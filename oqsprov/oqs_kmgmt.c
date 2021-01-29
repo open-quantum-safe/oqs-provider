@@ -20,8 +20,6 @@
 #include <assert.h>
 
 #include <string.h>
-/* For strcasecmp on Windows */
-#include "e_os.h"
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/params.h>
@@ -29,10 +27,6 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include "openssl/param_build.h"
-#include "prov/implementations.h"
-#include "prov/providercommon.h"
-#include "prov/provider_ctx.h"
-#include "prov/oqsx.h"
 #include "oqsx.h"
 
 // debugging

@@ -17,20 +17,12 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include "internal/deprecated.h"
-
-#include "e_os.h"  /* strcasecmp */
 #include <openssl/crypto.h>
 #include <openssl/evp.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/params.h>
 #include <openssl/err.h>
-#include <crypto/rsa.h>
-#include "prov/providercommonerr.h"
-#include "prov/provider_ctx.h"
-#include "prov/implementations.h"
-#include "prov/securitycheck.h"
 #include "oqsx.h"
 
 // debugging

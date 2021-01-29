@@ -23,7 +23,7 @@
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/params.h>
-#include "prov/oqsx.h"
+#include "oqsx.h"
 
 /*
  * Forward declarations to ensure that interface functions are correctly

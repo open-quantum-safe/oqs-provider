@@ -11,7 +11,7 @@
 #include <openssl/params.h>
 #include <openssl/core_names.h>
 #include <string.h>
-#include "prov/oqsx.h"
+#include "oqsx.h"
 
 /// Provider code
 

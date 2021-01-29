@@ -31,7 +31,7 @@
 #include "prov/provider_ctx.h"
 #include "prov/implementations.h"
 #include "prov/securitycheck.h"
-#include "prov/oqsx.h"
+#include "oqsx.h"
 
 // debugging
 #define OQS_KEM_PRINTF(a) if (getenv("OQSKEM")) printf(a)

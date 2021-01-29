@@ -34,7 +34,7 @@
 #include <openssl/params.h>
 #include <openssl/evp.h>
 #include <openssl/err.h>
-#include "prov/oqsx.h"
+#include "oqsx.h"
 
 // our own error codes:
 #define OQSPROV_R_INVALID_DIGEST                            1

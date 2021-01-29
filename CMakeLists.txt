@@ -19,3 +19,7 @@ include_directories(${liboqs_INCLUDE_DIR})
 
 # Provider module
 add_subdirectory(oqsprov)
+
+# Testing
+enable_testing()
+add_subdirectory(test)

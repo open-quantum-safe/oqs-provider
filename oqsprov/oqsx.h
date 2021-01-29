@@ -10,11 +10,12 @@
 
 #ifndef OSSL_PROVIDER_OQSX_H
 # define OSSL_PROVIDER_OQSX_H
+
+# include <stdatomic.h>
 # include <openssl/opensslconf.h>
 
 #  include <openssl/core.h>
 #  include <openssl/e_os2.h>
-#  include "internal/refcount.h"
 
 typedef struct prov_oqs_ctx_st {
     const OSSL_CORE_HANDLE *handle;
@@ -42,8 +43,7 @@ struct oqsx_key_st {
     size_t pubkeylen;
     char *oqs_name;
     char *tls_name;
-    CRYPTO_REF_COUNT references;
-    CRYPTO_RWLOCK *lock;
+    _Atomic int references;
     void *privkey;
     void *pubkey;
 };

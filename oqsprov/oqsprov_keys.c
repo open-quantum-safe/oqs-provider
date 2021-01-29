@@ -11,6 +11,7 @@
 #include <openssl/params.h>
 #include <openssl/core_names.h>
 #include <string.h>
+#include <assert.h>
 #include "oqsx.h"
 
 /// Provider code
@@ -61,9 +62,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
             goto err;
     }
 
-    ret->lock = CRYPTO_THREAD_lock_new();
-    if (ret->lock == NULL)
-        goto err;
     return ret;
 err:
     ERR_raise(ERR_LIB_EC, ERR_R_MALLOC_FAILURE);
@@ -73,36 +71,41 @@ err:
 
 void oqsx_key_free(OQSX_KEY *key)
 {
-    int i;
+    int refcnt;
 
     if (key == NULL)
         return;
 
-    CRYPTO_DOWN_REF(&key->references, &i, key->lock);
-    REF_PRINT_COUNT("OQSX_KEY", key);
-    if (i > 0)
+    refcnt = atomic_fetch_sub_explicit(&key->references, 1,
+                                       memory_order_relaxed) - 1;
+    if (refcnt == 0)
+        atomic_thread_fence(memory_order_acquire);
+#ifndef NDEBUG
+    fprintf(stderr, "%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
+#endif
+    if (refcnt > 0)
         return;
-    REF_ASSERT_ISNT(i < 0);
+    assert(refcnt == 0);
 
     OPENSSL_free(key->propq);
     OPENSSL_secure_clear_free(key->privkey, key->privkeylen);
     OPENSSL_secure_clear_free(key->pubkey, key->pubkeylen);
     if (key->iskem) OQS_KEM_free(key->key.k);
     else OQS_SIG_free(key->key.s);
-    CRYPTO_THREAD_lock_free(key->lock);
     OPENSSL_free(key);
 }
 
 int oqsx_key_up_ref(OQSX_KEY *key)
 {
-    int i;
+    int refcnt;
 
-    if (CRYPTO_UP_REF(&key->references, &i, key->lock) <= 0) 
-        return 0;
-
-    REF_PRINT_COUNT("OQSX_KEY", key);
-    REF_ASSERT_ISNT(i < 2);
-    return ((i > 1) ? 1 : 0);
+    refcnt = atomic_fetch_add_explicit(&key->references, 1,
+                                       memory_order_relaxed) + 1;
+#ifndef NDEBUG
+    fprintf(stderr, "%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
+#endif
+    assert(refcnt > 1);
+    return (refcnt > 1);
 }
 
 int oqsx_key_allocate_keymaterial(OQSX_KEY *key)

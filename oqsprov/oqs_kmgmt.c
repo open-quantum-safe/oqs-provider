@@ -33,6 +33,7 @@
 #include "prov/providercommon.h"
 #include "prov/provider_ctx.h"
 #include "prov/oqsx.h"
+#include "oqsx.h"
 
 // debugging
 #define OQS_KM_PRINTF(a) if (getenv("OQSKM")) printf(a)
@@ -299,7 +300,7 @@ static const OSSL_PARAM *oqsx_settable_params(void *provctx)
 
 static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int is_kem)
 {
-    OSSL_LIB_CTX *libctx = PROV_LIBCTX_OF(provctx);
+    OSSL_LIB_CTX *libctx = PROV_OQS_LIBCTX_OF(provctx);
     struct oqsx_gen_ctx *gctx = NULL;
 
     OQS_KM_PRINTF2("OQSKEYMGMT: gen_init called for key %s\n", oqs_name);
@@ -406,7 +407,7 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[])
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_START
 static void *oqs_sig_default_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_default, "oqs_sig_default", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_default, "oqs_sig_default", 0, NULL);
 }
 
 static void *oqs_sig_default_gen_init(void *provctx, int selection)
@@ -416,7 +417,7 @@ static void *oqs_sig_default_gen_init(void *provctx, int selection)
 
 static void *dilithium2_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_2, "dilithium2", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_2, "dilithium2", 0, NULL);
 }
 
 static void *dilithium2_gen_init(void *provctx, int selection)
@@ -425,7 +426,7 @@ static void *dilithium2_gen_init(void *provctx, int selection)
 }
 static void *dilithium3_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3, "dilithium3", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3, "dilithium3", 0, NULL);
 }
 
 static void *dilithium3_gen_init(void *provctx, int selection)
@@ -434,7 +435,7 @@ static void *dilithium3_gen_init(void *provctx, int selection)
 }
 static void *dilithium4_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_4, "dilithium4", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_4, "dilithium4", 0, NULL);
 }
 
 static void *dilithium4_gen_init(void *provctx, int selection)
@@ -444,7 +445,7 @@ static void *dilithium4_gen_init(void *provctx, int selection)
 
 static void *falcon512_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_falcon_512, "falcon512", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_falcon_512, "falcon512", 0, NULL);
 }
 
 static void *falcon512_gen_init(void *provctx, int selection)
@@ -453,7 +454,7 @@ static void *falcon512_gen_init(void *provctx, int selection)
 }
 static void *falcon1024_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_falcon_1024, "falcon1024", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_falcon_1024, "falcon1024", 0, NULL);
 }
 
 static void *falcon1024_gen_init(void *provctx, int selection)
@@ -463,7 +464,7 @@ static void *falcon1024_gen_init(void *provctx, int selection)
 
 static void *picnicl1full_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_picnic_L1_full, "picnicl1full", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic_L1_full, "picnicl1full", 0, NULL);
 }
 
 static void *picnicl1full_gen_init(void *provctx, int selection)
@@ -472,7 +473,7 @@ static void *picnicl1full_gen_init(void *provctx, int selection)
 }
 static void *picnic3l1_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_picnic3_L1, "picnic3l1", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic3_L1, "picnic3l1", 0, NULL);
 }
 
 static void *picnic3l1_gen_init(void *provctx, int selection)
@@ -482,7 +483,7 @@ static void *picnic3l1_gen_init(void *provctx, int selection)
 
 static void *rainbowIclassic_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_I_classic, "rainbowIclassic", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_I_classic, "rainbowIclassic", 0, NULL);
 }
 
 static void *rainbowIclassic_gen_init(void *provctx, int selection)
@@ -491,7 +492,7 @@ static void *rainbowIclassic_gen_init(void *provctx, int selection)
 }
 static void *rainbowVclassic_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_V_classic, "rainbowVclassic", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_V_classic, "rainbowVclassic", 0, NULL);
 }
 
 static void *rainbowVclassic_gen_init(void *provctx, int selection)
@@ -501,7 +502,7 @@ static void *rainbowVclassic_gen_init(void *provctx, int selection)
 
 static void *sphincsharaka128frobust_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_haraka_128f_robust, "sphincsharaka128frobust", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_haraka_128f_robust, "sphincsharaka128frobust", 0, NULL);
 }
 
 static void *sphincsharaka128frobust_gen_init(void *provctx, int selection)
@@ -511,7 +512,7 @@ static void *sphincsharaka128frobust_gen_init(void *provctx, int selection)
 
 static void *sphincssha256128frobust_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_sha256_128f_robust, "sphincssha256128frobust", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_sha256_128f_robust, "sphincssha256128frobust", 0, NULL);
 }
 
 static void *sphincssha256128frobust_gen_init(void *provctx, int selection)
@@ -521,7 +522,7 @@ static void *sphincssha256128frobust_gen_init(void *provctx, int selection)
 
 static void *sphincsshake256128frobust_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_shake256_128f_robust, "sphincsshake256128frobust", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_shake256_128f_robust, "sphincsshake256128frobust", 0, NULL);
 }
 
 static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
@@ -533,7 +534,7 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
 
 static void *frodo640aes_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_640_aes, "frodo640aes", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_640_aes, "frodo640aes", 1, NULL);
 }
 
 static void *frodo640aes_gen_init(void *provctx, int selection)
@@ -543,7 +544,7 @@ static void *frodo640aes_gen_init(void *provctx, int selection)
 
 static void *frodo640shake_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_640_shake, "frodo640shake", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_640_shake, "frodo640shake", 1, NULL);
 }
 
 static void *frodo640shake_gen_init(void *provctx, int selection)
@@ -553,7 +554,7 @@ static void *frodo640shake_gen_init(void *provctx, int selection)
 
 static void *frodo976aes_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_976_aes, "frodo976aes", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_976_aes, "frodo976aes", 1, NULL);
 }
 
 static void *frodo976aes_gen_init(void *provctx, int selection)
@@ -563,7 +564,7 @@ static void *frodo976aes_gen_init(void *provctx, int selection)
 
 static void *frodo976shake_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_976_shake, "frodo976shake", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_976_shake, "frodo976shake", 1, NULL);
 }
 
 static void *frodo976shake_gen_init(void *provctx, int selection)
@@ -573,7 +574,7 @@ static void *frodo976shake_gen_init(void *provctx, int selection)
 
 static void *frodo1344aes_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_1344_aes, "frodo1344aes", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_1344_aes, "frodo1344aes", 1, NULL);
 }
 
 static void *frodo1344aes_gen_init(void *provctx, int selection)
@@ -583,7 +584,7 @@ static void *frodo1344aes_gen_init(void *provctx, int selection)
 
 static void *frodo1344shake_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_1344_shake, "frodo1344shake", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_1344_shake, "frodo1344shake", 1, NULL);
 }
 
 static void *frodo1344shake_gen_init(void *provctx, int selection)
@@ -593,7 +594,7 @@ static void *frodo1344shake_gen_init(void *provctx, int selection)
 
 static void *bike1l1cpa_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l1_cpa, "bike1l1cpa", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l1_cpa, "bike1l1cpa", 1, NULL);
 }
 
 static void *bike1l1cpa_gen_init(void *provctx, int selection)
@@ -603,7 +604,7 @@ static void *bike1l1cpa_gen_init(void *provctx, int selection)
 
 static void *bike1l3cpa_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l3_cpa, "bike1l3cpa", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l3_cpa, "bike1l3cpa", 1, NULL);
 }
 
 static void *bike1l3cpa_gen_init(void *provctx, int selection)
@@ -613,7 +614,7 @@ static void *bike1l3cpa_gen_init(void *provctx, int selection)
 
 static void *kyber512_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_512, "kyber512", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_512, "kyber512", 1, NULL);
 }
 
 static void *kyber512_gen_init(void *provctx, int selection)
@@ -623,7 +624,7 @@ static void *kyber512_gen_init(void *provctx, int selection)
 
 static void *kyber768_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_768, "kyber768", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_768, "kyber768", 1, NULL);
 }
 
 static void *kyber768_gen_init(void *provctx, int selection)
@@ -633,7 +634,7 @@ static void *kyber768_gen_init(void *provctx, int selection)
 
 static void *kyber1024_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_1024, "kyber1024", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_1024, "kyber1024", 1, NULL);
 }
 
 static void *kyber1024_gen_init(void *provctx, int selection)
@@ -643,7 +644,7 @@ static void *kyber1024_gen_init(void *provctx, int selection)
 
 static void *ntru_hps2048509_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps2048509, "ntru_hps2048509", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps2048509, "ntru_hps2048509", 1, NULL);
 }
 
 static void *ntru_hps2048509_gen_init(void *provctx, int selection)
@@ -653,7 +654,7 @@ static void *ntru_hps2048509_gen_init(void *provctx, int selection)
 
 static void *ntru_hps2048677_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps2048677, "ntru_hps2048677", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps2048677, "ntru_hps2048677", 1, NULL);
 }
 
 static void *ntru_hps2048677_gen_init(void *provctx, int selection)
@@ -663,7 +664,7 @@ static void *ntru_hps2048677_gen_init(void *provctx, int selection)
 
 static void *ntru_hps4096821_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps4096821, "ntru_hps4096821", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps4096821, "ntru_hps4096821", 1, NULL);
 }
 
 static void *ntru_hps4096821_gen_init(void *provctx, int selection)
@@ -673,7 +674,7 @@ static void *ntru_hps4096821_gen_init(void *provctx, int selection)
 
 static void *ntru_hrss701_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hrss701, "ntru_hrss701", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hrss701, "ntru_hrss701", 1, NULL);
 }
 
 static void *ntru_hrss701_gen_init(void *provctx, int selection)
@@ -683,7 +684,7 @@ static void *ntru_hrss701_gen_init(void *provctx, int selection)
 
 static void *lightsaber_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_saber_lightsaber, "lightsaber", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_saber_lightsaber, "lightsaber", 1, NULL);
 }
 
 static void *lightsaber_gen_init(void *provctx, int selection)
@@ -693,7 +694,7 @@ static void *lightsaber_gen_init(void *provctx, int selection)
 
 static void *saber_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_saber_saber, "saber", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_saber_saber, "saber", 1, NULL);
 }
 
 static void *saber_gen_init(void *provctx, int selection)
@@ -703,7 +704,7 @@ static void *saber_gen_init(void *provctx, int selection)
 
 static void *firesaber_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_saber_firesaber, "firesaber", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_saber_firesaber, "firesaber", 1, NULL);
 }
 
 static void *firesaber_gen_init(void *provctx, int selection)
@@ -713,7 +714,7 @@ static void *firesaber_gen_init(void *provctx, int selection)
 
 static void *sidhp434_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p434, "sidhp434", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p434, "sidhp434", 1, NULL);
 }
 
 static void *sidhp434_gen_init(void *provctx, int selection)
@@ -723,7 +724,7 @@ static void *sidhp434_gen_init(void *provctx, int selection)
 
 static void *sidhp503_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p503, "sidhp503", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p503, "sidhp503", 1, NULL);
 }
 
 static void *sidhp503_gen_init(void *provctx, int selection)
@@ -733,7 +734,7 @@ static void *sidhp503_gen_init(void *provctx, int selection)
 
 static void *sidhp610_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p610, "sidhp610", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p610, "sidhp610", 1, NULL);
 }
 
 static void *sidhp610_gen_init(void *provctx, int selection)
@@ -743,7 +744,7 @@ static void *sidhp610_gen_init(void *provctx, int selection)
 
 static void *sidhp751_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p751, "sidhp751", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p751, "sidhp751", 1, NULL);
 }
 
 static void *sidhp751_gen_init(void *provctx, int selection)
@@ -753,7 +754,7 @@ static void *sidhp751_gen_init(void *provctx, int selection)
 
 static void *sikep434_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p434, "sikep434", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p434, "sikep434", 1, NULL);
 }
 
 static void *sikep434_gen_init(void *provctx, int selection)
@@ -763,7 +764,7 @@ static void *sikep434_gen_init(void *provctx, int selection)
 
 static void *sikep503_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p503, "sikep503", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p503, "sikep503", 1, NULL);
 }
 
 static void *sikep503_gen_init(void *provctx, int selection)
@@ -773,7 +774,7 @@ static void *sikep503_gen_init(void *provctx, int selection)
 
 static void *sikep610_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p610, "sikep610", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p610, "sikep610", 1, NULL);
 }
 
 static void *sikep610_gen_init(void *provctx, int selection)
@@ -783,7 +784,7 @@ static void *sikep610_gen_init(void *provctx, int selection)
 
 static void *sikep751_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p751, "sikep751", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p751, "sikep751", 1, NULL);
 }
 
 static void *sikep751_gen_init(void *provctx, int selection)
@@ -793,7 +794,7 @@ static void *sikep751_gen_init(void *provctx, int selection)
 
 static void *bike1l1fo_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l1_fo, "bike1l1fo", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l1_fo, "bike1l1fo", 1, NULL);
 }
 
 static void *bike1l1fo_gen_init(void *provctx, int selection)
@@ -803,7 +804,7 @@ static void *bike1l1fo_gen_init(void *provctx, int selection)
 
 static void *bike1l3fo_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l3_fo, "bike1l3fo", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l3_fo, "bike1l3fo", 1, NULL);
 }
 
 static void *bike1l3fo_gen_init(void *provctx, int selection)
@@ -813,7 +814,7 @@ static void *bike1l3fo_gen_init(void *provctx, int selection)
 
 static void *kyber90s512_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_512_90s, "kyber90s512", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_512_90s, "kyber90s512", 1, NULL);
 }
 
 static void *kyber90s512_gen_init(void *provctx, int selection)
@@ -823,7 +824,7 @@ static void *kyber90s512_gen_init(void *provctx, int selection)
 
 static void *kyber90s768_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_768_90s, "kyber90s768", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_768_90s, "kyber90s768", 1, NULL);
 }
 
 static void *kyber90s768_gen_init(void *provctx, int selection)
@@ -833,7 +834,7 @@ static void *kyber90s768_gen_init(void *provctx, int selection)
 
 static void *kyber90s1024_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_1024_90s, "kyber90s1024", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_1024_90s, "kyber90s1024", 1, NULL);
 }
 
 static void *kyber90s1024_gen_init(void *provctx, int selection)
@@ -843,7 +844,7 @@ static void *kyber90s1024_gen_init(void *provctx, int selection)
 
 static void *hqc128_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_128, "hqc128", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_128, "hqc128", 1, NULL);
 }
 
 static void *hqc128_gen_init(void *provctx, int selection)
@@ -853,7 +854,7 @@ static void *hqc128_gen_init(void *provctx, int selection)
 
 static void *hqc192_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_192, "hqc192", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_192, "hqc192", 1, NULL);
 }
 
 static void *hqc192_gen_init(void *provctx, int selection)
@@ -863,7 +864,7 @@ static void *hqc192_gen_init(void *provctx, int selection)
 
 static void *hqc256_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_256, "hqc256", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_256, "hqc256", 1, NULL);
 }
 
 static void *hqc256_gen_init(void *provctx, int selection)
@@ -873,7 +874,7 @@ static void *hqc256_gen_init(void *provctx, int selection)
 
 static void *ntrulpr653_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr653, "ntrulpr653", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr653, "ntrulpr653", 1, NULL);
 }
 
 static void *ntrulpr653_gen_init(void *provctx, int selection)
@@ -883,7 +884,7 @@ static void *ntrulpr653_gen_init(void *provctx, int selection)
 
 static void *ntrulpr761_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr761, "ntrulpr761", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr761, "ntrulpr761", 1, NULL);
 }
 
 static void *ntrulpr761_gen_init(void *provctx, int selection)
@@ -893,7 +894,7 @@ static void *ntrulpr761_gen_init(void *provctx, int selection)
 
 static void *ntrulpr857_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr857, "ntrulpr857", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr857, "ntrulpr857", 1, NULL);
 }
 
 static void *ntrulpr857_gen_init(void *provctx, int selection)
@@ -903,7 +904,7 @@ static void *ntrulpr857_gen_init(void *provctx, int selection)
 
 static void *sntrup653_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup653, "sntrup653", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup653, "sntrup653", 1, NULL);
 }
 
 static void *sntrup653_gen_init(void *provctx, int selection)
@@ -913,7 +914,7 @@ static void *sntrup653_gen_init(void *provctx, int selection)
 
 static void *sntrup761_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup761, "sntrup761", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup761, "sntrup761", 1, NULL);
 }
 
 static void *sntrup761_gen_init(void *provctx, int selection)
@@ -923,7 +924,7 @@ static void *sntrup761_gen_init(void *provctx, int selection)
 
 static void *sntrup857_new_key(void *provctx)
 { 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup857, "sntrup857", 1, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup857, "sntrup857", 1, NULL);
 }
 
 static void *sntrup857_gen_init(void *provctx, int selection)

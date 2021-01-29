@@ -26,6 +26,7 @@ typedef struct prov_oqs_ctx_st {
 
 PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx, const OSSL_CORE_HANDLE *handle);
 void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
+# define PROV_OQS_LIBCTX_OF(provctx) (((PROV_OQS_CTX *)provctx)->libctx)
 
 #include "oqs/oqs.h"
 

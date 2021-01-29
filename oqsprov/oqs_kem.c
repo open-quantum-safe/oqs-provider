@@ -61,7 +61,7 @@ static void *oqs_kem_newctx(void *provctx)
     OQS_KEM_PRINTF("OQS KEM provider called: newctx\n");
     if (pkemctx == NULL)
         return NULL;
-    pkemctx->libctx = PROV_LIBCTX_OF(provctx);
+    pkemctx->libctx = PROV_OQS_LIBCTX_OF(provctx);
     // kem will only be set in init
 
     return pkemctx;

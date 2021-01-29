@@ -8,8 +8,8 @@
 
 /* Internal OQS functions for other submodules: not for application use */
 
-#ifndef OSSL_PROVIDER_OQSX_H
-# define OSSL_PROVIDER_OQSX_H
+#ifndef OQSX_H
+# define OQSX_H
 
 # include <stdatomic.h>
 # include <openssl/opensslconf.h>

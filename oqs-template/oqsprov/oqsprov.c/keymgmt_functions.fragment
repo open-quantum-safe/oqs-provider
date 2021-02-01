@@ -1,0 +1,9 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+    ALG("{{variant['name']}}", oqs_{{ variant['name'] }}_keymgmt_functions),
+   {%- endfor %}
+{%- endfor %}
+{% for kem in config['kems'] %}
+    ALG("{{kem['name_group']}}", oqs_{{ kem['name_group'] }}_keymgmt_functions),
+{%- endfor %}
+

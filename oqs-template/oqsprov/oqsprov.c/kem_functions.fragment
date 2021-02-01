@@ -1,0 +1,4 @@
+{% for kem in config['kems'] %}
+    ALG("{{kem['name_group']}}", oqs_generic_kem_functions),
+{%- endfor %}
+

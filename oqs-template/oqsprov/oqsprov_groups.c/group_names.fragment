@@ -1,0 +1,6 @@
+{% set cnt = namespace(val=-1) %}
+{% for kem in config['kems'] -%}
+    {%- set cnt.val = cnt.val + 1 %}
+    OQS_GROUP_ENTRY("{{kem['name_group']}}", "{{kem['name_group']}}", "{{kem['name_group']}}", {{ cnt.val }}),
+{%- endfor %}
+

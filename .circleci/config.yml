@@ -1,0 +1,45 @@
+version: 2.1
+
+# CircleCI doesn't handle large file sets properly for local builds
+# https://github.com/CircleCI-Public/circleci-cli/issues/281#issuecomment-472808051
+localCheckout: &localCheckout
+  run: |-
+    PROJECT_PATH=$(cd ${CIRCLE_WORKING_DIRECTORY}; pwd)
+    mkdir -p ${PROJECT_PATH}
+    cd /tmp/_circleci_local_build_repo
+    git ls-files -z | xargs -0 -s 2090860 tar -c | tar -x -C ${PROJECT_PATH}
+    cp -a /tmp/_circleci_local_build_repo/.git ${PROJECT_PATH}
+jobs:
+  ubuntu_bionic:
+    description: A template for running OQS-OpenSSL tests on x64 Ubuntu Bionic Docker VMs
+    docker:
+      - image: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
+    steps:
+      - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
+      - run:
+          name: Clone and build liboqs
+          command: |
+             git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
+             cd liboqs && mkdir _build && cd _build &&
+             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
+             cd ..
+      - run:
+          name: Clone and build OpenSSL(3) 
+          command: |
+             git clone --depth 1 --branch master git://git.openssl.org/openssl.git openssl &&
+             cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 4 && make install_dev && cd ..
+      - run:
+          name: Build OQS-OpenSSL provider
+          command: |
+             ./scripts/preptests.sh && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+      - run:
+          name: Run provider tests
+          command: cd _build; ctest
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - ubuntu_bionic:
+          name: ubuntu-bionic
+          context: openquantumsafe

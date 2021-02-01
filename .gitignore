@@ -1,0 +1,14 @@
+# checked out OSSL
+openssl 
+# checked out liboqs
+liboqs
+# installed SW
+.local
+# obtained from main OQS-OpenSSL repo
+oqs-provider/generate.yml
+# build directory
+_build
+# generated from openssl src:
+test/ssltestlib.c
+test/ssltestlib.h
+test/oqs_test_groups

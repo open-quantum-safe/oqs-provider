@@ -2,6 +2,7 @@
 
 #include <openssl/provider.h>
 #include <openssl/ssl.h>
+#include <string.h>
 #include "ssltestlib.h"
 #include "test_common.h"
 
@@ -12,6 +13,35 @@ static char *cert = NULL;
 static char *privkey = NULL;
 static char *certsdir = NULL;
 static char *srpvfile = NULL;
+
+/*
+ * Copyright 2016-2020 The OpenSSL Project Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License 2.0 (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
+ */
+
+char *test_mk_file_path(const char *dir, const char *file)
+{
+# ifndef OPENSSL_SYS_VMS
+    const char *sep = "/";
+# else
+    const char *sep = "";
+# endif
+    size_t len = strlen(dir) + strlen(sep) + strlen(file) + 1;
+    char *full_file = OPENSSL_zalloc(len);
+
+    if (full_file != NULL) {
+        OPENSSL_strlcpy(full_file, dir, len);
+        OPENSSL_strlcat(full_file, sep, len);
+        OPENSSL_strlcat(full_file, file, len);
+    }
+
+    return full_file;
+}
+
 
 static const char *group_names[] = {
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_CASES_START
@@ -93,6 +123,9 @@ int main(int argc, char *argv[])
   certsdir = argv[3];
   srpvfile = argv[4];
 
+  T(cert = test_mk_file_path(certsdir, "servercert.pem"));
+  T(privkey = test_mk_file_path(certsdir, "serverkey.pem"));
+
   T(OSSL_LIB_CTX_load_config(libctx, configfile));
 
   /* Check we have the expected providers available:
@@ -106,17 +139,20 @@ int main(int argc, char *argv[])
   for (i = 0; i < nelem(group_names); i++) {
     if (test_oqs_groups(group_names[i])) {
       fprintf(stderr,
-              cGREEN "  Signature test succeeded: %s" cNORM "\n",
+              cGREEN "  KEM test succeeded: %s" cNORM "\n",
               group_names[i]);
     } else {
       fprintf(stderr,
-              cRED "  Signature test failed: %s" cNORM "\n",
+              cRED "  KEM test failed: %s" cNORM "\n",
               group_names[i]);
       ERR_print_errors_fp(stderr);
       errcnt++;
     }
   }
 
+  OPENSSL_free(cert);
+  OPENSSL_free(privkey);
+  OSSL_LIB_CTX_free(libctx);
   TEST_ASSERT(errcnt == 0)
   return !test;
 }

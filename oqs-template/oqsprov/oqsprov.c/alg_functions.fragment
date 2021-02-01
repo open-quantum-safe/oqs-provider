@@ -1,0 +1,9 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_keymgmt_functions[];
+   {%- endfor %}
+{%- endfor %}
+{% for kem in config['kems'] %}
+extern const OSSL_DISPATCH oqs_{{ kem['name_group'] }}_keymgmt_functions[];
+{%- endfor %}
+

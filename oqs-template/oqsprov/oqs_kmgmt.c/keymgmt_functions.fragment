@@ -1,0 +1,9 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+MAKE_KEYMGMT_FUNCTIONS({{variant['name']}})
+   {%- endfor %}
+{%- endfor %}
+{% for kem in config['kems'] %}
+MAKE_KEYMGMT_FUNCTIONS({{kem['name_group']}})
+{%- endfor %}
+

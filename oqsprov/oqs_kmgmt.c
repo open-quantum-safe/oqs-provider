@@ -29,10 +29,15 @@
 #include "openssl/param_build.h"
 #include "oqsx.h"
 
-// debugging
+#ifdef NDEBUG
+#define OQS_KM_PRINTF(a)
+#define OQS_KM_PRINTF2(a, b)
+#define OQS_KM_PRINTF3(a, b, c)
+#else
 #define OQS_KM_PRINTF(a) if (getenv("OQSKM")) printf(a)
 #define OQS_KM_PRINTF2(a, b) if (getenv("OQSKM")) printf(a, b)
 #define OQS_KM_PRINTF3(a, b, c) if (getenv("OQSKM")) printf(a, b, c)
+#endif // NDEBUG
 
 // our own error codes:
 #define OQSPROV_UNEXPECTED_NULL   1
@@ -265,9 +270,8 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[])
                                                 &used_len)) {
             return 0;
         }
-        //OPENSSL_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
-        //oqsxkey->privkey = NULL;
-        //oqsxkey->pubkey = NULL; 
+        OPENSSL_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
+        oqsxkey->privkey = NULL;
     }
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PROPERTIES);
     if (p != NULL) {

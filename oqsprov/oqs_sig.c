@@ -48,10 +48,15 @@
 // internal, but useful OSSL define:
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
 
-// debugging
+#ifdef NDEBUG
+#define OQS_SIG_PRINTF(a)
+#define OQS_SIG_PRINTF2(a, b)
+#define OQS_SIG_PRINTF3(a, b, c)
+#else
 #define OQS_SIG_PRINTF(a) if (getenv("OQSSIG")) printf(a)
 #define OQS_SIG_PRINTF2(a, b) if (getenv("OQSSIG")) printf(a, b)
 #define OQS_SIG_PRINTF3(a, b, c) if (getenv("OQSSIG")) printf(a, b, c)
+#endif // NDEBUG
 
 static OSSL_FUNC_signature_newctx_fn oqs_sig_newctx;
 static OSSL_FUNC_signature_sign_init_fn oqs_sig_sign_init;

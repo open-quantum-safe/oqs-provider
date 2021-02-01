@@ -55,6 +55,7 @@ static int test_oqs_signatures(const char *sigalg_name)
     && EVP_DigestVerifyFinal(mdctx, sig, siglen);
 
   EVP_MD_CTX_free(mdctx);
+  EVP_PKEY_free(key);
   OPENSSL_free(ctx);
   return testresult;
 }
@@ -94,6 +95,8 @@ int main(int argc, char *argv[])
       errcnt++;
     }
   }
+
+  OSSL_LIB_CTX_free(libctx);
 
   TEST_ASSERT(errcnt == 0)
   return !test;

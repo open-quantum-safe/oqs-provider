@@ -1,0 +1,6 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+    ALG("{{variant['name']}}", oqs_signature_functions),
+   {%- endfor %}
+{%- endfor %}
+

@@ -25,10 +25,15 @@
 #include <openssl/err.h>
 #include "oqsx.h"
 
-// debugging
+#ifdef NDEBUG
+#define OQS_KEM_PRINTF(a)
+#define OQS_KEM_PRINTF2(a, b)
+#define OQS_KEM_PRINTF3(a, b, c)
+#else
 #define OQS_KEM_PRINTF(a) if (getenv("OQSKEM")) printf(a)
 #define OQS_KEM_PRINTF2(a, b) if (getenv("OQSKEM")) printf(a, b)
 #define OQS_KEM_PRINTF3(a, b, c) if (getenv("OQSKEM")) printf(a, b, c)
+#endif // NDEBUG
 
 
 static OSSL_FUNC_kem_newctx_fn oqs_kem_newctx;

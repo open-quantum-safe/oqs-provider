@@ -5,7 +5,7 @@
  *
  * TBC: License banner
  *
- * ToDo: sigs.
+ * ToDo: encoder/decoders
  */
 
 /*
@@ -330,59 +330,4 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
 
     return 1;
 }
-///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
-extern const OSSL_DISPATCH oqs_oqs_sig_default_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium2_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium4_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_falcon512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_falcon1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_picnicl1full_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_picnic3l1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_rainbowIclassic_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_rainbowVclassic_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sphincsharaka128frobust_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sphincssha256128frobust_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sphincsshake256128frobust_keymgmt_functions[];
-
-extern const OSSL_DISPATCH oqs_frodo640aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo640shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo976aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo976shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo1344aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l1cpa_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l3cpa_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps2048509_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps2048677_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps4096821_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hrss701_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_lightsaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_saber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_firesaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l1fo_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l3fo_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc128_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc192_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc256_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
 

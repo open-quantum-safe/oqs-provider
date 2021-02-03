@@ -1,3 +1,5 @@
+[CircleCI](https://circleci.com/gh/open-quantum-safe/oqs-provider/tree/main): ![Build status image](https://circleci.com/gh/open-quantum-safe/oqs-provider/tree/main.svg?style=svg)
+
 oqsprovider - Open Quantum Safe provider for OpenSSL (3.0)
 ==========================================================
 

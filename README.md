@@ -1,4 +1,4 @@
-[CircleCI](https://circleci.com/gh/open-quantum-safe/oqs-provider/tree/main): ![Build status image](https://circleci.com/gh/open-quantum-safe/oqs-provider/tree/main.svg?style=svg)
+[![oqs-provider](https://circleci.com/gh/open-quantum-safe/oqs-provider.svg?style=svg)](https://app.circleci.com/pipelines/github/open-quantum-safe/oqs-provider)
 
 oqsprovider - Open Quantum Safe provider for OpenSSL (3.0)
 ==========================================================
@@ -25,6 +25,7 @@ the OpenSSL EVP interface. For information about the available OQS algorithms,
 [refer to the OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms).
 
 Open work items are
+- (CI) Testing on platforms other than Ubuntu 18.04 (x86_64)
 - fully TLS-integrated quantum-safe signatures
 - hybrid quantum-safe cryptography
 

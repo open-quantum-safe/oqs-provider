@@ -1,9 +1,9 @@
+// SPDX-License-Identifier: Apache-2.0 AND MIT
+
 /*
  * OQS OpenSSL 3 provider
  *
  * Code strongly inspired by OpenSSL common provider capabilities.
- *
- * TBC: OQS license
  *
  * ToDo: Interop testing.
  */

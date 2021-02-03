@@ -1,26 +1,16 @@
+// SPDX-License-Identifier: Apache-2.0 AND MIT
+
 /*
  * OQS OpenSSL 3 provider
  *
  * Code strongly inspired by OpenSSL DSA signature provider.
  * 
- * TBC: OQS license
+ * ToDo:  Go beyone EVP use cases/testing
  *
- * ToDo: Everything: This is just a template that needs to be completed with 
- * OQS calls.
  * Significant hurdle: Signature providers of new algorithms are not utilized 
  * properly in OpenSSL3 yet -> Integration won't be seamless and probably 
  * requires quite some (upstream) OpenSSL3 dev investment.
  */
-
-/*
- * Copyright 2019-2020 The OpenSSL Project Authors. All Rights Reserved.
- *
- * Licensed under the Apache License 2.0 (the "License").  You may not use
- * this file except in compliance with the License.  You can obtain a copy
- * in the file LICENSE in the source distribution or at
- * https://www.openssl.org/source/license.html
- */
-
 
 #include "oqs/sig.h"
 

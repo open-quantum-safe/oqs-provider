@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 AND MIT
+
 /*
  * OQS OpenSSL 3 key handler.
  *

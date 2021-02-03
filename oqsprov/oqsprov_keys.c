@@ -1,10 +1,12 @@
+// SPDX-License-Identifier: Apache-2.0 AND MIT
+
 /* 
  * OQS OpenSSL 3 key handler.
  * 
  * Code strongly inspired by OpenSSL crypto/ec key handler but relocated here 
  * to have code within provider.
  *
- * TBC: OQS license
+ * TBC: Use/test in more than KEM and SIG cases.
  */
 
 #include <openssl/err.h>

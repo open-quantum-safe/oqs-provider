@@ -1,4 +1,4 @@
-/* CC0 license applied */
+// SPDX-License-Identifier: Apache-2.0 AND MIT
 
 #include "test_common.h"
 

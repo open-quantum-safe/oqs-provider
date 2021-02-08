@@ -422,14 +422,41 @@ static void *dilithium3_gen_init(void *provctx, int selection)
 {
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3, 0);
 }
-static void *dilithium4_new_key(void *provctx)
+static void *dilithium5_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_4, "dilithium4", 0, NULL);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_5, "dilithium5", 0, NULL);
 }
 
-static void *dilithium4_gen_init(void *provctx, int selection)
+static void *dilithium5_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_4, 0);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_5, 0);
+}
+static void *dilithium2_aes_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_2_aes, "dilithium2_aes", 0, NULL);
+}
+
+static void *dilithium2_aes_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_2_aes, 0);
+}
+static void *dilithium3_aes_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3_aes, "dilithium3_aes", 0, NULL);
+}
+
+static void *dilithium3_aes_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3_aes, 0);
+}
+static void *dilithium5_aes_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_5_aes, "dilithium5_aes", 0, NULL);
+}
+
+static void *dilithium5_aes_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_5_aes, 0);
 }
 
 static void *falcon512_new_key(void *provctx)
@@ -952,7 +979,10 @@ static void *sntrup857_gen_init(void *provctx, int selection)
 MAKE_KEYMGMT_FUNCTIONS(oqs_sig_default)
 MAKE_KEYMGMT_FUNCTIONS(dilithium2)
 MAKE_KEYMGMT_FUNCTIONS(dilithium3)
-MAKE_KEYMGMT_FUNCTIONS(dilithium4)
+MAKE_KEYMGMT_FUNCTIONS(dilithium5)
+MAKE_KEYMGMT_FUNCTIONS(dilithium2_aes)
+MAKE_KEYMGMT_FUNCTIONS(dilithium3_aes)
+MAKE_KEYMGMT_FUNCTIONS(dilithium5_aes)
 MAKE_KEYMGMT_FUNCTIONS(falcon512)
 MAKE_KEYMGMT_FUNCTIONS(falcon1024)
 MAKE_KEYMGMT_FUNCTIONS(picnicl1full)

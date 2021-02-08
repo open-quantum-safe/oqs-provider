@@ -77,13 +77,22 @@ static int get_oqs_oid(unsigned char* oidbuf, const char *oqs_name) {
        return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.1.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_2, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.6.4.3", 1), &oidbuf);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.7.4.4", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_3, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.6.5.4", 1), &oidbuf);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.7.6.5", 1), &oidbuf);
    else
-   if (!strcmp(OQS_SIG_alg_dilithium_4, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.6.6.5", 1), &oidbuf);
+   if (!strcmp(OQS_SIG_alg_dilithium_5, oqs_name))
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.7.8.7", 1), &oidbuf);
+   else
+   if (!strcmp(OQS_SIG_alg_dilithium_2_aes, oqs_name))
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.11.4.4", 1), &oidbuf);
+   else
+   if (!strcmp(OQS_SIG_alg_dilithium_3_aes, oqs_name))
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.11.6.5", 1), &oidbuf);
+   else
+   if (!strcmp(OQS_SIG_alg_dilithium_5_aes, oqs_name))
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.11.8.7", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_falcon_512, oqs_name))
        return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.3.1", 1), &oidbuf);

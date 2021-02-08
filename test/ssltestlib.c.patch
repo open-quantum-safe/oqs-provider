@@ -1,5 +1,5 @@
---- ../openssl/test/helpers/ssltestlib.c	2021-01-29 06:04:14.149923710 +0100
-+++ ssltestlib.c	2021-01-29 14:29:59.662075688 +0100
+--- ../openssl/test/helpers/ssltestlib.c	2021-02-08 08:19:42.774106452 +0100
++++ ssltestlib.c	2021-02-08 08:44:55.882989246 +0100
 @@ -9,14 +9,7 @@
  
  #include <string.h>
@@ -112,62 +112,62 @@
              return NULL;
      }
      return meth_always_retry;
-@@ -695,39 +685,38 @@
- 
-     if (*sctx != NULL)
-         serverctx = *sctx;
--    else if (!TEST_ptr(serverctx = SSL_CTX_new_ex(libctx, NULL, sm)))
-+    else if ((serverctx = SSL_CTX_new_ex(libctx, NULL, sm)) == NULL)
-         goto err;
+@@ -695,14 +685,14 @@
+     if (sctx != NULL) {
+         if (*sctx != NULL)
+             serverctx = *sctx;
+-        else if (!TEST_ptr(serverctx = SSL_CTX_new_ex(libctx, NULL, sm)))
++        else if (!(serverctx = SSL_CTX_new_ex(libctx, NULL, sm)))
+             goto err;
+     }
  
      if (cctx != NULL) {
          if (*cctx != NULL)
              clientctx = *cctx;
 -        else if (!TEST_ptr(clientctx = SSL_CTX_new_ex(libctx, NULL, cm)))
-+        else if ((clientctx = SSL_CTX_new_ex(libctx, NULL, cm)) == NULL)
++        else if (!(clientctx = SSL_CTX_new_ex(libctx, NULL, cm)))
              goto err;
      }
  
-     if ((min_proto_version > 0
--         && !TEST_true(SSL_CTX_set_min_proto_version(serverctx,
--                                                     min_proto_version)))
-+         && !SSL_CTX_set_min_proto_version(serverctx,
-+                                           min_proto_version))
-         || (max_proto_version > 0
--            && !TEST_true(SSL_CTX_set_max_proto_version(serverctx,
--                                                        max_proto_version))))
-+            && !SSL_CTX_set_max_proto_version(serverctx,
-+                                              max_proto_version)))
+@@ -720,28 +710,28 @@
+ 
+     if (serverctx != NULL
+             && ((min_proto_version > 0
+-                 && !TEST_true(SSL_CTX_set_min_proto_version(serverctx,
++                 && !(SSL_CTX_set_min_proto_version(serverctx,
+                                                             min_proto_version)))
+                 || (max_proto_version > 0
+-                    && !TEST_true(SSL_CTX_set_max_proto_version(serverctx,
++                    && !(SSL_CTX_set_max_proto_version(serverctx,
+                                                                 max_proto_version)))))
          goto err;
      if (clientctx != NULL
          && ((min_proto_version > 0
 -             && !TEST_true(SSL_CTX_set_min_proto_version(clientctx,
--                                                         min_proto_version)))
-+             && !SSL_CTX_set_min_proto_version(clientctx,
-+                                               min_proto_version))
++             && !(SSL_CTX_set_min_proto_version(clientctx,
+                                                          min_proto_version)))
              || (max_proto_version > 0
 -                && !TEST_true(SSL_CTX_set_max_proto_version(clientctx,
--                                                            max_proto_version)))))
-+                && !SSL_CTX_set_max_proto_version(clientctx,
-+                                                  max_proto_version))))
++                && !(SSL_CTX_set_max_proto_version(clientctx,
+                                                             max_proto_version)))))
          goto err;
  
-     if (certfile != NULL && privkeyfile != NULL) {
+     if (serverctx != NULL && certfile != NULL && privkeyfile != NULL) {
 -        if (!TEST_int_eq(SSL_CTX_use_certificate_file(serverctx, certfile,
 -                                                      SSL_FILETYPE_PEM), 1)
 -                || !TEST_int_eq(SSL_CTX_use_PrivateKey_file(serverctx,
--                                                            privkeyfile,
++        if ((SSL_CTX_use_certificate_file(serverctx, certfile,
++                                                      SSL_FILETYPE_PEM) != 1)
++                || (SSL_CTX_use_PrivateKey_file(serverctx,
+                                                             privkeyfile,
 -                                                            SSL_FILETYPE_PEM), 1)
 -                || !TEST_int_eq(SSL_CTX_check_private_key(serverctx), 1))
-+        if (SSL_CTX_use_certificate_file(serverctx, certfile,
-+                                         SSL_FILETYPE_PEM) <= 0
-+            || SSL_CTX_use_PrivateKey_file(serverctx, privkeyfile,
-+                                           SSL_FILETYPE_PEM) <= 0
-+            || SSL_CTX_check_private_key(serverctx) <= 0)
++                                                            SSL_FILETYPE_PEM)!=1)
++                || (SSL_CTX_check_private_key(serverctx)!=1))
              goto err;
      }
  
-@@ -828,15 +817,15 @@
+@@ -843,15 +833,15 @@
  
      if (*sssl != NULL)
          serverssl = *sssl;
@@ -187,7 +187,7 @@
          goto error;
  
      SSL_set_bio(clientssl, c_to_s_bio, c_to_s_bio);
-@@ -865,28 +854,28 @@
+@@ -880,28 +870,28 @@
  
      if (*sssl != NULL)
          serverssl = *sssl;
@@ -224,7 +224,7 @@
          goto error;
  
      /* Set Non-blocking IO behaviour */
-@@ -939,9 +928,9 @@
+@@ -954,9 +944,9 @@
          }
  
          if (!clienterr && retc <= 0 && err != SSL_ERROR_WANT_READ) {
@@ -236,7 +236,7 @@
              clienterr = 1;
          }
          if (want != SSL_ERROR_NONE && err == want)
-@@ -957,9 +946,9 @@
+@@ -972,9 +962,9 @@
          if (!servererr && rets <= 0
                  && err != SSL_ERROR_WANT_READ
                  && err != SSL_ERROR_WANT_X509_LOOKUP) {
@@ -248,7 +248,7 @@
              servererr = 1;
          }
          if (want != SSL_ERROR_NONE && err == want)
-@@ -973,20 +962,20 @@
+@@ -988,20 +978,20 @@
              if (rets > 0 && retc <= 0) {
                  if (SSL_read(serverssl, buf, sizeof(buf)) > 0) {
                      /* We don't expect this to succeed! */
@@ -272,7 +272,7 @@
              return 0;
          }
          if (isdtls && abortctr <= 50 && (abortctr % 10) == 0) {
-@@ -995,7 +984,7 @@
+@@ -1010,7 +1000,7 @@
               * give the DTLS timer a chance to do something. We only do this for
               * the first few times to prevent hangs.
               */
@@ -281,7 +281,7 @@
          }
      } while (retc <=0 || rets <= 0);
  
-@@ -1022,10 +1011,9 @@
+@@ -1037,10 +1027,9 @@
       */
      for (i = 0; i < 2; i++) {
          if (SSL_read_ex(clientssl, &buf, sizeof(buf), &readbytes) > 0) {

@@ -47,7 +47,10 @@ extern const OSSL_DISPATCH oqs_signature_functions[];
 extern const OSSL_DISPATCH oqs_oqs_sig_default_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_dilithium2_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_dilithium3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium4_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium5_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium2_aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium5_aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_falcon512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_falcon1024_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_picnicl1full_keymgmt_functions[];
@@ -105,7 +108,10 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     ALG("oqs_sig_default", oqs_signature_functions),
     ALG("dilithium2", oqs_signature_functions),
     ALG("dilithium3", oqs_signature_functions),
-    ALG("dilithium4", oqs_signature_functions),
+    ALG("dilithium5", oqs_signature_functions),
+    ALG("dilithium2_aes", oqs_signature_functions),
+    ALG("dilithium3_aes", oqs_signature_functions),
+    ALG("dilithium5_aes", oqs_signature_functions),
     ALG("falcon512", oqs_signature_functions),
     ALG("falcon1024", oqs_signature_functions),
     ALG("picnicl1full", oqs_signature_functions),
@@ -170,7 +176,10 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     ALG("oqs_sig_default", oqs_oqs_sig_default_keymgmt_functions),
     ALG("dilithium2", oqs_dilithium2_keymgmt_functions),
     ALG("dilithium3", oqs_dilithium3_keymgmt_functions),
-    ALG("dilithium4", oqs_dilithium4_keymgmt_functions),
+    ALG("dilithium5", oqs_dilithium5_keymgmt_functions),
+    ALG("dilithium2_aes", oqs_dilithium2_aes_keymgmt_functions),
+    ALG("dilithium3_aes", oqs_dilithium3_aes_keymgmt_functions),
+    ALG("dilithium5_aes", oqs_dilithium5_aes_keymgmt_functions),
     ALG("falcon512", oqs_falcon512_keymgmt_functions),
     ALG("falcon1024", oqs_falcon1024_keymgmt_functions),
     ALG("picnicl1full", oqs_picnicl1full_keymgmt_functions),

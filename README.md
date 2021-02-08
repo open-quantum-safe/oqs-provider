@@ -135,6 +135,10 @@ server returns details about the established connection.
 
 Any [available KEM algorithm](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable#key-exchange) can be selected by passing it in the `-groups` option.
 
+### DRBG
+
+`oqsprovider` does not implement its own [DRBG](https://csrc.nist.gov/glossary/term/Deterministic_Random_Bit_Generator). Therefore by default it relies on OpenSSL to provide one. Thus, either the default or fips provider must be loaded for OQS algorithms to have access to OpenSSL-provided randomness. This dependency can be eliminated by building `liboqs` with [OQS_USE_OPENSSL=OFF](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL).
+
 Team
 ----
 The Open Quantum Safe project is led by [Douglas Stebila](https://www.douglas.stebila.ca/research/) and [Michele Mosca](http://faculty.iqc.uwaterloo.ca/mmosca/) at the University of Waterloo.

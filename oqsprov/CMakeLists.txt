@@ -11,4 +11,4 @@ set_target_properties(oqsprovider
 )
 target_link_libraries(oqsprovider ${liboqs_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 # To link weird mceliece avx code:
-target_link_options(oqs PRIVATE -Wl,-Bsymbolic)
+target_link_options(oqsprovider PRIVATE -Wl,-Bsymbolic)

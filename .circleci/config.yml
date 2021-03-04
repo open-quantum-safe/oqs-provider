@@ -21,7 +21,8 @@ jobs:
           command: |
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
              cd liboqs && mkdir _build && cd _build &&
-             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
+# disable McEliece AVX until liboqs issue #930 is resolved
+             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local -DOQS_ENABLE_KEM_classic_mceliece_348864_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_348864f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_460896f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6688128f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6960119f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_8192128_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_8192128f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_460896_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6688128_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6960119_avx=OFF .. && ninja install &&
              cd ..
       - run:
           name: Clone and build OpenSSL(3) 

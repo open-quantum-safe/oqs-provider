@@ -493,7 +493,7 @@ static const OSSL_PARAM known_gettable_ctx_params[] = {
     OSSL_PARAM_END
 };
 
-static const OSSL_PARAM *oqs_sig_gettable_ctx_params(void *vpoqs_sigctx, ossl_unused void *vctx)
+static const OSSL_PARAM *oqs_sig_gettable_ctx_params(ossl_unused void *vpoqs_sigctx, ossl_unused void *vctx)
 {
     OQS_SIG_PRINTF("OQS SIG provider: gettable_ctx_params called\n");
     return known_gettable_ctx_params;

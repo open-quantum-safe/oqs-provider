@@ -26,8 +26,8 @@ jobs:
       - run:
           name: Clone and build OpenSSL(3) 
           command: |
-             git clone --depth 1 --branch master git://git.openssl.org/openssl.git openssl &&
-             cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 4 && make install_dev && cd ..
+             git clone --branch master git://git.openssl.org/openssl.git openssl &&
+             cd openssl && git checkout openssl-3.0.0-alpha12 && ./config --prefix=$(echo $(pwd)/../.local) && make -j 4 && make install_dev && cd ..
       - run:
           name: Build OQS-OpenSSL provider
           command: |

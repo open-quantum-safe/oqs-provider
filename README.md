@@ -58,6 +58,10 @@ Example for building and installing OpenSSL 3.0 in `.local`:
 OpenSSL (3.0) is not yet released in a production version. For [limitations
 see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
 
+*Note*: Building has last been validated with OpenSSL tag `openssl-3.0.0-alpha12`
+even though the goal of this project is to always build and work with the latest
+OpenSSL `master` branch code.
+
 ### liboqs
 
 Example for building and installing liboqs in `.local`:

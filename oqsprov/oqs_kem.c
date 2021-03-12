@@ -77,13 +77,13 @@ static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem, int operation)
     return 1;
 }
 
-static int oqs_kem_encaps_init(void *vpkemctx, void *vkem)
+static int oqs_kem_encaps_init(void *vpkemctx, void *vkem, const OSSL_PARAM params[])
 {
     OQS_KEM_PRINTF("OQS KEM provider called: encaps_init\n");
     return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_ENCAPSULATE);
 }
 
-static int oqs_kem_decaps_init(void *vpkemctx, void *vkem)
+static int oqs_kem_decaps_init(void *vpkemctx, void *vkem, const OSSL_PARAM params[])
 {
     OQS_KEM_PRINTF("OQS KEM provider called: decaps_init\n");
     return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_DECAPSULATE);

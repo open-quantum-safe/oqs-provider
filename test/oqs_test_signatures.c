@@ -48,12 +48,12 @@ static int test_oqs_signatures(const char *sigalg_name)
     && (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
     && EVP_PKEY_keygen_init(ctx)
     && EVP_PKEY_gen(ctx, &key)
-    && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key)
+    && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
     && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
     && EVP_DigestSignFinal(mdctx, NULL, &siglen)
     && (sig = OPENSSL_malloc(siglen)) != NULL
     && EVP_DigestSignFinal(mdctx, sig, &siglen)
-    && EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key)
+    && EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
     && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
     && EVP_DigestVerifyFinal(mdctx, sig, siglen);
 

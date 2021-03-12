@@ -236,13 +236,13 @@ static int oqs_sig_signverify_init(void *vpoqs_sigctx, void *voqssig, int operat
     return 1;
 }
 
-static int oqs_sig_sign_init(void *vpoqs_sigctx, void *voqssig)
+static int oqs_sig_sign_init(void *vpoqs_sigctx, void *voqssig, const OSSL_PARAM params[])
 {
     OQS_SIG_PRINTF("OQS SIG provider: sign_init called\n");
     return oqs_sig_signverify_init(vpoqs_sigctx, voqssig, EVP_PKEY_OP_SIGN);
 }
 
-static int oqs_sig_verify_init(void *vpoqs_sigctx, void *voqssig)
+static int oqs_sig_verify_init(void *vpoqs_sigctx, void *voqssig, const OSSL_PARAM params[])
 {
     OQS_SIG_PRINTF("OQS SIG provider: verify_init called\n");
     return oqs_sig_signverify_init(vpoqs_sigctx, voqssig, EVP_PKEY_OP_VERIFY);
@@ -334,13 +334,13 @@ static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx, const char *mdname
 }
 
 static int oqs_sig_digest_sign_init(void *vpoqs_sigctx, const char *mdname,
-                                      void *voqssig)
+                                      void *voqssig, const OSSL_PARAM params[])
 {
     OQS_SIG_PRINTF("OQS SIG provider: digest_sign_init called\n");
     return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig, EVP_PKEY_OP_SIGN);
 }
 
-static int oqs_sig_digest_verify_init(void *vpoqs_sigctx, const char *mdname, void *voqssig)
+static int oqs_sig_digest_verify_init(void *vpoqs_sigctx, const char *mdname, void *voqssig, const OSSL_PARAM params[])
 {
     OQS_SIG_PRINTF("OQS SIG provider: sig_digest_verify called\n");
     return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig, EVP_PKEY_OP_VERIFY);

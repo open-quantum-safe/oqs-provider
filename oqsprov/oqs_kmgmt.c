@@ -51,7 +51,7 @@ struct oqsx_gen_ctx {
     char *propq;
     char *oqs_name;
     char *tls_name;
-    int is_kem;
+    int primitive;
     int selection;
 };
 
@@ -287,7 +287,7 @@ static const OSSL_PARAM *oqsx_settable_params(void *provctx)
     return oqs_settable_params;
 }
 
-static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int is_kem)
+static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int primitive)
 {
     OSSL_LIB_CTX *libctx = PROV_OQS_LIBCTX_OF(provctx);
     struct oqsx_gen_ctx *gctx = NULL;
@@ -297,7 +297,7 @@ static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int is_
     if ((gctx = OPENSSL_zalloc(sizeof(*gctx))) != NULL) {
         gctx->libctx = libctx;
         gctx->oqs_name = OPENSSL_strdup(oqs_name);
-        gctx->is_kem = is_kem;
+        gctx->primitive = primitive;
         gctx->selection = selection;
     }
     return gctx;
@@ -310,7 +310,7 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx)
     OQS_KM_PRINTF2("OQSKEYMGMT: gen called for %s\n", gctx->oqs_name);
     if (gctx == NULL)
         return NULL;
-    if ((key = oqsx_key_new(gctx->libctx, gctx->oqs_name, NULL, gctx->is_kem, gctx->propq)) == NULL) {
+    if ((key = oqsx_key_new(gctx->libctx, gctx->oqs_name, NULL, gctx->primitive, gctx->propq)) == NULL) {
         ERR_raise(ERR_LIB_PROV, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
@@ -946,7 +946,7 @@ static void *sntrup857_new_key(void *provctx)
 static void *sntrup857_gen_init(void *provctx, int selection)
 { 
     return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_sntrup857, 1);
-} 
+}
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 

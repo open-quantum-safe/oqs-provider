@@ -19,12 +19,35 @@
 #  include <openssl/core.h>
 #  include <openssl/e_os2.h>
 
+/* Extras for OQS extension */
+
+#define ENCODE_UINT32(pbuf, i)  (pbuf)[0]   = (unsigned char)((i>>24) & 0xff); \
+                                (pbuf)[1] = (unsigned char)((i>>16) & 0xff); \
+                                (pbuf)[2] = (unsigned char)((i>> 8) & 0xff); \
+                                (pbuf)[3] = (unsigned char)((i    ) & 0xff);
+#define DECODE_UINT32(i, pbuf)  i  = ((uint32_t) (pbuf)[0]) << 24; \
+                                i |= ((uint32_t) (pbuf)[1]) << 16; \
+                                i |= ((uint32_t) (pbuf)[2]) <<  8; \
+                                i |= ((uint32_t) (pbuf)[3]);
+
+#define ON_ERR_SET_GOTO(condition, ret, code, gt) \
+    if ((condition)) {                            \
+        printf("ON_ERR_CONDITION: %d, setting code: %d\n", condition, code);   \
+        (ret) = (code);                           \
+        goto gt;                                  \
+    }
+
+#define ON_ERR_GOTO(condition, gt) \
+    if ((condition)) {                        \
+        printf("ON_ERR_CONDITION: %d\n", condition);   \
+        goto gt;                              \
+    }
+
 typedef struct prov_oqs_ctx_st {
     const OSSL_CORE_HANDLE *handle;
     OSSL_LIB_CTX *libctx;         /* For all provider modules */
 //    BIO_METHOD *corebiometh; // for the time being, do without BIO_METHOD
 } PROV_OQS_CTX;
-
 
 PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx, const OSSL_CORE_HANDLE *handle);
 void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
@@ -32,16 +55,27 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 
 #include "oqs/oqs.h"
 
+typedef struct {
+    OQS_KEM *kem;
+    EVP_PKEY_CTX *kex;
+    EVP_PKEY *kexParam;
+} OQS_HYB_KEM;
+
 typedef union {
-    OQS_SIG *s;
-    OQS_KEM *k;
-} OQS_KEY;
+    OQS_SIG *sig;
+    OQS_KEM *kem;
+    OQS_HYB_KEM *hybkem;
+} OQS_PRIMITIVE;
+
+typedef enum {
+    KEY_TYPE_SIG, KEY_TYPE_KEM, KEY_TYPE_HYB_KEM
+} OQS_KEY_TYPE;
 
 struct oqsx_key_st {
     OSSL_LIB_CTX *libctx;
     char *propq;
-    unsigned int iskem:1;
-    OQS_KEY key;
+    OQS_KEY_TYPE keytype;
+    OQS_PRIMITIVE primitive;
     size_t privkeylen;
     size_t pubkeylen;
     char *oqs_name;
@@ -52,7 +86,6 @@ struct oqsx_key_st {
 };
 
 typedef struct oqsx_key_st OQSX_KEY;
-
 
 OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int is_kem, const char *propq);
 int oqsx_key_allocate_keymaterial(OQSX_KEY *key);

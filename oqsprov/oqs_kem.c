@@ -96,16 +96,16 @@ static int oqs_kem_encaps(void *vpkemctx, unsigned char *out, size_t *outlen,
 
     OQS_KEM_PRINTF("OQS KEM provider called: encaps\n");
     if (pkemctx->kem == NULL) {
-        printf("OQS Warning: OQS_KEM not initialized\n");
+        OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
-    *outlen = pkemctx->kem->key.k->length_ciphertext;
-    *secretlen = pkemctx->kem->key.k->length_shared_secret;
+    *outlen = pkemctx->kem->primitive.kem->length_ciphertext;
+    *secretlen = pkemctx->kem->primitive.kem->length_shared_secret;
     if (out == NULL || secret == NULL) {
        OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n", *outlen, *secretlen);
        return 1;
     }
-    return OQS_SUCCESS == OQS_KEM_encaps(pkemctx->kem->key.k, out, secret, pkemctx->kem->pubkey);
+    return OQS_SUCCESS == OQS_KEM_encaps(pkemctx->kem->primitive.kem, out, secret, pkemctx->kem->pubkey);
 }
 
 static int oqs_kem_decaps(void *vpkemctx, unsigned char *out, size_t *outlen,
@@ -115,13 +115,13 @@ static int oqs_kem_decaps(void *vpkemctx, unsigned char *out, size_t *outlen,
 
     OQS_KEM_PRINTF("OQS KEM provider called: decaps\n");
     if (pkemctx->kem == NULL) {
-        printf("OQS Warning: OQS_KEM not initialized\n");
+        OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
-    *outlen = pkemctx->kem->key.k->length_shared_secret;
+    *outlen = pkemctx->kem->primitive.kem->length_shared_secret;
     if (out == NULL) return 1;
 
-    return OQS_SUCCESS == OQS_KEM_decaps(pkemctx->kem->key.k, out, in, pkemctx->kem->privkey);
+    return OQS_SUCCESS == OQS_KEM_decaps(pkemctx->kem->primitive.kem, out, in, pkemctx->kem->privkey);
 }
 
 #define MAKE_KEM_FUNCTIONS(alg) \

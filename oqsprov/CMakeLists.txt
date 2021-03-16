@@ -1,6 +1,6 @@
 set(PROVIDER_SOURCE_FILES
   oqsprov.c oqsprov_groups.c oqsprov_keys.c
-  oqs_kmgmt.c oqs_sig.c oqs_kem.c
+  oqs_kmgmt.c oqs_sig.c oqs_kem.c oqs_hyb_kem.c
 )
 set(PROVIDER_HEADER_FILES
   oqsx.h

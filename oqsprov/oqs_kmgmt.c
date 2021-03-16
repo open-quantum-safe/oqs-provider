@@ -948,6 +948,16 @@ static void *sntrup857_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_sntrup857, 1);
 }
 
+static void *p256_sikep434_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p434, "sikep434", 2, NULL);
+}
+
+static void *p256_sikep434_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sike_p434, 2);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_KEYMGMT_FUNCTIONS(alg) \
@@ -1034,3 +1044,4 @@ MAKE_KEYMGMT_FUNCTIONS(sntrup653)
 MAKE_KEYMGMT_FUNCTIONS(sntrup761)
 MAKE_KEYMGMT_FUNCTIONS(sntrup857)
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+MAKE_KEYMGMT_FUNCTIONS(p256_sikep434)

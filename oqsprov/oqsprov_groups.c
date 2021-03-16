@@ -73,6 +73,7 @@ static const OQS_GROUP_CONSTANTS oqs_group_list[] = {
    { 0x0233, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0234, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
+   { 0x0235, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
 };
 
 #define OQS_GROUP_ENTRY(tlsname, realname, algorithm, idx) \
@@ -147,6 +148,7 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY("sntrup761", "sntrup761", "sntrup761", 38),
     OQS_GROUP_ENTRY("sntrup857", "sntrup857", "sntrup857", 39),
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
+    OQS_GROUP_ENTRY("p256_sikep434", "p256_sikep434", "p256_sikep434", 40),
 };
 
 static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)

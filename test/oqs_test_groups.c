@@ -77,27 +77,55 @@ static const char *group_names[] = {
   "sntrup761",
   "sntrup857",
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_CASES_END
+  "p256_sikep434"
 };
 
 static int test_oqs_groups(const char *group_name)
 {
   SSL_CTX *cctx = NULL, *sctx = NULL;
   SSL *clientssl = NULL, *serverssl = NULL;
-  int testresult =
+  int ret = 1, testresult = 0;
+
+  testresult =
     create_ssl_ctx_pair(libctx, TLS_server_method(), TLS_client_method(),
                         TLS1_3_VERSION, TLS1_3_VERSION,
-                        &sctx, &cctx, cert, privkey)
-    && create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL)
-    && SSL_set1_groups_list(serverssl, group_name)
-    && SSL_set1_groups_list(clientssl, group_name)
-    && create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE);
+                        &sctx, &cctx, cert, privkey);
+  if (!testresult) {
+      ret = -1; goto err;
+  }
 
+  testresult =
+    create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL);
+
+  if (!testresult) {
+      ret = -2; goto err;
+  }
+
+  testresult =
+    SSL_set1_groups_list(serverssl, group_name);
+  if (!testresult) {
+      ret = -3; goto err;
+  }
+
+  testresult =
+    SSL_set1_groups_list(clientssl, group_name);
+  if (!testresult) {
+      ret = -4; goto err;
+  }
+
+  testresult =
+    create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE);
+  if (!testresult) {
+      ret = -5; goto err;
+  }
+
+  err:
   SSL_free(serverssl);
   SSL_free(clientssl);
   SSL_CTX_free(sctx);
   SSL_CTX_free(cctx);
 
-  return testresult;
+  return ret;
 }
 
 #define nelem(a) (sizeof(a)/sizeof((a)[0]))
@@ -128,14 +156,18 @@ int main(int argc, char *argv[])
   T(OSSL_PROVIDER_available(libctx, "default"));
 
   for (i = 0; i < nelem(group_names); i++) {
-    if (test_oqs_groups(group_names[i])) {
+    fprintf(stderr,
+            cGREEN "  Testing...: %s" cNORM "\n",
+            group_names[i]);
+    int ret = test_oqs_groups(group_names[i]);
+    if (ret >= 0) {
       fprintf(stderr,
               cGREEN "  KEM test succeeded: %s" cNORM "\n",
               group_names[i]);
     } else {
       fprintf(stderr,
-              cRED "  KEM test failed: %s" cNORM "\n",
-              group_names[i]);
+              cRED "  KEM test failed: %s, return code: %d"  cNORM "\n",
+              group_names[i], ret);
       ERR_print_errors_fp(stderr);
       errcnt++;
     }

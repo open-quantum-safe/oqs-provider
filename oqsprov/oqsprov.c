@@ -41,6 +41,7 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
 };
 
 extern const OSSL_DISPATCH oqs_generic_kem_functions[];
+extern const OSSL_DISPATCH oqs_hybrid_kem_functions[];
 extern const OSSL_DISPATCH oqs_signature_functions[];
 
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
@@ -102,6 +103,7 @@ extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
+extern const OSSL_DISPATCH oqs_p256_sikep434_keymgmt_functions[];
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
@@ -168,6 +170,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     ALG("sntrup761", oqs_generic_kem_functions),
     ALG("sntrup857", oqs_generic_kem_functions),
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
+    ALG("p256_sikep434", oqs_hybrid_kem_functions),
     { NULL, NULL, NULL }
 };
 
@@ -231,6 +234,7 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     ALG("sntrup761", oqs_sntrup761_keymgmt_functions),
     ALG("sntrup857", oqs_sntrup857_keymgmt_functions),
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+    ALG("p256_sikep434", oqs_p256_sikep434_keymgmt_functions),
     { NULL, NULL, NULL }
 };
 
@@ -330,4 +334,3 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
 
     return 1;
 }
-

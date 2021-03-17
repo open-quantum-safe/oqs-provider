@@ -26,6 +26,14 @@ static OSSL_FUNC_provider_query_operation_fn oqsprovider_query;
 extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 
 #define ALG(NAMES, FUNC) { NAMES, "provider=oqsprovider", FUNC }
+#define KEMALG3(NAMES, SECBITS) \
+    { "" #NAMES "", "provider=oqsprovider", oqs_generic_kem_functions }, \
+    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_hybrid_kem_functions }, \
+    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_hybrid_kem_functions }
+#define KEMKMALG3(NAMES, SECBITS) \
+    { "" #NAMES "", "provider=oqsprovider", oqs_##NAMES##_keymgmt_functions }, \
+    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_ecp_##NAMES##_keymgmt_functions }, \
+    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_ecx_##NAMES##_keymgmt_functions }
 
 /* Functions provided by the core */
 static OSSL_FUNC_core_gettable_params_fn *c_gettable_params = NULL;
@@ -103,7 +111,88 @@ extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
-extern const OSSL_DISPATCH oqs_p256_sikep434_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_frodo640aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_frodo640shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_frodo976aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_frodo976shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_frodo1344aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_frodo1344shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_bike1l1cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_bike1l3cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_kyber512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_kyber768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_kyber1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntru_hps2048509_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntru_hps2048677_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntru_hps4096821_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntru_hrss701_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_lightsaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_saber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_firesaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sidhp434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sidhp503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sidhp610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sidhp751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sikep434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sikep503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sikep610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sikep751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_bike1l1fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_bike1l3fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_kyber90s512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_kyber90s768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_kyber90s1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_hqc128_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_hqc192_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_hqc256_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntrulpr653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntrulpr761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntrulpr857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sntrup653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sntrup761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sntrup857_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecx_frodo640aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_frodo640shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_frodo976aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_frodo976shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_frodo1344aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_frodo1344shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_bike1l1cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_bike1l3cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_kyber512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_kyber768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_kyber1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntru_hps2048509_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntru_hps2048677_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntru_hps4096821_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntru_hrss701_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_lightsaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_saber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_firesaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sidhp434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sidhp503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sidhp610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sidhp751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sikep434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sikep503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sikep610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sikep751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_bike1l1fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_bike1l3fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_kyber90s512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_kyber90s768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_kyber90s1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_hqc128_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_hqc192_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_hqc256_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntrulpr653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntrulpr761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntrulpr857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sntrup653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sntrup761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sntrup857_keymgmt_functions[];
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
@@ -129,48 +218,47 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 
 static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_START
-    ALG("frodo640aes", oqs_generic_kem_functions),
-    ALG("frodo640shake", oqs_generic_kem_functions),
-    ALG("frodo976aes", oqs_generic_kem_functions),
-    ALG("frodo976shake", oqs_generic_kem_functions),
-    ALG("frodo1344aes", oqs_generic_kem_functions),
-    ALG("frodo1344shake", oqs_generic_kem_functions),
-    ALG("bike1l1cpa", oqs_generic_kem_functions),
-    ALG("bike1l3cpa", oqs_generic_kem_functions),
-    ALG("kyber512", oqs_generic_kem_functions),
-    ALG("kyber768", oqs_generic_kem_functions),
-    ALG("kyber1024", oqs_generic_kem_functions),
-    ALG("ntru_hps2048509", oqs_generic_kem_functions),
-    ALG("ntru_hps2048677", oqs_generic_kem_functions),
-    ALG("ntru_hps4096821", oqs_generic_kem_functions),
-    ALG("ntru_hrss701", oqs_generic_kem_functions),
-    ALG("lightsaber", oqs_generic_kem_functions),
-    ALG("saber", oqs_generic_kem_functions),
-    ALG("firesaber", oqs_generic_kem_functions),
-    ALG("sidhp434", oqs_generic_kem_functions),
-    ALG("sidhp503", oqs_generic_kem_functions),
-    ALG("sidhp610", oqs_generic_kem_functions),
-    ALG("sidhp751", oqs_generic_kem_functions),
-    ALG("sikep434", oqs_generic_kem_functions),
-    ALG("sikep503", oqs_generic_kem_functions),
-    ALG("sikep610", oqs_generic_kem_functions),
-    ALG("sikep751", oqs_generic_kem_functions),
-    ALG("bike1l1fo", oqs_generic_kem_functions),
-    ALG("bike1l3fo", oqs_generic_kem_functions),
-    ALG("kyber90s512", oqs_generic_kem_functions),
-    ALG("kyber90s768", oqs_generic_kem_functions),
-    ALG("kyber90s1024", oqs_generic_kem_functions),
-    ALG("hqc128", oqs_generic_kem_functions),
-    ALG("hqc192", oqs_generic_kem_functions),
-    ALG("hqc256", oqs_generic_kem_functions),
-    ALG("ntrulpr653", oqs_generic_kem_functions),
-    ALG("ntrulpr761", oqs_generic_kem_functions),
-    ALG("ntrulpr857", oqs_generic_kem_functions),
-    ALG("sntrup653", oqs_generic_kem_functions),
-    ALG("sntrup761", oqs_generic_kem_functions),
-    ALG("sntrup857", oqs_generic_kem_functions),
+    KEMALG3(frodo640aes, 128),
+    KEMALG3(frodo640shake, 128),
+    KEMALG3(frodo976aes, 192),
+    KEMALG3(frodo976shake, 192),
+    KEMALG3(frodo1344aes, 256),
+    KEMALG3(frodo1344shake, 256),
+    KEMALG3(bike1l1cpa, 128),
+    KEMALG3(bike1l3cpa, 192),
+    KEMALG3(kyber512, 128),
+    KEMALG3(kyber768, 192),
+    KEMALG3(kyber1024, 256),
+    KEMALG3(ntru_hps2048509, 128),
+    KEMALG3(ntru_hps2048677, 192),
+    KEMALG3(ntru_hps4096821, 256),
+    KEMALG3(ntru_hrss701, 192),
+    KEMALG3(lightsaber, 128),
+    KEMALG3(saber, 192),
+    KEMALG3(firesaber, 256),
+    KEMALG3(sidhp434, 128),
+    KEMALG3(sidhp503, 128),
+    KEMALG3(sidhp610, 192),
+    KEMALG3(sidhp751, 256),
+    KEMALG3(sikep434, 128),
+    KEMALG3(sikep503, 128),
+    KEMALG3(sikep610, 192),
+    KEMALG3(sikep751, 256),
+    KEMALG3(bike1l1fo, 128),
+    KEMALG3(bike1l3fo, 192),
+    KEMALG3(kyber90s512, 128),
+    KEMALG3(kyber90s768, 192),
+    KEMALG3(kyber90s1024, 256),
+    KEMALG3(hqc128, 128),
+    KEMALG3(hqc192, 192),
+    KEMALG3(hqc256, 256),
+    KEMALG3(ntrulpr653, 128),
+    KEMALG3(ntrulpr761, 192),
+    KEMALG3(ntrulpr857, 192),
+    KEMALG3(sntrup653, 128),
+    KEMALG3(sntrup761, 192),
+    KEMALG3(sntrup857, 192),
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
-    ALG("p256_sikep434", oqs_hybrid_kem_functions),
     { NULL, NULL, NULL }
 };
 
@@ -193,48 +281,48 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),
     ALG("sphincsshake256128frobust", oqs_sphincsshake256128frobust_keymgmt_functions),
 
-    ALG("frodo640aes", oqs_frodo640aes_keymgmt_functions),
-    ALG("frodo640shake", oqs_frodo640shake_keymgmt_functions),
-    ALG("frodo976aes", oqs_frodo976aes_keymgmt_functions),
-    ALG("frodo976shake", oqs_frodo976shake_keymgmt_functions),
-    ALG("frodo1344aes", oqs_frodo1344aes_keymgmt_functions),
-    ALG("frodo1344shake", oqs_frodo1344shake_keymgmt_functions),
-    ALG("bike1l1cpa", oqs_bike1l1cpa_keymgmt_functions),
-    ALG("bike1l3cpa", oqs_bike1l3cpa_keymgmt_functions),
-    ALG("kyber512", oqs_kyber512_keymgmt_functions),
-    ALG("kyber768", oqs_kyber768_keymgmt_functions),
-    ALG("kyber1024", oqs_kyber1024_keymgmt_functions),
-    ALG("ntru_hps2048509", oqs_ntru_hps2048509_keymgmt_functions),
-    ALG("ntru_hps2048677", oqs_ntru_hps2048677_keymgmt_functions),
-    ALG("ntru_hps4096821", oqs_ntru_hps4096821_keymgmt_functions),
-    ALG("ntru_hrss701", oqs_ntru_hrss701_keymgmt_functions),
-    ALG("lightsaber", oqs_lightsaber_keymgmt_functions),
-    ALG("saber", oqs_saber_keymgmt_functions),
-    ALG("firesaber", oqs_firesaber_keymgmt_functions),
-    ALG("sidhp434", oqs_sidhp434_keymgmt_functions),
-    ALG("sidhp503", oqs_sidhp503_keymgmt_functions),
-    ALG("sidhp610", oqs_sidhp610_keymgmt_functions),
-    ALG("sidhp751", oqs_sidhp751_keymgmt_functions),
-    ALG("sikep434", oqs_sikep434_keymgmt_functions),
-    ALG("sikep503", oqs_sikep503_keymgmt_functions),
-    ALG("sikep610", oqs_sikep610_keymgmt_functions),
-    ALG("sikep751", oqs_sikep751_keymgmt_functions),
-    ALG("bike1l1fo", oqs_bike1l1fo_keymgmt_functions),
-    ALG("bike1l3fo", oqs_bike1l3fo_keymgmt_functions),
-    ALG("kyber90s512", oqs_kyber90s512_keymgmt_functions),
-    ALG("kyber90s768", oqs_kyber90s768_keymgmt_functions),
-    ALG("kyber90s1024", oqs_kyber90s1024_keymgmt_functions),
-    ALG("hqc128", oqs_hqc128_keymgmt_functions),
-    ALG("hqc192", oqs_hqc192_keymgmt_functions),
-    ALG("hqc256", oqs_hqc256_keymgmt_functions),
-    ALG("ntrulpr653", oqs_ntrulpr653_keymgmt_functions),
-    ALG("ntrulpr761", oqs_ntrulpr761_keymgmt_functions),
-    ALG("ntrulpr857", oqs_ntrulpr857_keymgmt_functions),
-    ALG("sntrup653", oqs_sntrup653_keymgmt_functions),
-    ALG("sntrup761", oqs_sntrup761_keymgmt_functions),
-    ALG("sntrup857", oqs_sntrup857_keymgmt_functions),
+    KEMKMALG3(frodo640aes, 128),
+    KEMKMALG3(frodo640shake, 128),
+    KEMKMALG3(frodo976aes, 192),
+    KEMKMALG3(frodo976shake, 192),
+    KEMKMALG3(frodo1344aes, 256),
+    KEMKMALG3(frodo1344shake, 256),
+    KEMKMALG3(bike1l1cpa, 128),
+    KEMKMALG3(bike1l3cpa, 192),
+    KEMKMALG3(kyber512, 128),
+    KEMKMALG3(kyber768, 192),
+    KEMKMALG3(kyber1024, 256),
+    KEMKMALG3(ntru_hps2048509, 128),
+    KEMKMALG3(ntru_hps2048677, 192),
+    KEMKMALG3(ntru_hps4096821, 256),
+    KEMKMALG3(ntru_hrss701, 192),
+    KEMKMALG3(lightsaber, 128),
+    KEMKMALG3(saber, 192),
+    KEMKMALG3(firesaber, 256),
+    KEMKMALG3(sidhp434, 128),
+    KEMKMALG3(sidhp503, 128),
+    KEMKMALG3(sidhp610, 192),
+    KEMKMALG3(sidhp751, 256),
+    KEMKMALG3(sikep434, 128),
+    KEMKMALG3(sikep503, 128),
+    KEMKMALG3(sikep610, 192),
+    KEMKMALG3(sikep751, 256),
+    KEMKMALG3(bike1l1fo, 128),
+    KEMKMALG3(bike1l3fo, 192),
+    KEMKMALG3(kyber90s512, 128),
+    KEMKMALG3(kyber90s768, 192),
+    KEMKMALG3(kyber90s1024, 256),
+    KEMKMALG3(hqc128, 128),
+    KEMKMALG3(hqc192, 192),
+    KEMKMALG3(hqc256, 256),
+    KEMKMALG3(ntrulpr653, 128),
+    KEMKMALG3(ntrulpr761, 192),
+    KEMKMALG3(ntrulpr857, 192),
+    KEMKMALG3(sntrup653, 128),
+    KEMKMALG3(sntrup761, 192),
+    KEMKMALG3(sntrup857, 192),
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
-    ALG("p256_sikep434", oqs_p256_sikep434_keymgmt_functions),
+    //ALG("x25519_sikep434", oqs_ecx_sikep434_keymgmt_functions),
     { NULL, NULL, NULL }
 };
 

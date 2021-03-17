@@ -18,6 +18,39 @@
 #include <assert.h>
 #include "oqsx.h"
 
+static const int nids_ecx[] = {
+        NID_X25519, // level 1
+        NID_X25519, // level 2
+        NID_X448,   // level 3
+        NID_X448,   // level 4
+        NID_X448    // level 5
+};
+
+static const int nids_ecp[] = {
+        NID_X9_62_prime256v1, // level 1
+        NID_X9_62_prime256v1, // level 2
+        NID_secp384r1,        // level 3
+        NID_secp384r1,        // level 4
+        NID_secp521r1         // level 5
+};
+
+static const int *nid_families[] = {
+        nids_ecp,
+        nids_ecx
+};
+
+static int oqsx_classical_nid_for_kem(const OQS_KEM *key, const int* nid_table, int* nid)
+{
+    int ret = 0;
+    ON_ERR_SET_GOTO(key->claimed_nist_level < 0 && key->claimed_nist_level > 5, ret, -1, err);
+
+    *nid = nid_table[key->claimed_nist_level - 1];
+
+    printf("NID for security level %u selected - %d\n", key->claimed_nist_level, *nid);
+    err:
+    return ret;
+}
+
 /// Provider code
 
 PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx, const OSSL_CORE_HANDLE *handle) {
@@ -42,19 +75,20 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
 
     if (ret == NULL) goto err;
 
-    printf("Creating new %s key (type %d)\n", oqs_name, primitive);
-    if (primitive == KEY_TYPE_KEM) {
-        ret->primitive.kem = OQS_KEM_new(oqs_name);
-        ret->privkeylen = ret->primitive.kem->length_secret_key;
-        ret->pubkeylen = ret->primitive.kem->length_public_key;
-        ret->keytype = KEY_TYPE_KEM;
-    } else if (primitive == KEY_TYPE_SIG) {
+    printf("Creating new %s key (type %d), tls_name = %s\n", oqs_name, primitive, tls_name);
+
+    if (primitive == KEY_TYPE_SIG) {
         ret->primitive.sig = OQS_SIG_new(oqs_name);
         ret->privkeylen = ret->primitive.sig->length_secret_key;
         ret->pubkeylen = ret->primitive.sig->length_public_key;
         ret->keytype = KEY_TYPE_SIG;
-    } else if (primitive == KEY_TYPE_HYB_KEM) {
-        OQS_HYB_KEM* hybkem = OPENSSL_zalloc(sizeof(OQS_HYB_KEM));
+    } else if (primitive == KEY_TYPE_KEM) {
+        ret->primitive.kem = OQS_KEM_new(oqs_name);
+        ret->privkeylen = ret->primitive.kem->length_secret_key;
+        ret->pubkeylen = ret->primitive.kem->length_public_key;
+        ret->keytype = KEY_TYPE_KEM;
+    } else if (primitive == KEY_TYPE_ECX_HYB_KEM || primitive == KEY_TYPE_ECP_HYB_KEM) {
+        OQS_HYB_KEM *hybkem = OPENSSL_zalloc(sizeof(OQS_HYB_KEM));
         size_t kex_length_public_key = 0, kex_length_private_key = 0;
 
         ON_ERR_GOTO(!hybkem, err);
@@ -62,11 +96,14 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         hybkem->kem = OQS_KEM_new(oqs_name);
         ON_ERR_GOTO(!hybkem->kem, err);
 
+        ret2 = oqsx_classical_nid_for_kem(hybkem->kem, nid_families[primitive - KEY_TYPE_ECP_HYB_KEM],
+                                          &hybkem->kex_nid);
+        ON_ERR_GOTO(ret2, err);
+
         hybkem->kexParam = EVP_PKEY_new();
         ON_ERR_GOTO(!hybkem->kexParam, err);
 
-        // TODO: don't hardcode X25519
-        EVP_PKEY_set_type(hybkem->kexParam, NID_X25519);
+        EVP_PKEY_set_type(hybkem->kexParam, hybkem->kex_nid);
 
         hybkem->kex = EVP_PKEY_CTX_new(hybkem->kexParam, NULL);
         ON_ERR_GOTO(!hybkem->kex, err);
@@ -80,8 +117,9 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         ret->primitive.hybkem = hybkem;
         ret->privkeylen = 4 + hybkem->kem->length_secret_key + 4 + kex_length_private_key;
         ret->pubkeylen = 4 + hybkem->kem->length_public_key + 4 + kex_length_public_key;
-        ret->keytype = KEY_TYPE_HYB_KEM;
+        ret->keytype = primitive;
     } else goto err;
+
 
     ret->libctx = libctx;
     ret->references = 1;
@@ -126,7 +164,7 @@ void oqsx_key_free(OQSX_KEY *key)
     OPENSSL_secure_clear_free(key->pubkey, key->pubkeylen);
     if (key->keytype == KEY_TYPE_KEM)
         OQS_KEM_free(key->primitive.kem);
-    else if (key->keytype == KEY_TYPE_HYB_KEM) {
+    else if (key->keytype == KEY_TYPE_ECP_HYB_KEM || key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         OQS_KEM_free(key->primitive.hybkem->kem);
         EVP_PKEY_CTX_free(key->primitive.hybkem->kex);
         EVP_PKEY_free(key->primitive.hybkem->kexParam);
@@ -160,18 +198,6 @@ int oqsx_key_allocate_keymaterial(OQSX_KEY *key)
         key->pubkey = OPENSSL_secure_zalloc(key->pubkeylen);
         ON_ERR_SET_GOTO(!key->pubkey, ret, 1, err);
     }
-#if 0
-    if (key->keytype == KEY_TYPE_HYB_KEM) {
-        if (!key->privkeyhyb) {
-            key->privkeyhyb = OPENSSL_secure_zalloc(key->privkeyhyblen);
-            ON_ERR_SET_GOTO(!key->privkeyhyb, ret, 1, err);
-        }
-        if (!key->pubkeyhyb) {
-            key->pubkeyhyb = OPENSSL_secure_zalloc(key->pubkeyhyblen);
-            ON_ERR_SET_GOTO(!key->pubkeyhyb, ret, 1, err);
-        }
-    }
-#endif
     err:
     return ret;
 }
@@ -225,7 +251,7 @@ int oqsx_key_gen(OQSX_KEY *key)
     if (key->keytype == KEY_TYPE_KEM) {
         ret = OQS_KEM_keypair(key->primitive.kem, key->pubkey, key->privkey);
         ON_ERR_GOTO(ret, err);
-    } else if (key->keytype == KEY_TYPE_HYB_KEM) {
+    } else if (key->keytype == KEY_TYPE_ECP_HYB_KEM || key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         OQS_HYB_KEM *hybkem = key->primitive.hybkem;
         OQS_KEM *kem = hybkem->kem;
         EVP_PKEY_CTX *kex = hybkem->kex;
@@ -233,7 +259,6 @@ int oqsx_key_gen(OQSX_KEY *key)
 
         size_t privkeykemlen = kem->length_secret_key, privkeykexlen = 0;
         size_t pubkeykemlen = kem->length_public_key, pubkeykexlen = 0;
-
 
         ret = OQS_KEM_keypair(hybkem->kem, key->pubkey + 4, key->privkey + 4);
         ON_ERR_GOTO(ret, err);
@@ -253,7 +278,6 @@ int oqsx_key_gen(OQSX_KEY *key)
         ENCODE_UINT32((unsigned char *)key->pubkey + 4 + pubkeykemlen, pubkeykexlen);
         ENCODE_UINT32((unsigned char *)key->privkey, privkeykemlen);
         ENCODE_UINT32((unsigned char *)key->privkey + 4 + privkeykemlen, privkeykexlen);
-
     } else if (key->keytype == KEY_TYPE_SIG) {
         ret = OQS_SIG_keypair(key->primitive.sig, key->pubkey, key->privkey);
         ON_ERR_GOTO(ret, err);
@@ -267,6 +291,8 @@ int oqsx_key_gen(OQSX_KEY *key)
 int oqsx_key_parambits(OQSX_KEY *key) {
     if (key->keytype == KEY_TYPE_KEM)
         return 128+(key->primitive.kem->claimed_nist_level-1)/2*64;
+    else if (key->keytype == KEY_TYPE_ECP_HYB_KEM || key->keytype == KEY_TYPE_ECX_HYB_KEM)
+        return 128+(key->primitive.hybkem->kem->claimed_nist_level-1)/2*64;
     return 128+(key->primitive.sig->claimed_nist_level-1)/2*64;
 }
 

@@ -43,6 +43,11 @@
         goto gt;                              \
     }
 
+#define ECP_NAME(secbits, oqsname) \
+    (secbits == 128 ? "secp256r1_" #oqsname "" : secbits == 192 ? "secp384r1_" #oqsname "" : "secp521r1_" #oqsname "")
+#define ECX_NAME(secbits, oqsname) \
+    (secbits == 128 ? "x25519_" #oqsname "" : "x448_" #oqsname "")
+
 typedef struct prov_oqs_ctx_st {
     const OSSL_CORE_HANDLE *handle;
     OSSL_LIB_CTX *libctx;         /* For all provider modules */
@@ -59,6 +64,7 @@ typedef struct {
     OQS_KEM *kem;
     EVP_PKEY_CTX *kex;
     EVP_PKEY *kexParam;
+    int kex_nid;
 } OQS_HYB_KEM;
 
 typedef union {
@@ -68,7 +74,7 @@ typedef union {
 } OQS_PRIMITIVE;
 
 typedef enum {
-    KEY_TYPE_SIG, KEY_TYPE_KEM, KEY_TYPE_HYB_KEM
+    KEY_TYPE_SIG, KEY_TYPE_KEM, KEY_TYPE_ECP_HYB_KEM, KEY_TYPE_ECX_HYB_KEM
 } OQS_KEY_TYPE;
 
 struct oqsx_key_st {

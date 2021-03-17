@@ -21,9 +21,9 @@
 #include <string.h>
 
 #ifdef NDEBUG
-#define OQS_HYBKEM_PRINTF(a) printf(a)
-#define OQS_HYBKEM_PRINTF2(a, b) printf(a, b)
-#define OQS_HYBKEM_PRINTF3(a, b, c) printf(a, b, c)
+#define OQS_HYBKEM_PRINTF(a)
+#define OQS_HYBKEM_PRINTF2(a, b)
+#define OQS_HYBKEM_PRINTF3(a, b, c)
 #else
 #define OQS_HYBKEM_PRINTF(a) if (getenv("OQSHYBKEM")) printf(a)
 #define OQS_HYBKEM_PRINTF2(a, b) if (getenv("OQSHYBKEM")) printf(a, b)
@@ -195,7 +195,7 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
         return 1;
     }
 
-    peerpk = EVP_PKEY_new_raw_public_key(NID_X25519, NULL, pubkey_kex, pubkey_kexlen);
+    peerpk = EVP_PKEY_new_raw_public_key(hybkem->kex_nid, NULL, pubkey_kex, pubkey_kexlen);
     ON_ERR_SET_GOTO(!peerpk, ret, -1, err);
 
     ret2 = EVP_PKEY_keygen_init(kctx);
@@ -255,12 +255,12 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret, size_t *sec
     *secretlen = hybkem->kem->length_shared_secret + kexDeriveLen;
     if (secret == NULL) return 1;
 
-    pkey = EVP_PKEY_new_raw_private_key(NID_X25519, NULL, privkey_kex, privkey_kexlen);
+    pkey = EVP_PKEY_new_raw_private_key(hybkem->kex_nid, NULL, privkey_kex, privkey_kexlen);
     ON_ERR_SET_GOTO(!pkey, ret, -1, err);
 
     get_ct_ptr(ct, ctlen, &ct1, hybkem->kem->length_ciphertext, &ct2, pubkey_kexlen);
 
-    peerpkey = EVP_PKEY_new_raw_public_key(NID_X25519, NULL, ct2, pubkey_kexlen);
+    peerpkey = EVP_PKEY_new_raw_public_key(hybkem->kex_nid, NULL, ct2, pubkey_kexlen);
     ON_ERR_SET_GOTO(!peerpkey, ret, -1, err);
 
 

@@ -32,14 +32,14 @@
 
 #define ON_ERR_SET_GOTO(condition, ret, code, gt) \
     if ((condition)) {                            \
-        printf("ON_ERR_CONDITION: %d, setting code: %d\n", condition, code);   \
+        printf("ON_ERR_CONDITION: %d, setting code: %d\n", condition, code); fflush(stdout);   \
         (ret) = (code);                           \
         goto gt;                                  \
     }
 
 #define ON_ERR_GOTO(condition, gt) \
     if ((condition)) {                        \
-        printf("ON_ERR_CONDITION: %d\n", condition);   \
+        printf("ON_ERR_CONDITION: %d\n", condition); fflush(stdout);   \
         goto gt;                              \
     }
 
@@ -60,11 +60,22 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 
 #include "oqs/oqs.h"
 
+struct oqsx_kex_info_st {
+    int nid_kex;
+    int nid_kex_crv;
+    int raw_key_support;
+    size_t kex_length_public_key;
+    size_t kex_length_private_key;
+    size_t kex_length_secret;
+};
+
+typedef struct oqsx_kex_info_st OQS_KEX_INFO;
+
 typedef struct {
     OQS_KEM *kem;
     EVP_PKEY_CTX *kex;
     EVP_PKEY *kexParam;
-    int kex_nid;
+    OQS_KEX_INFO kex_info;
 } OQS_HYB_KEM;
 
 typedef union {

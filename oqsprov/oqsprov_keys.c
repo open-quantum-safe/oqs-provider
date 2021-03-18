@@ -18,38 +18,67 @@
 #include <assert.h>
 #include "oqsx.h"
 
-static const int nids_ecx[] = {
-        NID_X25519, // level 1
-        NID_X25519, // level 2
-        NID_X448,   // level 3
-        NID_X448,   // level 4
-        NID_X448    // level 5
+static const OQS_KEX_INFO nids_ecp[] = {
+        { EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65 , 121, 32}, // level 1
+        { EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65 , 121, 32}, // level 2
+        { EVP_PKEY_EC, NID_secp384r1       , 0, 97 , 167, 48}, // level 3
+        { EVP_PKEY_EC, NID_secp384r1       , 0, 97 , 167, 48}, // level 4
+        { EVP_PKEY_EC, NID_secp521r1       , 0, 133, 223, 66}  // level 5
 };
 
-static const int nids_ecp[] = {
-        NID_X9_62_prime256v1, // level 1
-        NID_X9_62_prime256v1, // level 2
-        NID_secp384r1,        // level 3
-        NID_secp384r1,        // level 4
-        NID_secp521r1         // level 5
+static const OQS_KEX_INFO nids_ecx[] = {
+        { EVP_PKEY_X25519, 0, 1, 32, 32, 32}, // level 1
+        { EVP_PKEY_X25519, 0, 1, 32, 32, 32}, // level 2
+        { EVP_PKEY_X448,   0, 1, 56, 56, 56}, // level 3
+        { EVP_PKEY_X448,   0, 1, 56, 56, 56}, // level 4
+        { EVP_PKEY_X448,   0, 1, 56, 56, 56}  // level 5
 };
 
-static const int *nid_families[] = {
-        nids_ecp,
-        nids_ecx
-};
-
-static int oqsx_classical_nid_for_kem(const OQS_KEM *key, const int* nid_table, int* nid)
+static int oqshybkem_init_ecp(int nistlevel, OQS_HYB_KEM *hybkem, OQS_KEX_INFO *kex_info)
 {
-    int ret = 0;
-    ON_ERR_SET_GOTO(key->claimed_nist_level < 0 && key->claimed_nist_level > 5, ret, -1, err);
+    int ret = 1;
 
-    *nid = nid_table[key->claimed_nist_level - 1];
+    *kex_info = nids_ecp[nistlevel - 1];
 
-    printf("NID for security level %u selected - %d\n", key->claimed_nist_level, *nid);
+    hybkem->kex = EVP_PKEY_CTX_new_id(kex_info->nid_kex, NULL);
+    ON_ERR_GOTO(!hybkem->kex, err);
+
+    ret = EVP_PKEY_paramgen_init(hybkem->kex);
+    ON_ERR_GOTO(ret <= 0, err);
+
+    ret = EVP_PKEY_CTX_set_ec_paramgen_curve_nid(hybkem->kex, kex_info->nid_kex_crv);
+    ON_ERR_GOTO(ret <= 0, err);
+
+    ret = EVP_PKEY_paramgen(hybkem->kex, &hybkem->kexParam);
+    ON_ERR_GOTO(ret <= 0 || !hybkem->kexParam, err);
+
     err:
     return ret;
 }
+
+static int oqshybkem_init_ecx(int nistlevel, OQS_HYB_KEM *hybkem, OQS_KEX_INFO *kex_info)
+{
+    int ret = 1;
+
+    *kex_info = nids_ecx[nistlevel - 1];
+
+    hybkem->kexParam = EVP_PKEY_new();
+    ON_ERR_SET_GOTO(!hybkem->kexParam, ret, -1, err);
+
+    ret = EVP_PKEY_set_type(hybkem->kexParam, kex_info->nid_kex);
+    ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
+
+    hybkem->kex = EVP_PKEY_CTX_new(hybkem->kexParam, NULL);
+    ON_ERR_SET_GOTO(!hybkem->kex, ret, -1, err);
+
+    err:
+    return ret;
+}
+
+static const int (*init_kex_fun[])(int, OQS_HYB_KEM *, OQS_KEX_INFO *) = {
+        oqshybkem_init_ecp,
+        oqshybkem_init_ecx
+};
 
 /// Provider code
 
@@ -75,8 +104,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
 
     if (ret == NULL) goto err;
 
-    printf("Creating new %s key (type %d), tls_name = %s\n", oqs_name, primitive, tls_name);
-
     if (primitive == KEY_TYPE_SIG) {
         ret->primitive.sig = OQS_SIG_new(oqs_name);
         ret->privkeylen = ret->primitive.sig->length_secret_key;
@@ -89,34 +116,18 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         ret->keytype = KEY_TYPE_KEM;
     } else if (primitive == KEY_TYPE_ECX_HYB_KEM || primitive == KEY_TYPE_ECP_HYB_KEM) {
         OQS_HYB_KEM *hybkem = OPENSSL_zalloc(sizeof(OQS_HYB_KEM));
-        size_t kex_length_public_key = 0, kex_length_private_key = 0;
-
         ON_ERR_GOTO(!hybkem, err);
 
         hybkem->kem = OQS_KEM_new(oqs_name);
         ON_ERR_GOTO(!hybkem->kem, err);
 
-        ret2 = oqsx_classical_nid_for_kem(hybkem->kem, nid_families[primitive - KEY_TYPE_ECP_HYB_KEM],
-                                          &hybkem->kex_nid);
-        ON_ERR_GOTO(ret2, err);
-
-        hybkem->kexParam = EVP_PKEY_new();
-        ON_ERR_GOTO(!hybkem->kexParam, err);
-
-        EVP_PKEY_set_type(hybkem->kexParam, hybkem->kex_nid);
-
-        hybkem->kex = EVP_PKEY_CTX_new(hybkem->kexParam, NULL);
-        ON_ERR_GOTO(!hybkem->kex, err);
-
-        ret2 = EVP_PKEY_get_raw_public_key(hybkem->kexParam, NULL, &kex_length_public_key);
-        ON_ERR_GOTO(ret2 <= 0 || kex_length_public_key == 0, err);
-
-        ret2 = EVP_PKEY_get_raw_private_key(hybkem->kexParam, NULL, &kex_length_private_key);
-        ON_ERR_GOTO(ret2 <= 0 || kex_length_private_key == 0, err);
+        ret2 = (init_kex_fun[primitive - KEY_TYPE_ECP_HYB_KEM])
+                (hybkem->kem->claimed_nist_level, hybkem, &hybkem->kex_info);
+        ON_ERR_GOTO(ret2 <= 0 || !hybkem->kexParam || !hybkem->kex, err);
 
         ret->primitive.hybkem = hybkem;
-        ret->privkeylen = 4 + hybkem->kem->length_secret_key + 4 + kex_length_private_key;
-        ret->pubkeylen = 4 + hybkem->kem->length_public_key + 4 + kex_length_public_key;
+        ret->privkeylen = 4 + hybkem->kem->length_secret_key + 4 + hybkem->kex_info.kex_length_private_key;
+        ret->pubkeylen = 4 + hybkem->kem->length_public_key + 4 + hybkem->kex_info.kex_length_public_key;
         ret->keytype = primitive;
     } else goto err;
 
@@ -241,6 +252,16 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[], int include_priv
     return 1;
 }
 
+#if 0
+static void printhex(const char* title, unsigned char* c, size_t clen) {
+    printf("%s = ", title);
+    for (int i = 0; i < clen; ++i) {
+        printf("%02x", c[i]);
+    }
+    printf("\n");
+}
+#endif
+
 int oqsx_key_gen(OQSX_KEY *key)
 {
     int ret = 0, ret2 = 0;
@@ -253,31 +274,62 @@ int oqsx_key_gen(OQSX_KEY *key)
         ON_ERR_GOTO(ret, err);
     } else if (key->keytype == KEY_TYPE_ECP_HYB_KEM || key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         OQS_HYB_KEM *hybkem = key->primitive.hybkem;
-        OQS_KEM *kem = hybkem->kem;
-        EVP_PKEY_CTX *kex = hybkem->kex;
+        // Free at errhyb:
+        EVP_PKEY_CTX *kgctx = NULL;
         EVP_PKEY *pkey = NULL;
+        unsigned char *pubkeykex_encoded = NULL;
 
-        size_t privkeykemlen = kem->length_secret_key, privkeykexlen = 0;
-        size_t pubkeykemlen = kem->length_public_key, pubkeykexlen = 0;
+        size_t privkeykemlen = hybkem->kem->length_secret_key, privkeykexlen = 0;
+        size_t pubkeykemlen = hybkem->kem->length_public_key, pubkeykexlen = 0;
 
         ret = OQS_KEM_keypair(hybkem->kem, key->pubkey + 4, key->privkey + 4);
-        ON_ERR_GOTO(ret, err);
+        ON_ERR_GOTO(ret, errhyb);
 
-        ret2 = EVP_PKEY_keygen_init(kex);
-        ON_ERR_SET_GOTO(ret2 != 1, ret, 10, err);
-        ret2 = EVP_PKEY_keygen(kex, &pkey);
-        ON_ERR_SET_GOTO(ret2 != 1, ret, 11, err);
+        kgctx = EVP_PKEY_CTX_new(hybkem->kexParam, NULL);
+        ON_ERR_SET_GOTO(!kgctx, ret, -1, errhyb);
 
-        ret2 = EVP_PKEY_get_raw_public_key(pkey, key->pubkey + 4 + kem->length_public_key + 4, &pubkeykexlen);
-        ON_ERR_SET_GOTO(ret2 <= 0, ret, 44, err);
+        ret2 = EVP_PKEY_keygen_init(kgctx);
+        ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
+        ret2 = EVP_PKEY_keygen(kgctx, &pkey);
+        ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
 
-        ret2 = EVP_PKEY_get_raw_private_key(pkey, key->privkey + 4 + kem->length_secret_key + 4, &privkeykexlen);
-        ON_ERR_SET_GOTO(ret2 <= 0, ret, 45, err);
+
+        // TODO: is there a way to use pre-allocated space for the encoded key?
+        pubkeykexlen = EVP_PKEY_get1_encoded_public_key(pkey, &pubkeykex_encoded);
+        ON_ERR_SET_GOTO(pubkeykexlen <= 0 || !pubkeykex_encoded, ret, -1, errhyb);
+
+        memcpy(key->pubkey + 4 + hybkem->kem->length_public_key + 4, pubkeykex_encoded, pubkeykexlen);
+
+
+        if (hybkem->kex_info.raw_key_support) {
+            ret2 = EVP_PKEY_get_raw_private_key(pkey, key->privkey + 4 + hybkem->kem->length_secret_key + 4, &privkeykexlen);
+            ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
+        } else {
+            // TODO: Workaround for potential bug in OSSL3
+            // i2d_PrivateKey returns incorrect size. We ignore it because the encoded data seems correct.
+            // One could instead point to the already allocated private key once a bug for this is fixed
+            // See: https://github.com/openssl/openssl/issues/14655
+            unsigned char *pkey_enc = NULL;
+            i2d_PrivateKey(pkey, &pkey_enc);
+            ON_ERR_SET_GOTO(!pkey_enc, ret, -1, errhyb);
+            //ON_ERR_SET_GOTO(pkey_enclen != hybkem->kex_nid.kex_length_private_key, ret, -1, err);
+
+            privkeykexlen = hybkem->kex_info.kex_length_private_key;
+
+            memcpy(key->privkey + 4 + hybkem->kem->length_secret_key + 4, pkey_enc, hybkem->kex_info.kex_length_private_key);
+            OPENSSL_clear_free(pkey_enc, privkeykexlen);
+        }
 
         ENCODE_UINT32((unsigned char *)key->pubkey, pubkeykemlen);
         ENCODE_UINT32((unsigned char *)key->pubkey + 4 + pubkeykemlen, pubkeykexlen);
         ENCODE_UINT32((unsigned char *)key->privkey, privkeykemlen);
         ENCODE_UINT32((unsigned char *)key->privkey + 4 + privkeykemlen, privkeykexlen);
+
+        errhyb:
+        EVP_PKEY_CTX_free(kgctx);
+        EVP_PKEY_free(pkey);
+        OPENSSL_free(pubkeykex_encoded);
+        ON_ERR_GOTO(ret <= 0, err);
     } else if (key->keytype == KEY_TYPE_SIG) {
         ret = OQS_SIG_keypair(key->primitive.sig, key->pubkey, key->privkey);
         ON_ERR_GOTO(ret, err);
@@ -299,5 +351,7 @@ int oqsx_key_parambits(OQSX_KEY *key) {
 int oqsx_key_maxsize(OQSX_KEY *key) {
     if (key->keytype == KEY_TYPE_KEM)
         return key->primitive.kem->length_shared_secret;
-    return key->primitive.sig->length_signature;
+    else if (key->keytype == KEY_TYPE_ECP_HYB_KEM || key->keytype == KEY_TYPE_ECX_HYB_KEM)
+        return key->primitive.hybkem->kex_info.kex_length_secret + key->primitive.hybkem->kem->length_shared_secret;
+    else return key->primitive.sig->length_signature;
 }

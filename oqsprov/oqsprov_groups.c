@@ -40,46 +40,46 @@ typedef struct oqs_group_constants_st {
 static const OQS_GROUP_CONSTANTS oqs_group_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_START
-   { 0x0200, 0, 0x2F35, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0201, 0, 0x2F36, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0202, 0, 0x2F37, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0203, 0, 0x2F38, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0204, 0, 0x2F39, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0205, 0, 0x2F40, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0206, 0, 0x2F41, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0207, 0, 0x2F42, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x020F, 0, 0x2F26, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0210, 0, 0x2F43, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0211, 0, 0x2F44, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0214, 0, 0x2F45, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0215, 0, 0x2F46, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0216, 0, 0x2F47, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0217, 0, 0x2F48, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0218, 0, 0x2F49, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0219, 0, 0x2F50, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x021A, 0, 0x2F51, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x021B, 0, 0x2F52, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x021C, 0, 0x2F53, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x021D, 0, 0x2F54, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x021E, 0, 0x2F55, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x021F, 0, 0x2F27, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0220, 0, 0x2F56, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0221, 0, 0x2F57, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0222, 0, 0x2F58, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0223, 0, 0x2F28, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0224, 0, 0x2F59, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0229, 0, 0x2F60, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x022A, 0, 0x2F61, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x022B, 0, 0x2F62, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x022C, 0, 0x2F63, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x022D, 0, 0x2F64, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x022E, 0, 0x2F65, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x022F, 0, 0x2F66, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0230, 0, 0x2F67, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0231, 0, 0x2F68, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0232, 0, 0x2F69, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0233, 0, 0x2F70, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0234, 0, 0x2F71, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0200, 0x2F00, 0x2E00, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0201, 0x2F01, 0x2E01, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0202, 0x2F02, 0x2E02, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0203, 0x2F03, 0x2E03, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0204, 0x2F04, 0x2E04, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0205, 0x2F05, 0x2E05, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0206, 0x2F06, 0x2E06, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0207, 0x2F07, 0x2E07, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x020F, 0x2F0F, 0x2E0F, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0210, 0x2F10, 0x2E10, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0211, 0x2F11, 0x2E11, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0214, 0x2F14, 0x2E14, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0215, 0x2F15, 0x2E15, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0216, 0x2F16, 0x2E16, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0217, 0x2F17, 0x2E17, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0218, 0x2F18, 0x2E18, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0219, 0x2F19, 0x2E19, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x021A, 0x2F1A, 0x2E1A, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x021B, 0x2F1B, 0x2E1B, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x021C, 0x2F1C, 0x2E1C, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x021D, 0x2F1D, 0x2E1D, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x021E, 0x2F1E, 0x2E1E, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x021F, 0x2F1F, 0x2E1F, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0220, 0x2F20, 0x2E20, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0221, 0x2F21, 0x2E21, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0222, 0x2F22, 0x2E22, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0223, 0x2F23, 0x2E23, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0224, 0x2F24, 0x2E24, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0229, 0x2F29, 0x2E29, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x022A, 0x2F2A, 0x2E2A, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x022B, 0x2F2B, 0x2E2B, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x022C, 0x2F2C, 0x2E2C, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x022D, 0x2F2D, 0x2E2D, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x022E, 0x2F2E, 0x2E2E, 256, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x022F, 0x2F2F, 0x2E2F, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0230, 0x2F30, 0x2E30, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0231, 0x2F31, 0x2E31, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0232, 0x2F32, 0x2E32, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0233, 0x2F33, 0x2E33, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0234, 0x2F34, 0x2E34, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
 };
 
@@ -111,6 +111,32 @@ static const OQS_GROUP_CONSTANTS oqs_group_list[] = {
                         (unsigned int *)&oqs_group_list[idx].is_kem), \
         OSSL_PARAM_END \
     },                                                         \
+    { \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME, \
+                               ECP_NAME(sb, tlsname), \
+                               sizeof(ECP_NAME(sb, tlsname))), \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME_INTERNAL, \
+                               ECP_NAME(sb, realname), \
+                               sizeof(ECP_NAME(sb, realname))), \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_ALG, \
+                               ECP_NAME(sb, algorithm), \
+                               sizeof(ECP_NAME(sb, algorithm))), \
+        OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_GROUP_ID, \
+                        (unsigned int *)&oqs_group_list[idx].group_id_ecp_hyb), \
+        OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_GROUP_SECURITY_BITS, \
+                        (unsigned int *)&oqs_group_list[idx].secbits), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MIN_TLS, \
+                        (unsigned int *)&oqs_group_list[idx].mintls), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MAX_TLS, \
+                        (unsigned int *)&oqs_group_list[idx].maxtls), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MIN_DTLS, \
+                        (unsigned int *)&oqs_group_list[idx].mindtls), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MAX_DTLS, \
+                        (unsigned int *)&oqs_group_list[idx].maxdtls), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_IS_KEM, \
+                        (unsigned int *)&oqs_group_list[idx].is_kem), \
+        OSSL_PARAM_END \
+    }, \
     { \
         OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME, \
                                ECX_NAME(sb, tlsname), \
@@ -188,7 +214,7 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
 {
     size_t i;
 
-    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 2);
+    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3);
     for (i = 0; i < OSSL_NELEM(oqs_param_group_list); i++) {
         if (!cb(oqs_param_group_list[i], arg))
             return 0;

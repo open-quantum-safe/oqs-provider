@@ -44,7 +44,7 @@
     }
 
 #define ECP_NAME(secbits, oqsname) \
-    (secbits == 128 ? "secp256r1_" #oqsname "" : secbits == 192 ? "secp384r1_" #oqsname "" : "secp521r1_" #oqsname "")
+    (secbits == 128 ? "p256_" #oqsname "" : secbits == 192 ? "p384_" #oqsname "" : "p521_" #oqsname "")
 #define ECX_NAME(secbits, oqsname) \
     (secbits == 128 ? "x25519_" #oqsname "" : "x448_" #oqsname "")
 

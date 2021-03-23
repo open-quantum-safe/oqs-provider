@@ -13,15 +13,3 @@ static void *{{variant['name']}}_gen_init(void *provctx, int selection)
    {%- endfor %}
 {% endfor %}
 
-{% for kem in config['kems'] %}
-static void *{{kem['name_group']}}_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), {{kem['oqs_alg']}}, "{{kem['name_group']}}", 1, NULL);
-}
-
-static void *{{kem['name_group']}}_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, {{kem['oqs_alg']}}, 1);
-} 
-{% endfor %}
-

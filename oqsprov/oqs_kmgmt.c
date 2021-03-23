@@ -545,6 +545,7 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
 {
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_128f_robust, 0);
 }
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg) \
@@ -575,12 +576,12 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
 \
     static void *tokalg##_new_key(void *provctx) \
     { \
-        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_##tokoqsalg, "" #tokalg "", KEY_TYPE_KEM, NULL); \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_KEM, NULL); \
     }                                                 \
                                                       \
     static void *tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, OQS_KEM_alg_##tokoqsalg, KEY_TYPE_KEM); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_KEM); \
     }                                                 \
                                                       \
     const OSSL_DISPATCH oqs_##tokalg##_keymgmt_functions[] = { \
@@ -607,12 +608,12 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
                                                       \
     static void *ecp_##tokalg##_new_key(void *provctx) \
     { \
-        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_##tokoqsalg, "" #tokalg "", KEY_TYPE_ECP_HYB_KEM, NULL); \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECP_HYB_KEM, NULL); \
     } \
                                                       \
     static void *ecp_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, OQS_KEM_alg_##tokoqsalg, KEY_TYPE_ECP_HYB_KEM); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_ECP_HYB_KEM); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecp_##tokalg##_keymgmt_functions[] = { \
@@ -639,12 +640,12 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
                                                       \
     static void *ecx_##tokalg##_new_key(void *provctx) \
     { \
-        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_##tokoqsalg, "" #tokalg "", KEY_TYPE_ECX_HYB_KEM, NULL); \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECX_HYB_KEM, NULL); \
     } \
                                                       \
     static void *ecx_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, OQS_KEM_alg_##tokoqsalg, KEY_TYPE_ECX_HYB_KEM); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_ECX_HYB_KEM); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecx_##tokalg##_keymgmt_functions[] = { \
@@ -687,44 +688,44 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsharaka128frobust)
 MAKE_SIG_KEYMGMT_FUNCTIONS(sphincssha256128frobust)
 MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsshake256128frobust)
 
-MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, frodokem_640_aes)
-MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640shake, frodokem_640_shake)
-MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976aes, frodokem_976_aes)
-MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976shake, frodokem_976_shake)
-MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344aes, frodokem_1344_aes)
-MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344shake, frodokem_1344_shake)
-MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l1cpa, bike1_l1_cpa)
-MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l3cpa, bike1_l3_cpa)
-MAKE_KEM_KEYMGMT_FUNCTIONS(kyber512, kyber_512)
-MAKE_KEM_KEYMGMT_FUNCTIONS(kyber768, kyber_768)
-MAKE_KEM_KEYMGMT_FUNCTIONS(kyber1024, kyber_1024)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps2048509, ntru_hps2048509)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps2048677, ntru_hps2048677)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps4096821, ntru_hps4096821)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hrss701, ntru_hrss701)
-MAKE_KEM_KEYMGMT_FUNCTIONS(lightsaber, saber_lightsaber)
-MAKE_KEM_KEYMGMT_FUNCTIONS(saber, saber_saber)
-MAKE_KEM_KEYMGMT_FUNCTIONS(firesaber, saber_firesaber)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp434, sidh_p434)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp503, sidh_p503)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp610, sidh_p610)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp751, sidh_p751)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sikep434, sike_p434)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sikep503, sike_p503)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sikep610, sike_p610)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sikep751, sike_p751)
-MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l1fo, bike1_l1_fo)
-MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l3fo, bike1_l3_fo)
-MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s512, kyber_512_90s)
-MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s768, kyber_768_90s)
-MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s1024, kyber_1024_90s)
-MAKE_KEM_KEYMGMT_FUNCTIONS(hqc128, hqc_128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(hqc192, hqc_192)
-MAKE_KEM_KEYMGMT_FUNCTIONS(hqc256, hqc_256)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr653, ntruprime_ntrulpr653)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr761, ntruprime_ntrulpr761)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr857, ntruprime_ntrulpr857)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup653, ntruprime_sntrup653)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup761, ntruprime_sntrup761)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup857, ntruprime_sntrup857)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640shake, OQS_KEM_alg_frodokem_640_shake)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976aes, OQS_KEM_alg_frodokem_976_aes)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976shake, OQS_KEM_alg_frodokem_976_shake)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344aes, OQS_KEM_alg_frodokem_1344_aes)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344shake, OQS_KEM_alg_frodokem_1344_shake)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l1cpa, OQS_KEM_alg_bike1_l1_cpa)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l3cpa, OQS_KEM_alg_bike1_l3_cpa)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber512, OQS_KEM_alg_kyber_512)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber768, OQS_KEM_alg_kyber_768)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber1024, OQS_KEM_alg_kyber_1024)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps2048509, OQS_KEM_alg_ntru_hps2048509)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps2048677, OQS_KEM_alg_ntru_hps2048677)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps4096821, OQS_KEM_alg_ntru_hps4096821)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hrss701, OQS_KEM_alg_ntru_hrss701)
+MAKE_KEM_KEYMGMT_FUNCTIONS(lightsaber, OQS_KEM_alg_saber_lightsaber)
+MAKE_KEM_KEYMGMT_FUNCTIONS(saber, OQS_KEM_alg_saber_saber)
+MAKE_KEM_KEYMGMT_FUNCTIONS(firesaber, OQS_KEM_alg_saber_firesaber)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp434, OQS_KEM_alg_sidh_p434)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp503, OQS_KEM_alg_sidh_p503)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp610, OQS_KEM_alg_sidh_p610)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp751, OQS_KEM_alg_sidh_p751)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep434, OQS_KEM_alg_sike_p434)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep503, OQS_KEM_alg_sike_p503)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep610, OQS_KEM_alg_sike_p610)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep751, OQS_KEM_alg_sike_p751)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l1fo, OQS_KEM_alg_bike1_l1_fo)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l3fo, OQS_KEM_alg_bike1_l3_fo)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s512, OQS_KEM_alg_kyber_512_90s)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s768, OQS_KEM_alg_kyber_768_90s)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s1024, OQS_KEM_alg_kyber_1024_90s)
+MAKE_KEM_KEYMGMT_FUNCTIONS(hqc128, OQS_KEM_alg_hqc_128)
+MAKE_KEM_KEYMGMT_FUNCTIONS(hqc192, OQS_KEM_alg_hqc_192)
+MAKE_KEM_KEYMGMT_FUNCTIONS(hqc256, OQS_KEM_alg_hqc_256)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr653, OQS_KEM_alg_ntruprime_ntrulpr653)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr761, OQS_KEM_alg_ntruprime_ntrulpr761)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr857, OQS_KEM_alg_ntruprime_ntrulpr857)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup653, OQS_KEM_alg_ntruprime_sntrup653)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup761, OQS_KEM_alg_ntruprime_sntrup761)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup857, OQS_KEM_alg_ntruprime_sntrup857)
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END

@@ -329,7 +329,6 @@ int oqsx_key_gen(OQSX_KEY *key)
         EVP_PKEY_CTX_free(kgctx);
         EVP_PKEY_free(pkey);
         OPENSSL_free(pubkeykex_encoded);
-        ON_ERR_GOTO(ret <= 0, err);
     } else if (key->keytype == KEY_TYPE_SIG) {
         ret = OQS_SIG_keypair(key->primitive.sig, key->pubkey, key->privkey);
         ON_ERR_GOTO(ret, err);

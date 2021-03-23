@@ -110,7 +110,6 @@ extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
-///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
 
 extern const OSSL_DISPATCH oqs_ecp_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_frodo640shake_keymgmt_functions[];
@@ -193,6 +192,7 @@ extern const OSSL_DISPATCH oqs_ecx_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup857_keymgmt_functions[];
+///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START

@@ -107,10 +107,10 @@ static int get_oqs_oid(unsigned char* oidbuf, const char *oqs_name) {
        return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.311.89.2.1.21", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_rainbow_I_classic, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.1.1", 1), &oidbuf);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.1.1.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_rainbow_V_classic, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.3.1", 1), &oidbuf);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.3.1.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_sphincs_haraka_128f_robust, oqs_name))
        return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.6.1.1", 1), &oidbuf);

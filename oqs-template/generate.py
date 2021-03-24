@@ -41,9 +41,14 @@ def populate(filename, config, delimiter, overwrite=False):
 
 def load_config():
     config = file_get_contents(os.path.join('oqs-template', 'generate.yml'), encoding='utf-8')
+    config_extras = file_get_contents(os.path.join('oqs-template', 'generate-extras.yml'), encoding='utf-8')
     config = yaml.safe_load(config)
+    config_extras = yaml.safe_load(config_extras)
     for sig in config['sigs']:
         sig['variants'] = [variant for variant in sig['variants'] if variant['enable']]
+    for kem in config['kems']:
+        if kem['name_group'] in config_extras['kems']:
+            kem.update(config_extras['kems'][kem['name_group']])
     return config
 
 config = load_config()

@@ -21,15 +21,6 @@
 
 /* Extras for OQS extension */
 
-#define ENCODE_UINT32(pbuf, i)  (pbuf)[0]   = (unsigned char)((i>>24) & 0xff); \
-                                (pbuf)[1] = (unsigned char)((i>>16) & 0xff); \
-                                (pbuf)[2] = (unsigned char)((i>> 8) & 0xff); \
-                                (pbuf)[3] = (unsigned char)((i    ) & 0xff);
-#define DECODE_UINT32(i, pbuf)  i  = ((uint32_t) (pbuf)[0]) << 24; \
-                                i |= ((uint32_t) (pbuf)[1]) << 16; \
-                                i |= ((uint32_t) (pbuf)[2]) <<  8; \
-                                i |= ((uint32_t) (pbuf)[3]);
-
 #define ON_ERR_SET_GOTO(condition, ret, code, gt) \
     if ((condition)) {                            \
         printf("ON_ERR_CONDITION: %d, setting code: %d\n", condition, code); fflush(stdout);   \
@@ -72,35 +63,47 @@ struct oqsx_kex_info_st {
     size_t kex_length_secret;
 };
 
-typedef struct oqsx_kex_info_st OQS_KEX_INFO;
+typedef struct oqsx_kex_info_st OQSX_KEX_INFO;
 
-typedef struct {
-    OQS_KEM *kem;
+struct oqsx_evp_ctx_st {
     EVP_PKEY_CTX *kex;
     EVP_PKEY *kexParam;
-    OQS_KEX_INFO kex_info;
-} OQS_HYB_KEM;
+    const OQSX_KEX_INFO *kex_info;
+};
+
+typedef struct oqsx_evp_ctx_st OQSX_EVP_CTX;
 
 typedef union {
     OQS_SIG *sig;
     OQS_KEM *kem;
-    OQS_HYB_KEM *hybkem;
-} OQS_PRIMITIVE;
+} OQSX_QS_CTX;
 
-typedef enum {
+struct oqsx_provider_ctx_st {
+    OQSX_QS_CTX oqsx_qs_ctx;
+    OQSX_EVP_CTX *oqsx_evp_ctx;
+};
+
+typedef struct oqsx_provider_ctx_st OQSX_PROVIDER_CTX;
+
+enum oqsx_key_type_en {
     KEY_TYPE_SIG, KEY_TYPE_KEM, KEY_TYPE_ECP_HYB_KEM, KEY_TYPE_ECX_HYB_KEM
-} OQS_KEY_TYPE;
+};
+
+typedef enum oqsx_key_type_en OQSX_KEY_TYPE;
 
 struct oqsx_key_st {
     OSSL_LIB_CTX *libctx;
     char *propq;
-    OQS_KEY_TYPE keytype;
-    OQS_PRIMITIVE primitive;
+    OQSX_KEY_TYPE keytype;
+    OQSX_PROVIDER_CTX oqsx_provider_ctx;
+    size_t numkeys;
     size_t privkeylen;
     size_t pubkeylen;
     char *oqs_name;
     char *tls_name;
     _Atomic int references;
+    void **comp_privkey;
+    void **comp_pubkey;
     void *privkey;
     void *pubkey;
 };

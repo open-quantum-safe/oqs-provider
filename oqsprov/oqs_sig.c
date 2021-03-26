@@ -187,7 +187,7 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
 static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
                         const char *mdname, const char *mdprops)
 {
-    OQS_SIG_PRINTF3("OQS SIG provider: setup_md called for MD %s (alg %s)\n", mdname, ctx->sig->primitive.sig->method_name);
+    OQS_SIG_PRINTF3("OQS SIG provider: setup_md called for MD %s (alg %s)\n", mdname, ctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig->method_name);
     if (mdprops == NULL)
         mdprops = ctx->propq;
 
@@ -207,7 +207,7 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
 
         OPENSSL_free(ctx->aid);
         ctx->aid = NULL; // ensure next function allocates memory
-        ctx->aid_len = get_oqs_oid(ctx->aid, ctx->sig->primitive.sig->method_name);
+        ctx->aid_len = get_oqs_oid(ctx->aid, ctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig->method_name);
 
         ctx->mdctx = NULL;
         ctx->md = md;
@@ -253,7 +253,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 {
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     int ret = 0;
-    size_t oqs_sigsize = poqs_sigctx->sig->primitive.sig->length_signature;
+    size_t oqs_sigsize = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature;
     size_t mdsize = oqs_sig_get_md_size(poqs_sigctx);
 
     OQS_SIG_PRINTF("OQS SIG provider: sign called\n");
@@ -273,7 +273,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         return 0;
     }
 
-    ret = OQS_SIG_sign(poqs_sigctx->sig->primitive.sig, sig, siglen, tbs, tbslen, poqs_sigctx->sig->privkey);
+    ret = OQS_SIG_sign(poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig, sig, siglen, tbs, tbslen, poqs_sigctx->sig->privkey);
     if (ret != OQS_SUCCESS) {
         printf("OQS sign error\n");
         return 0;
@@ -293,7 +293,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
     if (mdsize != 0 && tbslen != mdsize)
         return 0;
 
-    ret = OQS_SIG_verify(poqs_sigctx->sig->primitive.sig, tbs, tbslen, sig, siglen, poqs_sigctx->sig->pubkey);
+    ret = OQS_SIG_verify(poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig, tbs, tbslen, sig, siglen, poqs_sigctx->sig->pubkey);
     if (ret != OQS_SUCCESS) {
         printf("OQS sign error\n");
         return 0;

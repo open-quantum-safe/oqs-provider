@@ -1,0 +1,65 @@
+# These fields for 'name_group' are added in addition to the ones specified in generate.yml
+
+kems:
+  frodo640aes:
+    nid_ecx_hybrid: '0x2F40'
+  frodo640shake:
+    nid_ecx_hybrid: '0x2F41'
+  frodo976aes:
+    nid_ecx_hybrid: '0x2F42'
+  frodo976shake:
+    nid_ecx_hybrid: '0x2F43'
+  bike1l1cpa:
+    nid_ecx_hybrid: '0x2F46'
+  bike1l3cpa:
+    nid_ecx_hybrid: '0x2F47'
+  kyber512:
+    nid_ecx_hybrid: '0x2F26'
+  kyber768:
+    nid_ecx_hybrid: '0x2F50'
+  ntru_hps2048509:
+    nid_ecx_hybrid: '0x2F54'
+  ntru_hps2048677:
+    nid_ecx_hybrid: '0x2F55'
+  ntru_hrss701:
+    nid_ecx_hybrid: '0x2F57'
+  lightsaber:
+    nid_ecx_hybrid: '0x2F58'
+  saber:
+    nid_ecx_hybrid: '0x2F59'
+  sidhp434:
+    nid_ecx_hybrid: '0x2F5B'
+  sidhp503:
+    nid_ecx_hybrid: '0x2F5C'
+  sidhp610:
+    nid_ecx_hybrid: '0x2F5D'
+  sikep434:
+    nid_ecx_hybrid: '0x2F27'
+  sikep503:
+    nid_ecx_hybrid: '0x2F60'
+  sikep610:
+    nid_ecx_hybrid: '0x2F61'
+  bike1l1fo:
+    nid_ecx_hybrid: '0x2F28'
+  bike1l3fo:
+    nid_ecx_hybrid: '0x2F64'
+  kyber90s512:
+    nid_ecx_hybrid: '0x2F69'
+  kyber90s768:
+    nid_ecx_hybrid: '0x2F6A'
+  hqc128:
+    nid_ecx_hybrid: '0x2F6C'
+  hqc192:
+    nid_ecx_hybrid: '0x2F6D'
+  ntrulpr653:
+    nid_ecx_hybrid: '0x2F6F'
+  ntrulpr761:
+    nid_ecx_hybrid: '0x2F70'
+  ntrulpr857:
+    nid_ecx_hybrid: '0x2F71'
+  sntrup653:
+    nid_ecx_hybrid: '0x2F72'
+  sntrup761:
+    nid_ecx_hybrid: '0x2F73'
+  sntrup857:
+    nid_ecx_hybrid: '0x2F74'

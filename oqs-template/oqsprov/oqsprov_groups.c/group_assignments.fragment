@@ -1,4 +1,4 @@
 {% for kem in config['kems'] %}
-   { {{ kem['nid'] }}, {{ kem['bit_security'] }}, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { {{ kem['nid'] }}, {{ kem['nid_hybrid'] }}, {% if 'nid_ecx_hybrid' in kem %}{{kem['nid_ecx_hybrid']}}{% else %}0     {% endif %}, {{ kem['bit_security'] }}, TLS1_3_VERSION, 0, -1, 0, 1 },
 {%- endfor %}
 

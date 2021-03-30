@@ -51,7 +51,7 @@ struct oqsx_gen_ctx {
     char *propq;
     char *oqs_name;
     char *tls_name;
-    int is_kem;
+    int primitive;
     int selection;
 };
 
@@ -287,7 +287,7 @@ static const OSSL_PARAM *oqsx_settable_params(void *provctx)
     return oqs_settable_params;
 }
 
-static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int is_kem)
+static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int primitive)
 {
     OSSL_LIB_CTX *libctx = PROV_OQS_LIBCTX_OF(provctx);
     struct oqsx_gen_ctx *gctx = NULL;
@@ -297,7 +297,7 @@ static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int is_
     if ((gctx = OPENSSL_zalloc(sizeof(*gctx))) != NULL) {
         gctx->libctx = libctx;
         gctx->oqs_name = OPENSSL_strdup(oqs_name);
-        gctx->is_kem = is_kem;
+        gctx->primitive = primitive;
         gctx->selection = selection;
     }
     return gctx;
@@ -310,7 +310,7 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx)
     OQS_KM_PRINTF2("OQSKEYMGMT: gen called for %s\n", gctx->oqs_name);
     if (gctx == NULL)
         return NULL;
-    if ((key = oqsx_key_new(gctx->libctx, gctx->oqs_name, NULL, gctx->is_kem, gctx->propq)) == NULL) {
+    if ((key = oqsx_key_new(gctx->libctx, gctx->oqs_name, NULL, gctx->primitive, gctx->propq)) == NULL) {
         ERR_raise(ERR_LIB_PROV, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
@@ -546,411 +546,9 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_128f_robust, 0);
 }
 
-
-
-static void *frodo640aes_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_640_aes, "frodo640aes", 1, NULL);
-}
-
-static void *frodo640aes_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_frodokem_640_aes, 1);
-} 
-
-static void *frodo640shake_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_640_shake, "frodo640shake", 1, NULL);
-}
-
-static void *frodo640shake_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_frodokem_640_shake, 1);
-} 
-
-static void *frodo976aes_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_976_aes, "frodo976aes", 1, NULL);
-}
-
-static void *frodo976aes_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_frodokem_976_aes, 1);
-} 
-
-static void *frodo976shake_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_976_shake, "frodo976shake", 1, NULL);
-}
-
-static void *frodo976shake_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_frodokem_976_shake, 1);
-} 
-
-static void *frodo1344aes_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_1344_aes, "frodo1344aes", 1, NULL);
-}
-
-static void *frodo1344aes_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_frodokem_1344_aes, 1);
-} 
-
-static void *frodo1344shake_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_frodokem_1344_shake, "frodo1344shake", 1, NULL);
-}
-
-static void *frodo1344shake_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_frodokem_1344_shake, 1);
-} 
-
-static void *bike1l1cpa_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l1_cpa, "bike1l1cpa", 1, NULL);
-}
-
-static void *bike1l1cpa_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_bike1_l1_cpa, 1);
-} 
-
-static void *bike1l3cpa_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l3_cpa, "bike1l3cpa", 1, NULL);
-}
-
-static void *bike1l3cpa_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_bike1_l3_cpa, 1);
-} 
-
-static void *kyber512_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_512, "kyber512", 1, NULL);
-}
-
-static void *kyber512_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_kyber_512, 1);
-} 
-
-static void *kyber768_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_768, "kyber768", 1, NULL);
-}
-
-static void *kyber768_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_kyber_768, 1);
-} 
-
-static void *kyber1024_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_1024, "kyber1024", 1, NULL);
-}
-
-static void *kyber1024_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_kyber_1024, 1);
-} 
-
-static void *ntru_hps2048509_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps2048509, "ntru_hps2048509", 1, NULL);
-}
-
-static void *ntru_hps2048509_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntru_hps2048509, 1);
-} 
-
-static void *ntru_hps2048677_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps2048677, "ntru_hps2048677", 1, NULL);
-}
-
-static void *ntru_hps2048677_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntru_hps2048677, 1);
-} 
-
-static void *ntru_hps4096821_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hps4096821, "ntru_hps4096821", 1, NULL);
-}
-
-static void *ntru_hps4096821_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntru_hps4096821, 1);
-} 
-
-static void *ntru_hrss701_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntru_hrss701, "ntru_hrss701", 1, NULL);
-}
-
-static void *ntru_hrss701_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntru_hrss701, 1);
-} 
-
-static void *lightsaber_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_saber_lightsaber, "lightsaber", 1, NULL);
-}
-
-static void *lightsaber_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_saber_lightsaber, 1);
-} 
-
-static void *saber_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_saber_saber, "saber", 1, NULL);
-}
-
-static void *saber_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_saber_saber, 1);
-} 
-
-static void *firesaber_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_saber_firesaber, "firesaber", 1, NULL);
-}
-
-static void *firesaber_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_saber_firesaber, 1);
-} 
-
-static void *sidhp434_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p434, "sidhp434", 1, NULL);
-}
-
-static void *sidhp434_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sidh_p434, 1);
-} 
-
-static void *sidhp503_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p503, "sidhp503", 1, NULL);
-}
-
-static void *sidhp503_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sidh_p503, 1);
-} 
-
-static void *sidhp610_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p610, "sidhp610", 1, NULL);
-}
-
-static void *sidhp610_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sidh_p610, 1);
-} 
-
-static void *sidhp751_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sidh_p751, "sidhp751", 1, NULL);
-}
-
-static void *sidhp751_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sidh_p751, 1);
-} 
-
-static void *sikep434_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p434, "sikep434", 1, NULL);
-}
-
-static void *sikep434_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sike_p434, 1);
-} 
-
-static void *sikep503_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p503, "sikep503", 1, NULL);
-}
-
-static void *sikep503_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sike_p503, 1);
-} 
-
-static void *sikep610_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p610, "sikep610", 1, NULL);
-}
-
-static void *sikep610_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sike_p610, 1);
-} 
-
-static void *sikep751_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_sike_p751, "sikep751", 1, NULL);
-}
-
-static void *sikep751_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_sike_p751, 1);
-} 
-
-static void *bike1l1fo_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l1_fo, "bike1l1fo", 1, NULL);
-}
-
-static void *bike1l1fo_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_bike1_l1_fo, 1);
-} 
-
-static void *bike1l3fo_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_bike1_l3_fo, "bike1l3fo", 1, NULL);
-}
-
-static void *bike1l3fo_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_bike1_l3_fo, 1);
-} 
-
-static void *kyber90s512_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_512_90s, "kyber90s512", 1, NULL);
-}
-
-static void *kyber90s512_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_kyber_512_90s, 1);
-} 
-
-static void *kyber90s768_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_768_90s, "kyber90s768", 1, NULL);
-}
-
-static void *kyber90s768_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_kyber_768_90s, 1);
-} 
-
-static void *kyber90s1024_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_kyber_1024_90s, "kyber90s1024", 1, NULL);
-}
-
-static void *kyber90s1024_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_kyber_1024_90s, 1);
-} 
-
-static void *hqc128_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_128, "hqc128", 1, NULL);
-}
-
-static void *hqc128_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_hqc_128, 1);
-} 
-
-static void *hqc192_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_192, "hqc192", 1, NULL);
-}
-
-static void *hqc192_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_hqc_192, 1);
-} 
-
-static void *hqc256_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_hqc_256, "hqc256", 1, NULL);
-}
-
-static void *hqc256_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_hqc_256, 1);
-} 
-
-static void *ntrulpr653_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr653, "ntrulpr653", 1, NULL);
-}
-
-static void *ntrulpr653_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_ntrulpr653, 1);
-} 
-
-static void *ntrulpr761_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr761, "ntrulpr761", 1, NULL);
-}
-
-static void *ntrulpr761_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_ntrulpr761, 1);
-} 
-
-static void *ntrulpr857_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_ntrulpr857, "ntrulpr857", 1, NULL);
-}
-
-static void *ntrulpr857_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_ntrulpr857, 1);
-} 
-
-static void *sntrup653_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup653, "sntrup653", 1, NULL);
-}
-
-static void *sntrup653_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_sntrup653, 1);
-} 
-
-static void *sntrup761_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup761, "sntrup761", 1, NULL);
-}
-
-static void *sntrup761_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_sntrup761, 1);
-} 
-
-static void *sntrup857_new_key(void *provctx)
-{ 
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_KEM_alg_ntruprime_sntrup857, "sntrup857", 1, NULL);
-}
-
-static void *sntrup857_gen_init(void *provctx, int selection)
-{ 
-    return oqsx_gen_init(provctx, selection, OQS_KEM_alg_ntruprime_sntrup857, 1);
-} 
-
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
-#define MAKE_KEYMGMT_FUNCTIONS(alg) \
+#define MAKE_SIG_KEYMGMT_FUNCTIONS(alg) \
 \
     const OSSL_DISPATCH oqs_##alg##_keymgmt_functions[] = { \
         { OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))alg##_new_key }, \
@@ -974,63 +572,160 @@ static void *sntrup857_gen_init(void *provctx, int selection)
         { 0, NULL } \
     };
 
+#define MAKE_KEM_KEYMGMT_FUNCTIONS(tokalg, tokoqsalg) \
+\
+    static void *tokalg##_new_key(void *provctx) \
+    { \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_KEM, NULL); \
+    }                                                 \
+                                                      \
+    static void *tokalg##_gen_init(void *provctx, int selection) \
+    { \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_KEM); \
+    }                                                 \
+                                                      \
+    const OSSL_DISPATCH oqs_##tokalg##_keymgmt_functions[] = { \
+        { OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))tokalg##_new_key }, \
+        { OSSL_FUNC_KEYMGMT_FREE, (void (*)(void))oqsx_key_free }, \
+        { OSSL_FUNC_KEYMGMT_GET_PARAMS, (void (*) (void))oqsx_get_params }, \
+        { OSSL_FUNC_KEYMGMT_SETTABLE_PARAMS, (void (*) (void))oqsx_settable_params },  \
+        { OSSL_FUNC_KEYMGMT_GETTABLE_PARAMS, (void (*) (void))oqs_gettable_params }, \
+        { OSSL_FUNC_KEYMGMT_SET_PARAMS, (void (*) (void))oqsx_set_params }, \
+        { OSSL_FUNC_KEYMGMT_HAS, (void (*)(void))oqsx_has }, \
+        { OSSL_FUNC_KEYMGMT_MATCH, (void (*)(void))oqsx_match }, \
+        { OSSL_FUNC_KEYMGMT_IMPORT, (void (*)(void))oqsx_import }, \
+        { OSSL_FUNC_KEYMGMT_IMPORT_TYPES, (void (*)(void))oqs_imexport_types }, \
+        { OSSL_FUNC_KEYMGMT_EXPORT, (void (*)(void))oqsx_export }, \
+        { OSSL_FUNC_KEYMGMT_EXPORT_TYPES, (void (*)(void))oqs_imexport_types }, \
+        { OSSL_FUNC_KEYMGMT_GEN_INIT, (void (*)(void))tokalg##_gen_init }, \
+        { OSSL_FUNC_KEYMGMT_GEN, (void (*)(void))oqsx_gen }, \
+        { OSSL_FUNC_KEYMGMT_GEN_CLEANUP, (void (*)(void))oqsx_gen_cleanup }, \
+        { OSSL_FUNC_KEYMGMT_GEN_SET_PARAMS, (void (*)(void))oqsx_gen_set_params }, \
+        { OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS, (void (*)(void))oqsx_gen_settable_params }, \
+        { OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load }, \
+        { 0, NULL } \
+    }; \
+                                                      \
+    static void *ecp_##tokalg##_new_key(void *provctx) \
+    { \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECP_HYB_KEM, NULL); \
+    } \
+                                                      \
+    static void *ecp_##tokalg##_gen_init(void *provctx, int selection) \
+    { \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_ECP_HYB_KEM); \
+    } \
+                                                      \
+    const OSSL_DISPATCH oqs_ecp_##tokalg##_keymgmt_functions[] = { \
+        { OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))ecp_##tokalg##_new_key }, \
+        { OSSL_FUNC_KEYMGMT_FREE, (void (*)(void))oqsx_key_free }, \
+        { OSSL_FUNC_KEYMGMT_GET_PARAMS, (void (*) (void))oqsx_get_params }, \
+        { OSSL_FUNC_KEYMGMT_SETTABLE_PARAMS, (void (*) (void))oqsx_settable_params },  \
+        { OSSL_FUNC_KEYMGMT_GETTABLE_PARAMS, (void (*) (void))oqs_gettable_params }, \
+        { OSSL_FUNC_KEYMGMT_SET_PARAMS, (void (*) (void))oqsx_set_params }, \
+        { OSSL_FUNC_KEYMGMT_HAS, (void (*)(void))oqsx_has }, \
+        { OSSL_FUNC_KEYMGMT_MATCH, (void (*)(void))oqsx_match }, \
+        { OSSL_FUNC_KEYMGMT_IMPORT, (void (*)(void))oqsx_import }, \
+        { OSSL_FUNC_KEYMGMT_IMPORT_TYPES, (void (*)(void))oqs_imexport_types }, \
+        { OSSL_FUNC_KEYMGMT_EXPORT, (void (*)(void))oqsx_export }, \
+        { OSSL_FUNC_KEYMGMT_EXPORT_TYPES, (void (*)(void))oqs_imexport_types }, \
+        { OSSL_FUNC_KEYMGMT_GEN_INIT, (void (*)(void))ecp_##tokalg##_gen_init }, \
+        { OSSL_FUNC_KEYMGMT_GEN, (void (*)(void))oqsx_gen }, \
+        { OSSL_FUNC_KEYMGMT_GEN_CLEANUP, (void (*)(void))oqsx_gen_cleanup }, \
+        { OSSL_FUNC_KEYMGMT_GEN_SET_PARAMS, (void (*)(void))oqsx_gen_set_params }, \
+        { OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS, (void (*)(void))oqsx_gen_settable_params }, \
+        { OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load }, \
+        { 0, NULL } \
+    }; \
+                                                      \
+    static void *ecx_##tokalg##_new_key(void *provctx) \
+    { \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECX_HYB_KEM, NULL); \
+    } \
+                                                      \
+    static void *ecx_##tokalg##_gen_init(void *provctx, int selection) \
+    { \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_ECX_HYB_KEM); \
+    } \
+                                                      \
+    const OSSL_DISPATCH oqs_ecx_##tokalg##_keymgmt_functions[] = { \
+        { OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))ecx_##tokalg##_new_key }, \
+        { OSSL_FUNC_KEYMGMT_FREE, (void (*)(void))oqsx_key_free }, \
+        { OSSL_FUNC_KEYMGMT_GET_PARAMS, (void (*) (void))oqsx_get_params }, \
+        { OSSL_FUNC_KEYMGMT_SETTABLE_PARAMS, (void (*) (void))oqsx_settable_params },  \
+        { OSSL_FUNC_KEYMGMT_GETTABLE_PARAMS, (void (*) (void))oqs_gettable_params }, \
+        { OSSL_FUNC_KEYMGMT_SET_PARAMS, (void (*) (void))oqsx_set_params }, \
+        { OSSL_FUNC_KEYMGMT_HAS, (void (*)(void))oqsx_has }, \
+        { OSSL_FUNC_KEYMGMT_MATCH, (void (*)(void))oqsx_match }, \
+        { OSSL_FUNC_KEYMGMT_IMPORT, (void (*)(void))oqsx_import }, \
+        { OSSL_FUNC_KEYMGMT_IMPORT_TYPES, (void (*)(void))oqs_imexport_types }, \
+        { OSSL_FUNC_KEYMGMT_EXPORT, (void (*)(void))oqsx_export }, \
+        { OSSL_FUNC_KEYMGMT_EXPORT_TYPES, (void (*)(void))oqs_imexport_types }, \
+        { OSSL_FUNC_KEYMGMT_GEN_INIT, (void (*)(void))ecx_##tokalg##_gen_init }, \
+        { OSSL_FUNC_KEYMGMT_GEN, (void (*)(void))oqsx_gen }, \
+        { OSSL_FUNC_KEYMGMT_GEN_CLEANUP, (void (*)(void))oqsx_gen_cleanup }, \
+        { OSSL_FUNC_KEYMGMT_GEN_SET_PARAMS, (void (*)(void))oqsx_gen_set_params }, \
+        { OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS, (void (*)(void))oqsx_gen_settable_params }, \
+        { OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load }, \
+        { 0, NULL } \
+    };
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
-MAKE_KEYMGMT_FUNCTIONS(oqs_sig_default)
-MAKE_KEYMGMT_FUNCTIONS(dilithium2)
-MAKE_KEYMGMT_FUNCTIONS(dilithium3)
-MAKE_KEYMGMT_FUNCTIONS(dilithium5)
-MAKE_KEYMGMT_FUNCTIONS(dilithium2_aes)
-MAKE_KEYMGMT_FUNCTIONS(dilithium3_aes)
-MAKE_KEYMGMT_FUNCTIONS(dilithium5_aes)
-MAKE_KEYMGMT_FUNCTIONS(falcon512)
-MAKE_KEYMGMT_FUNCTIONS(falcon1024)
-MAKE_KEYMGMT_FUNCTIONS(picnicl1full)
-MAKE_KEYMGMT_FUNCTIONS(picnic3l1)
-MAKE_KEYMGMT_FUNCTIONS(rainbowIclassic)
-MAKE_KEYMGMT_FUNCTIONS(rainbowVclassic)
-MAKE_KEYMGMT_FUNCTIONS(sphincsharaka128frobust)
-MAKE_KEYMGMT_FUNCTIONS(sphincssha256128frobust)
-MAKE_KEYMGMT_FUNCTIONS(sphincsshake256128frobust)
+MAKE_SIG_KEYMGMT_FUNCTIONS(oqs_sig_default)
+MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium2)
+MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium3)
+MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium5)
+MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium2_aes)
+MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium3_aes)
+MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium5_aes)
+MAKE_SIG_KEYMGMT_FUNCTIONS(falcon512)
+MAKE_SIG_KEYMGMT_FUNCTIONS(falcon1024)
+MAKE_SIG_KEYMGMT_FUNCTIONS(picnicl1full)
+MAKE_SIG_KEYMGMT_FUNCTIONS(picnic3l1)
+MAKE_SIG_KEYMGMT_FUNCTIONS(rainbowIclassic)
+MAKE_SIG_KEYMGMT_FUNCTIONS(rainbowVclassic)
+MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsharaka128frobust)
+MAKE_SIG_KEYMGMT_FUNCTIONS(sphincssha256128frobust)
+MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsshake256128frobust)
 
-MAKE_KEYMGMT_FUNCTIONS(frodo640aes)
-MAKE_KEYMGMT_FUNCTIONS(frodo640shake)
-MAKE_KEYMGMT_FUNCTIONS(frodo976aes)
-MAKE_KEYMGMT_FUNCTIONS(frodo976shake)
-MAKE_KEYMGMT_FUNCTIONS(frodo1344aes)
-MAKE_KEYMGMT_FUNCTIONS(frodo1344shake)
-MAKE_KEYMGMT_FUNCTIONS(bike1l1cpa)
-MAKE_KEYMGMT_FUNCTIONS(bike1l3cpa)
-MAKE_KEYMGMT_FUNCTIONS(kyber512)
-MAKE_KEYMGMT_FUNCTIONS(kyber768)
-MAKE_KEYMGMT_FUNCTIONS(kyber1024)
-MAKE_KEYMGMT_FUNCTIONS(ntru_hps2048509)
-MAKE_KEYMGMT_FUNCTIONS(ntru_hps2048677)
-MAKE_KEYMGMT_FUNCTIONS(ntru_hps4096821)
-MAKE_KEYMGMT_FUNCTIONS(ntru_hrss701)
-MAKE_KEYMGMT_FUNCTIONS(lightsaber)
-MAKE_KEYMGMT_FUNCTIONS(saber)
-MAKE_KEYMGMT_FUNCTIONS(firesaber)
-MAKE_KEYMGMT_FUNCTIONS(sidhp434)
-MAKE_KEYMGMT_FUNCTIONS(sidhp503)
-MAKE_KEYMGMT_FUNCTIONS(sidhp610)
-MAKE_KEYMGMT_FUNCTIONS(sidhp751)
-MAKE_KEYMGMT_FUNCTIONS(sikep434)
-MAKE_KEYMGMT_FUNCTIONS(sikep503)
-MAKE_KEYMGMT_FUNCTIONS(sikep610)
-MAKE_KEYMGMT_FUNCTIONS(sikep751)
-MAKE_KEYMGMT_FUNCTIONS(bike1l1fo)
-MAKE_KEYMGMT_FUNCTIONS(bike1l3fo)
-MAKE_KEYMGMT_FUNCTIONS(kyber90s512)
-MAKE_KEYMGMT_FUNCTIONS(kyber90s768)
-MAKE_KEYMGMT_FUNCTIONS(kyber90s1024)
-MAKE_KEYMGMT_FUNCTIONS(hqc128)
-MAKE_KEYMGMT_FUNCTIONS(hqc192)
-MAKE_KEYMGMT_FUNCTIONS(hqc256)
-MAKE_KEYMGMT_FUNCTIONS(ntrulpr653)
-MAKE_KEYMGMT_FUNCTIONS(ntrulpr761)
-MAKE_KEYMGMT_FUNCTIONS(ntrulpr857)
-MAKE_KEYMGMT_FUNCTIONS(sntrup653)
-MAKE_KEYMGMT_FUNCTIONS(sntrup761)
-MAKE_KEYMGMT_FUNCTIONS(sntrup857)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640shake, OQS_KEM_alg_frodokem_640_shake)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976aes, OQS_KEM_alg_frodokem_976_aes)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976shake, OQS_KEM_alg_frodokem_976_shake)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344aes, OQS_KEM_alg_frodokem_1344_aes)
+MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344shake, OQS_KEM_alg_frodokem_1344_shake)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l1cpa, OQS_KEM_alg_bike1_l1_cpa)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l3cpa, OQS_KEM_alg_bike1_l3_cpa)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber512, OQS_KEM_alg_kyber_512)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber768, OQS_KEM_alg_kyber_768)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber1024, OQS_KEM_alg_kyber_1024)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps2048509, OQS_KEM_alg_ntru_hps2048509)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps2048677, OQS_KEM_alg_ntru_hps2048677)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps4096821, OQS_KEM_alg_ntru_hps4096821)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hrss701, OQS_KEM_alg_ntru_hrss701)
+MAKE_KEM_KEYMGMT_FUNCTIONS(lightsaber, OQS_KEM_alg_saber_lightsaber)
+MAKE_KEM_KEYMGMT_FUNCTIONS(saber, OQS_KEM_alg_saber_saber)
+MAKE_KEM_KEYMGMT_FUNCTIONS(firesaber, OQS_KEM_alg_saber_firesaber)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp434, OQS_KEM_alg_sidh_p434)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp503, OQS_KEM_alg_sidh_p503)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp610, OQS_KEM_alg_sidh_p610)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sidhp751, OQS_KEM_alg_sidh_p751)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep434, OQS_KEM_alg_sike_p434)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep503, OQS_KEM_alg_sike_p503)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep610, OQS_KEM_alg_sike_p610)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sikep751, OQS_KEM_alg_sike_p751)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l1fo, OQS_KEM_alg_bike1_l1_fo)
+MAKE_KEM_KEYMGMT_FUNCTIONS(bike1l3fo, OQS_KEM_alg_bike1_l3_fo)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s512, OQS_KEM_alg_kyber_512_90s)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s768, OQS_KEM_alg_kyber_768_90s)
+MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s1024, OQS_KEM_alg_kyber_1024_90s)
+MAKE_KEM_KEYMGMT_FUNCTIONS(hqc128, OQS_KEM_alg_hqc_128)
+MAKE_KEM_KEYMGMT_FUNCTIONS(hqc192, OQS_KEM_alg_hqc_192)
+MAKE_KEM_KEYMGMT_FUNCTIONS(hqc256, OQS_KEM_alg_hqc_256)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr653, OQS_KEM_alg_ntruprime_ntrulpr653)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr761, OQS_KEM_alg_ntruprime_ntrulpr761)
+MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr857, OQS_KEM_alg_ntruprime_ntrulpr857)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup653, OQS_KEM_alg_ntruprime_sntrup653)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup761, OQS_KEM_alg_ntruprime_sntrup761)
+MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup857, OQS_KEM_alg_ntruprime_sntrup857)
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END

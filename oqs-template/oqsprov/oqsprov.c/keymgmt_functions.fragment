@@ -4,6 +4,6 @@
    {%- endfor %}
 {%- endfor %}
 {% for kem in config['kems'] %}
-    ALG("{{kem['name_group']}}", oqs_{{ kem['name_group'] }}_keymgmt_functions),
+    KEMKMALG3({{ kem['name_group'] }}, {{ kem['bit_security'] }}),
 {%- endfor %}
 

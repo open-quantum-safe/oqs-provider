@@ -6,4 +6,10 @@ extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_keymgmt_functions[];
 {% for kem in config['kems'] %}
 extern const OSSL_DISPATCH oqs_{{ kem['name_group'] }}_keymgmt_functions[];
 {%- endfor %}
+{% for kem in config['kems'] %}
+extern const OSSL_DISPATCH oqs_ecp_{{ kem['name_group'] }}_keymgmt_functions[];
+{%- endfor %}
+{% for kem in config['kems'] %}
+extern const OSSL_DISPATCH oqs_ecx_{{ kem['name_group'] }}_keymgmt_functions[];
+{%- endfor %}
 

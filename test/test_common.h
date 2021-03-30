@@ -23,6 +23,7 @@
 #define cBLUE   "\033[1;34m"
 #define cDBLUE  "\033[0;34m"
 #define cNORM   "\033[m"
+#define PROVIDER_NAME_OQS "oqsprovider"
 #define TEST_ASSERT(e)                                  \
   {                                                     \
     if (!(test = (e)))                                  \

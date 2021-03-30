@@ -5,6 +5,7 @@
 #include <string.h>
 #include "ssltestlib.h"
 #include "test_common.h"
+#include <openssl/core_names.h>
 
 static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
@@ -33,71 +34,97 @@ char *test_mk_file_path(const char *dir, const char *file)
     return full_file;
 }
 
-
-static const char *group_names[] = {
-///// OQS_TEMPLATE_FRAGMENT_GROUP_CASES_START
-  "frodo640aes",
-  "frodo640shake",
-  "frodo976aes",
-  "frodo976shake",
-  "frodo1344aes",
-  "frodo1344shake",
-  "bike1l1cpa",
-  "bike1l3cpa",
-  "kyber512",
-  "kyber768",
-  "kyber1024",
-  "ntru_hps2048509",
-  "ntru_hps2048677",
-  "ntru_hps4096821",
-  "ntru_hrss701",
-  "lightsaber",
-  "saber",
-  "firesaber",
-  "sidhp434",
-  "sidhp503",
-  "sidhp610",
-  "sidhp751",
-  "sikep434",
-  "sikep503",
-  "sikep610",
-  "sikep751",
-  "bike1l1fo",
-  "bike1l3fo",
-  "kyber90s512",
-  "kyber90s768",
-  "kyber90s1024",
-  "hqc128",
-  "hqc192",
-  "hqc256",
-  "ntrulpr653",
-  "ntrulpr761",
-  "ntrulpr857",
-  "sntrup653",
-  "sntrup761",
-  "sntrup857",
-///// OQS_TEMPLATE_FRAGMENT_GROUP_CASES_END
-};
-
 static int test_oqs_groups(const char *group_name)
 {
   SSL_CTX *cctx = NULL, *sctx = NULL;
   SSL *clientssl = NULL, *serverssl = NULL;
-  int testresult =
+  int ret = 1, testresult = 0;
+
+  testresult =
     create_ssl_ctx_pair(libctx, TLS_server_method(), TLS_client_method(),
                         TLS1_3_VERSION, TLS1_3_VERSION,
-                        &sctx, &cctx, cert, privkey)
-    && create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL)
-    && SSL_set1_groups_list(serverssl, group_name)
-    && SSL_set1_groups_list(clientssl, group_name)
-    && create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE);
+                        &sctx, &cctx, cert, privkey);
+  if (!testresult) {
+      ret = -1; goto err;
+  }
 
+  testresult =
+    create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL);
+
+  if (!testresult) {
+      ret = -2; goto err;
+  }
+
+  testresult =
+    SSL_set1_groups_list(serverssl, group_name);
+  if (!testresult) {
+      ret = -3; goto err;
+  }
+
+  testresult =
+    SSL_set1_groups_list(clientssl, group_name);
+  if (!testresult) {
+      ret = -4; goto err;
+  }
+
+  testresult =
+    create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE);
+  if (!testresult) {
+      ret = -5; goto err;
+  }
+
+  err:
   SSL_free(serverssl);
   SSL_free(clientssl);
   SSL_CTX_free(sctx);
   SSL_CTX_free(cctx);
 
-  return testresult;
+  return ret;
+}
+
+static int test_group(const OSSL_PARAM params[], void *data)
+{
+    int ret = 1;
+    int *errcnt = (int *) data;
+    const OSSL_PARAM *p = OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_GROUP_NAME);
+    if (p == NULL || p->data_type != OSSL_PARAM_UTF8_STRING) {
+        ret = -1;
+        goto err;
+    }
+
+    const char* group_name = OPENSSL_strdup(p->data);
+
+    fprintf(stderr,
+            cGREEN "  Testing...: %s" cNORM "\n",
+            group_name);
+
+    ret = test_oqs_groups(group_name);
+
+    if (ret >= 0) {
+        fprintf(stderr,
+                cGREEN "  KEM test succeeded: %s" cNORM "\n",
+                group_name);
+    } else {
+        fprintf(stderr,
+                cRED "  KEM test failed: %s, return code: %d"  cNORM "\n",
+                group_name, ret);
+        ERR_print_errors_fp(stderr);
+        (*errcnt)++;
+    }
+
+    err:
+    return ret;
+}
+
+static int test_provider_groups(OSSL_PROVIDER *provider, void *vctx)
+{
+    const char* provname = OSSL_PROVIDER_name(provider);
+
+    if (!strcmp(provname, PROVIDER_NAME_OQS))
+        return OSSL_PROVIDER_get_capabilities(provider, "TLS-GROUP",
+                                              test_group, vctx);
+    else
+        return 1;
 }
 
 #define nelem(a) (sizeof(a)/sizeof((a)[0]))
@@ -127,19 +154,7 @@ int main(int argc, char *argv[])
   T(OSSL_PROVIDER_available(libctx, modulename));
   T(OSSL_PROVIDER_available(libctx, "default"));
 
-  for (i = 0; i < nelem(group_names); i++) {
-    if (test_oqs_groups(group_names[i])) {
-      fprintf(stderr,
-              cGREEN "  KEM test succeeded: %s" cNORM "\n",
-              group_names[i]);
-    } else {
-      fprintf(stderr,
-              cRED "  KEM test failed: %s" cNORM "\n",
-              group_names[i]);
-      ERR_print_errors_fp(stderr);
-      errcnt++;
-    }
-  }
+  T(OSSL_PROVIDER_do_all(libctx, test_provider_groups, &errcnt));
 
   OPENSSL_free(cert);
   OPENSSL_free(privkey);

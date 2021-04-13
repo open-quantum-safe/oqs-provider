@@ -11,7 +11,7 @@ localCheckout: &localCheckout
     cp -a /tmp/_circleci_local_build_repo/.git ${PROJECT_PATH}
 jobs:
   ubuntu_focal:
-    description: A template for running OQS-OpenSSL tests on x64 Ubuntu Bionic Docker VMs
+    description: A template for running OQS-OpenSSL tests on x64 Ubuntu Docker VMs
     docker:
       - image: openquantumsafe/ci-ubuntu-focal-x86_64:latest
     steps:
@@ -21,7 +21,7 @@ jobs:
           command: |
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
              cd liboqs && mkdir _build && cd _build &&
-             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local -DOQS_ENABLE_KEM_classic_mceliece_348864_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_348864f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_460896f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6688128f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6960119f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_8192128_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_8192128f_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_460896_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6688128_avx=OFF -DOQS_ENABLE_KEM_classic_mceliece_6960119_avx=OFF .. && ninja install &&
+             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
              cd ..
       - run:
           name: Clone and build OpenSSL(3) 

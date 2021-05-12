@@ -15,6 +15,9 @@ This code is derived from the OQS-OpenSSL3 branch in
 https://github.com/open-quantum-safe/openssl creating
 an independent and (OpenSSL-)external provider.
 
+That repository also fully supports OpenSSL 1.1.1.
+There is no branch for OpenSSL 1.1.1 in this repository.
+
 Status
 ------
 

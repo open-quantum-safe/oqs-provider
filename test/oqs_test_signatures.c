@@ -47,7 +47,7 @@ static int test_oqs_signatures(const char *sigalg_name)
     (mdctx = EVP_MD_CTX_new()) != NULL
     && (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
     && EVP_PKEY_keygen_init(ctx)
-    && EVP_PKEY_gen(ctx, &key)
+    && EVP_PKEY_generate(ctx, &key)
     && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
     && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
     && EVP_DigestSignFinal(mdctx, NULL, &siglen)

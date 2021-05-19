@@ -1,14 +1,13 @@
---- ../openssl/test/helpers/ssltestlib.c	2021-02-08 08:19:42.774106452 +0100
-+++ ssltestlib.c	2021-02-08 08:44:55.882989246 +0100
-@@ -9,14 +9,7 @@
+--- ../openssl/test/helpers/ssltestlib.c	2021-05-19 08:08:58.953086474 +0200
++++ ssltestlib.c	2021-05-19 08:16:36.211148861 +0200
+@@ -9,13 +9,7 @@
  
  #include <string.h>
  
 -#include "internal/nelem.h"
--#include "internal/cryptlib.h" /* for ossl_sleep() */
 -#include "ssltestlib.h"
 -#include "../testutil.h"
--#include "e_os.h"
+-#include "e_os.h" /* for ossl_sleep() etc. */
 -
 -#ifdef OPENSSL_SYS_UNIX
 -# include <unistd.h>
@@ -16,7 +15,7 @@
  # ifndef OPENSSL_NO_KTLS
  #  include <netinet/in.h>
  #  include <netinet/in.h>
-@@ -25,7 +18,11 @@
+@@ -24,7 +18,11 @@
  #  include <unistd.h>
  #  include <fcntl.h>
  # endif
@@ -29,7 +28,7 @@
  
  static int tls_dump_new(BIO *bi);
  static int tls_dump_free(BIO *a);
-@@ -286,15 +283,15 @@
+@@ -285,15 +283,15 @@
  const BIO_METHOD *bio_s_mempacket_test(void)
  {
      if (meth_mem == NULL) {
@@ -54,7 +53,7 @@
              return NULL;
      }
      return meth_mem;
-@@ -309,9 +306,9 @@
+@@ -308,9 +306,9 @@
  {
      MEMPACKET_TEST_CTX *ctx;
  
@@ -66,7 +65,7 @@
          OPENSSL_free(ctx);
          return 0;
      }
-@@ -446,11 +443,11 @@
+@@ -445,11 +443,11 @@
      }
  
      for (i = 0; i < (duprec ? 3 : 1); i++) {
@@ -80,7 +79,7 @@
              goto err;
          /*
           * If we are duplicating the packet, we duplicate it three times. The
-@@ -601,22 +598,15 @@
+@@ -600,22 +598,15 @@
  const BIO_METHOD *bio_s_always_retry(void)
  {
      if (meth_always_retry == NULL) {
@@ -112,12 +111,17 @@
              return NULL;
      }
      return meth_always_retry;
-@@ -695,14 +685,14 @@
+@@ -694,16 +685,17 @@
      if (sctx != NULL) {
          if (*sctx != NULL)
              serverctx = *sctx;
--        else if (!TEST_ptr(serverctx = SSL_CTX_new_ex(libctx, NULL, sm)))
-+        else if (!(serverctx = SSL_CTX_new_ex(libctx, NULL, sm)))
+-        else if (!TEST_ptr(serverctx = SSL_CTX_new_ex(libctx, NULL, sm))
+-            || !TEST_true(SSL_CTX_set_options(serverctx,
+-                                              SSL_OP_ALLOW_CLIENT_RENEGOTIATION)))
++        else if (!(serverctx = SSL_CTX_new_ex(libctx, NULL, sm)) 
++                 || !(SSL_CTX_set_options(serverctx,
++                                          SSL_OP_ALLOW_CLIENT_RENEGOTIATION)))
++
              goto err;
      }
  
@@ -129,7 +133,7 @@
              goto err;
      }
  
-@@ -720,28 +710,28 @@
+@@ -721,28 +713,28 @@
  
      if (serverctx != NULL
              && ((min_proto_version > 0
@@ -167,7 +171,7 @@
              goto err;
      }
  
-@@ -843,15 +833,15 @@
+@@ -844,15 +836,15 @@
  
      if (*sssl != NULL)
          serverssl = *sssl;
@@ -187,7 +191,7 @@
          goto error;
  
      SSL_set_bio(clientssl, c_to_s_bio, c_to_s_bio);
-@@ -880,28 +870,28 @@
+@@ -881,28 +873,28 @@
  
      if (*sssl != NULL)
          serverssl = *sssl;
@@ -224,7 +228,7 @@
          goto error;
  
      /* Set Non-blocking IO behaviour */
-@@ -954,9 +944,9 @@
+@@ -955,9 +947,9 @@
          }
  
          if (!clienterr && retc <= 0 && err != SSL_ERROR_WANT_READ) {
@@ -236,7 +240,7 @@
              clienterr = 1;
          }
          if (want != SSL_ERROR_NONE && err == want)
-@@ -972,9 +962,9 @@
+@@ -973,9 +965,9 @@
          if (!servererr && rets <= 0
                  && err != SSL_ERROR_WANT_READ
                  && err != SSL_ERROR_WANT_X509_LOOKUP) {
@@ -248,7 +252,7 @@
              servererr = 1;
          }
          if (want != SSL_ERROR_NONE && err == want)
-@@ -988,20 +978,20 @@
+@@ -989,20 +981,20 @@
              if (rets > 0 && retc <= 0) {
                  if (SSL_read(serverssl, buf, sizeof(buf)) > 0) {
                      /* We don't expect this to succeed! */
@@ -272,7 +276,7 @@
              return 0;
          }
          if (isdtls && abortctr <= 50 && (abortctr % 10) == 0) {
-@@ -1010,7 +1000,7 @@
+@@ -1011,7 +1003,7 @@
               * give the DTLS timer a chance to do something. We only do this for
               * the first few times to prevent hangs.
               */
@@ -281,7 +285,7 @@
          }
      } while (retc <=0 || rets <= 0);
  
-@@ -1037,10 +1027,9 @@
+@@ -1038,10 +1030,9 @@
       */
      for (i = 0; i < 2; i++) {
          if (SSL_read_ex(clientssl, &buf, sizeof(buf), &readbytes) > 0) {

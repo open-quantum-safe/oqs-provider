@@ -11,26 +11,28 @@ standard OpenSSL (3.0) distribution by way of implementing a single shared
 library, the OQS
 [provider](https://www.openssl.org/docs/manmaster/man7/provider.html).
 
-This code is derived from the OQS-OpenSSL3 branch in
-https://github.com/open-quantum-safe/openssl creating
-an independent and (OpenSSL-)external provider.
+This repository has been derived from the [OQS-OpenSSL3 branch in
+https://github.com/open-quantum-safe/openssl](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL3)
+creating a provider that can be built outside the OpenSSL source tree.
 
 Status
 ------
 
 Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
-OpenSSL (3.0) provider interface. Also, OQS signatures are available via
-the OpenSSL EVP interface. For information about the available OQS algorithms,
+OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, OQS 
+signatures are available via the OpenSSL EVP interface. 
+
+For information about the available OQS algorithms,
 [refer to the OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms).
 
 Open work items are
-- (CI) Testing on platforms other than Ubuntu 18.04 (x86_64)
-- fully TLS-integrated quantum-safe signatures
-- hybrid quantum-safe cryptography
+- (CI) Testing on platforms other than Ubuntu (x86_64)
+- hybrid and fully TLS-integrated quantum-safe signature functionality
 
-If any of these functionalities are needed, please refer to the
-[OQS-OpenSSL1.1.1](https://github.com/open-quantum-safe/openssl) fork.
+If any of these features are needed, please refer to and use the
+[OQS-OpenSSL1.1.1](https://github.com/open-quantum-safe/openssl) fork
+where they are already implemented.
 
 Building and testing
 --------------------
@@ -58,7 +60,7 @@ Example for building and installing OpenSSL 3.0 in `.local`:
 OpenSSL (3.0) is not yet released in a production version. For [limitations
 see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
 
-*Note*: Building has last been validated with OpenSSL tag `openssl-3.0.0-alpha12`
+*Note*: Building has last been validated with OpenSSL version `3.0.0-alpha17-dev`
 even though the goal of this project is to always build and work with the latest
 OpenSSL `master` branch code.
 
@@ -90,7 +92,8 @@ Testing can be run via the following command:
 Add `-V` to the `ctest` command for verbose output.
 
 *Note*: Some parts of testing depend on OpenSSL components. These can be
-activated by executing `./scripts/preptests.sh` before building the provider.
+activated by executing `./scripts/preptests.sh` before building the provider. 
+See [the test README](test/README.md) for details.
 
 ## Build options
 

@@ -99,6 +99,7 @@ struct oqsx_key_st {
     size_t numkeys;
     size_t privkeylen;
     size_t pubkeylen;
+    size_t bit_security;
     char *oqs_name;
     char *tls_name;
     _Atomic int references;
@@ -110,7 +111,7 @@ struct oqsx_key_st {
 
 typedef struct oqsx_key_st OQSX_KEY;
 
-OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int is_kem, const char *propq);
+OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int is_kem, const char *propq, int bit_security);
 int oqsx_key_allocate_keymaterial(OQSX_KEY *key);
 void oqsx_key_free(OQSX_KEY *key);
 int oqsx_key_up_ref(OQSX_KEY *key);

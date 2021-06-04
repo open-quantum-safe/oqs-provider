@@ -292,6 +292,7 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     ret = oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLen1, NULL, &secretLen1, 1);
     ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
 
+
     *ctlen = ctLen0 + ctLen1;
     *secretlen = secretLen0 + secretLen1;
 

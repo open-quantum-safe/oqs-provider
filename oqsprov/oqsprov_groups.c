@@ -82,6 +82,7 @@ static const OQS_GROUP_CONSTANTS oqs_group_list[] = {
    { 0x0232, 0x2F32, 0x2F72, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0233, 0x2F33, 0x2F73, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0234, 0x2F34, 0x2F74, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x01FF, 0x2FFF, 0x2FFE, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
 };
 
@@ -284,6 +285,9 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY(sntrup857, sntrup857, sntrup857, 192, 39),
     OQS_GROUP_ENTRY_ECP(sntrup857, sntrup857, sntrup857, 192, 39),
     OQS_GROUP_ENTRY_ECX(sntrup857, sntrup857, sntrup857, 192, 39),
+    OQS_GROUP_ENTRY(oqs_kem_default, oqs_kem_default, oqs_kem_default, 128, 40),
+    OQS_GROUP_ENTRY_ECP(oqs_kem_default, oqs_kem_default, oqs_kem_default, 128, 40),
+    OQS_GROUP_ENTRY_ECX(oqs_kem_default, oqs_kem_default, oqs_kem_default, 128, 40),
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
 };
 

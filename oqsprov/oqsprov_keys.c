@@ -36,26 +36,24 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx) {
 /// Key code
 
 static const OQSX_KEX_INFO nids_ecp[] = {
-        { EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65 , 121, 32}, // level 1
-        { EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65 , 121, 32}, // level 2
-        { EVP_PKEY_EC, NID_secp384r1       , 0, 97 , 167, 48}, // level 3
-        { EVP_PKEY_EC, NID_secp384r1       , 0, 97 , 167, 48}, // level 4
-        { EVP_PKEY_EC, NID_secp521r1       , 0, 133, 223, 66}  // level 5
+        { EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65 , 121, 32}, // 128 bit
+        { EVP_PKEY_EC, NID_secp384r1       , 0, 97 , 167, 48}, // 192 bit
+        { EVP_PKEY_EC, NID_secp521r1       , 0, 133, 223, 66}  // 256 bit
 };
 
 static const OQSX_KEX_INFO nids_ecx[] = {
-        { EVP_PKEY_X25519, 0, 1, 32, 32, 32}, // level 1
-        { EVP_PKEY_X25519, 0, 1, 32, 32, 32}, // level 2
-        { EVP_PKEY_X448,   0, 1, 56, 56, 56}, // level 3
-        { EVP_PKEY_X448,   0, 1, 56, 56, 56}, // level 4
-        { 0,               0, 0,  0,  0,  0}  // level 5
+        { EVP_PKEY_X25519, 0, 1, 32, 32, 32}, // 128 bit
+        { EVP_PKEY_X448,   0, 1, 56, 56, 56}, // 192 bit
+        { 0,               0, 0,  0,  0,  0}  // 256 bit
 };
 
-static int oqshybkem_init_ecp(int nistlevel, OQSX_EVP_CTX *evp_ctx)
+static int oqshybkem_init_ecp(int bit_security, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
+    int idx = (bit_security - 128) / 64;
+    ON_ERR_GOTO(idx < 0 || idx > 2, err);
 
-    evp_ctx->kex_info = &nids_ecp[nistlevel - 1];
+    evp_ctx->kex_info = &nids_ecp[idx];
 
     evp_ctx->kex = EVP_PKEY_CTX_new_id(evp_ctx->kex_info->nid_kex, NULL);
     ON_ERR_GOTO(!evp_ctx->kex, err);
@@ -73,11 +71,13 @@ static int oqshybkem_init_ecp(int nistlevel, OQSX_EVP_CTX *evp_ctx)
     return ret;
 }
 
-static int oqshybkem_init_ecx(int nistlevel, OQSX_EVP_CTX *evp_ctx)
+static int oqshybkem_init_ecx(int bit_security, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
+    int idx = (bit_security - 128) / 64;
+    ON_ERR_GOTO(idx < 0 || idx > 2, err);
 
-    evp_ctx->kex_info = &nids_ecx[nistlevel - 1];
+    evp_ctx->kex_info = &nids_ecx[idx];
 
     evp_ctx->kexParam = EVP_PKEY_new();
     ON_ERR_SET_GOTO(!evp_ctx->kexParam, ret, -1, err);
@@ -97,7 +97,7 @@ static const int (*init_kex_fun[])(int, OQSX_EVP_CTX *) = {
         oqshybkem_init_ecx
 };
 
-OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int primitive, const char *propq)
+OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int primitive, const char *propq, int bit_security)
 {
     OQSX_KEY *ret = OPENSSL_zalloc(sizeof(*ret));
     int ret2 = 0;
@@ -127,7 +127,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         ON_ERR_GOTO(!evp_ctx, err);
 
         ret2 = (init_kex_fun[primitive - KEY_TYPE_ECP_HYB_KEM])
-                (ret->oqsx_provider_ctx.oqsx_qs_ctx.kem->claimed_nist_level, evp_ctx);
+                (bit_security, evp_ctx);
         ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->kexParam || !evp_ctx->kex, err);
 
         ret->numkeys = 2;
@@ -142,6 +142,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
     ret->libctx = libctx;
     ret->references = 1;
     ret->tls_name = OPENSSL_strdup(tls_name);
+    ret->bit_security = bit_security;
 
     if (propq != NULL) {
         ret->propq = OPENSSL_strdup(propq);
@@ -279,7 +280,6 @@ static int oqsx_key_gen_evp_kex(OQSX_EVP_CTX *ctx, unsigned char *pubkey, unsign
     EVP_PKEY *pkey = NULL;
     unsigned char *pubkeykex_encoded = NULL;
 
-    size_t privkeykexlen = 0;
     size_t pubkeykexlen = 0;
 
     kgctx = EVP_PKEY_CTX_new(ctx->kexParam, NULL);
@@ -297,21 +297,13 @@ static int oqsx_key_gen_evp_kex(OQSX_EVP_CTX *ctx, unsigned char *pubkey, unsign
     memcpy(pubkey, pubkeykex_encoded, pubkeykexlen);
 
     if (ctx->kex_info->raw_key_support) {
+        size_t privkeykexlen = 0;
         ret2 = EVP_PKEY_get_raw_private_key(pkey, privkey, &privkeykexlen);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     } else {
-        // TODO:
-        // Workaround for bug in OSSL3:
-        // i2d_PrivateKey returns incorrect size. We ignore it because the encoded data seems correct.
-        // One could instead point to the already allocated private key once a bug for this is fixed
-        // See: https://github.com/openssl/openssl/issues/14655
-        unsigned char *pkey_enc = NULL;
-        i2d_PrivateKey(pkey, &pkey_enc);
-        ON_ERR_SET_GOTO(!pkey_enc, ret, -1, errhyb);
-
-        privkeykexlen = ctx->kex_info->kex_length_private_key;
-        memcpy(privkey, pkey_enc, ctx->kex_info->kex_length_private_key);
-        OPENSSL_clear_free(pkey_enc, privkeykexlen);
+        unsigned char *pkey_enc = privkey;
+        int privkeykexlen = i2d_PrivateKey(pkey, &pkey_enc);
+        ON_ERR_SET_GOTO(!pkey_enc || privkeykexlen != (int) ctx->kex_info->kex_length_private_key, ret, -1, errhyb);
     }
 
     errhyb:
@@ -358,11 +350,7 @@ int oqsx_key_gen(OQSX_KEY *key)
 }
 
 int oqsx_key_parambits(OQSX_KEY *key) {
-    if (key->keytype == KEY_TYPE_KEM)
-        return 128+(key->oqsx_provider_ctx.oqsx_qs_ctx.kem->claimed_nist_level-1)/2*64;
-    else if (key->keytype == KEY_TYPE_ECP_HYB_KEM || key->keytype == KEY_TYPE_ECX_HYB_KEM)
-        return 128+(key->oqsx_provider_ctx.oqsx_qs_ctx.kem->claimed_nist_level-1)/2*64;
-    return 128+(key->oqsx_provider_ctx.oqsx_qs_ctx.sig->claimed_nist_level-1)/2*64;
+    return key->bit_security;
 }
 
 int oqsx_key_maxsize(OQSX_KEY *key) {

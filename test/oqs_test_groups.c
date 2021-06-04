@@ -118,7 +118,7 @@ static int test_group(const OSSL_PARAM params[], void *data)
 
 static int test_provider_groups(OSSL_PROVIDER *provider, void *vctx)
 {
-    const char* provname = OSSL_PROVIDER_name(provider);
+    const char* provname = OSSL_PROVIDER_get0_name(provider);
 
     if (!strcmp(provname, PROVIDER_NAME_OQS))
         return OSSL_PROVIDER_get_capabilities(provider, "TLS-GROUP",

@@ -110,6 +110,7 @@ extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_oqs_kem_default_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecp_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_frodo640shake_keymgmt_functions[];
@@ -151,6 +152,7 @@ extern const OSSL_DISPATCH oqs_ecp_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_oqs_kem_default_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecx_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_frodo640shake_keymgmt_functions[];
@@ -192,6 +194,7 @@ extern const OSSL_DISPATCH oqs_ecx_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_oqs_kem_default_keymgmt_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
@@ -258,6 +261,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMALG3(sntrup653, 128),
     KEMALG3(sntrup761, 192),
     KEMALG3(sntrup857, 192),
+    KEMALG3(oqs_kem_default, 128),
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
@@ -321,6 +325,7 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG3(sntrup653, 128),
     KEMKMALG3(sntrup761, 192),
     KEMKMALG3(sntrup857, 192),
+    KEMKMALG3(oqs_kem_default, 128),
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
     //ALG("x25519_sikep434", oqs_ecx_sikep434_keymgmt_functions),
     { NULL, NULL, NULL }

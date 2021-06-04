@@ -46,9 +46,10 @@ def load_config():
     config_extras = yaml.safe_load(config_extras)
     for sig in config['sigs']:
         sig['variants'] = [variant for variant in sig['variants'] if variant['enable']]
+    config['kems'] = config['kems'] + config_extras['kems']
     for kem in config['kems']:
-        if kem['name_group'] in config_extras['kems']:
-            kem.update(config_extras['kems'][kem['name_group']])
+        if kem['name_group'] in config_extras['kem-extras']:
+            kem.update(config_extras['kem-extras'][kem['name_group']])
     return config
 
 config = load_config()

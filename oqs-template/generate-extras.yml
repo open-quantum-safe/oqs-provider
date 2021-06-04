@@ -1,6 +1,13 @@
 # These fields for 'name_group' are added in addition to the ones specified in generate.yml
-
 kems:
+    -
+      name_group: 'oqs_kem_default'
+      nid: '0x01FF'
+      nid_hybrid: '0x2FFF'
+      nid_ecx_hybrid: '0x2FFE'
+      oqs_alg: 'OQS_KEM_alg_default'
+      bit_security: 128
+kem-extras:
   frodo640aes:
     nid_ecx_hybrid: '0x2F40'
   frodo640shake:

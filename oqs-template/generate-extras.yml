@@ -1,60 +1,56 @@
 # These fields for 'name_group' are added in addition to the ones specified in generate.yml
 kem-extras:
   frodo640aes:
-    nid_ecx_hybrid: '0x2F40'
+    nid_ecx_hybrid: '0x2F80'
   frodo640shake:
-    nid_ecx_hybrid: '0x2F41'
+    nid_ecx_hybrid: '0x2F81'
   frodo976aes:
-    nid_ecx_hybrid: '0x2F42'
+    nid_ecx_hybrid: '0x2F82'
   frodo976shake:
-    nid_ecx_hybrid: '0x2F43'
+    nid_ecx_hybrid: '0x2F83'
   kyber512:
-    nid_ecx_hybrid: '0x2F26'
+    nid_ecx_hybrid: '0x2FA6'
   kyber768:
-    nid_ecx_hybrid: '0x2F50'
+    nid_ecx_hybrid: '0x2F90'
   ntru_hps2048509:
-    nid_ecx_hybrid: '0x2F54'
+    nid_ecx_hybrid: '0x2F94'
   ntru_hps2048677:
-    nid_ecx_hybrid: '0x2F55'
+    nid_ecx_hybrid: '0x2F95'
   ntru_hrss701:
-    nid_ecx_hybrid: '0x2F57'
+    nid_ecx_hybrid: '0x2F97'
   lightsaber:
-    nid_ecx_hybrid: '0x2F58'
+    nid_ecx_hybrid: '0x2F98'
   saber:
-    nid_ecx_hybrid: '0x2F59'
+    nid_ecx_hybrid: '0x2F99'
   sidhp434:
-    nid_ecx_hybrid: '0x2F5B'
+    nid_ecx_hybrid: '0x2F9B'
   sidhp503:
-    nid_ecx_hybrid: '0x2F5C'
+    nid_ecx_hybrid: '0x2F9C'
   sidhp610:
-    nid_ecx_hybrid: '0x2F5D'
+    nid_ecx_hybrid: '0x2F9D'
   sikep434:
-    nid_ecx_hybrid: '0x2F27'
+    nid_ecx_hybrid: '0x2F67'
   sikep503:
-    nid_ecx_hybrid: '0x2F60'
+    nid_ecx_hybrid: '0x2FA0'
   sikep610:
-    nid_ecx_hybrid: '0x2F61'
-  bike1l1fo:
-    nid_ecx_hybrid: '0x2F28'
-  bike1l3fo:
-    nid_ecx_hybrid: '0x2F64'
+    nid_ecx_hybrid: '0x2FA1'
   kyber90s512:
-    nid_ecx_hybrid: '0x2F69'
+    nid_ecx_hybrid: '0x2FA9'
   kyber90s768:
-    nid_ecx_hybrid: '0x2F6A'
+    nid_ecx_hybrid: '0x2FAA'
   hqc128:
-    nid_ecx_hybrid: '0x2F6C'
+    nid_ecx_hybrid: '0x2FAC'
   hqc192:
-    nid_ecx_hybrid: '0x2F6D'
+    nid_ecx_hybrid: '0x2FAD'
   ntrulpr653:
-    nid_ecx_hybrid: '0x2F6F'
+    nid_ecx_hybrid: '0x2FAF'
   ntrulpr761:
-    nid_ecx_hybrid: '0x2F70'
+    nid_ecx_hybrid: '0x2FB0'
   ntrulpr857:
-    nid_ecx_hybrid: '0x2F71'
+    nid_ecx_hybrid: '0x2FB1'
   sntrup653:
-    nid_ecx_hybrid: '0x2F72'
+    nid_ecx_hybrid: '0x2FB2'
   sntrup761:
-    nid_ecx_hybrid: '0x2F73'
+    nid_ecx_hybrid: '0x2FB3'
   sntrup857:
-    nid_ecx_hybrid: '0x2F74'
+    nid_ecx_hybrid: '0x2FB4'

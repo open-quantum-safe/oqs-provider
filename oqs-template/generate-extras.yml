@@ -1,12 +1,4 @@
 # These fields for 'name_group' are added in addition to the ones specified in generate.yml
-kems:
-    -
-      name_group: 'oqs_kem_default'
-      nid: '0x01FF'
-      nid_hybrid: '0x2FFF'
-      nid_ecx_hybrid: '0x2FFE'
-      oqs_alg: 'OQS_KEM_alg_default'
-      bit_security: 128
 kem-extras:
   frodo640aes:
     nid_ecx_hybrid: '0x2F40'
@@ -16,10 +8,6 @@ kem-extras:
     nid_ecx_hybrid: '0x2F42'
   frodo976shake:
     nid_ecx_hybrid: '0x2F43'
-  bike1l1cpa:
-    nid_ecx_hybrid: '0x2F46'
-  bike1l3cpa:
-    nid_ecx_hybrid: '0x2F47'
   kyber512:
     nid_ecx_hybrid: '0x2F26'
   kyber768:

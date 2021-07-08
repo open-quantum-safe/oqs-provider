@@ -15,7 +15,6 @@ static char *tmpfilename = NULL;
 
 static const char *sigalg_names[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_START
-  "oqs_sig_default",
   "dilithium2",
   "dilithium3",
   "dilithium5",

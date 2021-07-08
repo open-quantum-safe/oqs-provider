@@ -53,7 +53,6 @@ extern const OSSL_DISPATCH oqs_hybrid_kem_functions[];
 extern const OSSL_DISPATCH oqs_signature_functions[];
 
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
-extern const OSSL_DISPATCH oqs_oqs_sig_default_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_dilithium2_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_dilithium3_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_dilithium5_keymgmt_functions[];
@@ -76,8 +75,6 @@ extern const OSSL_DISPATCH oqs_frodo976aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo976shake_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo1344aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l1cpa_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l3cpa_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber1024_keymgmt_functions[];
@@ -96,8 +93,8 @@ extern const OSSL_DISPATCH oqs_sikep434_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sikep503_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sikep610_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l1fo_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l3fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bikel1_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bikel3_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber90s512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber90s768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber90s1024_keymgmt_functions[];
@@ -110,7 +107,6 @@ extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_oqs_kem_default_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecp_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_frodo640shake_keymgmt_functions[];
@@ -118,8 +114,6 @@ extern const OSSL_DISPATCH oqs_ecp_frodo976aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_frodo976shake_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_frodo1344aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bike1l1cpa_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bike1l3cpa_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_kyber512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_kyber768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_kyber1024_keymgmt_functions[];
@@ -138,8 +132,8 @@ extern const OSSL_DISPATCH oqs_ecp_sikep434_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sikep503_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sikep610_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bike1l1fo_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bike1l3fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_bikel1_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_bikel3_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_kyber90s512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_kyber90s768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_kyber90s1024_keymgmt_functions[];
@@ -152,7 +146,6 @@ extern const OSSL_DISPATCH oqs_ecp_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_oqs_kem_default_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecx_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_frodo640shake_keymgmt_functions[];
@@ -160,8 +153,6 @@ extern const OSSL_DISPATCH oqs_ecx_frodo976aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_frodo976shake_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_frodo1344aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bike1l1cpa_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bike1l3cpa_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_kyber512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_kyber768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_kyber1024_keymgmt_functions[];
@@ -180,8 +171,8 @@ extern const OSSL_DISPATCH oqs_ecx_sikep434_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sikep503_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sikep610_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bike1l1fo_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bike1l3fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_bikel1_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_bikel3_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_kyber90s512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_kyber90s768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_kyber90s1024_keymgmt_functions[];
@@ -194,12 +185,10 @@ extern const OSSL_DISPATCH oqs_ecx_ntrulpr857_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_oqs_kem_default_keymgmt_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
-    ALG("oqs_sig_default", oqs_signature_functions),
     ALG("dilithium2", oqs_signature_functions),
     ALG("dilithium3", oqs_signature_functions),
     ALG("dilithium5", oqs_signature_functions),
@@ -227,8 +216,6 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMALG3(frodo976shake, 192),
     KEMALG3(frodo1344aes, 256),
     KEMALG3(frodo1344shake, 256),
-    KEMALG3(bike1l1cpa, 128),
-    KEMALG3(bike1l3cpa, 192),
     KEMALG3(kyber512, 128),
     KEMALG3(kyber768, 192),
     KEMALG3(kyber1024, 256),
@@ -247,8 +234,8 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMALG3(sikep503, 128),
     KEMALG3(sikep610, 192),
     KEMALG3(sikep751, 256),
-    KEMALG3(bike1l1fo, 128),
-    KEMALG3(bike1l3fo, 192),
+    KEMALG3(bikel1, 128),
+    KEMALG3(bikel3, 192),
     KEMALG3(kyber90s512, 128),
     KEMALG3(kyber90s768, 192),
     KEMALG3(kyber90s1024, 256),
@@ -261,14 +248,12 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMALG3(sntrup653, 128),
     KEMALG3(sntrup761, 192),
     KEMALG3(sntrup857, 192),
-    KEMALG3(oqs_kem_default, 128),
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
 
 static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
-    ALG("oqs_sig_default", oqs_oqs_sig_default_keymgmt_functions),
     ALG("dilithium2", oqs_dilithium2_keymgmt_functions),
     ALG("dilithium3", oqs_dilithium3_keymgmt_functions),
     ALG("dilithium5", oqs_dilithium5_keymgmt_functions),
@@ -291,8 +276,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG3(frodo976shake, 192),
     KEMKMALG3(frodo1344aes, 256),
     KEMKMALG3(frodo1344shake, 256),
-    KEMKMALG3(bike1l1cpa, 128),
-    KEMKMALG3(bike1l3cpa, 192),
     KEMKMALG3(kyber512, 128),
     KEMKMALG3(kyber768, 192),
     KEMKMALG3(kyber1024, 256),
@@ -311,8 +294,8 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG3(sikep503, 128),
     KEMKMALG3(sikep610, 192),
     KEMKMALG3(sikep751, 256),
-    KEMKMALG3(bike1l1fo, 128),
-    KEMKMALG3(bike1l3fo, 192),
+    KEMKMALG3(bikel1, 128),
+    KEMKMALG3(bikel3, 192),
     KEMKMALG3(kyber90s512, 128),
     KEMKMALG3(kyber90s768, 192),
     KEMKMALG3(kyber90s1024, 256),
@@ -325,7 +308,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG3(sntrup653, 128),
     KEMKMALG3(sntrup761, 192),
     KEMKMALG3(sntrup857, 192),
-    KEMKMALG3(oqs_kem_default, 128),
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
     //ALG("x25519_sikep434", oqs_ecx_sikep434_keymgmt_functions),
     { NULL, NULL, NULL }

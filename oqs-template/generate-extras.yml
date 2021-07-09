@@ -8,8 +8,6 @@ kem-extras:
     nid_ecx_hybrid: '0x2F82'
   frodo976shake:
     nid_ecx_hybrid: '0x2F83'
-  kyber512:
-    nid_ecx_hybrid: '0x2FA6'
   kyber768:
     nid_ecx_hybrid: '0x2F90'
   ntru_hps2048509:
@@ -28,8 +26,6 @@ kem-extras:
     nid_ecx_hybrid: '0x2F9C'
   sidhp610:
     nid_ecx_hybrid: '0x2F9D'
-  sikep434:
-    nid_ecx_hybrid: '0x2F67'
   sikep503:
     nid_ecx_hybrid: '0x2FA0'
   sikep610:

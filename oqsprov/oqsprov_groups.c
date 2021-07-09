@@ -48,7 +48,7 @@ static const OQS_GROUP_CONSTANTS oqs_group_list[] = {
    { 0x0203, 0x2F03, 0x2F83, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0204, 0x2F04, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0205, 0x2F05, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x023A, 0x2F3A, 0x2FA6, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x023A, 0x2F3A, 0x2F39, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x023C, 0x2F3C, 0x2F90, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x023D, 0x2F3D, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0214, 0x2F14, 0x2F94, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
@@ -62,11 +62,11 @@ static const OQS_GROUP_CONSTANTS oqs_group_list[] = {
    { 0x021C, 0x2F1C, 0x2F9C, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x021D, 0x2F1D, 0x2F9D, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x021E, 0x2F1E, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x021F, 0x2F1F, 0x2F67, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x021F, 0x2F1F, 0x2F27, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0220, 0x2F20, 0x2FA0, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0221, 0x2F21, 0x2FA1, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0222, 0x2F22, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0238, 0x2F38, 0     , 128, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0238, 0x2F38, 0x2F37, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x023B, 0x2F3B, 0     , 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x023E, 0x2F3E, 0x2FA9, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x023F, 0x2F3F, 0x2FAA, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
@@ -238,6 +238,7 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY_ECP(sikep751, sikep751, sikep751, 256, 23),
     OQS_GROUP_ENTRY(bikel1, bikel1, bikel1, 128, 24),
     OQS_GROUP_ENTRY_ECP(bikel1, bikel1, bikel1, 128, 24),
+    OQS_GROUP_ENTRY_ECX(bikel1, bikel1, bikel1, 128, 24),
     OQS_GROUP_ENTRY(bikel3, bikel3, bikel3, 192, 25),
     OQS_GROUP_ENTRY_ECP(bikel3, bikel3, bikel3, 192, 25),
     OQS_GROUP_ENTRY(kyber90s512, kyber90s512, kyber90s512, 128, 26),
@@ -281,7 +282,7 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
 {
     size_t i;
 
-    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3 - 11);
+    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3 - 10);
     for (i = 0; i < OSSL_NELEM(oqs_param_group_list); i++) {
         if (!cb(oqs_param_group_list[i], arg))
             return 0;

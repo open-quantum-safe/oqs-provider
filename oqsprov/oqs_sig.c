@@ -73,9 +73,6 @@ static OSSL_FUNC_signature_settable_ctx_md_params_fn oqs_sig_settable_ctx_md_par
 // OIDS:
 static int get_oqs_oid(unsigned char* oidbuf, const char *oqs_name) {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_OIDS_START
-   if (!strcmp(OQS_SIG_alg_default, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.1.1", 1), &oidbuf);
-   else
    if (!strcmp(OQS_SIG_alg_dilithium_2, oqs_name))
        return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.7.4.4", 1), &oidbuf);
    else

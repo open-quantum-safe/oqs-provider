@@ -46,10 +46,29 @@ def load_config():
     config_extras = yaml.safe_load(config_extras)
     for sig in config['sigs']:
         sig['variants'] = [variant for variant in sig['variants'] if variant['enable']]
-    config['kems'] = config['kems'] + config_extras['kems']
+
+    # remove KEMs without NID (old stuff)
+    newkems = []
+    for kem in config['kems']:
+        if 'nid' in kem:
+           newkems.append(kem)
+    config['kems']=newkems
+
     for kem in config['kems']:
         if kem['name_group'] in config_extras['kem-extras']:
             kem.update(config_extras['kem-extras'][kem['name_group']])
+        try:
+            for extra_nid_current in kem['extra_nids']['current']:
+                if 'hybrid_group' in extra_nid_current and extra_nid_current['hybrid_group'] in ["x25519", "x448"]:
+                    extra_hyb_nid = extra_nid_current['nid']
+                    if 'nid_ecx_hybrid' in kem:
+                        print("Warning, duplicate nid_ecx_hybrid for",
+                              kem['name_group'], ":", extra_hyb_nid, "in generate.yml,",
+                              kem['nid_ecx_hybrid'], "in generate_extras.yml, using generate.yml entry.")
+                    kem['nid_ecx_hybrid'] = extra_hyb_nid
+                    break
+        except:
+            pass
     return config
 
 config = load_config()

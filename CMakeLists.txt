@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(oqs-provider LANGUAGES C)
 set(CMAKE_C_STANDARD 11)
+set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 
 include(CheckLibraryExists)
 include(CheckFunctionExists)

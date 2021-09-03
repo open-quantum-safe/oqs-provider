@@ -338,6 +338,7 @@ static void oqsx_gen_cleanup(void *genctx)
     struct oqsx_gen_ctx *gctx = genctx;
 
     OQS_KM_PRINTF("OQSKEYMGMT: gen_cleanup called\n");
+    OPENSSL_free(gctx->tls_name);
     OPENSSL_free(gctx->propq);
     OPENSSL_free(gctx);
 }
@@ -380,6 +381,7 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[])
     if (p != NULL) {
         const char *algname = (char*)p->data;
 
+        OPENSSL_free(gctx->tls_name);
         gctx->tls_name = OPENSSL_strdup(algname);
     }
     p = OSSL_PARAM_locate_const(params, OSSL_KDF_PARAM_PROPERTIES);

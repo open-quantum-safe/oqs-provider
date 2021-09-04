@@ -16,7 +16,7 @@
 #include <openssl/params.h>
 #include <openssl/err.h>
 #include <string.h>
-#include "oqsx.h"
+#include "oqs_prov.h"
 
 #ifdef NDEBUG
 #define OQS_KEM_PRINTF(a)
@@ -33,7 +33,6 @@ static OSSL_FUNC_kem_newctx_fn oqs_kem_newctx;
 static OSSL_FUNC_kem_encapsulate_init_fn oqs_kem_encaps_init;
 static OSSL_FUNC_kem_encapsulate_fn oqs_qs_kem_encaps;
 static OSSL_FUNC_kem_encapsulate_fn oqs_hyb_kem_encaps;
-static OSSL_FUNC_kem_decapsulate_init_fn oqs_qs_kem_decaps_init;
 static OSSL_FUNC_kem_decapsulate_fn oqs_qs_kem_decaps;
 static OSSL_FUNC_kem_decapsulate_fn oqs_hyb_kem_decaps;
 static OSSL_FUNC_kem_freectx_fn oqs_kem_freectx;

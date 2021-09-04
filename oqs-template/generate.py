@@ -9,6 +9,63 @@ import shutil
 import subprocess
 import yaml
 
+# For files generated, the copyright message can be adapted
+# see https://github.com/open-quantum-safe/oqs-provider/issues/2#issuecomment-920904048
+# SPDX message to be leading, OpenSSL Copyright notice to be deleted
+def fixup_copyright(filename):
+   with open(filename, "r") as origfile:
+      with open(filename+".new", "w") as newfile:
+         newfile.write("// SPDX-License-Identifier: Apache-2.0 AND MIT\n\n")
+         skipline = False
+         checkline = True
+         for line in origfile:
+             if checkline==True and " * Copyright" in line:
+                skipline=True
+             if "*/" in line:
+                skipline=False
+                checkline=False
+             if not skipline:
+                newfile.write(line)
+   os.rename(filename+".new", filename)
+
+def run_subprocess(command, outfilename=None, working_dir='.', expected_returncode=0, input=None, ignore_returncode=False):
+    result = subprocess.run(
+            command,
+            input=input,
+            stdout=(open(outfilename, "w") if outfilename!=None else subprocess.PIPE),
+            stderr=subprocess.PIPE,
+            cwd=working_dir,
+        )
+
+    if not(ignore_returncode) and (result.returncode != expected_returncode):
+        if outfilename == None:
+            print(result.stdout.decode('utf-8'))
+        assert False, "Got unexpected return code {}".format(result.returncode)
+
+# Function replicating openssl makefile target of the same name to generate ASN1 structs
+# The function assumes perl to be present as well as an openssl master branch checked out.
+def generate_crypto_objects():
+    OSSL_SRC_DIR = 'openssl'
+    OSSL_OBJ_GEN_DIR = os.path.join(OSSL_SRC_DIR, 'crypto', 'objects')
+    # check presence of OpenSSL (script files):
+    if not os.path.exists(OSSL_OBJ_GEN_DIR):
+        print("Error: OSSL install not present (%s missing). Exiting." % (OSSL_OBJ_GEN_DIR))
+        exit(1)
+    # now run the generator scripts:
+    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'objects.pl'), '-n' , os.path.join('oqsprov', 'oqs_objects.txt') , os.path.join('oqsprov', 'oqs_obj_mac.num')  ]
+    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_mac.new'))
+    os.rename(os.path.join('oqsprov', 'oqs_obj_mac.new'), os.path.join('oqsprov', 'oqs_obj_mac.num'))
+    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'objects.pl'), os.path.join('oqsprov', 'oqs_objects.txt'), os.path.join('oqsprov', 'oqs_obj_mac.num') ]
+    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_mac.h'))
+    fixup_copyright(os.path.join('oqsprov', 'oqs_obj_mac.h'))
+    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'obj_dat.pl'), os.path.join('oqsprov', 'oqs_obj_mac.h')]
+    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_dat.h'))
+    fixup_copyright(os.path.join('oqsprov', 'oqs_obj_dat.h'))
+    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'objxref.pl'), os.path.join('oqsprov', 'oqs_obj_mac.num'), os.path.join('oqsprov', 'oqs_obj_xref.txt')]
+    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_xref.h'))
+    fixup_copyright(os.path.join('oqsprov', 'oqs_obj_xref.h'))
+    print("Crypto objects regenerated")
+    
 # For list.append in Jinja templates
 Jinja2 = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath="."),extensions=['jinja2.ext.do'])
 
@@ -73,11 +130,22 @@ def load_config():
 
 config = load_config()
 
-# For now, only activate providers:
 populate('test/oqs_test_signatures.c', config, '/////')
 populate('test/oqs_test_groups.c', config, '/////')
+populate('test/oqs_test_endecode.c', config, '/////')
+populate('oqsprov/oqsencoders.inc', config, '/////')
+populate('oqsprov/oqsdecoders.inc', config, '/////')
+populate('oqsprov/oqs_prov.h', config, '/////')
 populate('oqsprov/oqsprov.c', config, '/////')
 populate('oqsprov/oqsprov_groups.c', config, '/////')
 populate('oqsprov/oqs_kmgmt.c', config, '/////')
 populate('oqsprov/oqs_sig.c', config, '/////')
+populate('oqsprov/oqs_encode_key2any.c', config, '/////')
+populate('oqsprov/oqs_decode_der2key.c', config, '/////')
+populate('oqsprov/oqsprov_keys.c', config, '/////')
+populate('oqsprov/oqs_objects.txt', config, '#####')
+populate('oqsprov/oqs_obj_xref.txt', config, '#####')
+populate('scripts/runtests.sh', config, '#####')
+print("All files generated")
 
+generate_crypto_objects()

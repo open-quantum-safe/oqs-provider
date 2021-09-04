@@ -7,7 +7,7 @@ static void *{{variant['name']}}_new_key(void *provctx)
 
 static void *{{variant['name']}}_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, {{variant['oqs_meth']}}, 0, {{variant['security']}});
+    return oqsx_gen_init(provctx, selection, {{variant['oqs_meth']}}, "{{variant['name']}}", 0, {{variant['security']}});
 } 
 
    {%- endfor %}

@@ -1,0 +1,11 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+MAKE_ENCODER({{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER({{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER({{ variant['name'] }}, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER({{ variant['name'] }}, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER({{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER({{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, pem);
+   {%- endfor %}
+{%- endfor %}
+

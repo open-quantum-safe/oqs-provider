@@ -24,19 +24,12 @@
 #include <openssl/params.h>
 #include <openssl/evp.h>
 #include <openssl/err.h>
-#include "oqsx.h"
-
-// our own error codes:
-#define OQSPROV_R_INVALID_DIGEST                            1
-#define OQSPROV_R_INVALID_SIZE                              2
-#define OQSPROV_R_INVALID_KEY                               3
+#include <openssl/x509.h>
+#include "oqs_prov.h"
 
 // TBD: Review what we really need/want: For now go with OSSL settings:
 #define OSSL_MAX_NAME_SIZE 50
 #define OSSL_MAX_PROPQUERY_SIZE     256 /* Property query strings */
-
-// internal, but useful OSSL define:
-# define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
 
 #ifdef NDEBUG
 #define OQS_SIG_PRINTF(a)
@@ -71,55 +64,66 @@ static OSSL_FUNC_signature_set_ctx_md_params_fn oqs_sig_set_ctx_md_params;
 static OSSL_FUNC_signature_settable_ctx_md_params_fn oqs_sig_settable_ctx_md_params;
 
 // OIDS:
-static int get_oqs_oid(unsigned char* oidbuf, const char *oqs_name) {
+static int get_oqs_aid(unsigned char** oidbuf, const char *oqs_name) {
+   X509_ALGOR *algor = X509_ALGOR_new();
+   int aidlen = 0;
+
 ///// OQS_TEMPLATE_FRAGMENT_SIG_OIDS_START
    if (!strcmp(OQS_SIG_alg_dilithium_2, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.7.4.4", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("dilithium2", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_3, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.7.6.5", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("dilithium3", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_5, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.7.8.7", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("dilithium5", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_2_aes, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.11.4.4", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("dilithium2_aes", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_3_aes, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.11.6.5", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("dilithium3_aes", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_5_aes, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.11.8.7", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("dilithium5_aes", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_falcon_512, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.3.1", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("falcon512", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_falcon_1024, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.3.4", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("falcon1024", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_picnic_L1_full, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.311.89.2.1.7", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("picnicl1full", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_picnic3_L1, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.311.89.2.1.21", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("picnic3l1", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_rainbow_I_classic, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.1.1.1", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("rainbowIclassic", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_rainbow_V_classic, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.3.1.1", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("rainbowVclassic", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_sphincs_haraka_128f_robust, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.6.1.1", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("sphincsharaka128frobust", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_sphincs_sha256_128f_robust, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.6.4.1", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("sphincssha256128frobust", 0), V_ASN1_UNDEF, NULL);
    else
    if (!strcmp(OQS_SIG_alg_sphincs_shake256_128f_robust, oqs_name))
-       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.6.7.1", 1), &oidbuf);
+       X509_ALGOR_set0(algor, OBJ_txt2obj("sphincsshake256128frobust", 0), V_ASN1_UNDEF, NULL);
    else
 ///// OQS_TEMPLATE_FRAGMENT_SIG_OIDS_END
-   return(0);
+   // else closure: 
+      {
+         X509_ALGOR_free(algor);
+         return 0;
+      }
+         
+   aidlen = i2d_X509_ALGOR(algor, oidbuf); 
+   X509_ALGOR_free(algor);
+   return(aidlen);
 }
 
 /*
@@ -149,6 +153,8 @@ typedef struct {
     EVP_MD *md;
     EVP_MD_CTX *mdctx;
     size_t mdsize;
+    // for collecting data if no MD is active:
+    char* mddata;
     int operation;
 } PROV_OQSSIG_CTX;
 
@@ -202,9 +208,10 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
         EVP_MD_CTX_free(ctx->mdctx);
         EVP_MD_free(ctx->md);
 
-        OPENSSL_free(ctx->aid);
+        if (ctx->aid) 
+            OPENSSL_free(ctx->aid);
         ctx->aid = NULL; // ensure next function allocates memory
-        ctx->aid_len = get_oqs_oid(ctx->aid, ctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig->method_name);
+        ctx->aid_len = get_oqs_aid(&(ctx->aid), ctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig->method_name);
 
         ctx->mdctx = NULL;
         ctx->md = md;
@@ -253,7 +260,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     size_t oqs_sigsize = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature;
     size_t mdsize = oqs_sig_get_md_size(poqs_sigctx);
 
-    OQS_SIG_PRINTF("OQS SIG provider: sign called\n");
+    OQS_SIG_PRINTF2("OQS SIG provider: sign called for %ld bytes\n", tbslen);
+    OQS_SIG_PRINTF2("OQS SIG provider: mdsize %ld bytes\n", mdsize);
 
     if (sig == NULL) {
         *siglen = oqs_sigsize;
@@ -272,7 +280,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 
     ret = OQS_SIG_sign(poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig, sig, siglen, tbs, tbslen, poqs_sigctx->sig->privkey);
     if (ret != OQS_SUCCESS) {
-        printf("OQS sign error\n");
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGN_ERROR);
+        OQS_SIG_PRINTF("OQS sign error!!!\n");
         return 0;
     }
 
@@ -286,13 +295,15 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
     size_t mdsize = oqs_sig_get_md_size(poqs_sigctx);
     int ret = 0;
 
-    OQS_SIG_PRINTF("OQS SIG provider: verify called\n");
+    OQS_SIG_PRINTF3("OQS SIG provider: verify called with siglen %ld bytes and tbslen %ld\n", siglen, tbslen);
+    OQS_SIG_PRINTF2("OQS SIG provider: mdsize %ld bytes\n", mdsize);
     if (mdsize != 0 && tbslen != mdsize)
         return 0;
 
     ret = OQS_SIG_verify(poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig, tbs, tbslen, sig, siglen, poqs_sigctx->sig->pubkey);
     if (ret != OQS_SUCCESS) {
-        printf("OQS sign error\n");
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGN_ERROR);
+        OQS_SIG_PRINTF("OQS verify error!!\n");
         return 0;
     }
 
@@ -304,7 +315,7 @@ static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx, const char *mdname
 {
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
 
-    OQS_SIG_PRINTF("OQS SIG provider: digest_signverify called\n");
+    OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_init called for mdname %s\n", mdname);
 
     poqs_sigctx->flag_allow_md = 0;
     if (!oqs_sig_signverify_init(vpoqs_sigctx, voqssig, operation))
@@ -313,12 +324,15 @@ static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx, const char *mdname
     if (!oqs_sig_setup_md(poqs_sigctx, mdname, NULL))
         return 0;
 
-    poqs_sigctx->mdctx = EVP_MD_CTX_new();
-    if (poqs_sigctx->mdctx == NULL)
-        goto error;
+    // TBD: Set default mdname??? if (!oqs_sig_setup_md(poqs_sigctx, (mdname==NULL)?"SHA512":mdname, NULL))
+    if (mdname != NULL) {
+       poqs_sigctx->mdctx = EVP_MD_CTX_new();
+       if (poqs_sigctx->mdctx == NULL)
+           goto error;
 
-    if (!EVP_DigestInit_ex(poqs_sigctx->mdctx, poqs_sigctx->md, NULL))
-        goto error;
+       if (!EVP_DigestInit_ex(poqs_sigctx->mdctx, poqs_sigctx->md, NULL))
+           goto error;
+    }
 
     return 1;
 
@@ -327,6 +341,7 @@ static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx, const char *mdname
     EVP_MD_free(poqs_sigctx->md);
     poqs_sigctx->mdctx = NULL;
     poqs_sigctx->md = NULL;
+    OQS_SIG_PRINTF("   OQS SIG provider: digest_signverify FAILED\n");
     return 0;
 }
 
@@ -349,10 +364,31 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx, const unsigned char *da
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
 
     OQS_SIG_PRINTF("OQS SIG provider: digest_signverify_update called\n");
-    if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
+
+     XXX: was:if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
+    if (poqs_sigctx == NULL)
         return 0;
 
-    return EVP_DigestUpdate(poqs_sigctx->mdctx, data, datalen);
+    if (poqs_sigctx->mdctx) 
+    	return EVP_DigestUpdate(poqs_sigctx->mdctx, data, datalen);
+    else { // need to collect data
+	if (poqs_sigctx->mddata) {
+		int mdlen = poqs_sigctx->mdsize;
+		poqs_sigctx->mdsize += datalen;
+		char* newdata = OPENSSL_malloc(poqs_sigctx->mdsize);
+		memcpy(newdata, poqs_sigctx->mddata, mdlen);
+		memcpy(newdata+mdlen, data, datalen);
+		OPENSSL_free(poqs_sigctx->mddata);
+		poqs_sigctx->mddata = newdata;
+	}
+	else { // simple alloc and copy
+		poqs_sigctx->mdsize=datalen;
+		poqs_sigctx->mddata = OPENSSL_malloc(poqs_sigctx->mdsize);
+		memcpy(poqs_sigctx->mddata, data, poqs_sigctx->mdsize);
+	}
+        OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_update collected %ld bytes...\n", poqs_sigctx->mdsize);
+	return 1;
+    }
 }
 
 int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
@@ -363,7 +399,7 @@ int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig, size_t *si
     unsigned int dlen = 0;
 
     OQS_SIG_PRINTF("OQS SIG provider: digest_sign_final called\n");
-    if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
+    if (poqs_sigctx == NULL)
         return 0;
 
     /*
@@ -376,13 +412,18 @@ int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig, size_t *si
          * digests exceed EVP_MAX_MD_SIZE. We should probably handle that somehow -
          * but that problem is much larger than just here.
          */
-        if (!EVP_DigestFinal_ex(poqs_sigctx->mdctx, digest, &dlen))
-            return 0;
+	if (poqs_sigctx->mdctx != NULL)
+        	if (!EVP_DigestFinal_ex(poqs_sigctx->mdctx, digest, &dlen))
+            		return 0;
     }
 
     poqs_sigctx->flag_allow_md = 1;
 
-    return oqs_sig_sign(vpoqs_sigctx, sig, siglen, sigsize, digest, (size_t)dlen);
+    if (poqs_sigctx->mdctx != NULL) 
+	return oqs_sig_sign(vpoqs_sigctx, sig, siglen, sigsize, digest, (size_t)dlen);
+    else
+	return oqs_sig_sign(vpoqs_sigctx, sig, siglen, sigsize, poqs_sigctx->mddata, poqs_sigctx->mdsize);
+	
 }
 
 
@@ -394,20 +435,20 @@ int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
     unsigned int dlen = 0;
 
     OQS_SIG_PRINTF("OQS SIG provider: digest_verify_final called\n");
-    if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
+    // XXX was: if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
+    if (poqs_sigctx == NULL)
         return 0;
 
-    /*
-     * TODO(3.0): There is the possibility that some externally provided
-     * digests exceed EVP_MAX_MD_SIZE. We should probably handle that somehow -
-     * but that problem is much larger than just here. 
-     */
-    if (!EVP_DigestFinal_ex(poqs_sigctx->mdctx, digest, &dlen))
-        return 0;
+    if (poqs_sigctx->mdctx) {
+	if (!EVP_DigestFinal_ex(poqs_sigctx->mdctx, digest, &dlen))
+        	return 0;
 
-    poqs_sigctx->flag_allow_md = 1;
+    	poqs_sigctx->flag_allow_md = 1;
 
-    return oqs_sig_verify(vpoqs_sigctx, sig, siglen, digest, (size_t)dlen);
+    	return oqs_sig_verify(vpoqs_sigctx, sig, siglen, digest, (size_t)dlen);
+    }
+    else 
+    	return oqs_sig_verify(vpoqs_sigctx, sig, siglen, poqs_sigctx->mddata, poqs_sigctx->mdsize);
 }
 
 static void oqs_sig_freectx(void *vpoqs_sigctx)
@@ -421,8 +462,10 @@ static void oqs_sig_freectx(void *vpoqs_sigctx)
     ctx->propq = NULL;
     ctx->mdctx = NULL;
     ctx->md = NULL;
-    ctx->mdsize = 0;
     oqsx_key_free(ctx->sig);
+    OPENSSL_free(ctx->mddata);
+    ctx->mddata = NULL;
+    ctx->mdsize = 0;
     OPENSSL_free(ctx);
 }
 
@@ -457,6 +500,11 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx)
             goto err;
     }
 
+    if (srcctx->mddata) {
+	dstctx->mddata=OPENSSL_memdup(srcctx->mddata, srcctx->mdsize);
+	dstctx->mdsize = srcctx->mdsize;
+    }
+
     return dstctx;
  err:
     oqs_sig_freectx(dstctx);
@@ -473,6 +521,10 @@ static int oqs_sig_get_ctx_params(void *vpoqs_sigctx, OSSL_PARAM *params)
         return 0;
 
     p = OSSL_PARAM_locate(params, OSSL_SIGNATURE_PARAM_ALGORITHM_ID);
+
+    if (poqs_sigctx->aid == NULL)
+        poqs_sigctx->aid_len = get_oqs_aid(&(poqs_sigctx->aid), poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig->method_name);
+
     if (p != NULL
         && !OSSL_PARAM_set_octet_string(p, poqs_sigctx->aid, poqs_sigctx->aid_len))
         return 0;
@@ -596,7 +648,6 @@ static const OSSL_PARAM *oqs_sig_settable_ctx_md_params(void *vpoqs_sigctx)
     return EVP_MD_settable_ctx_params(poqs_sigctx->md);
 }
 
-// TBD: Templatize for #ALG where/if necessary
 const OSSL_DISPATCH oqs_signature_functions[] = {
     { OSSL_FUNC_SIGNATURE_NEWCTX, (void (*)(void))oqs_sig_newctx },
     { OSSL_FUNC_SIGNATURE_SIGN_INIT, (void (*)(void))oqs_sig_sign_init },

@@ -1,0 +1,8 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+# define {{ variant['name'] }}_evp_type       0
+# define {{ variant['name'] }}_input_type      "{{ variant['name'] }}"
+# define {{ variant['name'] }}_pem_type        "{{ variant['name'] }}"
+   {%- endfor %}
+{%- endfor %}
+

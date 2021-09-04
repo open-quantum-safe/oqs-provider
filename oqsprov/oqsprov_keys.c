@@ -13,24 +13,223 @@
 #include <openssl/params.h>
 #include <openssl/core_names.h>
 #include <openssl/evp.h>
-#include <openssl/ec.h>
+#include <openssl/x509.h>
 #include <string.h>
 #include <assert.h>
-#include "oqsx.h"
+#include "oqs_prov.h"
+
+#ifdef NDEBUG
+#define OQS_KEY_PRINTF(a)
+#define OQS_KEY_PRINTF2(a, b)
+#define OQS_KEY_PRINTF3(a, b, c)
+#else
+#define OQS_KEY_PRINTF(a) if (getenv("OQSKEY")) printf(a)
+#define OQS_KEY_PRINTF2(a, b) if (getenv("OQSKEY")) printf(a, b)
+#define OQS_KEY_PRINTF3(a, b, c) if (getenv("OQSKEY")) printf(a, b, c)
+#endif // NDEBUG
+
+typedef enum {
+    KEY_OP_PUBLIC,
+    KEY_OP_PRIVATE,
+    KEY_OP_KEYGEN
+} oqsx_key_op_t;
+
+/// NID/name table
+
+typedef struct {
+    int nid;
+    char* tlsname;
+    char* oqsname;
+    int secbits;
+} oqs_nid_name_t;
+
+///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
+#define NID_TABLE_LEN 15
+
+static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
+       { 0, "dilithium2", OQS_SIG_alg_dilithium_2, 128 },
+       { 0, "dilithium3", OQS_SIG_alg_dilithium_3, 192 },
+       { 0, "dilithium5", OQS_SIG_alg_dilithium_5, 256 },
+       { 0, "dilithium2_aes", OQS_SIG_alg_dilithium_2_aes, 128 },
+       { 0, "dilithium3_aes", OQS_SIG_alg_dilithium_3_aes, 192 },
+       { 0, "dilithium5_aes", OQS_SIG_alg_dilithium_5_aes, 256 },
+       { 0, "falcon512", OQS_SIG_alg_falcon_512, 128 },
+       { 0, "falcon1024", OQS_SIG_alg_falcon_1024, 256 },
+       { 0, "picnicl1full", OQS_SIG_alg_picnic_L1_full, 128 },
+       { 0, "picnic3l1", OQS_SIG_alg_picnic3_L1, 128 },
+       { 0, "rainbowIclassic", OQS_SIG_alg_rainbow_I_classic, 128 },
+       { 0, "rainbowVclassic", OQS_SIG_alg_rainbow_V_classic, 256 },
+       { 0, "sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, 128 },
+       { 0, "sphincssha256128frobust", OQS_SIG_alg_sphincs_sha256_128f_robust, 128 },
+       { 0, "sphincsshake256128frobust", OQS_SIG_alg_sphincs_shake256_128f_robust, 128 },
+///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
+};
+
+int oqs_set_nid(char* tlsname, int nid) {
+   int i;
+   for(i=0;i<NID_TABLE_LEN;i++) {
+      if (!strcmp(nid_names[i].tlsname, tlsname)) {
+          nid_names[i].nid = nid;
+          return 1;
+      }
+   }
+   return 0;
+}
+
+static int get_secbits(int nid) {
+   int i;
+   for(i=0;i<NID_TABLE_LEN;i++) {
+      if (nid_names[i].nid == nid)
+          return nid_names[i].secbits;
+   }
+   return 0; 
+}
+
+static char* get_oqsname(int nid) {
+   int i;
+   for(i=0;i<NID_TABLE_LEN;i++) {
+      if (nid_names[i].nid == nid)
+          return nid_names[i].oqsname;
+   }
+   return 0; 
+}
 
 /// Provider code
 
-PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx, const OSSL_CORE_HANDLE *handle) {
+PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx, const OSSL_CORE_HANDLE *handle, BIO_METHOD *bm) {
     PROV_OQS_CTX * ret = OPENSSL_zalloc(sizeof(PROV_OQS_CTX));
     if (ret) {
        ret->libctx = libctx;
        ret->handle = handle;
+       ret->corebiometh = bm;
     }
     return ret;
 }
 
 void oqsx_freeprovctx(PROV_OQS_CTX *ctx) {
     OPENSSL_free(ctx);
+}
+
+
+void oqsx_key_set0_libctx(OQSX_KEY *key, OSSL_LIB_CTX *libctx)
+{
+    key->libctx = libctx;
+}
+
+// convenience function creating OQSX keys from nids (only for sigs; hybrids TBD)
+static OQSX_KEY *oqsx_key_new_from_nid(OSSL_LIB_CTX *libctx, const char *propq, int id) {
+    return oqsx_key_new(libctx, get_oqsname(id), (char *)OBJ_nid2sn(id), KEY_TYPE_SIG, propq, get_secbits(id)); 
+}
+
+
+OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
+                      const unsigned char *p, int plen,
+                      oqsx_key_op_t op,
+                      OSSL_LIB_CTX *libctx, const char *propq)
+{
+    OQSX_KEY *key = NULL;
+    void **privkey, **pubkey;
+    int id;
+
+    if (op != KEY_OP_KEYGEN) {
+        if (palg != NULL) {
+            int ptype;
+
+            /* Algorithm parameters must be absent */
+            X509_ALGOR_get0(NULL, &ptype, NULL, palg);
+            if (ptype != V_ASN1_UNDEF) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                return 0;
+            }
+            id = OBJ_obj2nid(palg->algorithm);
+        }
+
+        if (p == NULL || id == EVP_PKEY_NONE) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            return 0;
+        }
+    }
+
+    key = oqsx_key_new_from_nid(libctx, propq, id);
+    if (key == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        return 0;
+    }
+
+    if (op == KEY_OP_PUBLIC) {
+        if (key->pubkeylen != plen) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            goto err;
+        }
+        key->pubkey = OPENSSL_secure_zalloc(key->pubkeylen); 
+        if (key->pubkey == NULL) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            goto err;
+        }
+        memcpy(key->pubkey, p, plen);
+    } else {
+        if (key->privkeylen+key->pubkeylen != plen) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            goto err;
+        }
+        key->privkey = OPENSSL_secure_zalloc(key->privkeylen); 
+        key->pubkey = OPENSSL_secure_zalloc(key->pubkeylen); 
+        if (key->privkey == NULL || key->pubkey == NULL) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            goto err;
+        }
+	// XXX what about secure key copy alternatives??
+        memcpy(key->privkey, p, key->privkeylen);
+        memcpy(key->pubkey, p+key->privkeylen, key->pubkeylen);
+    }
+
+    return key;
+
+ err:
+    oqsx_key_free(key);
+    return NULL;
+}
+
+OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk,
+                              OSSL_LIB_CTX *libctx, const char *propq)
+{
+    const unsigned char *p;
+    int plen;
+    X509_ALGOR *palg;
+    OQSX_KEY* oqsx = NULL;
+
+    if (!xpk || (!X509_PUBKEY_get0_param(NULL, &p, &plen, &palg, xpk))) {
+        return NULL;
+    }
+    oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PUBLIC, libctx, propq);
+    return oqsx;
+}
+
+OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
+                              OSSL_LIB_CTX *libctx, const char *propq)
+{
+    OQSX_KEY *oqsx = NULL;
+    const unsigned char *p;
+    int plen;
+    ASN1_OCTET_STRING *oct = NULL;
+    const X509_ALGOR *palg;
+
+    if (!PKCS8_pkey_get0(NULL, &p, &plen, &palg, p8inf))
+        return 0;
+
+    oct = d2i_ASN1_OCTET_STRING(NULL, &p, plen);
+    if (oct == NULL) {
+        p = NULL;
+        plen = 0;
+    } else {
+        p = ASN1_STRING_get0_data(oct);
+        plen = ASN1_STRING_length(oct);
+    }
+
+    oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PRIVATE,
+                       libctx, propq);
+    ASN1_OCTET_STRING_free(oct);
+    return oqsx;
 }
 
 /// Key code
@@ -104,6 +303,11 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
 
     if (ret == NULL) goto err;
 
+    if (oqs_name == NULL) {
+        OQS_KEY_PRINTF("OQSX_KEY: Fatal error: No OQS key name provided:\n");
+        goto err;
+    }
+
     if (primitive == KEY_TYPE_SIG) {
         ret->numkeys = 1;
         ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
@@ -146,14 +350,15 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
 
     if (propq != NULL) {
         ret->propq = OPENSSL_strdup(propq);
-        ERR_raise(ERR_LIB_EC, ERR_R_MALLOC_FAILURE);
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         if (ret->propq == NULL)
             goto err;
     }
 
+    OQS_KEY_PRINTF2("OQSX_KEY: new key created: %p\n", ret);
     return ret;
 err:
-    ERR_raise(ERR_LIB_EC, ERR_R_MALLOC_FAILURE);
+    ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
     OPENSSL_free(ret);
     return NULL;
 }
@@ -169,9 +374,7 @@ void oqsx_key_free(OQSX_KEY *key)
                                        memory_order_relaxed) - 1;
     if (refcnt == 0)
         atomic_thread_fence(memory_order_acquire);
-#ifndef NDEBUG
-    fprintf(stderr, "%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
-#endif
+    OQS_KEY_PRINTF3("%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
     if (refcnt > 0)
         return;
 #ifndef NDEBUG
@@ -201,8 +404,8 @@ int oqsx_key_up_ref(OQSX_KEY *key)
 
     refcnt = atomic_fetch_add_explicit(&key->references, 1,
                                        memory_order_relaxed) + 1;
+    OQS_KEY_PRINTF3("%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
 #ifndef NDEBUG
-    fprintf(stderr, "%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
     assert(refcnt > 1);
 #endif
     return (refcnt > 1);
@@ -231,32 +434,38 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[], int include_priv
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PRIV_KEY);
     if (p != NULL) {
         if (p->data_type != OSSL_PARAM_OCTET_STRING) {
-            printf("invalid data type\n");
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            return 0;
+        }
+        if (key->privkeylen != p->data_size) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
             return 0;
         }
         OPENSSL_secure_clear_free(key->privkey, key->privkeylen);
         key->privkey = OPENSSL_secure_malloc(p->data_size);
         if (key->privkey == NULL) {
-            ERR_raise(ERR_LIB_PROV, ERR_R_MALLOC_FAILURE);
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             return 0;
         }
         memcpy(key->privkey, p->data, p->data_size);
-        key->privkeylen = p->data_size;
     }
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PUB_KEY);
     if (p != NULL) {
         if (p->data_type != OSSL_PARAM_OCTET_STRING) {
-            printf("invalid data type\n");
+            OQS_KEY_PRINTF("invalid data type\n");
+            return 0;
+        }
+        if (key->pubkeylen != p->data_size) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
             return 0;
         }
         OPENSSL_secure_clear_free(key->pubkey, key->pubkeylen);
         key->pubkey = OPENSSL_secure_malloc(p->data_size);
         if (key->pubkey == NULL) {
-            ERR_raise(ERR_LIB_PROV, ERR_R_MALLOC_FAILURE);
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             return 0;
         }
         memcpy(key->pubkey, p->data, p->data_size);
-        key->pubkeylen = p->data_size;
     }
     return 1;
 }

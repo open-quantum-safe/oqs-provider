@@ -14,7 +14,19 @@
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/params.h>
-#include "oqsx.h"
+#include <openssl/objects.h>
+#include <openssl/err.h>
+#include "oqs_prov.h"
+
+#ifdef NDEBUG
+#define OQS_PROV_PRINTF(a)
+#define OQS_PROV_PRINTF2(a, b)
+#define OQS_PROV_PRINTF3(a, b, c)
+#else
+#define OQS_PROV_PRINTF(a) if (getenv("OQSPROV")) printf(a)
+#define OQS_PROV_PRINTF2(a, b) if (getenv("OQSPROV")) printf(a, b)
+#define OQS_PROV_PRINTF3(a, b, c) if (getenv("OQSPROV")) printf(a, b, c)
+#endif // NDEBUG
 
 /*
  * Forward declarations to ensure that interface functions are correctly
@@ -24,6 +36,55 @@ static OSSL_FUNC_provider_gettable_params_fn oqsprovider_gettable_params;
 static OSSL_FUNC_provider_get_params_fn oqsprovider_get_params;
 static OSSL_FUNC_provider_query_operation_fn oqsprovider_query;
 extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
+
+/* 
+ * List of all algorithms with given OIDs
+ */
+///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
+#define OQS_OID_CNT 78
+static const char* oqs_oid_alg_list[OQS_OID_CNT] =
+{
+"1.3.6.1.4.1.2.267.7.4.4", "dilithium2",
+"1.3.9999.2.7.1" , "p256_dilithium2",
+"1.3.9999.2.7.2" , "rsa3072_dilithium2",
+"1.3.6.1.4.1.2.267.7.6.5", "dilithium3",
+"1.3.9999.2.7.3" , "p384_dilithium3",
+"1.3.6.1.4.1.2.267.7.8.7", "dilithium5",
+"1.3.9999.2.7.4" , "p521_dilithium5",
+"1.3.6.1.4.1.2.267.11.4.4", "dilithium2_aes",
+"1.3.9999.2.11.1" , "p256_dilithium2_aes",
+"1.3.9999.2.11.2" , "rsa3072_dilithium2_aes",
+"1.3.6.1.4.1.2.267.11.6.5", "dilithium3_aes",
+"1.3.9999.2.11.3" , "p384_dilithium3_aes",
+"1.3.6.1.4.1.2.267.11.8.7", "dilithium5_aes",
+"1.3.9999.2.11.4" , "p521_dilithium5_aes",
+"1.3.9999.3.1", "falcon512",
+"1.3.9999.3.2" , "p256_falcon512",
+"1.3.9999.3.3" , "rsa3072_falcon512",
+"1.3.9999.3.4", "falcon1024",
+"1.3.9999.3.5" , "p521_falcon1024",
+"1.3.6.1.4.1.311.89.2.1.7", "picnicl1full",
+"1.3.6.1.4.1.311.89.2.1.8" , "p256_picnicl1full",
+"1.3.6.1.4.1.311.89.2.1.9" , "rsa3072_picnicl1full",
+"1.3.6.1.4.1.311.89.2.1.21", "picnic3l1",
+"1.3.6.1.4.1.311.89.2.1.22" , "p256_picnic3l1",
+"1.3.6.1.4.1.311.89.2.1.23" , "rsa3072_picnic3l1",
+"1.3.9999.5.1.1.1", "rainbowIclassic",
+"1.3.9999.5.1.2.1" , "p256_rainbowIclassic",
+"1.3.9999.5.1.3.1" , "rsa3072_rainbowIclassic",
+"1.3.9999.5.3.1.1", "rainbowVclassic",
+"1.3.9999.5.3.2.1" , "p521_rainbowVclassic",
+"1.3.9999.6.1.1", "sphincsharaka128frobust",
+"1.3.9999.6.1.2" , "p256_sphincsharaka128frobust",
+"1.3.9999.6.1.3" , "rsa3072_sphincsharaka128frobust",
+"1.3.9999.6.4.1", "sphincssha256128frobust",
+"1.3.9999.6.4.2" , "p256_sphincssha256128frobust",
+"1.3.9999.6.4.3" , "rsa3072_sphincssha256128frobust",
+"1.3.9999.6.7.1", "sphincsshake256128frobust",
+"1.3.9999.6.7.2" , "p256_sphincsshake256128frobust",
+"1.3.9999.6.7.3" , "rsa3072_sphincsshake256128frobust",
+///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
+};
 
 #define ALG(NAMES, FUNC) { NAMES, "provider=oqsprovider", FUNC }
 #define KEMALG3(NAMES, SECBITS) \
@@ -48,144 +109,6 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
     OSSL_PARAM_END
 };
 
-extern const OSSL_DISPATCH oqs_generic_kem_functions[];
-extern const OSSL_DISPATCH oqs_hybrid_kem_functions[];
-extern const OSSL_DISPATCH oqs_signature_functions[];
-
-///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
-extern const OSSL_DISPATCH oqs_dilithium2_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium5_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium2_aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium3_aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium5_aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_falcon512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_falcon1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_picnicl1full_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_picnic3l1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_rainbowIclassic_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_rainbowVclassic_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sphincsharaka128frobust_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sphincssha256128frobust_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sphincsshake256128frobust_keymgmt_functions[];
-
-extern const OSSL_DISPATCH oqs_frodo640aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo640shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo976aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo976shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo1344aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps2048509_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps2048677_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps4096821_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hrss701_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_lightsaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_saber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_firesaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bikel1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bikel3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc128_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc192_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc256_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
-
-extern const OSSL_DISPATCH oqs_ecp_frodo640aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo640shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo976aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo976shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo1344aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_ntru_hps2048509_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_ntru_hps2048677_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_ntru_hps4096821_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_ntru_hrss701_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_lightsaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_saber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_firesaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sidhp434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sidhp503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sidhp610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sidhp751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sikep434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sikep503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sikep610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bikel1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bikel3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber90s512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber90s768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber90s1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_hqc128_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_hqc192_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_hqc256_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_ntrulpr653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_ntrulpr761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_ntrulpr857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sntrup653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sntrup761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_sntrup857_keymgmt_functions[];
-
-extern const OSSL_DISPATCH oqs_ecx_frodo640aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo640shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo976aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo976shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo1344aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_ntru_hps2048509_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_ntru_hps2048677_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_ntru_hps4096821_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_ntru_hrss701_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_lightsaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_saber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_firesaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sidhp434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sidhp503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sidhp610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sidhp751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sikep434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sikep503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sikep610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bikel1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bikel3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber90s512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber90s768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber90s1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_hqc128_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_hqc192_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_hqc256_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_ntrulpr653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_ntrulpr761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_ntrulpr857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sntrup653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sntrup761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_sntrup857_keymgmt_functions[];
-///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
@@ -313,6 +236,21 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     { NULL, NULL, NULL }
 };
 
+static const OSSL_ALGORITHM oqsprovider_encoder[] = {
+#define ENCODER_PROVIDER "oqsprovider"
+#include "oqsencoders.inc"
+    { NULL, NULL, NULL }
+#undef ENCODER_PROVIDER
+};
+
+static const OSSL_ALGORITHM oqsprovider_decoder[] = {
+#define DECODER_PROVIDER "oqsprovider"
+#include "oqsdecoders.inc"
+    { NULL, NULL, NULL }
+#undef DECODER_PROVIDER
+};
+
+
 static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx)
 {
     return oqsprovider_param_types;
@@ -341,6 +279,7 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
                                           int *no_cache)
 {
     *no_cache = 0;
+
     switch (operation_id) {
     case OSSL_OP_SIGNATURE:
         return oqsprovider_signatures;
@@ -348,6 +287,10 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
         return oqsprovider_asym_kems;
     case OSSL_OP_KEYMGMT:
         return oqsprovider_keymgmt;
+    case OSSL_OP_ENCODER:
+        return oqsprovider_encoder;
+    case OSSL_OP_DECODER:
+        return oqsprovider_decoder;
     default:
         if (getenv("OQSPROV")) printf("Unknown operation %d requested from OQS provider\n", operation_id);
     }
@@ -374,8 +317,16 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
                        const OSSL_DISPATCH **out,
                        void **provctx)
 {
+    const OSSL_DISPATCH *orig_in=in;
     OSSL_FUNC_core_get_libctx_fn *c_get_libctx = NULL;
+    OSSL_FUNC_core_obj_create_fn *c_obj_create= NULL;
+    OSSL_FUNC_core_obj_add_sigid_fn *c_obj_add_sigid= NULL;
+    BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
+    int i;
+
+    if (!oqs_prov_bio_from_dispatch(in))
+        return 0;
 
     for (; in->function_id != 0; in++) {
         switch (in->function_id) {
@@ -388,17 +339,40 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
         case OSSL_FUNC_CORE_GET_LIBCTX:
             c_get_libctx = OSSL_FUNC_core_get_libctx(in);
             break;
+        case OSSL_FUNC_CORE_OBJ_CREATE:
+            c_obj_create = OSSL_FUNC_core_obj_create(in);
+            break;
+        case OSSL_FUNC_CORE_OBJ_ADD_SIGID:
+            c_obj_add_sigid = OSSL_FUNC_core_obj_add_sigid(in);
+            break;
         /* Just ignore anything we don't understand */
         default:
             break;
         }
     }
 
-    if (c_get_libctx == NULL)
+    // we need these functions:
+    if (c_obj_create == NULL || c_obj_add_sigid==NULL)
         return 0;
 
-    if ( ((libctx = OSSL_LIB_CTX_new()) == NULL) ||
-         (*provctx = oqsx_newprovctx(libctx, handle)) == NULL ) {
+    // insert all OIDs to the global objects list
+    for (i=0; i<OQS_OID_CNT;i+=2) {
+	if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+1]))
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+
+	if (!oqs_set_nid((char*)oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1])))
+              ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+
+	if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i+1], "", oqs_oid_alg_list[i+1])) {
+              OQS_PROV_PRINTF2("error registering %s with no hash\n", oqs_oid_alg_list[i+1]);
+              ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+	}
+
+    }
+
+    if ( ((corebiometh = oqs_bio_prov_init_bio_method()) == NULL) ||
+         ((libctx = OSSL_LIB_CTX_new_child(handle, orig_in)) == NULL) ||
+         ((*provctx = oqsx_newprovctx(libctx, handle, corebiometh)) == NULL ) ) { 
         OSSL_LIB_CTX_free(libctx);
         oqsprovider_teardown(*provctx);
         *provctx = NULL;

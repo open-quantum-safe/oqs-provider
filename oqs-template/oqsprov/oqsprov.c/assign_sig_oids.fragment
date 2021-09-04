@@ -1,0 +1,22 @@
+{% set count = namespace(val=0) %}
+{%- for sig in config['sigs'] %}
+    {%- for variant in sig['variants'] %}
+{%- set count.val = count.val + 1 -%}
+        {%- for classical_alg in variant['mix_with'] %}
+{%- set count.val = count.val + 1 -%}
+        {%- endfor %}
+    {%- endfor %}
+{%- endfor %}
+#define OQS_OID_CNT {{ count.val*2 }}
+static const char* oqs_oid_alg_list[OQS_OID_CNT] =
+{
+
+{%- for sig in config['sigs'] %}
+    {%- for variant in sig['variants'] %}
+"{{ variant['oid'] }}", "{{ variant['name'] }}", 
+        {%- for classical_alg in variant['mix_with'] %}
+"{{ classical_alg['oid'] }}" , "{{ classical_alg['name'] }}_{{ variant['name'] }}", 
+        {%- endfor %}
+    {%- endfor %}
+{%- endfor %}
+

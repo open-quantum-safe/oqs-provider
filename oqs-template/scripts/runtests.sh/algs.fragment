@@ -1,0 +1,6 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+interop {{ variant['name'] }}
+   {%- endfor %}
+{%- endfor %}
+

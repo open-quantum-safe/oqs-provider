@@ -81,6 +81,7 @@ int main(int argc, char *argv[])
    * so may be left away (in test/oqs.cnf if suitably build, see
    * https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL
    */
+  T(OSSL_PROVIDER_load(libctx, modulename));
   T(OSSL_PROVIDER_available(libctx, modulename));
   T(OSSL_PROVIDER_available(libctx, "default"));
 

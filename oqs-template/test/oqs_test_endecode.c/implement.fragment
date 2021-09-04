@@ -1,0 +1,7 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+KEYS({{ variant['name'] }});
+IMPLEMENT_TEST_SUITE({{ variant['name'] }}, "{{ variant['name'] }}")
+   {%- endfor %}
+{%- endfor %}
+

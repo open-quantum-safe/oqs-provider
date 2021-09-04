@@ -34,14 +34,20 @@ If any of these features are needed, please refer to and use the
 [OQS-OpenSSL1.1.1](https://github.com/open-quantum-safe/openssl) fork
 where they are already implemented.
 
+Building and testing -- Quick start
+-----------------------------------
+
+All component builds and tests described in detail below can be executed by
+running the script `scripts/fullbuild.sh` (tested on Linux Ubuntu and Mint).
+
+
 Building and testing
 --------------------
 
 ## Pre-requisites
 
-To be able to build `oqsprovider`, OpenSSL (3.0.0)  and liboqs
-need to be installed.  It's not important where they are installed, just
-that they are.
+To be able to build `oqsprovider`, OpenSSL 3.0 and liboqs need to be installed.
+It's not important where they are installed, just that they are.
 
 For building, minimum requirements are a C compiler, git access and `cmake`.
 For Linux these commands can typically be installed by running for example

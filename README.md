@@ -39,7 +39,7 @@ Building and testing
 
 ## Pre-requisites
 
-To be able to build `oqsprovider`, OpenSSL 3.0 (not yet released) and liboqs
+To be able to build `oqsprovider`, OpenSSL (3.0.0)  and liboqs
 need to be installed.  It's not important where they are installed, just
 that they are.
 
@@ -57,10 +57,10 @@ Example for building and installing OpenSSL 3.0 in `.local`:
     ./config --prefix=$(echo $(pwd)/../.local) && make && make install_sw
     cd ..
 
-OpenSSL (3.0) is not yet released in a production version. For [limitations
+For [OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
 see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
 
-*Note*: Building has last been validated with OpenSSL version `3.0.0-alpha17-dev`
+*Note*: Building has last been validated with OpenSSL version/tag `openssl-3.0.0`
 even though the goal of this project is to always build and work with the latest
 OpenSSL `master` branch code.
 

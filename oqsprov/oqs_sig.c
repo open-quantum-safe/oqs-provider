@@ -365,7 +365,6 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx, const unsigned char *da
 
     OQS_SIG_PRINTF("OQS SIG provider: digest_signverify_update called\n");
 
-     XXX: was:if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
     if (poqs_sigctx == NULL)
         return 0;
 
@@ -435,7 +434,6 @@ int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
     unsigned int dlen = 0;
 
     OQS_SIG_PRINTF("OQS SIG provider: digest_verify_final called\n");
-    // XXX was: if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
     if (poqs_sigctx == NULL)
         return 0;
 

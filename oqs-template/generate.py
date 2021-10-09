@@ -42,30 +42,6 @@ def run_subprocess(command, outfilename=None, working_dir='.', expected_returnco
             print(result.stdout.decode('utf-8'))
         assert False, "Got unexpected return code {}".format(result.returncode)
 
-# Function replicating openssl makefile target of the same name to generate ASN1 structs
-# The function assumes perl to be present as well as an openssl master branch checked out.
-def generate_crypto_objects():
-    OSSL_SRC_DIR = 'openssl'
-    OSSL_OBJ_GEN_DIR = os.path.join(OSSL_SRC_DIR, 'crypto', 'objects')
-    # check presence of OpenSSL (script files):
-    if not os.path.exists(OSSL_OBJ_GEN_DIR):
-        print("Error: OSSL install not present (%s missing). Exiting." % (OSSL_OBJ_GEN_DIR))
-        exit(1)
-    # now run the generator scripts:
-    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'objects.pl'), '-n' , os.path.join('oqsprov', 'oqs_objects.txt') , os.path.join('oqsprov', 'oqs_obj_mac.num')  ]
-    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_mac.new'))
-    os.rename(os.path.join('oqsprov', 'oqs_obj_mac.new'), os.path.join('oqsprov', 'oqs_obj_mac.num'))
-    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'objects.pl'), os.path.join('oqsprov', 'oqs_objects.txt'), os.path.join('oqsprov', 'oqs_obj_mac.num') ]
-    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_mac.h'))
-    fixup_copyright(os.path.join('oqsprov', 'oqs_obj_mac.h'))
-    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'obj_dat.pl'), os.path.join('oqsprov', 'oqs_obj_mac.h')]
-    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_dat.h'))
-    fixup_copyright(os.path.join('oqsprov', 'oqs_obj_dat.h'))
-    cmd = ['perl', os.path.join(OSSL_OBJ_GEN_DIR, 'objxref.pl'), os.path.join('oqsprov', 'oqs_obj_mac.num'), os.path.join('oqsprov', 'oqs_obj_xref.txt')]
-    run_subprocess(cmd, os.path.join('oqsprov', 'oqs_obj_xref.h'))
-    fixup_copyright(os.path.join('oqsprov', 'oqs_obj_xref.h'))
-    print("Crypto objects regenerated")
-    
 # For list.append in Jinja templates
 Jinja2 = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath="."),extensions=['jinja2.ext.do'])
 
@@ -143,9 +119,6 @@ populate('oqsprov/oqs_sig.c', config, '/////')
 populate('oqsprov/oqs_encode_key2any.c', config, '/////')
 populate('oqsprov/oqs_decode_der2key.c', config, '/////')
 populate('oqsprov/oqsprov_keys.c', config, '/////')
-populate('oqsprov/oqs_objects.txt', config, '#####')
-populate('oqsprov/oqs_obj_xref.txt', config, '#####')
 populate('scripts/runtests.sh', config, '#####')
 print("All files generated")
 
-generate_crypto_objects()

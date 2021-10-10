@@ -6,7 +6,6 @@
  * Code strongly inspired by OpenSSL crypto/ec key handler but relocated here 
  * to have code within provider.
  *
- * TBC: Use/test in more than KEM and SIG cases.
  */
 
 #include <openssl/err.h>
@@ -44,24 +43,48 @@ typedef struct {
 } oqs_nid_name_t;
 
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
-#define NID_TABLE_LEN 15
+#define NID_TABLE_LEN 39
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "dilithium2", OQS_SIG_alg_dilithium_2, 128 },
+       { 0, "p256_dilithium2", OQS_SIG_alg_dilithium_2, 128 },
+       { 0, "rsa3072_dilithium2", OQS_SIG_alg_dilithium_2, 128 },
        { 0, "dilithium3", OQS_SIG_alg_dilithium_3, 192 },
+       { 0, "p384_dilithium3", OQS_SIG_alg_dilithium_3, 192 },
        { 0, "dilithium5", OQS_SIG_alg_dilithium_5, 256 },
+       { 0, "p521_dilithium5", OQS_SIG_alg_dilithium_5, 256 },
        { 0, "dilithium2_aes", OQS_SIG_alg_dilithium_2_aes, 128 },
+       { 0, "p256_dilithium2_aes", OQS_SIG_alg_dilithium_2_aes, 128 },
+       { 0, "rsa3072_dilithium2_aes", OQS_SIG_alg_dilithium_2_aes, 128 },
        { 0, "dilithium3_aes", OQS_SIG_alg_dilithium_3_aes, 192 },
+       { 0, "p384_dilithium3_aes", OQS_SIG_alg_dilithium_3_aes, 192 },
        { 0, "dilithium5_aes", OQS_SIG_alg_dilithium_5_aes, 256 },
+       { 0, "p521_dilithium5_aes", OQS_SIG_alg_dilithium_5_aes, 256 },
        { 0, "falcon512", OQS_SIG_alg_falcon_512, 128 },
+       { 0, "p256_falcon512", OQS_SIG_alg_falcon_512, 128 },
+       { 0, "rsa3072_falcon512", OQS_SIG_alg_falcon_512, 128 },
        { 0, "falcon1024", OQS_SIG_alg_falcon_1024, 256 },
+       { 0, "p521_falcon1024", OQS_SIG_alg_falcon_1024, 256 },
        { 0, "picnicl1full", OQS_SIG_alg_picnic_L1_full, 128 },
+       { 0, "p256_picnicl1full", OQS_SIG_alg_picnic_L1_full, 128 },
+       { 0, "rsa3072_picnicl1full", OQS_SIG_alg_picnic_L1_full, 128 },
        { 0, "picnic3l1", OQS_SIG_alg_picnic3_L1, 128 },
+       { 0, "p256_picnic3l1", OQS_SIG_alg_picnic3_L1, 128 },
+       { 0, "rsa3072_picnic3l1", OQS_SIG_alg_picnic3_L1, 128 },
        { 0, "rainbowIclassic", OQS_SIG_alg_rainbow_I_classic, 128 },
+       { 0, "p256_rainbowIclassic", OQS_SIG_alg_rainbow_I_classic, 128 },
+       { 0, "rsa3072_rainbowIclassic", OQS_SIG_alg_rainbow_I_classic, 128 },
        { 0, "rainbowVclassic", OQS_SIG_alg_rainbow_V_classic, 256 },
+       { 0, "p521_rainbowVclassic", OQS_SIG_alg_rainbow_V_classic, 256 },
        { 0, "sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, 128 },
+       { 0, "p256_sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, 128 },
+       { 0, "rsa3072_sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, 128 },
        { 0, "sphincssha256128frobust", OQS_SIG_alg_sphincs_sha256_128f_robust, 128 },
+       { 0, "p256_sphincssha256128frobust", OQS_SIG_alg_sphincs_sha256_128f_robust, 128 },
+       { 0, "rsa3072_sphincssha256128frobust", OQS_SIG_alg_sphincs_sha256_128f_robust, 128 },
        { 0, "sphincsshake256128frobust", OQS_SIG_alg_sphincs_shake256_128f_robust, 128 },
+       { 0, "p256_sphincsshake256128frobust", OQS_SIG_alg_sphincs_shake256_128f_robust, 128 },
+       { 0, "rsa3072_sphincsshake256128frobust", OQS_SIG_alg_sphincs_shake256_128f_robust, 128 },
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };
 
@@ -178,7 +201,6 @@ OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             goto err;
         }
-	// XXX what about secure key copy alternatives??
         memcpy(key->privkey, p, key->privkeylen);
         memcpy(key->pubkey, p+key->privkeylen, key->pubkeylen);
     }

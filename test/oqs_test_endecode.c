@@ -605,7 +605,7 @@ static int test_unprotected_via_MSBLOB(const char *type, EVP_PKEY *key)
                               dump_der, 0);
 }
 
-// start steal XXX: Review!
+// start steal: Review TBD
 // stolen from openssl/crypto/pem/pvkfmt.c as ossl_do_PVK_header not public API:
 /* The PVK file magic number: seems to spell out "bobsfile", who is Bob? */
 # define MS_PVKMAGIC             0xb0b5f11eL
@@ -673,7 +673,7 @@ static int oqsx_do_PVK_header(const unsigned char **in, unsigned int length,
     return 1;
 }
 
-// end steal XXX
+// end steal TBD
 
 static int check_PVK(const char *file, const int line,
                      const char *type, const void *data, size_t data_len)

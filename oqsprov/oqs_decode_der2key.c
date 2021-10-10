@@ -21,7 +21,7 @@
 #include <openssl/proverr.h>
 //#include "internal/asn1.h"
 //instead just:
-int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb); // TBD: OK to use?? XXX
+int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb); // TBD: OK to use?
 
 #include "oqs_endecoder_local.h"
 
@@ -82,7 +82,8 @@ struct keytype_desc_st {
     free_key_fn *free_key;
 };
 
-// Start steal XXX: Review!
+// Start steal. Alternative: Open up d2i_X509_PUBKEY_INTERNAL
+// as per https://github.com/openssl/openssl/issues/16697 (TBD)
 // stolen from openssl/crypto/x509/x_pubkey.c as ossl_d2i_X509_PUBKEY_INTERNAL not public: 
 // dangerous internal struct dependency: Suggest opening up ossl_d2i_X509_PUBKEY_INTERNAL
 // or find out how to decode X509 with own ASN1 calls
@@ -116,7 +117,7 @@ X509_PUBKEY *oqsx_d2i_X509_PUBKEY_INTERNAL(const unsigned char **pp,
                                            ASN1_ITEM_rptr(X509_PUBKEY_INTERNAL),
                                            libctx, NULL);
 }
-// end steal XXX
+// end steal TBD
 
 
 /*

@@ -178,7 +178,7 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
         return NULL;
 
     poqs_sigctx->libctx = ((PROV_OQS_CTX*)provctx)->libctx;
-    poqs_sigctx->flag_allow_md = 0; // TBC
+    poqs_sigctx->flag_allow_md = 0;
     if (propq != NULL && (poqs_sigctx->propq = OPENSSL_strdup(propq)) == NULL) {
         OPENSSL_free(poqs_sigctx);
         poqs_sigctx = NULL;
@@ -324,7 +324,7 @@ static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx, const char *mdname
     if (!oqs_sig_setup_md(poqs_sigctx, mdname, NULL))
         return 0;
 
-    // TBD: Set default mdname??? if (!oqs_sig_setup_md(poqs_sigctx, (mdname==NULL)?"SHA512":mdname, NULL))
+    // TBD: review when hybrids get added
     if (mdname != NULL) {
        poqs_sigctx->mdctx = EVP_MD_CTX_new();
        if (poqs_sigctx->mdctx == NULL)
@@ -368,26 +368,25 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx, const unsigned char *da
     if (poqs_sigctx == NULL)
         return 0;
 
+    // unconditionally collect data for passing in full to OQS API
+    if (poqs_sigctx->mddata) {
+	int mdlen = poqs_sigctx->mdsize;
+	poqs_sigctx->mdsize += datalen;
+	char* newdata = OPENSSL_malloc(poqs_sigctx->mdsize);
+	memcpy(newdata, poqs_sigctx->mddata, mdlen);
+	memcpy(newdata+mdlen, data, datalen);
+	OPENSSL_free(poqs_sigctx->mddata);
+	poqs_sigctx->mddata = newdata;
+    }
+    else { // simple alloc and copy
+	poqs_sigctx->mdsize=datalen;
+	poqs_sigctx->mddata = OPENSSL_malloc(poqs_sigctx->mdsize);
+	memcpy(poqs_sigctx->mddata, data, poqs_sigctx->mdsize);
+    }
+    OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_update collected %ld bytes...\n", poqs_sigctx->mdsize);
     if (poqs_sigctx->mdctx) 
     	return EVP_DigestUpdate(poqs_sigctx->mdctx, data, datalen);
-    else { // need to collect data
-	if (poqs_sigctx->mddata) {
-		int mdlen = poqs_sigctx->mdsize;
-		poqs_sigctx->mdsize += datalen;
-		char* newdata = OPENSSL_malloc(poqs_sigctx->mdsize);
-		memcpy(newdata, poqs_sigctx->mddata, mdlen);
-		memcpy(newdata+mdlen, data, datalen);
-		OPENSSL_free(poqs_sigctx->mddata);
-		poqs_sigctx->mddata = newdata;
-	}
-	else { // simple alloc and copy
-		poqs_sigctx->mdsize=datalen;
-		poqs_sigctx->mddata = OPENSSL_malloc(poqs_sigctx->mdsize);
-		memcpy(poqs_sigctx->mddata, data, poqs_sigctx->mdsize);
-	}
-        OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_update collected %ld bytes...\n", poqs_sigctx->mdsize);
-	return 1;
-    }
+    return 1;
 }
 
 int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
@@ -418,6 +417,7 @@ int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig, size_t *si
 
     poqs_sigctx->flag_allow_md = 1;
 
+    // TBC for hybrids:
     if (poqs_sigctx->mdctx != NULL) 
 	return oqs_sig_sign(vpoqs_sigctx, sig, siglen, sigsize, digest, (size_t)dlen);
     else
@@ -437,6 +437,7 @@ int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
     if (poqs_sigctx == NULL)
         return 0;
 
+    // TBC for hybrids:
     if (poqs_sigctx->mdctx) {
 	if (!EVP_DigestFinal_ex(poqs_sigctx->mdctx, digest, &dlen))
         	return 0;

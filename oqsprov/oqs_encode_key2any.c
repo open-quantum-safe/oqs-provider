@@ -167,10 +167,7 @@ static X509_PUBKEY *oqsx_key_to_pubkey(const void *key, int key_nid,
     if ((xpk = X509_PUBKEY_new()) == NULL
         || (derlen = k2d(key, &der)) <= 0
         || !X509_PUBKEY_set0_param(xpk, OBJ_nid2obj(key_nid),
-	// not interoperable with oqs-openssl: OK? TBC
-        //              params_type, params, 
-	// OK:
-                        V_ASN1_UNDEF, NULL, 
+                        V_ASN1_UNDEF, NULL, // as per logic in oqs_meth.c in oqs-openssl
 			der, derlen)) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         X509_PUBKEY_free(xpk);
@@ -560,7 +557,6 @@ static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
     // TBC: Extend with hybrid keys
     buflen = oqsxkey->privkeylen+oqsxkey->pubkeylen;
     buf = OPENSSL_secure_malloc(buflen);
-    // XXX at least consider secure copy alternative:
     OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n", buflen);
     memcpy(buf, oqsxkey->privkey, oqsxkey->privkeylen);
     memcpy(buf+oqsxkey->privkeylen, oqsxkey->pubkey, oqsxkey->pubkeylen);
@@ -666,7 +662,6 @@ static void key2any_freectx(void *vctx)
 
     OQS_ENC_PRINTF("OQS ENC provider: key2any_freectx called\n");
 
-    //TBC: ossl_pw_clear_passphrase_data(&ctx->pwdata); Anything to be done at all? We don't store actual data....
     EVP_CIPHER_free(ctx->cipher);
     OPENSSL_free(ctx);
 }

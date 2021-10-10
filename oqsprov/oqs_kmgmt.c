@@ -20,7 +20,7 @@
 #include "openssl/param_build.h"
 #include "oqs_prov.h"
 
-// stolen from openssl/crypto/param_build_set.c as ossl_param_build_set_octet_string not public API: OK? TBC
+// stolen from openssl/crypto/param_build_set.c as ossl_param_build_set_octet_string not public API:
 
 int oqsx_param_build_set_octet_string(OSSL_PARAM_BLD *bld, OSSL_PARAM *p,
                                       const char *key,

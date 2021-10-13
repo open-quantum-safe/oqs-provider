@@ -32,6 +32,7 @@
 #define OQSPROV_R_OBJ_CREATE_ERR                            6
 #define OQSPROV_R_INVALID_ENCODING                          7
 #define OQSPROV_R_SIGN_ERROR				    8
+#define OQSPROV_R_LIB_CREATE_ERR			    9
 
 /* Extras for OQS extension */
 

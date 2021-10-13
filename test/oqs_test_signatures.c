@@ -33,6 +33,7 @@ static const char *sigalg_names[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END
 };
 
+// sign-and-hash must work with and without providing a digest algorithm
 static int test_oqs_signatures(const char *sigalg_name)
 {
   EVP_MD_CTX *mdctx = NULL;
@@ -42,17 +43,37 @@ static int test_oqs_signatures(const char *sigalg_name)
   unsigned char *sig;
   size_t siglen;
 
-  int testresult =
+  int testresult = 1;
+
+  // test with built-in digest only if default provider is active:
+  // TBD revisit when hybrids are activated: They always need default provider
+  if (OSSL_PROVIDER_available(libctx, "default"))
+    testresult  &=
+      (mdctx = EVP_MD_CTX_new()) != NULL
+      && (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
+      && EVP_PKEY_keygen_init(ctx)
+      && EVP_PKEY_generate(ctx, &key)
+      && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
+      && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
+      && EVP_DigestSignFinal(mdctx, NULL, &siglen)
+      && (sig = OPENSSL_malloc(siglen)) != NULL
+      && EVP_DigestSignFinal(mdctx, sig, &siglen)
+      && EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
+      && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
+      && EVP_DigestVerifyFinal(mdctx, sig, siglen);
+
+  // this test must work also with default provider inactive:
+  testresult &=
     (mdctx = EVP_MD_CTX_new()) != NULL
     && (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
     && EVP_PKEY_keygen_init(ctx)
     && EVP_PKEY_generate(ctx, &key)
-    && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
+    && EVP_DigestSignInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL)
     && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
     && EVP_DigestSignFinal(mdctx, NULL, &siglen)
     && (sig = OPENSSL_malloc(siglen)) != NULL
     && EVP_DigestSignFinal(mdctx, sig, &siglen)
-    && EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
+    && EVP_DigestVerifyInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL)
     && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
     && EVP_DigestVerifyFinal(mdctx, sig, siglen);
 
@@ -76,14 +97,7 @@ int main(int argc, char *argv[])
 
   T(OSSL_LIB_CTX_load_config(libctx, configfile));
 
-  /* Check we have the expected providers available:
-   * Note: default only needed if liboqs built using openssl,
-   * so may be left away (in test/oqs.cnf if suitably build, see
-   * https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL
-   */
-  T(OSSL_PROVIDER_load(libctx, modulename));
   T(OSSL_PROVIDER_available(libctx, modulename));
-  T(OSSL_PROVIDER_available(libctx, "default"));
 
   for (i = 0; i < nelem(sigalg_names); i++) {
     if (test_oqs_signatures(sigalg_names[i])) {

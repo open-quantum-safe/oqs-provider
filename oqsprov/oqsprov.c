@@ -16,6 +16,7 @@
 #include <openssl/params.h>
 #include <openssl/objects.h>
 #include <openssl/err.h>
+#include <openssl/provider.h>
 #include "oqs_prov.h"
 
 #ifdef NDEBUG
@@ -318,12 +319,14 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
                        void **provctx)
 {
     const OSSL_DISPATCH *orig_in=in;
-    OSSL_FUNC_core_get_libctx_fn *c_get_libctx = NULL;
     OSSL_FUNC_core_obj_create_fn *c_obj_create= NULL;
+    OSSL_FUNC_core_get_libctx_fn *c_get_libctx = NULL;
+
     OSSL_FUNC_core_obj_add_sigid_fn *c_obj_add_sigid= NULL;
     BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
     int i;
+    int rc = 0;
 
     if (!oqs_prov_bio_from_dispatch(in))
         return 0;
@@ -333,11 +336,11 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
         case OSSL_FUNC_CORE_GETTABLE_PARAMS:
             c_gettable_params = OSSL_FUNC_core_gettable_params(in);
             break;
-        case OSSL_FUNC_CORE_GET_PARAMS:
-            c_get_params = OSSL_FUNC_core_get_params(in);
-            break;
         case OSSL_FUNC_CORE_GET_LIBCTX:
             c_get_libctx = OSSL_FUNC_core_get_libctx(in);
+            break;
+        case OSSL_FUNC_CORE_GET_PARAMS:
+            c_get_params = OSSL_FUNC_core_get_params(in);
             break;
         case OSSL_FUNC_CORE_OBJ_CREATE:
             c_obj_create = OSSL_FUNC_core_obj_create(in);
@@ -352,8 +355,11 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
     }
 
     // we need these functions:
-    if (c_obj_create == NULL || c_obj_add_sigid==NULL)
+    if (c_obj_create == NULL || c_obj_add_sigid==NULL || c_get_libctx==NULL)
         return 0;
+
+    // try to get pre-existing context
+    libctx = (OSSL_LIB_CTX *)c_get_libctx(handle);
 
     // insert all OIDs to the global objects list
     for (i=0; i<OQS_OID_CNT;i+=2) {
@@ -370,16 +376,32 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
 
     }
 
+    // if libctx not yet existing, create a new one
     if ( ((corebiometh = oqs_bio_prov_init_bio_method()) == NULL) ||
-         ((libctx = OSSL_LIB_CTX_new_child(handle, orig_in)) == NULL) ||
+         ((libctx = libctx?libctx:OSSL_LIB_CTX_new_child(handle, orig_in)) == NULL) ||
          ((*provctx = oqsx_newprovctx(libctx, handle, corebiometh)) == NULL ) ) { 
-        OSSL_LIB_CTX_free(libctx);
-        oqsprovider_teardown(*provctx);
-        *provctx = NULL;
-        return 0;
+        OQS_PROV_PRINTF("OQS PROV: error creating new provider context\n");
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_LIB_CREATE_ERR);
+	goto end_init;
     }
 
     *out = oqsprovider_dispatch_table;
 
-    return 1;
+    // finally, check availability of default provider: Without it, this provider won't function:
+    if (!OSSL_PROVIDER_available(libctx, "default")) {
+        OQS_PROV_PRINTF("OQS PROV: Default provider not available. Activating.\n");
+        rc = (OSSL_PROVIDER_load(libctx, "default") != NULL);
+    }
+    else {
+        OQS_PROV_PRINTF("OQS PROV: Default provider available.\n");
+        rc = 1;
+    }
+
+end_init:
+    if (!rc) {
+        OSSL_LIB_CTX_free(libctx);
+        oqsprovider_teardown(*provctx);
+        *provctx = NULL;
+    }
+    return rc;
 }

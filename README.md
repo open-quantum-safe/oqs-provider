@@ -21,7 +21,8 @@ Status
 Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
 OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, OQS 
-signatures are available via the OpenSSL EVP interface. 
+signatures are available via the OpenSSL EVP interface. Key persistence is
+provided via the encode/decode mechanism (still WIP for X.509).
 
 For information about the available OQS algorithms,
 [refer to the OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms).
@@ -34,11 +35,16 @@ If any of these features are needed, please refer to and use the
 [OQS-OpenSSL1.1.1](https://github.com/open-quantum-safe/openssl) fork
 where they are already implemented.
 
+*Note:* `oqsprovider` depends for TLS session setup and hybrid operations
+on OpenSSL providers for classic crypto operations. Therefore it is essential
+that a provider such as `default` or `fips` is configured to be active. See
+`tests/oqs.cnf` for an example.
+
 Building and testing -- Quick start
 -----------------------------------
 
-All component builds and tests described in detail below can be executed by
-running the script `scripts/fullbuild.sh` (tested on Linux Ubuntu and Mint).
+All component builds and testing described in detail below can be executed by
+running the scripts `scripts/fullbuild.sh` and `scripts/runtests.sh` respectively (tested on Linux Ubuntu and Mint).
 
 
 Building and testing
@@ -91,7 +97,7 @@ Further `liboqs` build options are [documented here](https://github.com/open-qua
 
 ## Testing
 
-Testing can be run via the following command:
+Core component testing can be run via the following command:
 
     (cd _build; ctest)
 
@@ -100,6 +106,9 @@ Add `-V` to the `ctest` command for verbose output.
 *Note*: Some parts of testing depend on OpenSSL components. These can be
 activated by executing `./scripts/preptests.sh` before building the provider. 
 See [the test README](test/README.md) for details.
+
+Additional interoperability tests (with OQS-OpenSSL1.1.1) are available in the
+script `scripts/runtests.sh`.
 
 ## Build options
 

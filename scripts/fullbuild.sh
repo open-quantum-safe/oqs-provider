@@ -5,8 +5,8 @@ if [ $# -gt 0 ]; then
 fi
 
 if [ ! -d "openssl" ]; then
-   echo "openssl doesn't reside where expected: Cloning and building... Full debug and tracing enabled:"
-   git clone git://git.openssl.org/openssl.git && cd openssl && ./config enable-trace --debug --prefix=$(echo $(pwd)/../.local) && make && make install_sw && cd ..
+   echo "openssl doesn't reside where expected: Cloning and building... Full debug and tracing and FIPS enabled:"
+   git clone git://git.openssl.org/openssl.git && cd openssl && ./config enable-trace enable-fips --debug --prefix=$(echo $(pwd)/../.local) && make && make install_sw && cd ..
    if [ $? -ne 0 ]; then
      echo "openssl build failed. Exiting."
      exit -1

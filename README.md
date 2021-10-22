@@ -161,6 +161,8 @@ Contributors to the `oqsprovider` include:
 Acknowledgments
 ---------------
 
+The `oqsprovider` project is supported through the [NGI Assure Fund](https://nlnet.nl/assure), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet programme](https://www.ngi.eu), under the aegis of DG Communications Networks, Content and Technology under grant agreement No 957073.
+
 Financial support for the development of Open Quantum Safe has been provided by Amazon Web Services and the Tutte Institute for Mathematics and Computing.
 
 We'd like to make a special acknowledgement to the companies who have dedicated programmer time to contribute source code to OQS, including Amazon Web Services, evolutionQ, Microsoft Research, Cisco Systems, and IBM Research.

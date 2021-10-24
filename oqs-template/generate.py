@@ -9,6 +9,39 @@ import shutil
 import subprocess
 import yaml
 
+# For files generated, the copyright message can be adapted
+# see https://github.com/open-quantum-safe/oqs-provider/issues/2#issuecomment-920904048
+# SPDX message to be leading, OpenSSL Copyright notice to be deleted
+def fixup_copyright(filename):
+   with open(filename, "r") as origfile:
+      with open(filename+".new", "w") as newfile:
+         newfile.write("// SPDX-License-Identifier: Apache-2.0 AND MIT\n\n")
+         skipline = False
+         checkline = True
+         for line in origfile:
+             if checkline==True and " * Copyright" in line:
+                skipline=True
+             if "*/" in line:
+                skipline=False
+                checkline=False
+             if not skipline:
+                newfile.write(line)
+   os.rename(filename+".new", filename)
+
+def run_subprocess(command, outfilename=None, working_dir='.', expected_returncode=0, input=None, ignore_returncode=False):
+    result = subprocess.run(
+            command,
+            input=input,
+            stdout=(open(outfilename, "w") if outfilename!=None else subprocess.PIPE),
+            stderr=subprocess.PIPE,
+            cwd=working_dir,
+        )
+
+    if not(ignore_returncode) and (result.returncode != expected_returncode):
+        if outfilename == None:
+            print(result.stdout.decode('utf-8'))
+        assert False, "Got unexpected return code {}".format(result.returncode)
+
 # For list.append in Jinja templates
 Jinja2 = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath="."),extensions=['jinja2.ext.do'])
 
@@ -73,11 +106,19 @@ def load_config():
 
 config = load_config()
 
-# For now, only activate providers:
 populate('test/oqs_test_signatures.c', config, '/////')
 populate('test/oqs_test_groups.c', config, '/////')
+populate('test/oqs_test_endecode.c', config, '/////')
+populate('oqsprov/oqsencoders.inc', config, '/////')
+populate('oqsprov/oqsdecoders.inc', config, '/////')
+populate('oqsprov/oqs_prov.h', config, '/////')
 populate('oqsprov/oqsprov.c', config, '/////')
 populate('oqsprov/oqsprov_groups.c', config, '/////')
 populate('oqsprov/oqs_kmgmt.c', config, '/////')
 populate('oqsprov/oqs_sig.c', config, '/////')
+populate('oqsprov/oqs_encode_key2any.c', config, '/////')
+populate('oqsprov/oqs_decode_der2key.c', config, '/////')
+populate('oqsprov/oqsprov_keys.c', config, '/////')
+populate('scripts/runtests.sh', config, '#####')
+print("All files generated")
 

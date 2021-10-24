@@ -1,0 +1,6 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+    FREE_KEYS({{ variant['name'] }});
+   {%- endfor %}
+{%- endfor %}
+

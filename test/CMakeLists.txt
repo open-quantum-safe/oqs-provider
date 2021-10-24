@@ -11,6 +11,7 @@ set_tests_properties(oqs_signatures
 add_executable(oqs_test_signatures oqs_test_signatures.c)
 target_link_libraries(oqs_test_signatures ${OPENSSL_CRYPTO_LIBRARY})
 
+
 # oqs_test_groups.c relies on OpenSSL internals, which must be copied to
 # this directory to run this test:
 #
@@ -46,3 +47,21 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ssltestlib.h
   add_executable(oqs_test_groups oqs_test_groups.c ssltestlib.c)
   target_link_libraries(oqs_test_groups ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 endif()
+
+add_executable(oqs_test_endecode oqs_test_endecode.c)
+target_include_directories(oqs_test_endecode PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/include)
+target_include_directories(oqs_test_endecode PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/test)
+target_include_directories(oqs_test_endecode PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/apps/include)
+
+#target_link_libraries(oqs_test_endecode ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/test/libtestutil.a  ${CMAKE_CURRENT_SOURCE_DIR}/../.local/lib64/libcrypto.a pthread dl)
+target_link_libraries(oqs_test_endecode ${OPENSSL_CRYPTO_LIBRARY} ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/test/libtestutil.a )
+add_test(
+  NAME oqs_endecode
+  COMMAND oqs_test_endecode
+          "oqsprovider"
+          "${CMAKE_SOURCE_DIR}/test/oqs.cnf"
+)
+set_tests_properties(oqs_endecode
+  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
+)
+

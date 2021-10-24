@@ -1,0 +1,7 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+DECODER_w_structure("{{ variant['name'] }}", der, PrivateKeyInfo, {{ variant['name'] }}),
+DECODER_w_structure("{{ variant['name'] }}", der, SubjectPublicKeyInfo, {{ variant['name'] }}),
+   {%- endfor %}
+{%- endfor %}
+

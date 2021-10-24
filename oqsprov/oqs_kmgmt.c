@@ -18,7 +18,25 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include "openssl/param_build.h"
-#include "oqsx.h"
+#include "oqs_prov.h"
+
+// stolen from openssl/crypto/param_build_set.c as ossl_param_build_set_octet_string not public API:
+
+int oqsx_param_build_set_octet_string(OSSL_PARAM_BLD *bld, OSSL_PARAM *p,
+                                      const char *key,
+                                      const unsigned char *data,
+                                      size_t data_len)
+{
+    if (bld != NULL)
+        return OSSL_PARAM_BLD_push_octet_string(bld, key, data, data_len);
+
+    p = OSSL_PARAM_locate(p, key);
+    if (p != NULL)
+        return OSSL_PARAM_set_octet_string(p, data, data_len);
+    return 1;
+}
+
+
 
 #ifdef NDEBUG
 #define OQS_KM_PRINTF(a)
@@ -78,35 +96,49 @@ static int oqsx_has(const void *keydata, int selection)
     return ok;
 }
 
+/*
+ * Key matching has a problem in OQS world: OpenSSL assumes all keys to (also)
+ * contain public key material (https://www.openssl.org/docs/manmaster/man3/EVP_PKEY_eq.html).
+ * This is not the case with decoded private keys: Not all algorithms permit re-creating
+ * public key material from private keys (https://github.com/PQClean/PQClean/issues/415#issuecomment-910377682).
+ * Thus we implement the following logic:
+ * 1) Private keys are matched binary if available in both keys; only one key having private key material 
+ *    will be considered a mismatch
+ * 2) Public keys are matched binary if available in both keys; only one key having public key material
+ *    will NOT be considered a mismatch if both private keys are present and match: The latter logic will
+ *    only be triggered if domain parameter matching is requested to distinguish between a pure-play
+ *    public key match/test and one checking OpenSSL-type "EVP-PKEY-equality". This is possible as domain
+ *    parameters don't really play a role in OQS, so we consider them as a proxy for private key matching.
+ */
+ 
 static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
 {
     const OQSX_KEY *key1 = keydata1;
     const OQSX_KEY *key2 = keydata2;
     int ok = 1;
 
-    OQS_KM_PRINTF("OQSKEYMGMT: match called\n");
+    OQS_KM_PRINTF3("OQSKEYMGMT: match called for %p and %p\n", keydata1, keydata2);
 
-    if ((selection & OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS) != 0)
-        ok = ok && !strcmp(key1->oqs_name, key2->oqs_name);
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
         if ((key1->privkey == NULL && key2->privkey != NULL)
                 || (key1->privkey != NULL && key2->privkey == NULL)
-                || strcmp(key1->oqs_name, key2->oqs_name))
+                || ((key1->tls_name!=NULL && key2->tls_name!=NULL) && strcmp(key1->tls_name, key2->tls_name)))
             ok = 0;
         else
-            ok = ok && (key1->privkey == NULL /* implies key2->privkey == NULL */
-                        || CRYPTO_memcmp(key1->privkey, key2->privkey,
-                                         key1->privkeylen) == 0);
+            ok = ok && ( (key1->privkey==NULL && key2->privkey==NULL) || ((key1->privkey != NULL) && CRYPTO_memcmp(key1->privkey, key2->privkey, key1->privkeylen) == 0) );
     }
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
-        if ((key1->pubkey!=NULL && key2->pubkey != NULL)
-                || strcmp(key1->oqs_name, key2->oqs_name))
-            ok = 0;
-        else
-            ok = ok && (key1->pubkey == NULL /* implies key2->haspubkey == NULL */
-                        || CRYPTO_memcmp(key1->pubkey, key2->pubkey,
-                                         key1->pubkeylen) == 0);
+        if ((key1->pubkey == NULL && key2->pubkey != NULL) ||
+            (key1->pubkey != NULL && key2->pubkey == NULL) ||
+            ((key1->tls_name!=NULL && key2->tls_name!=NULL) && strcmp(key1->tls_name, key2->tls_name)))
+            // special case now: If domain parameter matching requested, consider private key match sufficient:
+            ok = ((selection & OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS) != 0) && 
+                  (key1->privkey != NULL && key2->privkey != NULL) &&
+                  (CRYPTO_memcmp(key1->privkey, key2->privkey, key1->privkeylen) == 0);
+        else 
+            ok = ok && ( (key1->pubkey==NULL && key2->pubkey==NULL) || ((key1->pubkey != NULL) && CRYPTO_memcmp(key1->pubkey, key2->pubkey, key1->pubkeylen) == 0) );
     }
+    if (!ok) OQS_KM_PRINTF("OQSKEYMGMT: match failed!\n");
     return ok;
 }
 
@@ -127,6 +159,56 @@ static int oqsx_import(void *keydata, int selection, const OSSL_PARAM params[])
     return ok;
 }
 
+int oqsx_key_to_params(const OQSX_KEY *key, OSSL_PARAM_BLD *tmpl,
+                  OSSL_PARAM params[], int include_private)
+{
+    int ret = 0;
+
+    if (key == NULL)
+        return 0;
+
+    if (key->pubkey != NULL) {
+        OSSL_PARAM *p = NULL;
+
+        if (tmpl == NULL) {
+            p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PUB_KEY);
+        }
+
+        if (p != NULL || tmpl != NULL) {
+            if (   key->pubkeylen == 0 
+                || !oqsx_param_build_set_octet_string(tmpl, p,
+                                                      OSSL_PKEY_PARAM_PUB_KEY,
+                                                      key->pubkey, key->pubkeylen))
+                goto err;
+        }
+    }
+    if (key->privkey != NULL && include_private) {
+        OSSL_PARAM *p = NULL;
+
+        /*
+         * Key import/export should never leak the bit length of the secret
+         * scalar in the key. Conceptually. OQS is not production strength
+         * so does not care. TBD.
+         *
+         */
+
+        if (tmpl == NULL) {
+            p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PRIV_KEY);
+        }
+
+        if (p != NULL || tmpl != NULL) {
+            if (   key->privkeylen == 0 
+                || !oqsx_param_build_set_octet_string(tmpl, p,
+                                                      OSSL_PKEY_PARAM_PRIV_KEY,
+                                                      key->privkey, key->privkeylen))
+                goto err;
+        }
+    }
+    ret = 1;
+ err:
+    return ret;
+}
+
 static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
                       void *cbarg)
 {
@@ -134,9 +216,13 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
     OSSL_PARAM_BLD *tmpl;
     OSSL_PARAM *params = NULL;
     OSSL_PARAM *p;
-    int ret = 0;
+    int ok = 1;
 
     OQS_KM_PRINTF("OQSKEYMGMT: export called\n");
+
+    /*
+     * In this implementation, only public and private keys can be exported, nothing else
+     */
     if (key == NULL) {
         ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
         return 0;
@@ -148,27 +234,24 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
         return 0;
     }
 
-    if (((selection & OSSL_KEYMGMT_SELECT_ALL_PARAMETERS) != 0) ||
-        ((selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0)) {
-        if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PUB_KEY)) != NULL) {
-            if (!OSSL_PARAM_set_octet_string(p, key->pubkey, key->pubkeylen))
-                goto err;
-        }
-        if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PRIV_KEY)) != NULL) {
-            if (!OSSL_PARAM_set_octet_string(p, key->privkey, key->privkeylen))
-                goto err;
-        }
+    if ((selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0) {
+        int include_private =
+            selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY ? 1 : 0;
+
+        ok = ok && oqsx_key_to_params(key, tmpl, NULL, include_private);
     }
 
     params = OSSL_PARAM_BLD_to_param(tmpl);
-    if (params == NULL)
+    if (params == NULL) {
+        ok = 0;
         goto err;
+    }
 
-    ret = param_cb(params, cbarg);
+    ok = ok & param_cb(params, cbarg);
     OSSL_PARAM_free(params);
 err:
     OSSL_PARAM_BLD_free(tmpl);
-    return ret;
+    return ok;
 }
 
 #define OQS_KEY_TYPES()                                                        \
@@ -187,12 +270,13 @@ static const OSSL_PARAM *oqs_imexport_types(int selection)
     return NULL;
 }
 
+// must handle param requests for KEM and SIG keys...
 static int oqsx_get_params(void *key, OSSL_PARAM params[])
 {
     OQSX_KEY *oqsxk = key;
     OSSL_PARAM *p;
 
-    OQS_KM_PRINTF("OQSKEYMGMT: get_params called\n");
+    OQS_KM_PRINTF2("OQSKEYMGMT: get_params called for %s\n", params[0].key);
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_BITS)) != NULL
         && !OSSL_PARAM_set_int(p, oqsx_key_parambits(oqsxk)))
         return 0;
@@ -241,7 +325,7 @@ static int set_property_query(OQSX_KEY *oqsxkey, const char *propq)
     if (propq != NULL) {
         oqsxkey->propq = OPENSSL_strdup(propq);
         if (oqsxkey->propq == NULL) {
-            ERR_raise(ERR_LIB_PROV, ERR_R_MALLOC_FAILURE);
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             return 0;
         }
     }
@@ -288,16 +372,17 @@ static const OSSL_PARAM *oqsx_settable_params(void *provctx)
     return oqs_settable_params;
 }
 
-static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, int primitive, int bit_security)
+static void *oqsx_gen_init(void *provctx, int selection, char* oqs_name, char* tls_name, int primitive, int bit_security)
 {
     OSSL_LIB_CTX *libctx = PROV_OQS_LIBCTX_OF(provctx);
     struct oqsx_gen_ctx *gctx = NULL;
 
-    OQS_KM_PRINTF2("OQSKEYMGMT: gen_init called for key %s\n", oqs_name);
+    OQS_KM_PRINTF2("OQSKEYMGMT: gen_init called for key %s \n", oqs_name);
 
     if ((gctx = OPENSSL_zalloc(sizeof(*gctx))) != NULL) {
         gctx->libctx = libctx;
         gctx->oqs_name = OPENSSL_strdup(oqs_name);
+        gctx->tls_name = OPENSSL_strdup(tls_name);
         gctx->primitive = primitive;
         gctx->selection = selection;
         gctx->bit_security = bit_security;
@@ -309,11 +394,11 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx)
 {
     OQSX_KEY *key;
 
-    OQS_KM_PRINTF2("OQSKEYMGMT: gen called for %s\n", gctx->oqs_name);
+    OQS_KM_PRINTF3("OQSKEYMGMT: gen called for %s (%s)\n", gctx->oqs_name, gctx->tls_name);
     if (gctx == NULL)
         return NULL;
     if ((key = oqsx_key_new(gctx->libctx, gctx->oqs_name, NULL, gctx->primitive, gctx->propq, gctx->bit_security)) == NULL) {
-        ERR_raise(ERR_LIB_PROV, ERR_R_MALLOC_FAILURE);
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
 
@@ -405,7 +490,7 @@ static void *dilithium2_new_key(void *provctx)
 
 static void *dilithium2_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_2, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_2, "dilithium2", 0, 128);
 }
 static void *dilithium3_new_key(void *provctx)
 {
@@ -414,7 +499,7 @@ static void *dilithium3_new_key(void *provctx)
 
 static void *dilithium3_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3, 0, 192);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3, "dilithium3", 0, 192);
 }
 static void *dilithium5_new_key(void *provctx)
 {
@@ -423,7 +508,7 @@ static void *dilithium5_new_key(void *provctx)
 
 static void *dilithium5_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_5, 0, 256);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_5, "dilithium5", 0, 256);
 }
 static void *dilithium2_aes_new_key(void *provctx)
 {
@@ -432,7 +517,7 @@ static void *dilithium2_aes_new_key(void *provctx)
 
 static void *dilithium2_aes_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_2_aes, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_2_aes, "dilithium2_aes", 0, 128);
 }
 static void *dilithium3_aes_new_key(void *provctx)
 {
@@ -441,7 +526,7 @@ static void *dilithium3_aes_new_key(void *provctx)
 
 static void *dilithium3_aes_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3_aes, 0, 192);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3_aes, "dilithium3_aes", 0, 192);
 }
 static void *dilithium5_aes_new_key(void *provctx)
 {
@@ -450,7 +535,7 @@ static void *dilithium5_aes_new_key(void *provctx)
 
 static void *dilithium5_aes_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_5_aes, 0, 256);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_5_aes, "dilithium5_aes", 0, 256);
 }
 
 static void *falcon512_new_key(void *provctx)
@@ -460,7 +545,7 @@ static void *falcon512_new_key(void *provctx)
 
 static void *falcon512_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_512, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_512, "falcon512", 0, 128);
 }
 static void *falcon1024_new_key(void *provctx)
 {
@@ -469,7 +554,7 @@ static void *falcon1024_new_key(void *provctx)
 
 static void *falcon1024_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_1024, 0, 256);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_1024, "falcon1024", 0, 256);
 }
 
 static void *picnicl1full_new_key(void *provctx)
@@ -479,7 +564,7 @@ static void *picnicl1full_new_key(void *provctx)
 
 static void *picnicl1full_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic_L1_full, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic_L1_full, "picnicl1full", 0, 128);
 }
 static void *picnic3l1_new_key(void *provctx)
 {
@@ -488,7 +573,7 @@ static void *picnic3l1_new_key(void *provctx)
 
 static void *picnic3l1_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic3_L1, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic3_L1, "picnic3l1", 0, 128);
 }
 
 static void *rainbowIclassic_new_key(void *provctx)
@@ -498,7 +583,7 @@ static void *rainbowIclassic_new_key(void *provctx)
 
 static void *rainbowIclassic_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_I_classic, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_I_classic, "rainbowIclassic", 0, 128);
 }
 static void *rainbowVclassic_new_key(void *provctx)
 {
@@ -507,7 +592,7 @@ static void *rainbowVclassic_new_key(void *provctx)
 
 static void *rainbowVclassic_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_V_classic, 0, 256);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_V_classic, "rainbowVclassic", 0, 256);
 }
 
 static void *sphincsharaka128frobust_new_key(void *provctx)
@@ -517,7 +602,7 @@ static void *sphincsharaka128frobust_new_key(void *provctx)
 
 static void *sphincsharaka128frobust_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_haraka_128f_robust, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_haraka_128f_robust, "sphincsharaka128frobust", 0, 128);
 }
 
 static void *sphincssha256128frobust_new_key(void *provctx)
@@ -527,7 +612,7 @@ static void *sphincssha256128frobust_new_key(void *provctx)
 
 static void *sphincssha256128frobust_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_sha256_128f_robust, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_sha256_128f_robust, "sphincssha256128frobust", 0, 128);
 }
 
 static void *sphincsshake256128frobust_new_key(void *provctx)
@@ -537,7 +622,7 @@ static void *sphincsshake256128frobust_new_key(void *provctx)
 
 static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_128f_robust, 0, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_128f_robust, "sphincsshake256128frobust", 0, 128);
 }
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
@@ -575,7 +660,7 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
                                                       \
     static void *tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_KEM, bit_security); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, NULL /* TBD: create hybrid TLS alg name! */, KEY_TYPE_KEM, bit_security); \
     }                                                 \
                                                       \
     const OSSL_DISPATCH oqs_##tokalg##_keymgmt_functions[] = { \
@@ -607,7 +692,7 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
                                                       \
     static void *ecp_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_ECP_HYB_KEM, bit_security); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, NULL /* TBD: create hybrid TLS alg name! */, KEY_TYPE_ECP_HYB_KEM, bit_security); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecp_##tokalg##_keymgmt_functions[] = { \
@@ -639,7 +724,7 @@ static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
                                                       \
     static void *ecx_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, tokoqsalg, KEY_TYPE_ECX_HYB_KEM, bit_security); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, NULL /* TBD: create hybrid TLS alg name! */, KEY_TYPE_ECX_HYB_KEM, bit_security); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecx_##tokalg##_keymgmt_functions[] = { \

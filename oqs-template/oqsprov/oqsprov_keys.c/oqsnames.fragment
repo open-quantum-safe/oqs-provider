@@ -1,0 +1,21 @@
+{% set count = namespace(val=0) %}
+{%- for sig in config['sigs'] %}
+{%- for variant in sig['variants'] -%}
+{%- set count.val = count.val + 1 -%}
+{%- for classical_alg in variant['mix_with'] %}
+{%- set count.val = count.val + 1 -%}
+{%- endfor -%}
+{%- endfor -%}
+{%- endfor %}
+#define NID_TABLE_LEN {{ count.val }}
+
+static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
+{%- for sig in config['sigs'] -%}
+   {%- for variant in sig['variants'] %}
+       { 0, "{{variant['name']}}", {{variant['oqs_meth']}}, {{variant['security']}} },
+     {%- for classical_alg in variant['mix_with'] %}
+       { 0, "{{ classical_alg['name'] }}_{{variant['name']}}", {{variant['oqs_meth']}}, {{variant['security']}} },
+     {%- endfor %}
+   {%- endfor %}
+{%- endfor %}
+

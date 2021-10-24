@@ -1,0 +1,7 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+    MAKE_KEYS({{ variant['name'] }}, "{{ variant['name'] }}", NULL);
+    ADD_TEST_SUITE({{ variant['name'] }});
+   {%- endfor %}
+{%- endfor %}
+

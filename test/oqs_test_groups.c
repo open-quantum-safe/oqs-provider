@@ -146,13 +146,8 @@ int main(int argc, char *argv[])
 
   T(OSSL_LIB_CTX_load_config(libctx, configfile));
 
-  /* Check we have the expected providers available:
-   * Note: default only needed if liboqs built using openssl,
-   * so may be left away (in test/oqs.cnf if suitably build, see
-   * https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL
-   */
   T(OSSL_PROVIDER_available(libctx, modulename));
-  T(OSSL_PROVIDER_available(libctx, "default"));
+  T(OSSL_PROVIDER_available(libctx, "default")); 
 
   T(OSSL_PROVIDER_do_all(libctx, test_provider_groups, &errcnt));
 

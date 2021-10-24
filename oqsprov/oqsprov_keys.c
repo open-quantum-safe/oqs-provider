@@ -297,9 +297,9 @@ static int oqsx_key_gen_evp_kex(OQSX_EVP_CTX *ctx, unsigned char *pubkey, unsign
     memcpy(pubkey, pubkeykex_encoded, pubkeykexlen);
 
     if (ctx->kex_info->raw_key_support) {
-        size_t privkeykexlen = 0;
+        size_t privkeykexlen = ctx->kex_info->kex_length_private_key;
         ret2 = EVP_PKEY_get_raw_private_key(pkey, privkey, &privkeykexlen);
-        ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
+        ON_ERR_SET_GOTO(ret2 <= 0 || privkeykexlen != ctx->kex_info->kex_length_private_key, ret, -1, errhyb);
     } else {
         unsigned char *pkey_enc = privkey;
         int privkeykexlen = i2d_PrivateKey(pkey, &pkey_enc);

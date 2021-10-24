@@ -15,6 +15,7 @@ jobs:
     docker:
       - image: openquantumsafe/ci-ubuntu-focal-x86_64:latest
     steps:
+      - setup_remote_docker
       - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
       - run:
           name: Clone and build liboqs
@@ -32,7 +33,6 @@ jobs:
           name: Build OQS-OpenSSL provider
           command: |
              ./scripts/preptests.sh && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
-      - setup_remote_docker
       - run:
           name: Run tests
           command: |

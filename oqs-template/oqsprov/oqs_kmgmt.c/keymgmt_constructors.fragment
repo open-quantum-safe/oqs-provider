@@ -2,7 +2,7 @@
    {%- for variant in sig['variants'] %}
 static void *{{variant['name']}}_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), {{variant['oqs_meth']}}, "{{variant['name']}}", 0, NULL, {{variant['security']}});
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), {{variant['oqs_meth']}}, "{{variant['name']}}", KEY_TYPE_SIG, NULL, {{variant['security']}});
 }
 
 static void *{{variant['name']}}_gen_init(void *provctx, int selection)
@@ -10,6 +10,18 @@ static void *{{variant['name']}}_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, {{variant['oqs_meth']}}, "{{variant['name']}}", 0, {{variant['security']}});
 } 
 
+     {%- for classical_alg in variant['mix_with'] %}
+static void *{{ classical_alg['name'] }}_{{variant['name']}}_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), {{variant['oqs_meth']}}, "{{ classical_alg['name'] }}_{{variant['name']}}", KEY_TYPE_HYB_SIG, NULL, {{variant['security']}});
+}
+
+static void *{{ classical_alg['name'] }}_{{variant['name']}}_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, {{variant['oqs_meth']}}, "{{ classical_alg['name'] }}_{{variant['name']}}", KEY_TYPE_HYB_SIG, {{variant['security']}});
+} 
+
+     {%- endfor -%}
    {%- endfor %}
 {% endfor %}
 

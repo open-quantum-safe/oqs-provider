@@ -3,6 +3,9 @@
 # Use newly built oqsprovider to generate certs for alg $1
 # Assumes .local to contain openssl(3) and oqsprovider to be in _build folder
 
+# uncomment to see what's happening:
+# set -x
+
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <algorithmname>. Exiting."
     exit 1

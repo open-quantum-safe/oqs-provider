@@ -2,6 +2,10 @@
    {%- for variant in sig['variants'] %}
     MAKE_KEYS({{ variant['name'] }}, "{{ variant['name'] }}", NULL);
     ADD_TEST_SUITE({{ variant['name'] }});
+      {%- for classical_alg in variant['mix_with'] %}
+    MAKE_KEYS({{ classical_alg['name'] }}_{{ variant['name'] }}, "{{ classical_alg['name'] }}_{{ variant['name'] }}", NULL);
+    ADD_TEST_SUITE({{ classical_alg['name'] }}_{{ variant['name'] }});
+      {%- endfor %}
    {%- endfor %}
 {%- endfor %}
 

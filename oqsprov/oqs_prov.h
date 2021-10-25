@@ -324,9 +324,11 @@ extern const OSSL_DISPATCH oqs_hqc256_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ntrulpr653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ntrulpr761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntrulpr1277_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sntrup1277_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecp_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_frodo640shake_keymgmt_functions[];
@@ -363,9 +365,11 @@ extern const OSSL_DISPATCH oqs_ecp_hqc256_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_ntrulpr653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_ntrulpr761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_ntrulpr857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_ntrulpr1277_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_sntrup857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_sntrup1277_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecx_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_frodo640shake_keymgmt_functions[];
@@ -402,9 +406,11 @@ extern const OSSL_DISPATCH oqs_ecx_hqc256_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_ntrulpr653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_ntrulpr761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_ntrulpr857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_ntrulpr1277_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup653_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup761_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_sntrup857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_sntrup1277_keymgmt_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
 
 /* BIO function declarations */

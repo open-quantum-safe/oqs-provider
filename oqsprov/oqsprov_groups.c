@@ -75,11 +75,13 @@ static const OQS_GROUP_CONSTANTS oqs_group_list[] = {
    { 0x022D, 0x2F2D, 0x2FAD, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x022E, 0x2F2E, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x022F, 0x2F2F, 0x2FAF, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0230, 0x2F30, 0x2FB0, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0230, 0x2F43, 0x2FB0, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0231, 0x2F31, 0x2FB1, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0241, 0x2F41, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0232, 0x2F32, 0x2FB2, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
-   { 0x0233, 0x2F33, 0x2FB3, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0233, 0x2F44, 0x2FB3, 128, TLS1_3_VERSION, 0, -1, 0, 1 },
    { 0x0234, 0x2F34, 0x2FB4, 192, TLS1_3_VERSION, 0, -1, 0, 1 },
+   { 0x0242, 0x2F42, 0     , 256, TLS1_3_VERSION, 0, -1, 0, 1 },
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
 };
 
@@ -260,21 +262,25 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY(ntrulpr653, ntrulpr653, ntrulpr653, 128, 32),
     OQS_GROUP_ENTRY_ECP(ntrulpr653, ntrulpr653, ntrulpr653, 128, 32),
     OQS_GROUP_ENTRY_ECX(ntrulpr653, ntrulpr653, ntrulpr653, 128, 32),
-    OQS_GROUP_ENTRY(ntrulpr761, ntrulpr761, ntrulpr761, 192, 33),
-    OQS_GROUP_ENTRY_ECP(ntrulpr761, ntrulpr761, ntrulpr761, 192, 33),
-    OQS_GROUP_ENTRY_ECX(ntrulpr761, ntrulpr761, ntrulpr761, 192, 33),
+    OQS_GROUP_ENTRY(ntrulpr761, ntrulpr761, ntrulpr761, 128, 33),
+    OQS_GROUP_ENTRY_ECP(ntrulpr761, ntrulpr761, ntrulpr761, 128, 33),
+    OQS_GROUP_ENTRY_ECX(ntrulpr761, ntrulpr761, ntrulpr761, 128, 33),
     OQS_GROUP_ENTRY(ntrulpr857, ntrulpr857, ntrulpr857, 192, 34),
     OQS_GROUP_ENTRY_ECP(ntrulpr857, ntrulpr857, ntrulpr857, 192, 34),
     OQS_GROUP_ENTRY_ECX(ntrulpr857, ntrulpr857, ntrulpr857, 192, 34),
-    OQS_GROUP_ENTRY(sntrup653, sntrup653, sntrup653, 128, 35),
-    OQS_GROUP_ENTRY_ECP(sntrup653, sntrup653, sntrup653, 128, 35),
-    OQS_GROUP_ENTRY_ECX(sntrup653, sntrup653, sntrup653, 128, 35),
-    OQS_GROUP_ENTRY(sntrup761, sntrup761, sntrup761, 192, 36),
-    OQS_GROUP_ENTRY_ECP(sntrup761, sntrup761, sntrup761, 192, 36),
-    OQS_GROUP_ENTRY_ECX(sntrup761, sntrup761, sntrup761, 192, 36),
-    OQS_GROUP_ENTRY(sntrup857, sntrup857, sntrup857, 192, 37),
-    OQS_GROUP_ENTRY_ECP(sntrup857, sntrup857, sntrup857, 192, 37),
-    OQS_GROUP_ENTRY_ECX(sntrup857, sntrup857, sntrup857, 192, 37),
+    OQS_GROUP_ENTRY(ntrulpr1277, ntrulpr1277, ntrulpr1277, 256, 35),
+    OQS_GROUP_ENTRY_ECP(ntrulpr1277, ntrulpr1277, ntrulpr1277, 256, 35),
+    OQS_GROUP_ENTRY(sntrup653, sntrup653, sntrup653, 128, 36),
+    OQS_GROUP_ENTRY_ECP(sntrup653, sntrup653, sntrup653, 128, 36),
+    OQS_GROUP_ENTRY_ECX(sntrup653, sntrup653, sntrup653, 128, 36),
+    OQS_GROUP_ENTRY(sntrup761, sntrup761, sntrup761, 128, 37),
+    OQS_GROUP_ENTRY_ECP(sntrup761, sntrup761, sntrup761, 128, 37),
+    OQS_GROUP_ENTRY_ECX(sntrup761, sntrup761, sntrup761, 128, 37),
+    OQS_GROUP_ENTRY(sntrup857, sntrup857, sntrup857, 192, 38),
+    OQS_GROUP_ENTRY_ECP(sntrup857, sntrup857, sntrup857, 192, 38),
+    OQS_GROUP_ENTRY_ECX(sntrup857, sntrup857, sntrup857, 192, 38),
+    OQS_GROUP_ENTRY(sntrup1277, sntrup1277, sntrup1277, 256, 39),
+    OQS_GROUP_ENTRY_ECP(sntrup1277, sntrup1277, sntrup1277, 256, 39),
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
 };
 
@@ -282,7 +288,7 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
 {
     size_t i;
 
-    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3 - 10);
+    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3 - 12 /* XXX manually exclude all 256bit ECX hybrids not supported */);
     for (i = 0; i < OSSL_NELEM(oqs_param_group_list); i++) {
         if (!cb(oqs_param_group_list[i], arg))
             return 0;

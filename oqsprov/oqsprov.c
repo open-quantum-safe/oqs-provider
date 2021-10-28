@@ -167,11 +167,13 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMALG3(hqc192, 192),
     KEMALG3(hqc256, 256),
     KEMALG3(ntrulpr653, 128),
-    KEMALG3(ntrulpr761, 192),
+    KEMALG3(ntrulpr761, 128),
     KEMALG3(ntrulpr857, 192),
+    KEMALG3(ntrulpr1277, 256),
     KEMALG3(sntrup653, 128),
-    KEMALG3(sntrup761, 192),
+    KEMALG3(sntrup761, 128),
     KEMALG3(sntrup857, 192),
+    KEMALG3(sntrup1277, 256),
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
@@ -227,11 +229,13 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG3(hqc192, 192),
     KEMKMALG3(hqc256, 256),
     KEMKMALG3(ntrulpr653, 128),
-    KEMKMALG3(ntrulpr761, 192),
+    KEMKMALG3(ntrulpr761, 128),
     KEMKMALG3(ntrulpr857, 192),
+    KEMKMALG3(ntrulpr1277, 256),
     KEMKMALG3(sntrup653, 128),
-    KEMKMALG3(sntrup761, 192),
+    KEMKMALG3(sntrup761, 128),
     KEMKMALG3(sntrup857, 192),
+    KEMKMALG3(sntrup1277, 256),
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
     //ALG("x25519_sikep434", oqs_ecx_sikep434_keymgmt_functions),
     { NULL, NULL, NULL }

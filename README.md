@@ -29,7 +29,7 @@ For information about the available OQS algorithms,
 
 Open work items are
 - (CI) Testing on platforms other than Ubuntu (x86_64)
-- hybrid and fully TLS-integrated quantum-safe signature functionality
+- fully TLS-integrated quantum-safe signature functionality
 
 If any of these features are needed, please refer to and use the
 [OQS-OpenSSL1.1.1](https://github.com/open-quantum-safe/openssl) fork

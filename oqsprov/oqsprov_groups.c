@@ -300,7 +300,6 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
 int oqs_provider_get_capabilities(void *provctx, const char *capability,
                               OSSL_CALLBACK *cb, void *arg)
 {
-    //printf("OQSPROV: get_capabilities...\n");
     if (strcasecmp(capability, "TLS-GROUP") == 0)
         return oqs_group_capability(cb, arg);
 

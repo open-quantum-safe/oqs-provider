@@ -39,10 +39,6 @@
 #define OQS_ENC_PRINTF3(a, b, c) if (getenv("OQSENC")) printf(a, b, c)
 #endif // NDEBUG
 
-void empty_func(void) {
-printf("MIB was here\n");
-}
-
 struct key2any_ctx_st {
     PROV_OQS_CTX *provctx;
 
@@ -162,7 +158,7 @@ static X509_PUBKEY *oqsx_key_to_pubkey(const void *key, int key_nid,
     /* The final X509_PUBKEY */
     X509_PUBKEY *xpk = NULL;
 
-    OQS_ENC_PRINTF("OQS ENC provider: oqsx_key_to_pubkey called\n");
+    OQS_ENC_PRINTF2("OQS ENC provider: oqsx_key_to_pubkey called for NID %d\n", key_nid);
 
     if ((xpk = X509_PUBKEY_new()) == NULL
         || (derlen = k2d(key, &der)) <= 0
@@ -548,13 +544,12 @@ static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
     // Encoding private _and_ public key concatenated ... seems unlogical and unnecessary, 
     // but is what oqs-openssl does, so we repeat it for interop... also from a security 
     // perspective not really smart to copy key material (side channel attacks, anyone?),
-    // but so be it.
+    // but so be it for now (TBC).
     if (oqsxkey == NULL || oqsxkey->privkey == NULL || oqsxkey->pubkey == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
 
-    // TBC: Extend with hybrid keys
     buflen = oqsxkey->privkeylen+oqsxkey->pubkeylen;
     buf = OPENSSL_secure_malloc(buflen);
     OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n", buflen);
@@ -593,48 +588,120 @@ static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
 # define dilithium2_evp_type       0
 # define dilithium2_input_type      "dilithium2"
 # define dilithium2_pem_type        "dilithium2"
+# define p256_dilithium2_evp_type       0
+# define p256_dilithium2_input_type      "p256_dilithium2"
+# define p256_dilithium2_pem_type        "p256_dilithium2"
+# define rsa3072_dilithium2_evp_type       0
+# define rsa3072_dilithium2_input_type      "rsa3072_dilithium2"
+# define rsa3072_dilithium2_pem_type        "rsa3072_dilithium2"
 # define dilithium3_evp_type       0
 # define dilithium3_input_type      "dilithium3"
 # define dilithium3_pem_type        "dilithium3"
+# define p384_dilithium3_evp_type       0
+# define p384_dilithium3_input_type      "p384_dilithium3"
+# define p384_dilithium3_pem_type        "p384_dilithium3"
 # define dilithium5_evp_type       0
 # define dilithium5_input_type      "dilithium5"
 # define dilithium5_pem_type        "dilithium5"
+# define p521_dilithium5_evp_type       0
+# define p521_dilithium5_input_type      "p521_dilithium5"
+# define p521_dilithium5_pem_type        "p521_dilithium5"
 # define dilithium2_aes_evp_type       0
 # define dilithium2_aes_input_type      "dilithium2_aes"
 # define dilithium2_aes_pem_type        "dilithium2_aes"
+# define p256_dilithium2_aes_evp_type       0
+# define p256_dilithium2_aes_input_type      "p256_dilithium2_aes"
+# define p256_dilithium2_aes_pem_type        "p256_dilithium2_aes"
+# define rsa3072_dilithium2_aes_evp_type       0
+# define rsa3072_dilithium2_aes_input_type      "rsa3072_dilithium2_aes"
+# define rsa3072_dilithium2_aes_pem_type        "rsa3072_dilithium2_aes"
 # define dilithium3_aes_evp_type       0
 # define dilithium3_aes_input_type      "dilithium3_aes"
 # define dilithium3_aes_pem_type        "dilithium3_aes"
+# define p384_dilithium3_aes_evp_type       0
+# define p384_dilithium3_aes_input_type      "p384_dilithium3_aes"
+# define p384_dilithium3_aes_pem_type        "p384_dilithium3_aes"
 # define dilithium5_aes_evp_type       0
 # define dilithium5_aes_input_type      "dilithium5_aes"
 # define dilithium5_aes_pem_type        "dilithium5_aes"
+# define p521_dilithium5_aes_evp_type       0
+# define p521_dilithium5_aes_input_type      "p521_dilithium5_aes"
+# define p521_dilithium5_aes_pem_type        "p521_dilithium5_aes"
 # define falcon512_evp_type       0
 # define falcon512_input_type      "falcon512"
 # define falcon512_pem_type        "falcon512"
+# define p256_falcon512_evp_type       0
+# define p256_falcon512_input_type      "p256_falcon512"
+# define p256_falcon512_pem_type        "p256_falcon512"
+# define rsa3072_falcon512_evp_type       0
+# define rsa3072_falcon512_input_type      "rsa3072_falcon512"
+# define rsa3072_falcon512_pem_type        "rsa3072_falcon512"
 # define falcon1024_evp_type       0
 # define falcon1024_input_type      "falcon1024"
 # define falcon1024_pem_type        "falcon1024"
+# define p521_falcon1024_evp_type       0
+# define p521_falcon1024_input_type      "p521_falcon1024"
+# define p521_falcon1024_pem_type        "p521_falcon1024"
 # define picnicl1full_evp_type       0
 # define picnicl1full_input_type      "picnicl1full"
 # define picnicl1full_pem_type        "picnicl1full"
+# define p256_picnicl1full_evp_type       0
+# define p256_picnicl1full_input_type      "p256_picnicl1full"
+# define p256_picnicl1full_pem_type        "p256_picnicl1full"
+# define rsa3072_picnicl1full_evp_type       0
+# define rsa3072_picnicl1full_input_type      "rsa3072_picnicl1full"
+# define rsa3072_picnicl1full_pem_type        "rsa3072_picnicl1full"
 # define picnic3l1_evp_type       0
 # define picnic3l1_input_type      "picnic3l1"
 # define picnic3l1_pem_type        "picnic3l1"
+# define p256_picnic3l1_evp_type       0
+# define p256_picnic3l1_input_type      "p256_picnic3l1"
+# define p256_picnic3l1_pem_type        "p256_picnic3l1"
+# define rsa3072_picnic3l1_evp_type       0
+# define rsa3072_picnic3l1_input_type      "rsa3072_picnic3l1"
+# define rsa3072_picnic3l1_pem_type        "rsa3072_picnic3l1"
 # define rainbowIclassic_evp_type       0
 # define rainbowIclassic_input_type      "rainbowIclassic"
 # define rainbowIclassic_pem_type        "rainbowIclassic"
+# define p256_rainbowIclassic_evp_type       0
+# define p256_rainbowIclassic_input_type      "p256_rainbowIclassic"
+# define p256_rainbowIclassic_pem_type        "p256_rainbowIclassic"
+# define rsa3072_rainbowIclassic_evp_type       0
+# define rsa3072_rainbowIclassic_input_type      "rsa3072_rainbowIclassic"
+# define rsa3072_rainbowIclassic_pem_type        "rsa3072_rainbowIclassic"
 # define rainbowVclassic_evp_type       0
 # define rainbowVclassic_input_type      "rainbowVclassic"
 # define rainbowVclassic_pem_type        "rainbowVclassic"
+# define p521_rainbowVclassic_evp_type       0
+# define p521_rainbowVclassic_input_type      "p521_rainbowVclassic"
+# define p521_rainbowVclassic_pem_type        "p521_rainbowVclassic"
 # define sphincsharaka128frobust_evp_type       0
 # define sphincsharaka128frobust_input_type      "sphincsharaka128frobust"
 # define sphincsharaka128frobust_pem_type        "sphincsharaka128frobust"
+# define p256_sphincsharaka128frobust_evp_type       0
+# define p256_sphincsharaka128frobust_input_type      "p256_sphincsharaka128frobust"
+# define p256_sphincsharaka128frobust_pem_type        "p256_sphincsharaka128frobust"
+# define rsa3072_sphincsharaka128frobust_evp_type       0
+# define rsa3072_sphincsharaka128frobust_input_type      "rsa3072_sphincsharaka128frobust"
+# define rsa3072_sphincsharaka128frobust_pem_type        "rsa3072_sphincsharaka128frobust"
 # define sphincssha256128frobust_evp_type       0
 # define sphincssha256128frobust_input_type      "sphincssha256128frobust"
 # define sphincssha256128frobust_pem_type        "sphincssha256128frobust"
+# define p256_sphincssha256128frobust_evp_type       0
+# define p256_sphincssha256128frobust_input_type      "p256_sphincssha256128frobust"
+# define p256_sphincssha256128frobust_pem_type        "p256_sphincssha256128frobust"
+# define rsa3072_sphincssha256128frobust_evp_type       0
+# define rsa3072_sphincssha256128frobust_input_type      "rsa3072_sphincssha256128frobust"
+# define rsa3072_sphincssha256128frobust_pem_type        "rsa3072_sphincssha256128frobust"
 # define sphincsshake256128frobust_evp_type       0
 # define sphincsshake256128frobust_input_type      "sphincsshake256128frobust"
 # define sphincsshake256128frobust_pem_type        "sphincsshake256128frobust"
+# define p256_sphincsshake256128frobust_evp_type       0
+# define p256_sphincsshake256128frobust_input_type      "p256_sphincsshake256128frobust"
+# define p256_sphincsshake256128frobust_pem_type        "p256_sphincsshake256128frobust"
+# define rsa3072_sphincsshake256128frobust_evp_type       0
+# define rsa3072_sphincsshake256128frobust_input_type      "rsa3072_sphincsshake256128frobust"
+# define rsa3072_sphincsshake256128frobust_pem_type        "rsa3072_sphincsshake256128frobust"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -770,6 +837,7 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
     OQSX_KEY *oqsk = (OQSX_KEY*)key;
 
     OQS_ENC_PRINTF3("OQS ENC provider: key2any_encode called with type %d (%s)\n", type, typestr);
+    OQS_ENC_PRINTF2("OQS ENC provider: key2any_encode called with pemname %s\n", pemname);
 
     if (key == NULL || type <= 0) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
@@ -1007,89 +1075,233 @@ MAKE_ENCODER(dilithium2, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(dilithium2, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium2, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(dilithium2, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_dilithium2, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_dilithium2, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_dilithium2, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_dilithium2, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_dilithium2, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_dilithium2, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_dilithium2, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_dilithium2, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_dilithium2, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_dilithium2, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_dilithium2, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_dilithium2, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(dilithium3, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(dilithium3, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium3, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(dilithium3, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium3, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(dilithium3, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p384_dilithium3, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p384_dilithium3, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p384_dilithium3, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p384_dilithium3, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p384_dilithium3, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p384_dilithium3, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(dilithium5, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(dilithium5, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium5, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(dilithium5, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium5, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(dilithium5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p521_dilithium5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p521_dilithium5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p521_dilithium5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p521_dilithium5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p521_dilithium5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p521_dilithium5, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(dilithium2_aes, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(dilithium2_aes, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium2_aes, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(dilithium2_aes, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium2_aes, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(dilithium2_aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_dilithium2_aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_dilithium2_aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_dilithium2_aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_dilithium2_aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_dilithium2_aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_dilithium2_aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_dilithium2_aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_dilithium2_aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_dilithium2_aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_dilithium2_aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_dilithium2_aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_dilithium2_aes, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(dilithium3_aes, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(dilithium3_aes, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium3_aes, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(dilithium3_aes, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium3_aes, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(dilithium3_aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p384_dilithium3_aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p384_dilithium3_aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p384_dilithium3_aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p384_dilithium3_aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p384_dilithium3_aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p384_dilithium3_aes, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(dilithium5_aes, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(dilithium5_aes, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium5_aes, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(dilithium5_aes, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(dilithium5_aes, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(dilithium5_aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p521_dilithium5_aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p521_dilithium5_aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p521_dilithium5_aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p521_dilithium5_aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p521_dilithium5_aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p521_dilithium5_aes, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(falcon512, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(falcon512, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(falcon512, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(falcon512, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(falcon512, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(falcon512, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_falcon512, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_falcon512, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_falcon512, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_falcon512, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_falcon512, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_falcon512, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_falcon512, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_falcon512, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_falcon512, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_falcon512, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_falcon512, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_falcon512, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(falcon1024, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(falcon1024, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(falcon1024, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(falcon1024, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(falcon1024, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(falcon1024, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p521_falcon1024, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p521_falcon1024, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p521_falcon1024, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p521_falcon1024, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p521_falcon1024, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p521_falcon1024, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(picnicl1full, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(picnicl1full, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(picnicl1full, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(picnicl1full, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(picnicl1full, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(picnicl1full, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_picnicl1full, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_picnicl1full, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_picnicl1full, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_picnicl1full, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_picnicl1full, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_picnicl1full, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_picnicl1full, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_picnicl1full, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_picnicl1full, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_picnicl1full, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_picnicl1full, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_picnicl1full, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(picnic3l1, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(picnic3l1, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(picnic3l1, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(picnic3l1, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(picnic3l1, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(picnic3l1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_picnic3l1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_picnic3l1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_picnic3l1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_picnic3l1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_picnic3l1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_picnic3l1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_picnic3l1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_picnic3l1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_picnic3l1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_picnic3l1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_picnic3l1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_picnic3l1, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(rainbowIclassic, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(rainbowIclassic, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(rainbowIclassic, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(rainbowIclassic, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(rainbowIclassic, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(rainbowIclassic, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_rainbowIclassic, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_rainbowIclassic, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_rainbowIclassic, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_rainbowIclassic, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_rainbowIclassic, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_rainbowIclassic, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_rainbowIclassic, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_rainbowIclassic, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_rainbowIclassic, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_rainbowIclassic, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_rainbowIclassic, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_rainbowIclassic, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(rainbowVclassic, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(rainbowVclassic, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(rainbowVclassic, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(rainbowVclassic, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(rainbowVclassic, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(rainbowVclassic, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p521_rainbowVclassic, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p521_rainbowVclassic, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p521_rainbowVclassic, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p521_rainbowVclassic, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p521_rainbowVclassic, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p521_rainbowVclassic, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(sphincsharaka128frobust, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(sphincsharaka128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(sphincsharaka128frobust, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(sphincsharaka128frobust, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(sphincsharaka128frobust, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(sphincsharaka128frobust, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsharaka128frobust, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincsharaka128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsharaka128frobust, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincsharaka128frobust, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsharaka128frobust, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_sphincsharaka128frobust, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsharaka128frobust, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsharaka128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsharaka128frobust, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsharaka128frobust, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsharaka128frobust, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsharaka128frobust, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(sphincssha256128frobust, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(sphincssha256128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(sphincssha256128frobust, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(sphincssha256128frobust, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(sphincssha256128frobust, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(sphincssha256128frobust, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_sphincssha256128frobust, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha256128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincssha256128frobust, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha256128frobust, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincssha256128frobust, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha256128frobust, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincssha256128frobust, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha256128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincssha256128frobust, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha256128frobust, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincssha256128frobust, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha256128frobust, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_ENCODER(sphincsshake256128frobust, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(sphincsshake256128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(sphincsshake256128frobust, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(sphincsshake256128frobust, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsshake256128frobust, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincsshake256128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsshake256128frobust, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincsshake256128frobust, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, pem);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END
 

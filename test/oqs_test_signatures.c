@@ -15,21 +15,21 @@ static char *tmpfilename = NULL;
 
 static const char *sigalg_names[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_START
-  "dilithium2",
-  "dilithium3",
-  "dilithium5",
-  "dilithium2_aes",
-  "dilithium3_aes",
-  "dilithium5_aes",
-  "falcon512",
-  "falcon1024",
-  "picnicl1full",
-  "picnic3l1",
-  "rainbowIclassic",
-  "rainbowVclassic",
-  "sphincsharaka128frobust",
-  "sphincssha256128frobust",
-  "sphincsshake256128frobust",
+  "dilithium2","p256_dilithium2","rsa3072_dilithium2",
+  "dilithium3","p384_dilithium3",
+  "dilithium5","p521_dilithium5",
+  "dilithium2_aes","p256_dilithium2_aes","rsa3072_dilithium2_aes",
+  "dilithium3_aes","p384_dilithium3_aes",
+  "dilithium5_aes","p521_dilithium5_aes",
+  "falcon512","p256_falcon512","rsa3072_falcon512",
+  "falcon1024","p521_falcon1024",
+  "picnicl1full","p256_picnicl1full","rsa3072_picnicl1full",
+  "picnic3l1","p256_picnic3l1","rsa3072_picnic3l1",
+  "rainbowIclassic","p256_rainbowIclassic","rsa3072_rainbowIclassic",
+  "rainbowVclassic","p521_rainbowVclassic",
+  "sphincsharaka128frobust","p256_sphincsharaka128frobust","rsa3072_sphincsharaka128frobust",
+  "sphincssha256128frobust","p256_sphincssha256128frobust","rsa3072_sphincssha256128frobust",
+  "sphincsshake256128frobust","p256_sphincsshake256128frobust","rsa3072_sphincsshake256128frobust",
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END
 };
 

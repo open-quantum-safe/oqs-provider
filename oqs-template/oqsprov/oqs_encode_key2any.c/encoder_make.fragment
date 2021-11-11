@@ -6,6 +6,14 @@ MAKE_ENCODER({{ variant['name'] }}, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER({{ variant['name'] }}, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER({{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER({{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, pem);
+     {%- for classical_alg in variant['mix_with'] %}
+MAKE_ENCODER({{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER({{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER({{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER({{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER({{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER({{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, pem);
+     {%- endfor -%}
    {%- endfor %}
 {%- endfor %}
 

@@ -3,6 +3,11 @@
 # define {{ variant['name'] }}_evp_type       0
 # define {{ variant['name'] }}_input_type      "{{ variant['name'] }}"
 # define {{ variant['name'] }}_pem_type        "{{ variant['name'] }}"
+     {%- for classical_alg in variant['mix_with'] %}
+# define {{ classical_alg['name'] }}_{{ variant['name'] }}_evp_type       0
+# define {{ classical_alg['name'] }}_{{ variant['name'] }}_input_type      "{{ classical_alg['name'] }}_{{ variant['name'] }}"
+# define {{ classical_alg['name'] }}_{{ variant['name'] }}_pem_type        "{{ classical_alg['name'] }}_{{ variant['name'] }}"
+     {%- endfor -%}
    {%- endfor %}
 {%- endfor %}
 

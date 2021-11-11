@@ -114,20 +114,44 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
     ALG("dilithium2", oqs_signature_functions),
+    ALG("p256_dilithium2", oqs_signature_functions),
+    ALG("rsa3072_dilithium2", oqs_signature_functions),
     ALG("dilithium3", oqs_signature_functions),
+    ALG("p384_dilithium3", oqs_signature_functions),
     ALG("dilithium5", oqs_signature_functions),
+    ALG("p521_dilithium5", oqs_signature_functions),
     ALG("dilithium2_aes", oqs_signature_functions),
+    ALG("p256_dilithium2_aes", oqs_signature_functions),
+    ALG("rsa3072_dilithium2_aes", oqs_signature_functions),
     ALG("dilithium3_aes", oqs_signature_functions),
+    ALG("p384_dilithium3_aes", oqs_signature_functions),
     ALG("dilithium5_aes", oqs_signature_functions),
+    ALG("p521_dilithium5_aes", oqs_signature_functions),
     ALG("falcon512", oqs_signature_functions),
+    ALG("p256_falcon512", oqs_signature_functions),
+    ALG("rsa3072_falcon512", oqs_signature_functions),
     ALG("falcon1024", oqs_signature_functions),
+    ALG("p521_falcon1024", oqs_signature_functions),
     ALG("picnicl1full", oqs_signature_functions),
+    ALG("p256_picnicl1full", oqs_signature_functions),
+    ALG("rsa3072_picnicl1full", oqs_signature_functions),
     ALG("picnic3l1", oqs_signature_functions),
+    ALG("p256_picnic3l1", oqs_signature_functions),
+    ALG("rsa3072_picnic3l1", oqs_signature_functions),
     ALG("rainbowIclassic", oqs_signature_functions),
+    ALG("p256_rainbowIclassic", oqs_signature_functions),
+    ALG("rsa3072_rainbowIclassic", oqs_signature_functions),
     ALG("rainbowVclassic", oqs_signature_functions),
+    ALG("p521_rainbowVclassic", oqs_signature_functions),
     ALG("sphincsharaka128frobust", oqs_signature_functions),
+    ALG("p256_sphincsharaka128frobust", oqs_signature_functions),
+    ALG("rsa3072_sphincsharaka128frobust", oqs_signature_functions),
     ALG("sphincssha256128frobust", oqs_signature_functions),
+    ALG("p256_sphincssha256128frobust", oqs_signature_functions),
+    ALG("rsa3072_sphincssha256128frobust", oqs_signature_functions),
     ALG("sphincsshake256128frobust", oqs_signature_functions),
+    ALG("p256_sphincsshake256128frobust", oqs_signature_functions),
+    ALG("rsa3072_sphincsshake256128frobust", oqs_signature_functions),
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
@@ -180,21 +204,21 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 
 static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
-    ALG("dilithium2", oqs_dilithium2_keymgmt_functions),
-    ALG("dilithium3", oqs_dilithium3_keymgmt_functions),
-    ALG("dilithium5", oqs_dilithium5_keymgmt_functions),
-    ALG("dilithium2_aes", oqs_dilithium2_aes_keymgmt_functions),
-    ALG("dilithium3_aes", oqs_dilithium3_aes_keymgmt_functions),
-    ALG("dilithium5_aes", oqs_dilithium5_aes_keymgmt_functions),
-    ALG("falcon512", oqs_falcon512_keymgmt_functions),
-    ALG("falcon1024", oqs_falcon1024_keymgmt_functions),
-    ALG("picnicl1full", oqs_picnicl1full_keymgmt_functions),
-    ALG("picnic3l1", oqs_picnic3l1_keymgmt_functions),
-    ALG("rainbowIclassic", oqs_rainbowIclassic_keymgmt_functions),
-    ALG("rainbowVclassic", oqs_rainbowVclassic_keymgmt_functions),
-    ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),
-    ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),
-    ALG("sphincsshake256128frobust", oqs_sphincsshake256128frobust_keymgmt_functions),
+    ALG("dilithium2", oqs_dilithium2_keymgmt_functions),ALG("p256_dilithium2", oqs_p256_dilithium2_keymgmt_functions),ALG("rsa3072_dilithium2", oqs_rsa3072_dilithium2_keymgmt_functions),
+    ALG("dilithium3", oqs_dilithium3_keymgmt_functions),ALG("p384_dilithium3", oqs_p384_dilithium3_keymgmt_functions),
+    ALG("dilithium5", oqs_dilithium5_keymgmt_functions),ALG("p521_dilithium5", oqs_p521_dilithium5_keymgmt_functions),
+    ALG("dilithium2_aes", oqs_dilithium2_aes_keymgmt_functions),ALG("p256_dilithium2_aes", oqs_p256_dilithium2_aes_keymgmt_functions),ALG("rsa3072_dilithium2_aes", oqs_rsa3072_dilithium2_aes_keymgmt_functions),
+    ALG("dilithium3_aes", oqs_dilithium3_aes_keymgmt_functions),ALG("p384_dilithium3_aes", oqs_p384_dilithium3_aes_keymgmt_functions),
+    ALG("dilithium5_aes", oqs_dilithium5_aes_keymgmt_functions),ALG("p521_dilithium5_aes", oqs_p521_dilithium5_aes_keymgmt_functions),
+    ALG("falcon512", oqs_falcon512_keymgmt_functions),ALG("p256_falcon512", oqs_p256_falcon512_keymgmt_functions),ALG("rsa3072_falcon512", oqs_rsa3072_falcon512_keymgmt_functions),
+    ALG("falcon1024", oqs_falcon1024_keymgmt_functions),ALG("p521_falcon1024", oqs_p521_falcon1024_keymgmt_functions),
+    ALG("picnicl1full", oqs_picnicl1full_keymgmt_functions),ALG("p256_picnicl1full", oqs_p256_picnicl1full_keymgmt_functions),ALG("rsa3072_picnicl1full", oqs_rsa3072_picnicl1full_keymgmt_functions),
+    ALG("picnic3l1", oqs_picnic3l1_keymgmt_functions),ALG("p256_picnic3l1", oqs_p256_picnic3l1_keymgmt_functions),ALG("rsa3072_picnic3l1", oqs_rsa3072_picnic3l1_keymgmt_functions),
+    ALG("rainbowIclassic", oqs_rainbowIclassic_keymgmt_functions),ALG("p256_rainbowIclassic", oqs_p256_rainbowIclassic_keymgmt_functions),ALG("rsa3072_rainbowIclassic", oqs_rsa3072_rainbowIclassic_keymgmt_functions),
+    ALG("rainbowVclassic", oqs_rainbowVclassic_keymgmt_functions),ALG("p521_rainbowVclassic", oqs_p521_rainbowVclassic_keymgmt_functions),
+    ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),ALG("p256_sphincsharaka128frobust", oqs_p256_sphincsharaka128frobust_keymgmt_functions),ALG("rsa3072_sphincsharaka128frobust", oqs_rsa3072_sphincsharaka128frobust_keymgmt_functions),
+    ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),ALG("p256_sphincssha256128frobust", oqs_p256_sphincssha256128frobust_keymgmt_functions),ALG("rsa3072_sphincssha256128frobust", oqs_rsa3072_sphincssha256128frobust_keymgmt_functions),
+    ALG("sphincsshake256128frobust", oqs_sphincsshake256128frobust_keymgmt_functions),ALG("p256_sphincsshake256128frobust", oqs_p256_sphincsshake256128frobust_keymgmt_functions),ALG("rsa3072_sphincsshake256128frobust", oqs_rsa3072_sphincsshake256128frobust_keymgmt_functions),
 
     KEMKMALG3(frodo640aes, 128),
     KEMKMALG3(frodo640shake, 128),
@@ -369,6 +393,8 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
               OQS_PROV_PRINTF2("error registering %s with no hash\n", oqs_oid_alg_list[i+1]);
               ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
 	}
+
+        OQS_PROV_PRINTF3("OQS PROV: successfully registered %s with NID %d\n", oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1]));
 
     }
 

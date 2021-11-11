@@ -1,6 +1,9 @@
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
     ALG("{{variant['name']}}", oqs_{{ variant['name'] }}_keymgmt_functions),
+     {%- for classical_alg in variant['mix_with'] -%}
+    ALG("{{ classical_alg['name'] }}_{{variant['name']}}", oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_keymgmt_functions),
+     {%- endfor -%}
    {%- endfor %}
 {%- endfor %}
 {% for kem in config['kems'] %}

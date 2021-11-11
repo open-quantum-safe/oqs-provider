@@ -1,8 +1,0 @@
-{% for sig in config['sigs'] %}
-   {%- for variant in sig['variants'] %}
-   if (!strcmp({{variant['oqs_meth']}}, oqs_name))
-       X509_ALGOR_set0(algor, OBJ_txt2obj("{{variant['name']}}", 0), V_ASN1_UNDEF, NULL);
-   else
-   {%- endfor %}
-{%- endfor %}
-

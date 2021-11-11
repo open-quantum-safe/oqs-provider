@@ -440,13 +440,13 @@ static void collect_name(const char *name, void *arg)
 
 static void dump_der(const char *label, const void *data, size_t data_len)
 {
-    printf("Would print HEX for DER output\n");
+    printf("Print HEX for DER output TBD\n");
     //test_output_memory(label, data, data_len);
 }
 
 static void dump_pem(const char *label, const void *data, size_t data_len)
 {
-    printf("Would print string for PEM output\n");
+    printf("Print string for PEM output TBD\n");
     //test_output_string(label, data, data_len - 1);
 }
 
@@ -605,8 +605,7 @@ static int test_unprotected_via_MSBLOB(const char *type, EVP_PKEY *key)
                               dump_der, 0);
 }
 
-// start steal: Review TBD
-// stolen from openssl/crypto/pem/pvkfmt.c as ossl_do_PVK_header not public API:
+/* stolen from openssl/crypto/pem/pvkfmt.c as ossl_do_PVK_header not public API: */
 /* The PVK file magic number: seems to spell out "bobsfile", who is Bob? */
 # define MS_PVKMAGIC             0xb0b5f11eL
 /* Salt length for PVK files */
@@ -673,7 +672,7 @@ static int oqsx_do_PVK_header(const unsigned char **in, unsigned int length,
     return 1;
 }
 
-// end steal TBD
+/* end steal */
 
 static int check_PVK(const char *file, const int line,
                      const char *type, const void *data, size_t data_len)
@@ -911,34 +910,82 @@ static int test_public_via_MSBLOB(const char *type, EVP_PKEY *key)
 ///// OQS_TEMPLATE_FRAGMENT_IMPLEMENT_START
 KEYS(dilithium2);
 IMPLEMENT_TEST_SUITE(dilithium2, "dilithium2")
+KEYS(p256_dilithium2);
+IMPLEMENT_TEST_SUITE(p256_dilithium2, "p256_dilithium2")
+KEYS(rsa3072_dilithium2);
+IMPLEMENT_TEST_SUITE(rsa3072_dilithium2, "rsa3072_dilithium2")
 KEYS(dilithium3);
 IMPLEMENT_TEST_SUITE(dilithium3, "dilithium3")
+KEYS(p384_dilithium3);
+IMPLEMENT_TEST_SUITE(p384_dilithium3, "p384_dilithium3")
 KEYS(dilithium5);
 IMPLEMENT_TEST_SUITE(dilithium5, "dilithium5")
+KEYS(p521_dilithium5);
+IMPLEMENT_TEST_SUITE(p521_dilithium5, "p521_dilithium5")
 KEYS(dilithium2_aes);
 IMPLEMENT_TEST_SUITE(dilithium2_aes, "dilithium2_aes")
+KEYS(p256_dilithium2_aes);
+IMPLEMENT_TEST_SUITE(p256_dilithium2_aes, "p256_dilithium2_aes")
+KEYS(rsa3072_dilithium2_aes);
+IMPLEMENT_TEST_SUITE(rsa3072_dilithium2_aes, "rsa3072_dilithium2_aes")
 KEYS(dilithium3_aes);
 IMPLEMENT_TEST_SUITE(dilithium3_aes, "dilithium3_aes")
+KEYS(p384_dilithium3_aes);
+IMPLEMENT_TEST_SUITE(p384_dilithium3_aes, "p384_dilithium3_aes")
 KEYS(dilithium5_aes);
 IMPLEMENT_TEST_SUITE(dilithium5_aes, "dilithium5_aes")
+KEYS(p521_dilithium5_aes);
+IMPLEMENT_TEST_SUITE(p521_dilithium5_aes, "p521_dilithium5_aes")
 KEYS(falcon512);
 IMPLEMENT_TEST_SUITE(falcon512, "falcon512")
+KEYS(p256_falcon512);
+IMPLEMENT_TEST_SUITE(p256_falcon512, "p256_falcon512")
+KEYS(rsa3072_falcon512);
+IMPLEMENT_TEST_SUITE(rsa3072_falcon512, "rsa3072_falcon512")
 KEYS(falcon1024);
 IMPLEMENT_TEST_SUITE(falcon1024, "falcon1024")
+KEYS(p521_falcon1024);
+IMPLEMENT_TEST_SUITE(p521_falcon1024, "p521_falcon1024")
 KEYS(picnicl1full);
 IMPLEMENT_TEST_SUITE(picnicl1full, "picnicl1full")
+KEYS(p256_picnicl1full);
+IMPLEMENT_TEST_SUITE(p256_picnicl1full, "p256_picnicl1full")
+KEYS(rsa3072_picnicl1full);
+IMPLEMENT_TEST_SUITE(rsa3072_picnicl1full, "rsa3072_picnicl1full")
 KEYS(picnic3l1);
 IMPLEMENT_TEST_SUITE(picnic3l1, "picnic3l1")
+KEYS(p256_picnic3l1);
+IMPLEMENT_TEST_SUITE(p256_picnic3l1, "p256_picnic3l1")
+KEYS(rsa3072_picnic3l1);
+IMPLEMENT_TEST_SUITE(rsa3072_picnic3l1, "rsa3072_picnic3l1")
 KEYS(rainbowIclassic);
 IMPLEMENT_TEST_SUITE(rainbowIclassic, "rainbowIclassic")
+KEYS(p256_rainbowIclassic);
+IMPLEMENT_TEST_SUITE(p256_rainbowIclassic, "p256_rainbowIclassic")
+KEYS(rsa3072_rainbowIclassic);
+IMPLEMENT_TEST_SUITE(rsa3072_rainbowIclassic, "rsa3072_rainbowIclassic")
 KEYS(rainbowVclassic);
 IMPLEMENT_TEST_SUITE(rainbowVclassic, "rainbowVclassic")
+KEYS(p521_rainbowVclassic);
+IMPLEMENT_TEST_SUITE(p521_rainbowVclassic, "p521_rainbowVclassic")
 KEYS(sphincsharaka128frobust);
 IMPLEMENT_TEST_SUITE(sphincsharaka128frobust, "sphincsharaka128frobust")
+KEYS(p256_sphincsharaka128frobust);
+IMPLEMENT_TEST_SUITE(p256_sphincsharaka128frobust, "p256_sphincsharaka128frobust")
+KEYS(rsa3072_sphincsharaka128frobust);
+IMPLEMENT_TEST_SUITE(rsa3072_sphincsharaka128frobust, "rsa3072_sphincsharaka128frobust")
 KEYS(sphincssha256128frobust);
 IMPLEMENT_TEST_SUITE(sphincssha256128frobust, "sphincssha256128frobust")
+KEYS(p256_sphincssha256128frobust);
+IMPLEMENT_TEST_SUITE(p256_sphincssha256128frobust, "p256_sphincssha256128frobust")
+KEYS(rsa3072_sphincssha256128frobust);
+IMPLEMENT_TEST_SUITE(rsa3072_sphincssha256128frobust, "rsa3072_sphincssha256128frobust")
 KEYS(sphincsshake256128frobust);
 IMPLEMENT_TEST_SUITE(sphincsshake256128frobust, "sphincsshake256128frobust")
+KEYS(p256_sphincsshake256128frobust);
+IMPLEMENT_TEST_SUITE(p256_sphincsshake256128frobust, "p256_sphincsshake256128frobust")
+KEYS(rsa3072_sphincsshake256128frobust);
+IMPLEMENT_TEST_SUITE(rsa3072_sphincsshake256128frobust, "rsa3072_sphincsshake256128frobust")
 ///// OQS_TEMPLATE_FRAGMENT_IMPLEMENT_END
 
 typedef enum OPTION_choice {
@@ -1028,34 +1075,82 @@ int setup_tests(void)
 ///// OQS_TEMPLATE_FRAGMENT_ADD_START
     MAKE_KEYS(dilithium2, "dilithium2", NULL);
     ADD_TEST_SUITE(dilithium2);
+    MAKE_KEYS(p256_dilithium2, "p256_dilithium2", NULL);
+    ADD_TEST_SUITE(p256_dilithium2);
+    MAKE_KEYS(rsa3072_dilithium2, "rsa3072_dilithium2", NULL);
+    ADD_TEST_SUITE(rsa3072_dilithium2);
     MAKE_KEYS(dilithium3, "dilithium3", NULL);
     ADD_TEST_SUITE(dilithium3);
+    MAKE_KEYS(p384_dilithium3, "p384_dilithium3", NULL);
+    ADD_TEST_SUITE(p384_dilithium3);
     MAKE_KEYS(dilithium5, "dilithium5", NULL);
     ADD_TEST_SUITE(dilithium5);
+    MAKE_KEYS(p521_dilithium5, "p521_dilithium5", NULL);
+    ADD_TEST_SUITE(p521_dilithium5);
     MAKE_KEYS(dilithium2_aes, "dilithium2_aes", NULL);
     ADD_TEST_SUITE(dilithium2_aes);
+    MAKE_KEYS(p256_dilithium2_aes, "p256_dilithium2_aes", NULL);
+    ADD_TEST_SUITE(p256_dilithium2_aes);
+    MAKE_KEYS(rsa3072_dilithium2_aes, "rsa3072_dilithium2_aes", NULL);
+    ADD_TEST_SUITE(rsa3072_dilithium2_aes);
     MAKE_KEYS(dilithium3_aes, "dilithium3_aes", NULL);
     ADD_TEST_SUITE(dilithium3_aes);
+    MAKE_KEYS(p384_dilithium3_aes, "p384_dilithium3_aes", NULL);
+    ADD_TEST_SUITE(p384_dilithium3_aes);
     MAKE_KEYS(dilithium5_aes, "dilithium5_aes", NULL);
     ADD_TEST_SUITE(dilithium5_aes);
+    MAKE_KEYS(p521_dilithium5_aes, "p521_dilithium5_aes", NULL);
+    ADD_TEST_SUITE(p521_dilithium5_aes);
     MAKE_KEYS(falcon512, "falcon512", NULL);
     ADD_TEST_SUITE(falcon512);
+    MAKE_KEYS(p256_falcon512, "p256_falcon512", NULL);
+    ADD_TEST_SUITE(p256_falcon512);
+    MAKE_KEYS(rsa3072_falcon512, "rsa3072_falcon512", NULL);
+    ADD_TEST_SUITE(rsa3072_falcon512);
     MAKE_KEYS(falcon1024, "falcon1024", NULL);
     ADD_TEST_SUITE(falcon1024);
+    MAKE_KEYS(p521_falcon1024, "p521_falcon1024", NULL);
+    ADD_TEST_SUITE(p521_falcon1024);
     MAKE_KEYS(picnicl1full, "picnicl1full", NULL);
     ADD_TEST_SUITE(picnicl1full);
+    MAKE_KEYS(p256_picnicl1full, "p256_picnicl1full", NULL);
+    ADD_TEST_SUITE(p256_picnicl1full);
+    MAKE_KEYS(rsa3072_picnicl1full, "rsa3072_picnicl1full", NULL);
+    ADD_TEST_SUITE(rsa3072_picnicl1full);
     MAKE_KEYS(picnic3l1, "picnic3l1", NULL);
     ADD_TEST_SUITE(picnic3l1);
+    MAKE_KEYS(p256_picnic3l1, "p256_picnic3l1", NULL);
+    ADD_TEST_SUITE(p256_picnic3l1);
+    MAKE_KEYS(rsa3072_picnic3l1, "rsa3072_picnic3l1", NULL);
+    ADD_TEST_SUITE(rsa3072_picnic3l1);
     MAKE_KEYS(rainbowIclassic, "rainbowIclassic", NULL);
     ADD_TEST_SUITE(rainbowIclassic);
+    MAKE_KEYS(p256_rainbowIclassic, "p256_rainbowIclassic", NULL);
+    ADD_TEST_SUITE(p256_rainbowIclassic);
+    MAKE_KEYS(rsa3072_rainbowIclassic, "rsa3072_rainbowIclassic", NULL);
+    ADD_TEST_SUITE(rsa3072_rainbowIclassic);
     MAKE_KEYS(rainbowVclassic, "rainbowVclassic", NULL);
     ADD_TEST_SUITE(rainbowVclassic);
+    MAKE_KEYS(p521_rainbowVclassic, "p521_rainbowVclassic", NULL);
+    ADD_TEST_SUITE(p521_rainbowVclassic);
     MAKE_KEYS(sphincsharaka128frobust, "sphincsharaka128frobust", NULL);
     ADD_TEST_SUITE(sphincsharaka128frobust);
+    MAKE_KEYS(p256_sphincsharaka128frobust, "p256_sphincsharaka128frobust", NULL);
+    ADD_TEST_SUITE(p256_sphincsharaka128frobust);
+    MAKE_KEYS(rsa3072_sphincsharaka128frobust, "rsa3072_sphincsharaka128frobust", NULL);
+    ADD_TEST_SUITE(rsa3072_sphincsharaka128frobust);
     MAKE_KEYS(sphincssha256128frobust, "sphincssha256128frobust", NULL);
     ADD_TEST_SUITE(sphincssha256128frobust);
+    MAKE_KEYS(p256_sphincssha256128frobust, "p256_sphincssha256128frobust", NULL);
+    ADD_TEST_SUITE(p256_sphincssha256128frobust);
+    MAKE_KEYS(rsa3072_sphincssha256128frobust, "rsa3072_sphincssha256128frobust", NULL);
+    ADD_TEST_SUITE(rsa3072_sphincssha256128frobust);
     MAKE_KEYS(sphincsshake256128frobust, "sphincsshake256128frobust", NULL);
     ADD_TEST_SUITE(sphincsshake256128frobust);
+    MAKE_KEYS(p256_sphincsshake256128frobust, "p256_sphincsshake256128frobust", NULL);
+    ADD_TEST_SUITE(p256_sphincsshake256128frobust);
+    MAKE_KEYS(rsa3072_sphincsshake256128frobust, "rsa3072_sphincsshake256128frobust", NULL);
+    ADD_TEST_SUITE(rsa3072_sphincsshake256128frobust);
 ///// OQS_TEMPLATE_FRAGMENT_ADD_END
 
     return 1;
@@ -1065,20 +1160,44 @@ void cleanup_tests(void)
 {
 ///// OQS_TEMPLATE_FRAGMENT_FREEKEYS_START
     FREE_KEYS(dilithium2);
+    FREE_KEYS(p256_dilithium2);
+    FREE_KEYS(rsa3072_dilithium2);
     FREE_KEYS(dilithium3);
+    FREE_KEYS(p384_dilithium3);
     FREE_KEYS(dilithium5);
+    FREE_KEYS(p521_dilithium5);
     FREE_KEYS(dilithium2_aes);
+    FREE_KEYS(p256_dilithium2_aes);
+    FREE_KEYS(rsa3072_dilithium2_aes);
     FREE_KEYS(dilithium3_aes);
+    FREE_KEYS(p384_dilithium3_aes);
     FREE_KEYS(dilithium5_aes);
+    FREE_KEYS(p521_dilithium5_aes);
     FREE_KEYS(falcon512);
+    FREE_KEYS(p256_falcon512);
+    FREE_KEYS(rsa3072_falcon512);
     FREE_KEYS(falcon1024);
+    FREE_KEYS(p521_falcon1024);
     FREE_KEYS(picnicl1full);
+    FREE_KEYS(p256_picnicl1full);
+    FREE_KEYS(rsa3072_picnicl1full);
     FREE_KEYS(picnic3l1);
+    FREE_KEYS(p256_picnic3l1);
+    FREE_KEYS(rsa3072_picnic3l1);
     FREE_KEYS(rainbowIclassic);
+    FREE_KEYS(p256_rainbowIclassic);
+    FREE_KEYS(rsa3072_rainbowIclassic);
     FREE_KEYS(rainbowVclassic);
+    FREE_KEYS(p521_rainbowVclassic);
     FREE_KEYS(sphincsharaka128frobust);
+    FREE_KEYS(p256_sphincsharaka128frobust);
+    FREE_KEYS(rsa3072_sphincsharaka128frobust);
     FREE_KEYS(sphincssha256128frobust);
+    FREE_KEYS(p256_sphincssha256128frobust);
+    FREE_KEYS(rsa3072_sphincssha256128frobust);
     FREE_KEYS(sphincsshake256128frobust);
+    FREE_KEYS(p256_sphincsshake256128frobust);
+    FREE_KEYS(rsa3072_sphincsshake256128frobust);
 ///// OQS_TEMPLATE_FRAGMENT_FREEKEYS_END
 
     OSSL_PROVIDER_unload(dfltprov);

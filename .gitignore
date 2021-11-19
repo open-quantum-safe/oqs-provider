@@ -12,3 +12,5 @@ _build
 test/ssltestlib.c
 test/ssltestlib.h
 test/oqs_test_groups
+# test artifacts
+tmp

@@ -118,15 +118,17 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
     int ok = 1;
 
     OQS_KM_PRINTF3("OQSKEYMGMT: match called for %p and %p\n", keydata1, keydata2);
+    OQS_KM_PRINTF2("OQSKEYMGMT: match called for selection %d\n", selection);
 
-    if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
+    if (((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) && ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) == 0)) {
         if ((key1->privkey == NULL && key2->privkey != NULL)
                 || (key1->privkey != NULL && key2->privkey == NULL)
                 || ((key1->tls_name!=NULL && key2->tls_name!=NULL) && strcmp(key1->tls_name, key2->tls_name)))
-            ok = 0;
+                ok = 0;
         else
-            ok = ok && ( (key1->privkey==NULL && key2->privkey==NULL) || ((key1->privkey != NULL) && CRYPTO_memcmp(key1->privkey, key2->privkey, key1->privkeylen) == 0) );
+            ok = ( (key1->privkey==NULL && key2->privkey==NULL) || ((key1->privkey != NULL) && CRYPTO_memcmp(key1->privkey, key2->privkey, key1->privkeylen) == 0) );
     }
+
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
         if ((key1->pubkey == NULL && key2->pubkey != NULL) ||
             (key1->pubkey != NULL && key2->pubkey == NULL) ||

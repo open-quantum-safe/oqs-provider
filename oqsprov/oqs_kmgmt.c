@@ -289,8 +289,15 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
         && !OSSL_PARAM_set_int(p, oqsx_key_maxsize(oqsxk)))
         return 0;
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY)) != NULL) {
-        if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey, oqsxk->pubkeylen))
-            return 0;
+        // hybrid KEMs are special in that the classic length information shall not be passed out:
+        if (oqsxk->keytype == KEY_TYPE_ECP_HYB_KEM || oqsxk->keytype == KEY_TYPE_ECX_HYB_KEM) {
+            if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey+SIZE_OF_UINT32, oqsxk->pubkeylen-SIZE_OF_UINT32))
+                return 0;
+        }
+        else {
+            if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey, oqsxk->pubkeylen))
+                return 0;
+        }
     }
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PUB_KEY)) != NULL) {
         if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey, oqsxk->pubkeylen))
@@ -343,10 +350,21 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[])
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY);
     if (p != NULL) {
         size_t used_len;
-        if (p->data_size != oqsxkey->pubkeylen
+        int classic_pubkey_len;
+        if (oqsxkey->keytype == KEY_TYPE_ECP_HYB_KEM || oqsxkey->keytype == KEY_TYPE_ECX_HYB_KEM) {
+            // classic key len already stored by key setup; only data needs to be filled in
+            if (p->data_size != oqsxkey->pubkeylen-SIZE_OF_UINT32
+                || !OSSL_PARAM_get_octet_string(p, &oqsxkey->comp_pubkey[0], oqsxkey->pubkeylen-SIZE_OF_UINT32,
+                                                &used_len)) {
+                return 0;
+            }
+        }
+        else {
+            if (p->data_size != oqsxkey->pubkeylen
                 || !OSSL_PARAM_get_octet_string(p, &oqsxkey->pubkey, oqsxkey->pubkeylen,
                                                 &used_len)) {
-            return 0;
+                return 0;
+            }
         }
         OPENSSL_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
         oqsxkey->privkey = NULL;

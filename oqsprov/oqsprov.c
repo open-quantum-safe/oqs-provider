@@ -302,7 +302,7 @@ static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
     if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, OQS_PROVIDER_VERSION_STR))
         return 0;
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_BUILDINFO);
-    if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, buildinfo))
+    if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, strdup(buildinfo)))
         return 0;
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_STATUS);
     if (p != NULL && !OSSL_PARAM_set_int(p, 1)) // provider is always running

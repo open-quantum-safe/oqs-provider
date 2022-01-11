@@ -292,15 +292,17 @@ static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx)
 static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
 {
     OSSL_PARAM *p;
+    char buildinfo[512];
 
+    snprintf(buildinfo, 512, "OQS Provider v.%s based on liboqs v.%s", OQS_PROVIDER_VERSION_STR, OQS_VERSION_TEXT);
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_NAME);
     if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, "OpenSSL OQS Provider"))
         return 0;
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_VERSION);
-    if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, OPENSSL_VERSION_STR))
+    if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, OQS_PROVIDER_VERSION_STR))
         return 0;
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_BUILDINFO);
-    if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, OPENSSL_FULL_VERSION_STR))
+    if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, buildinfo))
         return 0;
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_STATUS);
     if (p != NULL && !OSSL_PARAM_set_int(p, 1)) // provider is always running

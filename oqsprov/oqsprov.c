@@ -294,9 +294,7 @@ static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx)
 static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
 {
     OSSL_PARAM *p;
-    char buildinfo[512];
 
-    snprintf(buildinfo, 512, "OQS Provider v.%s based on liboqs v.%s", OQS_PROVIDER_VERSION_STR, OQS_VERSION_TEXT);
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_NAME);
     if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, "OpenSSL OQS Provider"))
         return 0;

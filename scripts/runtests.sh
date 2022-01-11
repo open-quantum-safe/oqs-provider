@@ -15,7 +15,7 @@ interop() {
 }
 
 # Output version:
-.local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider
+LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider
 
 # Run built-in tests:
 (cd _build; ctest $@)

@@ -131,6 +131,10 @@ to be located in a folder `.local` in the local directory as per the
 building examples above. Installing openssl(3.0) in a standard location
 eliminates the need for specific PATH setting as showcased below.
 
+## Checking provider version information
+
+   LD_LIBRARY_PATH=.local/lib .local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider 
+
 ## Creating (classic) keys and certificates
 
 This can be facilitated for example by running

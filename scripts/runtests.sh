@@ -1,13 +1,15 @@
 #!/bin/sh
 
 provider2openssl() {
+    echo
     echo "Testing oqsprovider->oqs-openssl interop for $1:"
-    ./scripts/oqsprovider-certgen.sh $1 && ./scripts/oqs-openssl-certverify.sh $1
+    ./scripts/oqsprovider-certgen.sh $1 && ./scripts/oqsprovider-cmssign.sh $1 && ./scripts/oqs-openssl-certverify.sh $1 && ./scripts/oqs-openssl-cmsverify.sh $1
 }
 
 openssl2provider() {
+    echo
     echo "Testing oqs-openssl->oqsprovider interop for $1:"
-    ./scripts/oqs-openssl-certgen.sh $1 && ./scripts/oqsprovider-certverify.sh $1
+    ./scripts/oqs-openssl-certgen.sh $1 && ./scripts/oqs-openssl-cmssign.sh $1 && ./scripts/oqsprovider-certverify.sh $1 && ./scripts/oqsprovider-cmsverify.sh $1
 }
 
 interop() {

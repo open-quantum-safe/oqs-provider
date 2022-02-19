@@ -23,6 +23,10 @@ interop() {
         provider2openssl $1 && openssl2provider $1
     fi
 
+    if [ $? -ne 0 ]; then
+        echo "Test for $1 failed. Terminating testing."
+        exit -1
+    fi
 }
 
 # Output version:

@@ -20,12 +20,12 @@ Status
 
 Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
-OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, OQS 
+OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
 signatures including CMS functionality are available via the OpenSSL
 EVP interface. Key persistence is provided via the encode/decode
 mechanism and X.509 data structures.
 
-For information about the available OQS algorithms,
+For information about the available QSC algorithms,
 [refer to the OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms).
 
 Open work items are
@@ -91,7 +91,7 @@ Further `liboqs` build options are [documented here](https://github.com/open-qua
 
 ## Building the provider
 
-`oqsprovider` can be build for example via the following:
+`oqsprovider` can be built for example via the following:
 
     cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build
     cmake --build _build
@@ -134,7 +134,7 @@ eliminates the need for specific PATH setting as showcased below.
 
 ## Checking provider version information
 
-   LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider 
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider 
 
 ## Creating (classic) keys and certificates
 
@@ -165,7 +165,7 @@ Any [available KEM algorithm](https://github.com/open-quantum-safe/openssl/tree/
 ## S/MIME message signing -- Cryptographic Message Syntax (CMS)
 
 Also possible is the creation and verification of quantum-safe digital
-signatures using CMS.
+signatures using [CMS](https://datatracker.ietf.org/doc/html/rfc5652).
 
 #### Signing data
 
@@ -213,7 +213,7 @@ using the standard OpenSSL calls. For sample code see
 `oqsprovider` does not implement its own
 [DRBG](https://csrc.nist.gov/glossary/term/Deterministic_Random_Bit_Generator).
 Therefore by default it relies on OpenSSL to provide one. Thus,
-either the default or fips provider must be loaded for OQS algorithms
+either the default or fips provider must be loaded for QSC algorithms
 to have access to OpenSSL-provided randomness. Check out
 [OpenSSL provider documentation](https://www.openssl.org/docs/manmaster/man7/provider.html)
 and/or [OpenSSL command line options](https://www.openssl.org/docs/manmaster/man1/openssl.html)

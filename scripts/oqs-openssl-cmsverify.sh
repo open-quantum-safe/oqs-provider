@@ -26,5 +26,5 @@ else
 docker create -v /certs --name certs alpine /bin/true && \
 docker cp tmp/ certs:/certs && \
 docker run --volumes-from certs -it $IMAGE sh -c "cd /certs/tmp && openssl cms -verify -CAfile $1_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile && diff signeddatafile inputfile" && \
-docker rm /certs
+docker rm certs
 fi

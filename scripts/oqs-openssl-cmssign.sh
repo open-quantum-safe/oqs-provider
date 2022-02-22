@@ -24,7 +24,7 @@ else
 # CCI doesn't permit mounting, so let's do as per https://circleci.com/docs/2.0/building-docker-images/#mounting-folders:
 docker create -v /certs --name certs alpine /bin/true && \
 docker cp tmp/ certs:/certs && \
-docker run --volumes-from certs ---name oqsossl -it $IMAGE sh -c "cd /certs/tmp && openssl cms -in inputfile -sign -signer $1_srv.crt -inkey $1_srv.key -nodetach -outform pem -binary -out signedfile.cms && openssl cms -verify -CAfile $1_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile " && \
+docker run --volumes-from certs --rm --name oqsossl -it $IMAGE sh -c "cd /certs/tmp && openssl cms -in inputfile -sign -signer $1_srv.crt -inkey $1_srv.key -nodetach -outform pem -binary -out signedfile.cms && openssl cms -verify -CAfile $1_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile " && \
 docker cp certs:/certs/tmp . && \
 docker rm certs
 fi

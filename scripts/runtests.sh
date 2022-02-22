@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 provider2openssl() {
     echo "Testing oqsprovider->oqs-openssl interop for $1:"
@@ -11,7 +11,16 @@ openssl2provider() {
 }
 
 interop() {
-    provider2openssl $1 && openssl2provider $1
+    # check if we can use docker or not:
+    docker info 2>&1 | grep Server > /dev/null
+
+    if [ $? -ne 0 ]; then
+        echo "Running local test only due to absence of docker:"
+        ./scripts/oqsprovider-certgen.sh $1 && ./scripts/oqsprovider-certverify.sh $1
+    else
+        provider2openssl $1 && openssl2provider $1
+    fi
+
 }
 
 # Output version:

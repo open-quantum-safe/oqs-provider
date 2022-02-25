@@ -528,7 +528,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
             fprintf(stderr, "Could not create OQS KEM algorithm %s. Enabled in liboqs?\n", oqs_name);
             goto err;
         }
-        ON_ERR_GOTO(!ret->oqsx_provider_ctx.oqsx_qs_ctx.kem, err);
         evp_ctx = OPENSSL_zalloc(sizeof(OQSX_EVP_CTX));
         ON_ERR_GOTO(!evp_ctx, err);
 

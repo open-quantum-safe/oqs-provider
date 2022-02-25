@@ -500,6 +500,10 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(sizeof(void *));
         ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = OQS_SIG_new(oqs_name);
+        if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.sig) {
+            fprintf(stderr, "Could not create OQS signature algorithm %s. Enabled in liboqs?\n", oqs_name);
+            goto err;
+        }
         ret->privkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key;
         ret->pubkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key;
         ret->keytype = KEY_TYPE_SIG;
@@ -509,6 +513,10 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(sizeof(void *));
         ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = OQS_KEM_new(oqs_name);
+        if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.kem) {
+            fprintf(stderr, "Could not create OQS KEM algorithm %s. Enabled in liboqs?\n", oqs_name);
+            goto err;
+        }
         ret->privkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
         ret->pubkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
         ret->keytype = KEY_TYPE_KEM;
@@ -516,7 +524,10 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
     case KEY_TYPE_ECX_HYB_KEM:
     case KEY_TYPE_ECP_HYB_KEM:
         ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = OQS_KEM_new(oqs_name);
-        ON_ERR_GOTO(!ret->oqsx_provider_ctx.oqsx_qs_ctx.kem, err);
+        if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.kem) {
+            fprintf(stderr, "Could not create OQS KEM algorithm %s. Enabled in liboqs?\n", oqs_name);
+            goto err;
+        }
         evp_ctx = OPENSSL_zalloc(sizeof(OQSX_EVP_CTX));
         ON_ERR_GOTO(!evp_ctx, err);
 
@@ -534,7 +545,10 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
 	break;
     case KEY_TYPE_HYB_SIG:
         ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = OQS_SIG_new(oqs_name);
-        ON_ERR_GOTO(!ret->oqsx_provider_ctx.oqsx_qs_ctx.sig, err);
+        if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.sig) {
+            fprintf(stderr, "Could not create OQS signature algorithm %s. Enabled in liboqs?\n", oqs_name);
+            goto err;
+        }
         evp_ctx = OPENSSL_zalloc(sizeof(OQSX_EVP_CTX));
         ON_ERR_GOTO(!evp_ctx, err);
 

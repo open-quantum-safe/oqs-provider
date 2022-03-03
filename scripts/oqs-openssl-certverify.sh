@@ -24,6 +24,7 @@ docker run -v `pwd`/tmp:/home/oqs/data -it $IMAGE sh -c "cd /home/oqs/data && op
 else
 # CCI doesn't permit mounting, so let's do as per https://circleci.com/docs/2.0/building-docker-images/#mounting-folders:
 docker create -v /certs --name certs alpine /bin/true && \
+chmod gou+rw tmp/* && \
 docker cp tmp/ certs:/certs && \
 docker run --volumes-from certs -it $IMAGE sh -c "cd /certs/tmp && openssl verify -CAfile $1_CA.crt $1_srv.crt" && \
 docker rm /certs

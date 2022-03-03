@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 provider2openssl() {
     echo
     echo "Testing oqsprovider->oqs-openssl interop for $1:"

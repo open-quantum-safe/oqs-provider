@@ -175,7 +175,7 @@ certificate (and its signature algorithm) to create the signed data:
 
 Step 1: Create quantum-safe key pair and self-signed certificate:
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider oqsprovider -provider default
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider-path _build/oqsprov -provider oqsprovider -provider default
 
 By changing the `-newkey` parameter algorithm name [any of the 
 supported quantum-safe or hybrid algorithms](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable#authentication)
@@ -202,11 +202,30 @@ Continuing the example above, the following command verifies the CMS file
 `signedfile` and outputs the `outputfile`. Its contents should be identical
 to the original data in `inputfile` above.
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile -provider oqsprovider -provider default
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile -provider-path _build/oqsprov -provider oqsprovider -provider default
 
 Note that it is also possible to build proper QSC certificate chains
 using the standard OpenSSL calls. For sample code see
 [scripts/oqsprovider-certgen.sh](scripts/oqsprovider-certgen.sh).
+
+### Support of `dgst` (and sign)
+
+Also tested to operate OK is the [openssl dgst](https://www.openssl.org/docs/man3.0/man1/openssl-dgst.html)
+command. Sample invocations building on the keys and certificate files in the examples above:
+
+#### Signing
+
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/oqsprov -provider oqsprovider -provider default -sign qsc.key -out dgstsignfile inputfile
+
+#### Verifying
+
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/oqsprov -provider oqsprovider -provider default -signature dgstsignfile -verify qsc.pubkey inputfile
+
+The public key can be extracted from the certificate using standard openssl command:
+
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl x509 -provider-path _build/oqsprov -provider oqsprovider -provider default -in qsc.crt -pubkey -noout > qsc.pubkey
+
+The `dgst` command is not tested for interoperability with [oqs-openssl111](https://github.com/open-quantum-safe/openssl).
 
 ### Note on randomness provider
 

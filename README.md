@@ -6,9 +6,9 @@ oqsprovider - Open Quantum Safe provider for OpenSSL (3.0)
 Purpose
 -------
 
-This repository contains code to enable quantum-safe cryptography in a
-standard OpenSSL (3.0) distribution by way of implementing a single shared
-library, the OQS
+This repository contains code to enable quantum-safe cryptography (QSC)
+in a standard OpenSSL (3.0) distribution by way of implementing a single
+shared library, the OQS
 [provider](https://www.openssl.org/docs/manmaster/man7/provider.html).
 
 This repository has been derived from the [OQS-OpenSSL3 branch in
@@ -20,11 +20,12 @@ Status
 
 Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
-OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, OQS 
-signatures are available via the OpenSSL EVP interface. Key persistence is
-provided via the encode/decode mechanism (still WIP for X.509).
+OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
+signatures including CMS functionality are available via the OpenSSL
+EVP interface. Key persistence is provided via the encode/decode
+mechanism and X.509 data structures.
 
-For information about the available OQS algorithms,
+For information about the available QSC algorithms,
 [refer to the OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms).
 
 Open work items are
@@ -90,7 +91,7 @@ Further `liboqs` build options are [documented here](https://github.com/open-qua
 
 ## Building the provider
 
-`oqsprovider` can be build for example via the following:
+`oqsprovider` can be built for example via the following:
 
     cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build
     cmake --build _build
@@ -133,39 +134,95 @@ eliminates the need for specific PATH setting as showcased below.
 
 ## Checking provider version information
 
-   LD_LIBRARY_PATH=.local/lib .local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider 
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider 
 
 ## Creating (classic) keys and certificates
 
 This can be facilitated for example by running
 
-    LD_LIBRARY_PATH=.local/lib .local/bin/openssl req -x509 -new -newkey rsa -keyout rsa_CA.key -out rsa_CA.crt -nodes -subj "/CN=test CA" -days 365 -config openssl/apps/openssl.cnf
-    LD_LIBRARY_PATH=.local/lib .local/bin/openssl genpkey -algorithm rsa -out rsa_srv.key
-    LD_LIBRARY_PATH=.local/lib .local/bin/openssl req -new -newkey rsa -keyout rsa_srv.key -out rsa_srv.csr -nodes -subj "/CN=test server" -config openssl/apps/openssl.cnf
-    LD_LIBRARY_PATH=.local/lib .local/bin/openssl x509 -req -in rsa_srv.csr -out rsa_srv.crt -CA rsa_CA.crt -CAkey rsa_CA.key -CAcreateserial -days 365
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey rsa -keyout rsa_CA.key -out rsa_CA.crt -nodes -subj "/CN=test CA" -days 365 -config openssl/apps/openssl.cnf
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl genpkey -algorithm rsa -out rsa_srv.key
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -new -newkey rsa -keyout rsa_srv.key -out rsa_srv.csr -nodes -subj "/CN=test server" -config openssl/apps/openssl.cnf
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl x509 -req -in rsa_srv.csr -out rsa_srv.crt -CA rsa_CA.crt -CAkey rsa_CA.key -CAcreateserial -days 365
 
 ## Setting up a (quantum-safe) test server
 
 This can be facilitated for example by running
 
-    LD_LIBRARY_PATH=.local/lib .local/bin/openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake -provider-path _build/oqsprov  -provider default -provider oqsprovider
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake -provider-path _build/oqsprov  -provider default -provider oqsprovider
 
 ## Running a client to interact with (quantum-safe) KEM algorithms
 
 This can be facilitated for example by running
 
-    LD_LIBRARY_PATH=.local/lib .local/bin/openssl s_client -groups frodo640shake -provider-path _build/oqsprov  -provider default -provider oqsprovider
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_client -groups frodo640shake -provider-path _build/oqsprov  -provider default -provider oqsprovider
 
 By issuing the command `GET /` the quantum-safe crypto enabled OpenSSL3
 server returns details about the established connection.
 
 Any [available KEM algorithm](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable#key-exchange) can be selected by passing it in the `-groups` option.
 
+## S/MIME message signing -- Cryptographic Message Syntax (CMS)
+
+Also possible is the creation and verification of quantum-safe digital
+signatures using [CMS](https://datatracker.ietf.org/doc/html/rfc5652).
+
+#### Signing data
+
+For creating signed data, two steps are required: One is the creation
+of a certificate using a QSC algorithm; the second is the use of this
+certificate (and its signature algorithm) to create the signed data:
+
+Step 1: Create quantum-safe key pair and self-signed certificate:
+
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider oqsprovider -provider default
+
+By changing the `-newkey` parameter algorithm name [any of the 
+supported quantum-safe or hybrid algorithms](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable#authentication)
+can be utilized instead of the sample algorithm `dilithium3`.
+
+Step 2: Sign data:
+
+As
+[the CMS standard](https://datatracker.ietf.org/doc/html/rfc5652#section-5.3)
+requires the presence of a digest algorithm, while quantum-safe crypto
+does not, in difference to the QSC certificate creation command above,
+passing a message digest algorithm via the `-md` parameter is mandatory.
+
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -in inputfile -sign -signer qsc.crt -inkey qsc.key -nodetach -outform pem -binary -out signedfile -md sha512 -provider-path _build/oqsprov  -provider default -provider oqsprovider
+
+Data to be signed is to be contained in the file named `inputfile`. The
+resultant CMS output is contained in file `signedfile`. The QSC algorithm
+used is the same signature algorithm utilized for signing the certificate
+`qsc.crt`.
+
+#### Verifying data
+
+Continuing the example above, the following command verifies the CMS file
+`signedfile` and outputs the `outputfile`. Its contents should be identical
+to the original data in `inputfile` above.
+
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile -provider oqsprovider -provider default
+
+Note that it is also possible to build proper QSC certificate chains
+using the standard OpenSSL calls. For sample code see
+[scripts/oqsprovider-certgen.sh](scripts/oqsprovider-certgen.sh).
+
 ### Note on randomness provider
 
-`oqsprovider` does not implement its own [DRBG](https://csrc.nist.gov/glossary/term/Deterministic_Random_Bit_Generator). Therefore by default it relies on OpenSSL to provide one. Thus, either the default or fips provider must be loaded for OQS algorithms to have access to OpenSSL-provided randomness. Check out [OpenSSL provider documentation](https://www.openssl.org/docs/manmaster/man7/provider.html) and/or [OpenSSL command line options](https://www.openssl.org/docs/manmaster/man1/openssl.html) on how to facilitate this. Or simply use the sample command lines documented in this README.
+`oqsprovider` does not implement its own
+[DRBG](https://csrc.nist.gov/glossary/term/Deterministic_Random_Bit_Generator).
+Therefore by default it relies on OpenSSL to provide one. Thus,
+either the default or fips provider must be loaded for QSC algorithms
+to have access to OpenSSL-provided randomness. Check out
+[OpenSSL provider documentation](https://www.openssl.org/docs/manmaster/man7/provider.html)
+and/or [OpenSSL command line options](https://www.openssl.org/docs/manmaster/man1/openssl.html)
+on how to facilitate this. Or simply use the sample command
+lines documented in this README.
 
-This dependency could be eliminated by building `liboqs` without OpenSSL support ([OQS_USE_OPENSSL=OFF](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL)), which of course would be an unusual approach for an OpenSSL-OQS provider.
+This dependency could be eliminated by building `liboqs` without
+OpenSSL support ([OQS_USE_OPENSSL=OFF](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL)),
+which of course would be an unusual approach for an OpenSSL-OQS provider.
 
 Team
 ----
@@ -176,14 +233,27 @@ Contributors to the `oqsprovider` include:
 - Michael Baentsch
 - Christian Paquin
 - Richard Levitte
+- Basil Hess
 
 Acknowledgments
 ---------------
 
-The `oqsprovider` project is supported through the [NGI Assure Fund](https://nlnet.nl/assure), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet programme](https://www.ngi.eu), under the aegis of DG Communications Networks, Content and Technology under grant agreement No 957073.
+The `oqsprovider` project is supported through the [NGI Assure Fund](https://nlnet.nl/assure),
+a fund established by [NLnet](https://nlnet.nl) with financial
+support from the European Commission's [Next Generation Internet programme](https://www.ngi.eu),
+under the aegis of DG Communications Networks, Content and Technology
+under grant agreement No 957073.
 
-Financial support for the development of Open Quantum Safe has been provided by Amazon Web Services and the Tutte Institute for Mathematics and Computing.
+Financial support for the development of Open Quantum Safe has been provided
+by Amazon Web Services and the Tutte Institute for Mathematics and Computing.
 
-We'd like to make a special acknowledgement to the companies who have dedicated programmer time to contribute source code to OQS, including Amazon Web Services, evolutionQ, Microsoft Research, Cisco Systems, and IBM Research.
+We'd like to make a special acknowledgement to the companies who have
+dedicated programmer time to contribute source code to OQS, including
+Amazon Web Services, evolutionQ, Microsoft Research, Cisco Systems, and IBM Research.
 
-Research projects which developed specific components of OQS have been supported by various research grants, including funding from the Natural Sciences and Engineering Research Council of Canada (NSERC); see [here](https://openquantumsafe.org/papers/SAC-SteMos16.pdf) and [here](https://openquantumsafe.org/papers/NISTPQC-CroPaqSte19.pdf) for funding acknowledgments.
+Research projects which developed specific components of OQS have been
+supported by various research grants, including funding from the Natural
+Sciences and Engineering Research Council of Canada (NSERC); see
+[here](https://openquantumsafe.org/papers/SAC-SteMos16.pdf) and
+[here](https://openquantumsafe.org/papers/NISTPQC-CroPaqSte19.pdf)
+for funding acknowledgments.

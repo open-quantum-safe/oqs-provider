@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x 
+#set -x 
 
 # Use dockerimage to verify certs for alg $1
 

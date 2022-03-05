@@ -225,6 +225,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 
     if (sig == NULL) {
       *siglen = max_sig_len;
+      OQS_SIG_PRINTF2("OQS SIG provider: sign test returning size %ld\n", *siglen);
       return 1;
     }
     if (*siglen < max_sig_len) {
@@ -303,7 +304,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
       goto endsign;
     }
     *siglen = classical_sig_len + oqs_sig_len;
-
+    OQS_SIG_PRINTF2("OQS SIG provider: signing completes with size %ld\n", *siglen);
     rv = 1; /* success */
 
  endsign:

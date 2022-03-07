@@ -17,6 +17,7 @@
 #include "crypto/evp.h"          /* For evp_pkey_is_provided() */
 
 #include "testutil.h" // output functions
+#include "test_common.h"
 
 /* Extended test macros to allow passing file & line number */
 #define TEST_FL_ptr(a)               test_ptr(file, line, #a, a)
@@ -62,8 +63,14 @@ static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
                           OSSL_PARAM *genparams)
 {
     EVP_PKEY *pkey = NULL;
-    EVP_PKEY_CTX *ctx =
-        template != NULL
+    EVP_PKEY_CTX *ctx = NULL;
+
+    if (!alg_is_enabled(type)) {
+        printf("Not generating key for disabled algorithm %s.\n", type);
+        return NULL;
+    }
+
+    ctx = (template != NULL)
         ? EVP_PKEY_CTX_new_from_pkey(keyctx, template, testpropq)
         : EVP_PKEY_CTX_new_from_name(keyctx, type, testpropq);
 
@@ -115,6 +122,11 @@ static int test_encode_decode(const char *file, const int line,
     void *encoded2 = NULL;
     long encoded2_len = 0;
     int ok = 0;
+
+    if (!alg_is_enabled(type)) {
+        printf("Not testing disabled algorithm %s.\n", type);
+        return 1;
+    }
 
     /*
      * Encode |pkey|, decode the result into |pkey2|, and finish off by
@@ -681,7 +693,6 @@ static int check_PVK(const char *file, const int line,
     unsigned int saltlen = 0, keylen = 0;
     int ok = oqsx_do_PVK_header(&in, data_len, 0, &saltlen, &keylen);
 
-    printf("Returning %d from check_PVK\n", ok);
     return ok;
 }
 
@@ -809,9 +820,9 @@ static int test_public_via_MSBLOB(const char *type, EVP_PKEY *key)
 
 #define KEYS(KEYTYPE)                           \
     static EVP_PKEY *key_##KEYTYPE = NULL
+// disabled retval test to permit NULL retval for unsupported algorithms:
 #define MAKE_KEYS(KEYTYPE, KEYTYPEstr, params)                          \
-    ok = ok                                                             \
-        && TEST_ptr(key_##KEYTYPE = oqstest_make_key(KEYTYPEstr, NULL, params))
+        key_##KEYTYPE = oqstest_make_key(KEYTYPEstr, NULL, params)
 #define FREE_KEYS(KEYTYPE)                                              \
     EVP_PKEY_free(key_##KEYTYPE);                                       \
 

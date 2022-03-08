@@ -45,7 +45,8 @@ Building and testing -- Quick start
 -----------------------------------
 
 All component builds and testing described in detail below can be executed by
-running the scripts `scripts/fullbuild.sh` and `scripts/runtests.sh` respectively (tested on Linux Ubuntu and Mint).
+running the scripts `scripts/fullbuild.sh` and `scripts/runtests.sh`
+respectively (tested on Linux Ubuntu and Mint).
 
 
 Building and testing
@@ -111,12 +112,23 @@ See [the test README](test/README.md) for details.
 Additional interoperability tests (with OQS-OpenSSL1.1.1) are available in the
 script `scripts/runtests.sh`.
 
-## Build options
+## Build and test options
 
 ### NDEBUG
 
 By adding the standard CMake option `-DCMAKE_BUILD_TYPE=Release` to the
 `oqsprovider` build command, debugging output is disabled.
+
+### OQS_SKIP_TESTS
+
+By setting this environment variable, OpenSSL 1.1.1 interoperability testing
+and algorithm families as listed [here](https://github.com/open-quantum-safe/openssl#supported-algorithms)
+can be disabled in testing. For example
+
+    OQS_SKIP_TESTS="111,rainbow" ./scripts/runtests.sh
+
+excludes OpenSSL1.1.1 interop testing as well as all algorithms of the
+"Rainbow" family.
 
 Using
 -----

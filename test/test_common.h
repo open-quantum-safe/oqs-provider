@@ -33,3 +33,4 @@
   }
 
 void hexdump(const void *ptr, size_t len);
+int alg_is_enabled(const char *algname);

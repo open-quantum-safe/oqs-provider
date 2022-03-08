@@ -8,9 +8,12 @@ set_tests_properties(oqs_signatures
   PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
 )
 
-add_executable(oqs_test_signatures oqs_test_signatures.c)
+add_executable(oqs_test_signatures oqs_test_signatures.c test_common.c)
 target_link_libraries(oqs_test_signatures ${OPENSSL_CRYPTO_LIBRARY})
 
+if (NOT DEFINED OPENSSL_BLDTOP)
+   set(OPENSSL_BLDTOP "${CMAKE_CURRENT_SOURCE_DIR}/../openssl")
+endif()
 
 # oqs_test_groups.c relies on OpenSSL internals, which must be copied to
 # this directory to run this test:
@@ -44,17 +47,16 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ssltestlib.h
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
   )
   file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test-groups)
-  add_executable(oqs_test_groups oqs_test_groups.c ssltestlib.c)
+  add_executable(oqs_test_groups oqs_test_groups.c ssltestlib.c test_common.c)
   target_link_libraries(oqs_test_groups ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 endif()
 
-add_executable(oqs_test_endecode oqs_test_endecode.c)
-target_include_directories(oqs_test_endecode PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/include)
-target_include_directories(oqs_test_endecode PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/test)
-target_include_directories(oqs_test_endecode PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/apps/include)
+add_executable(oqs_test_endecode oqs_test_endecode.c test_common.c)
+target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/include)
+target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/test)
+target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/apps/include)
 
-#target_link_libraries(oqs_test_endecode ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/test/libtestutil.a  ${CMAKE_CURRENT_SOURCE_DIR}/../.local/lib64/libcrypto.a pthread dl)
-target_link_libraries(oqs_test_endecode ${OPENSSL_CRYPTO_LIBRARY} ${CMAKE_CURRENT_SOURCE_DIR}/../openssl/test/libtestutil.a )
+target_link_libraries(oqs_test_endecode ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_BLDTOP}/test/libtestutil.a )
 add_test(
   NAME oqs_endecode
   COMMAND oqs_test_endecode

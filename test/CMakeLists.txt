@@ -15,41 +15,27 @@ if (NOT DEFINED OPENSSL_BLDTOP)
    set(OPENSSL_BLDTOP "${CMAKE_CURRENT_SOURCE_DIR}/../openssl")
 endif()
 
-# oqs_test_groups.c relies on OpenSSL internals, which must be copied to
-# this directory to run this test:
-#
-#    {openssl}/test/helpers/ssltestlib.c        -> test/ssltestlib.c
-#    {openssl}/test/helpers/ssltestlib.h        -> test/ssltestlib.h
-#    (they need some work to make independent from OpenSSL, patches are
-#     available in test/ssltestlib.c.patch and test/ssltestlib.h.patch)
-#
-#    {openssl}/test/certs/                      -> test/oqs_test_groups/certs/
-#    (just copy the whole directory over as is)
-#
-#    {openssl}/test/recipes/90-test_sslapi_data/passwd.txt
-#                                               -> test/oqs_test_groups/passwd.txt
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ssltestlib.h
-    AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ssltestlib.c
-    AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/oqs_test_groups/passwd.txt
-    AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/oqs_test_groups/certs
-    AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/oqs_test_groups/certs)
-  message("-- Including test oqs_groups")
-  add_test(
+if (NOT IS_DIRECTORY ${OPENSSL_BLDTOP})
+    message(WARNING "OpenSSL build directory '${OPENSSL_BLDTOP}' not present. Some dependent tests will be skipped.") 
+else()
+add_test(
     NAME oqs_groups
     COMMAND oqs_test_groups
             "oqsprovider"
             "${CMAKE_CURRENT_SOURCE_DIR}/oqs.cnf"
-            "${CMAKE_CURRENT_SOURCE_DIR}/oqs_test_groups/certs"
-            "${CMAKE_CURRENT_SOURCE_DIR}/oqs_test_groups/passwd.txt"
+            "${OPENSSL_BLDTOP}/test/certs"
+            "${OPENSSL_BLDTOP}/test/recipes/90-test_sslapi_data/passwd.txt"
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test-groups
-  )
-  set_tests_properties(oqs_signatures oqs_groups
+)
+set_tests_properties(oqs_groups
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
-  )
-  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test-groups)
-  add_executable(oqs_test_groups oqs_test_groups.c ssltestlib.c test_common.c)
-  target_link_libraries(oqs_test_groups ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
-endif()
+)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/test-groups)
+add_executable(oqs_test_groups oqs_test_groups.c test_common.c ${OPENSSL_BLDTOP}/test/helpers/ssltestlib.c)
+target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP}/include)
+target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP}/test)
+target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP}/apps/include)
+target_link_libraries(oqs_test_groups ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_BLDTOP}/test/libtestutil.a)
 
 add_executable(oqs_test_endecode oqs_test_endecode.c test_common.c)
 target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/include)
@@ -66,4 +52,6 @@ add_test(
 set_tests_properties(oqs_endecode
   PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
 )
+
+endif() # NOT IS_DIRECTORY ${OPENSSL_BLDTOP}
 

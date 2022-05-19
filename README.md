@@ -105,8 +105,8 @@ Core component testing can be run via the following command:
 
 Add `-V` to the `ctest` command for verbose output.
 
-*Note*: Some parts of testing depend on OpenSSL components. These can be
-activated by executing `./scripts/preptests.sh` before building the provider. 
+*Note*: Some parts of testing depend on OpenSSL components. Be sure to have
+these available (done automatically by the scripts provided).
 See [the test README](test/README.md) for details.
 
 Additional interoperability tests (with OQS-OpenSSL1.1.1) are available in the

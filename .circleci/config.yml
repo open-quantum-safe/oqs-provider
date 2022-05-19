@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Build OQS-OpenSSL provider
           command: |
-             ./scripts/preptests.sh && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+             mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
       - run:
           name: Run tests
           command: |

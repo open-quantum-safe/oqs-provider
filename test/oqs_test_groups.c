@@ -3,7 +3,7 @@
 #include <openssl/provider.h>
 #include <openssl/ssl.h>
 #include <string.h>
-#include "ssltestlib.h"
+#include "helpers/ssltestlib.h"
 #include "test_common.h"
 #include <openssl/core_names.h>
 

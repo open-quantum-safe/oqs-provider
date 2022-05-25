@@ -187,6 +187,7 @@ config = complete_config(config)
 
 
 populate('test/oqs_test_signatures.c', config, '/////')
+populate('test/oqs_test_kems.c', config, '/////')
 populate('test/oqs_test_groups.c', config, '/////')
 populate('test/oqs_test_endecode.c', config, '/////')
 populate('oqsprov/oqsencoders.inc', config, '/////')

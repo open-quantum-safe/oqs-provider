@@ -924,12 +924,12 @@ static void *rsa3072_sphincsshake256128frobust_gen_init(void *provctx, int selec
                                                       \
     static void *ecp_##tokalg##_new_key(void *provctx) \
     { \
-        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECP_HYB_KEM, NULL, bit_security); \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, ECP_NAME(bit_security, tokalg), KEY_TYPE_ECP_HYB_KEM, NULL, bit_security); \
     } \
                                                       \
     static void *ecp_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, tokoqsalg, NULL, KEY_TYPE_ECP_HYB_KEM, bit_security); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, ECP_NAME(bit_security, tokalg), KEY_TYPE_ECP_HYB_KEM, bit_security); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecp_##tokalg##_keymgmt_functions[] = { \
@@ -956,12 +956,12 @@ static void *rsa3072_sphincsshake256128frobust_gen_init(void *provctx, int selec
                                                       \
     static void *ecx_##tokalg##_new_key(void *provctx) \
     { \
-        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECX_HYB_KEM, NULL, bit_security); \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, ECX_NAME(bit_security, tokalg), KEY_TYPE_ECX_HYB_KEM, NULL, bit_security); \
     } \
                                                       \
     static void *ecx_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, tokoqsalg, NULL, KEY_TYPE_ECX_HYB_KEM, bit_security); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, ECX_NAME(bit_security, tokalg), KEY_TYPE_ECX_HYB_KEM, bit_security); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecx_##tokalg##_keymgmt_functions[] = { \

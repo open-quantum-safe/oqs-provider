@@ -28,6 +28,13 @@ mechanism and X.509 data structures.
 For information about the available QSC algorithms,
 [refer to the OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms).
 
+In addition to the hybrid key exchange algorithms listed in the [OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms), oqs-provider supports some more hybrid algorithms. If ``<KEX>`` is any of the key exchange algorithms listed in the [OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms), the following hybrid algorithms are supported:
+
+- if `<KEX>` claims NIST L1 or L2 security, oqs-provider provides the method `x25519_<KEX>`, which combines `<KEX>` with X25519.
+- if `<KEX>` claims NIST L3 or L4 security, oqs-provider provides the method `x448_<KEX>`, which combines `<KEX>` with X448.
+
+For example, since `kyber768` [claims NIST L3 security](https://github.com/open-quantum-safe/liboqs/blob/main/docs/algorithms/kem/kyber.md), the hybrid `x448_kyber768` is available.
+
 Open work items are
 - (CI) Testing on platforms other than Ubuntu (x86_64)
 - fully TLS-integrated quantum-safe signature functionality
@@ -254,6 +261,10 @@ lines documented in this README.
 This dependency could be eliminated by building `liboqs` without
 OpenSSL support ([OQS_USE_OPENSSL=OFF](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL)),
 which of course would be an unusual approach for an OpenSSL-OQS provider.
+
+### Note on KEM Decapsulation API
+
+The OpenSSL [`EVP_PKEY_decapsulate` API](https://www.openssl.org/docs/manmaster/man3/EVP_PKEY_decapsulate.html) specifies an explicit return value for failure. For security reasons, most KEM algorithms available from liboqs do not return an error code if decapsulation failed. Successful decapsulation can instead be implicitly verified by comparing the original and the decapsulated message.
 
 Team
 ----

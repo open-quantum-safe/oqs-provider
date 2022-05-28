@@ -51,7 +51,7 @@ static int test_oqs_signatures(const char *sigalg_name)
   }
   // test with built-in digest only if default provider is active:
   // TBD revisit when hybrids are activated: They always need default provider
-  if (OSSL_PROVIDER_available(libctx, "default"))
+  if (OSSL_PROVIDER_available(libctx, "default")) {
     testresult  &=
       (mdctx = EVP_MD_CTX_new()) != NULL
       && (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
@@ -65,6 +65,12 @@ static int test_oqs_signatures(const char *sigalg_name)
       && EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
       && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
       && EVP_DigestVerifyFinal(mdctx, sig, siglen);
+    sig[0] = ~sig[0];
+    testresult &=
+      EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
+      && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
+      && !EVP_DigestVerifyFinal(mdctx, sig, siglen);
+  }
 
   // this test must work also with default provider inactive:
   testresult &=
@@ -80,6 +86,11 @@ static int test_oqs_signatures(const char *sigalg_name)
     && EVP_DigestVerifyInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL)
     && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
     && EVP_DigestVerifyFinal(mdctx, sig, siglen);
+  sig[0] = ~sig[0];
+  testresult &=
+    EVP_DigestVerifyInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL)
+    && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
+    && !EVP_DigestVerifyFinal(mdctx, sig, siglen);
 
   EVP_MD_CTX_free(mdctx);
   EVP_PKEY_free(key);

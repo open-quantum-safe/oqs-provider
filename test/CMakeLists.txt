@@ -11,6 +11,19 @@ set_tests_properties(oqs_signatures
 add_executable(oqs_test_signatures oqs_test_signatures.c test_common.c)
 target_link_libraries(oqs_test_signatures ${OPENSSL_CRYPTO_LIBRARY})
 
+add_test(
+  NAME oqs_kems
+  COMMAND oqs_test_kems
+          "oqsprovider"
+          "${CMAKE_SOURCE_DIR}/test/oqs.cnf"
+)
+set_tests_properties(oqs_kems
+  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
+)
+
+add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
+target_link_libraries(oqs_test_kems ${OPENSSL_CRYPTO_LIBRARY})
+
 if (NOT DEFINED OPENSSL_BLDTOP)
    set(OPENSSL_BLDTOP "${CMAKE_CURRENT_SOURCE_DIR}/../openssl")
 endif()

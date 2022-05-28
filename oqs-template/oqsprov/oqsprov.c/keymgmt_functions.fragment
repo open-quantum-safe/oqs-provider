@@ -7,6 +7,6 @@
    {%- endfor %}
 {%- endfor %}
 {% for kem in config['kems'] %}
-    KEMKMALG3({{ kem['name_group'] }}, {{ kem['bit_security'] }}),
+{% if kem['bit_security'] == 256 %}    KEMKMALG2({{ kem['name_group'] }}, {{ kem['bit_security'] }}){% else %}    KEMKMALG3({{ kem['name_group'] }}, {{ kem['bit_security'] }}){% endif %},
 {%- endfor %}
 

@@ -57,14 +57,12 @@
 
 #define ON_ERR_SET_GOTO(condition, ret, code, gt) \
     if ((condition)) {                            \
-        printf("ON_ERR_CONDITION: %d, setting code: %d\n", condition, code); fflush(stdout);   \
         (ret) = (code);                           \
         goto gt;                                  \
     }
 
 #define ON_ERR_GOTO(condition, gt) \
     if ((condition)) {                        \
-        printf("ON_ERR_CONDITION: %d\n", condition); fflush(stdout);   \
         goto gt;                              \
     }
 

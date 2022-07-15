@@ -199,9 +199,9 @@ static OQSX_KEY *oqsx_key_new_from_nid(OSSL_LIB_CTX *libctx, const char *propq, 
  * TBD, check https://github.com/openssl/openssl/issues/16989
  */
 EVP_PKEY* setECParams(EVP_PKEY *eck, int nid) {
-    const char p256params[] = { 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07 };
-    const char p384params[] = { 0x06, 0x05, 0x2b, 0x81, 0x04, 0x00, 0x22 };
-    const char p521params[] = { 0x06, 0x05, 0x2b, 0x81, 0x04, 0x00, 0x23 };
+    const unsigned char p256params[] = { 0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07 };
+    const unsigned char p384params[] = { 0x06, 0x05, 0x2b, 0x81, 0x04, 0x00, 0x22 };
+    const unsigned char p521params[] = { 0x06, 0x05, 0x2b, 0x81, 0x04, 0x00, 0x23 };
 
     const unsigned char* params;
     switch(nid) {
@@ -426,7 +426,7 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx, char* algna
     return ret;
 }
 
-static int oqshybkem_init_ecp(int bit_security, OQSX_EVP_CTX *evp_ctx)
+static const int oqshybkem_init_ecp(int bit_security, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
     int idx = (bit_security - 128) / 64;
@@ -450,7 +450,7 @@ static int oqshybkem_init_ecp(int bit_security, OQSX_EVP_CTX *evp_ctx)
     return ret;
 }
 
-static int oqshybkem_init_ecx(int bit_security, OQSX_EVP_CTX *evp_ctx)
+static const int oqshybkem_init_ecx(int bit_security, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
     int idx = (bit_security - 128) / 64;

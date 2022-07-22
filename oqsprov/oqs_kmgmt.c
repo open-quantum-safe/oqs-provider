@@ -855,6 +855,7 @@ static void *rsa3072_sphincsshake128fsimple_gen_init(void *provctx,
         "rsa3072_sphincsshake128fsimple", KEY_TYPE_HYB_SIG, 128, 22);
 }
 
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                       \

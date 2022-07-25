@@ -103,7 +103,7 @@ typedef struct {
     EVP_MD_CTX *mdctx;
     size_t mdsize;
     // for collecting data if no MD is active:
-    char* mddata;
+    unsigned char* mddata;
     int operation;
 } PROV_OQSSIG_CTX;
 
@@ -473,7 +473,7 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx, const unsigned char *da
     if (poqs_sigctx->mddata) {
 	int mdlen = poqs_sigctx->mdsize;
 	poqs_sigctx->mdsize += datalen;
-	char* newdata = OPENSSL_malloc(poqs_sigctx->mdsize);
+	unsigned char* newdata = OPENSSL_malloc(poqs_sigctx->mdsize);
 	memcpy(newdata, poqs_sigctx->mddata, mdlen);
 	memcpy(newdata+mdlen, data, datalen);
 	OPENSSL_free(poqs_sigctx->mddata);

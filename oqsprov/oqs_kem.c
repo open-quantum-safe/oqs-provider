@@ -234,7 +234,7 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret, siz
     size_t privkey_kexlen = evp_ctx->evp_info->length_private_key;
 
     // Free at err:
-    EVP_PKEY_CTX *ctx;
+    EVP_PKEY_CTX *ctx = NULL;
     EVP_PKEY *pkey = NULL, *peerpkey = NULL;
 
     *secretlen = kexDeriveLen;

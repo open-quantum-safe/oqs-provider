@@ -25,7 +25,6 @@ static const char *sigalg_names[] = {
   "falcon1024","p521_falcon1024",
   "picnicl1full","p256_picnicl1full","rsa3072_picnicl1full",
   "picnic3l1","p256_picnic3l1","rsa3072_picnic3l1",
-  "rainbowIclassic","p256_rainbowIclassic","rsa3072_rainbowIclassic",
   "rainbowVclassic","p521_rainbowVclassic",
   "sphincsharaka128frobust","p256_sphincsharaka128frobust","rsa3072_sphincsharaka128frobust",
   "sphincssha256128frobust","p256_sphincssha256128frobust","rsa3072_sphincssha256128frobust",

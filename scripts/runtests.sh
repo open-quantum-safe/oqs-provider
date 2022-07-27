@@ -106,9 +106,6 @@ interop rsa3072_picnicl1full
 interop picnic3l1
 interop p256_picnic3l1
 interop rsa3072_picnic3l1
-interop rainbowIclassic
-interop p256_rainbowIclassic
-interop rsa3072_rainbowIclassic
 interop rainbowVclassic
 interop p521_rainbowVclassic
 interop sphincsharaka128frobust

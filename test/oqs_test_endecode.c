@@ -969,12 +969,6 @@ KEYS(p256_picnic3l1);
 IMPLEMENT_TEST_SUITE(p256_picnic3l1, "p256_picnic3l1")
 KEYS(rsa3072_picnic3l1);
 IMPLEMENT_TEST_SUITE(rsa3072_picnic3l1, "rsa3072_picnic3l1")
-KEYS(rainbowIclassic);
-IMPLEMENT_TEST_SUITE(rainbowIclassic, "rainbowIclassic")
-KEYS(p256_rainbowIclassic);
-IMPLEMENT_TEST_SUITE(p256_rainbowIclassic, "p256_rainbowIclassic")
-KEYS(rsa3072_rainbowIclassic);
-IMPLEMENT_TEST_SUITE(rsa3072_rainbowIclassic, "rsa3072_rainbowIclassic")
 KEYS(rainbowVclassic);
 IMPLEMENT_TEST_SUITE(rainbowVclassic, "rainbowVclassic")
 KEYS(p521_rainbowVclassic);
@@ -1134,12 +1128,6 @@ int setup_tests(void)
     ADD_TEST_SUITE(p256_picnic3l1);
     MAKE_KEYS(rsa3072_picnic3l1, "rsa3072_picnic3l1", NULL);
     ADD_TEST_SUITE(rsa3072_picnic3l1);
-    MAKE_KEYS(rainbowIclassic, "rainbowIclassic", NULL);
-    ADD_TEST_SUITE(rainbowIclassic);
-    MAKE_KEYS(p256_rainbowIclassic, "p256_rainbowIclassic", NULL);
-    ADD_TEST_SUITE(p256_rainbowIclassic);
-    MAKE_KEYS(rsa3072_rainbowIclassic, "rsa3072_rainbowIclassic", NULL);
-    ADD_TEST_SUITE(rsa3072_rainbowIclassic);
     MAKE_KEYS(rainbowVclassic, "rainbowVclassic", NULL);
     ADD_TEST_SUITE(rainbowVclassic);
     MAKE_KEYS(p521_rainbowVclassic, "p521_rainbowVclassic", NULL);
@@ -1195,9 +1183,6 @@ void cleanup_tests(void)
     FREE_KEYS(picnic3l1);
     FREE_KEYS(p256_picnic3l1);
     FREE_KEYS(rsa3072_picnic3l1);
-    FREE_KEYS(rainbowIclassic);
-    FREE_KEYS(p256_rainbowIclassic);
-    FREE_KEYS(rsa3072_rainbowIclassic);
     FREE_KEYS(rainbowVclassic);
     FREE_KEYS(p521_rainbowVclassic);
     FREE_KEYS(sphincsharaka128frobust);

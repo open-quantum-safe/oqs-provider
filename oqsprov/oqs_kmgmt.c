@@ -732,33 +732,6 @@ static void *rsa3072_picnic3l1_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic3_L1, "rsa3072_picnic3l1", KEY_TYPE_HYB_SIG, 128);
 }
 
-static void *rainbowIclassic_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_I_classic, "rainbowIclassic", KEY_TYPE_SIG, NULL, 128);
-}
-
-static void *rainbowIclassic_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_I_classic, "rainbowIclassic", 0, 128);
-}
-static void *p256_rainbowIclassic_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_I_classic, "p256_rainbowIclassic", KEY_TYPE_HYB_SIG, NULL, 128);
-}
-
-static void *p256_rainbowIclassic_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_I_classic, "p256_rainbowIclassic", KEY_TYPE_HYB_SIG, 128);
-}
-static void *rsa3072_rainbowIclassic_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_I_classic, "rsa3072_rainbowIclassic", KEY_TYPE_HYB_SIG, NULL, 128);
-}
-
-static void *rsa3072_rainbowIclassic_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_I_classic, "rsa3072_rainbowIclassic", KEY_TYPE_HYB_SIG, 128);
-}
 static void *rainbowVclassic_new_key(void *provctx)
 {
     return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_V_classic, "rainbowVclassic", KEY_TYPE_SIG, NULL, 256);
@@ -1012,9 +985,6 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_picnicl1full)
 MAKE_SIG_KEYMGMT_FUNCTIONS(picnic3l1)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_picnic3l1)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_picnic3l1)
-MAKE_SIG_KEYMGMT_FUNCTIONS(rainbowIclassic)
-MAKE_SIG_KEYMGMT_FUNCTIONS(p256_rainbowIclassic)
-MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_rainbowIclassic)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rainbowVclassic)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_rainbowVclassic)
 MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsharaka128frobust)

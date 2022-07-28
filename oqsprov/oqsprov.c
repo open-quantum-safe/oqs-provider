@@ -42,7 +42,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
  * List of all algorithms with given OIDs
  */
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
-#define OQS_OID_CNT 78
+#define OQS_OID_CNT 72
 static const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {
 "1.3.6.1.4.1.2.267.7.4.4", "dilithium2",
@@ -70,9 +70,6 @@ static const char* oqs_oid_alg_list[OQS_OID_CNT] =
 "1.3.6.1.4.1.311.89.2.1.21", "picnic3l1",
 "1.3.6.1.4.1.311.89.2.1.22" , "p256_picnic3l1",
 "1.3.6.1.4.1.311.89.2.1.23" , "rsa3072_picnic3l1",
-"1.3.9999.5.1.1.1", "rainbowIclassic",
-"1.3.9999.5.1.2.1" , "p256_rainbowIclassic",
-"1.3.9999.5.1.3.1" , "rsa3072_rainbowIclassic",
 "1.3.9999.5.3.1.1", "rainbowVclassic",
 "1.3.9999.5.3.2.1" , "p521_rainbowVclassic",
 "1.3.9999.6.1.1", "sphincsharaka128frobust",
@@ -144,9 +141,6 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     ALG("picnic3l1", oqs_signature_functions),
     ALG("p256_picnic3l1", oqs_signature_functions),
     ALG("rsa3072_picnic3l1", oqs_signature_functions),
-    ALG("rainbowIclassic", oqs_signature_functions),
-    ALG("p256_rainbowIclassic", oqs_signature_functions),
-    ALG("rsa3072_rainbowIclassic", oqs_signature_functions),
     ALG("rainbowVclassic", oqs_signature_functions),
     ALG("p521_rainbowVclassic", oqs_signature_functions),
     ALG("sphincsharaka128frobust", oqs_signature_functions),
@@ -222,7 +216,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     ALG("falcon1024", oqs_falcon1024_keymgmt_functions),ALG("p521_falcon1024", oqs_p521_falcon1024_keymgmt_functions),
     ALG("picnicl1full", oqs_picnicl1full_keymgmt_functions),ALG("p256_picnicl1full", oqs_p256_picnicl1full_keymgmt_functions),ALG("rsa3072_picnicl1full", oqs_rsa3072_picnicl1full_keymgmt_functions),
     ALG("picnic3l1", oqs_picnic3l1_keymgmt_functions),ALG("p256_picnic3l1", oqs_p256_picnic3l1_keymgmt_functions),ALG("rsa3072_picnic3l1", oqs_rsa3072_picnic3l1_keymgmt_functions),
-    ALG("rainbowIclassic", oqs_rainbowIclassic_keymgmt_functions),ALG("p256_rainbowIclassic", oqs_p256_rainbowIclassic_keymgmt_functions),ALG("rsa3072_rainbowIclassic", oqs_rsa3072_rainbowIclassic_keymgmt_functions),
     ALG("rainbowVclassic", oqs_rainbowVclassic_keymgmt_functions),ALG("p521_rainbowVclassic", oqs_p521_rainbowVclassic_keymgmt_functions),
     ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),ALG("p256_sphincsharaka128frobust", oqs_p256_sphincsharaka128frobust_keymgmt_functions),ALG("rsa3072_sphincsharaka128frobust", oqs_rsa3072_sphincsharaka128frobust_keymgmt_functions),
     ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),ALG("p256_sphincssha256128frobust", oqs_p256_sphincssha256128frobust_keymgmt_functions),ALG("rsa3072_sphincssha256128frobust", oqs_rsa3072_sphincssha256128frobust_keymgmt_functions),

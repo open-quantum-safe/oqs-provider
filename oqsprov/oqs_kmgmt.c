@@ -73,6 +73,7 @@ struct oqsx_gen_ctx {
     OSSL_LIB_CTX *libctx;
     char *propq;
     char *oqs_name;
+    char *cmp_name;
     char *tls_name;
     int primitive;
     int selection;
@@ -462,11 +463,23 @@ static void *oqsx_gen_init(void *provctx, int selection, char *oqs_name,
     OSSL_LIB_CTX *libctx = PROV_OQS_LIBCTX_OF(provctx);
     struct oqsx_gen_ctx *gctx = NULL;
 
+
     OQS_KM_PRINTF2("OQSKEYMGMT: gen_init called for key %s \n", oqs_name);
+
 
     if ((gctx = OPENSSL_zalloc(sizeof(*gctx))) != NULL) {
         gctx->libctx = libctx;
-        gctx->oqs_name = OPENSSL_strdup(oqs_name);
+        gctx->cmp_name = NULL;
+        if (primitive != KEY_TYPE_CMP_SIG)
+          gctx->oqs_name = OPENSSL_strdup(oqs_name);
+        else {
+          char* cmp_name = malloc(sizeof(oqs_name) + 1);
+          strcpy(cmp_name,oqs_name);
+          cmp_name = strtok(cmp_name, "_");
+          gctx->oqs_name = OPENSSL_strdup(cmp_name);
+          cmp_name = strtok (NULL, "_");
+          gctx->cmp_name = OPENSSL_strdup(cmp_name);
+        }
         gctx->tls_name = OPENSSL_strdup(tls_name);
         gctx->primitive = primitive;
         gctx->selection = selection;

@@ -176,7 +176,7 @@ struct oqsx_key_st {
 #endif
         int references;
 
-    /* point to actual priv key material -- classic key, if present, first
+    /* point to actual priv key material -- classic key, if present, first, unless is composite
      * i.e., OQS key always at comp_*key[numkeys-1]
      */
     void **comp_privkey;

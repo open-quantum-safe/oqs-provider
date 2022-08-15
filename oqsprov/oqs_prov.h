@@ -19,7 +19,7 @@
 #  include <openssl/core.h>
 #  include <openssl/e_os2.h>
 
-#define OQS_PROVIDER_VERSION_STR "0.4.0-dev"
+#define OQS_PROVIDER_VERSION_STR "0.4.0"
 
 /* internal, but useful OSSL define */
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))

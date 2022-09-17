@@ -156,7 +156,7 @@ def load_config():
     config = yaml.safe_load(config)
     config_extras = yaml.safe_load(config_extras)
     for sig in config['sigs']:
-        sig['variants'] = [variant for variant in sig['variants'] if variant['enable']]
+        sig['variants'] = [variant for variant in sig['variants'] if ('enable' in variant and variant['enable'])]
 
     # remove KEMs without NID (old stuff)
     newkems = []

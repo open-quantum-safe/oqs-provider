@@ -470,16 +470,9 @@ static void *oqsx_gen_init(void *provctx, int selection, char *oqs_name,
     if ((gctx = OPENSSL_zalloc(sizeof(*gctx))) != NULL) {
         gctx->libctx = libctx;
         gctx->cmp_name = NULL;
-        if (primitive != KEY_TYPE_CMP_SIG)
-          gctx->oqs_name = OPENSSL_strdup(oqs_name);
-        else {
-          char* cmp_name = malloc(sizeof(oqs_name) + 1);
-          strcpy(cmp_name,oqs_name);
-          cmp_name = strtok(cmp_name, "_");
-          gctx->oqs_name = OPENSSL_strdup(cmp_name);
-          cmp_name = strtok (NULL, "_");
+        gctx->oqs_name = OPENSSL_strdup(oqs_name);
+        if (primitive == KEY_TYPE_CMP_SIG)
           gctx->cmp_name = OPENSSL_strdup(cmp_name);
-        }
         gctx->tls_name = OPENSSL_strdup(tls_name);
         gctx->primitive = primitive;
         gctx->selection = selection;

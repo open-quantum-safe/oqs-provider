@@ -869,7 +869,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
             goto err;
     }
 
-    OQS_KEY_PRINTF2("OQSX_KEY: new key created: %p\n", ret);
+    printf("OQSX_KEY: new key created: %p\n", ret);
     return ret;
 err:
     ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
@@ -1160,7 +1160,8 @@ int oqsx_key_gen(OQSX_KEY *key)
             || key->keytype == KEY_TYPE_CMP_SIG) {
         ret = !oqsx_key_set_composites(key);
         ON_ERR_GOTO(ret, err);
-        ret = oqsx_key_gen_oqs(key, 0);
+        ret = oqsx_key_gen_oqs(key, 0); // 18
+        printf("ret = %i\n", ret);
     } else {
         ret = 1;
     }

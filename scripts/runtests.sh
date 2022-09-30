@@ -119,7 +119,9 @@ interop rsa3072_sphincsshake256128frobust
 # Run built-in tests:
 (cd _build; ctest $@)
 
-# cleanup
+# cleanup: TBC:
+# decide for testing strategy when integrating to OpenSSL test harness:
+# Keep scripts generating certs (testing more code paths) or use API?
 #rm -rf tmp
 echo
 echo "All oqsprovider tests passed."

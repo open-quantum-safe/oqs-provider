@@ -90,10 +90,6 @@ static int test_signature(const OSSL_PARAM params[], void *data)
 
     if (sigalg_name == NULL) return 0;
 
-    fprintf(stderr,
-            cGREEN "  Testing...: %s" cNORM "\n",
-            sigalg_name);
-
     ret = test_oqs_tlssig(sigalg_name);
 
     if (ret >= 0) {
@@ -124,45 +120,16 @@ static int test_provider_signatures(OSSL_PROVIDER *provider, void *vctx)
         return 1;
 }
 
-#define nelem(a) (sizeof(a)/sizeof((a)[0]))
-
-static size_t tcb(const char *buf, size_t cnt,
-                int category, int cmd, void *vdata)
-{
-    BIO *bio = vdata;
-    const char *label = NULL;
-
-    switch (cmd) {
-    case OSSL_TRACE_CTRL_BEGIN:
-        label = "BEGIN";
-        break;
-    case OSSL_TRACE_CTRL_END:
-        label = "END";
-        break;
-    }
-
-    if (label != NULL) {
-        union {
-            pthread_t tid;
-            unsigned long ltid;
-        } tid;
-
-        tid.tid = pthread_self();
-        BIO_printf(bio, "%s TRACE[%s]:%lx\n",
-                   label, OSSL_trace_get_category_name(category), tid.ltid);
-    }
-    return (size_t)BIO_puts(bio, buf);
-}
-
 int main(int argc, char *argv[])
 {
   size_t i;
   int errcnt = 0, test = 0;
 
-  /* Un-comment for full tracing:
+#ifndef OPENSSL_NO_TRACE
+  fprintf(stderr, "Full tracing enabled via openssl config 'enable-trace'.\n");
   BIO *err = BIO_new_fp(stderr, BIO_NOCLOSE | BIO_FP_TEXT);
-  OSSL_trace_set_callback(OSSL_TRACE_CATEGORY_ALL, tcb, err);
-  */
+  OSSL_trace_set_channel(OSSL_TRACE_CATEGORY_ALL, err);
+#endif
 
   T((libctx = OSSL_LIB_CTX_new()) != NULL);
   T(argc == 4);

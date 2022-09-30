@@ -94,7 +94,7 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 #endif
 
 /* helper structure for classic key components in hybrid keys.
- * Actual tables in oqsprov_keys.c
+ * Actual tables in oqsprov_keys.ce
  */
 struct oqsx_evp_info_st {
     int keytype;
@@ -190,6 +190,11 @@ struct oqsx_key_st {
 };
 
 typedef struct oqsx_key_st OQSX_KEY;
+
+char* get_oqsname(int nid);
+char* get_cmpname(int nid);
+int get_keytype(int nid);
+char* get_tlsname_fromoqs(char* oqsname);
 
 /* Register given NID with tlsname in OSSL3 registry */
 int oqs_set_nid(char *tlsname, int nid);

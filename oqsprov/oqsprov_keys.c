@@ -125,6 +125,17 @@ static int get_keytype(int nid)
     return 0;
 }
 
+char* get_tlsname_fromoqs(char* oqsname) {
+   int i;
+   for(i=0;i<NID_TABLE_LEN;i++) {
+        if (nid_names[i].keytype ==  KEY_TYPE_SIG){
+            if (!strcmp(nid_names[i].oqsname, oqsname)) 
+                return nid_names[i].tlsname;
+        }
+   }
+   return 0;
+}
+
 static char *get_oqsname(int nid)
 {
     int i;
@@ -135,7 +146,7 @@ static char *get_oqsname(int nid)
     return 0;
 }
 
-static char* get_cmpname(int nid) {
+char* get_cmpname(int nid) {
    int i;
    for(i=0;i<NID_TABLE_LEN;i++) {
       if (nid_names[i].nid == nid)

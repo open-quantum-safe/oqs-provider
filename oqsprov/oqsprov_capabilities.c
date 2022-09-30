@@ -12,6 +12,21 @@
 #include <string.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
+
+/* Temporary oqs-provider build-enabler until OSSL enablement is up-streamed */
+/* TLS-SIGALG Capability */
+#define OSSL_CAPABILITY_TLS_SIGALG_NAME              "tls-sigalg-name"
+#define OSSL_CAPABILITY_TLS_SIGALG_NAME_INTERNAL     "tls-sigalg-name-internal"
+#define OSSL_CAPABILITY_TLS_SIGALG_ALG               "tls-sigalg-alg"
+#define OSSL_CAPABILITY_TLS_SIGALG_HASHALG           "tls-sigalg-hashalg"
+#define OSSL_CAPABILITY_TLS_SIGALG_OID               "tls-sigalg-oid"
+#define OSSL_CAPABILITY_TLS_SIGALG_CODE_POINT        "tls-sigalg-code-point"
+#define OSSL_CAPABILITY_TLS_SIGALG_SECURITY_BITS     "tls-sigalg-sec-bits"
+#define OSSL_CAPABILITY_TLS_SIGALG_MIN_TLS           "tls-min-tls"
+#define OSSL_CAPABILITY_TLS_SIGALG_MAX_TLS           "tls-max-tls"
+#define OSSL_CAPABILITY_TLS_SIGALG_MIN_DTLS          "tls-min-dtls"
+#define OSSL_CAPABILITY_TLS_SIGALG_MAX_DTLS          "tls-max-dtls"
+
 /* For TLS1_VERSION etc */
 #include <openssl/ssl.h>
 #include <openssl/params.h>
@@ -273,12 +288,151 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
     return 1;
 }
 
+typedef struct oqs_sigalg_constants_st {
+    unsigned int code_point;         /* Code point */
+    unsigned int secbits;            /* Bits of security */
+    int mintls;                      /* Minimum TLS version, -1 unsupported */
+    int maxtls;                      /* Maximum TLS version (or 0 for undefined) */
+    int mindtls;                     /* Minimum DTLS version, -1 unsupported */
+    int maxdtls;                     /* Maximum DTLS version (or 0 for undefined) */
+} OQS_SIGALG_CONSTANTS;
+
+static const OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
+    // ad-hoc assignments - take from OQS generate data structures
+///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_START
+    { 0xfea0, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea1, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea2, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea3, 192, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea4, 192, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea5, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea6, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea7, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea8, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfea9, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfeaa, 192, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfeab, 192, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfeac, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfead, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe0b, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe0c, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe0d, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe0e, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe0f, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe96, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe97, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe98, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe1b, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe1c, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe1d, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe3c, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe3d, 256, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe42, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe43, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe44, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe5e, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe5f, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe60, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe7a, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe7b, 128, TLS1_3_VERSION, 0, -1, 0 },
+    { 0xfe7c, 128, TLS1_3_VERSION, 0, -1, 0 },
+///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
+};
+
+#define OQS_SIGALG_ENTRY(tlsname, realname, algorithm, oid, idx) \
+    { \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME, \
+                               #tlsname, \
+                               sizeof(#tlsname)), \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME_INTERNAL, \
+                               #realname, \
+                               sizeof(#realname)), \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_ALG, \
+                               #algorithm, \
+                               sizeof(#algorithm)), \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_HASHALG, "", 0) ,\
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_OID, \
+                               #oid, \
+                               sizeof(#oid)), \
+        OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_SIGALG_CODE_POINT, \
+                        (unsigned int *)&oqs_sigalg_list[idx].code_point), \
+        OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_SIGALG_SECURITY_BITS, \
+                        (unsigned int *)&oqs_sigalg_list[idx].secbits), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MIN_TLS, \
+                        (unsigned int *)&oqs_sigalg_list[idx].mintls), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MAX_TLS, \
+                        (unsigned int *)&oqs_sigalg_list[idx].maxtls), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MIN_DTLS, \
+                        (unsigned int *)&oqs_sigalg_list[idx].mindtls), \
+        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MAX_DTLS, \
+                        (unsigned int *)&oqs_sigalg_list[idx].maxdtls), \
+        OSSL_PARAM_END \
+    }
+
+static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
+///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_START
+    OQS_SIGALG_ENTRY(dilithium2, dilithium2, dilithium2, "1.3.6.1.4.1.2.267.7.4.4", 0),
+    OQS_SIGALG_ENTRY(p256_dilithium2, p256_dilithium2, p256_dilithium2, "1.3.9999.2.7.1", 1),
+    OQS_SIGALG_ENTRY(rsa3072_dilithium2, rsa3072_dilithium2, rsa3072_dilithium2, "1.3.9999.2.7.2", 2),
+    OQS_SIGALG_ENTRY(dilithium3, dilithium3, dilithium3, "1.3.6.1.4.1.2.267.7.6.5", 3),
+    OQS_SIGALG_ENTRY(p384_dilithium3, p384_dilithium3, p384_dilithium3, "1.3.9999.2.7.3", 4),
+    OQS_SIGALG_ENTRY(dilithium5, dilithium5, dilithium5, "1.3.6.1.4.1.2.267.7.8.7", 5),
+    OQS_SIGALG_ENTRY(p521_dilithium5, p521_dilithium5, p521_dilithium5, "1.3.9999.2.7.4", 6),
+    OQS_SIGALG_ENTRY(dilithium2_aes, dilithium2_aes, dilithium2_aes, "1.3.6.1.4.1.2.267.11.4.4", 7),
+    OQS_SIGALG_ENTRY(p256_dilithium2_aes, p256_dilithium2_aes, p256_dilithium2_aes, "1.3.9999.2.11.1", 8),
+    OQS_SIGALG_ENTRY(rsa3072_dilithium2_aes, rsa3072_dilithium2_aes, rsa3072_dilithium2_aes, "1.3.9999.2.11.2", 9),
+    OQS_SIGALG_ENTRY(dilithium3_aes, dilithium3_aes, dilithium3_aes, "1.3.6.1.4.1.2.267.11.6.5", 10),
+    OQS_SIGALG_ENTRY(p384_dilithium3_aes, p384_dilithium3_aes, p384_dilithium3_aes, "1.3.9999.2.11.3", 11),
+    OQS_SIGALG_ENTRY(dilithium5_aes, dilithium5_aes, dilithium5_aes, "1.3.6.1.4.1.2.267.11.8.7", 12),
+    OQS_SIGALG_ENTRY(p521_dilithium5_aes, p521_dilithium5_aes, p521_dilithium5_aes, "1.3.9999.2.11.4", 13),
+    OQS_SIGALG_ENTRY(falcon512, falcon512, falcon512, "1.3.9999.3.1", 14),
+    OQS_SIGALG_ENTRY(p256_falcon512, p256_falcon512, p256_falcon512, "1.3.9999.3.2", 15),
+    OQS_SIGALG_ENTRY(rsa3072_falcon512, rsa3072_falcon512, rsa3072_falcon512, "1.3.9999.3.3", 16),
+    OQS_SIGALG_ENTRY(falcon1024, falcon1024, falcon1024, "1.3.9999.3.4", 17),
+    OQS_SIGALG_ENTRY(p521_falcon1024, p521_falcon1024, p521_falcon1024, "1.3.9999.3.5", 18),
+    OQS_SIGALG_ENTRY(picnicl1full, picnicl1full, picnicl1full, "1.3.6.1.4.1.311.89.2.1.7", 19),
+    OQS_SIGALG_ENTRY(p256_picnicl1full, p256_picnicl1full, p256_picnicl1full, "1.3.6.1.4.1.311.89.2.1.8", 20),
+    OQS_SIGALG_ENTRY(rsa3072_picnicl1full, rsa3072_picnicl1full, rsa3072_picnicl1full, "1.3.6.1.4.1.311.89.2.1.9", 21),
+    OQS_SIGALG_ENTRY(picnic3l1, picnic3l1, picnic3l1, "1.3.6.1.4.1.311.89.2.1.21", 22),
+    OQS_SIGALG_ENTRY(p256_picnic3l1, p256_picnic3l1, p256_picnic3l1, "1.3.6.1.4.1.311.89.2.1.22", 23),
+    OQS_SIGALG_ENTRY(rsa3072_picnic3l1, rsa3072_picnic3l1, rsa3072_picnic3l1, "1.3.6.1.4.1.311.89.2.1.23", 24),
+    OQS_SIGALG_ENTRY(rainbowVclassic, rainbowVclassic, rainbowVclassic, "1.3.9999.5.3.1.1", 25),
+    OQS_SIGALG_ENTRY(p521_rainbowVclassic, p521_rainbowVclassic, p521_rainbowVclassic, "1.3.9999.5.3.2.1", 26),
+    OQS_SIGALG_ENTRY(sphincsharaka128frobust, sphincsharaka128frobust, sphincsharaka128frobust, "1.3.9999.6.1.1", 27),
+    OQS_SIGALG_ENTRY(p256_sphincsharaka128frobust, p256_sphincsharaka128frobust, p256_sphincsharaka128frobust, "1.3.9999.6.1.2", 28),
+    OQS_SIGALG_ENTRY(rsa3072_sphincsharaka128frobust, rsa3072_sphincsharaka128frobust, rsa3072_sphincsharaka128frobust, "1.3.9999.6.1.3", 29),
+    OQS_SIGALG_ENTRY(sphincssha256128frobust, sphincssha256128frobust, sphincssha256128frobust, "1.3.9999.6.4.1", 30),
+    OQS_SIGALG_ENTRY(p256_sphincssha256128frobust, p256_sphincssha256128frobust, p256_sphincssha256128frobust, "1.3.9999.6.4.2", 31),
+    OQS_SIGALG_ENTRY(rsa3072_sphincssha256128frobust, rsa3072_sphincssha256128frobust, rsa3072_sphincssha256128frobust, "1.3.9999.6.4.3", 32),
+    OQS_SIGALG_ENTRY(sphincsshake256128frobust, sphincsshake256128frobust, sphincsshake256128frobust, "1.3.9999.6.7.1", 33),
+    OQS_SIGALG_ENTRY(p256_sphincsshake256128frobust, p256_sphincsshake256128frobust, p256_sphincsshake256128frobust, "1.3.9999.6.7.2", 34),
+    OQS_SIGALG_ENTRY(rsa3072_sphincsshake256128frobust, rsa3072_sphincsshake256128frobust, rsa3072_sphincsshake256128frobust, "1.3.9999.6.7.3", 35),
+///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
+};
+
+static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
+{
+    size_t i;
+
+    assert(OSSL_NELEM(oqs_param_sigalg_list) == OSSL_NELEM(oqs_sigalg_list));
+    for (i = 0; i < OSSL_NELEM(oqs_param_sigalg_list); i++) {
+        if (!cb(oqs_param_sigalg_list[i], arg))
+            return 0;
+    }
+
+    return 1;
+}
+
 int oqs_provider_get_capabilities(void *provctx, const char *capability,
                               OSSL_CALLBACK *cb, void *arg)
 {
     if (strcasecmp(capability, "TLS-GROUP") == 0)
         return oqs_group_capability(cb, arg);
 
+    if (strcasecmp(capability, "TLS-SIGALG") == 0)
+        return oqs_sigalg_capability(cb, arg);
+
     /* We don't support this capability */
     return 0;
 }
+

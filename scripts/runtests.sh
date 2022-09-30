@@ -75,9 +75,6 @@ echo "OpenSSL app: $OPENSSL_APP"
 # Output version:
 $OPENSSL_APP list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider
 
-# Run built-in tests:
-(cd _build; ctest $@)
-
 # Run interop-tests:
 echo "Cert gen/verify, CMS sign/verify tests for all enabled algorithms commencing..."
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_START
@@ -119,8 +116,11 @@ interop p256_sphincsshake256128frobust
 interop rsa3072_sphincsshake256128frobust
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_END
 
+# Run built-in tests:
+(cd _build; ctest $@)
+
 # cleanup
-rm -rf tmp
+#rm -rf tmp
 echo
 echo "All oqsprovider tests passed."
 

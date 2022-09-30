@@ -96,7 +96,7 @@ static int test_group(const OSSL_PARAM params[], void *data)
         goto err;
     }
 
-    const char* group_name = OPENSSL_strdup(p->data);
+    char* group_name = OPENSSL_strdup(p->data);
 
     fprintf(stderr,
             cGREEN "  Testing...: %s" cNORM "\n",
@@ -117,6 +117,7 @@ static int test_group(const OSSL_PARAM params[], void *data)
     }
 
     err:
+    OPENSSL_free(group_name);
     return ret;
 }
 

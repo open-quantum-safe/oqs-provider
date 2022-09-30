@@ -168,6 +168,8 @@ PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx, const OSSL_CORE_HANDLE *hand
 }
 
 void oqsx_freeprovctx(PROV_OQS_CTX *ctx) {
+    OSSL_LIB_CTX_free(ctx->libctx);
+    BIO_meth_free(ctx->corebiometh);
     OPENSSL_free(ctx);
 }
 

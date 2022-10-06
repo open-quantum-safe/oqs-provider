@@ -169,6 +169,8 @@ struct oqsx_key_st {
      */
     size_t privkeylen;
     size_t pubkeylen;
+    size_t privkeylen_cmp;
+    size_t pubkeylen_cmp;
     size_t bit_security;
     char *tls_name;
 #ifndef OQS_PROVIDER_NOATOMIC

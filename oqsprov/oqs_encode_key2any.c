@@ -558,6 +558,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
     int buflen = 0, privkeylen;
     ASN1_OCTET_STRING oct;
     int keybloblen, keybloblenc;
+    STACK_OF(ASN1_TYPE) *sk = NULL;
+    ASN1_TYPE *aType = NULL;
+    unsigned char *temp = NULL;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_pki_priv_to_der called\n");
 
@@ -647,48 +650,46 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             keybloblen = 0; // signal error
         }
     }else{
-        STACK_OF(ASN1_TYPE) *sk = sk_ASN1_TYPE_new_null();
-        ASN1_TYPE *aType = ASN1_TYPE_new();
-        unsigned char *temp = NULL;
-        
+        if((sk = sk_ASN1_TYPE_new_null()) == NULL)
+            return -1;
 
-        buflen = oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key+oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key;
+        aType = ASN1_TYPE_new();
+
+        buflen = oqsxkey->pubkeylen;
         buf = OPENSSL_secure_malloc(buflen);
-        memcpy(buf, oqsxkey->comp_privkey[0], oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key);
-        memcpy(buf+oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key, oqsxkey->comp_pubkey[0], oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key);
-        
+        memcpy(buf, oqsxkey->pubkey, buflen);
+
         oct.data = buf;
         oct.length = buflen;
-        oct.flags = 0;       
 
-        keybloblen = i2d_ASN1_OCTET_STRING(&oct, pder);
+        keybloblen = i2d_ASN1_OCTET_STRING(&oct, &temp);
         if (keybloblen < 0) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             keybloblen = 0; // signal error
         }
-        ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, pder);
+
+        ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, &temp);
 
         if (!sk_ASN1_TYPE_push(sk, aType))
             return -1;
 
-        temp = NULL;
         aType = ASN1_TYPE_new();
+        temp = NULL;
 
-        buflen = oqsxkey->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_secret_key+oqsxkey->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_public_key;
+        buflen = oqsxkey->pubkeylen;
         buf = OPENSSL_secure_malloc(buflen);
-        memcpy(buf, oqsxkey->comp_privkey[1], oqsxkey->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_secret_key);
-        memcpy(buf+oqsxkey->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_secret_key, oqsxkey->comp_pubkey[1], oqsxkey->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_public_key);
-        
+        memcpy(buf, oqsxkey->pubkey, buflen);
+
         oct.data = buf;
         oct.length = buflen;
-        oct.flags = 0;       
 
-        keybloblen = i2d_ASN1_OCTET_STRING(&oct, pder);
+        keybloblen = i2d_ASN1_OCTET_STRING(&oct, &temp);
         if (keybloblen < 0) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             keybloblen = 0; // signal error
         }
-        ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, pder);
+
+        ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, &temp);
 
         if (!sk_ASN1_TYPE_push(sk, aType))
             return -1;

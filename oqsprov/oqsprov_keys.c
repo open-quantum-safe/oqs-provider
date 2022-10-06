@@ -856,8 +856,10 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->numkeys = 2;
         ret->comp_privkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
-        ret->privkeylen = (ret->numkeys-1) * SIZE_OF_UINT32 + ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key + ret->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_secret_key;
-        ret->pubkeylen = (ret->numkeys-1) * SIZE_OF_UINT32 + ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key + ret->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_public_key;
+        ret->privkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key;
+        ret->pubkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key;
+        ret->privkeylen_cmp = ret->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_secret_key;
+        ret->pubkeylen_cmp = ret->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_public_key;
         ret->keytype = primitive;
 
 	break;

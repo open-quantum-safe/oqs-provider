@@ -193,6 +193,7 @@ int oqsx_key_secbits(OQSX_KEY *k);
 /* retrieve maximum size of generated artifact (shared secret or signature, respectively) */
 int oqsx_key_maxsize(OQSX_KEY *k);
 void oqsx_key_set0_libctx(OQSX_KEY *key, OSSL_LIB_CTX *libctx);
+int oqs_patch_codepoints(void);
 
 /* Function prototypes */
 

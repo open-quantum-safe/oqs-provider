@@ -1,0 +1,10 @@
+{% set cnt = namespace(val=-1) %}
+{%- for kem in config['kems'] %}
+   {%- set cnt.val = cnt.val + 1 %}
+   if (getenv("OQS_CP_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CP_{{ kem['name_group']|upper }}"));
+   if (getenv("OQS_CP_ECP_HYB_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_{{ kem['name_group']|upper }}"));
+ {%- if 'nid_ecx_hybrid' in kem %}
+   if (getenv("OQS_CP_ECX_HYB_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_{{ kem['name_group']|upper }}"));
+ {%- endif %}
+{%- endfor %}
+

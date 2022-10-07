@@ -346,6 +346,9 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
     if (!oqs_prov_bio_from_dispatch(in))
         return 0;
 
+    if (!oqs_patch_codepoints())
+        return 0;
+
     for (; in->function_id != 0; in++) {
         switch (in->function_id) {
         case OSSL_FUNC_CORE_GETTABLE_PARAMS:

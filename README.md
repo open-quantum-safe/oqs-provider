@@ -1,13 +1,13 @@
 [![oqs-provider](https://circleci.com/gh/open-quantum-safe/oqs-provider.svg?style=svg)](https://app.circleci.com/pipelines/github/open-quantum-safe/oqs-provider)
 
-oqsprovider - Open Quantum Safe provider for OpenSSL (3.0)
+oqsprovider - Open Quantum Safe provider for OpenSSL (3.x)
 ==========================================================
 
 Purpose
 -------
 
 This repository contains code to enable quantum-safe cryptography (QSC)
-in a standard OpenSSL (3.0) distribution by way of implementing a single
+in a standard OpenSSL (3.x) distribution by way of implementing a single
 shared library, the OQS
 [provider](https://www.openssl.org/docs/manmaster/man7/provider.html).
 
@@ -23,25 +23,44 @@ key establishment in TLS1.3 including management of such keys via the
 OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
 signatures including CMS functionality are available via the OpenSSL
 EVP interface. Key persistence is provided via the encode/decode
-mechanism and X.509 data structures.
+mechanism and X.509 data structures. Also available is support for 
+TLS1.3 signature functionality via the [OpenSSL3 fetchable signature
+algorithm feature](https://github.com/openssl/openssl/pull/19312).
 
-For information about the available QSC algorithms,
-[refer to the OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms).
+Algorithms
+----------
 
-In addition to the hybrid key exchange algorithms listed in the [OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms), oqs-provider supports some more hybrid algorithms. If ``<KEX>`` is any of the key exchange algorithms listed in the [OQS-OpenSSL documentation](https://github.com/open-quantum-safe/openssl#supported-algorithms), the following hybrid algorithms are supported:
+This implementation makes available the following quantum safe algorithms:
 
-- if `<KEX>` claims NIST L1 or L2 security, oqs-provider provides the method `x25519_<KEX>`, which combines `<KEX>` with X25519.
-- if `<KEX>` claims NIST L3 or L4 security, oqs-provider provides the method `x448_<KEX>`, which combines `<KEX>` with X448.
+<!--- OQS_TEMPLATE_FRAGMENT_ALGS_START -->
+- **BIKE**: `bikel1`, `bikel3`
+- **CRYSTALS-Kyber**: `kyber512`, `kyber768`, `kyber1024`, `kyber90s512`, `kyber90s768`, `kyber90s1024`
+- **FrodoKEM**: `frodo640aes`, `frodo640shake`, `frodo976aes`, `frodo976shake`, `frodo1344aes`, `frodo1344shake`
+- **HQC**: `hqc128`, `hqc192`, `hqc256`†
+- **NTRU**: `ntru_hps2048509`, `ntru_hps2048677`, `ntru_hps4096821`, `ntru_hps40961229`, `ntru_hrss701`, `ntru_hrss1373`
+- **NTRU-Prime**: `ntrulpr653`, `ntrulpr761`, `ntrulpr857`, `ntrulpr1277`, `sntrup653`, `sntrup761`, `sntrup857`, `sntrup1277`
+- **SABER**: `lightsaber`, `saber`, `firesaber`
+- **CRYSTALS-Dilithium**:`dilithium2`\*, `dilithium3`\*, `dilithium5`\*, `dilithium2_aes`\*, `dilithium3_aes`\*, `dilithium5_aes`\*
+- **Falcon**:`falcon512`\*, `falcon1024`\*
+- **Picnic**:`picnicl1fs`, `picnicl1ur`, `picnicl1full`\*, `picnic3l1`\*, `picnic3l3`, `picnic3l5`
+- **Rainbow**:`rainbowIIIclassic`, `rainbowIIIcircumzenithal`, `rainbowIIIcompressed`, `rainbowVclassic`\*, `rainbowVcircumzenithal`, `rainbowVcompressed`
+- **SPHINCS-Haraka**:`sphincsharaka128frobust`\*, `sphincsharaka128fsimple`, `sphincsharaka128srobust`, `sphincsharaka128ssimple`, `sphincsharaka192frobust`, `sphincsharaka192fsimple`, `sphincsharaka192srobust`, `sphincsharaka192ssimple`, `sphincsharaka256frobust`, `sphincsharaka256fsimple`, `sphincsharaka256srobust`, `sphincsharaka256ssimple`
+- **SPHINCS-SHA256**:`sphincssha256128frobust`\*, `sphincssha256128fsimple`, `sphincssha256128srobust`, `sphincssha256128ssimple`, `sphincssha256192frobust`, `sphincssha256192fsimple`, `sphincssha256192srobust`, `sphincssha256192ssimple`, `sphincssha256256frobust`, `sphincssha256256fsimple`, `sphincssha256256srobust`, `sphincssha256256ssimple`
+- **SPHINCS-SHAKE256**:`sphincsshake256128frobust`\*, `sphincsshake256128fsimple`, `sphincsshake256128srobust`, `sphincsshake256128ssimple`, `sphincsshake256192frobust`, `sphincsshake256192fsimple`, `sphincsshake256192srobust`, `sphincsshake256192ssimple`, `sphincsshake256256frobust`, `sphincsshake256256fsimple`, `sphincsshake256256srobust`, `sphincsshake256256ssimple`
 
-For example, since `kyber768` [claims NIST L3 security](https://github.com/open-quantum-safe/liboqs/blob/main/docs/algorithms/kem/kyber.md), the hybrid `x448_kyber768` is available.
+<!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 
-Open work items are
-- (CI) Testing on platforms other than Ubuntu (x86_64)
-- fully TLS-integrated quantum-safe signature functionality
+In order to enable parallel use of classic and quantum-safe cryptography 
+this provider also provides different hybrid algorithms, combining classic
+and quantum-safe methods at their respective bit strength:
 
-If any of these features are needed, please refer to and use the
-[OQS-OpenSSL1.1.1](https://github.com/open-quantum-safe/openssl) fork
-where they are already implemented.
+- if `<KEX>` claims NIST L1 or L2 security, oqs-provider provides the methods `p256_<KEX>` and `x25519_<KEX>`, which combines `<KEX>` with EC curve p256 and X25519, respectively.
+- if `<KEX>` claims NIST L3 or L4 security, oqs-provider provides the methods `p384_<KEX>` and `x448_<KEX>`, which combines `<KEX>` with EC curve p384 and X448, respectively.
+- if `<KEX>` claims NIST L5 security, oqs-provider provides the method `p521_<KEX>`, which combines `<KEX>` with EC curve p521.
+
+For example, since `kyber768` [claims NIST L3 security](https://github.com/open-quantum-safe/liboqs/blob/main/docs/algorithms/kem/kyber.md), the hybrids `x448_kyber768` and `p384_kyber768` are available.
+
+A full list of algorithms, their interoperability code points and a method to dynamically adapt them are documented in [ALGORITHMS.md](ALGORITHMS.md).
 
 *Note:* `oqsprovider` depends for TLS session setup and hybrid operations
 on OpenSSL providers for classic crypto operations. Therefore it is essential

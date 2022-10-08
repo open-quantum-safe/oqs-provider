@@ -275,116 +275,6 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
 };
 
-int oqs_patch_codepoints() {
-	
-///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_START
-   if (getenv("OQS_CP_FRODO640AES")) oqs_group_list[0].group_id = atoi(getenv("OQS_CP_FRODO640AES"));
-   if (getenv("OQS_CP_ECP_HYB_FRODO640AES")) oqs_group_list[0].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FRODO640AES"));
-   if (getenv("OQS_CP_ECX_HYB_FRODO640AES")) oqs_group_list[0].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_FRODO640AES"));
-   if (getenv("OQS_CP_FRODO640SHAKE")) oqs_group_list[1].group_id = atoi(getenv("OQS_CP_FRODO640SHAKE"));
-   if (getenv("OQS_CP_ECP_HYB_FRODO640SHAKE")) oqs_group_list[1].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FRODO640SHAKE"));
-   if (getenv("OQS_CP_ECX_HYB_FRODO640SHAKE")) oqs_group_list[1].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_FRODO640SHAKE"));
-   if (getenv("OQS_CP_FRODO976AES")) oqs_group_list[2].group_id = atoi(getenv("OQS_CP_FRODO976AES"));
-   if (getenv("OQS_CP_ECP_HYB_FRODO976AES")) oqs_group_list[2].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FRODO976AES"));
-   if (getenv("OQS_CP_ECX_HYB_FRODO976AES")) oqs_group_list[2].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_FRODO976AES"));
-   if (getenv("OQS_CP_FRODO976SHAKE")) oqs_group_list[3].group_id = atoi(getenv("OQS_CP_FRODO976SHAKE"));
-   if (getenv("OQS_CP_ECP_HYB_FRODO976SHAKE")) oqs_group_list[3].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FRODO976SHAKE"));
-   if (getenv("OQS_CP_ECX_HYB_FRODO976SHAKE")) oqs_group_list[3].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_FRODO976SHAKE"));
-   if (getenv("OQS_CP_FRODO1344AES")) oqs_group_list[4].group_id = atoi(getenv("OQS_CP_FRODO1344AES"));
-   if (getenv("OQS_CP_ECP_HYB_FRODO1344AES")) oqs_group_list[4].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FRODO1344AES"));
-   if (getenv("OQS_CP_FRODO1344SHAKE")) oqs_group_list[5].group_id = atoi(getenv("OQS_CP_FRODO1344SHAKE"));
-   if (getenv("OQS_CP_ECP_HYB_FRODO1344SHAKE")) oqs_group_list[5].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FRODO1344SHAKE"));
-   if (getenv("OQS_CP_KYBER512")) oqs_group_list[6].group_id = atoi(getenv("OQS_CP_KYBER512"));
-   if (getenv("OQS_CP_ECP_HYB_KYBER512")) oqs_group_list[6].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_KYBER512"));
-   if (getenv("OQS_CP_ECX_HYB_KYBER512")) oqs_group_list[6].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_KYBER512"));
-   if (getenv("OQS_CP_KYBER768")) oqs_group_list[7].group_id = atoi(getenv("OQS_CP_KYBER768"));
-   if (getenv("OQS_CP_ECP_HYB_KYBER768")) oqs_group_list[7].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_KYBER768"));
-   if (getenv("OQS_CP_ECX_HYB_KYBER768")) oqs_group_list[7].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_KYBER768"));
-   if (getenv("OQS_CP_KYBER1024")) oqs_group_list[8].group_id = atoi(getenv("OQS_CP_KYBER1024"));
-   if (getenv("OQS_CP_ECP_HYB_KYBER1024")) oqs_group_list[8].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_KYBER1024"));
-   if (getenv("OQS_CP_NTRU_HPS2048509")) oqs_group_list[9].group_id = atoi(getenv("OQS_CP_NTRU_HPS2048509"));
-   if (getenv("OQS_CP_ECP_HYB_NTRU_HPS2048509")) oqs_group_list[9].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRU_HPS2048509"));
-   if (getenv("OQS_CP_ECX_HYB_NTRU_HPS2048509")) oqs_group_list[9].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_NTRU_HPS2048509"));
-   if (getenv("OQS_CP_NTRU_HPS2048677")) oqs_group_list[10].group_id = atoi(getenv("OQS_CP_NTRU_HPS2048677"));
-   if (getenv("OQS_CP_ECP_HYB_NTRU_HPS2048677")) oqs_group_list[10].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRU_HPS2048677"));
-   if (getenv("OQS_CP_ECX_HYB_NTRU_HPS2048677")) oqs_group_list[10].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_NTRU_HPS2048677"));
-   if (getenv("OQS_CP_NTRU_HPS4096821")) oqs_group_list[11].group_id = atoi(getenv("OQS_CP_NTRU_HPS4096821"));
-   if (getenv("OQS_CP_ECP_HYB_NTRU_HPS4096821")) oqs_group_list[11].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRU_HPS4096821"));
-   if (getenv("OQS_CP_NTRU_HPS40961229")) oqs_group_list[12].group_id = atoi(getenv("OQS_CP_NTRU_HPS40961229"));
-   if (getenv("OQS_CP_ECP_HYB_NTRU_HPS40961229")) oqs_group_list[12].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRU_HPS40961229"));
-   if (getenv("OQS_CP_NTRU_HRSS701")) oqs_group_list[13].group_id = atoi(getenv("OQS_CP_NTRU_HRSS701"));
-   if (getenv("OQS_CP_ECP_HYB_NTRU_HRSS701")) oqs_group_list[13].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRU_HRSS701"));
-   if (getenv("OQS_CP_ECX_HYB_NTRU_HRSS701")) oqs_group_list[13].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_NTRU_HRSS701"));
-   if (getenv("OQS_CP_NTRU_HRSS1373")) oqs_group_list[14].group_id = atoi(getenv("OQS_CP_NTRU_HRSS1373"));
-   if (getenv("OQS_CP_ECP_HYB_NTRU_HRSS1373")) oqs_group_list[14].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRU_HRSS1373"));
-   if (getenv("OQS_CP_LIGHTSABER")) oqs_group_list[15].group_id = atoi(getenv("OQS_CP_LIGHTSABER"));
-   if (getenv("OQS_CP_ECP_HYB_LIGHTSABER")) oqs_group_list[15].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_LIGHTSABER"));
-   if (getenv("OQS_CP_ECX_HYB_LIGHTSABER")) oqs_group_list[15].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_LIGHTSABER"));
-   if (getenv("OQS_CP_SABER")) oqs_group_list[16].group_id = atoi(getenv("OQS_CP_SABER"));
-   if (getenv("OQS_CP_ECP_HYB_SABER")) oqs_group_list[16].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_SABER"));
-   if (getenv("OQS_CP_ECX_HYB_SABER")) oqs_group_list[16].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_SABER"));
-   if (getenv("OQS_CP_FIRESABER")) oqs_group_list[17].group_id = atoi(getenv("OQS_CP_FIRESABER"));
-   if (getenv("OQS_CP_ECP_HYB_FIRESABER")) oqs_group_list[17].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FIRESABER"));
-   if (getenv("OQS_CP_BIKEL1")) oqs_group_list[18].group_id = atoi(getenv("OQS_CP_BIKEL1"));
-   if (getenv("OQS_CP_ECP_HYB_BIKEL1")) oqs_group_list[18].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_BIKEL1"));
-   if (getenv("OQS_CP_ECX_HYB_BIKEL1")) oqs_group_list[18].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_BIKEL1"));
-   if (getenv("OQS_CP_BIKEL3")) oqs_group_list[19].group_id = atoi(getenv("OQS_CP_BIKEL3"));
-   if (getenv("OQS_CP_ECP_HYB_BIKEL3")) oqs_group_list[19].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_BIKEL3"));
-   if (getenv("OQS_CP_KYBER90S512")) oqs_group_list[20].group_id = atoi(getenv("OQS_CP_KYBER90S512"));
-   if (getenv("OQS_CP_ECP_HYB_KYBER90S512")) oqs_group_list[20].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_KYBER90S512"));
-   if (getenv("OQS_CP_ECX_HYB_KYBER90S512")) oqs_group_list[20].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_KYBER90S512"));
-   if (getenv("OQS_CP_KYBER90S768")) oqs_group_list[21].group_id = atoi(getenv("OQS_CP_KYBER90S768"));
-   if (getenv("OQS_CP_ECP_HYB_KYBER90S768")) oqs_group_list[21].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_KYBER90S768"));
-   if (getenv("OQS_CP_ECX_HYB_KYBER90S768")) oqs_group_list[21].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_KYBER90S768"));
-   if (getenv("OQS_CP_KYBER90S1024")) oqs_group_list[22].group_id = atoi(getenv("OQS_CP_KYBER90S1024"));
-   if (getenv("OQS_CP_ECP_HYB_KYBER90S1024")) oqs_group_list[22].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_KYBER90S1024"));
-   if (getenv("OQS_CP_HQC128")) oqs_group_list[23].group_id = atoi(getenv("OQS_CP_HQC128"));
-   if (getenv("OQS_CP_ECP_HYB_HQC128")) oqs_group_list[23].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_HQC128"));
-   if (getenv("OQS_CP_ECX_HYB_HQC128")) oqs_group_list[23].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_HQC128"));
-   if (getenv("OQS_CP_HQC192")) oqs_group_list[24].group_id = atoi(getenv("OQS_CP_HQC192"));
-   if (getenv("OQS_CP_ECP_HYB_HQC192")) oqs_group_list[24].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_HQC192"));
-   if (getenv("OQS_CP_ECX_HYB_HQC192")) oqs_group_list[24].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_HQC192"));
-   if (getenv("OQS_CP_HQC256")) oqs_group_list[25].group_id = atoi(getenv("OQS_CP_HQC256"));
-   if (getenv("OQS_CP_ECP_HYB_HQC256")) oqs_group_list[25].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_HQC256"));
-   if (getenv("OQS_CP_NTRULPR653")) oqs_group_list[26].group_id = atoi(getenv("OQS_CP_NTRULPR653"));
-   if (getenv("OQS_CP_ECP_HYB_NTRULPR653")) oqs_group_list[26].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRULPR653"));
-   if (getenv("OQS_CP_ECX_HYB_NTRULPR653")) oqs_group_list[26].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_NTRULPR653"));
-   if (getenv("OQS_CP_NTRULPR761")) oqs_group_list[27].group_id = atoi(getenv("OQS_CP_NTRULPR761"));
-   if (getenv("OQS_CP_ECP_HYB_NTRULPR761")) oqs_group_list[27].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRULPR761"));
-   if (getenv("OQS_CP_ECX_HYB_NTRULPR761")) oqs_group_list[27].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_NTRULPR761"));
-   if (getenv("OQS_CP_NTRULPR857")) oqs_group_list[28].group_id = atoi(getenv("OQS_CP_NTRULPR857"));
-   if (getenv("OQS_CP_ECP_HYB_NTRULPR857")) oqs_group_list[28].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRULPR857"));
-   if (getenv("OQS_CP_ECX_HYB_NTRULPR857")) oqs_group_list[28].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_NTRULPR857"));
-   if (getenv("OQS_CP_NTRULPR1277")) oqs_group_list[29].group_id = atoi(getenv("OQS_CP_NTRULPR1277"));
-   if (getenv("OQS_CP_ECP_HYB_NTRULPR1277")) oqs_group_list[29].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_NTRULPR1277"));
-   if (getenv("OQS_CP_SNTRUP653")) oqs_group_list[30].group_id = atoi(getenv("OQS_CP_SNTRUP653"));
-   if (getenv("OQS_CP_ECP_HYB_SNTRUP653")) oqs_group_list[30].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_SNTRUP653"));
-   if (getenv("OQS_CP_ECX_HYB_SNTRUP653")) oqs_group_list[30].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_SNTRUP653"));
-   if (getenv("OQS_CP_SNTRUP761")) oqs_group_list[31].group_id = atoi(getenv("OQS_CP_SNTRUP761"));
-   if (getenv("OQS_CP_ECP_HYB_SNTRUP761")) oqs_group_list[31].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_SNTRUP761"));
-   if (getenv("OQS_CP_ECX_HYB_SNTRUP761")) oqs_group_list[31].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_SNTRUP761"));
-   if (getenv("OQS_CP_SNTRUP857")) oqs_group_list[32].group_id = atoi(getenv("OQS_CP_SNTRUP857"));
-   if (getenv("OQS_CP_ECP_HYB_SNTRUP857")) oqs_group_list[32].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_SNTRUP857"));
-   if (getenv("OQS_CP_ECX_HYB_SNTRUP857")) oqs_group_list[32].group_id_ecx_hyb = atoi(getenv("OQS_CP_ECX_HYB_SNTRUP857"));
-   if (getenv("OQS_CP_SNTRUP1277")) oqs_group_list[33].group_id = atoi(getenv("OQS_CP_SNTRUP1277"));
-   if (getenv("OQS_CP_ECP_HYB_SNTRUP1277")) oqs_group_list[33].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_SNTRUP1277"));
-///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
-	return 1;
-}
-
-static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
-{
-    size_t i;
-
-    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3 - 12 /* XXX manually exclude all 256bit ECX hybrids not supported */);
-    for (i = 0; i < OSSL_NELEM(oqs_param_group_list); i++) {
-        if (!cb(oqs_param_group_list[i], arg))
-            return 0;
-    }
-
-    return 1;
-}
-
 typedef struct oqs_sigalg_constants_st {
     unsigned int code_point;         /* Code point */
     unsigned int secbits;            /* Bits of security */
@@ -435,6 +325,155 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     { 0xfe7c, 128, TLS1_3_VERSION, 0, -1, 0 },
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
+
+int oqs_patch_codepoints() {
+	
+///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_START
+
+
+   if (getenv("OQS_CODEPOINT_FRODO640AES")) oqs_group_list[0].group_id = atoi(getenv("OQS_CODEPOINT_FRODO640AES"));
+   if (getenv("OQS_CODEPOINT_P256_FRODO640AES")) oqs_group_list[0].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_FRODO640AES"));
+   if (getenv("OQS_CODEPOINT_X25519_FRODO640AES")) oqs_group_list[0].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_FRODO640AES"));
+   if (getenv("OQS_CODEPOINT_FRODO640SHAKE")) oqs_group_list[1].group_id = atoi(getenv("OQS_CODEPOINT_FRODO640SHAKE"));
+   if (getenv("OQS_CODEPOINT_P256_FRODO640SHAKE")) oqs_group_list[1].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_FRODO640SHAKE"));
+   if (getenv("OQS_CODEPOINT_X25519_FRODO640SHAKE")) oqs_group_list[1].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_FRODO640SHAKE"));
+   if (getenv("OQS_CODEPOINT_FRODO976AES")) oqs_group_list[2].group_id = atoi(getenv("OQS_CODEPOINT_FRODO976AES"));
+   if (getenv("OQS_CODEPOINT_P384_FRODO976AES")) oqs_group_list[2].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_FRODO976AES"));
+   if (getenv("OQS_CODEPOINT_X448_FRODO976AES")) oqs_group_list[2].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_FRODO976AES"));
+   if (getenv("OQS_CODEPOINT_FRODO976SHAKE")) oqs_group_list[3].group_id = atoi(getenv("OQS_CODEPOINT_FRODO976SHAKE"));
+   if (getenv("OQS_CODEPOINT_P384_FRODO976SHAKE")) oqs_group_list[3].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_FRODO976SHAKE"));
+   if (getenv("OQS_CODEPOINT_X448_FRODO976SHAKE")) oqs_group_list[3].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_FRODO976SHAKE"));
+   if (getenv("OQS_CODEPOINT_FRODO1344AES")) oqs_group_list[4].group_id = atoi(getenv("OQS_CODEPOINT_FRODO1344AES"));
+   if (getenv("OQS_CODEPOINT_P521_FRODO1344AES")) oqs_group_list[4].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_FRODO1344AES"));
+   if (getenv("OQS_CODEPOINT_FRODO1344SHAKE")) oqs_group_list[5].group_id = atoi(getenv("OQS_CODEPOINT_FRODO1344SHAKE"));
+   if (getenv("OQS_CODEPOINT_P521_FRODO1344SHAKE")) oqs_group_list[5].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_FRODO1344SHAKE"));
+   if (getenv("OQS_CODEPOINT_KYBER512")) oqs_group_list[6].group_id = atoi(getenv("OQS_CODEPOINT_KYBER512"));
+   if (getenv("OQS_CODEPOINT_P256_KYBER512")) oqs_group_list[6].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_KYBER512"));
+   if (getenv("OQS_CODEPOINT_X25519_KYBER512")) oqs_group_list[6].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_KYBER512"));
+   if (getenv("OQS_CODEPOINT_KYBER768")) oqs_group_list[7].group_id = atoi(getenv("OQS_CODEPOINT_KYBER768"));
+   if (getenv("OQS_CODEPOINT_P384_KYBER768")) oqs_group_list[7].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_KYBER768"));
+   if (getenv("OQS_CODEPOINT_X448_KYBER768")) oqs_group_list[7].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_KYBER768"));
+   if (getenv("OQS_CODEPOINT_KYBER1024")) oqs_group_list[8].group_id = atoi(getenv("OQS_CODEPOINT_KYBER1024"));
+   if (getenv("OQS_CODEPOINT_P521_KYBER1024")) oqs_group_list[8].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_KYBER1024"));
+   if (getenv("OQS_CODEPOINT_NTRU_HPS2048509")) oqs_group_list[9].group_id = atoi(getenv("OQS_CODEPOINT_NTRU_HPS2048509"));
+   if (getenv("OQS_CODEPOINT_P256_NTRU_HPS2048509")) oqs_group_list[9].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_NTRU_HPS2048509"));
+   if (getenv("OQS_CODEPOINT_X25519_NTRU_HPS2048509")) oqs_group_list[9].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_NTRU_HPS2048509"));
+   if (getenv("OQS_CODEPOINT_NTRU_HPS2048677")) oqs_group_list[10].group_id = atoi(getenv("OQS_CODEPOINT_NTRU_HPS2048677"));
+   if (getenv("OQS_CODEPOINT_P384_NTRU_HPS2048677")) oqs_group_list[10].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_NTRU_HPS2048677"));
+   if (getenv("OQS_CODEPOINT_X448_NTRU_HPS2048677")) oqs_group_list[10].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_NTRU_HPS2048677"));
+   if (getenv("OQS_CODEPOINT_NTRU_HPS4096821")) oqs_group_list[11].group_id = atoi(getenv("OQS_CODEPOINT_NTRU_HPS4096821"));
+   if (getenv("OQS_CODEPOINT_P521_NTRU_HPS4096821")) oqs_group_list[11].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_NTRU_HPS4096821"));
+   if (getenv("OQS_CODEPOINT_NTRU_HPS40961229")) oqs_group_list[12].group_id = atoi(getenv("OQS_CODEPOINT_NTRU_HPS40961229"));
+   if (getenv("OQS_CODEPOINT_P521_NTRU_HPS40961229")) oqs_group_list[12].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_NTRU_HPS40961229"));
+   if (getenv("OQS_CODEPOINT_NTRU_HRSS701")) oqs_group_list[13].group_id = atoi(getenv("OQS_CODEPOINT_NTRU_HRSS701"));
+   if (getenv("OQS_CODEPOINT_P384_NTRU_HRSS701")) oqs_group_list[13].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_NTRU_HRSS701"));
+   if (getenv("OQS_CODEPOINT_X448_NTRU_HRSS701")) oqs_group_list[13].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_NTRU_HRSS701"));
+   if (getenv("OQS_CODEPOINT_NTRU_HRSS1373")) oqs_group_list[14].group_id = atoi(getenv("OQS_CODEPOINT_NTRU_HRSS1373"));
+   if (getenv("OQS_CODEPOINT_P521_NTRU_HRSS1373")) oqs_group_list[14].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_NTRU_HRSS1373"));
+   if (getenv("OQS_CODEPOINT_LIGHTSABER")) oqs_group_list[15].group_id = atoi(getenv("OQS_CODEPOINT_LIGHTSABER"));
+   if (getenv("OQS_CODEPOINT_P256_LIGHTSABER")) oqs_group_list[15].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_LIGHTSABER"));
+   if (getenv("OQS_CODEPOINT_X25519_LIGHTSABER")) oqs_group_list[15].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_LIGHTSABER"));
+   if (getenv("OQS_CODEPOINT_SABER")) oqs_group_list[16].group_id = atoi(getenv("OQS_CODEPOINT_SABER"));
+   if (getenv("OQS_CODEPOINT_P384_SABER")) oqs_group_list[16].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_SABER"));
+   if (getenv("OQS_CODEPOINT_X448_SABER")) oqs_group_list[16].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_SABER"));
+   if (getenv("OQS_CODEPOINT_FIRESABER")) oqs_group_list[17].group_id = atoi(getenv("OQS_CODEPOINT_FIRESABER"));
+   if (getenv("OQS_CODEPOINT_P521_FIRESABER")) oqs_group_list[17].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_FIRESABER"));
+   if (getenv("OQS_CODEPOINT_BIKEL1")) oqs_group_list[18].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL1"));
+   if (getenv("OQS_CODEPOINT_P256_BIKEL1")) oqs_group_list[18].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_BIKEL1"));
+   if (getenv("OQS_CODEPOINT_X25519_BIKEL1")) oqs_group_list[18].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_BIKEL1"));
+   if (getenv("OQS_CODEPOINT_BIKEL3")) oqs_group_list[19].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL3"));
+   if (getenv("OQS_CODEPOINT_P384_BIKEL3")) oqs_group_list[19].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_BIKEL3"));
+   if (getenv("OQS_CODEPOINT_KYBER90S512")) oqs_group_list[20].group_id = atoi(getenv("OQS_CODEPOINT_KYBER90S512"));
+   if (getenv("OQS_CODEPOINT_P256_KYBER90S512")) oqs_group_list[20].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_KYBER90S512"));
+   if (getenv("OQS_CODEPOINT_X25519_KYBER90S512")) oqs_group_list[20].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_KYBER90S512"));
+   if (getenv("OQS_CODEPOINT_KYBER90S768")) oqs_group_list[21].group_id = atoi(getenv("OQS_CODEPOINT_KYBER90S768"));
+   if (getenv("OQS_CODEPOINT_P384_KYBER90S768")) oqs_group_list[21].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_KYBER90S768"));
+   if (getenv("OQS_CODEPOINT_X448_KYBER90S768")) oqs_group_list[21].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_KYBER90S768"));
+   if (getenv("OQS_CODEPOINT_KYBER90S1024")) oqs_group_list[22].group_id = atoi(getenv("OQS_CODEPOINT_KYBER90S1024"));
+   if (getenv("OQS_CODEPOINT_P521_KYBER90S1024")) oqs_group_list[22].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_KYBER90S1024"));
+   if (getenv("OQS_CODEPOINT_HQC128")) oqs_group_list[23].group_id = atoi(getenv("OQS_CODEPOINT_HQC128"));
+   if (getenv("OQS_CODEPOINT_P256_HQC128")) oqs_group_list[23].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_HQC128"));
+   if (getenv("OQS_CODEPOINT_X25519_HQC128")) oqs_group_list[23].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_HQC128"));
+   if (getenv("OQS_CODEPOINT_HQC192")) oqs_group_list[24].group_id = atoi(getenv("OQS_CODEPOINT_HQC192"));
+   if (getenv("OQS_CODEPOINT_P384_HQC192")) oqs_group_list[24].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_HQC192"));
+   if (getenv("OQS_CODEPOINT_X448_HQC192")) oqs_group_list[24].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_HQC192"));
+   if (getenv("OQS_CODEPOINT_HQC256")) oqs_group_list[25].group_id = atoi(getenv("OQS_CODEPOINT_HQC256"));
+   if (getenv("OQS_CODEPOINT_P521_HQC256")) oqs_group_list[25].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_HQC256"));
+   if (getenv("OQS_CODEPOINT_NTRULPR653")) oqs_group_list[26].group_id = atoi(getenv("OQS_CODEPOINT_NTRULPR653"));
+   if (getenv("OQS_CODEPOINT_P256_NTRULPR653")) oqs_group_list[26].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_NTRULPR653"));
+   if (getenv("OQS_CODEPOINT_X25519_NTRULPR653")) oqs_group_list[26].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_NTRULPR653"));
+   if (getenv("OQS_CODEPOINT_NTRULPR761")) oqs_group_list[27].group_id = atoi(getenv("OQS_CODEPOINT_NTRULPR761"));
+   if (getenv("OQS_CODEPOINT_P256_NTRULPR761")) oqs_group_list[27].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_NTRULPR761"));
+   if (getenv("OQS_CODEPOINT_X25519_NTRULPR761")) oqs_group_list[27].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_NTRULPR761"));
+   if (getenv("OQS_CODEPOINT_NTRULPR857")) oqs_group_list[28].group_id = atoi(getenv("OQS_CODEPOINT_NTRULPR857"));
+   if (getenv("OQS_CODEPOINT_P384_NTRULPR857")) oqs_group_list[28].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_NTRULPR857"));
+   if (getenv("OQS_CODEPOINT_X448_NTRULPR857")) oqs_group_list[28].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_NTRULPR857"));
+   if (getenv("OQS_CODEPOINT_NTRULPR1277")) oqs_group_list[29].group_id = atoi(getenv("OQS_CODEPOINT_NTRULPR1277"));
+   if (getenv("OQS_CODEPOINT_P521_NTRULPR1277")) oqs_group_list[29].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_NTRULPR1277"));
+   if (getenv("OQS_CODEPOINT_SNTRUP653")) oqs_group_list[30].group_id = atoi(getenv("OQS_CODEPOINT_SNTRUP653"));
+   if (getenv("OQS_CODEPOINT_P256_SNTRUP653")) oqs_group_list[30].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_SNTRUP653"));
+   if (getenv("OQS_CODEPOINT_X25519_SNTRUP653")) oqs_group_list[30].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_SNTRUP653"));
+   if (getenv("OQS_CODEPOINT_SNTRUP761")) oqs_group_list[31].group_id = atoi(getenv("OQS_CODEPOINT_SNTRUP761"));
+   if (getenv("OQS_CODEPOINT_P256_SNTRUP761")) oqs_group_list[31].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P256_SNTRUP761"));
+   if (getenv("OQS_CODEPOINT_X25519_SNTRUP761")) oqs_group_list[31].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X25519_SNTRUP761"));
+   if (getenv("OQS_CODEPOINT_SNTRUP857")) oqs_group_list[32].group_id = atoi(getenv("OQS_CODEPOINT_SNTRUP857"));
+   if (getenv("OQS_CODEPOINT_P384_SNTRUP857")) oqs_group_list[32].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P384_SNTRUP857"));
+   if (getenv("OQS_CODEPOINT_X448_SNTRUP857")) oqs_group_list[32].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_X448_SNTRUP857"));
+   if (getenv("OQS_CODEPOINT_SNTRUP1277")) oqs_group_list[33].group_id = atoi(getenv("OQS_CODEPOINT_SNTRUP1277"));
+   if (getenv("OQS_CODEPOINT_P521_SNTRUP1277")) oqs_group_list[33].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_P521_SNTRUP1277"));
+
+   if (getenv("OQS_CODEPOINT_DILITHIUM2")) oqs_sigalg_list[0].code_point = atoi(getenv("OQS_CODEPOINT_DILITHIUM2"));
+   if (getenv("OQS_CODEPOINT_P256_DILITHIUM2")) oqs_sigalg_list[1].code_point = atoi(getenv("OQS_CODEPOINT_P256_DILITHIUM2"));
+   if (getenv("OQS_CODEPOINT_RSA3072_DILITHIUM2")) oqs_sigalg_list[2].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_DILITHIUM2"));
+   if (getenv("OQS_CODEPOINT_DILITHIUM3")) oqs_sigalg_list[3].code_point = atoi(getenv("OQS_CODEPOINT_DILITHIUM3"));
+   if (getenv("OQS_CODEPOINT_P384_DILITHIUM3")) oqs_sigalg_list[4].code_point = atoi(getenv("OQS_CODEPOINT_P384_DILITHIUM3"));
+   if (getenv("OQS_CODEPOINT_DILITHIUM5")) oqs_sigalg_list[5].code_point = atoi(getenv("OQS_CODEPOINT_DILITHIUM5"));
+   if (getenv("OQS_CODEPOINT_P521_DILITHIUM5")) oqs_sigalg_list[6].code_point = atoi(getenv("OQS_CODEPOINT_P521_DILITHIUM5"));
+   if (getenv("OQS_CODEPOINT_DILITHIUM2_AES")) oqs_sigalg_list[7].code_point = atoi(getenv("OQS_CODEPOINT_DILITHIUM2_AES"));
+   if (getenv("OQS_CODEPOINT_P256_DILITHIUM2_AES")) oqs_sigalg_list[8].code_point = atoi(getenv("OQS_CODEPOINT_P256_DILITHIUM2_AES"));
+   if (getenv("OQS_CODEPOINT_RSA3072_DILITHIUM2_AES")) oqs_sigalg_list[9].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_DILITHIUM2_AES"));
+   if (getenv("OQS_CODEPOINT_DILITHIUM3_AES")) oqs_sigalg_list[10].code_point = atoi(getenv("OQS_CODEPOINT_DILITHIUM3_AES"));
+   if (getenv("OQS_CODEPOINT_P384_DILITHIUM3_AES")) oqs_sigalg_list[11].code_point = atoi(getenv("OQS_CODEPOINT_P384_DILITHIUM3_AES"));
+   if (getenv("OQS_CODEPOINT_DILITHIUM5_AES")) oqs_sigalg_list[12].code_point = atoi(getenv("OQS_CODEPOINT_DILITHIUM5_AES"));
+   if (getenv("OQS_CODEPOINT_P521_DILITHIUM5_AES")) oqs_sigalg_list[13].code_point = atoi(getenv("OQS_CODEPOINT_P521_DILITHIUM5_AES"));
+   if (getenv("OQS_CODEPOINT_FALCON512")) oqs_sigalg_list[14].code_point = atoi(getenv("OQS_CODEPOINT_FALCON512"));
+   if (getenv("OQS_CODEPOINT_P256_FALCON512")) oqs_sigalg_list[15].code_point = atoi(getenv("OQS_CODEPOINT_P256_FALCON512"));
+   if (getenv("OQS_CODEPOINT_RSA3072_FALCON512")) oqs_sigalg_list[16].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_FALCON512"));
+   if (getenv("OQS_CODEPOINT_FALCON1024")) oqs_sigalg_list[17].code_point = atoi(getenv("OQS_CODEPOINT_FALCON1024"));
+   if (getenv("OQS_CODEPOINT_P521_FALCON1024")) oqs_sigalg_list[18].code_point = atoi(getenv("OQS_CODEPOINT_P521_FALCON1024"));
+   if (getenv("OQS_CODEPOINT_PICNICL1FULL")) oqs_sigalg_list[19].code_point = atoi(getenv("OQS_CODEPOINT_PICNICL1FULL"));
+   if (getenv("OQS_CODEPOINT_P256_PICNICL1FULL")) oqs_sigalg_list[20].code_point = atoi(getenv("OQS_CODEPOINT_P256_PICNICL1FULL"));
+   if (getenv("OQS_CODEPOINT_RSA3072_PICNICL1FULL")) oqs_sigalg_list[21].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_PICNICL1FULL"));
+   if (getenv("OQS_CODEPOINT_PICNIC3L1")) oqs_sigalg_list[22].code_point = atoi(getenv("OQS_CODEPOINT_PICNIC3L1"));
+   if (getenv("OQS_CODEPOINT_P256_PICNIC3L1")) oqs_sigalg_list[23].code_point = atoi(getenv("OQS_CODEPOINT_P256_PICNIC3L1"));
+   if (getenv("OQS_CODEPOINT_RSA3072_PICNIC3L1")) oqs_sigalg_list[24].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_PICNIC3L1"));
+   if (getenv("OQS_CODEPOINT_RAINBOWVCLASSIC")) oqs_sigalg_list[25].code_point = atoi(getenv("OQS_CODEPOINT_RAINBOWVCLASSIC"));
+   if (getenv("OQS_CODEPOINT_P521_RAINBOWVCLASSIC")) oqs_sigalg_list[26].code_point = atoi(getenv("OQS_CODEPOINT_P521_RAINBOWVCLASSIC"));
+   if (getenv("OQS_CODEPOINT_SPHINCSHARAKA128FROBUST")) oqs_sigalg_list[27].code_point = atoi(getenv("OQS_CODEPOINT_SPHINCSHARAKA128FROBUST"));
+   if (getenv("OQS_CODEPOINT_P256_SPHINCSHARAKA128FROBUST")) oqs_sigalg_list[28].code_point = atoi(getenv("OQS_CODEPOINT_P256_SPHINCSHARAKA128FROBUST"));
+   if (getenv("OQS_CODEPOINT_RSA3072_SPHINCSHARAKA128FROBUST")) oqs_sigalg_list[29].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_SPHINCSHARAKA128FROBUST"));
+   if (getenv("OQS_CODEPOINT_SPHINCSSHA256128FROBUST")) oqs_sigalg_list[30].code_point = atoi(getenv("OQS_CODEPOINT_SPHINCSSHA256128FROBUST"));
+   if (getenv("OQS_CODEPOINT_P256_SPHINCSSHA256128FROBUST")) oqs_sigalg_list[31].code_point = atoi(getenv("OQS_CODEPOINT_P256_SPHINCSSHA256128FROBUST"));
+   if (getenv("OQS_CODEPOINT_RSA3072_SPHINCSSHA256128FROBUST")) oqs_sigalg_list[32].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_SPHINCSSHA256128FROBUST"));
+   if (getenv("OQS_CODEPOINT_SPHINCSSHAKE256128FROBUST")) oqs_sigalg_list[33].code_point = atoi(getenv("OQS_CODEPOINT_SPHINCSSHAKE256128FROBUST"));
+   if (getenv("OQS_CODEPOINT_P256_SPHINCSSHAKE256128FROBUST")) oqs_sigalg_list[34].code_point = atoi(getenv("OQS_CODEPOINT_P256_SPHINCSSHAKE256128FROBUST"));
+   if (getenv("OQS_CODEPOINT_RSA3072_SPHINCSSHAKE256128FROBUST")) oqs_sigalg_list[35].code_point = atoi(getenv("OQS_CODEPOINT_RSA3072_SPHINCSSHAKE256128FROBUST"));
+///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
+	return 1;
+}
+
+static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
+{
+    size_t i;
+
+    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3 - 12 /* XXX manually exclude all 256bit ECX hybrids not supported */);
+    for (i = 0; i < OSSL_NELEM(oqs_param_group_list); i++) {
+        if (!cb(oqs_param_group_list[i], arg))
+            return 0;
+    }
+
+    return 1;
+}
 
 #define OQS_SIGALG_ENTRY(tlsname, realname, algorithm, oid, idx) \
     { \

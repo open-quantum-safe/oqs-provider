@@ -234,3 +234,16 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | p521_sphincsshake256256ssimple | 0xfe95 | [] | OQS_CODEPOINT_P521_SPHINCSSHAKE256256SSIMPLE
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_END -->
 
+Changing code points
+--------------------
+
+In order to dynamically change the code point of any one algorithm, the respective
+environment variable listed above has to be set to the `INT`eger value of the
+desired code point. For example, as Cloudflare has chosen `0xfe30` as the code
+point for their hybrid X25519_kyber512 implementation, the following command
+can be used to successfully confirm interoperability between the oqs-provider
+and the Cloudflare infrastructure using this hybrid classic/quantum-safe algorithm:
+
+```
+OQS_CODEPOINT_X25519_KYBER512=65072  ./openssl/apps/openssl s_client -groups x25519_kyber512 -connect cloudflare.com:443 -provider-path _build/oqsprov -provider oqsprovider -provider default
+```

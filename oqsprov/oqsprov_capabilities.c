@@ -277,13 +277,6 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 
 int oqs_patch_codepoints() {
 	
-	if (getenv("KYBER512_X_CP")) {
-		oqs_group_list[6].group_id_ecx_hyb = atoi(getenv("KYBER512_X_CP"));
-	}
-	if (getenv("KYBER768_X_CP")) {
-		oqs_group_list[7].group_id_ecx_hyb = atoi(getenv("KYBER768_X_CP"));
-	}
-
 ///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_START
    if (getenv("OQS_CP_FRODO640AES")) oqs_group_list[0].group_id = atoi(getenv("OQS_CP_FRODO640AES"));
    if (getenv("OQS_CP_ECP_HYB_FRODO640AES")) oqs_group_list[0].group_id_ecp_hyb = atoi(getenv("OQS_CP_ECP_HYB_FRODO640AES"));
@@ -401,7 +394,7 @@ typedef struct oqs_sigalg_constants_st {
     int maxdtls;                     /* Maximum DTLS version (or 0 for undefined) */
 } OQS_SIGALG_CONSTANTS;
 
-static const OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
+static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_START
     { 0xfea0, 128, TLS1_3_VERSION, 0, -1, 0 },

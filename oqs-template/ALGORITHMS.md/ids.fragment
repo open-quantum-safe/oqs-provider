@@ -1,0 +1,30 @@
+{% macro ecx_name(bits) -%}
+{%- if bits == 128 -%} x25519 {%- endif -%}
+{%- if bits == 192 -%} x448 {%- endif -%}
+{%- if bits == 256 -%} {%- print("Impossible bit setting for ECX hybrid") -%} {%- endif -%}
+{%- endmacro -%}
+
+{% macro ecp_name(bits) -%}
+{%- if bits == 128 -%} p256 {%- endif -%}
+{%- if bits == 192 -%} p384 {%- endif -%}
+{%- if bits == 256 -%} p521 {%- endif -%}
+{%- endmacro %}
+
+|Algorithm name | default ID | enabled | environment variable |
+|---------------|:----------:|:-------:|----------------------|
+{%- for kem in config['kems']  %}
+| {{ kem['name_group'] }} | {{ kem['nid'] }} | [x] | OQS_CODEPOINT_{{ kem['name_group']|upper }} 
+| {{ ecp_name(kem['bit_security']) }}_{{ kem['name_group'] }} | {{ kem['nid_hybrid'] }} | [x] | OQS_CODEPOINT_{{ ecp_name(kem['bit_security'])|upper }}_{{ kem['name_group']|upper }}
+{%- if 'nid_ecx_hybrid' in kem %}
+| {{ ecx_name(kem['bit_security']) }}_{{ kem['name_group'] }} | {{ kem['nid_ecx_hybrid'] }} | [x] | OQS_CODEPOINT_{{ ecx_name(kem['bit_security'])|upper }}_{{ kem['name_group']|upper }}
+{%- endif -%}
+{%- endfor %}
+{%- for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+| {{variant['name']}} | {{ variant['code_point'] }} | [{%- if variant['enable'] -%} x {%- endif -%}] | OQS_CODEPOINT_{{ variant['name']|upper }}
+      {%- for classical_alg in variant['mix_with'] %}
+| {{ classical_alg['name'] }}_{{variant['name']}} | {{ classical_alg['code_point'] }} | [{%- if variant['enable'] -%} x {%- endif -%}] | OQS_CODEPOINT_{{ classical_alg['name']|upper }}_{{ variant['name']|upper }}
+      {%- endfor %}
+   {%- endfor %}
+{%- endfor %}
+

@@ -52,10 +52,10 @@ static int test_oqs_signatures(const char *sigalg_name)
   // TBD revisit when hybrids are activated: They always need default provider
   if (OSSL_PROVIDER_available(libctx, "default")) {
     testresult  &=
-      (mdctx = EVP_MD_CTX_new()) != NULL
-      && (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
+      (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
       && EVP_PKEY_keygen_init(ctx)
       && EVP_PKEY_generate(ctx, &key)
+      && (mdctx = EVP_MD_CTX_new()) != NULL
       && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key, NULL)
       && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
       && EVP_DigestSignFinal(mdctx, NULL, &siglen)
@@ -71,12 +71,19 @@ static int test_oqs_signatures(const char *sigalg_name)
       && !EVP_DigestVerifyFinal(mdctx, sig, siglen);
   }
 
+  EVP_MD_CTX_free(mdctx);
+  EVP_PKEY_free(key);
+  OPENSSL_free(ctx);
+  OPENSSL_free(sig);
+  mdctx = NULL;
+  key = NULL;
+
   // this test must work also with default provider inactive:
   testresult &=
-    (mdctx = EVP_MD_CTX_new()) != NULL
-    && (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
+    (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
     && EVP_PKEY_keygen_init(ctx)
     && EVP_PKEY_generate(ctx, &key)
+    && (mdctx = EVP_MD_CTX_new()) != NULL
     && EVP_DigestSignInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL)
     && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
     && EVP_DigestSignFinal(mdctx, NULL, &siglen)
@@ -94,6 +101,7 @@ static int test_oqs_signatures(const char *sigalg_name)
   EVP_MD_CTX_free(mdctx);
   EVP_PKEY_free(key);
   OPENSSL_free(ctx);
+  OPENSSL_free(sig);
   return testresult;
 }
 

@@ -96,27 +96,24 @@ static int test_group(const OSSL_PARAM params[], void *data)
         goto err;
     }
 
-    const char* group_name = OPENSSL_strdup(p->data);
-
-    fprintf(stderr,
-            cGREEN "  Testing...: %s" cNORM "\n",
-            group_name);
+    char* group_name = OPENSSL_strdup(p->data);
 
     ret = test_oqs_groups(group_name);
 
     if (ret >= 0) {
         fprintf(stderr,
-                cGREEN "  KEM test succeeded: %s" cNORM "\n",
+                cGREEN "  TLS-KEM handshake test succeeded: %s" cNORM "\n",
                 group_name);
     } else {
         fprintf(stderr,
-                cRED "  KEM test failed: %s, return code: %d"  cNORM "\n",
+                cRED "  TLS-KEM handshake test failed: %s, return code: %d"  cNORM "\n",
                 group_name, ret);
         ERR_print_errors_fp(stderr);
         (*errcnt)++;
     }
 
     err:
+    OPENSSL_free(group_name);
     return ret;
 }
 

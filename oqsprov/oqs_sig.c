@@ -146,7 +146,9 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
         }
 
         EVP_MD_CTX_free(ctx->mdctx);
+	ctx->mdctx = NULL;
         EVP_MD_free(ctx->md);
+	ctx->md = NULL;
 
         if (ctx->aid) 
             OPENSSL_free(ctx->aid);
@@ -471,17 +473,16 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx, const unsigned char *da
 
     // unconditionally collect data for passing in full to OQS API
     if (poqs_sigctx->mddata) {
-	int mdlen = poqs_sigctx->mdsize;
-	poqs_sigctx->mdsize += datalen;
-	unsigned char* newdata = OPENSSL_malloc(poqs_sigctx->mdsize);
-	memcpy(newdata, poqs_sigctx->mddata, mdlen);
-	memcpy(newdata+mdlen, data, datalen);
-	OPENSSL_free(poqs_sigctx->mddata);
+	unsigned char* newdata = OPENSSL_realloc(poqs_sigctx->mddata, poqs_sigctx->mdsize+datalen);
+	if (newdata == NULL) return 0;
+	memcpy(newdata+poqs_sigctx->mdsize, data, datalen);
 	poqs_sigctx->mddata = newdata;
+	poqs_sigctx->mdsize += datalen;
     }
     else { // simple alloc and copy
+	poqs_sigctx->mddata = OPENSSL_malloc(datalen);
+	if (poqs_sigctx->mddata == NULL) return 0;
 	poqs_sigctx->mdsize=datalen;
-	poqs_sigctx->mddata = OPENSSL_malloc(poqs_sigctx->mdsize);
 	memcpy(poqs_sigctx->mddata, data, poqs_sigctx->mdsize);
     }
     OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_update collected %ld bytes...\n", poqs_sigctx->mdsize);
@@ -601,6 +602,8 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx)
 
     if (srcctx->mddata) {
 	dstctx->mddata=OPENSSL_memdup(srcctx->mddata, srcctx->mdsize);
+	if (dstctx->mddata == NULL)
+            goto err;
 	dstctx->mdsize = srcctx->mdsize;
     }
 

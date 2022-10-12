@@ -1,0 +1,13 @@
+{%- for family, kems in config['kems'] | groupby('family') %}
+- **{{ family }}**: {% for kem in kems -%} `{{ kem['name_group'] }}` {%- if not loop.last %}, {% endif -%}{%- if loop.last and family == 'HQC' -%}†{%- endif -%}{%- endfor -%}
+{%- endfor %}
+{%- for sig in config['sigs'] %}
+- **{{ sig['family'] }}**:
+    {%- for variant in sig['variants'] -%}
+`{{ variant['name'] }}`
+{%- if variant['enable'] -%} \* {%- endif -%}
+{%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+{%- endfor %}
+
+

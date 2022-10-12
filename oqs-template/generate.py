@@ -101,8 +101,8 @@ def complete_config(config):
       for sig in famsig['variants']:
          bits_level = nist_to_bits(get_sig_nistlevel(famsig, sig))
          if bits_level == None: 
-             print("Cannot find security level for {:s} {:s}".format(famsig['family'], sig['name']))
-             exit(1)
+             print("Cannot find security level for {:s} {:s}. Setting to 0.".format(famsig['family'], sig['name']))
+             bits_level = 0
          sig['security'] = bits_level
    return config
 
@@ -140,7 +140,10 @@ def populate(filename, config, delimiter, overwrite=False):
         contents = file_get_contents(filename)
     for fragment in fragments:
         identifier = os.path.splitext(os.path.basename(fragment))[0]
-        identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START'.format(delimiter, identifier.upper())
+        if filename.endswith('.md'):
+            identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START -->'.format(delimiter, identifier.upper())
+        else:
+            identifier_start = '{} OQS_TEMPLATE_FRAGMENT_{}_START'.format(delimiter, identifier.upper())
         identifier_end = '{} OQS_TEMPLATE_FRAGMENT_{}_END'.format(delimiter, identifier.upper())
         preamble = contents[:contents.find(identifier_start)]
         postamble = contents[contents.find(identifier_end):]
@@ -150,13 +153,14 @@ def populate(filename, config, delimiter, overwrite=False):
             contents = preamble + identifier_start + Jinja2.get_template(fragment).render({'config': config}) + postamble
     file_put_contents(filename, contents)
 
-def load_config():
+def load_config(include_disabled_sigs=False):
     config = file_get_contents(os.path.join('oqs-template', 'generate.yml'), encoding='utf-8')
     config_extras = file_get_contents(os.path.join('oqs-template', 'generate-extras.yml'), encoding='utf-8')
     config = yaml.safe_load(config)
     config_extras = yaml.safe_load(config_extras)
-    for sig in config['sigs']:
-        sig['variants'] = [variant for variant in sig['variants'] if ('enable' in variant and variant['enable'])]
+    if not include_disabled_sigs:
+        for sig in config['sigs']:
+            sig['variants'] = [variant for variant in sig['variants'] if ('enable' in variant and variant['enable'])]
 
     # remove KEMs without NID (old stuff)
     newkems = []
@@ -164,6 +168,14 @@ def load_config():
         if 'nid' in kem:
            newkems.append(kem)
     config['kems']=newkems
+
+    # remove SIGs without OID (old stuff)
+    for sig in config['sigs']:
+        newvars = []
+        for variant in sig['variants']:
+            if 'oid' in variant:
+                newvars.append(variant)
+        sig['variants']=newvars
 
     for kem in config['kems']:
         if kem['name_group'] in config_extras['kem-extras']:
@@ -200,5 +212,11 @@ populate('oqsprov/oqs_encode_key2any.c', config, '/////')
 populate('oqsprov/oqs_decode_der2key.c', config, '/////')
 populate('oqsprov/oqsprov_keys.c', config, '/////')
 populate('scripts/runtests.sh', config, '#####')
+
+config2 = load_config(include_disabled_sigs=True)
+config2 = complete_config(config2)
+
+populate('ALGORITHMS.md', config2, '<!---')
+populate('README.md', config2, '<!---')
 print("All files generated")
 

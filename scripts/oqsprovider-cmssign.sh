@@ -7,9 +7,15 @@
 # uncomment to see what's happening:
 #set -x
 
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <algorithmname>. Exiting."
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <algorithmname> [digestname]. Exiting."
     exit 1
+fi
+
+if [ $# -eq 2 ]; then
+	DGSTNAME=$2
+else
+	DGSTNAME="sha512"
 fi
 
 if [ -z "$OPENSSL_APP" ]; then
@@ -36,7 +42,7 @@ else
    exit -1
 fi
 
-$OPENSSL_APP x509 -provider oqsprovider -provider default -in tmp/$1_srv.crt -pubkey -noout > tmp/$1_srv.pubkey && $OPENSSL_APP cms -in tmp/inputfile -sign -signer tmp/$1_srv.crt -inkey tmp/$1_srv.key -nodetach -outform pem -binary -out tmp/signedfile.cms -md sha512 -provider oqsprovider -provider default && $OPENSSL_APP dgst -provider oqsprovider -provider default -sign tmp/$1_srv.key -out tmp/dgstsignfile tmp/inputfile
+$OPENSSL_APP x509 -provider oqsprovider -provider default -in tmp/$1_srv.crt -pubkey -noout > tmp/$1_srv.pubkey && $OPENSSL_APP cms -in tmp/inputfile -sign -signer tmp/$1_srv.crt -inkey tmp/$1_srv.key -nodetach -outform pem -binary -out tmp/signedfile.cms -md $DGSTNAME -provider oqsprovider -provider default && $OPENSSL_APP dgst -provider oqsprovider -provider default -sign tmp/$1_srv.key -out tmp/dgstsignfile tmp/inputfile
 
 if [ $? -eq 0 ]; then
 # run internal test:
@@ -44,3 +50,4 @@ if [ $? -eq 0 ]; then
 else
    exit -1
 fi
+

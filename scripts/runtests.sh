@@ -3,7 +3,7 @@
 provider2openssl() {
     echo
     echo "Testing oqsprovider->oqs-openssl interop for $1:"
-    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-certverify.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-cmsverify.sh $1
+    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 md5 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-certverify.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-cmsverify.sh $1
 }
 
 openssl2provider() {

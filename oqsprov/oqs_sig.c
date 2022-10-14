@@ -137,7 +137,7 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
     if (mdname != NULL) {
         EVP_MD *md = EVP_MD_fetch(ctx->libctx, mdname, mdprops);
 
-        if (md == NULL) {
+        if ((md == NULL)||(EVP_MD_nid(md)==NID_undef)) {
             if (md == NULL)
                 ERR_raise_data(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST,
                                "%s could not be fetched", mdname);

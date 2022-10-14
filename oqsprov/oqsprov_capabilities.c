@@ -13,20 +13,6 @@
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 
-/* Temporary oqs-provider build-enabler until OSSL enablement is up-streamed */
-/* TLS-SIGALG Capability */
-#define OSSL_CAPABILITY_TLS_SIGALG_NAME              "tls-sigalg-name"
-#define OSSL_CAPABILITY_TLS_SIGALG_NAME_INTERNAL     "tls-sigalg-name-internal"
-#define OSSL_CAPABILITY_TLS_SIGALG_ALG               "tls-sigalg-alg"
-#define OSSL_CAPABILITY_TLS_SIGALG_HASHALG           "tls-sigalg-hashalg"
-#define OSSL_CAPABILITY_TLS_SIGALG_OID               "tls-sigalg-oid"
-#define OSSL_CAPABILITY_TLS_SIGALG_CODE_POINT        "tls-sigalg-code-point"
-#define OSSL_CAPABILITY_TLS_SIGALG_SECURITY_BITS     "tls-sigalg-sec-bits"
-#define OSSL_CAPABILITY_TLS_SIGALG_MIN_TLS           "tls-min-tls"
-#define OSSL_CAPABILITY_TLS_SIGALG_MAX_TLS           "tls-max-tls"
-#define OSSL_CAPABILITY_TLS_SIGALG_MIN_DTLS          "tls-min-dtls"
-#define OSSL_CAPABILITY_TLS_SIGALG_MAX_DTLS          "tls-max-dtls"
-
 /* For TLS1_VERSION etc */
 #include <openssl/ssl.h>
 #include <openssl/params.h>
@@ -475,6 +461,7 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
     return 1;
 }
 
+#ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
 #define OQS_SIGALG_ENTRY(tlsname, realname, algorithm, oid, idx) \
     { \
         OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME, \
@@ -558,6 +545,7 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
 
     return 1;
 }
+#endif /* OSSL_CAPABILITY_TLS_SIGALG_NAME */
 
 int oqs_provider_get_capabilities(void *provctx, const char *capability,
                               OSSL_CALLBACK *cb, void *arg)
@@ -565,8 +553,10 @@ int oqs_provider_get_capabilities(void *provctx, const char *capability,
     if (strcasecmp(capability, "TLS-GROUP") == 0)
         return oqs_group_capability(cb, arg);
 
+#ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
     if (strcasecmp(capability, "TLS-SIGALG") == 0)
         return oqs_sigalg_capability(cb, arg);
+#endif
 
     /* We don't support this capability */
     return 0;

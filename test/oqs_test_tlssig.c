@@ -6,9 +6,6 @@
 #include "helpers/ssltestlib.h"
 #include "test_common.h"
 #include <openssl/core_names.h>
-/* Temporary oqs-provider build-enabler until OSSL enablement is up-streamed */
-/* TLS-SIGALG Capability */
-#define OQS_CAPABILITY_TLS_SIGALG_NAME              "tls-sigalg-name"
 
 #include <openssl/trace.h>
 
@@ -17,6 +14,7 @@ static char *modulename = NULL;
 static char *configfile = NULL;
 static char *certsdir = NULL;
 
+#ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
 static int test_oqs_tlssig(const char *sig_name)
 {
   SSL_CTX *cctx = NULL, *sctx = NULL;
@@ -80,7 +78,7 @@ static int test_signature(const OSSL_PARAM params[], void *data)
     int ret = 0;
     int *errcnt = (int *) data;
     // Change define over to OSSL... once upstream update is done
-    const OSSL_PARAM *p = OSSL_PARAM_locate_const(params, OQS_CAPABILITY_TLS_SIGALG_NAME);
+    const OSSL_PARAM *p = OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_SIGALG_NAME);
     if (p == NULL || p->data_type != OSSL_PARAM_UTF8_STRING) {
         ret = -1;
         goto err;
@@ -119,6 +117,7 @@ static int test_provider_signatures(OSSL_PROVIDER *provider, void *vctx)
     else
         return 1;
 }
+#endif /* OSSL_CAPABILITY_TLS_SIGALG_NAME */
 
 int main(int argc, char *argv[])
 {

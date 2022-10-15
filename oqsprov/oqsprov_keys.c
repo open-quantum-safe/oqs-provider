@@ -265,7 +265,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
         memcpy(key->pubkey, p, plen);
     } else {
         if (key->privkeylen+key->pubkeylen != plen) {
-    OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, key->privkeylen+key->pubkeylen);
+            OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(key->privkeylen+key->pubkeylen));
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             goto err;
         }

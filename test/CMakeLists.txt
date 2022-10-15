@@ -59,7 +59,8 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 set_tests_properties(oqs_tlssig
-    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
+    # Some algorithms known to overflow OpenSSL limits; TBD/resolved upstream
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov;OQS_SKIP_TESTS=picnicl1full,rainbowVclassic,sphincs"
 )
 add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c ${OPENSSL_BLDTOP}/test/helpers/ssltestlib.c)
 # e_os.h resides in top-level for OSSL3:

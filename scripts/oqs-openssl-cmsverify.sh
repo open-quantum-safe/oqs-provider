@@ -21,6 +21,13 @@ if [ ! -f tmp/$1_srv.crt ]; then
     exit 1
 fi
 
+openssl_version=$($OPENSSL_APP version)
+
+if [[ "$openssl_version" = "OpenSSL 3.0."* ]]; then
+        echo "Skipping CMS test for OpenSSL 3.0"
+        exit 0
+fi
+
 if [[ -z "$CIRCLECI" ]]; then
 docker run -v `pwd`/tmp:/home/oqs/data -it $IMAGE sh -c "cd /home/oqs/data && openssl cms -verify -CAfile $1_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile && diff signeddatafile inputfile"
 else

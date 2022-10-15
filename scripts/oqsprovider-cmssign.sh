@@ -42,6 +42,13 @@ else
    exit -1
 fi
 
+openssl_version=$($OPENSSL_APP version)
+
+if [[ "$openssl_version" == "OpenSSL 3.0."* ]]; then
+	echo "Skipping CMS test for OpenSSL 3.0"
+	exit 0
+fi
+
 $OPENSSL_APP x509 -provider oqsprovider -provider default -in tmp/$1_srv.crt -pubkey -noout > tmp/$1_srv.pubkey && $OPENSSL_APP cms -in tmp/inputfile -sign -signer tmp/$1_srv.crt -inkey tmp/$1_srv.key -nodetach -outform pem -binary -out tmp/signedfile.cms -md $DGSTNAME -provider oqsprovider -provider default && $OPENSSL_APP dgst -provider oqsprovider -provider default -sign tmp/$1_srv.key -out tmp/dgstsignfile tmp/inputfile
 
 if [ $? -eq 0 ]; then

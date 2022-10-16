@@ -190,6 +190,8 @@ int oqsx_key_fromdata(OQSX_KEY *oqsxk, const OSSL_PARAM params[],
                      int include_private);
 /* retrieve security bit count for key */
 int oqsx_key_secbits(OQSX_KEY *k);
+/* retrieve pure OQS key len */
+int oqsx_key_get_oqs_public_key_len(OQSX_KEY *k);
 /* retrieve maximum size of generated artifact (shared secret or signature, respectively) */
 int oqsx_key_maxsize(OQSX_KEY *k);
 void oqsx_key_set0_libctx(OQSX_KEY *key, OSSL_LIB_CTX *libctx);

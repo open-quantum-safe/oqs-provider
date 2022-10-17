@@ -60,7 +60,8 @@ and quantum-safe methods at their respective bit strength:
 
 For example, since `kyber768` [claims NIST L3 security](https://github.com/open-quantum-safe/liboqs/blob/main/docs/algorithms/kem/kyber.md), the hybrids `x448_kyber768` and `p384_kyber768` are available.
 
-A full list of algorithms, their interoperability code points and a method to dynamically adapt them are documented in [ALGORITHMS.md](ALGORITHMS.md).
+A full list of algorithms, their interoperability code points and OIDs as well
+as a method to dynamically adapt them are documented in [ALGORITHMS.md](ALGORITHMS.md).
 
 *Note:* `oqsprovider` depends for TLS session setup and hybrid operations
 on OpenSSL providers for classic crypto operations. Therefore it is essential

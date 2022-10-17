@@ -41,7 +41,7 @@ None.
 
 ### Misc updates
 
-- Dynamic code point changes via environment variables. See [ALGORITHMS.md](ALGORITHMS.md).
+- Dynamic code point and OID changes via environment variables. See [ALGORITHMS.md](ALGORITHMS.md).
 
 ---
 

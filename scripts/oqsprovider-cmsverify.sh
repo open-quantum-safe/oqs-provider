@@ -26,6 +26,13 @@ if [ -z "$LD_LIBRARY_PATH" ]; then
     exit 1
 fi
 
+openssl_version=$($OPENSSL_APP version)
+
+if [[ "$openssl_version" = "OpenSSL 3.0."* ]]; then
+        echo "Skipping CMS test for OpenSSL 3.0"
+        exit 0
+fi
+
 # Assumes certgen has been run before: Quick check for CMS file:
 
 if [ -f tmp/signedfile.cms ]; then

@@ -533,9 +533,9 @@ static int oqsx_spki_pub_to_der(const void *vecxkey, unsigned char **pder)
 
 static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
 {
-    const OQSX_KEY *oqsxkey = vecxkey;
+    OQSX_KEY *oqsxkey = (OQSX_KEY *)vecxkey;
     unsigned char* buf = NULL;
-    int buflen = 0;
+    int buflen = 0, privkeylen;
     ASN1_OCTET_STRING oct;
     int keybloblen;
 
@@ -550,11 +550,23 @@ static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
         return 0;
     }
 
-    buflen = oqsxkey->privkeylen+oqsxkey->pubkeylen;
+    // only concatenate private classic key (if any) and OQS private and public key
+    // NOT saving public classic key component (if any)
+    privkeylen = oqsxkey->privkeylen;
+    if (oqsxkey->numkeys > 1) { // hybrid
+        int actualprivkeylen;
+        DECODE_UINT32(actualprivkeylen, oqsxkey->privkey);
+	if (actualprivkeylen > oqsxkey->evp_info->length_private_key) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            return 0;
+	}
+	privkeylen -= (oqsxkey->evp_info->length_private_key - actualprivkeylen);
+    }
+    buflen = privkeylen+oqsx_key_get_oqs_public_key_len(oqsxkey);
     buf = OPENSSL_secure_malloc(buflen);
     OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n", buflen);
-    memcpy(buf, oqsxkey->privkey, oqsxkey->privkeylen);
-    memcpy(buf+oqsxkey->privkeylen, oqsxkey->pubkey, oqsxkey->pubkeylen);
+    memcpy(buf, oqsxkey->privkey, privkeylen);
+    memcpy(buf+privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys-1], oqsx_key_get_oqs_public_key_len(oqsxkey));
 
     oct.data = buf;
     oct.length = buflen;

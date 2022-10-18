@@ -264,7 +264,23 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
         }
         memcpy(key->pubkey, p, plen);
     } else {
-        if (key->privkeylen+key->pubkeylen != plen) {
+	int classical_privatekey_len = 0;
+	// for plain OQS keys, we expect OQS priv||OQS pub key
+	size_t actualprivkeylen = key->privkeylen;
+	// for hybrid keys, we expect classic priv key||OQS priv key||OQS pub key
+	// classic pub key must/can be re-created from classic private key
+	if (key->numkeys == 2) {
+            DECODE_UINT32(classical_privatekey_len, p); // actual classic key len
+	    // adjust expected size
+	    if (classical_privatekey_len > key->evp_info->length_private_key) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err;
+	    }
+	    actualprivkeylen -= (key->evp_info->length_private_key - classical_privatekey_len);
+	}
+
+        if (actualprivkeylen + oqsx_key_get_oqs_public_key_len(key) != plen) {
+            OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(actualprivkeylen + oqsx_key_get_oqs_public_key_len(key)));
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             goto err;
         }
@@ -272,8 +288,21 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             goto err;
         }
-        memcpy(key->privkey, p, key->privkeylen);
-        memcpy(key->pubkey, p+key->privkeylen, key->pubkeylen);
+	// first populate private key data
+        memcpy(key->privkey, p, actualprivkeylen);
+	// only enough data to fill public OQS key component
+	if (oqsx_key_get_oqs_public_key_len(key) != plen - actualprivkeylen) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            goto err;
+        }
+	// populate OQS public key structure
+	if (key->numkeys == 2) {
+            unsigned char *pubkey = (unsigned char *)key->pubkey;
+            ENCODE_UINT32(pubkey,key->evp_info->length_public_key);
+	    memcpy(pubkey+SIZE_OF_UINT32+key->evp_info->length_public_key, p+actualprivkeylen, plen-actualprivkeylen);
+	}
+	else
+            memcpy(key->pubkey, p+key->privkeylen, plen-key->privkeylen);
     }
     ret = oqsx_key_set_composites(key);
     ON_ERR_GOTO(ret, err);
@@ -310,8 +339,15 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
             }
             else {
                 const unsigned char* enc_privkey = key->comp_privkey[0];
+                unsigned char* enc_pubkey = key->comp_pubkey[0];
                 key->classical_pkey = d2i_PrivateKey(key->evp_info->keytype, NULL, &enc_privkey, classical_privkey_len);
                 if (!key->classical_pkey) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    goto err;
+                }
+		// re-create classic public key part from private key:
+		int pubkeylen = i2d_PublicKey(key->classical_pkey, &enc_pubkey);
+		if (pubkeylen != key->evp_info->length_public_key) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err;
                 }
@@ -833,5 +869,21 @@ int oqsx_key_maxsize(OQSX_KEY *key) {
     default:
 	OQS_KEY_PRINTF("OQSX KEY: Wrong key type\n");
 	return 0;
+    }
+}
+
+int oqsx_key_get_oqs_public_key_len(OQSX_KEY *k) {
+    switch(k->keytype) {
+        case KEY_TYPE_SIG:
+	case KEY_TYPE_KEM:
+	    return k->pubkeylen;
+	case KEY_TYPE_HYB_SIG:
+	    return k->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key;
+	case KEY_TYPE_ECX_HYB_KEM:
+	case KEY_TYPE_ECP_HYB_KEM:
+	    return k->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
+        default:
+            OQS_KEY_PRINTF2("OQSX_KEY: Unknown key type encountered: %d\n", k->keytype);
+	    return -1;
     }
 }

@@ -89,9 +89,9 @@ For Linux these commands can typically be installed by running for example
 
     sudo apt install build-essential git cmake
 
-### OpenSSL (3.0)
+### OpenSSL 3
 
-Example for building and installing OpenSSL 3.0 in `.local`:
+Example for building and installing OpenSSL 3 in `.local`:
 
     git clone git://git.openssl.org/openssl.git
     cd openssl
@@ -100,10 +100,6 @@ Example for building and installing OpenSSL 3.0 in `.local`:
 
 For [OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
 see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
-
-*Note*: Building has last been validated with OpenSSL version/tag `openssl-3.0.0`
-even though the goal of this project is to always build and work with the latest
-OpenSSL `master` branch code.
 
 ### liboqs
 
@@ -286,8 +282,38 @@ which of course would be an unusual approach for an OpenSSL-OQS provider.
 
 The OpenSSL [`EVP_PKEY_decapsulate` API](https://www.openssl.org/docs/manmaster/man3/EVP_PKEY_decapsulate.html) specifies an explicit return value for failure. For security reasons, most KEM algorithms available from liboqs do not return an error code if decapsulation failed. Successful decapsulation can instead be implicitly verified by comparing the original and the decapsulated message.
 
+Note on OpenSSL versions
+------------------------
+
+`oqsprovider` is written to ensure building on all versions of OpenSSL
+supporting the provider concept. However, OpenSSL still is in active
+development regarding features supported via the provider interface.
+Therefore some functionalities documented above are only supported
+with specific OpenSSL versions:
+
+## 3.0
+
+In this version, CMS functionality implemented in providers is not
+supported: The resolution of https://github.com/openssl/openssl/issues/17717
+has not been not getting back-ported to OpenSSL3.0.
+
+Also not supported in this version are provider-based signature algorithms
+used during TLS operations as documented in https://github.com/openssl/openssl/issues/10512.
+
+## 3.1
+
+Not supported in this version are provider-based signature algorithms
+used during TLS operations as documented in https://github.com/openssl/openssl/issues/10512.
+
+## 3.2-dev
+
+Same as 3.1. If https://github.com/openssl/openssl/pull/19312 lands TLS1.3 signature
+algorithms will work, but algorithms with overly long signatures still fail due to
+specific message size limitations built into OpenSSL and/or the TLS specifications.
+
 Team
 ----
+
 The Open Quantum Safe project is led by [Douglas Stebila](https://www.douglas.stebila.ca/research/) and [Michele Mosca](http://faculty.iqc.uwaterloo.ca/mmosca/) at the University of Waterloo.
 
 Contributors to the `oqsprovider` include:

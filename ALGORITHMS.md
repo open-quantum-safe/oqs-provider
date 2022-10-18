@@ -7,6 +7,8 @@ Some algorithms by default may not be enabled for use in the master code-generat
 
 As standardization for these algorithms within TLS is not done, all TLS code points/IDs can be changed from their default values to values set by environment variables. This facilitates interoperability testing with TLS1.3 implementations that use different IDs.
 
+# Code points / algorithm IDs
+
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_START -->
 
 |Algorithm name | default ID | enabled | environment variable |
@@ -247,3 +249,146 @@ and the Cloudflare infrastructure using this hybrid classic/quantum-safe algorit
 ```
 OQS_CODEPOINT_X25519_KYBER512=65072  ./openssl/apps/openssl s_client -groups x25519_kyber512 -connect cloudflare.com:443 -provider-path _build/oqsprov -provider oqsprovider -provider default
 ```
+
+# OIDs
+
+Along the same lines as the code points, X.509 OIDs may be subject to change
+prior to final standardization. The environment variables below permit
+adapting the OIDs of all supported signature algorithms as per the table below.
+
+<!--- OQS_TEMPLATE_FRAGMENT_OIDS_START -->
+|Algorithm name |    default OID    | enabled | environment variable |
+|---------------|:-----------------:|:-------:|----------------------|
+| dilithium2 | 1.3.6.1.4.1.2.267.7.4.4 |Yes| OQS_OID_DILITHIUM2
+| p256_dilithium2 | 1.3.9999.2.7.1 |Yes| OQS_OID_P256_DILITHIUM2
+| rsa3072_dilithium2 | 1.3.9999.2.7.2 |Yes| OQS_OID_RSA3072_DILITHIUM2
+| dilithium3 | 1.3.6.1.4.1.2.267.7.6.5 |Yes| OQS_OID_DILITHIUM3
+| p384_dilithium3 | 1.3.9999.2.7.3 |Yes| OQS_OID_P384_DILITHIUM3
+| dilithium5 | 1.3.6.1.4.1.2.267.7.8.7 |Yes| OQS_OID_DILITHIUM5
+| p521_dilithium5 | 1.3.9999.2.7.4 |Yes| OQS_OID_P521_DILITHIUM5
+| dilithium2_aes | 1.3.6.1.4.1.2.267.11.4.4 |Yes| OQS_OID_DILITHIUM2_AES
+| p256_dilithium2_aes | 1.3.9999.2.11.1 |Yes| OQS_OID_P256_DILITHIUM2_AES
+| rsa3072_dilithium2_aes | 1.3.9999.2.11.2 |Yes| OQS_OID_RSA3072_DILITHIUM2_AES
+| dilithium3_aes | 1.3.6.1.4.1.2.267.11.6.5 |Yes| OQS_OID_DILITHIUM3_AES
+| p384_dilithium3_aes | 1.3.9999.2.11.3 |Yes| OQS_OID_P384_DILITHIUM3_AES
+| dilithium5_aes | 1.3.6.1.4.1.2.267.11.8.7 |Yes| OQS_OID_DILITHIUM5_AES
+| p521_dilithium5_aes | 1.3.9999.2.11.4 |Yes| OQS_OID_P521_DILITHIUM5_AES
+| falcon512 | 1.3.9999.3.1 |Yes| OQS_OID_FALCON512
+| p256_falcon512 | 1.3.9999.3.2 |Yes| OQS_OID_P256_FALCON512
+| rsa3072_falcon512 | 1.3.9999.3.3 |Yes| OQS_OID_RSA3072_FALCON512
+| falcon1024 | 1.3.9999.3.4 |Yes| OQS_OID_FALCON1024
+| p521_falcon1024 | 1.3.9999.3.5 |Yes| OQS_OID_P521_FALCON1024
+| picnicl1fs | 1.3.6.1.4.1.311.89.2.1.1 |No| OQS_OID_PICNICL1FS
+| p256_picnicl1fs | 1.3.6.1.4.1.311.89.2.1.2 |No| OQS_OID_P256_PICNICL1FS
+| rsa3072_picnicl1fs | 1.3.6.1.4.1.311.89.2.1.3 |No| OQS_OID_RSA3072_PICNICL1FS
+| picnicl1ur | 1.3.6.1.4.1.311.89.2.1.4 |No| OQS_OID_PICNICL1UR
+| p256_picnicl1ur | 1.3.6.1.4.1.311.89.2.1.5 |No| OQS_OID_P256_PICNICL1UR
+| rsa3072_picnicl1ur | 1.3.6.1.4.1.311.89.2.1.6 |No| OQS_OID_RSA3072_PICNICL1UR
+| picnicl1full | 1.3.6.1.4.1.311.89.2.1.7 |Yes| OQS_OID_PICNICL1FULL
+| p256_picnicl1full | 1.3.6.1.4.1.311.89.2.1.8 |Yes| OQS_OID_P256_PICNICL1FULL
+| rsa3072_picnicl1full | 1.3.6.1.4.1.311.89.2.1.9 |Yes| OQS_OID_RSA3072_PICNICL1FULL
+| picnic3l1 | 1.3.6.1.4.1.311.89.2.1.21 |Yes| OQS_OID_PICNIC3L1
+| p256_picnic3l1 | 1.3.6.1.4.1.311.89.2.1.22 |Yes| OQS_OID_P256_PICNIC3L1
+| rsa3072_picnic3l1 | 1.3.6.1.4.1.311.89.2.1.23 |Yes| OQS_OID_RSA3072_PICNIC3L1
+| picnic3l3 | 1.3.6.1.4.1.311.89.2.1.24 |No| OQS_OID_PICNIC3L3
+| p384_picnic3l3 | 1.3.6.1.4.1.311.89.2.1.25 |No| OQS_OID_P384_PICNIC3L3
+| picnic3l5 | 1.3.6.1.4.1.311.89.2.1.26 |No| OQS_OID_PICNIC3L5
+| p521_picnic3l5 | 1.3.6.1.4.1.311.89.2.1.27 |No| OQS_OID_P521_PICNIC3L5
+| rainbowIIIclassic | 1.3.9999.5.2.1.1 |No| OQS_OID_RAINBOWIIICLASSIC
+| p384_rainbowIIIclassic | 1.3.9999.5.2.2.1 |No| OQS_OID_P384_RAINBOWIIICLASSIC
+| rainbowIIIcircumzenithal | 1.3.9999.5.2.3.1 |No| OQS_OID_RAINBOWIIICIRCUMZENITHAL
+| p384_rainbowIIIcircumzenithal | 1.3.9999.5.2.4.1 |No| OQS_OID_P384_RAINBOWIIICIRCUMZENITHAL
+| rainbowIIIcompressed | 1.3.9999.5.2.5.1 |No| OQS_OID_RAINBOWIIICOMPRESSED
+| p384_rainbowIIIcompressed | 1.3.9999.5.2.6.1 |No| OQS_OID_P384_RAINBOWIIICOMPRESSED
+| rainbowVclassic | 1.3.9999.5.3.1.1 |Yes| OQS_OID_RAINBOWVCLASSIC
+| p521_rainbowVclassic | 1.3.9999.5.3.2.1 |Yes| OQS_OID_P521_RAINBOWVCLASSIC
+| rainbowVcircumzenithal | 1.3.9999.5.3.3.1 |No| OQS_OID_RAINBOWVCIRCUMZENITHAL
+| p521_rainbowVcircumzenithal | 1.3.9999.5.3.4.1 |No| OQS_OID_P521_RAINBOWVCIRCUMZENITHAL
+| rainbowVcompressed | 1.3.9999.5.3.5.1 |No| OQS_OID_RAINBOWVCOMPRESSED
+| p521_rainbowVcompressed | 1.3.9999.5.3.6.1 |No| OQS_OID_P521_RAINBOWVCOMPRESSED
+| sphincsharaka128frobust | 1.3.9999.6.1.1 |Yes| OQS_OID_SPHINCSHARAKA128FROBUST
+| p256_sphincsharaka128frobust | 1.3.9999.6.1.2 |Yes| OQS_OID_P256_SPHINCSHARAKA128FROBUST
+| rsa3072_sphincsharaka128frobust | 1.3.9999.6.1.3 |Yes| OQS_OID_RSA3072_SPHINCSHARAKA128FROBUST
+| sphincsharaka128fsimple | 1.3.9999.6.1.4 |No| OQS_OID_SPHINCSHARAKA128FSIMPLE
+| p256_sphincsharaka128fsimple | 1.3.9999.6.1.5 |No| OQS_OID_P256_SPHINCSHARAKA128FSIMPLE
+| rsa3072_sphincsharaka128fsimple | 1.3.9999.6.1.6 |No| OQS_OID_RSA3072_SPHINCSHARAKA128FSIMPLE
+| sphincsharaka128srobust | 1.3.9999.6.1.7 |No| OQS_OID_SPHINCSHARAKA128SROBUST
+| p256_sphincsharaka128srobust | 1.3.9999.6.1.8 |No| OQS_OID_P256_SPHINCSHARAKA128SROBUST
+| rsa3072_sphincsharaka128srobust | 1.3.9999.6.1.9 |No| OQS_OID_RSA3072_SPHINCSHARAKA128SROBUST
+| sphincsharaka128ssimple | 1.3.9999.6.1.10 |No| OQS_OID_SPHINCSHARAKA128SSIMPLE
+| p256_sphincsharaka128ssimple | 1.3.9999.6.1.11 |No| OQS_OID_P256_SPHINCSHARAKA128SSIMPLE
+| rsa3072_sphincsharaka128ssimple | 1.3.9999.6.1.12 |No| OQS_OID_RSA3072_SPHINCSHARAKA128SSIMPLE
+| sphincsharaka192frobust | 1.3.9999.6.2.1 |No| OQS_OID_SPHINCSHARAKA192FROBUST
+| p384_sphincsharaka192frobust | 1.3.9999.6.2.2 |No| OQS_OID_P384_SPHINCSHARAKA192FROBUST
+| sphincsharaka192fsimple | 1.3.9999.6.2.3 |No| OQS_OID_SPHINCSHARAKA192FSIMPLE
+| p384_sphincsharaka192fsimple | 1.3.9999.6.2.4 |No| OQS_OID_P384_SPHINCSHARAKA192FSIMPLE
+| sphincsharaka192srobust | 1.3.9999.6.2.5 |No| OQS_OID_SPHINCSHARAKA192SROBUST
+| p384_sphincsharaka192srobust | 1.3.9999.6.2.6 |No| OQS_OID_P384_SPHINCSHARAKA192SROBUST
+| sphincsharaka192ssimple | 1.3.9999.6.2.7 |No| OQS_OID_SPHINCSHARAKA192SSIMPLE
+| p384_sphincsharaka192ssimple | 1.3.9999.6.2.8 |No| OQS_OID_P384_SPHINCSHARAKA192SSIMPLE
+| sphincsharaka256frobust | 1.3.9999.6.3.1 |No| OQS_OID_SPHINCSHARAKA256FROBUST
+| p521_sphincsharaka256frobust | 1.3.9999.6.3.2 |No| OQS_OID_P521_SPHINCSHARAKA256FROBUST
+| sphincsharaka256fsimple | 1.3.9999.6.3.3 |No| OQS_OID_SPHINCSHARAKA256FSIMPLE
+| p521_sphincsharaka256fsimple | 1.3.9999.6.3.4 |No| OQS_OID_P521_SPHINCSHARAKA256FSIMPLE
+| sphincsharaka256srobust | 1.3.9999.6.3.5 |No| OQS_OID_SPHINCSHARAKA256SROBUST
+| p521_sphincsharaka256srobust | 1.3.9999.6.3.6 |No| OQS_OID_P521_SPHINCSHARAKA256SROBUST
+| sphincsharaka256ssimple | 1.3.9999.6.3.7 |No| OQS_OID_SPHINCSHARAKA256SSIMPLE
+| p521_sphincsharaka256ssimple | 1.3.9999.6.3.8 |No| OQS_OID_P521_SPHINCSHARAKA256SSIMPLE
+| sphincssha256128frobust | 1.3.9999.6.4.1 |Yes| OQS_OID_SPHINCSSHA256128FROBUST
+| p256_sphincssha256128frobust | 1.3.9999.6.4.2 |Yes| OQS_OID_P256_SPHINCSSHA256128FROBUST
+| rsa3072_sphincssha256128frobust | 1.3.9999.6.4.3 |Yes| OQS_OID_RSA3072_SPHINCSSHA256128FROBUST
+| sphincssha256128fsimple | 1.3.9999.6.4.4 |No| OQS_OID_SPHINCSSHA256128FSIMPLE
+| p256_sphincssha256128fsimple | 1.3.9999.6.4.5 |No| OQS_OID_P256_SPHINCSSHA256128FSIMPLE
+| rsa3072_sphincssha256128fsimple | 1.3.9999.6.4.6 |No| OQS_OID_RSA3072_SPHINCSSHA256128FSIMPLE
+| sphincssha256128srobust | 1.3.9999.6.4.7 |No| OQS_OID_SPHINCSSHA256128SROBUST
+| p256_sphincssha256128srobust | 1.3.9999.6.4.8 |No| OQS_OID_P256_SPHINCSSHA256128SROBUST
+| rsa3072_sphincssha256128srobust | 1.3.9999.6.4.9 |No| OQS_OID_RSA3072_SPHINCSSHA256128SROBUST
+| sphincssha256128ssimple | 1.3.9999.6.4.10 |No| OQS_OID_SPHINCSSHA256128SSIMPLE
+| p256_sphincssha256128ssimple | 1.3.9999.6.4.11 |No| OQS_OID_P256_SPHINCSSHA256128SSIMPLE
+| rsa3072_sphincssha256128ssimple | 1.3.9999.6.4.12 |No| OQS_OID_RSA3072_SPHINCSSHA256128SSIMPLE
+| sphincssha256192frobust | 1.3.9999.6.5.1 |No| OQS_OID_SPHINCSSHA256192FROBUST
+| p384_sphincssha256192frobust | 1.3.9999.6.5.2 |No| OQS_OID_P384_SPHINCSSHA256192FROBUST
+| sphincssha256192fsimple | 1.3.9999.6.5.3 |No| OQS_OID_SPHINCSSHA256192FSIMPLE
+| p384_sphincssha256192fsimple | 1.3.9999.6.5.4 |No| OQS_OID_P384_SPHINCSSHA256192FSIMPLE
+| sphincssha256192srobust | 1.3.9999.6.5.5 |No| OQS_OID_SPHINCSSHA256192SROBUST
+| p384_sphincssha256192srobust | 1.3.9999.6.5.6 |No| OQS_OID_P384_SPHINCSSHA256192SROBUST
+| sphincssha256192ssimple | 1.3.9999.6.5.7 |No| OQS_OID_SPHINCSSHA256192SSIMPLE
+| p384_sphincssha256192ssimple | 1.3.9999.6.5.8 |No| OQS_OID_P384_SPHINCSSHA256192SSIMPLE
+| sphincssha256256frobust | 1.3.9999.6.6.1 |No| OQS_OID_SPHINCSSHA256256FROBUST
+| p521_sphincssha256256frobust | 1.3.9999.6.6.2 |No| OQS_OID_P521_SPHINCSSHA256256FROBUST
+| sphincssha256256fsimple | 1.3.9999.6.6.3 |No| OQS_OID_SPHINCSSHA256256FSIMPLE
+| p521_sphincssha256256fsimple | 1.3.9999.6.6.4 |No| OQS_OID_P521_SPHINCSSHA256256FSIMPLE
+| sphincssha256256srobust | 1.3.9999.6.6.5 |No| OQS_OID_SPHINCSSHA256256SROBUST
+| p521_sphincssha256256srobust | 1.3.9999.6.6.6 |No| OQS_OID_P521_SPHINCSSHA256256SROBUST
+| sphincssha256256ssimple | 1.3.9999.6.6.7 |No| OQS_OID_SPHINCSSHA256256SSIMPLE
+| p521_sphincssha256256ssimple | 1.3.9999.6.6.8 |No| OQS_OID_P521_SPHINCSSHA256256SSIMPLE
+| sphincsshake256128frobust | 1.3.9999.6.7.1 |Yes| OQS_OID_SPHINCSSHAKE256128FROBUST
+| p256_sphincsshake256128frobust | 1.3.9999.6.7.2 |Yes| OQS_OID_P256_SPHINCSSHAKE256128FROBUST
+| rsa3072_sphincsshake256128frobust | 1.3.9999.6.7.3 |Yes| OQS_OID_RSA3072_SPHINCSSHAKE256128FROBUST
+| sphincsshake256128fsimple | 1.3.9999.6.7.4 |No| OQS_OID_SPHINCSSHAKE256128FSIMPLE
+| p256_sphincsshake256128fsimple | 1.3.9999.6.7.5 |No| OQS_OID_P256_SPHINCSSHAKE256128FSIMPLE
+| rsa3072_sphincsshake256128fsimple | 1.3.9999.6.7.6 |No| OQS_OID_RSA3072_SPHINCSSHAKE256128FSIMPLE
+| sphincsshake256128srobust | 1.3.9999.6.7.7 |No| OQS_OID_SPHINCSSHAKE256128SROBUST
+| p256_sphincsshake256128srobust | 1.3.9999.6.7.8 |No| OQS_OID_P256_SPHINCSSHAKE256128SROBUST
+| rsa3072_sphincsshake256128srobust | 1.3.9999.6.7.9 |No| OQS_OID_RSA3072_SPHINCSSHAKE256128SROBUST
+| sphincsshake256128ssimple | 1.3.9999.6.7.10 |No| OQS_OID_SPHINCSSHAKE256128SSIMPLE
+| p256_sphincsshake256128ssimple | 1.3.9999.6.7.11 |No| OQS_OID_P256_SPHINCSSHAKE256128SSIMPLE
+| rsa3072_sphincsshake256128ssimple | 1.3.9999.6.7.12 |No| OQS_OID_RSA3072_SPHINCSSHAKE256128SSIMPLE
+| sphincsshake256192frobust | 1.3.9999.6.8.1 |No| OQS_OID_SPHINCSSHAKE256192FROBUST
+| p384_sphincsshake256192frobust | 1.3.9999.6.8.2 |No| OQS_OID_P384_SPHINCSSHAKE256192FROBUST
+| sphincsshake256192fsimple | 1.3.9999.6.8.3 |No| OQS_OID_SPHINCSSHAKE256192FSIMPLE
+| p384_sphincsshake256192fsimple | 1.3.9999.6.8.4 |No| OQS_OID_P384_SPHINCSSHAKE256192FSIMPLE
+| sphincsshake256192srobust | 1.3.9999.6.8.5 |No| OQS_OID_SPHINCSSHAKE256192SROBUST
+| p384_sphincsshake256192srobust | 1.3.9999.6.8.6 |No| OQS_OID_P384_SPHINCSSHAKE256192SROBUST
+| sphincsshake256192ssimple | 1.3.9999.6.8.7 |No| OQS_OID_SPHINCSSHAKE256192SSIMPLE
+| p384_sphincsshake256192ssimple | 1.3.9999.6.8.8 |No| OQS_OID_P384_SPHINCSSHAKE256192SSIMPLE
+| sphincsshake256256frobust | 1.3.9999.6.9.1 |No| OQS_OID_SPHINCSSHAKE256256FROBUST
+| p521_sphincsshake256256frobust | 1.3.9999.6.9.2 |No| OQS_OID_P521_SPHINCSSHAKE256256FROBUST
+| sphincsshake256256fsimple | 1.3.9999.6.9.3 |No| OQS_OID_SPHINCSSHAKE256256FSIMPLE
+| p521_sphincsshake256256fsimple | 1.3.9999.6.9.4 |No| OQS_OID_P521_SPHINCSSHAKE256256FSIMPLE
+| sphincsshake256256srobust | 1.3.9999.6.9.5 |No| OQS_OID_SPHINCSSHAKE256256SROBUST
+| p521_sphincsshake256256srobust | 1.3.9999.6.9.6 |No| OQS_OID_P521_SPHINCSSHAKE256256SROBUST
+| sphincsshake256256ssimple | 1.3.9999.6.9.7 |No| OQS_OID_SPHINCSSHAKE256256SSIMPLE
+| p521_sphincsshake256256ssimple | 1.3.9999.6.9.8 |No| OQS_OID_P521_SPHINCSSHAKE256256SSIMPLE
+<!--- OQS_TEMPLATE_FRAGMENT_OIDS_END -->
+

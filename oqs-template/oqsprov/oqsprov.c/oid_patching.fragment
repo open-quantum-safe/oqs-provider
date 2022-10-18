@@ -1,0 +1,12 @@
+{% set cnt = namespace(val=-2) %}
+{%- for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+      {%- set cnt.val = cnt.val + 2 %}
+   if (getenv("OQS_OID_{{variant['name']|upper}}")) oqs_oid_alg_list[{{ cnt.val }}] = getenv("OQS_OID_{{variant['name']|upper}}"); 
+      {%- for classical_alg in variant['mix_with'] %}
+         {%- set cnt.val = cnt.val + 2 %}
+   if (getenv("OQS_OID_{{ classical_alg['name']|upper }}_{{variant['name']|upper}}")) oqs_oid_alg_list[{{ cnt.val }}] = getenv("OQS_OID_{{ classical_alg['name']|upper }}_{{variant['name']|upper}}"); 
+      {%- endfor %}
+   {%- endfor %}
+{%- endfor %}
+

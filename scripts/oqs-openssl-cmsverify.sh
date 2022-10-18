@@ -23,7 +23,7 @@ fi
 
 openssl_version=$($OPENSSL_APP version)
 
-if [[ "$openssl_version" = "OpenSSL 3.0."* ]]; then
+if [[ "$openssl_version" == "OpenSSL 3.0."* ]]; then
         echo "Skipping CMS test for OpenSSL 3.0"
         exit 0
 fi

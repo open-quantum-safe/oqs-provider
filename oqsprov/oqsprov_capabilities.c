@@ -20,13 +20,7 @@
 // internal, but useful OSSL define:
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
 
-#define ECP_NAME(secbits, oqsname) \
-    (secbits == 128 ? "p256_" #oqsname "" : \
-     secbits == 192 ? "p384_" #oqsname "" : \
-                      "p521_" #oqsname "")
-#define ECX_NAME(secbits, oqsname) \
-    (secbits == 128 ? "x25519_" #oqsname "" : \
-                        "x448_" #oqsname "")
+#include "oqs_prov.h"
 
 typedef struct oqs_group_constants_st {
     unsigned int group_id;           /* Group ID */

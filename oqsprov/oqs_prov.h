@@ -9,6 +9,9 @@
 
 /* Internal OQS functions for other submodules: not for application use */
 
+/* Set this define to create support for x25519_kyber768 as done by cloudflare */
+// #define CLOUDFLARE
+
 #ifndef OQSX_H
 # define OQSX_H
 
@@ -70,9 +73,16 @@
     (secbits == 128 ? "p256_" #oqsname "" : \
      secbits == 192 ? "p384_" #oqsname "" : \
                       "p521_" #oqsname "")
+
+#ifdef CLOUDFLARE
 #define ECX_NAME(secbits, oqsname) \
-    (secbits == 128 ? "x25519_" #oqsname "" : \
+    (((secbits == 128) || (!strcmp("kyber768", ""#oqsname""))) ? "x25519_" #oqsname "" : \
                         "x448_" #oqsname "")
+#else
+#define ECX_NAME(secbits, oqsname) \
+    ((secbits == 128) ? "x25519_" #oqsname "" : \
+                        "x448_" #oqsname "")
+#endif
 
 typedef struct prov_oqs_ctx_st {
     const OSSL_CORE_HANDLE *handle;

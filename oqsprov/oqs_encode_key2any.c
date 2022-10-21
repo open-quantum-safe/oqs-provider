@@ -667,7 +667,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         oct.data = buf;
         oct.length = buflen;
         oct.flags = 0;
-
         if (!PKCS8_pkey_set0(p8info_internal, OBJ_nid2obj(OBJ_sn2nid(get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(oqsxkey->tls_name))))), 0, V_ASN1_UNDEF, NULL, buf, buflen))
             keybloblen = 0; // signal error           
         keybloblen = i2d_PKCS8_PRIV_KEY_INFO(p8info_internal, &temp);

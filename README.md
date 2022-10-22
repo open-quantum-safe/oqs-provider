@@ -291,23 +291,18 @@ development regarding features supported via the provider interface.
 Therefore some functionalities documented above are only supported
 with specific OpenSSL versions:
 
-## 3.0
+## 3.0/3.1
 
-In this version, CMS functionality implemented in providers is not
+In these versions, CMS functionality implemented in providers is not
 supported: The resolution of https://github.com/openssl/openssl/issues/17717
 has not been not getting back-ported to OpenSSL3.0.
 
 Also not supported in this version are provider-based signature algorithms
 used during TLS operations as documented in https://github.com/openssl/openssl/issues/10512.
 
-## 3.1
-
-Not supported in this version are provider-based signature algorithms
-used during TLS operations as documented in https://github.com/openssl/openssl/issues/10512.
-
 ## 3.2-dev
 
-Same as 3.1. If https://github.com/openssl/openssl/pull/19312 lands TLS1.3 signature
+If https://github.com/openssl/openssl/pull/19312 lands, TLS1.3 signature
 algorithms will work, but algorithms with overly long signatures still fail due to
 specific message size limitations built into OpenSSL and/or the TLS specifications.
 

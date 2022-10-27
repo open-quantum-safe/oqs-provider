@@ -279,17 +279,27 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
 	    actualprivkeylen -= (key->evp_info->length_private_key - classical_privatekey_len);
 	}
 
+#ifdef NOPUBKEY_IN_PRIVKEY
+        if (actualprivkeylen != plen) {
+            OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(actualprivkeylen));
+#else
         if (actualprivkeylen + oqsx_key_get_oqs_public_key_len(key) != plen) {
             OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(actualprivkeylen + oqsx_key_get_oqs_public_key_len(key)));
+#endif
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             goto err;
         }
-        if (oqsx_key_allocate_keymaterial(key, 1)) {
+        if (oqsx_key_allocate_keymaterial(key, 1)
+#ifndef NOPUBKEY_IN_PRIVKEY
+		|| oqsx_key_allocate_keymaterial(key, 0)
+#endif
+			) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             goto err;
         }
 	// first populate private key data
         memcpy(key->privkey, p, actualprivkeylen);
+#ifndef NOPUBKEY_IN_PRIVKEY
 	// only enough data to fill public OQS key component
 	if (oqsx_key_get_oqs_public_key_len(key) != plen - actualprivkeylen) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
@@ -303,6 +313,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
 	}
 	else
             memcpy(key->pubkey, p+key->privkeylen, plen-key->privkeylen);
+#endif
     }
     ret = oqsx_key_set_composites(key);
     ON_ERR_GOTO(ret, err);
@@ -345,12 +356,14 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err;
                 }
+#ifndef NOPUBKEY_IN_PRIVKEY
 		// re-create classic public key part from private key:
 		int pubkeylen = i2d_PublicKey(key->classical_pkey, &enc_pubkey);
 		if (pubkeylen != key->evp_info->length_public_key) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err;
                 }
+#endif
             }
         }
     }
@@ -685,7 +698,7 @@ int oqsx_key_allocate_keymaterial(OQSX_KEY *key, int include_private)
         key->privkey = OPENSSL_secure_zalloc(key->privkeylen);
         ON_ERR_SET_GOTO(!key->privkey, ret, 1, err);
     }
-    if (!key->pubkey) {
+    if (!key->pubkey && !include_private) {
         key->pubkey = OPENSSL_secure_zalloc(key->pubkeylen);
         ON_ERR_SET_GOTO(!key->pubkey, ret, 1, err);
     }
@@ -817,7 +830,7 @@ int oqsx_key_gen(OQSX_KEY *key)
     EVP_PKEY* pkey = NULL;
 
     if (key->privkey == NULL || key->pubkey == NULL) {
-        ret = oqsx_key_allocate_keymaterial(key, 1);
+        ret = oqsx_key_allocate_keymaterial(key, 0) || oqsx_key_allocate_keymaterial(key, 1);
         ON_ERR_GOTO(ret, err);
     }
 

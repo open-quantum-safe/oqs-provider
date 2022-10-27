@@ -175,7 +175,7 @@ static int oqs_sig_signverify_init(void *vpoqs_sigctx, void *voqssig, int operat
     poqs_sigctx->sig = voqssig;
     poqs_sigctx->operation = operation;
     if ( (operation==EVP_PKEY_OP_SIGN && !poqs_sigctx->sig->privkey) ||
-         (operation==EVP_PKEY_OP_SIGN && !poqs_sigctx->sig->pubkey)) {
+         (operation==EVP_PKEY_OP_VERIFY && !poqs_sigctx->sig->pubkey)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
         return 0;
     }

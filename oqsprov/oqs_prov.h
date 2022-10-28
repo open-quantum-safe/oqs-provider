@@ -22,7 +22,13 @@
 #  include <openssl/core.h>
 #  include <openssl/e_os2.h>
 
-#define OQS_PROVIDER_VERSION_STR "0.5.0-dev"
+#define OQS_PROVIDER_BASE_VERSION_STR "0.5.0-dev"
+
+#ifdef NOPUBKEY_IN_PRIVKEY
+#define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR "-nopub"
+#else
+#define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR
+#endif
 
 /* internal, but useful OSSL define */
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))

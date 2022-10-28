@@ -93,6 +93,7 @@ static int oqsx_has(const void *keydata, int selection)
         if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0)
             ok = ok && key->privkey != NULL;
     }
+    if (!ok) OQS_KM_PRINTF2("OQSKM: has returning FALSE on selection %2x\n", selection);
     return ok;
 }
 
@@ -110,7 +111,7 @@ static int oqsx_has(const void *keydata, int selection)
  *    public key match/test and one checking OpenSSL-type "EVP-PKEY-equality". This is possible as domain
  *    parameters don't really play a role in OQS, so we consider them as a proxy for private key matching.
  */
- 
+
 static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
 {
     const OQSX_KEY *key1 = keydata1;
@@ -119,6 +120,23 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
 
     OQS_KM_PRINTF3("OQSKEYMGMT: match called for %p and %p\n", keydata1, keydata2);
     OQS_KM_PRINTF2("OQSKEYMGMT: match called for selection %d\n", selection);
+
+#ifdef NOPUBKEY_IN_PRIVKEY
+    /* Now this is a "leap of faith" logic: If a public-only PKEY and a private-only PKEY
+     * are tested for equality we cannot do anything other than saying OK (as per
+     * https://github.com/PQClean/PQClean/issues/415#issuecomment-910377682) if at
+     * least the key type name matches. Potential actual key mismatches will only
+     * be discovered later.
+     */
+    if (((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) && ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0)) {
+        if ((key1->privkey == NULL && key2->pubkey == NULL)
+                || (key1->pubkey == NULL && key2->privkey == NULL)
+                || ((key1->tls_name!=NULL && key2->tls_name!=NULL) && !strcmp(key1->tls_name, key2->tls_name))) {
+            OQS_KM_PRINTF("OQSKEYMGMT: leap-of-faith match\n");
+	    return 1;
+	}
+    }
+#endif
 
     if (((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) && ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) == 0)) {
         if ((key1->privkey == NULL && key2->privkey != NULL)

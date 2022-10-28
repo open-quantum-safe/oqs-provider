@@ -545,7 +545,11 @@ static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
     // but is what oqs-openssl does, so we repeat it for interop... also from a security 
     // perspective not really smart to copy key material (side channel attacks, anyone?),
     // but so be it for now (TBC).
-    if (oqsxkey == NULL || oqsxkey->privkey == NULL || oqsxkey->pubkey == NULL) {
+    if (oqsxkey == NULL || oqsxkey->privkey == NULL 
+#ifndef NOPUBKEY_IN_PRIVKEY
+		    || oqsxkey->pubkey == NULL
+#endif
+        ) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
@@ -562,11 +566,18 @@ static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
 	}
 	privkeylen -= (oqsxkey->evp_info->length_private_key - actualprivkeylen);
     }
+#ifdef NOPUBKEY_IN_PRIVKEY
+    buflen = privkeylen;
+    buf = OPENSSL_secure_malloc(buflen);
+    OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %d\n", buflen);
+    memcpy(buf, oqsxkey->privkey, privkeylen);
+#else
     buflen = privkeylen+oqsx_key_get_oqs_public_key_len(oqsxkey);
     buf = OPENSSL_secure_malloc(buflen);
     OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n", buflen);
     memcpy(buf, oqsxkey->privkey, privkeylen);
     memcpy(buf+privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys-1], oqsx_key_get_oqs_public_key_len(oqsxkey));
+#endif
 
     oct.data = buf;
     oct.length = buflen;

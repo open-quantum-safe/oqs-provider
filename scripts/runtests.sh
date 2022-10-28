@@ -72,7 +72,8 @@ fi
 
 echo "OpenSSL app: $OPENSSL_APP"
 
-# Output version:
+echo "Version information:"
+$OPENSSL_APP version
 $OPENSSL_APP list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider
 
 # Run interop-tests:

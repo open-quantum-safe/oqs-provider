@@ -998,7 +998,7 @@ int oqsx_key_allocate_keymaterial(OQSX_KEY *key, int include_private)
     int ret = 0;
 
     if (!key->privkey && include_private) {
-        key->privkey = OPENSSL_secure_zalloc(key->privkeylen + key->privkeylen_cmp);
+        key->privkey = OPENSSL_secure_zalloc(key->privkeylen + key->privkeylen_cmp + SIZE_OF_UINT32);
         ON_ERR_SET_GOTO(!key->privkey, ret, 1, err);
     }
     if (!key->pubkey && !include_private) {
@@ -1257,9 +1257,16 @@ int oqsx_key_maxsize(OQSX_KEY *key)
                + key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature
                + SIZE_OF_UINT32;
     case KEY_TYPE_CMP_SIG:
-  return key->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature 
-        + key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_signature 
-        + SIZE_OF_UINT32;
+    int aux = 0;
+    if (get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(key->tls_name))) == 0)
+        aux += key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature + SIZE_OF_UINT32;
+    else
+        aux += key->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature;
+    if (get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(key->tls_name))) == 0)
+        aux += key->oqsx_provider_ctx_cmp.oqsx_evp_ctx->evp_info->length_signature;
+    else
+        aux += key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_signature;
+    return  aux;
     default:
         OQS_KEY_PRINTF("OQSX KEY: Wrong key type\n");
         return 0;

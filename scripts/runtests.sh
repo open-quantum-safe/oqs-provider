@@ -69,6 +69,10 @@ if [ $? -eq 0 ]; then
    echo "No OQS-OpenSSL111 interop tests due to skip instruction in $OQS_SKIP_TESTS"
    export LOCALTESTONLY="Yes"
 fi
+if [ ! -z "${DRAFT_MASSIMO_LAMPS_PQ_SIG_CERTIFICATES_00}" ]; then
+   echo "No OQS-OpenSSL111 interop tests due to DRAFT_MASSIMO_LAMPS_PQ_SIG_CERTIFICATES_00"
+   export LOCALTESTONLY="Yes"
+fi
 
 echo "OpenSSL app: $OPENSSL_APP"
 

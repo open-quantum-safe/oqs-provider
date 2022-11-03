@@ -209,33 +209,52 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 {
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQSX_KEY *oqsxkey = poqs_sigctx->sig;
-    OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
-    OQS_SIG *cmp_key = poqs_sigctx->sig->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig; // if this value is not NULL, we're running composite
+    OQS_SIG *oqs_key = NULL;
+    OQS_SIG *cmp_key = NULL; 
     EVP_PKEY *evpkey = oqsxkey->classical_pkey; // if this value is not NULL,
                                                 // we're running hybrid
     EVP_PKEY_CTX *classical_ctx_sign = NULL;
 
     OQS_SIG_PRINTF2("OQS SIG provider: sign called for %ld bytes\n", tbslen);
 
-    int is_hybrid = evpkey != NULL;
-    int is_composite = cmp_key != NULL;
-    size_t max_sig_len = oqs_key->length_signature;
+    int is_hybrid = evpkey!=NULL;
+    int is_composite = (poqs_sigctx->sig->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig != NULL || poqs_sigctx->sig->oqsx_provider_ctx_cmp.oqsx_evp_ctx->keyParam != NULL);
+    size_t max_sig_len = 0;
     size_t classical_sig_len = 0, oqs_sig_len = 0, cmp_sig_len = 0;
     size_t actual_classical_sig_len = 0, actual_oqs_sig_len = 0;
-    size_t index = 0;
+    size_t index = 0, oqs = 0, cmp = 0;
     int rv = 0;
+
+    if(!is_composite){
+      max_sig_len = oqs_key->length_signature;
+      oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
+    }else{
+      if (poqs_sigctx->sig->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig != NULL)
+        cmp_key = poqs_sigctx->sig->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig;
+      else{
+        cmp_key = poqs_sigctx->sig->oqsx_provider_ctx_cmp.oqsx_evp_ctx->keyParam;
+        cmp = 1;
+      }
+
+      if (poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig != NULL)
+        oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
+      else{
+        oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_evp_ctx->keyParam;
+        oqs = 1;
+      }
+    }
 
     if (!oqsxkey || !oqs_key || !oqsxkey->privkey) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_NO_PRIVATE_KEY);
         return rv;
     }
+
     if (is_hybrid) {
         actual_classical_sig_len = oqsxkey->evp_info->length_signature;
         max_sig_len += (SIZE_OF_UINT32 + actual_classical_sig_len);
     }
-    if (is_composite)
-      max_sig_len += (SIZE_OF_UINT32 + cmp_key->length_signature);
 
+    
 
     if (sig == NULL) {
         *siglen = max_sig_len;
@@ -322,25 +341,31 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     }
 
     if (is_composite){
-      if (OQS_SIG_sign(oqs_key, sig + SIZE_OF_UINT32, &actual_oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-2]) != OQS_SUCCESS) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
-        goto endsign;
-      }
-
-      ENCODE_UINT32(sig, actual_oqs_sig_len);
-      oqs_sig_len = SIZE_OF_UINT32 + actual_oqs_sig_len;
-      index += oqs_sig_len;
-
-      if (OQS_SIG_sign(cmp_key, sig + index, &cmp_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-1]) != OQS_SUCCESS) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
-        goto endsign;
-      }
-    } else if (OQS_SIG_sign(oqs_key, sig + index, &oqs_sig_len, tbs, tbslen,
-              oqsxkey->comp_privkey[oqsxkey->numkeys-1]) 
-          != OQS_SUCCESS) {
+      if (!oqs){
+        if (OQS_SIG_sign(oqs_key, sig + SIZE_OF_UINT32, &actual_oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-2]) != OQS_SUCCESS) {
           ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
           goto endsign;
         }
+
+        ENCODE_UINT32(sig, actual_oqs_sig_len);
+        oqs_sig_len = SIZE_OF_UINT32 + actual_oqs_sig_len;
+        index += oqs_sig_len;
+      }else{ //sign non PQC key on oqs_key
+
+      }
+
+      if(!cmp)
+        if (OQS_SIG_sign(cmp_key, sig + index, &cmp_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-1]) != OQS_SUCCESS) {
+          ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
+          goto endsign;
+        }
+      else{ //sign non PQC key on cmp_key
+
+      }
+    } else if (OQS_SIG_sign(oqs_key, sig + index, &oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-1]) != OQS_SUCCESS) {
+              ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
+              goto endsign;
+          }
 
 
     *siglen = classical_sig_len + oqs_sig_len + cmp_sig_len;

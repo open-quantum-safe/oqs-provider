@@ -1267,6 +1267,7 @@ int oqsx_key_maxsize(OQSX_KEY *key)
     else
         aux += key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_signature;
     return  aux;
+    }
     default:
         OQS_KEY_PRINTF("OQSX KEY: Wrong key type\n");
         return 0;

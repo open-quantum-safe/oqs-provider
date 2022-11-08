@@ -712,7 +712,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 keybloblen = 0; // signal error
             }
         }
-        
+
         ASN1_STRING_set0(aString, temp, keybloblen);
         ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, aString);
 

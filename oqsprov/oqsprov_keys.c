@@ -839,6 +839,8 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->oqsx_provider_ctx.oqsx_evp_ctx = evp_ctx;
         ret->keytype = primitive;
 	    ret->evp_info = evp_ctx->evp_info;
+
+        ret->cmp_classical_pkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
     break;
     case KEY_TYPE_CMP_SIG:
         if (get_tlsname_fromoqs(oqs_name) != 0){
@@ -874,6 +876,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->numkeys = 2;
         ret->comp_privkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
+        ret->cmp_classical_pkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
         if (ret2) {
             ret->privkeylen = ret->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_private_key;
             ret->pubkeylen = ret->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_public_key;
@@ -1202,7 +1205,7 @@ int oqsx_key_gen(OQSX_KEY *key)
         if (get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(key->tls_name))) == 0){
             pkey = oqsx_key_gen_evp_key(key->oqsx_provider_ctx.oqsx_evp_ctx, key->pubkey, key->privkey, 1);
             ON_ERR_GOTO(pkey==NULL, err);
-            pkey = NULL;
+            key->cmp_classical_pkey[0] = pkey;
             ret = oqsx_key_set_composites(key);
             ON_ERR_GOTO(ret, err);
         }else{
@@ -1214,9 +1217,11 @@ int oqsx_key_gen(OQSX_KEY *key)
 
         if (get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(key->tls_name))) == 0){
             pkey = oqsx_key_gen_evp_key(key->oqsx_provider_ctx_cmp.oqsx_evp_ctx, key->comp_pubkey[key->numkeys-1], key->comp_privkey[key->numkeys-1], 0);
+            key->cmp_classical_pkey[key->numkeys-1] = pkey;
             ON_ERR_GOTO(pkey==NULL, err);
         }else{
             ret = OQS_SIG_keypair(key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig, key->privkey + key->privkeylen, key->pubkey + key->pubkeylen);
+            ON_ERR_GOTO(ret, err);
             key->comp_pubkey[1] = key->pubkey + key->pubkeylen;
             key->comp_privkey[1] = key->privkey + key->privkeylen;
         }

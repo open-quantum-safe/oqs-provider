@@ -160,6 +160,7 @@ struct oqsx_key_st {
     OQSX_ENCODING_CTX oqsx_encoding_ctx;
 #endif
     OQSX_PROVIDER_CTX oqsx_provider_ctx_cmp;
+    EVP_PKEY** cmp_classical_pkey;
     EVP_PKEY *classical_pkey; // for hybrid sigs
     const OQSX_EVP_INFO *evp_info;
     size_t numkeys;

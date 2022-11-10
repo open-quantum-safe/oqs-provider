@@ -254,11 +254,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
     }
 
     if (op == KEY_OP_PUBLIC) {
-	// strip blindly inefficient OCTET STRING wrapping if indicated by env var
-	// TBD: do proper TLV decoding if this really becomes a standard
-	int octet_string_adjust = getenv("DRAFT_MASSIMO_LAMPS_PQ_SIG_CERTIFICATES_00")?4:0;
-	// length check will fail if pubkeys longer than 65535 (TLV-0482xxxx) are encoded this way:
-        if (key->pubkeylen != (plen-octet_string_adjust)) {
+        if (key->pubkeylen != plen) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             goto err;
         }
@@ -266,7 +262,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             goto err;
         }
-        memcpy(key->pubkey, p+octet_string_adjust, plen-octet_string_adjust);
+        memcpy(key->pubkey, p, plen);
     } else {
 	int classical_privatekey_len = 0;
 	// for plain OQS keys, we expect OQS priv||OQS pub key

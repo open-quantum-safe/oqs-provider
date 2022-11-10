@@ -509,14 +509,10 @@ static int prepare_oqsx_params(const void *oqsxkey, int nid, int save,
 
 # define prepare_ecx_params NULL
 
-#define ENCODE_UINT16(pbuf, i)  (pbuf)[0] = (unsigned char)((i>>8) & 0xff); \
-                                (pbuf)[1] = (unsigned char)((i   ) & 0xff)
-
 static int oqsx_spki_pub_to_der(const void *vecxkey, unsigned char **pder)
 {
     const OQSX_KEY *oqsxkey = vecxkey;
     unsigned char *keyblob;
-    int retlen;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_spki_pub_to_der called\n");
 
@@ -525,31 +521,14 @@ static int oqsx_spki_pub_to_der(const void *vecxkey, unsigned char **pder)
         return 0;
     }
 
-    if (getenv("DRAFT_MASSIMO_LAMPS_PQ_SIG_CERTIFICATES_00")) { // support for inefficient OCTET STRING wrapping
-        retlen = oqsxkey->pubkeylen+4;
-        keyblob = OPENSSL_malloc(retlen);
-        if (keyblob) {
-            // encode TLV for OCTET_STRING
-            keyblob[0] = (char)V_ASN1_OCTET_STRING;
-            keyblob[1] = (char)0x82; // support for longer pub keys not foreseen
-            if (oqsxkey->pubkeylen > 65535) {
-                OQS_ENC_PRINTF2("OQS ENC provider: pub key longer than permitted for OCTET STRING wrap: %ld\n", oqsxkey->pubkeylen);
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-	    }
-            ENCODE_UINT16(keyblob+2, oqsxkey->pubkeylen);
-            memcpy(keyblob+4, oqsxkey->pubkey, oqsxkey->pubkeylen);
-	}
-    }
-    else {
-        keyblob = OPENSSL_memdup(oqsxkey->pubkey, retlen = oqsxkey->pubkeylen);
-    }
+    keyblob = OPENSSL_memdup(oqsxkey->pubkey, oqsxkey->pubkeylen);
     if (keyblob == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         return 0;
     }
 
     *pder = keyblob;
-    return retlen;
+    return oqsxkey->pubkeylen;
 }
 
 static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)

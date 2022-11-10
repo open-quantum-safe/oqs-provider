@@ -557,7 +557,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
     unsigned char *buf = NULL;
     int buflen = 0, privkeylen;
     ASN1_OCTET_STRING oct;
-    int keybloblen;
+    int keybloblen, nid;
     STACK_OF(ASN1_TYPE) *sk = NULL;
     ASN1_TYPE *aType = NULL;
     ASN1_STRING *aString = NULL;
@@ -667,18 +667,17 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         oct.data = buf;
         oct.length = buflen;
         oct.flags = 0;
-        if(get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(oqsxkey->tls_name))) == 0){
-            temp = buf;
-            keybloblen = buflen;
-        }else{
-            if (!PKCS8_pkey_set0(p8info_internal, OBJ_nid2obj(OBJ_sn2nid(get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(oqsxkey->tls_name))))), 0, V_ASN1_UNDEF, NULL, buf, buflen))
-                keybloblen = 0; // signal error     
-            keybloblen = i2d_PKCS8_PRIV_KEY_INFO(p8info_internal, &temp);
-            if (keybloblen < 0) {
-                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-                keybloblen = 0; // signal error
-            } 
-        }     
+        if(get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(oqsxkey->tls_name))) == 0)
+            nid = oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->nid;
+        else
+            nid = OBJ_sn2nid(get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(oqsxkey->tls_name))));
+        if (!PKCS8_pkey_set0(p8info_internal, OBJ_nid2obj(nid), 0, V_ASN1_UNDEF, NULL, buf, buflen))
+            keybloblen = 0; // signal error     
+        keybloblen = i2d_PKCS8_PRIV_KEY_INFO(p8info_internal, &temp);
+        if (keybloblen < 0) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            keybloblen = 0; // signal error
+        }  
 
         ASN1_STRING_set0(aString, temp, keybloblen);
         ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, aString);
@@ -700,18 +699,18 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         oct.length = buflen;
         oct.flags = 0;
 
-        if(get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(oqsxkey->tls_name))) == 0){
-            temp = buf;
-            keybloblen = buflen;
-        }else{
-            if (!PKCS8_pkey_set0(p8info_internal, OBJ_nid2obj(OBJ_sn2nid(get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(oqsxkey->tls_name))))), 0, V_ASN1_UNDEF, NULL, buf, buflen))
-                keybloblen = 0; // signal error
-            keybloblen = i2d_PKCS8_PRIV_KEY_INFO(p8info_internal, &temp);
-            if (keybloblen < 0) {
-                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-                keybloblen = 0; // signal error
-            }
+        if(get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(oqsxkey->tls_name))) == 0)
+            nid = oqsxkey->oqsx_provider_ctx_cmp.oqsx_evp_ctx->evp_info->nid;
+        else
+            nid = OBJ_sn2nid(get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(oqsxkey->tls_name))));
+        if (!PKCS8_pkey_set0(p8info_internal, OBJ_nid2obj(nid), 0, V_ASN1_UNDEF, NULL, buf, buflen))
+            keybloblen = 0; // signal error
+        keybloblen = i2d_PKCS8_PRIV_KEY_INFO(p8info_internal, &temp);
+        if (keybloblen < 0) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            keybloblen = 0; // signal error
         }
+        
 
         ASN1_STRING_set0(aString, temp, keybloblen);
         ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, aString);

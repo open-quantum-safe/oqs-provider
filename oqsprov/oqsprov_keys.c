@@ -966,8 +966,14 @@ void oqsx_key_free(OQSX_KEY *key)
         OPENSSL_free(key->oqsx_provider_ctx.oqsx_evp_ctx);
     } 
     if(key->keytype == KEY_TYPE_CMP_SIG){
-        OQS_SIG_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig);
-        OQS_SIG_free(key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig);
+        if (key->oqsx_provider_ctx.oqsx_qs_ctx.sig == NULL)
+            OPENSSL_free(key->oqsx_provider_ctx.oqsx_evp_ctx);
+        else
+            OQS_SIG_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig);
+        if (key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig == NULL)
+            OPENSSL_free(key->oqsx_provider_ctx_cmp.oqsx_evp_ctx);
+        else
+            OQS_SIG_free(key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig);
     }
 #ifdef OQS_PROVIDER_NOATOMIC
     CRYPTO_THREAD_lock_free(key->lock);
@@ -1272,7 +1278,7 @@ int oqsx_key_maxsize(OQSX_KEY *key)
     else
         aux += key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig->length_signature;
     return  aux;
-    }
+    
     default:
         OQS_KEY_PRINTF("OQSX KEY: Wrong key type\n");
         return 0;

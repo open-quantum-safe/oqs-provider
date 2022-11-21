@@ -504,22 +504,40 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
 {
     const OQSX_KEY *oqsxkey = vxkey;
     unsigned char *keyblob;
+    int ret = 0;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_spki_pub_to_der called\n");
 
-    if (oqsxkey == NULL) {
+    if (oqsxkey == NULL || oqsxkey->pubkey == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
+#ifdef BUILD_ENCODING_LIB
+    if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
+        unsigned char *buf;
+        int buflen;
+        int ret = 0;
+        const OQSX_ENCODING_CTX* encoding_ctx = &oqsxkey->oqsx_encoding_ctx;
+        buflen = encoding_ctx->encoding_impl->crypto_publickeybytes;
 
-    keyblob = OPENSSL_memdup(oqsxkey->pubkey, oqsxkey->pubkeylen);
-    if (keyblob == NULL) {
-        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-        return 0;
+        buf = OPENSSL_secure_zalloc(buflen);
+        ret = qsc_encode(encoding_ctx->encoding_ctx, encoding_ctx->encoding_impl, oqsxkey->pubkey, &buf, 0, 0, 1);
+        if (ret != QSC_ENC_OK) return -1;
+
+        *pder = buf;
+        return buflen;
+    } else {
+#endif
+        keyblob = OPENSSL_memdup(oqsxkey->pubkey, oqsxkey->pubkeylen);
+        if (keyblob == NULL) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            return 0;
+        }
+        *pder = keyblob;
+        return oqsxkey->pubkeylen;
+#ifdef BUILD_ENCODING_LIB
     }
-
-    *pder = keyblob;
-    return oqsxkey->pubkeylen;
+#endif
 }
 
 static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
@@ -557,17 +575,39 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 	}
 	privkeylen -= (oqsxkey->evp_info->length_private_key - actualprivkeylen);
     }
+#ifdef BUILD_ENCODING_LIB
+    if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
+        const OQSX_ENCODING_CTX* encoding_ctx = &oqsxkey->oqsx_encoding_ctx;
+        int ret = 0;
 #ifdef NOPUBKEY_IN_PRIVKEY
-    buflen = privkeylen;
-    buf = OPENSSL_secure_malloc(buflen);
-    OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %d\n", buflen);
-    memcpy(buf, oqsxkey->privkey, privkeylen);
+        int withoptional = (encoding_ctx->encoding_ctx->raw_private_key_encodes_public_key ? 1 : 0);
 #else
-    buflen = privkeylen+oqsx_key_get_oqs_public_key_len(oqsxkey);
-    buf = OPENSSL_secure_malloc(buflen);
-    OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n", buflen);
-    memcpy(buf, oqsxkey->privkey, privkeylen);
-    memcpy(buf+privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys-1], oqsx_key_get_oqs_public_key_len(oqsxkey));
+        int withoptional = 1;
+#endif
+        buflen = (withoptional ? encoding_ctx->encoding_impl->crypto_secretkeybytes : 
+            encoding_ctx->encoding_impl->crypto_secretkeybytes_nooptional);
+        buf = OPENSSL_secure_zalloc(buflen);
+        
+        ret = qsc_encode(encoding_ctx->encoding_ctx, encoding_ctx->encoding_impl, 
+            oqsxkey->comp_pubkey[oqsxkey->numkeys-1], 0, 
+            oqsxkey->privkey, &buf, withoptional);
+        if (ret != QSC_ENC_OK) return -1;
+    } else {
+#endif
+#ifdef NOPUBKEY_IN_PRIVKEY
+        buflen = privkeylen;
+        buf = OPENSSL_secure_malloc(buflen);
+        OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %d\n", buflen);
+        memcpy(buf, oqsxkey->privkey, privkeylen);
+#else
+        buflen = privkeylen+oqsx_key_get_oqs_public_key_len(oqsxkey);
+        buf = OPENSSL_secure_malloc(buflen);
+        OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n", buflen);
+        memcpy(buf, oqsxkey->privkey, privkeylen);
+        memcpy(buf+privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys-1], oqsx_key_get_oqs_public_key_len(oqsxkey));
+#endif
+#ifdef BUILD_ENCODING_LIB
+    }
 #endif
 
     oct.data = buf;

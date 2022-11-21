@@ -42,7 +42,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
  */
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 #define OQS_OID_CNT 68
-static const char* oqs_oid_alg_list[OQS_OID_CNT] =
+const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {
 "1.3.6.1.4.1.2.267.7.4.4", "dilithium2",
 "1.3.9999.2.7.1" , "p256_dilithium2",
@@ -120,6 +120,50 @@ int oqs_patch_oids(void) {
 ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
+
+const char* oqs_alg_encoding_list[OQS_OID_CNT/2] = { 0 };
+
+
+int oqs_patch_encodings(void) {
+///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_START
+   if (getenv("OQS_ENCODING_DILITHIUM2")) oqs_alg_encoding_list[0] = getenv("OQS_ENCODING_DILITHIUM2");
+   if (getenv("OQS_ENCODING_P256_DILITHIUM2")) oqs_alg_encoding_list[1] = getenv("OQS_ENCODING_P256_DILITHIUM2");
+   if (getenv("OQS_ENCODING_RSA3072_DILITHIUM2")) oqs_alg_encoding_list[2] = getenv("OQS_ENCODING_RSA3072_DILITHIUM2");
+   if (getenv("OQS_ENCODING_DILITHIUM3")) oqs_alg_encoding_list[3] = getenv("OQS_ENCODING_DILITHIUM3");
+   if (getenv("OQS_ENCODING_P384_DILITHIUM3")) oqs_alg_encoding_list[4] = getenv("OQS_ENCODING_P384_DILITHIUM3");
+   if (getenv("OQS_ENCODING_DILITHIUM5")) oqs_alg_encoding_list[5] = getenv("OQS_ENCODING_DILITHIUM5");
+   if (getenv("OQS_ENCODING_P521_DILITHIUM5")) oqs_alg_encoding_list[6] = getenv("OQS_ENCODING_P521_DILITHIUM5");
+   if (getenv("OQS_ENCODING_DILITHIUM2_AES")) oqs_alg_encoding_list[7] = getenv("OQS_ENCODING_DILITHIUM2_AES");
+   if (getenv("OQS_ENCODING_P256_DILITHIUM2_AES")) oqs_alg_encoding_list[8] = getenv("OQS_ENCODING_P256_DILITHIUM2_AES");
+   if (getenv("OQS_ENCODING_RSA3072_DILITHIUM2_AES")) oqs_alg_encoding_list[9] = getenv("OQS_ENCODING_RSA3072_DILITHIUM2_AES");
+   if (getenv("OQS_ENCODING_DILITHIUM3_AES")) oqs_alg_encoding_list[10] = getenv("OQS_ENCODING_DILITHIUM3_AES");
+   if (getenv("OQS_ENCODING_P384_DILITHIUM3_AES")) oqs_alg_encoding_list[11] = getenv("OQS_ENCODING_P384_DILITHIUM3_AES");
+   if (getenv("OQS_ENCODING_DILITHIUM5_AES")) oqs_alg_encoding_list[12] = getenv("OQS_ENCODING_DILITHIUM5_AES");
+   if (getenv("OQS_ENCODING_P521_DILITHIUM5_AES")) oqs_alg_encoding_list[13] = getenv("OQS_ENCODING_P521_DILITHIUM5_AES");
+   if (getenv("OQS_ENCODING_FALCON512")) oqs_alg_encoding_list[14] = getenv("OQS_ENCODING_FALCON512");
+   if (getenv("OQS_ENCODING_P256_FALCON512")) oqs_alg_encoding_list[15] = getenv("OQS_ENCODING_P256_FALCON512");
+   if (getenv("OQS_ENCODING_RSA3072_FALCON512")) oqs_alg_encoding_list[16] = getenv("OQS_ENCODING_RSA3072_FALCON512");
+   if (getenv("OQS_ENCODING_FALCON1024")) oqs_alg_encoding_list[17] = getenv("OQS_ENCODING_FALCON1024");
+   if (getenv("OQS_ENCODING_P521_FALCON1024")) oqs_alg_encoding_list[18] = getenv("OQS_ENCODING_P521_FALCON1024");
+   if (getenv("OQS_ENCODING_SPHINCSHARAKA128FROBUST")) oqs_alg_encoding_list[19] = getenv("OQS_ENCODING_SPHINCSHARAKA128FROBUST");
+   if (getenv("OQS_ENCODING_P256_SPHINCSHARAKA128FROBUST")) oqs_alg_encoding_list[20] = getenv("OQS_ENCODING_P256_SPHINCSHARAKA128FROBUST");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSHARAKA128FROBUST")) oqs_alg_encoding_list[21] = getenv("OQS_ENCODING_RSA3072_SPHINCSHARAKA128FROBUST");
+   if (getenv("OQS_ENCODING_SPHINCSHARAKA128FSIMPLE")) oqs_alg_encoding_list[22] = getenv("OQS_ENCODING_SPHINCSHARAKA128FSIMPLE");
+   if (getenv("OQS_ENCODING_P256_SPHINCSHARAKA128FSIMPLE")) oqs_alg_encoding_list[23] = getenv("OQS_ENCODING_P256_SPHINCSHARAKA128FSIMPLE");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSHARAKA128FSIMPLE")) oqs_alg_encoding_list[24] = getenv("OQS_ENCODING_RSA3072_SPHINCSHARAKA128FSIMPLE");
+   if (getenv("OQS_ENCODING_SPHINCSSHA256128FROBUST")) oqs_alg_encoding_list[25] = getenv("OQS_ENCODING_SPHINCSSHA256128FROBUST");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA256128FROBUST")) oqs_alg_encoding_list[26] = getenv("OQS_ENCODING_P256_SPHINCSSHA256128FROBUST");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128FROBUST")) oqs_alg_encoding_list[27] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128FROBUST");
+   if (getenv("OQS_ENCODING_SPHINCSSHA256128SSIMPLE")) oqs_alg_encoding_list[28] = getenv("OQS_ENCODING_SPHINCSSHA256128SSIMPLE");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA256128SSIMPLE")) oqs_alg_encoding_list[29] = getenv("OQS_ENCODING_P256_SPHINCSSHA256128SSIMPLE");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128SSIMPLE")) oqs_alg_encoding_list[30] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128SSIMPLE");
+   if (getenv("OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE")) oqs_alg_encoding_list[31] = getenv("OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE256128FSIMPLE")) oqs_alg_encoding_list[32] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE256128FSIMPLE");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE256128FSIMPLE")) oqs_alg_encoding_list[33] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE256128FSIMPLE");
+///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_END
+    return 1;
+}
+
 
 #define ALG(NAMES, FUNC) { NAMES, "provider=oqsprovider", FUNC }
 #define KEMALG3(NAMES, SECBITS) \
@@ -497,6 +541,9 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
         return 0;
 
     if (!oqs_patch_oids())
+        return 0;
+
+    if (!oqs_patch_encodings())
         return 0;
 
     for (; in->function_id != 0; in++) {

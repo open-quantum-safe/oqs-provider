@@ -344,14 +344,10 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 
     if (is_composite){
       if (oqs_key_classic == NULL){
-        if (OQS_SIG_sign(oqs_key, sig + SIZE_OF_UINT32, &oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-2]) != OQS_SUCCESS) {
+        if (OQS_SIG_sign(oqs_key, sig, &oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-2]) != OQS_SUCCESS) {
           ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
           goto endsign;
         }
-
-        ENCODE_UINT32(sig, oqs_sig_len);
-        oqs_sig_len = SIZE_OF_UINT32 + oqs_sig_len;
-        index += oqs_sig_len;
       }else{ //sign non PQC key on oqs_key
           const EVP_MD *classical_md;
           int digest_len;
@@ -393,7 +389,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         }
 
         if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign, classical_md) <= 0) ||
-        (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32, &oqs_sig_len, digest, digest_len) <= 0)) {
+        (EVP_PKEY_sign(classical_ctx_sign, sig, &oqs_sig_len, digest, digest_len) <= 0)) {
           ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
           goto endsign;
         }
@@ -402,11 +398,9 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         /* sig is bigger than expected */
         ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
         goto endsign;
+        }
       }
-      ENCODE_UINT32(sig, oqs_sig_len);
-      oqs_sig_len = SIZE_OF_UINT32 + oqs_sig_len;
       index += oqs_sig_len;
-      }
 
       if(cmp_key_classic == NULL){
         if (OQS_SIG_sign(cmp_key, sig + index, &cmp_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys-1]) != OQS_SUCCESS) {

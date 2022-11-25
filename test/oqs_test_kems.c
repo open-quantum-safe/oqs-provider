@@ -39,9 +39,6 @@ static const char *kemalg_names[] = {
     KEMALG2(ntru_hps40961229, 256),
     KEMALG3(ntru_hrss701, 192),
     KEMALG2(ntru_hrss1373, 256),
-    KEMALG3(lightsaber, 128),
-    KEMALG3(saber, 192),
-    KEMALG2(firesaber, 256),
     KEMALG3(bikel1, 128),
     KEMALG3(bikel3, 192),
     KEMALG3(kyber90s512, 128),
@@ -50,14 +47,6 @@ static const char *kemalg_names[] = {
     KEMALG3(hqc128, 128),
     KEMALG3(hqc192, 192),
     KEMALG2(hqc256, 256),
-    KEMALG3(ntrulpr653, 128),
-    KEMALG3(ntrulpr761, 128),
-    KEMALG3(ntrulpr857, 192),
-    KEMALG2(ntrulpr1277, 256),
-    KEMALG3(sntrup653, 128),
-    KEMALG3(sntrup761, 128),
-    KEMALG3(sntrup857, 192),
-    KEMALG2(sntrup1277, 256),
 ///// OQS_TEMPLATE_FRAGMENT_KEM_CASES_END
 };
 

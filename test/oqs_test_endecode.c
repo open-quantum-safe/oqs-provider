@@ -957,22 +957,6 @@ KEYS(falcon1024);
 IMPLEMENT_TEST_SUITE(falcon1024, "falcon1024")
 KEYS(p521_falcon1024);
 IMPLEMENT_TEST_SUITE(p521_falcon1024, "p521_falcon1024")
-KEYS(picnicl1full);
-IMPLEMENT_TEST_SUITE(picnicl1full, "picnicl1full")
-KEYS(p256_picnicl1full);
-IMPLEMENT_TEST_SUITE(p256_picnicl1full, "p256_picnicl1full")
-KEYS(rsa3072_picnicl1full);
-IMPLEMENT_TEST_SUITE(rsa3072_picnicl1full, "rsa3072_picnicl1full")
-KEYS(picnic3l1);
-IMPLEMENT_TEST_SUITE(picnic3l1, "picnic3l1")
-KEYS(p256_picnic3l1);
-IMPLEMENT_TEST_SUITE(p256_picnic3l1, "p256_picnic3l1")
-KEYS(rsa3072_picnic3l1);
-IMPLEMENT_TEST_SUITE(rsa3072_picnic3l1, "rsa3072_picnic3l1")
-KEYS(rainbowVclassic);
-IMPLEMENT_TEST_SUITE(rainbowVclassic, "rainbowVclassic")
-KEYS(p521_rainbowVclassic);
-IMPLEMENT_TEST_SUITE(p521_rainbowVclassic, "p521_rainbowVclassic")
 KEYS(sphincsharaka128frobust);
 IMPLEMENT_TEST_SUITE(sphincsharaka128frobust, "sphincsharaka128frobust")
 KEYS(p256_sphincsharaka128frobust);
@@ -1116,22 +1100,6 @@ int setup_tests(void)
     ADD_TEST_SUITE(falcon1024);
     MAKE_KEYS(p521_falcon1024, "p521_falcon1024", NULL);
     ADD_TEST_SUITE(p521_falcon1024);
-    MAKE_KEYS(picnicl1full, "picnicl1full", NULL);
-    ADD_TEST_SUITE(picnicl1full);
-    MAKE_KEYS(p256_picnicl1full, "p256_picnicl1full", NULL);
-    ADD_TEST_SUITE(p256_picnicl1full);
-    MAKE_KEYS(rsa3072_picnicl1full, "rsa3072_picnicl1full", NULL);
-    ADD_TEST_SUITE(rsa3072_picnicl1full);
-    MAKE_KEYS(picnic3l1, "picnic3l1", NULL);
-    ADD_TEST_SUITE(picnic3l1);
-    MAKE_KEYS(p256_picnic3l1, "p256_picnic3l1", NULL);
-    ADD_TEST_SUITE(p256_picnic3l1);
-    MAKE_KEYS(rsa3072_picnic3l1, "rsa3072_picnic3l1", NULL);
-    ADD_TEST_SUITE(rsa3072_picnic3l1);
-    MAKE_KEYS(rainbowVclassic, "rainbowVclassic", NULL);
-    ADD_TEST_SUITE(rainbowVclassic);
-    MAKE_KEYS(p521_rainbowVclassic, "p521_rainbowVclassic", NULL);
-    ADD_TEST_SUITE(p521_rainbowVclassic);
     MAKE_KEYS(sphincsharaka128frobust, "sphincsharaka128frobust", NULL);
     ADD_TEST_SUITE(sphincsharaka128frobust);
     MAKE_KEYS(p256_sphincsharaka128frobust, "p256_sphincsharaka128frobust", NULL);
@@ -1177,14 +1145,6 @@ void cleanup_tests(void)
     FREE_KEYS(rsa3072_falcon512);
     FREE_KEYS(falcon1024);
     FREE_KEYS(p521_falcon1024);
-    FREE_KEYS(picnicl1full);
-    FREE_KEYS(p256_picnicl1full);
-    FREE_KEYS(rsa3072_picnicl1full);
-    FREE_KEYS(picnic3l1);
-    FREE_KEYS(p256_picnic3l1);
-    FREE_KEYS(rsa3072_picnic3l1);
-    FREE_KEYS(rainbowVclassic);
-    FREE_KEYS(p521_rainbowVclassic);
     FREE_KEYS(sphincsharaka128frobust);
     FREE_KEYS(p256_sphincsharaka128frobust);
     FREE_KEYS(rsa3072_sphincsharaka128frobust);

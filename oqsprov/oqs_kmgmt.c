@@ -695,80 +695,6 @@ static void *p521_falcon1024_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_1024, "p521_falcon1024", KEY_TYPE_HYB_SIG, 256);
 }
 
-static void *picnicl1full_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic_L1_full, "picnicl1full", KEY_TYPE_SIG, NULL, 128);
-}
-
-static void *picnicl1full_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic_L1_full, "picnicl1full", 0, 128);
-}
-static void *p256_picnicl1full_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic_L1_full, "p256_picnicl1full", KEY_TYPE_HYB_SIG, NULL, 128);
-}
-
-static void *p256_picnicl1full_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic_L1_full, "p256_picnicl1full", KEY_TYPE_HYB_SIG, 128);
-}
-static void *rsa3072_picnicl1full_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic_L1_full, "rsa3072_picnicl1full", KEY_TYPE_HYB_SIG, NULL, 128);
-}
-
-static void *rsa3072_picnicl1full_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic_L1_full, "rsa3072_picnicl1full", KEY_TYPE_HYB_SIG, 128);
-}
-static void *picnic3l1_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic3_L1, "picnic3l1", KEY_TYPE_SIG, NULL, 128);
-}
-
-static void *picnic3l1_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic3_L1, "picnic3l1", 0, 128);
-}
-static void *p256_picnic3l1_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic3_L1, "p256_picnic3l1", KEY_TYPE_HYB_SIG, NULL, 128);
-}
-
-static void *p256_picnic3l1_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic3_L1, "p256_picnic3l1", KEY_TYPE_HYB_SIG, 128);
-}
-static void *rsa3072_picnic3l1_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_picnic3_L1, "rsa3072_picnic3l1", KEY_TYPE_HYB_SIG, NULL, 128);
-}
-
-static void *rsa3072_picnic3l1_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic3_L1, "rsa3072_picnic3l1", KEY_TYPE_HYB_SIG, 128);
-}
-
-static void *rainbowVclassic_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_V_classic, "rainbowVclassic", KEY_TYPE_SIG, NULL, 256);
-}
-
-static void *rainbowVclassic_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_V_classic, "rainbowVclassic", 0, 256);
-}
-static void *p521_rainbowVclassic_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_V_classic, "p521_rainbowVclassic", KEY_TYPE_HYB_SIG, NULL, 256);
-}
-
-static void *p521_rainbowVclassic_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_V_classic, "p521_rainbowVclassic", KEY_TYPE_HYB_SIG, 256);
-}
-
 static void *sphincsharaka128frobust_new_key(void *provctx)
 {
     return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_haraka_128f_robust, "sphincsharaka128frobust", KEY_TYPE_SIG, NULL, 128);
@@ -997,14 +923,6 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(p256_falcon512)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_falcon512)
 MAKE_SIG_KEYMGMT_FUNCTIONS(falcon1024)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_falcon1024)
-MAKE_SIG_KEYMGMT_FUNCTIONS(picnicl1full)
-MAKE_SIG_KEYMGMT_FUNCTIONS(p256_picnicl1full)
-MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_picnicl1full)
-MAKE_SIG_KEYMGMT_FUNCTIONS(picnic3l1)
-MAKE_SIG_KEYMGMT_FUNCTIONS(p256_picnic3l1)
-MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_picnic3l1)
-MAKE_SIG_KEYMGMT_FUNCTIONS(rainbowVclassic)
-MAKE_SIG_KEYMGMT_FUNCTIONS(p521_rainbowVclassic)
 MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsharaka128frobust)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_sphincsharaka128frobust)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_sphincsharaka128frobust)
@@ -1030,9 +948,6 @@ MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps4096821, OQS_KEM_alg_ntru_hps4096821, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hps40961229, OQS_KEM_alg_ntru_hps40961229, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hrss701, OQS_KEM_alg_ntru_hrss701, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(ntru_hrss1373, OQS_KEM_alg_ntru_hrss1373, 256)
-MAKE_KEM_KEYMGMT_FUNCTIONS(lightsaber, OQS_KEM_alg_saber_lightsaber, 128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(saber, OQS_KEM_alg_saber_saber, 192)
-MAKE_KEM_KEYMGMT_FUNCTIONS(firesaber, OQS_KEM_alg_saber_firesaber, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(bikel1, OQS_KEM_alg_bike_l1, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(bikel3, OQS_KEM_alg_bike_l3, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s512, OQS_KEM_alg_kyber_512_90s, 128)
@@ -1041,12 +956,4 @@ MAKE_KEM_KEYMGMT_FUNCTIONS(kyber90s1024, OQS_KEM_alg_kyber_1024_90s, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(hqc128, OQS_KEM_alg_hqc_128, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(hqc192, OQS_KEM_alg_hqc_192, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(hqc256, OQS_KEM_alg_hqc_256, 256)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr653, OQS_KEM_alg_ntruprime_ntrulpr653, 128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr761, OQS_KEM_alg_ntruprime_ntrulpr761, 128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr857, OQS_KEM_alg_ntruprime_ntrulpr857, 192)
-MAKE_KEM_KEYMGMT_FUNCTIONS(ntrulpr1277, OQS_KEM_alg_ntruprime_ntrulpr1277, 256)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup653, OQS_KEM_alg_ntruprime_sntrup653, 128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup761, OQS_KEM_alg_ntruprime_sntrup761, 128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup857, OQS_KEM_alg_ntruprime_sntrup857, 192)
-MAKE_KEM_KEYMGMT_FUNCTIONS(sntrup1277, OQS_KEM_alg_ntruprime_sntrup1277, 256)
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END

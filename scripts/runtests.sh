@@ -98,14 +98,6 @@ interop p256_falcon512
 interop rsa3072_falcon512
 interop falcon1024
 interop p521_falcon1024
-interop picnicl1full
-interop p256_picnicl1full
-interop rsa3072_picnicl1full
-interop picnic3l1
-interop p256_picnic3l1
-interop rsa3072_picnic3l1
-interop rainbowVclassic
-interop p521_rainbowVclassic
 interop sphincsharaka128frobust
 interop p256_sphincsharaka128frobust
 interop rsa3072_sphincsharaka128frobust

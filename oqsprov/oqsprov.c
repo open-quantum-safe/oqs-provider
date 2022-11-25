@@ -41,7 +41,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
  * List of all algorithms with given OIDs
  */
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
-#define OQS_OID_CNT 72
+#define OQS_OID_CNT 56
 static const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {
 "1.3.6.1.4.1.2.267.7.4.4", "dilithium2",
@@ -63,14 +63,6 @@ static const char* oqs_oid_alg_list[OQS_OID_CNT] =
 "1.3.9999.3.3" , "rsa3072_falcon512",
 "1.3.9999.3.4", "falcon1024",
 "1.3.9999.3.5" , "p521_falcon1024",
-"1.3.6.1.4.1.311.89.2.1.7", "picnicl1full",
-"1.3.6.1.4.1.311.89.2.1.8" , "p256_picnicl1full",
-"1.3.6.1.4.1.311.89.2.1.9" , "rsa3072_picnicl1full",
-"1.3.6.1.4.1.311.89.2.1.21", "picnic3l1",
-"1.3.6.1.4.1.311.89.2.1.22" , "p256_picnic3l1",
-"1.3.6.1.4.1.311.89.2.1.23" , "rsa3072_picnic3l1",
-"1.3.9999.5.3.1.1", "rainbowVclassic",
-"1.3.9999.5.3.2.1" , "p521_rainbowVclassic",
 "1.3.9999.6.1.1", "sphincsharaka128frobust",
 "1.3.9999.6.1.2" , "p256_sphincsharaka128frobust",
 "1.3.9999.6.1.3" , "rsa3072_sphincsharaka128frobust",
@@ -104,23 +96,15 @@ int oqs_patch_oids(void) {
    if (getenv("OQS_OID_RSA3072_FALCON512")) oqs_oid_alg_list[32] = getenv("OQS_OID_RSA3072_FALCON512");
    if (getenv("OQS_OID_FALCON1024")) oqs_oid_alg_list[34] = getenv("OQS_OID_FALCON1024");
    if (getenv("OQS_OID_P521_FALCON1024")) oqs_oid_alg_list[36] = getenv("OQS_OID_P521_FALCON1024");
-   if (getenv("OQS_OID_PICNICL1FULL")) oqs_oid_alg_list[38] = getenv("OQS_OID_PICNICL1FULL");
-   if (getenv("OQS_OID_P256_PICNICL1FULL")) oqs_oid_alg_list[40] = getenv("OQS_OID_P256_PICNICL1FULL");
-   if (getenv("OQS_OID_RSA3072_PICNICL1FULL")) oqs_oid_alg_list[42] = getenv("OQS_OID_RSA3072_PICNICL1FULL");
-   if (getenv("OQS_OID_PICNIC3L1")) oqs_oid_alg_list[44] = getenv("OQS_OID_PICNIC3L1");
-   if (getenv("OQS_OID_P256_PICNIC3L1")) oqs_oid_alg_list[46] = getenv("OQS_OID_P256_PICNIC3L1");
-   if (getenv("OQS_OID_RSA3072_PICNIC3L1")) oqs_oid_alg_list[48] = getenv("OQS_OID_RSA3072_PICNIC3L1");
-   if (getenv("OQS_OID_RAINBOWVCLASSIC")) oqs_oid_alg_list[50] = getenv("OQS_OID_RAINBOWVCLASSIC");
-   if (getenv("OQS_OID_P521_RAINBOWVCLASSIC")) oqs_oid_alg_list[52] = getenv("OQS_OID_P521_RAINBOWVCLASSIC");
-   if (getenv("OQS_OID_SPHINCSHARAKA128FROBUST")) oqs_oid_alg_list[54] = getenv("OQS_OID_SPHINCSHARAKA128FROBUST");
-   if (getenv("OQS_OID_P256_SPHINCSHARAKA128FROBUST")) oqs_oid_alg_list[56] = getenv("OQS_OID_P256_SPHINCSHARAKA128FROBUST");
-   if (getenv("OQS_OID_RSA3072_SPHINCSHARAKA128FROBUST")) oqs_oid_alg_list[58] = getenv("OQS_OID_RSA3072_SPHINCSHARAKA128FROBUST");
-   if (getenv("OQS_OID_SPHINCSSHA256128FROBUST")) oqs_oid_alg_list[60] = getenv("OQS_OID_SPHINCSSHA256128FROBUST");
-   if (getenv("OQS_OID_P256_SPHINCSSHA256128FROBUST")) oqs_oid_alg_list[62] = getenv("OQS_OID_P256_SPHINCSSHA256128FROBUST");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHA256128FROBUST")) oqs_oid_alg_list[64] = getenv("OQS_OID_RSA3072_SPHINCSSHA256128FROBUST");
-   if (getenv("OQS_OID_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[66] = getenv("OQS_OID_SPHINCSSHAKE256128FROBUST");
-   if (getenv("OQS_OID_P256_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[68] = getenv("OQS_OID_P256_SPHINCSSHAKE256128FROBUST");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[70] = getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FROBUST");
+   if (getenv("OQS_OID_SPHINCSHARAKA128FROBUST")) oqs_oid_alg_list[38] = getenv("OQS_OID_SPHINCSHARAKA128FROBUST");
+   if (getenv("OQS_OID_P256_SPHINCSHARAKA128FROBUST")) oqs_oid_alg_list[40] = getenv("OQS_OID_P256_SPHINCSHARAKA128FROBUST");
+   if (getenv("OQS_OID_RSA3072_SPHINCSHARAKA128FROBUST")) oqs_oid_alg_list[42] = getenv("OQS_OID_RSA3072_SPHINCSHARAKA128FROBUST");
+   if (getenv("OQS_OID_SPHINCSSHA256128FROBUST")) oqs_oid_alg_list[44] = getenv("OQS_OID_SPHINCSSHA256128FROBUST");
+   if (getenv("OQS_OID_P256_SPHINCSSHA256128FROBUST")) oqs_oid_alg_list[46] = getenv("OQS_OID_P256_SPHINCSSHA256128FROBUST");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHA256128FROBUST")) oqs_oid_alg_list[48] = getenv("OQS_OID_RSA3072_SPHINCSSHA256128FROBUST");
+   if (getenv("OQS_OID_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[50] = getenv("OQS_OID_SPHINCSSHAKE256128FROBUST");
+   if (getenv("OQS_OID_P256_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[52] = getenv("OQS_OID_P256_SPHINCSSHAKE256128FROBUST");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[54] = getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FROBUST");
 ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -176,14 +160,6 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     ALG("rsa3072_falcon512", oqs_signature_functions),
     ALG("falcon1024", oqs_signature_functions),
     ALG("p521_falcon1024", oqs_signature_functions),
-    ALG("picnicl1full", oqs_signature_functions),
-    ALG("p256_picnicl1full", oqs_signature_functions),
-    ALG("rsa3072_picnicl1full", oqs_signature_functions),
-    ALG("picnic3l1", oqs_signature_functions),
-    ALG("p256_picnic3l1", oqs_signature_functions),
-    ALG("rsa3072_picnic3l1", oqs_signature_functions),
-    ALG("rainbowVclassic", oqs_signature_functions),
-    ALG("p521_rainbowVclassic", oqs_signature_functions),
     ALG("sphincsharaka128frobust", oqs_signature_functions),
     ALG("p256_sphincsharaka128frobust", oqs_signature_functions),
     ALG("rsa3072_sphincsharaka128frobust", oqs_signature_functions),
@@ -214,9 +190,6 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMALG2(ntru_hps40961229, 256),
     KEMALG3(ntru_hrss701, 192),
     KEMALG2(ntru_hrss1373, 256),
-    KEMALG3(lightsaber, 128),
-    KEMALG3(saber, 192),
-    KEMALG2(firesaber, 256),
     KEMALG3(bikel1, 128),
     KEMALG3(bikel3, 192),
     KEMALG3(kyber90s512, 128),
@@ -225,14 +198,6 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMALG3(hqc128, 128),
     KEMALG3(hqc192, 192),
     KEMALG2(hqc256, 256),
-    KEMALG3(ntrulpr653, 128),
-    KEMALG3(ntrulpr761, 128),
-    KEMALG3(ntrulpr857, 192),
-    KEMALG2(ntrulpr1277, 256),
-    KEMALG3(sntrup653, 128),
-    KEMALG3(sntrup761, 128),
-    KEMALG3(sntrup857, 192),
-    KEMALG2(sntrup1277, 256),
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
@@ -247,9 +212,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     ALG("dilithium5_aes", oqs_dilithium5_aes_keymgmt_functions),ALG("p521_dilithium5_aes", oqs_p521_dilithium5_aes_keymgmt_functions),
     ALG("falcon512", oqs_falcon512_keymgmt_functions),ALG("p256_falcon512", oqs_p256_falcon512_keymgmt_functions),ALG("rsa3072_falcon512", oqs_rsa3072_falcon512_keymgmt_functions),
     ALG("falcon1024", oqs_falcon1024_keymgmt_functions),ALG("p521_falcon1024", oqs_p521_falcon1024_keymgmt_functions),
-    ALG("picnicl1full", oqs_picnicl1full_keymgmt_functions),ALG("p256_picnicl1full", oqs_p256_picnicl1full_keymgmt_functions),ALG("rsa3072_picnicl1full", oqs_rsa3072_picnicl1full_keymgmt_functions),
-    ALG("picnic3l1", oqs_picnic3l1_keymgmt_functions),ALG("p256_picnic3l1", oqs_p256_picnic3l1_keymgmt_functions),ALG("rsa3072_picnic3l1", oqs_rsa3072_picnic3l1_keymgmt_functions),
-    ALG("rainbowVclassic", oqs_rainbowVclassic_keymgmt_functions),ALG("p521_rainbowVclassic", oqs_p521_rainbowVclassic_keymgmt_functions),
     ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),ALG("p256_sphincsharaka128frobust", oqs_p256_sphincsharaka128frobust_keymgmt_functions),ALG("rsa3072_sphincsharaka128frobust", oqs_rsa3072_sphincsharaka128frobust_keymgmt_functions),
     ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),ALG("p256_sphincssha256128frobust", oqs_p256_sphincssha256128frobust_keymgmt_functions),ALG("rsa3072_sphincssha256128frobust", oqs_rsa3072_sphincssha256128frobust_keymgmt_functions),
     ALG("sphincsshake256128frobust", oqs_sphincsshake256128frobust_keymgmt_functions),ALG("p256_sphincsshake256128frobust", oqs_p256_sphincsshake256128frobust_keymgmt_functions),ALG("rsa3072_sphincsshake256128frobust", oqs_rsa3072_sphincsshake256128frobust_keymgmt_functions),
@@ -269,9 +231,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG2(ntru_hps40961229, 256),
     KEMKMALG3(ntru_hrss701, 192),
     KEMKMALG2(ntru_hrss1373, 256),
-    KEMKMALG3(lightsaber, 128),
-    KEMKMALG3(saber, 192),
-    KEMKMALG2(firesaber, 256),
     KEMKMALG3(bikel1, 128),
     KEMKMALG3(bikel3, 192),
     KEMKMALG3(kyber90s512, 128),
@@ -280,14 +239,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG3(hqc128, 128),
     KEMKMALG3(hqc192, 192),
     KEMKMALG2(hqc256, 256),
-    KEMKMALG3(ntrulpr653, 128),
-    KEMKMALG3(ntrulpr761, 128),
-    KEMKMALG3(ntrulpr857, 192),
-    KEMKMALG2(ntrulpr1277, 256),
-    KEMKMALG3(sntrup653, 128),
-    KEMKMALG3(sntrup761, 128),
-    KEMKMALG3(sntrup857, 192),
-    KEMKMALG2(sntrup1277, 256),
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
     //ALG("x25519_sikep434", oqs_ecx_sikep434_keymgmt_functions),
     { NULL, NULL, NULL }

@@ -44,7 +44,7 @@ typedef struct {
 } oqs_nid_name_t;
 
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
-#define NID_TABLE_LEN 36
+#define NID_TABLE_LEN 28
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
@@ -66,14 +66,6 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "rsa3072_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128 },
        { 0, "falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256 },
        { 0, "p521_falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_HYB_SIG, 256 },
-       { 0, "picnicl1full", OQS_SIG_alg_picnic_L1_full, KEY_TYPE_SIG, 128 },
-       { 0, "p256_picnicl1full", OQS_SIG_alg_picnic_L1_full, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "rsa3072_picnicl1full", OQS_SIG_alg_picnic_L1_full, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "picnic3l1", OQS_SIG_alg_picnic3_L1, KEY_TYPE_SIG, 128 },
-       { 0, "p256_picnic3l1", OQS_SIG_alg_picnic3_L1, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "rsa3072_picnic3l1", OQS_SIG_alg_picnic3_L1, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "rainbowVclassic", OQS_SIG_alg_rainbow_V_classic, KEY_TYPE_SIG, 256 },
-       { 0, "p521_rainbowVclassic", OQS_SIG_alg_rainbow_V_classic, KEY_TYPE_HYB_SIG, 256 },
        { 0, "sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, KEY_TYPE_SIG, 128 },
        { 0, "p256_sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, KEY_TYPE_HYB_SIG, 128 },
        { 0, "rsa3072_sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, KEY_TYPE_HYB_SIG, 128 },

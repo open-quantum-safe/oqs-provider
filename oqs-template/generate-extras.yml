@@ -16,10 +16,6 @@ kem-extras:
     nid_ecx_hybrid: '0x2F95'
   ntru_hrss701:
     nid_ecx_hybrid: '0x2F97'
-  lightsaber:
-    nid_ecx_hybrid: '0x2F98'
-  saber:
-    nid_ecx_hybrid: '0x2F99'
   sidhp434:
     nid_ecx_hybrid: '0x2F9B'
   sidhp503:
@@ -38,15 +34,3 @@ kem-extras:
     nid_ecx_hybrid: '0x2FAC'
   hqc192:
     nid_ecx_hybrid: '0x2FAD'
-  ntrulpr653:
-    nid_ecx_hybrid: '0x2FAF'
-  ntrulpr761:
-    nid_ecx_hybrid: '0x2FB0'
-  ntrulpr857:
-    nid_ecx_hybrid: '0x2FB1'
-  sntrup653:
-    nid_ecx_hybrid: '0x2FB2'
-  sntrup761:
-    nid_ecx_hybrid: '0x2FB3'
-  sntrup857:
-    nid_ecx_hybrid: '0x2FB4'

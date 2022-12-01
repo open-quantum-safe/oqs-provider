@@ -800,6 +800,18 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define rsa3072_sphincsshake128fsimple_input_type \
     "rsa3072_sphincsshake128fsimple"
 #define rsa3072_sphincsshake128fsimple_pem_type "rsa3072_sphincsshake128fsimple"
+
+# define dilithium3_rsa3072_evp_type             0
+# define dilithium3_rsa3072_input_type           "dilithium3_rsa3072"
+# define dilithium3_rsa3072_pem_type             "dilithium3_rsa3072"
+
+# define dilithium3_p256_evp_type                0
+# define dilithium3_p256_input_type              "dilithium3_p256"
+# define dilithium3_p256_pem_type                "dilithium3_p256"
+
+# define falcon512_p256_evp_type                 0
+# define falcon512_p256_input_type               "falcon512_p256"
+# define falcon512_p256_pem_type                 "falcon512_p256"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -1529,4 +1541,22 @@ MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(rsa3072_sphincsshake128fsimple);
+MAKE_ENCODER(dilithium3_rsa3072, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_rsa3072, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_rsa3072, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_rsa3072, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_rsa3072, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium3_rsa3072, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(dilithium3_p256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_p256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_p256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_p256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_p256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium3_p256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(falcon512_p256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(falcon512_p256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(falcon512_p256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(falcon512_p256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(falcon512_p256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(falcon512_p256, oqsx, SubjectPublicKeyInfo, pem);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

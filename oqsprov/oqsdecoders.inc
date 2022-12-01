@@ -53,6 +53,11 @@ DECODER_w_structure("dilithium2", der, PrivateKeyInfo, dilithium2),
                         p384_dilithium3),
     DECODER_w_structure("p384_dilithium3", der, SubjectPublicKeyInfo,
                         p384_dilithium3),
+    DECODER_w_structure("dilithium3_rsa3072", der, SubjectPublicKeyInfo,
+                        dilithium3_rsa3072),
+    DECODER_w_structure("dilithium3_p256", der, SubjectPublicKeyInfo,
+                        dilithium3_p256),
+
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5
     DECODER_w_structure("dilithium5", der, PrivateKeyInfo, dilithium5),
@@ -72,6 +77,8 @@ DECODER_w_structure("dilithium2", der, PrivateKeyInfo, dilithium2),
                         rsa3072_falcon512),
     DECODER_w_structure("rsa3072_falcon512", der, SubjectPublicKeyInfo,
                         rsa3072_falcon512),
+    DECODER_w_structure("falcon512_p256", der, SubjectPublicKeyInfo,
+                        falcon512_p256),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
     DECODER_w_structure("falcon1024", der, PrivateKeyInfo, falcon1024),

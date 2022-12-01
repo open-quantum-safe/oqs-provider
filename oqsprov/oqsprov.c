@@ -47,7 +47,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
  * List of all algorithms with given OIDs
  */
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
-#define OQS_OID_CNT 46
+#define OQS_OID_CNT 52
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "1.3.6.1.4.1.2.267.7.4.4",
     "dilithium2",
@@ -95,6 +95,12 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p256_sphincsshake128fsimple",
     "1.3.9999.6.7.15",
     "rsa3072_sphincsshake128fsimple",
+    "2.16.840.1.114027.80.5.2",
+    "dilithium3_rsa3072",
+    "2.16.840.1.114027.80.5.1",
+    "dilithium3_p256", 
+    "2.16.840.1.114027.80.5.3",
+    "falcon512_p256",  
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -330,6 +336,8 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #ifdef OQS_ENABLE_SIG_dilithium_3
     SIGALG("dilithium3", 192, oqs_signature_functions),
     SIGALG("p384_dilithium3", 192, oqs_signature_functions),
+    SIGALG("dilithium3_rsa3072", 192, oqs_signature_functions),
+    SIGALG("dilithium3_p256", 192, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5
     SIGALG("dilithium5", 256, oqs_signature_functions),
@@ -339,6 +347,7 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("falcon512", 128, oqs_signature_functions),
     SIGALG("p256_falcon512", 128, oqs_signature_functions),
     SIGALG("rsa3072_falcon512", 128, oqs_signature_functions),
+    SIGALG("falcon512_p256", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
     SIGALG("falcon1024", 256, oqs_signature_functions),
@@ -457,6 +466,8 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 #ifdef OQS_ENABLE_SIG_dilithium_3
     SIGALG("dilithium3", 192, oqs_dilithium3_keymgmt_functions),
     SIGALG("p384_dilithium3", 192, oqs_p384_dilithium3_keymgmt_functions),
+    SIGALG("dilithium3_rsa3072", 192, oqs_dilithium3_rsa3072_keymgmt_functions),
+    SIGALG("dilithium3_p256", 192, oqs_dilithium3_p256_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5
     SIGALG("dilithium5", 256, oqs_dilithium5_keymgmt_functions),
@@ -466,6 +477,7 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     SIGALG("falcon512", 128, oqs_falcon512_keymgmt_functions),
     SIGALG("p256_falcon512", 128, oqs_p256_falcon512_keymgmt_functions),
     SIGALG("rsa3072_falcon512", 128, oqs_rsa3072_falcon512_keymgmt_functions),
+    SIGALG("falcon512_p256", 128, oqs_falcon512_p256_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
     SIGALG("falcon1024", 256, oqs_falcon1024_keymgmt_functions),

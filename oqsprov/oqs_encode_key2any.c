@@ -692,6 +692,18 @@ static int oqsx_pki_priv_to_der(const void *vecxkey, unsigned char **pder)
 # define rsa3072_sphincsshake256128frobust_evp_type       0
 # define rsa3072_sphincsshake256128frobust_input_type      "rsa3072_sphincsshake256128frobust"
 # define rsa3072_sphincsshake256128frobust_pem_type        "rsa3072_sphincsshake256128frobust"
+# define sphincsshake256192fsimple_evp_type       0
+# define sphincsshake256192fsimple_input_type      "sphincsshake256192fsimple"
+# define sphincsshake256192fsimple_pem_type        "sphincsshake256192fsimple"
+# define p384_sphincsshake256192fsimple_evp_type       0
+# define p384_sphincsshake256192fsimple_input_type      "p384_sphincsshake256192fsimple"
+# define p384_sphincsshake256192fsimple_pem_type        "p384_sphincsshake256192fsimple"
+# define sphincsshake256256fsimple_evp_type       0
+# define sphincsshake256256fsimple_input_type      "sphincsshake256256fsimple"
+# define sphincsshake256256fsimple_pem_type        "sphincsshake256256fsimple"
+# define p521_sphincsshake256256fsimple_evp_type       0
+# define p521_sphincsshake256256fsimple_input_type      "p521_sphincsshake256256fsimple"
+# define p521_sphincsshake256256fsimple_pem_type        "p521_sphincsshake256256fsimple"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -1227,5 +1239,29 @@ MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(rsa3072_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(sphincsshake256192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(sphincsshake256192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(sphincsshake256192fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(sphincsshake256192fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(sphincsshake256192fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(sphincsshake256192fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p384_sphincsshake256192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p384_sphincsshake256192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p384_sphincsshake256192fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p384_sphincsshake256192fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p384_sphincsshake256192fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p384_sphincsshake256192fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(sphincsshake256256fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(sphincsshake256256fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(sphincsshake256256fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(sphincsshake256256fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(sphincsshake256256fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(sphincsshake256256fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(p521_sphincsshake256256fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p521_sphincsshake256256fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p521_sphincsshake256256fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p521_sphincsshake256256fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p521_sphincsshake256256fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p521_sphincsshake256256fsimple, oqsx, SubjectPublicKeyInfo, pem);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END
 

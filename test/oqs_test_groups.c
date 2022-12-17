@@ -128,8 +128,6 @@ static int test_provider_groups(OSSL_PROVIDER *provider, void *vctx)
         return 1;
 }
 
-#define nelem(a) (sizeof(a)/sizeof((a)[0]))
-
 int main(int argc, char *argv[])
 {
   size_t i;

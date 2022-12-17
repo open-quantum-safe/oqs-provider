@@ -3,6 +3,7 @@
 #include <openssl/evp.h>
 #include <openssl/provider.h>
 #include "test_common.h"
+#include "oqs/oqs.h"
 
 static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
@@ -15,17 +16,45 @@ static char *tmpfilename = NULL;
 
 static const char *sigalg_names[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_START
+#ifdef OQS_ENABLE_SIG_dilithium_2
   "dilithium2","p256_dilithium2","rsa3072_dilithium2",
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
   "dilithium3","p384_dilithium3",
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
   "dilithium5","p521_dilithium5",
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2_aes
   "dilithium2_aes","p256_dilithium2_aes","rsa3072_dilithium2_aes",
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3_aes
   "dilithium3_aes","p384_dilithium3_aes",
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5_aes
   "dilithium5_aes","p521_dilithium5_aes",
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
   "falcon512","p256_falcon512","rsa3072_falcon512",
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
   "falcon1024","p521_falcon1024",
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
   "sphincsharaka128frobust","p256_sphincsharaka128frobust","rsa3072_sphincsharaka128frobust",
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
   "sphincssha256128frobust","p256_sphincssha256128frobust","rsa3072_sphincssha256128frobust",
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
   "sphincsshake256128frobust","p256_sphincsshake256128frobust","rsa3072_sphincsshake256128frobust",
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
+  "sphincsshake256192fsimple","p384_sphincsshake256192fsimple",
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
+  "sphincsshake256256fsimple","p521_sphincsshake256256fsimple",
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END
 };
 

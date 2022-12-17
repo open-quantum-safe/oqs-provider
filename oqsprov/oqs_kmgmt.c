@@ -778,6 +778,42 @@ static void *rsa3072_sphincsshake256128frobust_gen_init(void *provctx, int selec
 {
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_128f_robust, "rsa3072_sphincsshake256128frobust", KEY_TYPE_HYB_SIG, 128);
 }
+static void *sphincsshake256192fsimple_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_shake256_192f_simple, "sphincsshake256192fsimple", KEY_TYPE_SIG, NULL, 192);
+}
+
+static void *sphincsshake256192fsimple_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_192f_simple, "sphincsshake256192fsimple", 0, 192);
+}
+static void *p384_sphincsshake256192fsimple_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_shake256_192f_simple, "p384_sphincsshake256192fsimple", KEY_TYPE_HYB_SIG, NULL, 192);
+}
+
+static void *p384_sphincsshake256192fsimple_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_192f_simple, "p384_sphincsshake256192fsimple", KEY_TYPE_HYB_SIG, 192);
+}
+static void *sphincsshake256256fsimple_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_shake256_256f_simple, "sphincsshake256256fsimple", KEY_TYPE_SIG, NULL, 256);
+}
+
+static void *sphincsshake256256fsimple_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_256f_simple, "sphincsshake256256fsimple", 0, 256);
+}
+static void *p521_sphincsshake256256fsimple_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_shake256_256f_simple, "p521_sphincsshake256256fsimple", KEY_TYPE_HYB_SIG, NULL, 256);
+}
+
+static void *p521_sphincsshake256256fsimple_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_256f_simple, "p521_sphincsshake256256fsimple", KEY_TYPE_HYB_SIG, 256);
+}
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
@@ -932,6 +968,10 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_sphincssha256128frobust)
 MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsshake256128frobust)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_sphincsshake256128frobust)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_sphincsshake256128frobust)
+MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsshake256192fsimple)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p384_sphincsshake256192fsimple)
+MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsshake256256fsimple)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p521_sphincsshake256256fsimple)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640shake, OQS_KEM_alg_frodokem_640_shake, 128)

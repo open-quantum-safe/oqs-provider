@@ -1,11 +1,13 @@
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
+#ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
     MAKE_KEYS({{ variant['name'] }}, "{{ variant['name'] }}", NULL);
     ADD_TEST_SUITE({{ variant['name'] }});
       {%- for classical_alg in variant['mix_with'] %}
     MAKE_KEYS({{ classical_alg['name'] }}_{{ variant['name'] }}, "{{ classical_alg['name'] }}_{{ variant['name'] }}", NULL);
     ADD_TEST_SUITE({{ classical_alg['name'] }}_{{ variant['name'] }});
       {%- endfor %}
+#endif
    {%- endfor %}
 {%- endfor %}
 

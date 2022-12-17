@@ -41,9 +41,21 @@ This implementation makes available the following quantum safe algorithms:
 - **Falcon**:`falcon512`\*, `falcon1024`\*
 - **SPHINCS-Haraka**:`sphincsharaka128frobust`\*, `sphincsharaka128fsimple`, `sphincsharaka128srobust`, `sphincsharaka128ssimple`, `sphincsharaka192frobust`, `sphincsharaka192fsimple`, `sphincsharaka192srobust`, `sphincsharaka192ssimple`, `sphincsharaka256frobust`, `sphincsharaka256fsimple`, `sphincsharaka256srobust`, `sphincsharaka256ssimple`
 - **SPHINCS-SHA256**:`sphincssha256128frobust`\*, `sphincssha256128fsimple`, `sphincssha256128srobust`, `sphincssha256128ssimple`, `sphincssha256192frobust`, `sphincssha256192fsimple`, `sphincssha256192srobust`, `sphincssha256192ssimple`, `sphincssha256256frobust`, `sphincssha256256fsimple`, `sphincssha256256srobust`, `sphincssha256256ssimple`
-- **SPHINCS-SHAKE256**:`sphincsshake256128frobust`\*, `sphincsshake256128fsimple`, `sphincsshake256128srobust`, `sphincsshake256128ssimple`, `sphincsshake256192frobust`, `sphincsshake256192fsimple`, `sphincsshake256192srobust`, `sphincsshake256192ssimple`, `sphincsshake256256frobust`, `sphincsshake256256fsimple`, `sphincsshake256256srobust`, `sphincsshake256256ssimple`
+- **SPHINCS-SHAKE256**:`sphincsshake256128frobust`\*, `sphincsshake256128fsimple`, `sphincsshake256128srobust`, `sphincsshake256128ssimple`, `sphincsshake256192frobust`, `sphincsshake256192fsimple`\*, `sphincsshake256192srobust`, `sphincsshake256192ssimple`, `sphincsshake256256frobust`, `sphincsshake256256fsimple`\*, `sphincsshake256256srobust`, `sphincsshake256256ssimple`
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
+
+As the underlying [liboqs](https://github.com/open-quantum-safe/liboqs)
+at build time may be configured to not enable all algorithms, it is
+advisable to check the possible subset of algorithms actually enabled
+via the standard commands, i.e.,
+`openssl list -signature-algorithms -provider oqsprovider` and
+`openssl list -kem-algorithms -provider oqsprovider`.
+
+In addition, algorithms not denoted with "\*" above are not enabled for
+TLS operations. This designation can be changed by modifying the
+"enabled" flags in the main [algorithm configuration file](oqs-template/generate.yml)
+and re-running the generator script `python3 oqs-template/generate.py`.
 
 In order to enable parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic

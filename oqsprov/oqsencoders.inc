@@ -75,6 +75,7 @@
  */
 
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_START
+#ifdef OQS_ENABLE_SIG_dilithium_2
 ENCODER_w_structure("dilithium2", dilithium2, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium2", dilithium2, pem, PrivateKeyInfo),
 ENCODER_w_structure("dilithium2", dilithium2, der, EncryptedPrivateKeyInfo),
@@ -91,6 +92,8 @@ ENCODER_w_structure("rsa3072_dilithium2", rsa3072_dilithium2, der, EncryptedPriv
 ENCODER_w_structure("rsa3072_dilithium2", rsa3072_dilithium2, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("rsa3072_dilithium2", rsa3072_dilithium2, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("rsa3072_dilithium2", rsa3072_dilithium2, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
 ENCODER_w_structure("dilithium3", dilithium3, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium3", dilithium3, pem, PrivateKeyInfo),
 ENCODER_w_structure("dilithium3", dilithium3, der, EncryptedPrivateKeyInfo),
@@ -102,6 +105,8 @@ ENCODER_w_structure("p384_dilithium3", p384_dilithium3, der, EncryptedPrivateKey
 ENCODER_w_structure("p384_dilithium3", p384_dilithium3, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("p384_dilithium3", p384_dilithium3, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("p384_dilithium3", p384_dilithium3, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
 ENCODER_w_structure("dilithium5", dilithium5, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium5", dilithium5, pem, PrivateKeyInfo),
 ENCODER_w_structure("dilithium5", dilithium5, der, EncryptedPrivateKeyInfo),
@@ -113,6 +118,8 @@ ENCODER_w_structure("p521_dilithium5", p521_dilithium5, der, EncryptedPrivateKey
 ENCODER_w_structure("p521_dilithium5", p521_dilithium5, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("p521_dilithium5", p521_dilithium5, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("p521_dilithium5", p521_dilithium5, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2_aes
 ENCODER_w_structure("dilithium2_aes", dilithium2_aes, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium2_aes", dilithium2_aes, pem, PrivateKeyInfo),
 ENCODER_w_structure("dilithium2_aes", dilithium2_aes, der, EncryptedPrivateKeyInfo),
@@ -129,6 +136,8 @@ ENCODER_w_structure("rsa3072_dilithium2_aes", rsa3072_dilithium2_aes, der, Encry
 ENCODER_w_structure("rsa3072_dilithium2_aes", rsa3072_dilithium2_aes, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("rsa3072_dilithium2_aes", rsa3072_dilithium2_aes, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("rsa3072_dilithium2_aes", rsa3072_dilithium2_aes, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3_aes
 ENCODER_w_structure("dilithium3_aes", dilithium3_aes, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium3_aes", dilithium3_aes, pem, PrivateKeyInfo),
 ENCODER_w_structure("dilithium3_aes", dilithium3_aes, der, EncryptedPrivateKeyInfo),
@@ -140,6 +149,8 @@ ENCODER_w_structure("p384_dilithium3_aes", p384_dilithium3_aes, der, EncryptedPr
 ENCODER_w_structure("p384_dilithium3_aes", p384_dilithium3_aes, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("p384_dilithium3_aes", p384_dilithium3_aes, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("p384_dilithium3_aes", p384_dilithium3_aes, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5_aes
 ENCODER_w_structure("dilithium5_aes", dilithium5_aes, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium5_aes", dilithium5_aes, pem, PrivateKeyInfo),
 ENCODER_w_structure("dilithium5_aes", dilithium5_aes, der, EncryptedPrivateKeyInfo),
@@ -151,6 +162,8 @@ ENCODER_w_structure("p521_dilithium5_aes", p521_dilithium5_aes, der, EncryptedPr
 ENCODER_w_structure("p521_dilithium5_aes", p521_dilithium5_aes, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("p521_dilithium5_aes", p521_dilithium5_aes, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("p521_dilithium5_aes", p521_dilithium5_aes, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
 ENCODER_w_structure("falcon512", falcon512, der, PrivateKeyInfo),
 ENCODER_w_structure("falcon512", falcon512, pem, PrivateKeyInfo),
 ENCODER_w_structure("falcon512", falcon512, der, EncryptedPrivateKeyInfo),
@@ -167,6 +180,8 @@ ENCODER_w_structure("rsa3072_falcon512", rsa3072_falcon512, der, EncryptedPrivat
 ENCODER_w_structure("rsa3072_falcon512", rsa3072_falcon512, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("rsa3072_falcon512", rsa3072_falcon512, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("rsa3072_falcon512", rsa3072_falcon512, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
 ENCODER_w_structure("falcon1024", falcon1024, der, PrivateKeyInfo),
 ENCODER_w_structure("falcon1024", falcon1024, pem, PrivateKeyInfo),
 ENCODER_w_structure("falcon1024", falcon1024, der, EncryptedPrivateKeyInfo),
@@ -178,6 +193,8 @@ ENCODER_w_structure("p521_falcon1024", p521_falcon1024, der, EncryptedPrivateKey
 ENCODER_w_structure("p521_falcon1024", p521_falcon1024, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("p521_falcon1024", p521_falcon1024, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("p521_falcon1024", p521_falcon1024, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
 ENCODER_w_structure("sphincsharaka128frobust", sphincsharaka128frobust, der, PrivateKeyInfo),
 ENCODER_w_structure("sphincsharaka128frobust", sphincsharaka128frobust, pem, PrivateKeyInfo),
 ENCODER_w_structure("sphincsharaka128frobust", sphincsharaka128frobust, der, EncryptedPrivateKeyInfo),
@@ -194,6 +211,8 @@ ENCODER_w_structure("rsa3072_sphincsharaka128frobust", rsa3072_sphincsharaka128f
 ENCODER_w_structure("rsa3072_sphincsharaka128frobust", rsa3072_sphincsharaka128frobust, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("rsa3072_sphincsharaka128frobust", rsa3072_sphincsharaka128frobust, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("rsa3072_sphincsharaka128frobust", rsa3072_sphincsharaka128frobust, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
 ENCODER_w_structure("sphincssha256128frobust", sphincssha256128frobust, der, PrivateKeyInfo),
 ENCODER_w_structure("sphincssha256128frobust", sphincssha256128frobust, pem, PrivateKeyInfo),
 ENCODER_w_structure("sphincssha256128frobust", sphincssha256128frobust, der, EncryptedPrivateKeyInfo),
@@ -210,6 +229,8 @@ ENCODER_w_structure("rsa3072_sphincssha256128frobust", rsa3072_sphincssha256128f
 ENCODER_w_structure("rsa3072_sphincssha256128frobust", rsa3072_sphincssha256128frobust, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("rsa3072_sphincssha256128frobust", rsa3072_sphincssha256128frobust, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("rsa3072_sphincssha256128frobust", rsa3072_sphincssha256128frobust, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
 ENCODER_w_structure("sphincsshake256128frobust", sphincsshake256128frobust, der, PrivateKeyInfo),
 ENCODER_w_structure("sphincsshake256128frobust", sphincsshake256128frobust, pem, PrivateKeyInfo),
 ENCODER_w_structure("sphincsshake256128frobust", sphincsshake256128frobust, der, EncryptedPrivateKeyInfo),
@@ -226,5 +247,32 @@ ENCODER_w_structure("rsa3072_sphincsshake256128frobust", rsa3072_sphincsshake256
 ENCODER_w_structure("rsa3072_sphincsshake256128frobust", rsa3072_sphincsshake256128frobust, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("rsa3072_sphincsshake256128frobust", rsa3072_sphincsshake256128frobust, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("rsa3072_sphincsshake256128frobust", rsa3072_sphincsshake256128frobust, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
+ENCODER_w_structure("sphincsshake256192fsimple", sphincsshake256192fsimple, der, PrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256192fsimple", sphincsshake256192fsimple, pem, PrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256192fsimple", sphincsshake256192fsimple, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256192fsimple", sphincsshake256192fsimple, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256192fsimple", sphincsshake256192fsimple, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("sphincsshake256192fsimple", sphincsshake256192fsimple, pem, SubjectPublicKeyInfo),ENCODER_w_structure("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, der, PrivateKeyInfo),
+ENCODER_w_structure("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, pem, PrivateKeyInfo),
+ENCODER_w_structure("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, pem, SubjectPublicKeyInfo),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
+ENCODER_w_structure("sphincsshake256256fsimple", sphincsshake256256fsimple, der, PrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256256fsimple", sphincsshake256256fsimple, pem, PrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256256fsimple", sphincsshake256256fsimple, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256256fsimple", sphincsshake256256fsimple, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("sphincsshake256256fsimple", sphincsshake256256fsimple, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("sphincsshake256256fsimple", sphincsshake256256fsimple, pem, SubjectPublicKeyInfo),ENCODER_w_structure("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, der, PrivateKeyInfo),
+ENCODER_w_structure("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, pem, PrivateKeyInfo),
+ENCODER_w_structure("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, pem, SubjectPublicKeyInfo),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END
 

@@ -1,11 +1,13 @@
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
+#ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
 DECODER_w_structure("{{ variant['name'] }}", der, PrivateKeyInfo, {{ variant['name'] }}),
 DECODER_w_structure("{{ variant['name'] }}", der, SubjectPublicKeyInfo, {{ variant['name'] }}),
      {%- for classical_alg in variant['mix_with'] -%}
 DECODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", der, PrivateKeyInfo, {{ classical_alg['name'] }}_{{ variant['name'] }}),
 DECODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", der, SubjectPublicKeyInfo, {{ classical_alg['name'] }}_{{ variant['name'] }}),
-     {%- endfor -%}
+     {%- endfor %}
+#endif
    {%- endfor %}
 {%- endfor %}
 

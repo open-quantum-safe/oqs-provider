@@ -41,7 +41,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
  * List of all algorithms with given OIDs
  */
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
-#define OQS_OID_CNT 56
+#define OQS_OID_CNT 64
 static const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {
 "1.3.6.1.4.1.2.267.7.4.4", "dilithium2",
@@ -72,6 +72,10 @@ static const char* oqs_oid_alg_list[OQS_OID_CNT] =
 "1.3.9999.6.7.1", "sphincsshake256128frobust",
 "1.3.9999.6.7.2" , "p256_sphincsshake256128frobust",
 "1.3.9999.6.7.3" , "rsa3072_sphincsshake256128frobust",
+"1.3.9999.6.8.3", "sphincsshake256192fsimple",
+"1.3.9999.6.8.4" , "p384_sphincsshake256192fsimple",
+"1.3.9999.6.9.3", "sphincsshake256256fsimple",
+"1.3.9999.6.9.4" , "p521_sphincsshake256256fsimple",
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -105,6 +109,10 @@ int oqs_patch_oids(void) {
    if (getenv("OQS_OID_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[50] = getenv("OQS_OID_SPHINCSSHAKE256128FROBUST");
    if (getenv("OQS_OID_P256_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[52] = getenv("OQS_OID_P256_SPHINCSSHAKE256128FROBUST");
    if (getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FROBUST")) oqs_oid_alg_list[54] = getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FROBUST");
+   if (getenv("OQS_OID_SPHINCSSHAKE256192FSIMPLE")) oqs_oid_alg_list[56] = getenv("OQS_OID_SPHINCSSHAKE256192FSIMPLE");
+   if (getenv("OQS_OID_P384_SPHINCSSHAKE256192FSIMPLE")) oqs_oid_alg_list[58] = getenv("OQS_OID_P384_SPHINCSSHAKE256192FSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHAKE256256FSIMPLE")) oqs_oid_alg_list[60] = getenv("OQS_OID_SPHINCSSHAKE256256FSIMPLE");
+   if (getenv("OQS_OID_P521_SPHINCSSHAKE256256FSIMPLE")) oqs_oid_alg_list[62] = getenv("OQS_OID_P521_SPHINCSSHAKE256256FSIMPLE");
 ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -141,92 +149,237 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
+#ifdef OQS_ENABLE_SIG_dilithium_2
     ALG("dilithium2", oqs_signature_functions),
     ALG("p256_dilithium2", oqs_signature_functions),
     ALG("rsa3072_dilithium2", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
     ALG("dilithium3", oqs_signature_functions),
     ALG("p384_dilithium3", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
     ALG("dilithium5", oqs_signature_functions),
     ALG("p521_dilithium5", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2_aes
     ALG("dilithium2_aes", oqs_signature_functions),
     ALG("p256_dilithium2_aes", oqs_signature_functions),
     ALG("rsa3072_dilithium2_aes", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3_aes
     ALG("dilithium3_aes", oqs_signature_functions),
     ALG("p384_dilithium3_aes", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5_aes
     ALG("dilithium5_aes", oqs_signature_functions),
     ALG("p521_dilithium5_aes", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
     ALG("falcon512", oqs_signature_functions),
     ALG("p256_falcon512", oqs_signature_functions),
     ALG("rsa3072_falcon512", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
     ALG("falcon1024", oqs_signature_functions),
     ALG("p521_falcon1024", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
     ALG("sphincsharaka128frobust", oqs_signature_functions),
     ALG("p256_sphincsharaka128frobust", oqs_signature_functions),
     ALG("rsa3072_sphincsharaka128frobust", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
     ALG("sphincssha256128frobust", oqs_signature_functions),
     ALG("p256_sphincssha256128frobust", oqs_signature_functions),
     ALG("rsa3072_sphincssha256128frobust", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
     ALG("sphincsshake256128frobust", oqs_signature_functions),
     ALG("p256_sphincsshake256128frobust", oqs_signature_functions),
     ALG("rsa3072_sphincsshake256128frobust", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
+    ALG("sphincsshake256192fsimple", oqs_signature_functions),
+    ALG("p384_sphincsshake256192fsimple", oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
+    ALG("sphincsshake256256fsimple", oqs_signature_functions),
+    ALG("p521_sphincsshake256256fsimple", oqs_signature_functions),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
 
 static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_START
+#ifdef OQS_ENABLE_KEM_frodokem_640_aes
     KEMALG3(frodo640aes, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_640_shake
     KEMALG3(frodo640shake, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_976_aes
     KEMALG3(frodo976aes, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_976_shake
     KEMALG3(frodo976shake, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_1344_aes
     KEMALG2(frodo1344aes, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_1344_shake
     KEMALG2(frodo1344shake, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_512
     KEMALG3(kyber512, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_768
     KEMALG3(kyber768, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_1024
     KEMALG2(kyber1024, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l1
     KEMALG3(bikel1, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l3
     KEMALG3(bikel3, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_512_90s
     KEMALG3(kyber90s512, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_768_90s
     KEMALG3(kyber90s768, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_1024_90s
     KEMALG2(kyber90s1024, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_128
     KEMALG3(hqc128, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_192
     KEMALG3(hqc192, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_256
     KEMALG2(hqc256, 256),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
 
 static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
-    ALG("dilithium2", oqs_dilithium2_keymgmt_functions),ALG("p256_dilithium2", oqs_p256_dilithium2_keymgmt_functions),ALG("rsa3072_dilithium2", oqs_rsa3072_dilithium2_keymgmt_functions),
-    ALG("dilithium3", oqs_dilithium3_keymgmt_functions),ALG("p384_dilithium3", oqs_p384_dilithium3_keymgmt_functions),
-    ALG("dilithium5", oqs_dilithium5_keymgmt_functions),ALG("p521_dilithium5", oqs_p521_dilithium5_keymgmt_functions),
-    ALG("dilithium2_aes", oqs_dilithium2_aes_keymgmt_functions),ALG("p256_dilithium2_aes", oqs_p256_dilithium2_aes_keymgmt_functions),ALG("rsa3072_dilithium2_aes", oqs_rsa3072_dilithium2_aes_keymgmt_functions),
-    ALG("dilithium3_aes", oqs_dilithium3_aes_keymgmt_functions),ALG("p384_dilithium3_aes", oqs_p384_dilithium3_aes_keymgmt_functions),
-    ALG("dilithium5_aes", oqs_dilithium5_aes_keymgmt_functions),ALG("p521_dilithium5_aes", oqs_p521_dilithium5_aes_keymgmt_functions),
-    ALG("falcon512", oqs_falcon512_keymgmt_functions),ALG("p256_falcon512", oqs_p256_falcon512_keymgmt_functions),ALG("rsa3072_falcon512", oqs_rsa3072_falcon512_keymgmt_functions),
-    ALG("falcon1024", oqs_falcon1024_keymgmt_functions),ALG("p521_falcon1024", oqs_p521_falcon1024_keymgmt_functions),
-    ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),ALG("p256_sphincsharaka128frobust", oqs_p256_sphincsharaka128frobust_keymgmt_functions),ALG("rsa3072_sphincsharaka128frobust", oqs_rsa3072_sphincsharaka128frobust_keymgmt_functions),
-    ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),ALG("p256_sphincssha256128frobust", oqs_p256_sphincssha256128frobust_keymgmt_functions),ALG("rsa3072_sphincssha256128frobust", oqs_rsa3072_sphincssha256128frobust_keymgmt_functions),
-    ALG("sphincsshake256128frobust", oqs_sphincsshake256128frobust_keymgmt_functions),ALG("p256_sphincsshake256128frobust", oqs_p256_sphincsshake256128frobust_keymgmt_functions),ALG("rsa3072_sphincsshake256128frobust", oqs_rsa3072_sphincsshake256128frobust_keymgmt_functions),
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    ALG("dilithium2", oqs_dilithium2_keymgmt_functions),
+    ALG("p256_dilithium2", oqs_p256_dilithium2_keymgmt_functions),
+    ALG("rsa3072_dilithium2", oqs_rsa3072_dilithium2_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    ALG("dilithium3", oqs_dilithium3_keymgmt_functions),
+    ALG("p384_dilithium3", oqs_p384_dilithium3_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    ALG("dilithium5", oqs_dilithium5_keymgmt_functions),
+    ALG("p521_dilithium5", oqs_p521_dilithium5_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2_aes
+    ALG("dilithium2_aes", oqs_dilithium2_aes_keymgmt_functions),
+    ALG("p256_dilithium2_aes", oqs_p256_dilithium2_aes_keymgmt_functions),
+    ALG("rsa3072_dilithium2_aes", oqs_rsa3072_dilithium2_aes_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3_aes
+    ALG("dilithium3_aes", oqs_dilithium3_aes_keymgmt_functions),
+    ALG("p384_dilithium3_aes", oqs_p384_dilithium3_aes_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5_aes
+    ALG("dilithium5_aes", oqs_dilithium5_aes_keymgmt_functions),
+    ALG("p521_dilithium5_aes", oqs_p521_dilithium5_aes_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    ALG("falcon512", oqs_falcon512_keymgmt_functions),
+    ALG("p256_falcon512", oqs_p256_falcon512_keymgmt_functions),
+    ALG("rsa3072_falcon512", oqs_rsa3072_falcon512_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    ALG("falcon1024", oqs_falcon1024_keymgmt_functions),
+    ALG("p521_falcon1024", oqs_p521_falcon1024_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
+    ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),
+    ALG("p256_sphincsharaka128frobust", oqs_p256_sphincsharaka128frobust_keymgmt_functions),
+    ALG("rsa3072_sphincsharaka128frobust", oqs_rsa3072_sphincsharaka128frobust_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
+    ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),
+    ALG("p256_sphincssha256128frobust", oqs_p256_sphincssha256128frobust_keymgmt_functions),
+    ALG("rsa3072_sphincssha256128frobust", oqs_rsa3072_sphincssha256128frobust_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
+    ALG("sphincsshake256128frobust", oqs_sphincsshake256128frobust_keymgmt_functions),
+    ALG("p256_sphincsshake256128frobust", oqs_p256_sphincsshake256128frobust_keymgmt_functions),
+    ALG("rsa3072_sphincsshake256128frobust", oqs_rsa3072_sphincsshake256128frobust_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
+    ALG("sphincsshake256192fsimple", oqs_sphincsshake256192fsimple_keymgmt_functions),
+    ALG("p384_sphincsshake256192fsimple", oqs_p384_sphincsshake256192fsimple_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
+    ALG("sphincsshake256256fsimple", oqs_sphincsshake256256fsimple_keymgmt_functions),
+    ALG("p521_sphincsshake256256fsimple", oqs_p521_sphincsshake256256fsimple_keymgmt_functions),
+#endif
 
+#ifdef OQS_ENABLE_KEM_frodokem_640_aes
     KEMKMALG3(frodo640aes, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_640_shake
     KEMKMALG3(frodo640shake, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_976_aes
     KEMKMALG3(frodo976aes, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_976_shake
     KEMKMALG3(frodo976shake, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_1344_aes
     KEMKMALG2(frodo1344aes, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_1344_shake
     KEMKMALG2(frodo1344shake, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_512
     KEMKMALG3(kyber512, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_768
     KEMKMALG3(kyber768, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_1024
     KEMKMALG2(kyber1024, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l1
     KEMKMALG3(bikel1, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l3
     KEMKMALG3(bikel3, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_512_90s
     KEMKMALG3(kyber90s512, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_768_90s
     KEMKMALG3(kyber90s768, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_kyber_1024_90s
     KEMKMALG2(kyber90s1024, 256),
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_128
     KEMKMALG3(hqc128, 128),
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_192
     KEMKMALG3(hqc192, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_256
     KEMKMALG2(hqc256, 256),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
     //ALG("x25519_sikep434", oqs_ecx_sikep434_keymgmt_functions),
     { NULL, NULL, NULL }

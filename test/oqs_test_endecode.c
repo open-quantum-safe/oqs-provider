@@ -18,6 +18,7 @@
 
 #include "testutil.h" // output functions
 #include "test_common.h"
+#include "oqs/oqs.h"
 
 /* Extended test macros to allow passing file & line number */
 #define TEST_FL_ptr(a)               test_ptr(file, line, #a, a)
@@ -919,62 +920,96 @@ static int test_public_via_MSBLOB(const char *type, EVP_PKEY *key)
 #endif
 
 ///// OQS_TEMPLATE_FRAGMENT_IMPLEMENT_START
+#ifdef OQS_ENABLE_SIG_dilithium_2
 KEYS(dilithium2);
 IMPLEMENT_TEST_SUITE(dilithium2, "dilithium2")
 KEYS(p256_dilithium2);
 IMPLEMENT_TEST_SUITE(p256_dilithium2, "p256_dilithium2")
 KEYS(rsa3072_dilithium2);
 IMPLEMENT_TEST_SUITE(rsa3072_dilithium2, "rsa3072_dilithium2")
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
 KEYS(dilithium3);
 IMPLEMENT_TEST_SUITE(dilithium3, "dilithium3")
 KEYS(p384_dilithium3);
 IMPLEMENT_TEST_SUITE(p384_dilithium3, "p384_dilithium3")
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
 KEYS(dilithium5);
 IMPLEMENT_TEST_SUITE(dilithium5, "dilithium5")
 KEYS(p521_dilithium5);
 IMPLEMENT_TEST_SUITE(p521_dilithium5, "p521_dilithium5")
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2_aes
 KEYS(dilithium2_aes);
 IMPLEMENT_TEST_SUITE(dilithium2_aes, "dilithium2_aes")
 KEYS(p256_dilithium2_aes);
 IMPLEMENT_TEST_SUITE(p256_dilithium2_aes, "p256_dilithium2_aes")
 KEYS(rsa3072_dilithium2_aes);
 IMPLEMENT_TEST_SUITE(rsa3072_dilithium2_aes, "rsa3072_dilithium2_aes")
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3_aes
 KEYS(dilithium3_aes);
 IMPLEMENT_TEST_SUITE(dilithium3_aes, "dilithium3_aes")
 KEYS(p384_dilithium3_aes);
 IMPLEMENT_TEST_SUITE(p384_dilithium3_aes, "p384_dilithium3_aes")
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5_aes
 KEYS(dilithium5_aes);
 IMPLEMENT_TEST_SUITE(dilithium5_aes, "dilithium5_aes")
 KEYS(p521_dilithium5_aes);
 IMPLEMENT_TEST_SUITE(p521_dilithium5_aes, "p521_dilithium5_aes")
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
 KEYS(falcon512);
 IMPLEMENT_TEST_SUITE(falcon512, "falcon512")
 KEYS(p256_falcon512);
 IMPLEMENT_TEST_SUITE(p256_falcon512, "p256_falcon512")
 KEYS(rsa3072_falcon512);
 IMPLEMENT_TEST_SUITE(rsa3072_falcon512, "rsa3072_falcon512")
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
 KEYS(falcon1024);
 IMPLEMENT_TEST_SUITE(falcon1024, "falcon1024")
 KEYS(p521_falcon1024);
 IMPLEMENT_TEST_SUITE(p521_falcon1024, "p521_falcon1024")
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
 KEYS(sphincsharaka128frobust);
 IMPLEMENT_TEST_SUITE(sphincsharaka128frobust, "sphincsharaka128frobust")
 KEYS(p256_sphincsharaka128frobust);
 IMPLEMENT_TEST_SUITE(p256_sphincsharaka128frobust, "p256_sphincsharaka128frobust")
 KEYS(rsa3072_sphincsharaka128frobust);
 IMPLEMENT_TEST_SUITE(rsa3072_sphincsharaka128frobust, "rsa3072_sphincsharaka128frobust")
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
 KEYS(sphincssha256128frobust);
 IMPLEMENT_TEST_SUITE(sphincssha256128frobust, "sphincssha256128frobust")
 KEYS(p256_sphincssha256128frobust);
 IMPLEMENT_TEST_SUITE(p256_sphincssha256128frobust, "p256_sphincssha256128frobust")
 KEYS(rsa3072_sphincssha256128frobust);
 IMPLEMENT_TEST_SUITE(rsa3072_sphincssha256128frobust, "rsa3072_sphincssha256128frobust")
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
 KEYS(sphincsshake256128frobust);
 IMPLEMENT_TEST_SUITE(sphincsshake256128frobust, "sphincsshake256128frobust")
 KEYS(p256_sphincsshake256128frobust);
 IMPLEMENT_TEST_SUITE(p256_sphincsshake256128frobust, "p256_sphincsshake256128frobust")
 KEYS(rsa3072_sphincsshake256128frobust);
 IMPLEMENT_TEST_SUITE(rsa3072_sphincsshake256128frobust, "rsa3072_sphincsshake256128frobust")
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
+KEYS(sphincsshake256192fsimple);
+IMPLEMENT_TEST_SUITE(sphincsshake256192fsimple, "sphincsshake256192fsimple")
+KEYS(p384_sphincsshake256192fsimple);
+IMPLEMENT_TEST_SUITE(p384_sphincsshake256192fsimple, "p384_sphincsshake256192fsimple")
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
+KEYS(sphincsshake256256fsimple);
+IMPLEMENT_TEST_SUITE(sphincsshake256256fsimple, "sphincsshake256256fsimple")
+KEYS(p521_sphincsshake256256fsimple);
+IMPLEMENT_TEST_SUITE(p521_sphincsshake256256fsimple, "p521_sphincsshake256256fsimple")
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_IMPLEMENT_END
 
 typedef enum OPTION_choice {
@@ -1062,62 +1097,96 @@ int setup_tests(void)
     TEST_info("Generating keys...");
 
 ///// OQS_TEMPLATE_FRAGMENT_ADD_START
+#ifdef OQS_ENABLE_SIG_dilithium_2
     MAKE_KEYS(dilithium2, "dilithium2", NULL);
     ADD_TEST_SUITE(dilithium2);
     MAKE_KEYS(p256_dilithium2, "p256_dilithium2", NULL);
     ADD_TEST_SUITE(p256_dilithium2);
     MAKE_KEYS(rsa3072_dilithium2, "rsa3072_dilithium2", NULL);
     ADD_TEST_SUITE(rsa3072_dilithium2);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
     MAKE_KEYS(dilithium3, "dilithium3", NULL);
     ADD_TEST_SUITE(dilithium3);
     MAKE_KEYS(p384_dilithium3, "p384_dilithium3", NULL);
     ADD_TEST_SUITE(p384_dilithium3);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
     MAKE_KEYS(dilithium5, "dilithium5", NULL);
     ADD_TEST_SUITE(dilithium5);
     MAKE_KEYS(p521_dilithium5, "p521_dilithium5", NULL);
     ADD_TEST_SUITE(p521_dilithium5);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2_aes
     MAKE_KEYS(dilithium2_aes, "dilithium2_aes", NULL);
     ADD_TEST_SUITE(dilithium2_aes);
     MAKE_KEYS(p256_dilithium2_aes, "p256_dilithium2_aes", NULL);
     ADD_TEST_SUITE(p256_dilithium2_aes);
     MAKE_KEYS(rsa3072_dilithium2_aes, "rsa3072_dilithium2_aes", NULL);
     ADD_TEST_SUITE(rsa3072_dilithium2_aes);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3_aes
     MAKE_KEYS(dilithium3_aes, "dilithium3_aes", NULL);
     ADD_TEST_SUITE(dilithium3_aes);
     MAKE_KEYS(p384_dilithium3_aes, "p384_dilithium3_aes", NULL);
     ADD_TEST_SUITE(p384_dilithium3_aes);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5_aes
     MAKE_KEYS(dilithium5_aes, "dilithium5_aes", NULL);
     ADD_TEST_SUITE(dilithium5_aes);
     MAKE_KEYS(p521_dilithium5_aes, "p521_dilithium5_aes", NULL);
     ADD_TEST_SUITE(p521_dilithium5_aes);
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
     MAKE_KEYS(falcon512, "falcon512", NULL);
     ADD_TEST_SUITE(falcon512);
     MAKE_KEYS(p256_falcon512, "p256_falcon512", NULL);
     ADD_TEST_SUITE(p256_falcon512);
     MAKE_KEYS(rsa3072_falcon512, "rsa3072_falcon512", NULL);
     ADD_TEST_SUITE(rsa3072_falcon512);
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
     MAKE_KEYS(falcon1024, "falcon1024", NULL);
     ADD_TEST_SUITE(falcon1024);
     MAKE_KEYS(p521_falcon1024, "p521_falcon1024", NULL);
     ADD_TEST_SUITE(p521_falcon1024);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
     MAKE_KEYS(sphincsharaka128frobust, "sphincsharaka128frobust", NULL);
     ADD_TEST_SUITE(sphincsharaka128frobust);
     MAKE_KEYS(p256_sphincsharaka128frobust, "p256_sphincsharaka128frobust", NULL);
     ADD_TEST_SUITE(p256_sphincsharaka128frobust);
     MAKE_KEYS(rsa3072_sphincsharaka128frobust, "rsa3072_sphincsharaka128frobust", NULL);
     ADD_TEST_SUITE(rsa3072_sphincsharaka128frobust);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
     MAKE_KEYS(sphincssha256128frobust, "sphincssha256128frobust", NULL);
     ADD_TEST_SUITE(sphincssha256128frobust);
     MAKE_KEYS(p256_sphincssha256128frobust, "p256_sphincssha256128frobust", NULL);
     ADD_TEST_SUITE(p256_sphincssha256128frobust);
     MAKE_KEYS(rsa3072_sphincssha256128frobust, "rsa3072_sphincssha256128frobust", NULL);
     ADD_TEST_SUITE(rsa3072_sphincssha256128frobust);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
     MAKE_KEYS(sphincsshake256128frobust, "sphincsshake256128frobust", NULL);
     ADD_TEST_SUITE(sphincsshake256128frobust);
     MAKE_KEYS(p256_sphincsshake256128frobust, "p256_sphincsshake256128frobust", NULL);
     ADD_TEST_SUITE(p256_sphincsshake256128frobust);
     MAKE_KEYS(rsa3072_sphincsshake256128frobust, "rsa3072_sphincsshake256128frobust", NULL);
     ADD_TEST_SUITE(rsa3072_sphincsshake256128frobust);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
+    MAKE_KEYS(sphincsshake256192fsimple, "sphincsshake256192fsimple", NULL);
+    ADD_TEST_SUITE(sphincsshake256192fsimple);
+    MAKE_KEYS(p384_sphincsshake256192fsimple, "p384_sphincsshake256192fsimple", NULL);
+    ADD_TEST_SUITE(p384_sphincsshake256192fsimple);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
+    MAKE_KEYS(sphincsshake256256fsimple, "sphincsshake256256fsimple", NULL);
+    ADD_TEST_SUITE(sphincsshake256256fsimple);
+    MAKE_KEYS(p521_sphincsshake256256fsimple, "p521_sphincsshake256256fsimple", NULL);
+    ADD_TEST_SUITE(p521_sphincsshake256256fsimple);
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_ADD_END
 
     return 1;
@@ -1126,34 +1195,64 @@ int setup_tests(void)
 void cleanup_tests(void)
 {
 ///// OQS_TEMPLATE_FRAGMENT_FREEKEYS_START
+#ifdef OQS_ENABLE_SIG_dilithium_2
     FREE_KEYS(dilithium2);
     FREE_KEYS(p256_dilithium2);
     FREE_KEYS(rsa3072_dilithium2);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
     FREE_KEYS(dilithium3);
     FREE_KEYS(p384_dilithium3);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
     FREE_KEYS(dilithium5);
     FREE_KEYS(p521_dilithium5);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2_aes
     FREE_KEYS(dilithium2_aes);
     FREE_KEYS(p256_dilithium2_aes);
     FREE_KEYS(rsa3072_dilithium2_aes);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3_aes
     FREE_KEYS(dilithium3_aes);
     FREE_KEYS(p384_dilithium3_aes);
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5_aes
     FREE_KEYS(dilithium5_aes);
     FREE_KEYS(p521_dilithium5_aes);
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
     FREE_KEYS(falcon512);
     FREE_KEYS(p256_falcon512);
     FREE_KEYS(rsa3072_falcon512);
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
     FREE_KEYS(falcon1024);
     FREE_KEYS(p521_falcon1024);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
     FREE_KEYS(sphincsharaka128frobust);
     FREE_KEYS(p256_sphincsharaka128frobust);
     FREE_KEYS(rsa3072_sphincsharaka128frobust);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
     FREE_KEYS(sphincssha256128frobust);
     FREE_KEYS(p256_sphincssha256128frobust);
     FREE_KEYS(rsa3072_sphincssha256128frobust);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
     FREE_KEYS(sphincsshake256128frobust);
     FREE_KEYS(p256_sphincsshake256128frobust);
     FREE_KEYS(rsa3072_sphincsshake256128frobust);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
+    FREE_KEYS(sphincsshake256192fsimple);
+    FREE_KEYS(p384_sphincsshake256192fsimple);
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
+    FREE_KEYS(sphincsshake256256fsimple);
+    FREE_KEYS(p521_sphincsshake256256fsimple);
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_FREEKEYS_END
 
     OSSL_PROVIDER_unload(dfltprov);

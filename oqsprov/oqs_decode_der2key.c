@@ -641,5 +641,13 @@ MAKE_DECODER("p256_sphincsshake256128frobust", p256_sphincsshake256128frobust, o
 MAKE_DECODER("p256_sphincsshake256128frobust", p256_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER("rsa3072_sphincsshake256128frobust", rsa3072_sphincsshake256128frobust, oqsx, PrivateKeyInfo);
 MAKE_DECODER("rsa3072_sphincsshake256128frobust", rsa3072_sphincsshake256128frobust, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("sphincsshake256192fsimple", sphincsshake256192fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER("sphincsshake256192fsimple", sphincsshake256192fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER("p384_sphincsshake256192fsimple", p384_sphincsshake256192fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("sphincsshake256256fsimple", sphincsshake256256fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER("sphincsshake256256fsimple", sphincsshake256256fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER("p521_sphincsshake256256fsimple", p521_sphincsshake256256fsimple, oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END
 

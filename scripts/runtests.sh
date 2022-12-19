@@ -23,11 +23,16 @@ interop() {
         fi
     fi
 
-
-    if [ -z "$LOCALTESTONLY" ]; then
-        provider2openssl $1 >> interop.log 2>&1 && openssl2provider $1 >> interop.log 2>&1
-    else
-        $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1
+    # Check whether algorithm is supported at all:
+    $OPENSSL_APP list -signature-algorithms -provider oqsprovider | grep $1 > /dev/null 2>&1
+    if [ $? -ne 1 ]; then
+	# exclude interop testing for algs not supported by oqs-openssl111:
+	echo $1 | grep -q "sphincsshake256192fsimple\|sphincsshake256256fsimple" 
+	if [ $? -ne 0 ] && [ -z "$LOCALTESTONLY" ]; then
+            provider2openssl $1 >> interop.log 2>&1 && openssl2provider $1 >> interop.log 2>&1
+	else
+            $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1
+        fi
     fi
 
     if [ $? -ne 0 ]; then
@@ -107,6 +112,10 @@ interop rsa3072_sphincssha256128frobust
 interop sphincsshake256128frobust
 interop p256_sphincsshake256128frobust
 interop rsa3072_sphincsshake256128frobust
+interop sphincsshake256192fsimple
+interop p384_sphincsshake256192fsimple
+interop sphincsshake256256fsimple
+interop p521_sphincsshake256256fsimple
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_END
 
 # Run built-in tests:

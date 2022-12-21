@@ -462,6 +462,7 @@ static void oqsx_gen_cleanup(void *genctx)
     struct oqsx_gen_ctx *gctx = genctx;
 
     OQS_KM_PRINTF("OQSKEYMGMT: gen_cleanup called\n");
+    OPENSSL_free(gctx->oqs_name);
     OPENSSL_free(gctx->tls_name);
     OPENSSL_free(gctx->propq);
     OPENSSL_free(gctx);

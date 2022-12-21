@@ -155,7 +155,6 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
         ctx->aid = NULL; // ensure next function allocates memory
         ctx->aid_len = get_aid(&(ctx->aid), ctx->sig->tls_name);
 
-        ctx->mdctx = NULL;
         ctx->md = md;
         OPENSSL_strlcpy(ctx->mdname, mdname, sizeof(ctx->mdname));
     }
@@ -566,6 +565,9 @@ static void oqs_sig_freectx(void *vpoqs_sigctx)
     OPENSSL_free(ctx->mddata);
     ctx->mddata = NULL;
     ctx->mdsize = 0;
+    OPENSSL_free(ctx->aid);
+    ctx->aid = NULL;
+    ctx->aid_len = 0;
     OPENSSL_free(ctx);
 }
 
@@ -605,6 +607,19 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx)
 	if (dstctx->mddata == NULL)
             goto err;
 	dstctx->mdsize = srcctx->mdsize;
+    }
+
+    if (srcctx->aid) {
+      dstctx->aid = OPENSSL_memdup(srcctx->aid, srcctx->aid_len);
+      if (dstctx->aid == NULL)
+        goto err;
+      dstctx->aid_len = srcctx->aid_len;
+    }
+
+    if (srcctx->propq) {
+      dstctx->propq = OPENSSL_strdup(srcctx->propq);
+      if (dstctx->propq == NULL)
+        goto err;
     }
 
     return dstctx;

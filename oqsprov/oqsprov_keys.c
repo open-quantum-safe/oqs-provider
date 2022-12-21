@@ -656,6 +656,7 @@ void oqsx_key_free(OQSX_KEY *key)
 #endif
 
     OPENSSL_free(key->propq);
+    OPENSSL_free(key->tls_name);
     OPENSSL_secure_clear_free(key->privkey, key->privkeylen);
     OPENSSL_secure_clear_free(key->pubkey, key->pubkeylen);
     OPENSSL_free(key->comp_pubkey);

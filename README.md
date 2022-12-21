@@ -324,6 +324,7 @@ Contributors to the `oqsprovider` include:
 - Christian Paquin
 - Richard Levitte
 - Basil Hess
+- Julian Segeth
 
 Acknowledgments
 ---------------

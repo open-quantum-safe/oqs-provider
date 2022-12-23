@@ -157,7 +157,6 @@ struct oqsx_key_st {
     size_t privkeylen;
     size_t pubkeylen;
     size_t bit_security;
-    char *oqs_name;
     char *tls_name;
     _Atomic int references;
 

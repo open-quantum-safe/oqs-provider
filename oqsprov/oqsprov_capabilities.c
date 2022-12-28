@@ -365,7 +365,6 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
 {
     size_t i;
 
-    assert(OSSL_NELEM(oqs_param_group_list) == OSSL_NELEM(oqs_group_list) * 3 - 12 /* XXX manually exclude all 256bit ECX hybrids not supported */);
     for (i = 0; i < OSSL_NELEM(oqs_param_group_list); i++) {
         if (!cb(oqs_param_group_list[i], arg))
             return 0;

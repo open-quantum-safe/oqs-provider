@@ -118,7 +118,6 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
         return NULL;
 
     poqs_sigctx->libctx = ((PROV_OQS_CTX*)provctx)->libctx;
-    poqs_sigctx->flag_allow_md = 0;
     if (propq != NULL && (poqs_sigctx->propq = OPENSSL_strdup(propq)) == NULL) {
         OPENSSL_free(poqs_sigctx);
         poqs_sigctx = NULL;
@@ -173,6 +172,7 @@ static int oqs_sig_signverify_init(void *vpoqs_sigctx, void *voqssig, int operat
     oqsx_key_free(poqs_sigctx->sig);
     poqs_sigctx->sig = voqssig;
     poqs_sigctx->operation = operation;
+    poqs_sigctx->flag_allow_md = 1; /* change permitted until first use */
     if ( (operation==EVP_PKEY_OP_SIGN && !poqs_sigctx->sig->privkey) ||
          (operation==EVP_PKEY_OP_VERIFY && !poqs_sigctx->sig->pubkey)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
@@ -420,7 +420,7 @@ static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx, const char *mdname
 
     OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_init called for mdname %s\n", mdname);
 
-    poqs_sigctx->flag_allow_md = 0;
+    poqs_sigctx->flag_allow_md = 1; /* permitted until first use */
     if (!oqs_sig_signverify_init(vpoqs_sigctx, voqssig, operation))
         return 0;
 
@@ -469,6 +469,8 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx, const unsigned char *da
 
     if (poqs_sigctx == NULL)
         return 0;
+    // disallow MD changes after update has been called at least once
+    poqs_sigctx->flag_allow_md = 0;
 
     // unconditionally collect data for passing in full to OQS API
     if (poqs_sigctx->mddata) {

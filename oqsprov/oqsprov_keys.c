@@ -668,7 +668,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
             p = NULL;
             plen = 0;
         }else{
-            unsigned char *buf, *temp;
+            unsigned char *buf, *temp, *concat_key;
             int buflen, templen;
             PKCS8_PRIV_KEY_INFO *p8info = PKCS8_PRIV_KEY_INFO_new();
 
@@ -686,8 +686,11 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
             p8info = d2i_PKCS8_PRIV_KEY_INFO(&p8info, &buf, buflen);
             PKCS8_pkey_get0(NULL, &buf, &buflen, NULL, p8info);
 
-            memcpy(buf + buflen, temp, templen);
-            p = buf;
+            concat_key = OPENSSL_secure_malloc(buflen + templen);
+
+            memcpy(concat_key, buf, buflen);
+            memcpy(concat_key + buflen, temp, templen);
+            p = concat_key;
             plen = templen + buflen;
         }
     }

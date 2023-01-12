@@ -485,6 +485,20 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                 memcpy(key->pubkey, p + key->privkeylen,
                        plen - key->privkeylen);
 #endif
+            if  (key->keytype == KEY_TYPE_CMP_SIG){
+                size_t first_privkeylen = key->privkeylen - key->privkeylen_cmp;
+                size_t first_pubkeylen = key->pubkeylen - key->pubkeylen_cmp;
+
+                memcpy(key->privkey, p, first_privkeylen);
+                memcpy(key->privkey + first_privkeylen, p + first_privkeylen + first_pubkeylen, key->privkeylen_cmp);
+
+                memcpy(key->pubkey, p + first_privkeylen, first_pubkeylen);    
+                memcpy(key->pubkey + first_pubkeylen, p + key->privkeylen + first_pubkeylen, key->pubkeylen_cmp);   
+
+        }else{
+            memcpy(key->privkey, p, key->privkeylen);
+            memcpy(key->pubkey, p + key->privkeylen, key->pubkeylen);
+        }
         }
 #ifdef USE_ENCODING_LIB
     }
@@ -573,6 +587,8 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err;
                 }
+            }else{
+                key->cmp_classical_pkey[key->numkeys - 2] = NULL;
             }
             if (get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(key->tls_name))) == 0){
                 EVP_PKEY *npk = EVP_PKEY_new();
@@ -587,6 +603,8 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err;
                 }
+            }else{
+                key->cmp_classical_pkey[key->numkeys - 1] = NULL;
             }
         }
         if (op == KEY_OP_PRIVATE){
@@ -598,6 +616,8 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err;
                 }
+            }else{
+                key->cmp_classical_pkey[key->numkeys - 2] = NULL;
             }
             if (get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(key->tls_name))) == 0){
                 const unsigned char *enc_privkey_comp = key->comp_privkey[key->numkeys - 1];
@@ -607,6 +627,8 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err;
                 }
+            }else{
+                key->cmp_classical_pkey[key->numkeys - 1] = NULL;
             }
         }
     }
@@ -638,7 +660,7 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
 OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                               OSSL_LIB_CTX *libctx, const char *propq)
 {
-    printf("9\n"); //IMPLEMENT DECODE STACK OF HERE 
+    printf("9\n"); 
     OQSX_KEY *oqsx = NULL;
     const unsigned char *p;
     int plen;
@@ -670,21 +692,22 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
         }else{
             unsigned char *buf, *temp, *concat_key;
             int buflen, templen;
-            PKCS8_PRIV_KEY_INFO *p8info = PKCS8_PRIV_KEY_INFO_new();
+            PKCS8_PRIV_KEY_INFO *p8info_temp = PKCS8_PRIV_KEY_INFO_new();
+            PKCS8_PRIV_KEY_INFO *p8info_buf = PKCS8_PRIV_KEY_INFO_new();
 
             aType = sk_ASN1_TYPE_pop(sk); //pop the second crypt algorithm
             temp = aType->value.sequence->data;
             templen = aType->value.sequence->length;
 
-            p8info = d2i_PKCS8_PRIV_KEY_INFO(&p8info, &temp, templen);
-            PKCS8_pkey_get0(NULL, &temp, &templen, NULL, p8info);
+            p8info_temp = d2i_PKCS8_PRIV_KEY_INFO(&p8info_temp, &temp, templen);
+            PKCS8_pkey_get0(NULL, &temp, &templen, NULL, p8info_temp);
 
             aType = sk_ASN1_TYPE_pop(sk); //pop the first crypt algorithm
             buf = aType->value.sequence->data;
             buflen = aType->value.sequence->length;
 
-            p8info = d2i_PKCS8_PRIV_KEY_INFO(&p8info, &buf, buflen);
-            PKCS8_pkey_get0(NULL, &buf, &buflen, NULL, p8info);
+            p8info_buf = d2i_PKCS8_PRIV_KEY_INFO(&p8info_buf, &buf, buflen);
+            PKCS8_pkey_get0(NULL, &buf, &buflen, NULL, p8info_buf);
 
             concat_key = OPENSSL_secure_malloc(buflen + templen);
 
@@ -1413,8 +1436,6 @@ int oqsx_key_gen(OQSX_KEY *key)
         {
             ret = OQS_SIG_keypair(key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig, key->privkey + key->privkeylen, key->pubkey + key->pubkeylen);
             ON_ERR_GOTO(ret, err);
-            key->comp_pubkey[1] = key->pubkey + key->pubkeylen;
-            key->comp_privkey[1] = key->privkey + key->privkeylen;
         }
 
 }else if (key->keytype == KEY_TYPE_SIG) {

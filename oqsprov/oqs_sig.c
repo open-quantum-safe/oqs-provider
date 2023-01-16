@@ -472,23 +472,25 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx, const unsigned char *da
     // disallow MD changes after update has been called at least once
     poqs_sigctx->flag_allow_md = 0;
 
+    if (poqs_sigctx->mdctx) 
+    	return EVP_DigestUpdate(poqs_sigctx->mdctx, data, datalen);
+    else {
     // unconditionally collect data for passing in full to OQS API
-    if (poqs_sigctx->mddata) {
+      if (poqs_sigctx->mddata) {
 	unsigned char* newdata = OPENSSL_realloc(poqs_sigctx->mddata, poqs_sigctx->mdsize+datalen);
 	if (newdata == NULL) return 0;
 	memcpy(newdata+poqs_sigctx->mdsize, data, datalen);
 	poqs_sigctx->mddata = newdata;
 	poqs_sigctx->mdsize += datalen;
-    }
-    else { // simple alloc and copy
+      }
+      else { // simple alloc and copy
 	poqs_sigctx->mddata = OPENSSL_malloc(datalen);
 	if (poqs_sigctx->mddata == NULL) return 0;
 	poqs_sigctx->mdsize=datalen;
 	memcpy(poqs_sigctx->mddata, data, poqs_sigctx->mdsize);
+      }
+      OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_update collected %ld bytes...\n", poqs_sigctx->mdsize);
     }
-    OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_update collected %ld bytes...\n", poqs_sigctx->mdsize);
-    if (poqs_sigctx->mdctx) 
-    	return EVP_DigestUpdate(poqs_sigctx->mdctx, data, datalen);
     return 1;
 }
 

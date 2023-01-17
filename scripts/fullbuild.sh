@@ -18,6 +18,10 @@ fi
 if [ ! -f ".local/lib/liboqs.a" ]; then
    echo "liboqs static lib not built: Cloning and building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
+   # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
+   #    STD: only include NIST standardized algorithms
+   #    NIST_R4: only include algorithms in round 4 of the NIST competition
+   #    All: include all algorithms supported by liboqs (default)
    git clone https://github.com/open-quantum-safe/liboqs.git && cd liboqs && cmake -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cmake --build _build && cmake --install _build && cd ..
    if [ $? -ne 0 ]; then
      echo "liboqs build failed. Exiting."

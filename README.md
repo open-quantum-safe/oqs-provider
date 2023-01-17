@@ -122,7 +122,7 @@ Further `liboqs` build options are [documented here](https://github.com/open-qua
 
 ## Building the provider
 
-`oqsprovider` can be built for example via the following:
+`oqsprovider` using the local OpenSSL3 build as done above can be built for example via the following:
 
     cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build
     cmake --build _build
@@ -142,7 +142,23 @@ See [the test README](test/README.md) for details.
 Additional interoperability tests (with OQS-OpenSSL1.1.1) are available in the
 script `scripts/runtests.sh`.
 
+## Packaging
+
+A build target to create .deb packaging is available via the standard `package`
+target, e.g., executing `make package` in the `_build` subdirectory.
+
 ## Build and test options
+
+### Size optimizations
+
+In order to reduce the size of the oqsprovider, it is possible to limit the number
+of algorithms supported, e.g., to the set of NIST standardized algorithms. This is
+facilitated by setting the `liboqs` build option `-DOQS_ALGS_ENABLED=STD`.
+
+### ninja
+
+By adding the standard CMake option `-GNinja` the ninja build system can be used,
+enabling the usual `ninja`, `ninja test`, or `ninja package` commands.
 
 ### NDEBUG
 
@@ -176,7 +192,7 @@ eliminates the need for specific PATH setting as showcased below.
 
 ## Checking provider version information
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider 
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/lib -provider oqsprovider 
 
 ## Creating (classic) keys and certificates
 
@@ -191,13 +207,13 @@ This can be facilitated for example by running
 
 This can be facilitated for example by running
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake -provider-path _build/oqsprov  -provider default -provider oqsprovider
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake -provider-path _build/lib  -provider default -provider oqsprovider
 
 ## Running a client to interact with (quantum-safe) KEM algorithms
 
 This can be facilitated for example by running
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_client -groups frodo640shake -provider-path _build/oqsprov  -provider default -provider oqsprovider
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_client -groups frodo640shake -provider-path _build/lib  -provider default -provider oqsprovider
 
 By issuing the command `GET /` the quantum-safe crypto enabled OpenSSL3
 server returns details about the established connection.
@@ -217,7 +233,7 @@ certificate (and its signature algorithm) to create the signed data:
 
 Step 1: Create quantum-safe key pair and self-signed certificate:
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider-path _build/oqsprov -provider oqsprovider -provider default
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider-path _build/lib -provider oqsprovider -provider default
 
 By changing the `-newkey` parameter algorithm name [any of the 
 supported quantum-safe or hybrid algorithms](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable#authentication)
@@ -231,7 +247,7 @@ requires the presence of a digest algorithm, while quantum-safe crypto
 does not, in difference to the QSC certificate creation command above,
 passing a message digest algorithm via the `-md` parameter is mandatory.
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -in inputfile -sign -signer qsc.crt -inkey qsc.key -nodetach -outform pem -binary -out signedfile -md sha512 -provider-path _build/oqsprov  -provider default -provider oqsprovider
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -in inputfile -sign -signer qsc.crt -inkey qsc.key -nodetach -outform pem -binary -out signedfile -md sha512 -provider-path _build/lib  -provider default -provider oqsprovider
 
 Data to be signed is to be contained in the file named `inputfile`. The
 resultant CMS output is contained in file `signedfile`. The QSC algorithm
@@ -244,7 +260,7 @@ Continuing the example above, the following command verifies the CMS file
 `signedfile` and outputs the `outputfile`. Its contents should be identical
 to the original data in `inputfile` above.
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile -provider-path _build/oqsprov -provider oqsprovider -provider default
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile -provider-path _build/lib -provider oqsprovider -provider default
 
 Note that it is also possible to build proper QSC certificate chains
 using the standard OpenSSL calls. For sample code see
@@ -257,15 +273,15 @@ command. Sample invocations building on the keys and certificate files in the ex
 
 #### Signing
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/oqsprov -provider oqsprovider -provider default -sign qsc.key -out dgstsignfile inputfile
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/lib -provider oqsprovider -provider default -sign qsc.key -out dgstsignfile inputfile
 
 #### Verifying
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/oqsprov -provider oqsprovider -provider default -signature dgstsignfile -verify qsc.pubkey inputfile
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/lib -provider oqsprovider -provider default -signature dgstsignfile -verify qsc.pubkey inputfile
 
 The public key can be extracted from the certificate using standard openssl command:
 
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl x509 -provider-path _build/oqsprov -provider oqsprovider -provider default -in qsc.crt -pubkey -noout > qsc.pubkey
+    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl x509 -provider-path _build/lib -provider oqsprovider -provider default -in qsc.crt -pubkey -noout > qsc.pubkey
 
 The `dgst` command is not tested for interoperability with [oqs-openssl111](https://github.com/open-quantum-safe/openssl).
 

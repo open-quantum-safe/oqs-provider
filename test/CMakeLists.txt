@@ -1,3 +1,4 @@
+include(GNUInstallDirs)
 add_test(
   NAME oqs_signatures
   COMMAND oqs_test_signatures
@@ -5,7 +6,7 @@ add_test(
           "${CMAKE_SOURCE_DIR}/test/oqs.cnf"
 )
 set_tests_properties(oqs_signatures
-  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
+  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"
 )
 
 add_executable(oqs_test_signatures oqs_test_signatures.c test_common.c)
@@ -18,7 +19,7 @@ add_test(
           "${CMAKE_SOURCE_DIR}/test/oqs.cnf"
 )
 set_tests_properties(oqs_kems
-  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
+  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"
 )
 
 add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
@@ -40,7 +41,7 @@ add_test(
             "${OPENSSL_BLDTOP}/test/recipes/90-test_sslapi_data/passwd.txt"
 )
 set_tests_properties(oqs_groups
-    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"
 )
 add_executable(oqs_test_groups oqs_test_groups.c test_common.c ${OPENSSL_BLDTOP}/test/helpers/ssltestlib.c)
 # e_os.h resides in top-level for OSSL3:
@@ -60,7 +61,7 @@ add_test(
 )
 set_tests_properties(oqs_tlssig
     # Some algorithms known to overflow OpenSSL limits; TBD/resolved upstream
-    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov;OQS_SKIP_TESTS=picnicl1full,rainbowVclassic,sphincs"
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib;OQS_SKIP_TESTS=picnicl1full,rainbowVclassic,sphincs"
 )
 add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c ${OPENSSL_BLDTOP}/test/helpers/ssltestlib.c)
 # e_os.h resides in top-level for OSSL3:
@@ -81,7 +82,7 @@ add_test(
   COMMAND oqs_test_endecode
 )
 set_tests_properties(oqs_endecode
-  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/oqsprov"
+  PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"
 )
 
 endif() # NOT IS_DIRECTORY ${OPENSSL_BLDTOP}

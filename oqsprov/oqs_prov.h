@@ -22,7 +22,7 @@
 #  include <openssl/core.h>
 #  include <openssl/e_os2.h>
 
-#define OQS_PROVIDER_BASE_VERSION_STR "0.5.0-dev"
+#define OQS_PROVIDER_BASE_VERSION_STR OQSPROVIDER_VERSION_TEXT
 
 #ifdef NOPUBKEY_IN_PRIVKEY
 #define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR "-nopub"
@@ -157,7 +157,6 @@ struct oqsx_key_st {
     size_t privkeylen;
     size_t pubkeylen;
     size_t bit_security;
-    char *oqs_name;
     char *tls_name;
     _Atomic int references;
 

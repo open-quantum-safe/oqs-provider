@@ -50,7 +50,7 @@ if [ -z "$OPENSSL_APP" ]; then
 fi
 
 if [ -z "$OPENSSL_MODULES" ]; then
-    export OPENSSL_MODULES=_build/oqsprov
+    export OPENSSL_MODULES=_build/lib
 fi
 
 if [ -z "$LD_LIBRARY_PATH" ]; then
@@ -79,7 +79,7 @@ echo "OpenSSL app: $OPENSSL_APP"
 
 echo "Version information:"
 $OPENSSL_APP version
-$OPENSSL_APP list -providers -verbose -provider-path _build/oqsprov -provider oqsprovider
+$OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
 
 # Run interop-tests:
 echo "Cert gen/verify, CMS sign/verify tests for all enabled algorithms commencing..."

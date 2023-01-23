@@ -380,7 +380,6 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
         OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME, \
                                #tlsname, \
                                sizeof(#tlsname)), \
-        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_HASH_NAME, "", 0) ,\
         OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_OID, \
                                #oid, \
                                sizeof(#oid)), \

@@ -34,7 +34,7 @@ if [ ! -f "_build/oqsprov/oqsprovider.so" ]; then
    echo "oqsprovider not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
-   cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+   cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."
      exit -1

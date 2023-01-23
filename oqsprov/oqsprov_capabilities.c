@@ -461,8 +461,8 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
 {
     size_t i;
 
-    // assertion doesn't hold if not all algorithms are enabled in liboqs:
-    // XXX fixme assert(OSSL_NELEM(oqs_param_sigalg_list) == OSSL_NELEM(oqs_sigalg_list));
+    // relaxed assertion for the case that not all algorithms are enabled in liboqs:
+    assert(OSSL_NELEM(oqs_param_sigalg_list) <= OSSL_NELEM(oqs_sigalg_list));
     for (i = 0; i < OSSL_NELEM(oqs_param_sigalg_list); i++) {
         if (!cb(oqs_param_sigalg_list[i], arg))
             return 0;

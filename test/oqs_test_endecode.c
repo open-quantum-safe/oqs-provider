@@ -982,6 +982,14 @@ IMPLEMENT_TEST_SUITE(p256_sphincsharaka128frobust, "p256_sphincsharaka128frobust
 KEYS(rsa3072_sphincsharaka128frobust);
 IMPLEMENT_TEST_SUITE(rsa3072_sphincsharaka128frobust, "rsa3072_sphincsharaka128frobust")
 #endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
+KEYS(sphincsharaka128fsimple);
+IMPLEMENT_TEST_SUITE(sphincsharaka128fsimple, "sphincsharaka128fsimple")
+KEYS(p256_sphincsharaka128fsimple);
+IMPLEMENT_TEST_SUITE(p256_sphincsharaka128fsimple, "p256_sphincsharaka128fsimple")
+KEYS(rsa3072_sphincsharaka128fsimple);
+IMPLEMENT_TEST_SUITE(rsa3072_sphincsharaka128fsimple, "rsa3072_sphincsharaka128fsimple")
+#endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
 KEYS(sphincssha256128frobust);
 IMPLEMENT_TEST_SUITE(sphincssha256128frobust, "sphincssha256128frobust")
@@ -990,25 +998,21 @@ IMPLEMENT_TEST_SUITE(p256_sphincssha256128frobust, "p256_sphincssha256128frobust
 KEYS(rsa3072_sphincssha256128frobust);
 IMPLEMENT_TEST_SUITE(rsa3072_sphincssha256128frobust, "rsa3072_sphincssha256128frobust")
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
-KEYS(sphincsshake256128frobust);
-IMPLEMENT_TEST_SUITE(sphincsshake256128frobust, "sphincsshake256128frobust")
-KEYS(p256_sphincsshake256128frobust);
-IMPLEMENT_TEST_SUITE(p256_sphincsshake256128frobust, "p256_sphincsshake256128frobust")
-KEYS(rsa3072_sphincsshake256128frobust);
-IMPLEMENT_TEST_SUITE(rsa3072_sphincsshake256128frobust, "rsa3072_sphincsshake256128frobust")
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
+KEYS(sphincssha256128ssimple);
+IMPLEMENT_TEST_SUITE(sphincssha256128ssimple, "sphincssha256128ssimple")
+KEYS(p256_sphincssha256128ssimple);
+IMPLEMENT_TEST_SUITE(p256_sphincssha256128ssimple, "p256_sphincssha256128ssimple")
+KEYS(rsa3072_sphincssha256128ssimple);
+IMPLEMENT_TEST_SUITE(rsa3072_sphincssha256128ssimple, "rsa3072_sphincssha256128ssimple")
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
-KEYS(sphincsshake256192fsimple);
-IMPLEMENT_TEST_SUITE(sphincsshake256192fsimple, "sphincsshake256192fsimple")
-KEYS(p384_sphincsshake256192fsimple);
-IMPLEMENT_TEST_SUITE(p384_sphincsshake256192fsimple, "p384_sphincsshake256192fsimple")
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
-KEYS(sphincsshake256256fsimple);
-IMPLEMENT_TEST_SUITE(sphincsshake256256fsimple, "sphincsshake256256fsimple")
-KEYS(p521_sphincsshake256256fsimple);
-IMPLEMENT_TEST_SUITE(p521_sphincsshake256256fsimple, "p521_sphincsshake256256fsimple")
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
+KEYS(sphincsshake256128fsimple);
+IMPLEMENT_TEST_SUITE(sphincsshake256128fsimple, "sphincsshake256128fsimple")
+KEYS(p256_sphincsshake256128fsimple);
+IMPLEMENT_TEST_SUITE(p256_sphincsshake256128fsimple, "p256_sphincsshake256128fsimple")
+KEYS(rsa3072_sphincsshake256128fsimple);
+IMPLEMENT_TEST_SUITE(rsa3072_sphincsshake256128fsimple, "rsa3072_sphincsshake256128fsimple")
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_IMPLEMENT_END
 
@@ -1159,6 +1163,14 @@ int setup_tests(void)
     MAKE_KEYS(rsa3072_sphincsharaka128frobust, "rsa3072_sphincsharaka128frobust", NULL);
     ADD_TEST_SUITE(rsa3072_sphincsharaka128frobust);
 #endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
+    MAKE_KEYS(sphincsharaka128fsimple, "sphincsharaka128fsimple", NULL);
+    ADD_TEST_SUITE(sphincsharaka128fsimple);
+    MAKE_KEYS(p256_sphincsharaka128fsimple, "p256_sphincsharaka128fsimple", NULL);
+    ADD_TEST_SUITE(p256_sphincsharaka128fsimple);
+    MAKE_KEYS(rsa3072_sphincsharaka128fsimple, "rsa3072_sphincsharaka128fsimple", NULL);
+    ADD_TEST_SUITE(rsa3072_sphincsharaka128fsimple);
+#endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
     MAKE_KEYS(sphincssha256128frobust, "sphincssha256128frobust", NULL);
     ADD_TEST_SUITE(sphincssha256128frobust);
@@ -1167,25 +1179,21 @@ int setup_tests(void)
     MAKE_KEYS(rsa3072_sphincssha256128frobust, "rsa3072_sphincssha256128frobust", NULL);
     ADD_TEST_SUITE(rsa3072_sphincssha256128frobust);
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
-    MAKE_KEYS(sphincsshake256128frobust, "sphincsshake256128frobust", NULL);
-    ADD_TEST_SUITE(sphincsshake256128frobust);
-    MAKE_KEYS(p256_sphincsshake256128frobust, "p256_sphincsshake256128frobust", NULL);
-    ADD_TEST_SUITE(p256_sphincsshake256128frobust);
-    MAKE_KEYS(rsa3072_sphincsshake256128frobust, "rsa3072_sphincsshake256128frobust", NULL);
-    ADD_TEST_SUITE(rsa3072_sphincsshake256128frobust);
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
+    MAKE_KEYS(sphincssha256128ssimple, "sphincssha256128ssimple", NULL);
+    ADD_TEST_SUITE(sphincssha256128ssimple);
+    MAKE_KEYS(p256_sphincssha256128ssimple, "p256_sphincssha256128ssimple", NULL);
+    ADD_TEST_SUITE(p256_sphincssha256128ssimple);
+    MAKE_KEYS(rsa3072_sphincssha256128ssimple, "rsa3072_sphincssha256128ssimple", NULL);
+    ADD_TEST_SUITE(rsa3072_sphincssha256128ssimple);
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
-    MAKE_KEYS(sphincsshake256192fsimple, "sphincsshake256192fsimple", NULL);
-    ADD_TEST_SUITE(sphincsshake256192fsimple);
-    MAKE_KEYS(p384_sphincsshake256192fsimple, "p384_sphincsshake256192fsimple", NULL);
-    ADD_TEST_SUITE(p384_sphincsshake256192fsimple);
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
-    MAKE_KEYS(sphincsshake256256fsimple, "sphincsshake256256fsimple", NULL);
-    ADD_TEST_SUITE(sphincsshake256256fsimple);
-    MAKE_KEYS(p521_sphincsshake256256fsimple, "p521_sphincsshake256256fsimple", NULL);
-    ADD_TEST_SUITE(p521_sphincsshake256256fsimple);
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
+    MAKE_KEYS(sphincsshake256128fsimple, "sphincsshake256128fsimple", NULL);
+    ADD_TEST_SUITE(sphincsshake256128fsimple);
+    MAKE_KEYS(p256_sphincsshake256128fsimple, "p256_sphincsshake256128fsimple", NULL);
+    ADD_TEST_SUITE(p256_sphincsshake256128fsimple);
+    MAKE_KEYS(rsa3072_sphincsshake256128fsimple, "rsa3072_sphincsshake256128fsimple", NULL);
+    ADD_TEST_SUITE(rsa3072_sphincsshake256128fsimple);
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_ADD_END
 
@@ -1235,23 +1243,25 @@ void cleanup_tests(void)
     FREE_KEYS(p256_sphincsharaka128frobust);
     FREE_KEYS(rsa3072_sphincsharaka128frobust);
 #endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
+    FREE_KEYS(sphincsharaka128fsimple);
+    FREE_KEYS(p256_sphincsharaka128fsimple);
+    FREE_KEYS(rsa3072_sphincsharaka128fsimple);
+#endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
     FREE_KEYS(sphincssha256128frobust);
     FREE_KEYS(p256_sphincssha256128frobust);
     FREE_KEYS(rsa3072_sphincssha256128frobust);
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
-    FREE_KEYS(sphincsshake256128frobust);
-    FREE_KEYS(p256_sphincsshake256128frobust);
-    FREE_KEYS(rsa3072_sphincsshake256128frobust);
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
+    FREE_KEYS(sphincssha256128ssimple);
+    FREE_KEYS(p256_sphincssha256128ssimple);
+    FREE_KEYS(rsa3072_sphincssha256128ssimple);
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
-    FREE_KEYS(sphincsshake256192fsimple);
-    FREE_KEYS(p384_sphincsshake256192fsimple);
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
-    FREE_KEYS(sphincsshake256256fsimple);
-    FREE_KEYS(p521_sphincsshake256256fsimple);
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
+    FREE_KEYS(sphincsshake256128fsimple);
+    FREE_KEYS(p256_sphincsshake256128fsimple);
+    FREE_KEYS(rsa3072_sphincsshake256128fsimple);
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_FREEKEYS_END
 

@@ -43,17 +43,17 @@ static const char *sigalg_names[] = {
 #ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
   "sphincsharaka128frobust","p256_sphincsharaka128frobust","rsa3072_sphincsharaka128frobust",
 #endif
+#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
+  "sphincsharaka128fsimple","p256_sphincsharaka128fsimple","rsa3072_sphincsharaka128fsimple",
+#endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
   "sphincssha256128frobust","p256_sphincssha256128frobust","rsa3072_sphincssha256128frobust",
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_robust
-  "sphincsshake256128frobust","p256_sphincsshake256128frobust","rsa3072_sphincsshake256128frobust",
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
+  "sphincssha256128ssimple","p256_sphincssha256128ssimple","rsa3072_sphincssha256128ssimple",
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_192f_simple
-  "sphincsshake256192fsimple","p384_sphincsshake256192fsimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_256f_simple
-  "sphincsshake256256fsimple","p521_sphincsshake256256fsimple",
+#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
+  "sphincsshake256128fsimple","p256_sphincsshake256128fsimple","rsa3072_sphincsshake256128fsimple",
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END
 };

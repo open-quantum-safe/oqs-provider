@@ -39,9 +39,9 @@ This implementation makes available the following quantum safe algorithms:
 - **HQC**: `hqc128`, `hqc192`, `hqc256`†
 - **CRYSTALS-Dilithium**:`dilithium2`\*, `dilithium3`\*, `dilithium5`\*, `dilithium2_aes`\*, `dilithium3_aes`\*, `dilithium5_aes`\*
 - **Falcon**:`falcon512`\*, `falcon1024`\*
-- **SPHINCS-Haraka**:`sphincsharaka128frobust`\*, `sphincsharaka128fsimple`, `sphincsharaka128srobust`, `sphincsharaka128ssimple`, `sphincsharaka192frobust`, `sphincsharaka192fsimple`, `sphincsharaka192srobust`, `sphincsharaka192ssimple`, `sphincsharaka256frobust`, `sphincsharaka256fsimple`, `sphincsharaka256srobust`, `sphincsharaka256ssimple`
-- **SPHINCS-SHA256**:`sphincssha256128frobust`\*, `sphincssha256128fsimple`, `sphincssha256128srobust`, `sphincssha256128ssimple`, `sphincssha256192frobust`, `sphincssha256192fsimple`, `sphincssha256192srobust`, `sphincssha256192ssimple`, `sphincssha256256frobust`, `sphincssha256256fsimple`, `sphincssha256256srobust`, `sphincssha256256ssimple`
-- **SPHINCS-SHAKE256**:`sphincsshake256128frobust`\*, `sphincsshake256128fsimple`, `sphincsshake256128srobust`, `sphincsshake256128ssimple`, `sphincsshake256192frobust`, `sphincsshake256192fsimple`\*, `sphincsshake256192srobust`, `sphincsshake256192ssimple`, `sphincsshake256256frobust`, `sphincsshake256256fsimple`\*, `sphincsshake256256srobust`, `sphincsshake256256ssimple`
+- **SPHINCS-Haraka**:`sphincsharaka128frobust`\*, `sphincsharaka128fsimple`\*, `sphincsharaka128srobust`, `sphincsharaka128ssimple`, `sphincsharaka192frobust`, `sphincsharaka192fsimple`, `sphincsharaka192srobust`, `sphincsharaka192ssimple`, `sphincsharaka256frobust`, `sphincsharaka256fsimple`, `sphincsharaka256srobust`, `sphincsharaka256ssimple`
+- **SPHINCS-SHA256**:`sphincssha256128frobust`\*, `sphincssha256128fsimple`, `sphincssha256128srobust`, `sphincssha256128ssimple`\*, `sphincssha256192frobust`, `sphincssha256192fsimple`, `sphincssha256192srobust`, `sphincssha256192ssimple`, `sphincssha256256frobust`, `sphincssha256256fsimple`, `sphincssha256256srobust`, `sphincssha256256ssimple`
+- **SPHINCS-SHAKE256**:`sphincsshake256128frobust`, `sphincsshake256128fsimple`\*, `sphincsshake256128srobust`, `sphincsshake256128ssimple`, `sphincsshake256192frobust`, `sphincsshake256192fsimple`, `sphincsshake256192srobust`, `sphincsshake256192ssimple`, `sphincsshake256256frobust`, `sphincsshake256256fsimple`, `sphincsshake256256srobust`, `sphincsshake256256ssimple`
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 
@@ -167,14 +167,16 @@ By adding the standard CMake option `-DCMAKE_BUILD_TYPE=Release` to the
 
 ### OQS_SKIP_TESTS
 
-By setting this environment variable, OpenSSL 1.1.1 interoperability testing
-and algorithm families as listed [here](https://github.com/open-quantum-safe/openssl#supported-algorithms)
+By setting this environment variable, testing of specific
+algorithm families as listed [here](https://github.com/open-quantum-safe/openssl#supported-algorithms)
 can be disabled in testing. For example
 
-    OQS_SKIP_TESTS="111,rainbow" ./scripts/runtests.sh
+    OQS_SKIP_TESTS="sphincs" ./scripts/runtests.sh
 
-excludes OpenSSL1.1.1 interop testing as well as all algorithms of the
-"Rainbow" family.
+excludes all algorithms of the "Sphincs" family.
+
+*Note*: By default, interoperability testing with oqs-openssl111 is no longer
+performed by default but can be manually enabled in the script `scripts/runtests.sh`.
 
 Using
 -----

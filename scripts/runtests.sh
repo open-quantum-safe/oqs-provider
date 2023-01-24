@@ -26,9 +26,7 @@ interop() {
     # Check whether algorithm is supported at all:
     $OPENSSL_APP list -signature-algorithms -provider oqsprovider | grep $1 > /dev/null 2>&1
     if [ $? -ne 1 ]; then
-	# exclude interop testing for algs not supported by oqs-openssl111:
-	echo $1 | grep -q "sphincsshake256192fsimple\|sphincsshake256256fsimple" 
-	if [ $? -ne 0 ] && [ -z "$LOCALTESTONLY" ]; then
+	if [ -z "$LOCALTESTONLY" ]; then
             provider2openssl $1 >> interop.log 2>&1 && openssl2provider $1 >> interop.log 2>&1
 	else
             $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1
@@ -68,12 +66,11 @@ if [ $? -ne 0 ]; then
    export LOCALTESTONLY="Yes"
 fi
 
-# check if OpenSSL111 interop tests are disabled:
-echo $OQS_SKIP_TESTS | grep -q "111"
-if [ $? -eq 0 ]; then
-   echo "No OQS-OpenSSL111 interop tests due to skip instruction in $OQS_SKIP_TESTS"
-   export LOCALTESTONLY="Yes"
-fi
+# by default, do not run interop tests as per 
+# https://github.com/open-quantum-safe/oqs-provider/issues/32
+# comment the following line if they should be run; be sure to
+# have alignment in algorithms supported in that case
+export LOCALTESTONLY="Yes"
 
 echo "OpenSSL app: $OPENSSL_APP"
 
@@ -106,16 +103,18 @@ interop p521_falcon1024
 interop sphincsharaka128frobust
 interop p256_sphincsharaka128frobust
 interop rsa3072_sphincsharaka128frobust
+interop sphincsharaka128fsimple
+interop p256_sphincsharaka128fsimple
+interop rsa3072_sphincsharaka128fsimple
 interop sphincssha256128frobust
 interop p256_sphincssha256128frobust
 interop rsa3072_sphincssha256128frobust
-interop sphincsshake256128frobust
-interop p256_sphincsshake256128frobust
-interop rsa3072_sphincsshake256128frobust
-interop sphincsshake256192fsimple
-interop p384_sphincsshake256192fsimple
-interop sphincsshake256256fsimple
-interop p521_sphincsshake256256fsimple
+interop sphincssha256128ssimple
+interop p256_sphincssha256128ssimple
+interop rsa3072_sphincssha256128ssimple
+interop sphincsshake256128fsimple
+interop p256_sphincsshake256128fsimple
+interop rsa3072_sphincsshake256128fsimple
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_END
 
 # Run built-in tests:

@@ -232,45 +232,43 @@ typedef struct oqs_sigalg_constants_st {
     unsigned int secbits;            /* Bits of security */
     int mintls;                      /* Minimum TLS version, -1 unsupported */
     int maxtls;                      /* Maximum TLS version (or 0 for undefined) */
-    int mindtls;                     /* Minimum DTLS version, -1 unsupported */
-    int maxdtls;                     /* Maximum DTLS version (or 0 for undefined) */
 } OQS_SIGALG_CONSTANTS;
 
 static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_START
-    { 0xfea0, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea1, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea2, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea3, 192, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea4, 192, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea5, 256, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea6, 256, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea7, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea8, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfea9, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfeaa, 192, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfeab, 192, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfeac, 256, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfead, 256, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe0b, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe0c, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe0d, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe0e, 256, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe0f, 256, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe42, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe43, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe44, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe5e, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe5f, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe60, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe7a, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe7b, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe7c, 128, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe88, 192, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe89, 192, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe90, 256, TLS1_3_VERSION, 0, -1, -1 },
-    { 0xfe91, 256, TLS1_3_VERSION, 0, -1, -1 },
+    { 0xfea0, 128, TLS1_3_VERSION, 0 },
+    { 0xfea1, 128, TLS1_3_VERSION, 0 },
+    { 0xfea2, 128, TLS1_3_VERSION, 0 },
+    { 0xfea3, 192, TLS1_3_VERSION, 0 },
+    { 0xfea4, 192, TLS1_3_VERSION, 0 },
+    { 0xfea5, 256, TLS1_3_VERSION, 0 },
+    { 0xfea6, 256, TLS1_3_VERSION, 0 },
+    { 0xfea7, 128, TLS1_3_VERSION, 0 },
+    { 0xfea8, 128, TLS1_3_VERSION, 0 },
+    { 0xfea9, 128, TLS1_3_VERSION, 0 },
+    { 0xfeaa, 192, TLS1_3_VERSION, 0 },
+    { 0xfeab, 192, TLS1_3_VERSION, 0 },
+    { 0xfeac, 256, TLS1_3_VERSION, 0 },
+    { 0xfead, 256, TLS1_3_VERSION, 0 },
+    { 0xfe0b, 128, TLS1_3_VERSION, 0 },
+    { 0xfe0c, 128, TLS1_3_VERSION, 0 },
+    { 0xfe0d, 128, TLS1_3_VERSION, 0 },
+    { 0xfe0e, 256, TLS1_3_VERSION, 0 },
+    { 0xfe0f, 256, TLS1_3_VERSION, 0 },
+    { 0xfe42, 128, TLS1_3_VERSION, 0 },
+    { 0xfe43, 128, TLS1_3_VERSION, 0 },
+    { 0xfe44, 128, TLS1_3_VERSION, 0 },
+    { 0xfe5e, 128, TLS1_3_VERSION, 0 },
+    { 0xfe5f, 128, TLS1_3_VERSION, 0 },
+    { 0xfe60, 128, TLS1_3_VERSION, 0 },
+    { 0xfe7a, 128, TLS1_3_VERSION, 0 },
+    { 0xfe7b, 128, TLS1_3_VERSION, 0 },
+    { 0xfe7c, 128, TLS1_3_VERSION, 0 },
+    { 0xfe88, 192, TLS1_3_VERSION, 0 },
+    { 0xfe89, 192, TLS1_3_VERSION, 0 },
+    { 0xfe90, 256, TLS1_3_VERSION, 0 },
+    { 0xfe91, 256, TLS1_3_VERSION, 0 },
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 
@@ -376,16 +374,12 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
 #define OQS_SIGALG_ENTRY(tlsname, realname, algorithm, oid, idx) \
     { \
+        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_IANA_NAME, \
+                               #tlsname, \
+                               sizeof(#tlsname)), \
         OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME, \
                                #tlsname, \
                                sizeof(#tlsname)), \
-        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME_INTERNAL, \
-                               #realname, \
-                               sizeof(#realname)), \
-        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_ALG, \
-                               #algorithm, \
-                               sizeof(#algorithm)), \
-        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_HASHALG, "", 0) ,\
         OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_OID, \
                                #oid, \
                                sizeof(#oid)), \
@@ -397,10 +391,6 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
                         (unsigned int *)&oqs_sigalg_list[idx].mintls), \
         OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MAX_TLS, \
                         (unsigned int *)&oqs_sigalg_list[idx].maxtls), \
-        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MIN_DTLS, \
-                        (unsigned int *)&oqs_sigalg_list[idx].mindtls), \
-        OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MAX_DTLS, \
-                        (unsigned int *)&oqs_sigalg_list[idx].maxdtls), \
         OSSL_PARAM_END \
     }
 
@@ -471,7 +461,8 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
 {
     size_t i;
 
-    assert(OSSL_NELEM(oqs_param_sigalg_list) == OSSL_NELEM(oqs_sigalg_list));
+    // relaxed assertion for the case that not all algorithms are enabled in liboqs:
+    assert(OSSL_NELEM(oqs_param_sigalg_list) <= OSSL_NELEM(oqs_sigalg_list));
     for (i = 0; i < OSSL_NELEM(oqs_param_sigalg_list); i++) {
         if (!cb(oqs_param_sigalg_list[i], arg))
             return 0;

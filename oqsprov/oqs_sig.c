@@ -410,6 +410,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
     if (ctx_verify) {
       EVP_PKEY_CTX_free(ctx_verify);
     }
+    OQS_SIG_PRINTF2("OQS SIG provider: verify rv = %d\n", rv);
     return rv;
 }
 

@@ -95,11 +95,11 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p256_sphincsshake128fsimple",
     "1.3.9999.6.7.15",
     "rsa3072_sphincsshake128fsimple",
-    "2.16.840.1.114027.80.5.2",
+    "2.16.840.1.114027.80.5.1.1",
     "dilithium3_rsa3072",
-    "2.16.840.1.114027.80.5.1",
+    "2.16.840.1.114027.80.5.1.2",
     "dilithium3_p256", 
-    "2.16.840.1.114027.80.5.3",
+    "2.16.840.1.114027.80.5.1.8",
     "falcon512_p256",  
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };

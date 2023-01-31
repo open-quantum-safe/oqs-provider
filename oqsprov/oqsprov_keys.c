@@ -648,10 +648,46 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
     int plen;
     X509_ALGOR *palg;
     OQSX_KEY *oqsx = NULL;
+    STACK_OF(ASN1_TYPE) *sk = NULL;
+    ASN1_TYPE *aType = NULL;
+    ASN1_OCTET_STRING *oct = NULL;
 
     if (!xpk || (!X509_PUBKEY_get0_param(NULL, &p, &plen, &palg, xpk)))
     {
         return NULL;
+    }
+    if (get_keytype(OBJ_obj2nid(palg->algorithm)) == KEY_TYPE_CMP_SIG){
+        sk = d2i_ASN1_SEQUENCE_ANY(NULL, &p, plen);
+        if (sk == NULL){
+            p = NULL;
+            plen = 0;
+        }else{
+            unsigned char *buf, *temp, *concat_key;
+            int buflen, templen;
+            X509_PUBKEY *p8info_temp = X509_PUBKEY_new();
+            X509_PUBKEY *p8info_buf = X509_PUBKEY_new();
+
+            aType = sk_ASN1_TYPE_pop(sk); //pop the second crypt algorithm
+            temp = aType->value.sequence->data;
+            templen = aType->value.sequence->length;
+
+            p8info_temp = d2i_X509_PUBKEY(&p8info_temp, &temp, templen);
+            X509_PUBKEY_get0_param(NULL, &temp, &templen, NULL, p8info_temp);
+
+            aType = sk_ASN1_TYPE_pop(sk); //pop the first crypt algorithm
+            buf = aType->value.sequence->data;
+            buflen = aType->value.sequence->length;
+
+            p8info_buf = d2i_X509_PUBKEY(&p8info_buf, &buf, buflen);
+            X509_PUBKEY_get0_param(NULL, &buf, &buflen, NULL, p8info_buf);
+
+            concat_key = OPENSSL_secure_malloc(buflen + templen);
+
+            memcpy(concat_key, buf, buflen);
+            memcpy(concat_key + buflen, temp, templen);
+            p = concat_key;
+            plen = templen + buflen;
+        }
     }
     oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PUBLIC, libctx, propq);
     return oqsx;
@@ -1430,11 +1466,13 @@ int oqsx_key_gen(OQSX_KEY *key)
         {
             pkey = oqsx_key_gen_evp_key(key->oqsx_provider_ctx_cmp.oqsx_evp_ctx, key->comp_pubkey[key->numkeys - 1], key->comp_privkey[key->numkeys - 1], 0);
             key->cmp_classical_pkey[key->numkeys - 1] = pkey;
+            const unsigned char *pubkey = key->comp_pubkey[key->numkeys - 1];
             ON_ERR_GOTO(pkey == NULL, err);
+
         }
         else
         {
-            ret = OQS_SIG_keypair(key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig, key->privkey + key->privkeylen, key->pubkey + key->pubkeylen);
+            ret = OQS_SIG_keypair(key->oqsx_provider_ctx_cmp.oqsx_qs_ctx.sig, key->privkey + key->privkeylen - key->privkeylen_cmp, key->pubkey + key->pubkeylen - key->pubkeylen_cmp);
             ON_ERR_GOTO(ret, err);
         }
 

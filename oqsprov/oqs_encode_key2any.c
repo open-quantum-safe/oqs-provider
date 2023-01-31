@@ -510,7 +510,13 @@ static int prepare_oqsx_params(const void *oqsxkey, int nid, int save,
 static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
 {
     const OQSX_KEY *oqsxkey = vxkey;
-    unsigned char *keyblob;
+    unsigned char *keyblob, *buf;
+    int keybloblen, nid;
+    STACK_OF(ASN1_TYPE) *sk = NULL;
+    ASN1_TYPE *aType = NULL;
+    ASN1_STRING *aString = NULL;
+    unsigned char *temp = NULL;
+    X509_PUBKEY *p8info_internal = NULL;
     int ret = 0;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_spki_pub_to_der called\n");
@@ -519,36 +525,100 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
+    if (oqsxkey->keytype  != KEY_TYPE_CMP_SIG){
 #ifdef USE_ENCODING_LIB
-    if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL
-        && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
-        unsigned char *buf;
-        int buflen;
-        int ret = 0;
-        const OQSX_ENCODING_CTX *encoding_ctx = &oqsxkey->oqsx_encoding_ctx;
-        buflen = encoding_ctx->encoding_impl->crypto_publickeybytes;
+        if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL
+            && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
+            unsigned char *buf;
+            int buflen;
+            int ret = 0;
+            const OQSX_ENCODING_CTX *encoding_ctx = &oqsxkey->oqsx_encoding_ctx;
+            buflen = encoding_ctx->encoding_impl->crypto_publickeybytes;
 
-        buf = OPENSSL_secure_zalloc(buflen);
-        ret = qsc_encode(encoding_ctx->encoding_ctx,
-                         encoding_ctx->encoding_impl, oqsxkey->pubkey, &buf, 0,
-                         0, 1);
-        if (ret != QSC_ENC_OK)
+            buf = OPENSSL_secure_zalloc(buflen);
+            ret = qsc_encode(encoding_ctx->encoding_ctx,
+                            encoding_ctx->encoding_impl, oqsxkey->pubkey, &buf, 0,
+                            0, 1);
+            if (ret != QSC_ENC_OK)
+                return -1;
+
+            *pder = buf;
+            return buflen;
+        } else {
+#endif
+            keyblob = OPENSSL_memdup(oqsxkey->pubkey, oqsxkey->pubkeylen);
+            if (keyblob == NULL) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                return 0;
+            }
+            *pder = keyblob;
+            return oqsxkey->pubkeylen;
+    #ifdef USE_ENCODING_LIB
+        }
+    #endif
+    }else{
+        int len, len2;
+        if((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
 
-        *pder = buf;
-        return buflen;
-    } else {
-#endif
-        keyblob = OPENSSL_memdup(oqsxkey->pubkey, oqsxkey->pubkeylen);
-        if (keyblob == NULL) {
+        p8info_internal = X509_PUBKEY_new();
+        aType = ASN1_TYPE_new();
+        aString = ASN1_OCTET_STRING_new();
+
+        len =  oqsxkey->pubkeylen - oqsxkey->pubkeylen_cmp;;
+        buf = OPENSSL_memdup(oqsxkey->pubkey, len);
+
+        if(get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(oqsxkey->tls_name))) == 0)
+            nid = oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->nid;
+        else
+            nid = OBJ_sn2nid(get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(oqsxkey->tls_name))));
+        if (!X509_PUBKEY_set0_param(p8info_internal, OBJ_nid2obj(nid), V_ASN1_UNDEF, NULL, buf, len))
+            keybloblen = 0; // signal error     
+        keybloblen = i2d_X509_PUBKEY(p8info_internal, &temp);
+        if (keybloblen < 0) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-            return 0;
+            keybloblen = 0; // signal error
+        }  
+
+        ASN1_STRING_set0(aString, temp, keybloblen);
+        ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, aString);
+
+        if (!sk_ASN1_TYPE_push(sk, aType))
+            return -1;
+
+        aType = ASN1_TYPE_new();
+        aString = ASN1_OCTET_STRING_new();
+        p8info_internal = X509_PUBKEY_new();
+        temp = NULL;
+
+        len2 = oqsxkey->pubkeylen_cmp;
+        buf = OPENSSL_memdup(oqsxkey->pubkey + len,  len2);
+
+        if(get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(oqsxkey->tls_name))) == 0)
+            nid = oqsxkey->oqsx_provider_ctx_cmp.oqsx_evp_ctx->evp_info->nid;
+        else
+            nid = OBJ_sn2nid(get_tlsname_fromoqs(get_cmpname(OBJ_sn2nid(oqsxkey->tls_name))));
+        if (!X509_PUBKEY_set0_param(p8info_internal, OBJ_nid2obj(nid), V_ASN1_UNDEF, NULL, buf, len2))
+            keybloblen = 0; // signal error
+        keybloblen = i2d_X509_PUBKEY(p8info_internal, &temp);
+        if (keybloblen < 0) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            keybloblen = 0; // signal error
         }
-        *pder = keyblob;
-        return oqsxkey->pubkeylen;
-#ifdef USE_ENCODING_LIB
+        
+
+        ASN1_STRING_set0(aString, temp, keybloblen);
+        ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, aString);
+
+        if (!sk_ASN1_TYPE_push(sk, aType))
+            return -1;
+
+        keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
+
+        return keybloblen;
     }
-#endif
+
+
 }
 
 static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)

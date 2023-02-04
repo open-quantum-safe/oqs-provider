@@ -331,7 +331,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
 
     OQS_SIG_PRINTF3("OQS SIG provider: verify called with siglen %ld bytes and tbslen %ld\n", siglen, tbslen);
 
-    if (!oqsxkey || !oqs_key || !oqsxkey->pubkey || sig == NULL || tbs == NULL) {
+    if (!oqsxkey || !oqs_key || !oqsxkey->pubkey || sig == NULL || (tbs == NULL && tbslen > 0)) {
       ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
       goto endverify;
     }

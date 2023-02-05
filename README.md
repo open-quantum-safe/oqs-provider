@@ -54,7 +54,7 @@ via the standard commands, i.e.,
 
 In addition, algorithms not denoted with "\*" above are not enabled for
 TLS operations. This designation can be changed by modifying the
-"enabled" flags in the main [algorithm configuration file](oqs-template/generate.yml)
+"enabled" flags in the main [algorithm configuration file](oqs-template/generate-extras.yml)
 and re-running the generator script `python3 oqs-template/generate.py`.
 
 In order to enable parallel use of classic and quantum-safe cryptography 
@@ -177,6 +177,71 @@ excludes all algorithms of the "Sphincs" family.
 
 *Note*: By default, interoperability testing with oqs-openssl111 is no longer
 performed by default but can be manually enabled in the script `scripts/runtests.sh`.
+
+Building under Windows
+--------------------
+The instructions below were tested on Windows 10 and 11 using MSYS2 MINGW64 (building with Visual Studio 2019 was NOT successful in our case). They are a bit experimental and only provisional. Note that the tests were skipped in the building process, however, setting up a test server and client with PQC algorithms still works.
+
+## Pre-requisites
+
+Open MSYS2 MINGW64 and make sure that git is installed:
+
+    pacman -S git
+
+Create a new directory `.local`:
+
+    mkdir install
+
+## OpenSSL 3
+
+Build and install OpenSSL 3 in `.local`:
+
+    git clone git://git.openssl.org/openssl.git
+    cd openssl
+    ./config --prefix=$(echo $(pwd)/../.local) && make && make install_sw
+    cd ..
+
+For [OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
+see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
+
+
+## liboqs
+
+Build and install `liboqs` in `.local`:
+
+    git clone https://github.com/open-quantum-safe/liboqs.git
+    cd liboqs
+    cmake -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build
+    cmake --build _build && cmake --install _build
+    cd ..
+
+Further `liboqs` build options are [documented here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).
+
+## Building the provider
+
+Create a file `oqsprov.def` in the directory `oqsprov` with the following lines:
+
+    EXPORTS
+        OSSL_provider_init
+
+Add `oqsprov.def` to the following section in CMakeLists.txt of the directory `oqsprov` in line 8.
+
+    set(PROVIDER_SOURCE_FILES
+        oqsprov.c oqsprov_capabilities.c oqsprov_keys.c
+        oqs_kmgmt.c oqs_sig.c oqs_kem.c
+        oqs_encode_key2any.c oqs_endecoder_common.c oqs_decode_der2key.c oqsprov_bio.c
+        oqsprov.def
+    )
+
+Modify `tests/test_common.c` in line 27 by replacing `while((comma = strchr(alglist, ','))) {` with :
+
+    while((comma = index(alglist, ','))) {
+
+Build `oqsprovider` using the local OpenSSL3 via the following:
+
+    cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build
+    cmake --build _build
+
 
 Using
 -----

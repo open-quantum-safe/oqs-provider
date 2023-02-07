@@ -24,7 +24,7 @@ int alg_is_enabled(const char *algname) {
 
     if (alglist == NULL) return 1;
 
-    while((comma = index(alglist, ','))) {
+    while((comma = strchr(alglist, ','))) {
         memcpy(totest, alglist, MIN(200,comma-alglist));
         totest[comma-alglist]='\0';
         if (strstr(algname, totest)) return 0;

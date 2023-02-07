@@ -4,8 +4,6 @@ openssl
 liboqs
 # installed SW
 .local
-# obtained from main OQS-OpenSSL repo
-oqs-template/generate.yml
 # build directory
 _build
 # generated from openssl src:

@@ -178,6 +178,10 @@ excludes all algorithms of the "Sphincs" family.
 *Note*: By default, interoperability testing with oqs-openssl111 is no longer
 performed by default but can be manually enabled in the script `scripts/runtests.sh`.
 
+Building on Windows
+--------------------
+The following steps have been tested on Windows 10 and 11 using MSYS2 MINGW64 and were successful. However, building with Visual Studio 2019 was unsuccessful (see [#47](https://github.com/open-quantum-safe/oqs-provider/issues/47)). Note that the process of building on Windows is considered experimental and may need further adjustments. Please report further issues to [#47](https://github.com/open-quantum-safe/oqs-provider/issues/47). Despite skipping the testing process, setting up a test server and client with post-quantum cryptography algorithms can still be accomplished.
+
 Using
 -----
 

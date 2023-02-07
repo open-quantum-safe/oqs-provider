@@ -194,6 +194,14 @@ struct oqsx_key_st {
 
 typedef struct oqsx_key_st OQSX_KEY;
 
+//composite signature
+struct SignatureModel{
+  ASN1_BIT_STRING *sig1;
+  ASN1_BIT_STRING *sig2;
+};
+
+typedef struct SignatureModel CompositeSignature;
+
 char* get_oqsname(int nid);
 char* get_cmpname(int nid);
 int get_keytype(int nid);

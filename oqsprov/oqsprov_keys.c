@@ -17,6 +17,7 @@
 #include <openssl/x509.h>
 #include <string.h>
 
+
 #ifdef NDEBUG
 #    define OQS_KEY_PRINTF(a)
 #    define OQS_KEY_PRINTF2(a, b)
@@ -1515,7 +1516,7 @@ int oqsx_key_maxsize(OQSX_KEY *key)
                + SIZE_OF_UINT32;
     case KEY_TYPE_CMP_SIG:
     {
-        int aux = 0;
+        int aux = sizeof(CompositeSignature);
         if (get_tlsname_fromoqs(get_oqsname(OBJ_sn2nid(key->tls_name))) == 0)
             aux += key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature;
         else

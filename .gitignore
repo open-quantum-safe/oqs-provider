@@ -1,5 +1,5 @@
-# checked out OSSL
-openssl 
+# checked out OSSL variants
+openssl* 
 # checked out liboqs
 liboqs
 # installed SW

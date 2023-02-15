@@ -6,6 +6,7 @@ extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_EncryptedPrivateKeyInfo_
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_text_encoder_functions[];
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{ variant['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{ variant['name'] }}_decoder_functions[];
      {%- for classical_alg in variant['mix_with'] -%}
@@ -15,6 +16,7 @@ extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_text_encoder_functions[];
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{ classical_alg['name'] }}_{{ variant['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{ classical_alg['name'] }}_{{ variant['name'] }}_decoder_functions[];
      {%- endfor -%}

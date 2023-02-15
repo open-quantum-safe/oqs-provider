@@ -22,5 +22,13 @@ if [ -z "$LD_LIBRARY_PATH" ]; then
     exit 1
 fi
 
+# check that CSR can be output OK
+
+$OPENSSL_APP req -text -in tmp/$1_srv.csr -noout -provider oqsprovider -provider default -config $OPENSSL_APP.cnf |& grep Error
+if [ $? -eq 0 ]; then
+    echo "Couldn't print CSR correctly. Exiting."
+    exit 1
+fi
+
 $OPENSSL_APP verify -provider oqsprovider -provider default -CAfile tmp/$1_CA.crt tmp/$1_srv.crt 
 

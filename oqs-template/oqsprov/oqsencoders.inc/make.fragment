@@ -7,14 +7,16 @@ ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, der, Encrypt
 ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, pem, SubjectPublicKeyInfo),
-     {%- for classical_alg in variant['mix_with'] -%}
+ENCODER_TEXT("{{ variant['name'] }}", {{ variant['name'] }}),
+{% for classical_alg in variant['mix_with'] -%}
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, der, PrivateKeyInfo),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, pem, PrivateKeyInfo),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, der, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, pem, EncryptedPrivateKeyInfo),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, pem, SubjectPublicKeyInfo),
-     {%- endfor %}
+ENCODER_TEXT("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}),
+{% endfor -%}
 #endif
    {%- endfor %}
 {%- endfor %}

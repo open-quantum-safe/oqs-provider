@@ -12,6 +12,14 @@ openssl2provider() {
     $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-certgen.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-cmssign.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmsverify.sh $1
 }
 
+localalgtest() {
+    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1
+    if [ $? -ne 0 ]; then
+        echo "localalgtest $1 failed. Exiting.".
+        exit 1
+    fi
+}
+
 interop() {
     echo -n "."
     # check if we want to run this algorithm:
@@ -29,7 +37,7 @@ interop() {
 	if [ -z "$LOCALTESTONLY" ]; then
             provider2openssl $1 >> interop.log 2>&1 && openssl2provider $1 >> interop.log 2>&1
 	else
-            $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1
+            localalgtest $1
         fi
     fi
 

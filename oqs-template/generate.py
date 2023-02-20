@@ -155,9 +155,7 @@ def populate(filename, config, delimiter, overwrite=False):
 
 def load_config(include_disabled_sigs=False):
     config = file_get_contents(os.path.join('oqs-template', 'generate.yml'), encoding='utf-8')
-    config_extras = file_get_contents(os.path.join('oqs-template', 'generate-extras.yml'), encoding='utf-8')
     config = yaml.safe_load(config)
-    config_extras = yaml.safe_load(config_extras)
     if not include_disabled_sigs:
         for sig in config['sigs']:
             sig['variants'] = [variant for variant in sig['variants'] if ('enable' in variant and variant['enable'])]
@@ -178,8 +176,6 @@ def load_config(include_disabled_sigs=False):
         sig['variants']=newvars
 
     for kem in config['kems']:
-        if kem['name_group'] in config_extras['kem-extras']:
-            kem.update(config_extras['kem-extras'][kem['name_group']])
         try:
             for extra_nid_current in kem['extra_nids']['current']:
                 if 'hybrid_group' in extra_nid_current and extra_nid_current['hybrid_group'] in ["x25519", "x448"]:

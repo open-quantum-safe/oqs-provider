@@ -1,5 +1,5 @@
-# N.B: For interoperability, NIDS must match the curve IDs used in
-# https://docs.google.com/spreadsheets/d/12YarzaNv3XQNLnvDsWLlRKwtZFhRrDdWf36YlzwrPeg/edit#gid=0
+# This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
+# Next free plain KEM ID: 0x0244, p-hybrid: 0x2F44, X-hybrid: 0x2FB0
 kems:
   -
     family: 'FrodoKEM'
@@ -7,24 +7,40 @@ kems:
     nid: '0x0200'
     nid_hybrid: '0x2F00'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_aes'
+    extra_nids:
+      current:
+        - hybrid_group: "x25519"
+          nid: '0x2F80'
   -
     family: 'FrodoKEM'
     name_group: 'frodo640shake'
     nid: '0x0201'
     nid_hybrid: '0x2F01'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_shake'
+    extra_nids:
+      current:
+        - hybrid_group: "x25519"
+          nid: '0x2F81'
   -
     family: 'FrodoKEM'
     name_group: 'frodo976aes'
     nid: '0x0202'
     nid_hybrid: '0x2F02'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_aes'
+    extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '0x2F82'
   -
     family: 'FrodoKEM'
     name_group: 'frodo976shake'
     nid: '0x0203'
     nid_hybrid: '0x2F03'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_shake'
+    extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '0x2F83'
   -
     family: 'FrodoKEM'
     name_group: 'frodo1344aes'
@@ -93,6 +109,9 @@ kems:
     nid: '0x023C'
     nid_hybrid: '0x2F3C'
     extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '0x2F90'
       old:
         - implementation_version: NIST Round 2 submission
           nist-round: 2
@@ -152,28 +171,61 @@ kems:
   -
     family: 'BIKE'
     name_group: 'bikel1'
-    implementation_version: '4.1'
-    nid: '0x0238'
-    nid_hybrid: '0x2F38'
+    implementation_version: '5.1'
+    nid: '0x0241'
+    nid_hybrid: '0x2F41'
     oqs_alg: 'OQS_KEM_alg_bike_l1'
     extra_nids:
       current:
         - hybrid_group: "x25519"
+          nid: '0x2FAE'
+      old:
+        - implementation_version: NIST Round 3 submission
+          nist-round: 3
+          nid: '0x0238'
+        - implementation_version: NIST Round 3 submission
+          nist-round: 3
+          hybrid_group: x25519
           nid: '0x2F37'
-          implementation_version: '4.1'
+        - implementation_version: NIST Round 3 submission
+          nist-round: 3
+          hybrid_group: secp256_r1
+          nid: '0x2F38'
   -
     family: 'BIKE'
     name_group: 'bikel3'
-    implementation_version: '4.1'
-    nid: '0x023B'
-    nid_hybrid: '0x2F3B'
+    implementation_version: '5.1'
+    nid: '0x0242'
+    nid_hybrid: '0x2F42'
     oqs_alg: 'OQS_KEM_alg_bike_l3'
+    extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '0x2FAF'
+      old:
+        - implementation_version: NIST Round 3 submission
+          nist-round: 3
+          nid: '0x023B'
+        - implementation_version: NIST Round 3 submission
+          nist-round: 3
+          hybrid_group: secp384_r1
+          nid: '0x2F3B'
+  -
+    family: 'BIKE'
+    name_group: 'bikel5'
+    implementation_version: '5.1'
+    nid: '0x0243'
+    nid_hybrid: '0x2F43'
+    oqs_alg: 'OQS_KEM_alg_bike_l5'
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber90s512'
     nid: '0x023E'
     nid_hybrid: '0x2F3E'
     extra_nids:
+      current:
+        - hybrid_group: "x25519"
+          nid: '0x2FA9'
       old:
         - implementation_version: NIST Round 2 submission
           nist-round: 2
@@ -189,6 +241,9 @@ kems:
     nid: '0x023F'
     nid_hybrid: '0x2F3F'
     extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '0x2FAA'
       old:
         - implementation_version: NIST Round 2 submission
           nist-round: 2
@@ -219,12 +274,20 @@ kems:
     nid: '0x022C'
     nid_hybrid: '0x2F2C'
     oqs_alg: 'OQS_KEM_alg_hqc_128'
+    extra_nids:
+      current:
+        - hybrid_group: "x25519"
+          nid: '0x2FAC'
   -
     family: 'HQC'
     name_group: 'hqc192'
     nid: '0x022D'
     nid_hybrid: '0x2F2D'
     oqs_alg: 'OQS_KEM_alg_hqc_192'
+    extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '0x2FAD'
   -
     family: 'HQC'
     name_group: 'hqc256'
@@ -236,8 +299,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# N.B: For interoperability, code-points and OIDs must match those used in
-# https://docs.google.com/spreadsheets/d/12YarzaNv3XQNLnvDsWLlRKwtZFhRrDdWf36YlzwrPeg/edit#gid=0
+# Next free signature ID: 0xfeae
 sigs:
   # -
     # iso (1)

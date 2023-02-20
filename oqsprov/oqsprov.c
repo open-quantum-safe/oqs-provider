@@ -252,6 +252,9 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 #ifdef OQS_ENABLE_KEM_bike_l3
     KEMALG3(bikel3, 192),
 #endif
+#ifdef OQS_ENABLE_KEM_bike_l5
+    KEMALG2(bikel5, 256),
+#endif
 #ifdef OQS_ENABLE_KEM_kyber_512_90s
     KEMALG3(kyber90s512, 128),
 #endif
@@ -369,6 +372,9 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l3
     KEMKMALG3(bikel3, 192),
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l5
+    KEMKMALG2(bikel5, 256),
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_512_90s
     KEMKMALG3(kyber90s512, 128),

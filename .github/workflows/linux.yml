@@ -10,10 +10,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-#          - name: alpine
-#            container: openquantumsafe/ci-alpine-amd64:latest
-          - name: focal
-            container: openquantumsafe/ci-ubuntu-focal-x86_64:latest
+          - name: alpine
+            container: openquantumsafe/ci-alpine-amd64:latest
+# focal test done on CircleCI - save the compute cycles here until CCI is dropped
+#          - name: focal
+#            container: openquantumsafe/ci-ubuntu-focal-x86_64:latest
           - name: jammy
             container: openquantumsafe/ci-ubuntu-jammy:latest
     container:

@@ -1,0 +1,39 @@
+name: Linux tests
+
+on: [push]
+
+jobs:
+
+  linux_intel:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: alpine
+            container: openquantumsafe/ci-alpine-amd64:latest
+# focal test done on CircleCI - save the compute cycles here until CCI is dropped
+#          - name: focal
+#            container: openquantumsafe/ci-ubuntu-focal-x86_64:latest
+          - name: jammy
+            container: openquantumsafe/ci-ubuntu-jammy:latest
+    container:
+      image: ${{ matrix.container }}
+    env:
+      MAKE_PARAMS: "-j 18"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Full build
+        run: ./scripts/fullbuild.sh
+      - name: Test
+        run: ./scripts/runtests.sh -V
+      - name: Verify nothing changes on re-generate code
+        run: |
+          git config --global user.name "ciuser" && \
+          git config --global user.email "ci@openquantumsafe.org" && \
+          export LIBOQS_SRC_DIR=`pwd`/liboqs && \
+          ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
+          python3 oqs-template/generate.py && \
+          ! git status | grep modified
+

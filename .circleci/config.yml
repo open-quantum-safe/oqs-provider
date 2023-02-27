@@ -18,19 +18,19 @@ jobs:
       - setup_remote_docker
       - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
       - run:
-          name: Clone and build liboqs
+          name: Clone and build liboqs (only STD algs)
           command: |
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
              cd liboqs && mkdir _build && cd _build &&
-             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
+             cmake -GNinja -DOQS_ALGS_ENABLED=STD -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
              cd ..
       - run:
           name: Clone and build OpenSSL(3) 
           command: |
              git clone --branch master git://git.openssl.org/openssl.git openssl &&
-             cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 4 && make install_sw && cd ..
+             cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
       - run:
-          name: Build OQS-OpenSSL provider
+          name: Build OQS-OpenSSL provider (only STD algs)
           command: |
              mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
       - run:

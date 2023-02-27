@@ -17,10 +17,12 @@ jobs:
 #            container: openquantumsafe/ci-ubuntu-focal-x86_64:latest
           - name: jammy
             container: openquantumsafe/ci-ubuntu-jammy:latest
+            env:
+              OQS_ALGS_ENABLED: STD
     container:
       image: ${{ matrix.container }}
     env:
-      MAKE_PARAMS: "-j 4" 
+      MAKE_PARAMS: -j
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

@@ -43,17 +43,39 @@ fi
 
 # Check whether liboqs is built:
 if [ ! -f ".local/lib/liboqs.a" ]; then
-   echo "liboqs static lib not built: Cloning and building..."
-   # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
-   # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
-   #    STD: only include NIST standardized algorithms
-   #    NIST_R4: only include algorithms in round 4 of the NIST competition
-   #    All: include all algorithms supported by liboqs (default)
-   git clone --depth 1 --branch $LIBOQS_BRANCH https://github.com/open-quantum-safe/liboqs.git && cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
-   if [ $? -ne 0 ]; then
+  echo "liboqs static lib not built..."
+  if [ ! -d liboqs ]; then
+    echo "cloning liboqs $LIBOQS_BRANCH..."
+    git clone --depth 1 --branch $LIBOQS_BRANCH https://github.com/open-quantum-safe/liboqs.git
+    if [ $? -ne 0 ]; then
+      echo "liboqs clone failure for branch $LIBOQS_BRANCH. Exiting."
+      exit -1
+    fi
+    if [ "$LIBOQS_BRANCH" != "main" ]; then
+      # check for presence of backwards-compatibility generator file
+      if [ -f oqs-template/generate.yml-$LIBOQS_BRANCH ]; then
+        echo "generating code for $LIBOQS_BRANCH"
+        mv oqs-template/generate.yml oqs-template/generate.yml-main
+        cp oqs-template/generate.yml-$LIBOQS_BRANCH oqs-template/generate.yml
+        LIBOQS_SRC_DIR=`pwd`/liboqs python3 oqs-template/generate.py
+        if [ $? -ne 0 ]; then
+           echo "Code generation failure for $LIBOQS_BRANCH. Exiting."
+           exit -1
+        fi
+      fi
+    fi
+  fi
+
+ # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
+ # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
+ #    STD: only include NIST standardized algorithms
+ #    NIST_R4: only include algorithms in round 4 of the NIST competition
+ #    All: include all algorithms supported by liboqs (default)
+ cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
+ if [ $? -ne 0 ]; then
      echo "liboqs build failed. Exiting."
      exit -1
-   fi
+ fi
 fi
 
 # Check whether provider is built:

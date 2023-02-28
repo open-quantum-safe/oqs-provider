@@ -348,7 +348,7 @@ therefore represent the interoperability level at a specific point in time (of d
 of `oqsprovider` and `liboqs`).
 
 By default, `oqsprovider` always uses the most current version of `liboqs` code, but by
-setting the environment variable "LIBOQS_BRANCH" when running the `scripts/fullbuild.sh"
+setting the environment variable "LIBOQS_BRANCH" when running the `scripts/fullbuild.sh`
 script, code will be generated to utilize a specific, supported `liboqs` release. The
 script `scripts/revertmain.sh` can be used to revert all code back to the default,
 `main`-branch tracking strategy. This can be used, for example, to facilitate a release

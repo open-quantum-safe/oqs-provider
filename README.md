@@ -327,13 +327,32 @@ supported: The resolution of https://github.com/openssl/openssl/issues/17717
 has not been not getting back-ported to OpenSSL3.0.
 
 Also not supported in this version are provider-based signature algorithms
-used during TLS operations as documented in https://github.com/openssl/openssl/issues/10512.
+used during TLS1.3 operations as documented in https://github.com/openssl/openssl/issues/10512.
 
-## 3.2-dev
+## 3.2(-dev)
 
-If https://github.com/openssl/openssl/pull/19312 lands, TLS1.3 signature
-algorithms will work, but algorithms with overly long signatures still fail due to
-specific message size limitations built into OpenSSL and/or the TLS specifications.
+After https://github.com/openssl/openssl/pull/19312 landed, (also PQ) signature
+algorithms are working in TLS1.3 (handshaking), but algorithms with overly long
+signatures may still fail due to specific message size limitations built into
+OpenSSL and/or the TLS specifications.
+
+liboqs dependency
+-----------------
+
+As `oqsprovider` is dependent on `liboqs` for the implementation of the PQ algorithms
+there is a mechanism to adapt the functionality of a specific `liboqs` version to the
+current `oqsprovider` version: The use of the code generator script `oqs-template/generate.py`
+which in turn is driven by any of the `liboqs` release-specific `oqs-template/generate.yml[-release]`
+files. The same file(s) also define the (default) TLS IDs of all algorithms included and
+therefore represent the interoperability level at a specific point in time (of development
+of `oqsprovider` and `liboqs`).
+
+By default, `oqsprovider` always uses the most current version of `liboqs` code, but by
+setting the environment variable "LIBOQS_BRANCH" when running the `scripts/fullbuild.sh`
+script, code will be generated to utilize a specific, supported `liboqs` release. The
+script `scripts/revertmain.sh` can be used to revert all code back to the default,
+`main`-branch tracking strategy. This can be used, for example, to facilitate a release
+of `oqsprovider` to track an old `liboqs` release.
 
 Team
 ----

@@ -13,7 +13,7 @@ openssl2provider() {
 }
 
 localalgtest() {
-    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1
+    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1 &&  $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-ca.sh $1 >> interop.log 2>&1
     if [ $? -ne 0 ]; then
         echo "localalgtest $1 failed. Exiting.".
         exit 1
@@ -48,19 +48,19 @@ interop() {
 }
 
 if [ -z "$OQS_PROVIDER_TESTSCRIPTS" ]; then
-    export OQS_PROVIDER_TESTSCRIPTS=.
+    export OQS_PROVIDER_TESTSCRIPTS=$(pwd)
 fi
 
 if [ -z "$OPENSSL_APP" ]; then
-    export OPENSSL_APP=openssl/apps/openssl
+    export OPENSSL_APP=$(pwd)/openssl/apps/openssl
 fi
 
 if [ -z "$OPENSSL_MODULES" ]; then
-    export OPENSSL_MODULES=_build/lib
+    export OPENSSL_MODULES=$(pwd)/_build/lib
 fi
 
 if [ -z "$LD_LIBRARY_PATH" ]; then
-    export LD_LIBRARY_PATH=.local/lib64
+    export LD_LIBRARY_PATH=$(pwd)/.local/lib64
 fi
 
 if [ ! -z "$OQS_SKIP_TESTS" ]; then

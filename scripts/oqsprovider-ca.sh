@@ -1,8 +1,6 @@
 #!/bin/bash
 
-set -x
-
-# Use newly built oqsprovider to generate certs for alg $1
+# Test openssl CA functionality using oqsprovider for alg $1
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <algorithmname>. Exiting."
@@ -50,5 +48,6 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
-$OPENSSL_APP verify -CAfile $1_rootCA.crt $1.crt
+# Don't forget to use provider(s) when not activated via config file
+$OPENSSL_APP verify -provider oqsprovider -provider default -CAfile $1_rootCA.crt $1.crt
 

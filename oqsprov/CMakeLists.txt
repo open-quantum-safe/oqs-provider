@@ -6,6 +6,7 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 add_definitions(-DOQSPROVIDER_VERSION_TEXT="${OQSPROVIDER_VERSION_TEXT}")
+message(STATUS "Building commit ${GIT_COMMIT_HASH} in ${CMAKE_SOURCE_DIR}")
 add_definitions(-DOQS_PROVIDER_COMMIT=" \(${GIT_COMMIT_HASH}\)")
 add_compile_options(-Wunused-function)
 set(PROVIDER_SOURCE_FILES

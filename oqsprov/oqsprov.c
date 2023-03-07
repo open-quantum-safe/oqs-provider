@@ -419,7 +419,7 @@ static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx)
     return oqsprovider_param_types;
 }
 
-#define OQS_PROVIDER_BUILD_INFO_STR "OQS Provider v." OQS_PROVIDER_VERSION_STR " based on liboqs v." OQS_VERSION_TEXT
+#define OQS_PROVIDER_BUILD_INFO_STR "OQS Provider v." OQS_PROVIDER_VERSION_STR OQS_PROVIDER_COMMIT " based on liboqs v." OQS_VERSION_TEXT
 
 static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
 {

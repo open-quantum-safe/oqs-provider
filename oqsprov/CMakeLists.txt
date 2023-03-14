@@ -18,7 +18,7 @@ set(PROVIDER_SOURCE_FILES
 set(PROVIDER_HEADER_FILES
   oqs_prov.h oqs_endecoder_local.h
 )
-add_library(oqsprovider MODULE ${PROVIDER_SOURCE_FILES})
+add_library(oqsprovider SHARED ${PROVIDER_SOURCE_FILES})
 set_target_properties(oqsprovider
     PROPERTIES
     PREFIX ""

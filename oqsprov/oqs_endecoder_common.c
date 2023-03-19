@@ -10,8 +10,6 @@
 
 #include <openssl/core.h>
 #include <openssl/buffer.h>
-//#include "internal/asn1.h"
-//#include "prov/bio.h"
 #include <openssl/bio.h>
 #include "oqs_endecoder_local.h"
 
@@ -86,22 +84,3 @@ void oqs_prov_free_key(const OSSL_DISPATCH *fns, void *key)
         kmgmt_free(key);
 }
 
-// "crypto internal" function: TCB: OK to use???
-extern int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb);
-
-int ossl_read_der(PROV_OQS_CTX *provctx, OSSL_CORE_BIO *cin,  unsigned char **data,
-                  long *len)
-{
-    BUF_MEM *mem = NULL;
-    BIO *in = BIO_new_from_core_bio(PROV_OQS_LIBCTX_OF(provctx), cin);
-    // permissible/sensible to use this internal function?
-    int ok = (asn1_d2i_read_bio(in, &mem) >= 0);
-
-    if (ok) {
-        *data = (unsigned char *)mem->data;
-        *len = (long)mem->length;
-        OPENSSL_free(mem);
-    }
-    BIO_free(in);
-    return ok;
-}

@@ -582,8 +582,9 @@ static const int (*init_kex_fun[])(int, OQSX_EVP_CTX *) = {
         oqshybkem_init_ecp,
         oqshybkem_init_ecx
 };
-
+#ifdef USE_ENCODING_LIB
 extern const char* oqs_alg_encoding_list[];
+#endif
 extern const char* oqs_oid_alg_list[];
 
 OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int primitive, const char *propq, int bit_security, int alg_idx)
@@ -615,17 +616,15 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
             goto err;
         }
 
-        if (alg_idx >= 0 && oqs_alg_encoding_list[alg_idx] != NULL) {
 #ifdef USE_ENCODING_LIB
+        if (alg_idx >= 0 && oqs_alg_encoding_list[alg_idx] != NULL) {
             if (qsc_encoding_by_name_oid(&ret->oqsx_encoding_ctx.encoding_ctx, &ret->oqsx_encoding_ctx.encoding_impl, oqs_oid_alg_list[2*alg_idx], oqs_alg_encoding_list[alg_idx]) != QSC_ENC_OK) {
                 fprintf(stderr, "Could not create OQS signature encoding algorithm %s (%s, %s). Defaulting to no encoding.\n", oqs_alg_encoding_list[alg_idx], oqs_name, oqs_oid_alg_list[2*alg_idx]);
             ret->oqsx_encoding_ctx.encoding_ctx = NULL;
                 ret->oqsx_encoding_ctx.encoding_impl = NULL;
             }
-#else
-            fprintf(stderr, "Not built with encoding library. Defaulting to no encoding.\n");
-#endif
         }
+#endif
         ret->privkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key;
         ret->pubkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key;
         ret->keytype = KEY_TYPE_SIG;

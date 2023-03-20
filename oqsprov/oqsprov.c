@@ -121,8 +121,9 @@ int oqs_patch_oids(void) {
     return 1;
 }
 
-const char* oqs_alg_encoding_list[OQS_OID_CNT/2] = { 0 };
 
+#ifdef USE_ENCODING_LIB
+const char* oqs_alg_encoding_list[OQS_OID_CNT/2] = { 0 };
 
 int oqs_patch_encodings(void) {
 ///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_START
@@ -163,6 +164,7 @@ int oqs_patch_encodings(void) {
 ///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_END
     return 1;
 }
+#endif
 
 
 #define ALG(NAMES, FUNC) { NAMES, "provider=oqsprovider", FUNC }
@@ -550,8 +552,10 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
     if (!oqs_patch_oids())
         return 0;
 
+#ifdef USE_ENCODING_LIB
     if (!oqs_patch_encodings())
         return 0;
+#endif
 
     for (; in->function_id != 0; in++) {
         switch (in->function_id) {

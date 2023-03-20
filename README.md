@@ -180,31 +180,9 @@ performed by default but can be manually enabled in the script `scripts/runtests
 
 ### Key Encoding
 
-By setting environment variables, oqs-provider can be configured to encode keys (subjectPublicKey and and privateKey ASN.1 structures) according to IETF drafts:
+By setting `-DUSE_ENCODING_LIB=<ON/OFF>` at compile-time, oqs-provider can be compiled with with an an external encoding library `qsc-key-encoder`. Configuring the encodings is done via environment as described in [ALGORITHMS.md](ALGORITHMS.md).
 
-| Environment Variable | Permissible values |
-| --- | --- |
-| `OQS_ENCODING_DILITHIUM2` | `draft-uni-qsckeys-dilithium-00/sk-pk` |
-| `OQS_ENCODING_DILITHIUM3` | `draft-uni-qsckeys-dilithium-00/sk-pk` |
-| `OQS_ENCODING_DILITHIUM5` | `draft-uni-qsckeys-dilithium-00/sk-pk` |
-| `OQS_ENCODING_DILITHIUM2_AES` | `draft-uni-qsckeys-dilithium-00/sk-pk` |
-| `OQS_ENCODING_DILITHIUM3_AES` | `draft-uni-qsckeys-dilithium-00/sk-pk` |
-| `OQS_ENCODING_DILITHIUM5_AES` | `draft-uni-qsckeys-dilithium-00/sk-pk` |
-| `OQS_ENCODING_FALCON512` | `draft-uni-qsckeys-falcon-00/sk-pk` |
-| `OQS_ENCODING_FALCON1024` | `draft-uni-qsckeys-falcon-00/sk-pk` |
-| `OQS_ENCODING_SPHINCSHARAKA128FROBUST` | `draft-uni-qsckeys-sphincsplus-00/sk-pk` |
-| `OQS_ENCODING_SPHINCSHARAKA128FSIMPLE` | `draft-uni-qsckeys-sphincsplus-00/sk-pk` |
-| `OQS_ENCODING_SPHINCSSHA256128FROBUST` | `draft-uni-qsckeys-sphincsplus-00/sk-pk` |
-| `OQS_ENCODING_SPHINCSSHA256128SSIMPLE` | `draft-uni-qsckeys-sphincsplus-00/sk-pk` |
-| `OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE` | `draft-uni-qsckeys-sphincsplus-00/sk-pk` |
-
-If no environment variable is set, or if an unknown value is set, the default is 'no' encoding, meaning that key serialization uses the 'raw' keys of the crypto implementations. 
-
-The test script `scripts/runtests_encodings.sh` (instead of `scripts/runtests.sh`) can be used for a test run with all supported encodings activated.
-
-By setting `-DUSE_ENCODING_LIB=OFF` at compile-time, oqs-provider can be optionally compiled without support for the IETF drafts for key encodings. The default value is `ON`.
-
-By setting `-DNOPUBKEY_IN_PRIVKEY` at compile-time, it can be further specified to omit explicitly serializing the public key in a `privateKey` structure. The default value is `OFF`.
+By setting `-DNOPUBKEY_IN_PRIVKEY=<ON/OFF>` at compile-time, it can be further specified to omit explicitly serializing the public key in a `privateKey` structure. The default value is `OFF`.
 
 Building on Windows
 --------------------

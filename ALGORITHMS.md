@@ -294,3 +294,63 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | p521_sphincsshake256256ssimple | 1.3.9999.6.9.8 |No| OQS_OID_P521_SPHINCSSHAKE256256SSIMPLE
 <!--- OQS_TEMPLATE_FRAGMENT_OIDS_END -->
 
+# Key Encodings
+
+By setting environment variables, oqs-provider can be configured to encode keys (subjectPublicKey and and privateKey ASN.1 structures) according to the following IETF drafts:
+
+- https://datatracker.ietf.org/doc/draft-uni-qsckeys-dilithium/00/
+- https://datatracker.ietf.org/doc/draft-uni-qsckeys-falcon/00/
+- https://datatracker.ietf.org/doc/draft-uni-qsckeys-sphincsplus/00/
+
+<!--- OQS_TEMPLATE_FRAGMENT_ENCODINGS_START -->
+|Environment Variable | Permissible Values |
+| --- | --- |
+|`OQS_ENCODING_DILITHIUM2`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM3`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM5`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2_AES`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM3_AES`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM5_AES`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_FALCON512`|`draft-uni-qsckeys-falcon-00/sk-pk`|
+|`OQS_ENCODING_FALCON1024`|`draft-uni-qsckeys-falcon-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA128FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA128FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA128SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA128SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA192FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA192FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA192SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA192SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA256FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA256FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA256SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSHARAKA256SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256128FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256128FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256128SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256128SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256192FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256192FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256192SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256192SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256256FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256256FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256256SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHA256256SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256128FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256128SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256128SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256192FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256192FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256192SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256192SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256256FROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256256FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256256SROBUST`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+|`OQS_ENCODING_SPHINCSSHAKE256256SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
+<!--- OQS_TEMPLATE_FRAGMENT_ENCODINGS_END -->
+
+If no environment variable is set, or if an unknown value is set, the default is 'no' encoding, meaning that key serialization uses the 'raw' keys of the crypto implementations. 
+
+The test script `scripts/runtests_encodings.sh` (instead of `scripts/runtests.sh`) can be used for a test run with all supported encodings activated.

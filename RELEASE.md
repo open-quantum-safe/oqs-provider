@@ -42,6 +42,7 @@ None.
 ### Misc updates
 
 - Dynamic code point and OID changes via environment variables. See [ALGORITHMS.md](ALGORITHMS.md).
+- Dynamic key encoding changes via environment variable using external qsc_key_encoder library. See [ALGORITHMS.md](ALGORITHMS.md).
 
 ---
 

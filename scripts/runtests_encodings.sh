@@ -13,4 +13,4 @@ OQS_ENCODING_SPHINCSHARAKA128FSIMPLE=draft-uni-qsckeys-sphincsplus-00/sk-pk \
 OQS_ENCODING_SPHINCSSHA256128FROBUST=draft-uni-qsckeys-sphincsplus-00/sk-pk \
 OQS_ENCODING_SPHINCSSHA256128SSIMPLE=draft-uni-qsckeys-sphincsplus-00/sk-pk \
 OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE=draft-uni-qsckeys-sphincsplus-00/sk-pk \
-scripts/runtests.sh
+scripts/runtests.sh $@

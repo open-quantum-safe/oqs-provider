@@ -25,10 +25,19 @@
 #define OQS_PROVIDER_BASE_VERSION_STR OQSPROVIDER_VERSION_TEXT
 
 #ifdef NOPUBKEY_IN_PRIVKEY
-#define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR "-nopub"
+#define NOPUBKEY_IN_PRIVKEY_STR "-nopub"
 #else
-#define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR
+#define NOPUBKEY_IN_PRIVKEY_STR ""
 #endif
+
+#ifdef USE_ENCODING_LIB
+#define ENCODING_LIB_STR "-encoding_support"
+#else
+#define ENCODING_LIB_STR ""
+#endif
+
+#define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR NOPUBKEY_IN_PRIVKEY_STR ENCODING_LIB_STR
+
 
 /* internal, but useful OSSL define */
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
@@ -101,7 +110,7 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 # define PROV_OQS_LIBCTX_OF(provctx) (((PROV_OQS_CTX *)provctx)->libctx)
 
 #include "oqs/oqs.h"
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
 #include <qsc_encoding.h>
 #endif
 
@@ -140,7 +149,7 @@ struct oqsx_provider_ctx_st {
 
 typedef struct oqsx_provider_ctx_st OQSX_PROVIDER_CTX;
 
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
 struct oqsx_provider_encoding_ctx_st {
     const qsc_encoding_t* encoding_ctx;
     const qsc_encoding_impl_t* encoding_impl;
@@ -160,7 +169,7 @@ struct oqsx_key_st {
     char *propq;
     OQSX_KEY_TYPE keytype;
     OQSX_PROVIDER_CTX oqsx_provider_ctx;
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
     OQSX_ENCODING_CTX oqsx_encoding_ctx;
 #endif
     EVP_PKEY *classical_pkey; // for hybrid sigs

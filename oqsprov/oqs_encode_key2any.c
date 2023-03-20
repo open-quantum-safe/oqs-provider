@@ -512,7 +512,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
     if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
         unsigned char *buf;
         int buflen;
@@ -535,7 +535,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         }
         *pder = keyblob;
         return oqsxkey->pubkeylen;
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
     }
 #endif
 }
@@ -575,7 +575,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 	}
 	privkeylen -= (oqsxkey->evp_info->length_private_key - actualprivkeylen);
     }
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
     if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
         const OQSX_ENCODING_CTX* encoding_ctx = &oqsxkey->oqsx_encoding_ctx;
         int ret = 0;
@@ -606,7 +606,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         memcpy(buf, oqsxkey->privkey, privkeylen);
         memcpy(buf+privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys-1], oqsx_key_get_oqs_public_key_len(oqsxkey));
 #endif
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
     }
 #endif
 

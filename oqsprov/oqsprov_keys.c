@@ -261,7 +261,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
     }
 
     if (op == KEY_OP_PUBLIC) {
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
         if (key->oqsx_encoding_ctx.encoding_ctx && key->oqsx_encoding_ctx.encoding_impl) {
             key->pubkeylen = key->oqsx_encoding_ctx.encoding_ctx->raw_crypto_publickeybytes;
             if (key->oqsx_encoding_ctx.encoding_impl->crypto_publickeybytes != plen) {
@@ -287,7 +287,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
                 goto err;
             }
             memcpy(key->pubkey, p, plen);
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
         }
 #endif
     } else {
@@ -305,7 +305,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
     	    }
     	    actualprivkeylen -= (key->evp_info->length_private_key - classical_privatekey_len);
     	}
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
         if (key->oqsx_encoding_ctx.encoding_ctx && key->oqsx_encoding_ctx.encoding_impl) {
              const qsc_encoding_t* encoding_ctx = key->oqsx_encoding_ctx.encoding_ctx;
 #ifdef NOPUBKEY_IN_PRIVKEY
@@ -371,7 +371,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
                 memcpy(key->pubkey, p+key->privkeylen, plen-key->privkeylen);
 #endif
         }
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
     }
 #endif
     ret = oqsx_key_set_composites(key);
@@ -616,10 +616,10 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         }
 
         if (alg_idx >= 0 && oqs_alg_encoding_list[alg_idx] != NULL) {
-#ifdef BUILD_ENCODING_LIB
+#ifdef USE_ENCODING_LIB
             if (qsc_encoding_by_name_oid(&ret->oqsx_encoding_ctx.encoding_ctx, &ret->oqsx_encoding_ctx.encoding_impl, oqs_oid_alg_list[2*alg_idx], oqs_alg_encoding_list[alg_idx]) != QSC_ENC_OK) {
                 fprintf(stderr, "Could not create OQS signature encoding algorithm %s (%s, %s). Defaulting to no encoding.\n", oqs_alg_encoding_list[alg_idx], oqs_name, oqs_oid_alg_list[2*alg_idx]);
-                ret->oqsx_encoding_ctx.encoding_ctx = NULL;
+            ret->oqsx_encoding_ctx.encoding_ctx = NULL;
                 ret->oqsx_encoding_ctx.encoding_impl = NULL;
             }
 #else

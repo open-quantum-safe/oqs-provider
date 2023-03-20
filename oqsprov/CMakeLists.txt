@@ -5,7 +5,7 @@ execute_process(
   OUTPUT_VARIABLE GIT_COMMIT_HASH
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-if (BUILD_ENCODING_LIB)
+if (USE_ENCODING_LIB)
   include(ExternalProject)
   set(encoder_LIBRARY ${CMAKE_BINARY_DIR}/install/lib/${CMAKE_STATIC_LIBRARY_PREFIX}qsc_key_encoder${CMAKE_STATIC_LIBRARY_SUFFIX})
   set(encoder_LIBRARY_INCLUDE ${CMAKE_BINARY_DIR}/install/include)
@@ -33,7 +33,7 @@ set(PROVIDER_HEADER_FILES
   oqs_prov.h oqs_endecoder_local.h
 )
 add_library(oqsprovider SHARED ${PROVIDER_SOURCE_FILES})
-if (BUILD_ENCODING_LIB)
+if (USE_ENCODING_LIB)
   add_dependencies(oqsprovider encoder)
 endif()
 set_target_properties(oqsprovider
@@ -47,7 +47,7 @@ set_target_properties(oqsprovider
     # For Windows DLLs
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 target_link_libraries(oqsprovider OQS::oqs ${OPENSSL_CRYPTO_LIBRARY})
-if (BUILD_ENCODING_LIB)
+if (USE_ENCODING_LIB)
   target_link_libraries(oqsprovider qsc_key_encoder)
   target_include_directories(oqsprovider PRIVATE ${encoder_LIBRARY_INCLUDE})
 endif()

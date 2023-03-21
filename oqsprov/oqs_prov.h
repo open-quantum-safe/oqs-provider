@@ -206,7 +206,7 @@ char* get_oqsname(int nid);
 int get_cmpname(int nid, int index, char *out);
 int get_qntcmp(int nid);
 int get_keytype(int nid);
-char* get_tlsname_fromoqs(char* oqsname);
+char* get_oqsname_fromtls(char* oqsname);
 
 /* Register given NID with tlsname in OSSL3 registry */
 int oqs_set_nid(char *tlsname, int nid);

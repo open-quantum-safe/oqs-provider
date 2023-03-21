@@ -254,20 +254,6 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
   if (is_composite)
   {
     max_sig_len = oqsx_key_maxsize(oqsxkey);
-/*     
-max_sig_len += sizeof(CompositeSignature);
-
-    if (is_composite_second_classic)
-    {
-      max_sig_len += oqsxkey->oqsx_provider_ctx_cmp.oqsx_evp_ctx->evp_info->length_signature;
-      cmp_sig_len = oqsxkey->oqsx_provider_ctx_cmp.oqsx_evp_ctx->evp_info->length_signature;
-    }
-    else
-    {
-      max_sig_len += cmp_key->length_signature;
-      cmp_sig_len = cmp_key->length_signature;
-    }
-*/
   }else
   {
     max_sig_len += oqs_key->length_signature;
@@ -375,7 +361,7 @@ max_sig_len += sizeof(CompositeSignature);
     for (i = 0; i < oqsxkey->numkeys; i++){
       get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i, name);
 
-      if (get_tlsname_fromoqs(name)){
+      if (get_oqsname_fromtls(name)){
         oqs_sig_len = oqsxkey->oqsx_provider_ctx[i].oqsx_qs_ctx.sig->length_signature;
         buf = OPENSSL_malloc(oqs_sig_len);
         if (OQS_SIG_sign(oqs_key, buf, &oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[i]) != OQS_SUCCESS)
@@ -592,7 +578,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         buf_len = compsig->sig2->length;
       }
 
-      if (get_tlsname_fromoqs(name)){
+      if (get_oqsname_fromtls(name)){
         if (OQS_SIG_verify(oqs_key, tbs, tbslen, buf, buf_len, oqsxkey->comp_pubkey[i]) != OQS_SUCCESS)
         {
           ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);

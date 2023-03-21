@@ -92,11 +92,11 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple,
      KEY_TYPE_HYB_SIG, 128},
-    {0, "dilithium3_rsa3072", OQS_SIG_alg_dilithium_3, "rsa3072",
+    {0, "dilithium3_rsa3072", OQS_SIG_alg_dilithium_3,
      KEY_TYPE_CMP_SIG, 128},
-    {0, "dilithium3_p256", OQS_SIG_alg_dilithium_3, "p256",
+    {0, "dilithium3_p256", OQS_SIG_alg_dilithium_3,
      KEY_TYPE_CMP_SIG, 128},
-    {0, "falcon512_p256", OQS_SIG_alg_falcon_512, "p256",
+    {0, "falcon512_p256", OQS_SIG_alg_falcon_512, 
      KEY_TYPE_CMP_SIG, 128},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };

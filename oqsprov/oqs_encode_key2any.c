@@ -561,7 +561,6 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
     #endif
     }else{
         int len, i;
-        size_t previouslen = 0;
         char *name = OPENSSL_malloc(strlen(oqsxkey->tls_name));
         if((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
@@ -574,7 +573,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
             get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i, name);
 
             len = oqsxkey->pubkeylen_cmp[i];
-            buf = OPENSSL_memdup(oqsxkey->pubkey +  previouslen, len);
+            buf = OPENSSL_memdup(oqsxkey->comp_pubkey[i], len);
 
             if(get_tlsname_fromoqs(name) == 0)
                 nid = oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->nid;
@@ -594,7 +593,6 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
             if (!sk_ASN1_TYPE_push(sk, aType))
                 return -1;
 
-            previouslen += len;
         }
 
 /* 
@@ -757,7 +755,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         }
     }else{
         int i;
-        size_t previouslen = 0;
         name = OPENSSL_malloc(strlen(oqsxkey->tls_name));;
         if((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
@@ -769,8 +766,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             temp = NULL;
             get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i, name);
 
-            buflen = oqsxkey->privkeylen_cmp[i];
-            buf = OPENSSL_memdup(oqsxkey->privkey +  previouslen, buflen);
+            buflen = oqsxkey->privkeylen_cmp[i] + oqsxkey->pubkeylen_cmp[i];
+            buf = OPENSSL_malloc(buflen);
+            memcpy(buf, oqsxkey->comp_privkey[i], oqsxkey->privkeylen_cmp[i]);
+            memcpy(buf + oqsxkey->privkeylen_cmp[i], oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
 
             if(get_tlsname_fromoqs(name) == 0)
                 nid = oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->nid;
@@ -790,7 +789,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             if (!sk_ASN1_TYPE_push(sk, aType))
                 return -1;
 
-            previouslen += buflen;
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
         OPENSSL_free(name);

@@ -471,8 +471,6 @@ static void *oqsx_gen_init(void *provctx, int selection, char *oqs_name,
         gctx->libctx = libctx;
         gctx->cmp_name = NULL;
         gctx->oqs_name = OPENSSL_strdup(oqs_name);
-        if (primitive == KEY_TYPE_CMP_SIG)
-          gctx->cmp_name = OPENSSL_strdup(cmp_name);
         gctx->tls_name = OPENSSL_strdup(tls_name);
         gctx->primitive = primitive;
         gctx->selection = selection;
@@ -864,32 +862,32 @@ static void *rsa3072_sphincsshake128fsimple_gen_init(void *provctx,
 
 static void *dilithium3_rsa3072_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3,"rsa3072", "dilithium3_rsa3072", KEY_TYPE_CMP_SIG, NULL, 128);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3, "dilithium3_rsa3072", KEY_TYPE_CMP_SIG, NULL, 128);
 }
 
 static void *dilithium3_rsa3072_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3,"rsa3072", "dilithium3_rsa3072", KEY_TYPE_CMP_SIG, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3, "dilithium3_rsa3072", KEY_TYPE_CMP_SIG, 128);
 }
 
 static void *dilithium3_p256_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3,"p256", "dilithium3_p256", KEY_TYPE_CMP_SIG, NULL, 128);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3, "dilithium3_p256", KEY_TYPE_CMP_SIG, NULL, 128);
 }
 
 static void *dilithium3_p256_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3,"p256", "dilithium3_p256", KEY_TYPE_CMP_SIG, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3, "dilithium3_p256", KEY_TYPE_CMP_SIG, 128);
 }
 
 static void *falcon512_p256_new_key(void *provctx)
 {
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_falcon_512, "p256", "falcon512_p256", KEY_TYPE_CMP_SIG, NULL, 128);
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_falcon_512, "falcon512_p256", KEY_TYPE_CMP_SIG, NULL, 128);
 }
 
 static void *falcon512_p256_gen_init(void *provctx, int selection)
 {
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_512,"p256", "falcon512_p256", KEY_TYPE_CMP_SIG, 128);
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_512, "falcon512_p256", KEY_TYPE_CMP_SIG, 128);
 }
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END

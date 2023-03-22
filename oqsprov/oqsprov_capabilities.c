@@ -257,11 +257,11 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     { 0xfeab, 192, TLS1_3_VERSION, 0 },
     { 0xfeac, 256, TLS1_3_VERSION, 0 },
     { 0xfead, 256, TLS1_3_VERSION, 0 },
-    { 0xfe0b, 128, TLS1_3_VERSION, 0 },
-    { 0xfe0c, 128, TLS1_3_VERSION, 0 },
-    { 0xfe0d, 128, TLS1_3_VERSION, 0 },
-    { 0xfe0e, 256, TLS1_3_VERSION, 0 },
-    { 0xfe0f, 256, TLS1_3_VERSION, 0 },
+    { 0xfeae, 128, TLS1_3_VERSION, 0 },
+    { 0xfeaf, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb0, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb1, 256, TLS1_3_VERSION, 0 },
+    { 0xfeb2, 256, TLS1_3_VERSION, 0 },
     { 0xfe42, 128, TLS1_3_VERSION, 0 },
     { 0xfe43, 128, TLS1_3_VERSION, 0 },
     { 0xfe44, 128, TLS1_3_VERSION, 0 },
@@ -436,13 +436,13 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(p521_dilithium5_aes, p521_dilithium5_aes, p521_dilithium5_aes, "1.3.9999.2.11.4", 13),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_512
-    OQS_SIGALG_ENTRY(falcon512, falcon512, falcon512, "1.3.9999.3.1", 14),
-    OQS_SIGALG_ENTRY(p256_falcon512, p256_falcon512, p256_falcon512, "1.3.9999.3.2", 15),
-    OQS_SIGALG_ENTRY(rsa3072_falcon512, rsa3072_falcon512, rsa3072_falcon512, "1.3.9999.3.3", 16),
+    OQS_SIGALG_ENTRY(falcon512, falcon512, falcon512, "1.3.9999.3.6", 14),
+    OQS_SIGALG_ENTRY(p256_falcon512, p256_falcon512, p256_falcon512, "1.3.9999.3.7", 15),
+    OQS_SIGALG_ENTRY(rsa3072_falcon512, rsa3072_falcon512, rsa3072_falcon512, "1.3.9999.3.8", 16),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
-    OQS_SIGALG_ENTRY(falcon1024, falcon1024, falcon1024, "1.3.9999.3.4", 17),
-    OQS_SIGALG_ENTRY(p521_falcon1024, p521_falcon1024, p521_falcon1024, "1.3.9999.3.5", 18),
+    OQS_SIGALG_ENTRY(falcon1024, falcon1024, falcon1024, "1.3.9999.3.9", 17),
+    OQS_SIGALG_ENTRY(p521_falcon1024, p521_falcon1024, p521_falcon1024, "1.3.9999.3.10", 18),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
     OQS_SIGALG_ENTRY(sphincsharaka128frobust, sphincsharaka128frobust, sphincsharaka128frobust, "1.3.9999.6.1.1", 19),

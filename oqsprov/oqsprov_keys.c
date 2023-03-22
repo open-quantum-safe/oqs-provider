@@ -122,6 +122,15 @@ static char* get_oqsname(int nid) {
    return 0; 
 }
 
+static int get_oqsalg_idx(int nid) {
+   int i;
+   for(i=0;i<NID_TABLE_LEN;i++) {
+      if (nid_names[i].nid == nid)
+          return i;
+   }
+   return -1; 
+}
+
 static int oqsx_key_set_composites(OQSX_KEY *key) {
 	int ret = 0;
 
@@ -189,7 +198,7 @@ static OQSX_KEY *oqsx_key_new_from_nid(OSSL_LIB_CTX *libctx, const char *propq, 
 		return NULL;
 	}
 
-	return oqsx_key_new(libctx, get_oqsname(nid), tls_algname, get_keytype(nid), propq, get_secbits(nid));
+	return oqsx_key_new(libctx, get_oqsname(nid), tls_algname, get_keytype(nid), propq, get_secbits(nid), get_oqsalg_idx(nid));
 }
 
 /* Workaround for not functioning EC PARAM initialization
@@ -252,67 +261,119 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
     }
 
     if (op == KEY_OP_PUBLIC) {
-        if (key->pubkeylen != plen) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-            goto err;
-        }
-        if (oqsx_key_allocate_keymaterial(key, 0)) {
-            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-            goto err;
-        }
-        memcpy(key->pubkey, p, plen);
-    } else {
-	int classical_privatekey_len = 0;
-	// for plain OQS keys, we expect OQS priv||OQS pub key
-	size_t actualprivkeylen = key->privkeylen;
-	// for hybrid keys, we expect classic priv key||OQS priv key||OQS pub key
-	// classic pub key must/can be re-created from classic private key
-	if (key->numkeys == 2) {
-            DECODE_UINT32(classical_privatekey_len, p); // actual classic key len
-	    // adjust expected size
-	    if (classical_privatekey_len > key->evp_info->length_private_key) {
+#ifdef USE_ENCODING_LIB
+        if (key->oqsx_encoding_ctx.encoding_ctx && key->oqsx_encoding_ctx.encoding_impl) {
+            key->pubkeylen = key->oqsx_encoding_ctx.encoding_ctx->raw_crypto_publickeybytes;
+            if (key->oqsx_encoding_ctx.encoding_impl->crypto_publickeybytes != plen) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                 goto err;
-	    }
-	    actualprivkeylen -= (key->evp_info->length_private_key - classical_privatekey_len);
-	}
+            }
+            if (oqsx_key_allocate_keymaterial(key, 0)) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err;
+            }
+            if (qsc_decode(key->oqsx_encoding_ctx.encoding_ctx, key->oqsx_encoding_ctx.encoding_impl, p, (unsigned char **) &key->pubkey, 0, 0, 1) != QSC_ENC_OK) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err;
+            }
+        } else {
+#endif
+            if (key->pubkeylen != plen) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err;
+            }
+            if (oqsx_key_allocate_keymaterial(key, 0)) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err;
+            }
+            memcpy(key->pubkey, p, plen);
+#ifdef USE_ENCODING_LIB
+        }
+#endif
+    } else {
+    	int classical_privatekey_len = 0;
+    	// for plain OQS keys, we expect OQS priv||OQS pub key
+    	size_t actualprivkeylen = key->privkeylen;
+    	// for hybrid keys, we expect classic priv key||OQS priv key||OQS pub key
+    	// classic pub key must/can be re-created from classic private key
+    	if (key->numkeys == 2) {
+                DECODE_UINT32(classical_privatekey_len, p); // actual classic key len
+    	    // adjust expected size
+    	    if (classical_privatekey_len > key->evp_info->length_private_key) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    goto err;
+    	    }
+    	    actualprivkeylen -= (key->evp_info->length_private_key - classical_privatekey_len);
+    	}
+#ifdef USE_ENCODING_LIB
+        if (key->oqsx_encoding_ctx.encoding_ctx && key->oqsx_encoding_ctx.encoding_impl) {
+             const qsc_encoding_t* encoding_ctx = key->oqsx_encoding_ctx.encoding_ctx;
+#ifdef NOPUBKEY_IN_PRIVKEY
+            // if the raw private key includes the public key, the optional part is needed, otherwise not.
+            int withoptional = (encoding_ctx->raw_private_key_encodes_public_key ? 1 : 0);
+#else
+            int withoptional = 1;
+#endif
+            int pubkey_available = withoptional;
+            if (oqsx_key_allocate_keymaterial(key, 1)) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err;
+            }
+            if (pubkey_available) {
+                if (oqsx_key_allocate_keymaterial(key, 0)) {
+                    ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                    goto err;
+                }
+            }
 
+            if (qsc_decode(encoding_ctx, key->oqsx_encoding_ctx.encoding_impl, 
+                        0, (pubkey_available ? (unsigned char**)&key->pubkey : 0), p, 
+                        (unsigned char**)&key->privkey, withoptional) != QSC_ENC_OK) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err;
+            }
+
+        } else {
+#endif
 #ifdef NOPUBKEY_IN_PRIVKEY
         if (actualprivkeylen != plen) {
-            OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(actualprivkeylen));
+                OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(actualprivkeylen));
 #else
         if (actualprivkeylen + oqsx_key_get_oqs_public_key_len(key) != plen) {
-            OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(actualprivkeylen + oqsx_key_get_oqs_public_key_len(key)));
+                OQS_KEY_PRINTF3("OQSX KEY: private key with unexpected length %d vs %d\n", plen, (int)(actualprivkeylen + oqsx_key_get_oqs_public_key_len(key)));
 #endif
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-            goto err;
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err;
         }
         if (oqsx_key_allocate_keymaterial(key, 1)
 #ifndef NOPUBKEY_IN_PRIVKEY
-		|| oqsx_key_allocate_keymaterial(key, 0)
+    		|| oqsx_key_allocate_keymaterial(key, 0)
 #endif
-			) {
-            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-            goto err;
-        }
-	// first populate private key data
-        memcpy(key->privkey, p, actualprivkeylen);
+    			) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err;
+            }
+    	// first populate private key data
+            memcpy(key->privkey, p, actualprivkeylen);
 #ifndef NOPUBKEY_IN_PRIVKEY
-	// only enough data to fill public OQS key component
-	if (oqsx_key_get_oqs_public_key_len(key) != plen - actualprivkeylen) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-            goto err;
-        }
-	// populate OQS public key structure
-	if (key->numkeys == 2) {
-            unsigned char *pubkey = (unsigned char *)key->pubkey;
-            ENCODE_UINT32(pubkey,key->evp_info->length_public_key);
-	    memcpy(pubkey+SIZE_OF_UINT32+key->evp_info->length_public_key, p+actualprivkeylen, plen-actualprivkeylen);
-	}
-	else
-            memcpy(key->pubkey, p+key->privkeylen, plen-key->privkeylen);
+    	// only enough data to fill public OQS key component
+    	if (oqsx_key_get_oqs_public_key_len(key) != plen - actualprivkeylen) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err;
+            }
+    	// populate OQS public key structure
+    	if (key->numkeys == 2) {
+                unsigned char *pubkey = (unsigned char *)key->pubkey;
+                ENCODE_UINT32(pubkey,key->evp_info->length_public_key);
+    	    memcpy(pubkey+SIZE_OF_UINT32+key->evp_info->length_public_key, p+actualprivkeylen, plen-actualprivkeylen);
+    	}
+    	else
+                memcpy(key->pubkey, p+key->privkeylen, plen-key->privkeylen);
 #endif
+        }
+#ifdef USE_ENCODING_LIB
     }
+#endif
     ret = oqsx_key_set_composites(key);
     ON_ERR_GOTO(ret, err);
     if (key->numkeys == 2) { // hybrid key
@@ -321,7 +382,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
             ERR_raise(ERR_LIB_USER, OQSPROV_R_EVPINFO_MISSING);
             goto err;
         }
-	if (op == KEY_OP_PUBLIC) {
+	    if (op == KEY_OP_PUBLIC) {
             DECODE_UINT32(classical_pubkey_len, key->pubkey);
             if (key->evp_info->raw_key_support) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
@@ -340,7 +401,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg,
                 }
             }
         }
-	if (op == KEY_OP_PRIVATE) {
+	    if (op == KEY_OP_PRIVATE) {
             DECODE_UINT32(classical_privkey_len, key->privkey);
             if (key->evp_info->raw_key_support) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
@@ -521,8 +582,12 @@ static const int (*init_kex_fun[])(int, OQSX_EVP_CTX *) = {
         oqshybkem_init_ecp,
         oqshybkem_init_ecx
 };
+#ifdef USE_ENCODING_LIB
+extern const char* oqs_alg_encoding_list[];
+#endif
+extern const char* oqs_oid_alg_list[];
 
-OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int primitive, const char *propq, int bit_security)
+OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int primitive, const char *propq, int bit_security, int alg_idx)
 {
     OQSX_KEY *ret = OPENSSL_zalloc(sizeof(*ret));
     OQSX_EVP_CTX *evp_ctx = NULL;
@@ -550,6 +615,16 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
             fprintf(stderr, "Could not create OQS signature algorithm %s. Enabled in liboqs?\n", oqs_name);
             goto err;
         }
+
+#ifdef USE_ENCODING_LIB
+        if (alg_idx >= 0 && oqs_alg_encoding_list[alg_idx] != NULL) {
+            if (qsc_encoding_by_name_oid(&ret->oqsx_encoding_ctx.encoding_ctx, &ret->oqsx_encoding_ctx.encoding_impl, oqs_oid_alg_list[2*alg_idx], oqs_alg_encoding_list[alg_idx]) != QSC_ENC_OK) {
+                fprintf(stderr, "Could not create OQS signature encoding algorithm %s (%s, %s). Defaulting to no encoding.\n", oqs_alg_encoding_list[alg_idx], oqs_name, oqs_oid_alg_list[2*alg_idx]);
+            ret->oqsx_encoding_ctx.encoding_ctx = NULL;
+                ret->oqsx_encoding_ctx.encoding_impl = NULL;
+            }
+        }
+#endif
         ret->privkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_secret_key;
         ret->pubkeylen = ret->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key;
         ret->keytype = KEY_TYPE_SIG;

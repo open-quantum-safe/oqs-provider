@@ -37,6 +37,22 @@ jobs:
           name: Run tests
           command: |
              ./scripts/runtests.sh -V
+      - run:
+          name: Run tests (with encodings)
+          command: |
+            ./scripts/runtests_encodings.sh -V
+      - run:
+          name: Build OQS-OpenSSL provider (only STD algs) with NOPUBKEY_IN_PRIVKEY
+          command: |
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DNOPUBKEY_IN_PRIVKEY=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+      - run:
+          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
+          command: |
+             ./scripts/runtests.sh -V
+      - run:
+          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings)
+          command: |
+            ./scripts/runtests_encodings.sh -V
 workflows:
   version: 2.1
   build:

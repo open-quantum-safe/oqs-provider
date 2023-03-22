@@ -22,13 +22,7 @@
 #  include <openssl/core.h>
 #  include <openssl/e_os2.h>
 
-#define OQS_PROVIDER_BASE_VERSION_STR OQSPROVIDER_VERSION_TEXT
-
-#ifdef NOPUBKEY_IN_PRIVKEY
-#define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR "-nopub"
-#else
-#define OQS_PROVIDER_VERSION_STR OQS_PROVIDER_BASE_VERSION_STR
-#endif
+#define OQS_PROVIDER_VERSION_STR OQSPROVIDER_VERSION_TEXT
 
 /* internal, but useful OSSL define */
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
@@ -101,6 +95,9 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 # define PROV_OQS_LIBCTX_OF(provctx) (((PROV_OQS_CTX *)provctx)->libctx)
 
 #include "oqs/oqs.h"
+#ifdef USE_ENCODING_LIB
+#include <qsc_encoding.h>
+#endif
 
 /* helper structure for classic key components in hybrid keys.
  * Actual tables in oqsprov_keys.c
@@ -137,6 +134,15 @@ struct oqsx_provider_ctx_st {
 
 typedef struct oqsx_provider_ctx_st OQSX_PROVIDER_CTX;
 
+#ifdef USE_ENCODING_LIB
+struct oqsx_provider_encoding_ctx_st {
+    const qsc_encoding_t* encoding_ctx;
+    const qsc_encoding_impl_t* encoding_impl;
+};
+
+typedef struct oqsx_provider_encoding_ctx_st OQSX_ENCODING_CTX;
+#endif
+
 enum oqsx_key_type_en {
     KEY_TYPE_SIG, KEY_TYPE_KEM, KEY_TYPE_ECP_HYB_KEM, KEY_TYPE_ECX_HYB_KEM, KEY_TYPE_HYB_SIG
 };
@@ -148,6 +154,9 @@ struct oqsx_key_st {
     char *propq;
     OQSX_KEY_TYPE keytype;
     OQSX_PROVIDER_CTX oqsx_provider_ctx;
+#ifdef USE_ENCODING_LIB
+    OQSX_ENCODING_CTX oqsx_encoding_ctx;
+#endif
     EVP_PKEY *classical_pkey; // for hybrid sigs
     const OQSX_EVP_INFO *evp_info;
     size_t numkeys;
@@ -179,7 +188,7 @@ typedef struct oqsx_key_st OQSX_KEY;
 int oqs_set_nid(char* tlsname, int nid);
 
 /* Create OQSX_KEY data structure based on parameters; key material allocated separately */ 
-OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int is_kem, const char *propq, int bit_security);
+OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int is_kem, const char *propq, int bit_security, int alg_idx);
 
 /* allocate key material; component pointers need to be set separately */
 int oqsx_key_allocate_keymaterial(OQSX_KEY *key, int include_private);

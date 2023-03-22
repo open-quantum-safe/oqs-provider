@@ -8,7 +8,7 @@
     {%- endfor %}
 {%- endfor %}
 #define OQS_OID_CNT {{ count.val*2 }}
-static const char* oqs_oid_alg_list[OQS_OID_CNT] =
+const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {
 
 {%- for sig in config['sigs'] %}

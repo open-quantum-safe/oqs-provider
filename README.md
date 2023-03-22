@@ -178,6 +178,12 @@ excludes all algorithms of the "Sphincs" family.
 *Note*: By default, interoperability testing with oqs-openssl111 is no longer
 performed by default but can be manually enabled in the script `scripts/runtests.sh`.
 
+### Key Encoding
+
+By setting `-DUSE_ENCODING_LIB=<ON/OFF>` at compile-time, oqs-provider can be compiled with with an an external encoding library `qsc-key-encoder`. Configuring the encodings is done via environment as described in [ALGORITHMS.md](ALGORITHMS.md).
+
+By setting `-DNOPUBKEY_IN_PRIVKEY=<ON/OFF>` at compile-time, it can be further specified to omit explicitly serializing the public key in a `privateKey` structure. The default value is `OFF`.
+
 Building on Windows
 --------------------
 The following steps have been tested on Windows 10 and 11 using MSYS2 MINGW64 and were successful. However, building with Visual Studio 2019 was unsuccessful (see [#47](https://github.com/open-quantum-safe/oqs-provider/issues/47)). Note that the process of building on Windows is considered experimental and may need further adjustments. Please report further issues to [#47](https://github.com/open-quantum-safe/oqs-provider/issues/47). Despite skipping the testing process, setting up a test server and client with post-quantum cryptography algorithms can still be accomplished.

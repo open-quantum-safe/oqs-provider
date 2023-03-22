@@ -347,6 +347,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_dilithium_2'
         oid: '1.3.6.1.4.1.2.267.7.4.4'
         code_point: '0xfea0'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -362,6 +363,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_dilithium_3'
         oid: '1.3.6.1.4.1.2.267.7.6.5'
         code_point: '0xfea3'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -373,6 +375,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_dilithium_5'
         oid: '1.3.6.1.4.1.2.267.7.8.7'
         code_point: '0xfea5'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -384,6 +387,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_dilithium_2_aes'
         oid: '1.3.6.1.4.1.2.267.11.4.4'
         code_point: '0xfea7'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -399,6 +403,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_dilithium_3_aes'
         oid: '1.3.6.1.4.1.2.267.11.6.5'
         code_point: '0xfeaa'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -410,6 +415,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_dilithium_5_aes'
         oid: '1.3.6.1.4.1.2.267.11.8.7'
         code_point: '0xfeac'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -428,6 +434,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_512'
         oid: '1.3.9999.3.1'
         code_point: '0xfe0b'
+        supported_encodings: ['draft-uni-qsckeys-falcon-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -443,6 +450,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.9999.3.4'
         code_point: '0xfe0e'
+        supported_encodings: ['draft-uni-qsckeys-falcon-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -457,6 +465,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_128f_robust'
         oid: '1.3.9999.6.1.1'
         code_point: '0xfe42'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -472,6 +481,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_128f_simple'
         oid: '1.3.9999.6.1.4'
         code_point: '0xfe45'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -487,6 +497,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_128s_robust'
         oid: '1.3.9999.6.1.7'
         code_point: '0xfe48'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -502,6 +513,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_128s_simple'
         oid: '1.3.9999.6.1.10'
         code_point: '0xfe4b'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -517,6 +529,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_192f_robust'
         oid: '1.3.9999.6.2.1'
         code_point: '0xfe4e'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -528,6 +541,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_192f_simple'
         oid: '1.3.9999.6.2.3'
         code_point: '0xfe50'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -539,6 +553,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_192s_robust'
         oid: '1.3.9999.6.2.5'
         code_point: '0xfe52'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -550,6 +565,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_192s_simple'
         oid: '1.3.9999.6.2.7'
         code_point: '0xfe54'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -561,6 +577,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_256f_robust'
         oid: '1.3.9999.6.3.1'
         code_point: '0xfe56'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -572,6 +589,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_256f_simple'
         oid: '1.3.9999.6.3.3'
         code_point: '0xfe58'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -583,6 +601,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_256s_robust'
         oid: '1.3.9999.6.3.5'
         code_point: '0xfe5a'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -594,6 +613,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_haraka_256s_simple'
         oid: '1.3.9999.6.3.7'
         code_point: '0xfe5c'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -608,6 +628,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_128f_robust'
         oid: '1.3.9999.6.4.1'
         code_point: '0xfe5e'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -623,6 +644,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_128f_simple'
         oid: '1.3.9999.6.4.4'
         code_point: '0xfe61'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -638,6 +660,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_128s_robust'
         oid: '1.3.9999.6.4.7'
         code_point: '0xfe64'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -653,6 +676,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_128s_simple'
         oid: '1.3.9999.6.4.10'
         code_point: '0xfe67'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -668,6 +692,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_192f_robust'
         oid: '1.3.9999.6.5.1'
         code_point: '0xfe6a'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -679,6 +704,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_192f_simple'
         oid: '1.3.9999.6.5.3'
         code_point: '0xfe6c'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -690,6 +716,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_192s_robust'
         oid: '1.3.9999.6.5.5'
         code_point: '0xfe6e'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -701,6 +728,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_192s_simple'
         oid: '1.3.9999.6.5.7'
         code_point: '0xfe70'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -712,6 +740,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_256f_robust'
         oid: '1.3.9999.6.6.1'
         code_point: '0xfe72'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -723,6 +752,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_256f_simple'
         oid: '1.3.9999.6.6.3'
         code_point: '0xfe74'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -734,6 +764,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_256s_robust'
         oid: '1.3.9999.6.6.5'
         code_point: '0xfe76'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -745,6 +776,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_sha256_256s_simple'
         oid: '1.3.9999.6.6.7'
         code_point: '0xfe78'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -759,6 +791,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_128f_robust'
         oid: '1.3.9999.6.7.1'
         code_point: '0xfe7a'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -774,6 +807,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_128f_simple'
         oid: '1.3.9999.6.7.4'
         code_point: '0xfe7d'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -789,6 +823,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_128s_robust'
         oid: '1.3.9999.6.7.7'
         code_point: '0xfe80'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -804,6 +839,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_128s_simple'
         oid: '1.3.9999.6.7.10'
         code_point: '0xfe83'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -819,6 +855,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_192f_robust'
         oid: '1.3.9999.6.8.1'
         code_point: '0xfe86'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -830,6 +867,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_192f_simple'
         oid: '1.3.9999.6.8.3'
         code_point: '0xfe88'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -841,6 +879,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_192s_robust'
         oid: '1.3.9999.6.8.5'
         code_point: '0xfe8a'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -852,6 +891,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_192s_simple'
         oid: '1.3.9999.6.8.7'
         code_point: '0xfe8c'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -863,6 +903,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_256f_robust'
         oid: '1.3.9999.6.9.1'
         code_point: '0xfe8e'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -874,6 +915,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_256f_simple'
         oid: '1.3.9999.6.9.3'
         code_point: '0xfe90'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -885,6 +927,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_256s_robust'
         oid: '1.3.9999.6.9.5'
         code_point: '0xfe92'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -896,6 +939,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_sphincs_shake256_256s_simple'
         oid: '1.3.9999.6.9.7'
         code_point: '0xfe94'
+        supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',

@@ -10,9 +10,8 @@ if (USE_ENCODING_LIB)
   set(encoder_LIBRARY ${CMAKE_BINARY_DIR}/install/lib/${CMAKE_STATIC_LIBRARY_PREFIX}qsc_key_encoder${CMAKE_STATIC_LIBRARY_SUFFIX})
   set(encoder_LIBRARY_INCLUDE ${CMAKE_BINARY_DIR}/install/include)
   ExternalProject_Add(encoder
-      GIT_REPOSITORY https://github.com/Quantum-Safe-Collaboration/qsc-key-rfc.git
+      GIT_REPOSITORY https://github.com/Quantum-Safe-Collaboration/qsc-key-encoder.git
       GIT_TAG main
-      SOURCE_SUBDIR qsc-key-encoder
       CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install -DCMAKE_BUILD_TYPE=Release
       BUILD_BYPRODUCTS ${encoder_LIBRARY}
   )

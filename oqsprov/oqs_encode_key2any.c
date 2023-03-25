@@ -1215,7 +1215,11 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 return 0;
         }
         /* finally print pure PQ key */
-        if (!print_labeled_buf(out, "PQ key material:", okey->comp_pubkey[okey->numkeys-1],
+        if (
+#ifdef NOPUBKEY_IN_PRIVKEY
+	    okey->comp_pubkey[okey->numkeys-1] &&
+#endif
+	    !print_labeled_buf(out, "PQ key material:", okey->comp_pubkey[okey->numkeys-1],
                                okey->pubkeylen-classic_key_len-SIZE_OF_UINT32))
             return 0;
     }

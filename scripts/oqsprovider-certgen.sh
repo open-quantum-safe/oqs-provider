@@ -25,6 +25,7 @@ fi
 #rm -rf tmp
 mkdir -p tmp
 $OPENSSL_APP req -x509 -new -newkey $1 -keyout tmp/$1_CA.key -out tmp/$1_CA.crt -nodes -subj "/CN=oqstest CA" -days 365 -config $OPENSSL_APP.cnf -provider oqsprovider -provider default && \
+$OPENSSL_APP pkey -in tmp/$1_CA.key -provider oqsprovider -provider default && \
 $OPENSSL_APP genpkey -algorithm $1 -out tmp/$1_srv.key -provider oqsprovider -provider default && \
 $OPENSSL_APP req -new -newkey $1 -keyout tmp/$1_srv.key -out tmp/$1_srv.csr -nodes -subj "/CN=oqstest server" -config $OPENSSL_APP.cnf -provider oqsprovider -provider default && \
 $OPENSSL_APP x509 -req -in tmp/$1_srv.csr -out tmp/$1_srv.crt -CA tmp/$1_CA.crt -CAkey tmp/$1_CA.key -CAcreateserial -days 365 -provider oqsprovider -provider default && \

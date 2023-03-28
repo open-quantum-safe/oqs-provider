@@ -87,8 +87,7 @@ static int get_aid(unsigned char **oidbuf, const char *tls_name)
 DECLARE_ASN1_FUNCTIONS(CompositeSignature)
 
 ASN1_NDEF_SEQUENCE(CompositeSignature) = {
-  ASN1_SIMPLE(CompositeSignature, sig1, ASN1_BIT_STRING),
-  ASN1_SIMPLE(CompositeSignature, sig2, ASN1_BIT_STRING)
+  ASN1_SET_OF(CompositeSignature, sig, ASN1_BIT_STRING),
 } ASN1_NDEF_SEQUENCE_END(CompositeSignature)
 
 IMPLEMENT_ASN1_FUNCTIONS(CompositeSignature)
@@ -241,6 +240,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
   size_t actual_classical_sig_len = 0;
   size_t index = 0;
   int rv = 0;
+  ASN1_BIT_STRING *comp_sig;
 
   if (!oqsxkey || !(oqs_key || oqs_key_classic) || !oqsxkey->privkey)
   {
@@ -358,6 +358,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     CompositeSignature *compsig = CompositeSignature_new();
     int i;
     char *name = OPENSSL_malloc(strlen(oqsxkey->tls_name));
+    if((compsig->sig = sk_ASN1_TYPE_new_null()) == NULL)
+      goto endsign;   
     for (i = 0; i < oqsxkey->numkeys; i++){
       get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i, name);
 
@@ -435,17 +437,27 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
           goto endsign;
         }
       }
-      if (i == 0){ //temporary condition
+      comp_sig = ASN1_BIT_STRING_new();
+      comp_sig->data = OPENSSL_memdup(buf, oqs_sig_len);
+      comp_sig->length = oqs_sig_len;
+      if (!sk_ASN1_TYPE_push(compsig->sig, comp_sig))
+        goto endsign;
+      
+
+ /*      if (i == 0){ //temporary condition
         compsig->sig1->data = OPENSSL_memdup(buf, oqs_sig_len);
         compsig->sig1->length = oqs_sig_len;
       }else{
         compsig->sig2->data = OPENSSL_memdup(buf, oqs_sig_len);
         compsig->sig2->length = oqs_sig_len;
-      }
+      } 
+*/
       
     }
     oqs_sig_len = i2d_CompositeSignature(compsig, &sig);
     OPENSSL_free(name);
+    OPENSSL_free(compsig->sig);
+    OPENSSL_free(comp_sig);
   }
   else if (OQS_SIG_sign(oqs_key, sig + index, &oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys - 1]) != OQS_SUCCESS)
   {
@@ -481,6 +493,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
     size_t classical_sig_len = 0, oqs_sig_len = 0;
     size_t index = 0;
     int rv = 0;
+  ASN1_BIT_STRING *comp_sig;
 
     OQS_SIG_PRINTF3(
         "OQS SIG provider: verify called with siglen %ld bytes and tbslen %ld\n",
@@ -566,17 +579,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
     size_t buf_len;
     if(d2i_CompositeSignature(&compsig, &sig, siglen) == NULL)
       goto endverify;
-
+    if((compsig->sig = sk_ASN1_TYPE_new_null()) == NULL)
+      goto endverify; 
     for(i = 0; i < oqsxkey->numkeys; i++){
       get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i, name);
-      
-      if (i == 0){ //temporary condition
-        buf = compsig->sig1->data;
-        buf_len = compsig->sig1->length;
-      }else{
-        buf = compsig->sig2->data;
-        buf_len = compsig->sig2->length;
-      }
 
       if (get_oqsname_fromtls(name)){
         if (OQS_SIG_verify(oqs_key, tbs, tbslen, buf, buf_len, oqsxkey->comp_pubkey[i]) != OQS_SUCCESS)
@@ -635,12 +641,27 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         {
           ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
           goto endverify;
-        }
-        
+        }       
       }
+      comp_sig = ASN1_BIT_STRING_new();
+      comp_sig->data = OPENSSL_memdup(buf, oqs_sig_len);
+      comp_sig->length = oqs_sig_len;
+      if (!sk_ASN1_TYPE_push(compsig->sig, comp_sig))
+        goto endverify;
       
+
+ /*      if (i == 0){ //temporary condition
+        compsig->sig1->data = OPENSSL_memdup(buf, oqs_sig_len);
+        compsig->sig1->length = oqs_sig_len;
+      }else{
+        compsig->sig2->data = OPENSSL_memdup(buf, oqs_sig_len);
+        compsig->sig2->length = oqs_sig_len;
+      } 
+*/
     }
     OPENSSL_free(name);
+    OPENSSL_free(compsig->sig);
+    OPENSSL_free(comp_sig);
   }else
   {
     if (!oqsxkey->comp_pubkey[oqsxkey->numkeys - 1])

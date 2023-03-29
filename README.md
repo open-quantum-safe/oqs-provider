@@ -80,7 +80,7 @@ Building and testing -- Quick start
 
 All component builds and testing described in detail below can be executed by
 running the scripts `scripts/fullbuild.sh` and `scripts/runtests.sh`
-respectively (tested on Linux Ubuntu and Mint).
+respectively (tested on Linux Ubuntu and Mint as well as OSX).
 
 
 Building and testing

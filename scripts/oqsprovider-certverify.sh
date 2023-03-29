@@ -24,7 +24,7 @@ fi
 
 # check that CSR can be output OK
 
-$OPENSSL_APP req -text -in tmp/$1_srv.csr -noout -provider oqsprovider -provider default -config $OPENSSL_APP.cnf |& grep Error
+$OPENSSL_APP req -text -in tmp/$1_srv.csr -noout -provider oqsprovider -provider default -config $OPENSSL_APP.cnf 2>&1 | grep Error
 if [ $? -eq 0 ]; then
     echo "Couldn't print CSR correctly. Exiting."
     exit 1

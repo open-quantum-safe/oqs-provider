@@ -18,7 +18,7 @@ jobs:
       MAKE_PARAMS: "-j 18"
     steps:
       - name: Update container
-        run: apt update && apt install cmake ninja-build gcc libssl-dev git
+        run: apt update && apt install -y cmake ninja-build gcc libssl-dev git
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build

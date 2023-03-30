@@ -1,0 +1,27 @@
+name: Tests using distributions with OpenSSL3 binaries
+
+on: [push]
+
+jobs:
+
+  linux_intel:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: jammy
+            container: ubuntu:latest
+    container:
+      image: ${{ matrix.container }}
+    env:
+      MAKE_PARAMS: "-j 18"
+    steps:
+      - name: Update container
+        run: apt update && apt install cmake ninja-build gcc libssl-dev git
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Full build
+        run: ./scripts/fullbuild.sh
+      - name: Test
+        run: ./scripts/runtests.sh -V

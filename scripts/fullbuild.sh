@@ -5,8 +5,9 @@
 # Argument -F: Hard clean, ensuring checkout and build of all dependencies
 # EnvVar MAKE_PARAMS: passed to invocations of make; sample value: "-j"
 # EnvVar LIBOQS_BRANCH: Defines branch/release of liboqs; default value "main"
-# EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; default value "master"
 # EnvVar OQS_ALGS_ENABLED: If set, defines OQS algs to be enabled, e.g., "STD"
+# EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
+# EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL3
 
 if [ $# -gt 0 ]; then
    if [ "$1" == "-f" ]; then
@@ -21,24 +22,32 @@ if [ -z "$LIBOQS_BRANCH" ]; then
    export LIBOQS_BRANCH=main
 fi
 
-if [ -z "$OPENSSL_BRANCH" ]; then
-   export OPENSSL_BRANCH=master
-fi
-
 if [ -z "$OQS_ALGS_ENABLED" ]; then
    export DOQS_ALGS_ENABLED=""
 else
    export DOQS_ALGS_ENABLED="$OQS_ALGS_ENABLED"
 fi
 
-if [ ! -d "openssl" ]; then
-   echo "openssl doesn't reside where expected: Cloning and building..."
-   # for full debug build add: enable-trace enable-fips --debug
-   git clone --depth 1 --branch $OPENSSL_BRANCH git://git.openssl.org/openssl.git && cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make $MAKE_PARAMS && make install_sw && cd ..
-   if [ $? -ne 0 ]; then
-     echo "openssl build failed. Exiting."
-     exit -1
+if [ -z "$OPENSSL_INSTALL" ]; then
+ openssl version | grep "OpenSSL 3" > /dev/null 2>&1
+ #if [ \($? -ne 0 \) -o \( ! -z "$OPENSSL_BRANCH" \) ]; then
+ if [ $? -ne 0 ] || [ ! -z "$OPENSSL_BRANCH" ]; then
+   if [ -z "$OPENSSL_BRANCH" ]; then
+      export OPENSSL_BRANCH="master"
    fi
+   # No OSSL3 installation given/found, or specific branch build requested
+   echo "OpenSSL3 to be built from source at branch $OPENSSL_BRANCH."
+
+   if [ ! -d "openssl" ]; then
+      echo "openssl not specified and doesn't reside where expected: Cloning and building..."
+      # for full debug build add: enable-trace enable-fips --debug
+      git clone --depth 1 --branch $OPENSSL_BRANCH git://git.openssl.org/openssl.git && cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
+      if [ $? -ne 0 ]; then
+        echo "openssl build failed. Exiting."
+        exit -1
+      fi
+   fi
+ fi
 fi
 
 # Check whether liboqs is built:
@@ -83,7 +92,11 @@ if [ ! -f "_build/oqsprov/oqsprovider.so" ]; then
    echo "oqsprovider not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
-   cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+   if [ -z "$OPENSSL_INSTALL" ]; then
+       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+   else
+       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+   fi
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."
      exit -1

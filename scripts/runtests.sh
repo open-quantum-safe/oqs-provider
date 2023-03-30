@@ -1,19 +1,21 @@
 #!/bin/sh
 
+rv=0
+
 provider2openssl() {
     echo
     echo "Testing oqsprovider->oqs-openssl interop for $1:"
-    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 sha3-384 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-certverify.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-cmsverify.sh $1
+    $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-certgen.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-cmssign.sh $1 sha3-384 && $OQS_PROVIDER_TESTSCRIPTS/oqs-openssl-certverify.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/oqs-openssl-cmsverify.sh $1
 }
 
 openssl2provider() {
     echo
     echo "Testing oqs-openssl->oqsprovider interop for $1:"
-    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-certgen.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqs-openssl-cmssign.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmsverify.sh $1
+    $OQS_PROVIDER_TESTSCRIPTS/oqs-openssl-certgen.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/oqs-openssl-cmssign.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-certverify.sh $1 && $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-cmsverify.sh $1
 }
 
 localalgtest() {
-    $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-cmssign.sh $1 >> interop.log 2>&1 &&  $OQS_PROVIDER_TESTSCRIPTS/scripts/oqsprovider-ca.sh $1 >> interop.log 2>&1
+    $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-cmssign.sh $1 >> interop.log 2>&1 &&  $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-ca.sh $1 >> interop.log 2>&1
     if [ $? -ne 0 ]; then
         echo "localalgtest $1 failed. Exiting.".
         exit 1
@@ -48,11 +50,25 @@ interop() {
 }
 
 if [ -z "$OQS_PROVIDER_TESTSCRIPTS" ]; then
-    export OQS_PROVIDER_TESTSCRIPTS=$(pwd)
+    export OQS_PROVIDER_TESTSCRIPTS=$(pwd)/scripts
+fi
+
+if [ ! -z "$OPENSSL_INSTALL" ]; then
+    # setting config variables suitably for pre-existing OpenSSL installation
+    export OPENSSL_APP=$OPENSSL_INSTALL/bin/openssl
+    export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib64
+    export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
+else
+    # removing the need to pass explicit -conf parameter to all tests:
+    export OPENSSL_CONF=$OQS_PROVIDER_TESTSCRIPTS/openssl-ca.cnf
 fi
 
 if [ -z "$OPENSSL_APP" ]; then
-    export OPENSSL_APP=$(pwd)/openssl/apps/openssl
+    if [ -f $(pwd)/openssl/apps/openssl ]; then
+        export OPENSSL_APP=$(pwd)/openssl/apps/openssl
+    else # if no local openssl src directory is found, rely on PATH...
+        export OPENSSL_APP=openssl
+    fi
 fi
 
 if [ -z "$OPENSSL_MODULES" ]; then
@@ -66,6 +82,11 @@ fi
 if [ ! -z "$OQS_SKIP_TESTS" ]; then
    echo "Skipping algs $OQS_SKIP_TESTS"
 fi
+
+echo "Test setup:"
+echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+echo "OPENSSL_APP=$OPENSSL_APP"
+echo "OPENSSL_CONF=$OPENSSL_CONF"
 
 # check if we can use docker or not:
 docker info 2>&1 | grep Server > /dev/null
@@ -126,12 +147,22 @@ interop rsa3072_sphincsshake256128fsimple
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_END
 
 # Run built-in tests:
-(cd _build; ctest $@)
+cd _build && ctest $@ && cd ..
+
+if [ $? -ne 0 ]; then
+   rv=1
+fi
 
 # cleanup: TBC:
 # decide for testing strategy when integrating to OpenSSL test harness:
 # Keep scripts generating certs (testing more code paths) or use API?
 #rm -rf tmp
 echo
-echo "All oqsprovider tests passed."
+
+if [ $rv -ne 0 ]; then
+   echo "Tests failed."
+else
+   echo "All oqsprovider tests passed."
+fi
+exit $rv
 

@@ -54,10 +54,16 @@ if [ -z "$OQS_PROVIDER_TESTSCRIPTS" ]; then
 fi
 
 if [ ! -z "$OPENSSL_INSTALL" ]; then
-    # setting config variables suitably for pre-existing OpenSSL installation
-    export OPENSSL_APP=$OPENSSL_INSTALL/bin/openssl
-    export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib64
-    export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
+    # trying to set config variables suitably for pre-existing OpenSSL installation
+    if [ -f $OPENSSL_INSTALL/bin/openssl ]; then
+        export OPENSSL_APP=$OPENSSL_INSTALL/bin/openssl
+    fi
+    if [ -d $OPENSSL_INSTALL/lib64 ]; then
+        export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib64
+    fi
+    if [ -f $OPENSSL_INSTALL/ssl/openssl.cnf ]; then
+        export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
+    fi
 else
     # removing the need to pass explicit -conf parameter to all tests:
     export OPENSSL_CONF=$OQS_PROVIDER_TESTSCRIPTS/openssl-ca.cnf

@@ -53,6 +53,60 @@ jobs:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings)
           command: |
             ./scripts/runtests_encodings.sh -V
+
+  macOS:
+    description: A template for running tests on macOS
+    parameters:
+      CMAKE_ARGS:
+        description: "Arguments to pass to CMake."
+        type: string
+    macos:
+      xcode: "13.2.1"
+    steps:
+      - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
+      - run:
+          name: Install dependencies
+          command: env HOMEBREW_NO_AUTO_UPDATE=1 brew install cmake ninja
+      - run:
+          name: Get system information
+          command: sysctl -a | grep machdep.cpu && cc --version
+      - run:
+          name: Clone and build liboqs
+          command: |
+             git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
+             cd liboqs && mkdir _build && cd _build &&
+             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local << parameters.CMAKE_ARGS >> .. && ninja install &&
+             cd ..
+      - run:
+          name: Clone and build OpenSSL(3) master
+          command: |
+             git clone --branch master git://git.openssl.org/openssl.git openssl &&
+             cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
+      - run:
+          name: Build OQS-OpenSSL provider 
+          command: |
+             mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+      - run:
+          name: Run tests
+          command: |
+             ./scripts/runtests.sh -V
+      - run:
+          name: Run tests (with encodings)
+          command: |
+            ./scripts/runtests_encodings.sh -V
+      - run:
+          name: Build OQS-OpenSSL provider with NOPUBKEY_IN_PRIVKEY
+          command: |
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DNOPUBKEY_IN_PRIVKEY=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+      - run:
+          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
+          command: |
+             ./scripts/runtests.sh -V
+      - run:
+          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings)
+          command: |
+            ./scripts/runtests_encodings.sh -V
+
 workflows:
   version: 2.1
   build:
@@ -60,3 +114,10 @@ workflows:
       - ubuntu_focal:
           name: ubuntu-focal
           context: openquantumsafe
+      - macOS:
+          name: macOS-noopenssl
+          CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_USE_OPENSSL=OFF
+      - macOS:
+          name: macOS-shared
+          CMAKE_ARGS: -DBUILD_SHARED_LIBS=ON -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
+

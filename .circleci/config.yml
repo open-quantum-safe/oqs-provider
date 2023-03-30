@@ -38,9 +38,10 @@ jobs:
           command: |
              ./scripts/runtests.sh -V
       - run:
-          name: Run tests (with encodings)
+          name: Run tests (with encodings, positive and negative test)
           command: |
             ./scripts/runtests_encodings.sh -V
+            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
       - run:
           name: Build OQS-OpenSSL provider (only STD algs) with NOPUBKEY_IN_PRIVKEY
           command: |
@@ -50,9 +51,10 @@ jobs:
           command: |
              ./scripts/runtests.sh -V
       - run:
-          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings)
+          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings, positive and negative test)
           command: |
             ./scripts/runtests_encodings.sh -V
+            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
 
   macOS:
     description: A template for running tests on macOS

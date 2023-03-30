@@ -351,6 +351,8 @@ By setting environment variables, oqs-provider can be configured to encode keys 
 |`OQS_ENCODING_SPHINCSSHAKE256256SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
 <!--- OQS_TEMPLATE_FRAGMENT_ENCODINGS_END -->
 
-If no environment variable is set, or if an unknown value is set, the default is 'no' encoding, meaning that key serialization uses the 'raw' keys of the crypto implementations. 
+By setting `OQS_ENCODING_<ALGORITHM>_ALGNAME` environment variables, the corresponding algorithm names are set. The names are documented in the [`qsc_encoding.h`](https://github.com/Quantum-Safe-Collaboration/qsc-key-encoder/blob/main/include/qsc_encoding.h) header file of the encoder library.
+
+If no environment variable is set, or if an unknown value is set, the default is 'no' encoding, meaning that key serialization uses the 'raw' keys of the crypto implementations. If unknown values are set as environment variables, a run-time error will be raised.
 
 The test script `scripts/runtests_encodings.sh` (instead of `scripts/runtests.sh`) can be used for a test run with all supported encodings activated.

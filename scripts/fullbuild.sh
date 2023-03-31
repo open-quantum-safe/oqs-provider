@@ -91,11 +91,12 @@ fi
 if [ ! -f "_build/oqsprov/oqsprovider.so" ]; then
    echo "oqsprovider not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
+   BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
    else
-       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
    fi
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."

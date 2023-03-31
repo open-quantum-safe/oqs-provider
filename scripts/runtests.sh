@@ -64,9 +64,6 @@ if [ ! -z "$OPENSSL_INSTALL" ]; then
     if [ -f $OPENSSL_INSTALL/ssl/openssl.cnf ]; then
         export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
     fi
-else
-    # removing the need to pass explicit -conf parameter to all tests:
-    export OPENSSL_CONF=$OQS_PROVIDER_TESTSCRIPTS/openssl-ca.cnf
 fi
 
 if [ -z "$OPENSSL_APP" ]; then
@@ -93,6 +90,7 @@ echo "Test setup:"
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "OPENSSL_APP=$OPENSSL_APP"
 echo "OPENSSL_CONF=$OPENSSL_CONF"
+echo "OPENSSL_MODULES=$OPENSSL_MODULES"
 
 # check if we can use docker or not:
 docker info 2>&1 | grep Server > /dev/null
@@ -106,8 +104,6 @@ fi
 # comment the following line if they should be run; be sure to
 # have alignment in algorithms supported in that case
 export LOCALTESTONLY="Yes"
-
-echo "OpenSSL app: $OPENSSL_APP"
 
 echo "Version information:"
 $OPENSSL_APP version

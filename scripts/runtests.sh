@@ -18,6 +18,7 @@ localalgtest() {
     $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-certgen.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-certverify.sh $1 >> interop.log 2>&1 && $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-cmssign.sh $1 >> interop.log 2>&1 &&  $OQS_PROVIDER_TESTSCRIPTS/oqsprovider-ca.sh $1 >> interop.log 2>&1
     if [ $? -ne 0 ]; then
         echo "localalgtest $1 failed. Exiting.".
+        cat interop.log
         exit 1
     fi
 }
@@ -67,7 +68,7 @@ if [ ! -z "$OPENSSL_INSTALL" ]; then
     fi
 else
     if [ -z "$OPENSSL_CONF" ]; then
-        export OPENSSL_CONF=$(pwd)/test/oqs.cnf
+        export OPENSSL_CONF=$(pwd)/scripts/openssl-ca.cnf
     fi
 fi
 

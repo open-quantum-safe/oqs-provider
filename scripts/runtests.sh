@@ -23,7 +23,7 @@ localalgtest() {
 }
 
 interop() {
-    echo -n "."
+    echo ".\c"
     # check if we want to run this algorithm:
     if [ ! -z "$OQS_SKIP_TESTS" ]; then
         GREPTEST=$(echo $OQS_SKIP_TESTS | sed "s/\,/\\\|/g")
@@ -45,6 +45,7 @@ interop() {
 
     if [ $? -ne 0 ]; then
         echo "Test for $1 failed. Terminating testing."
+        cat interop.log
         exit 1
     fi
 }
@@ -63,6 +64,10 @@ if [ ! -z "$OPENSSL_INSTALL" ]; then
     fi
     if [ -f $OPENSSL_INSTALL/ssl/openssl.cnf ]; then
         export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
+    fi
+else
+    if [ -z "$OPENSSL_CONF" ]; then
+        export OPENSSL_CONF=$(pwd)/test/oqs.cnf
     fi
 fi
 
@@ -110,7 +115,7 @@ $OPENSSL_APP version
 $OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
 
 # Run interop-tests:
-echo "Cert gen/verify, CMS sign/verify tests for all enabled algorithms commencing..."
+echo "Cert gen/verify, CMS sign/verify, CA tests for all enabled algorithms commencing..."
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_START
 interop dilithium2
 interop p256_dilithium2
@@ -148,7 +153,11 @@ interop p256_sphincsshake256128fsimple
 interop rsa3072_sphincsshake256128fsimple
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_END
 
+echo
+
 # Run built-in tests:
+# Without removing OPENSSL_CONF ctest hangs... ???
+unset OPENSSL_CONF
 cd _build && ctest $@ && cd ..
 
 if [ $? -ne 0 ]; then

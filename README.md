@@ -82,6 +82,14 @@ All component builds and testing described in detail below can be executed by
 running the scripts `scripts/fullbuild.sh` and `scripts/runtests.sh`
 respectively (tested on Linux Ubuntu and Mint as well as OSX).
 
+By default, these scripts always build and test against the current OpenSSL `master` branch.
+
+These scripts can be configured by setting various environment variables as documented in the scripts.
+For information the following environment settings may be of most interest:
+
+- OPENSSL_INSTALL: Directory of an existing, non-standard OpenSSL binary distribution
+- OPENSSL_BRANCH: Tag of a specific OpenSSL release to be built and used in testing
+
 
 Building and testing
 --------------------
@@ -98,7 +106,8 @@ For Linux these commands can typically be installed by running for example
 
 ### OpenSSL 3
 
-Example for building and installing OpenSSL 3 in `.local`:
+If OpenSSL3 is not already installed, the following shows an example for building
+and installing the latest/`master` branch of OpenSSL 3 in `.local`:
 
     git clone git://git.openssl.org/openssl.git
     cd openssl
@@ -199,7 +208,7 @@ explanations can be found for example
 Another alternative is to explicitly request its use on the command line.
 The following examples use that option. All examples below assume openssl (3.0)
 to be located in a folder `.local` in the local directory as per the
-building examples above. Installing openssl(3.0) in a standard location
+building examples above. Having OpenSSL(3) installed in a standard location
 eliminates the need for specific PATH setting as showcased below.
 
 ## Checking provider version information
@@ -338,9 +347,8 @@ used during TLS1.3 operations as documented in https://github.com/openssl/openss
 ## 3.2(-dev)
 
 After https://github.com/openssl/openssl/pull/19312 landed, (also PQ) signature
-algorithms are working in TLS1.3 (handshaking), but algorithms with overly long
-signatures may still fail due to specific message size limitations built into
-OpenSSL and/or the TLS specifications.
+algorithms are working in TLS1.3 (handshaking); after https://github.com/openssl/openssl/pull/20486
+has landed, also algorithms with very long signatures are supported.
 
 liboqs dependency
 -----------------

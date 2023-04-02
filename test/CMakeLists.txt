@@ -10,6 +10,7 @@ set_tests_properties(oqs_signatures
 )
 
 add_executable(oqs_test_signatures oqs_test_signatures.c test_common.c)
+target_include_directories(oqs_test_signatures PRIVATE ${CMAKE_SOURCE_DIR}/.local/include)
 target_link_libraries(oqs_test_signatures ${OPENSSL_CRYPTO_LIBRARY})
 
 add_test(
@@ -23,6 +24,7 @@ set_tests_properties(oqs_kems
 )
 
 add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
+target_include_directories(oqs_test_kems PRIVATE ${CMAKE_SOURCE_DIR}/.local/include)
 target_link_libraries(oqs_test_kems ${OPENSSL_CRYPTO_LIBRARY})
 
 if (NOT DEFINED OPENSSL_BLDTOP)
@@ -30,7 +32,7 @@ if (NOT DEFINED OPENSSL_BLDTOP)
 endif()
 
 if (NOT IS_DIRECTORY ${OPENSSL_BLDTOP})
-    message(WARNING "OpenSSL build directory '${OPENSSL_BLDTOP}' not present. Some dependent tests will be skipped.") 
+    message(WARNING "OpenSSL source build directory '${OPENSSL_BLDTOP}' not present. Some dependent tests will be skipped.") 
 else()
 add_test(
     NAME oqs_groups

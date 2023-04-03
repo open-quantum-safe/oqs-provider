@@ -13,6 +13,7 @@ if (USE_ENCODING_LIB)
       GIT_REPOSITORY https://github.com/Quantum-Safe-Collaboration/qsc-key-encoder.git
       GIT_TAG main
       CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install -DCMAKE_BUILD_TYPE=Release
+      UPDATE_DISCONNECTED 1
       BUILD_BYPRODUCTS ${encoder_LIBRARY}
   )
   add_library(qsc_key_encoder STATIC IMPORTED)

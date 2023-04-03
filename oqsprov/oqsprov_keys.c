@@ -617,9 +617,9 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         }
 
 #ifdef USE_ENCODING_LIB
-        if (alg_idx >= 0 && oqs_alg_encoding_list[alg_idx] != NULL) {
+        if (alg_idx >= 0 && oqs_alg_encoding_list[2*alg_idx] != NULL && oqs_alg_encoding_list[2*alg_idx+1] != NULL) {
             if (qsc_encoding_by_name_oid(&ret->oqsx_encoding_ctx.encoding_ctx, &ret->oqsx_encoding_ctx.encoding_impl, oqs_alg_encoding_list[2*alg_idx+1], oqs_alg_encoding_list[2*alg_idx]) != QSC_ENC_OK) {
-                fprintf(stderr, "Could not create OQS signature encoding algorithm %s (%s, %s).\n", oqs_alg_encoding_list[alg_idx], oqs_name, oqs_oid_alg_list[2*alg_idx]);
+                fprintf(stderr, "Could not create OQS signature encoding algorithm %s (%s, %s).\n", oqs_alg_encoding_list[2*alg_idx+1], oqs_name, oqs_alg_encoding_list[2*alg_idx]);
                 ret->oqsx_encoding_ctx.encoding_ctx = NULL;
                 ret->oqsx_encoding_ctx.encoding_impl = NULL;
                 goto err;

@@ -9,6 +9,12 @@
 # EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
 # EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL3
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+   SHLIBEXT="dylib"
+else
+   SHLIBEXT="so"
+fi
+
 if [ $# -gt 0 ]; then
    if [ "$1" == "-f" ]; then
       rm -rf _build
@@ -88,8 +94,8 @@ if [ ! -f ".local/lib/liboqs.a" ]; then
 fi
 
 # Check whether provider is built:
-if [ ! -f "_build/oqsprov/oqsprovider.so" ]; then
-   echo "oqsprovider not built: Building..."
+if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
+   echo "oqsprovider (_build/lib/oqsprovider.$SHLIBEXT) not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
    BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON

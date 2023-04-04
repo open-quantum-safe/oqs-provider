@@ -34,6 +34,7 @@ if [ -z "$LD_LIBRARY_PATH" ]; then
     echo "LD_LIBRARY_PATH env var not set. Exiting."
     exit 1
 fi
+export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
 # Assumes certgen has been run before: Quick check
 

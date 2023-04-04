@@ -62,6 +62,8 @@ if [ ! -z "$OPENSSL_INSTALL" ]; then
     fi
     if [ -d $OPENSSL_INSTALL/lib64 ]; then
         export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib64
+    elif [ -d $OPENSSL_INSTALL/lib ]; then
+        export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib
     fi
     if [ -f $OPENSSL_INSTALL/ssl/openssl.cnf ]; then
         export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
@@ -97,6 +99,9 @@ echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "OPENSSL_APP=$OPENSSL_APP"
 echo "OPENSSL_CONF=$OPENSSL_CONF"
 echo "OPENSSL_MODULES=$OPENSSL_MODULES"
+
+# Some OSX vodoo
+export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
 # check if we can use docker or not:
 docker info 2>&1 | grep Server > /dev/null

@@ -45,7 +45,7 @@ add_test(
 set_tests_properties(oqs_groups
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"
 )
-add_executable(oqs_test_groups oqs_test_groups.c test_common.c ${OPENSSL_BLDTOP}/test/helpers/ssltestlib.c)
+add_executable(oqs_test_groups oqs_test_groups.c test_common.c tlstest_helpers.c)
 # e_os.h resides in top-level for OSSL3:
 target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP})
 target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP}/include)
@@ -65,7 +65,7 @@ set_tests_properties(oqs_tlssig
     # Some algorithms known to overflow OpenSSL limits; TBD/resolved upstream
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib;OQS_SKIP_TESTS=picnicl1full,rainbowVclassic,sphincs"
 )
-add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c ${OPENSSL_BLDTOP}/test/helpers/ssltestlib.c)
+add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c tlstest_helpers.c)
 # e_os.h resides in top-level for OSSL3:
 target_include_directories(oqs_test_tlssig PRIVATE ${OPENSSL_BLDTOP})
 target_include_directories(oqs_test_tlssig PRIVATE ${OPENSSL_BLDTOP}/include)

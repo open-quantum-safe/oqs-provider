@@ -51,7 +51,7 @@ target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP})
 target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP}/include)
 target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP}/test)
 target_include_directories(oqs_test_groups PRIVATE ${OPENSSL_BLDTOP}/apps/include)
-target_link_libraries(oqs_test_groups ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_BLDTOP}/test/libtestutil.a)
+target_link_libraries(oqs_test_groups ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
 add_test(
     NAME oqs_tlssig
@@ -71,7 +71,7 @@ target_include_directories(oqs_test_tlssig PRIVATE ${OPENSSL_BLDTOP})
 target_include_directories(oqs_test_tlssig PRIVATE ${OPENSSL_BLDTOP}/include)
 target_include_directories(oqs_test_tlssig PRIVATE ${OPENSSL_BLDTOP}/test)
 target_include_directories(oqs_test_tlssig PRIVATE ${OPENSSL_BLDTOP}/apps/include)
-target_link_libraries(oqs_test_tlssig ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_BLDTOP}/test/libtestutil.a)
+target_link_libraries(oqs_test_tlssig ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
 add_executable(oqs_test_endecode oqs_test_endecode.c test_common.c)
 target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/include)

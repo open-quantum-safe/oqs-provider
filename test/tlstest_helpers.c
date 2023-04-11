@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#include "testutil.h"
 
 
 #define MAXLOOPS    1000000
@@ -112,9 +111,9 @@ int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
         }
 
         if (!clienterr && retc <= 0 && err != SSL_ERROR_WANT_READ) {
-            TEST_info("SSL_connect() failed %d, %d", retc, err);
+            fprintf(stderr, "SSL_connect() failed %d, %d", retc, err);
             if (want != SSL_ERROR_SSL)
-                TEST_openssl_errors();
+                ERR_clear_error();
             clienterr = 1;
         }
         if (want != SSL_ERROR_NONE && err == want)
@@ -130,9 +129,9 @@ int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
         if (!servererr && rets <= 0
             && err != SSL_ERROR_WANT_READ
             && err != SSL_ERROR_WANT_X509_LOOKUP) {
-            TEST_info("SSL_accept() failed %d, %d", rets, err);
+            fprintf(stderr, "SSL_accept() failed %d, %d", rets, err);
             if (want != SSL_ERROR_SSL)
-                TEST_openssl_errors();
+                ERR_clear_error();
             servererr = 1;
         }
         if (want != SSL_ERROR_NONE && err == want)
@@ -141,7 +140,7 @@ int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
             return 0;
 
         if (++abortctr == MAXLOOPS) {
-            TEST_info("No progress made");
+            fprintf(stderr, "No progress made");
             return 0;
         }
 
@@ -170,10 +169,9 @@ int create_tls_connection(SSL *serverssl, SSL *clientssl, int want)
      */
     for (i = 0; i < 2; i++) {
         if (SSL_read_ex(clientssl, &buf, sizeof(buf), &readbytes) > 0) {
-            if (!TEST_ulong_eq(readbytes, 0))
+            if (readbytes !=0)
                 return 0;
-        } else if (!TEST_int_eq(SSL_get_error(clientssl, 0),
-                                SSL_ERROR_WANT_READ)) {
+        } else if (SSL_get_error(clientssl, 0) != SSL_ERROR_WANT_READ) {
             return 0;
         }
     }

@@ -380,6 +380,7 @@ Contributors to the `oqsprovider` include:
 - Richard Levitte
 - Basil Hess
 - Julian Segeth
+- Alex Zaslavsky
 
 Acknowledgments
 ---------------

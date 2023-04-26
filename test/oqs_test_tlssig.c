@@ -3,7 +3,7 @@
 #include <openssl/provider.h>
 #include <openssl/ssl.h>
 #include <string.h>
-#include "helpers/ssltestlib.h"
+#include "tlstest_helpers.h"
 #include "test_common.h"
 #include <openssl/core_names.h>
 
@@ -36,23 +36,21 @@ static int test_oqs_tlssig(const char *sig_name)
   sprintf(certpath, "%s%s%s%s", certsdir, sep, sig_name, "_srv.crt");
   sprintf(privkeypath, "%s%s%s%s", certsdir, sep, sig_name, "_srv.key");
   testresult =
-    create_ssl_ctx_pair(libctx, TLS_server_method(), TLS_client_method(),
-                        TLS1_3_VERSION, TLS1_3_VERSION,
-                        &sctx, &cctx, certpath, privkeypath);
+    create_tls1_3_ctx_pair(libctx, &sctx, &cctx, certpath, privkeypath);
 
   if (!testresult) {
       ret = -1; goto err;
   }
 
   testresult =
-    create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL, NULL);
+    create_tls_objects(sctx, cctx, &serverssl, &clientssl);
 
   if (!testresult) {
       ret = -2; goto err;
   }
 
   testresult =
-    create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE);
+    create_tls_connection(serverssl, clientssl, SSL_ERROR_NONE);
   if (!testresult) {
       ret = -5; goto err;
   }

@@ -552,6 +552,7 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
 static void oqsprovider_teardown(void *provctx)
 {
    oqsx_freeprovctx((PROV_OQS_CTX*)provctx);
+   OQS_destroy();
 }
 
 /* Functions we provide to the core */
@@ -576,6 +577,8 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
     BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
     int i, rc = 0;
+
+    OQS_init();
 
     if (!oqs_prov_bio_from_dispatch(in))
         return 0;

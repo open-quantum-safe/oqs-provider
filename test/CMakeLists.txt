@@ -64,14 +64,12 @@ add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c tlstest_helpers.c
 target_link_libraries(oqs_test_tlssig ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
 add_executable(oqs_test_endecode oqs_test_endecode.c test_common.c)
-target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/include)
-target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/test)
-target_include_directories(oqs_test_endecode PRIVATE ${OPENSSL_BLDTOP}/apps/include)
-
-target_link_libraries(oqs_test_endecode ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_BLDTOP}/test/libtestutil.a )
+target_link_libraries(oqs_test_endecode ${OPENSSL_CRYPTO_LIBRARY})
 add_test(
   NAME oqs_endecode
   COMMAND oqs_test_endecode
+          "oqsprovider"
+          "${CMAKE_CURRENT_SOURCE_DIR}/oqs.cnf"
 )
 set_tests_properties(oqs_endecode
   PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"

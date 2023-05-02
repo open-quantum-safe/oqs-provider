@@ -43,9 +43,9 @@ jobs:
             ./scripts/runtests_encodings.sh -V
             ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
       - run:
-          name: Build OQS-OpenSSL provider (only STD algs) with NOPUBKEY_IN_PRIVKEY
+          name: Build OQS-OpenSSL provider (only STD algs) with NOPUBKEY_IN_PRIVKEY and QSC encoding support
           command: |
-             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DNOPUBKEY_IN_PRIVKEY=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DNOPUBKEY_IN_PRIVKEY=ON -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
       - run:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
           command: |
@@ -85,7 +85,15 @@ jobs:
              git clone --branch master git://git.openssl.org/openssl.git openssl &&
              cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
       - run:
-          name: Build OQS-OpenSSL provider (with encoding support for testing)
+          name: Build OQS-OpenSSL provider
+          command: |
+             mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+      - run:
+          name: Run tests
+          command: |
+             ./scripts/runtests.sh -V
+      - run:
+          name: Build OQS-OpenSSL provider with QSC encoding support
           command: |
              mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
       - run:
@@ -98,9 +106,9 @@ jobs:
             ./scripts/runtests_encodings.sh -V
             ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
       - run:
-          name: Build OQS-OpenSSL provider with NOPUBKEY_IN_PRIVKEY
+          name: Build OQS-OpenSSL provider with NOPUBKEY_IN_PRIVKEY and QSC encoding support
           command: |
-             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DNOPUBKEY_IN_PRIVKEY=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DNOPUBKEY_IN_PRIVKEY=ON -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
       - run:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
           command: |

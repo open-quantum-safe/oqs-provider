@@ -27,20 +27,12 @@ add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
 target_include_directories(oqs_test_kems PRIVATE ${CMAKE_SOURCE_DIR}/.local/include)
 target_link_libraries(oqs_test_kems ${OPENSSL_CRYPTO_LIBRARY})
 
-if (NOT DEFINED OPENSSL_BLDTOP)
-   set(OPENSSL_BLDTOP "${CMAKE_CURRENT_SOURCE_DIR}/../openssl")
-endif()
-
-if (NOT IS_DIRECTORY ${OPENSSL_BLDTOP})
-    message(WARNING "OpenSSL source build directory '${OPENSSL_BLDTOP}' not present. Some dependent tests will be skipped.") 
-else()
 add_test(
     NAME oqs_groups
     COMMAND oqs_test_groups
             "oqsprovider"
             "${CMAKE_CURRENT_SOURCE_DIR}/oqs.cnf"
-            "${OPENSSL_BLDTOP}/test/certs"
-            "${OPENSSL_BLDTOP}/test/recipes/90-test_sslapi_data/passwd.txt"
+            "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 set_tests_properties(oqs_groups
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"
@@ -74,6 +66,4 @@ add_test(
 set_tests_properties(oqs_endecode
   PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${CMAKE_BINARY_DIR}/lib"
 )
-
-endif() # NOT IS_DIRECTORY ${OPENSSL_BLDTOP}
 

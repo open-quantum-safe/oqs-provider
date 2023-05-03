@@ -13,7 +13,6 @@ static char *configfile = NULL;
 static char *cert = NULL;
 static char *privkey = NULL;
 static char *certsdir = NULL;
-static char *srpvfile = NULL;
 
 char *test_mk_file_path(const char *dir, const char *file)
 {
@@ -132,11 +131,10 @@ int main(int argc, char *argv[])
   int errcnt = 0, test = 0;
 
   T((libctx = OSSL_LIB_CTX_new()) != NULL);
-  T(argc == 5);
+  T(argc == 4);
   modulename = argv[1];
   configfile = argv[2];
   certsdir = argv[3];
-  srpvfile = argv[4];
 
   T(cert = test_mk_file_path(certsdir, "servercert.pem"));
   T(privkey = test_mk_file_path(certsdir, "serverkey.pem"));

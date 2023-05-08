@@ -111,7 +111,7 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
 {
     PROV_OQSSIG_CTX *poqs_sigctx;
 
-    OQS_SIG_PRINTF("OQS SIG provider: newctx called\n");
+    OQS_SIG_PRINTF2("OQS SIG provider: newctx called with propq %s\n", propq);
 
     poqs_sigctx = OPENSSL_zalloc(sizeof(PROV_OQSSIG_CTX));
     if (poqs_sigctx == NULL)

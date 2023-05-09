@@ -200,22 +200,21 @@ int oqs_patch_encodings(void) {
 }
 #endif
 
-
-#define ALG(NAMES, FUNC) { NAMES, "provider=oqsprovider", FUNC }
+#define SIGALG(NAMES, SECBITS, FUNC) { NAMES, "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", FUNC }
 #define KEMALG3(NAMES, SECBITS) \
-    { "" #NAMES "", "provider=oqsprovider", oqs_generic_kem_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_hybrid_kem_functions }, \
-    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_hybrid_kem_functions }
+    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_generic_kem_functions }, \
+    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_hybrid_kem_functions }, \
+    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_hybrid_kem_functions }
 #define KEMKMALG3(NAMES, SECBITS) \
-    { "" #NAMES "", "provider=oqsprovider", oqs_##NAMES##_keymgmt_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_ecp_##NAMES##_keymgmt_functions }, \
-    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_ecx_##NAMES##_keymgmt_functions }
+    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"" , oqs_##NAMES##_keymgmt_functions }, \
+    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_ecp_##NAMES##_keymgmt_functions }, \
+    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_ecx_##NAMES##_keymgmt_functions }
 #define KEMALG2(NAMES, SECBITS) \
     { "" #NAMES "", "provider=oqsprovider", oqs_generic_kem_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_hybrid_kem_functions }
+    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_hybrid_kem_functions }
 #define KEMKMALG2(NAMES, SECBITS) \
     { "" #NAMES "", "provider=oqsprovider", oqs_##NAMES##_keymgmt_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider", oqs_ecp_##NAMES##_keymgmt_functions }
+    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_ecp_##NAMES##_keymgmt_functions }
 
 /* Functions provided by the core */
 static OSSL_FUNC_core_gettable_params_fn *c_gettable_params = NULL;
@@ -234,64 +233,64 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
 #ifdef OQS_ENABLE_SIG_dilithium_2
-    ALG("dilithium2", oqs_signature_functions),
-    ALG("p256_dilithium2", oqs_signature_functions),
-    ALG("rsa3072_dilithium2", oqs_signature_functions),
+    SIGALG("dilithium2", 128, oqs_signature_functions),
+    SIGALG("p256_dilithium2", 128, oqs_signature_functions),
+    SIGALG("rsa3072_dilithium2", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
-    ALG("dilithium3", oqs_signature_functions),
-    ALG("p384_dilithium3", oqs_signature_functions),
+    SIGALG("dilithium3", 192, oqs_signature_functions),
+    SIGALG("p384_dilithium3", 192, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5
-    ALG("dilithium5", oqs_signature_functions),
-    ALG("p521_dilithium5", oqs_signature_functions),
+    SIGALG("dilithium5", 256, oqs_signature_functions),
+    SIGALG("p521_dilithium5", 256, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_2_aes
-    ALG("dilithium2_aes", oqs_signature_functions),
-    ALG("p256_dilithium2_aes", oqs_signature_functions),
-    ALG("rsa3072_dilithium2_aes", oqs_signature_functions),
+    SIGALG("dilithium2_aes", 128, oqs_signature_functions),
+    SIGALG("p256_dilithium2_aes", 128, oqs_signature_functions),
+    SIGALG("rsa3072_dilithium2_aes", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3_aes
-    ALG("dilithium3_aes", oqs_signature_functions),
-    ALG("p384_dilithium3_aes", oqs_signature_functions),
+    SIGALG("dilithium3_aes", 192, oqs_signature_functions),
+    SIGALG("p384_dilithium3_aes", 192, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5_aes
-    ALG("dilithium5_aes", oqs_signature_functions),
-    ALG("p521_dilithium5_aes", oqs_signature_functions),
+    SIGALG("dilithium5_aes", 256, oqs_signature_functions),
+    SIGALG("p521_dilithium5_aes", 256, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_512
-    ALG("falcon512", oqs_signature_functions),
-    ALG("p256_falcon512", oqs_signature_functions),
-    ALG("rsa3072_falcon512", oqs_signature_functions),
+    SIGALG("falcon512", 128, oqs_signature_functions),
+    SIGALG("p256_falcon512", 128, oqs_signature_functions),
+    SIGALG("rsa3072_falcon512", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
-    ALG("falcon1024", oqs_signature_functions),
-    ALG("p521_falcon1024", oqs_signature_functions),
+    SIGALG("falcon1024", 256, oqs_signature_functions),
+    SIGALG("p521_falcon1024", 256, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
-    ALG("sphincsharaka128frobust", oqs_signature_functions),
-    ALG("p256_sphincsharaka128frobust", oqs_signature_functions),
-    ALG("rsa3072_sphincsharaka128frobust", oqs_signature_functions),
+    SIGALG("sphincsharaka128frobust", 128, oqs_signature_functions),
+    SIGALG("p256_sphincsharaka128frobust", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincsharaka128frobust", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
-    ALG("sphincsharaka128fsimple", oqs_signature_functions),
-    ALG("p256_sphincsharaka128fsimple", oqs_signature_functions),
-    ALG("rsa3072_sphincsharaka128fsimple", oqs_signature_functions),
+    SIGALG("sphincsharaka128fsimple", 128, oqs_signature_functions),
+    SIGALG("p256_sphincsharaka128fsimple", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincsharaka128fsimple", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
-    ALG("sphincssha256128frobust", oqs_signature_functions),
-    ALG("p256_sphincssha256128frobust", oqs_signature_functions),
-    ALG("rsa3072_sphincssha256128frobust", oqs_signature_functions),
+    SIGALG("sphincssha256128frobust", 128, oqs_signature_functions),
+    SIGALG("p256_sphincssha256128frobust", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincssha256128frobust", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
-    ALG("sphincssha256128ssimple", oqs_signature_functions),
-    ALG("p256_sphincssha256128ssimple", oqs_signature_functions),
-    ALG("rsa3072_sphincssha256128ssimple", oqs_signature_functions),
+    SIGALG("sphincssha256128ssimple", 128, oqs_signature_functions),
+    SIGALG("p256_sphincssha256128ssimple", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincssha256128ssimple", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
-    ALG("sphincsshake256128fsimple", oqs_signature_functions),
-    ALG("p256_sphincsshake256128fsimple", oqs_signature_functions),
-    ALG("rsa3072_sphincsshake256128fsimple", oqs_signature_functions),
+    SIGALG("sphincsshake256128fsimple", 128, oqs_signature_functions),
+    SIGALG("p256_sphincsshake256128fsimple", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincsshake256128fsimple", 128, oqs_signature_functions),
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     { NULL, NULL, NULL }
@@ -360,64 +359,64 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
 #ifdef OQS_ENABLE_SIG_dilithium_2
-    ALG("dilithium2", oqs_dilithium2_keymgmt_functions),
-    ALG("p256_dilithium2", oqs_p256_dilithium2_keymgmt_functions),
-    ALG("rsa3072_dilithium2", oqs_rsa3072_dilithium2_keymgmt_functions),
+    SIGALG("dilithium2", 128, oqs_dilithium2_keymgmt_functions),
+    SIGALG("p256_dilithium2", 128, oqs_p256_dilithium2_keymgmt_functions),
+    SIGALG("rsa3072_dilithium2", 128, oqs_rsa3072_dilithium2_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
-    ALG("dilithium3", oqs_dilithium3_keymgmt_functions),
-    ALG("p384_dilithium3", oqs_p384_dilithium3_keymgmt_functions),
+    SIGALG("dilithium3", 192, oqs_dilithium3_keymgmt_functions),
+    SIGALG("p384_dilithium3", 192, oqs_p384_dilithium3_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5
-    ALG("dilithium5", oqs_dilithium5_keymgmt_functions),
-    ALG("p521_dilithium5", oqs_p521_dilithium5_keymgmt_functions),
+    SIGALG("dilithium5", 256, oqs_dilithium5_keymgmt_functions),
+    SIGALG("p521_dilithium5", 256, oqs_p521_dilithium5_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_2_aes
-    ALG("dilithium2_aes", oqs_dilithium2_aes_keymgmt_functions),
-    ALG("p256_dilithium2_aes", oqs_p256_dilithium2_aes_keymgmt_functions),
-    ALG("rsa3072_dilithium2_aes", oqs_rsa3072_dilithium2_aes_keymgmt_functions),
+    SIGALG("dilithium2_aes", 128, oqs_dilithium2_aes_keymgmt_functions),
+    SIGALG("p256_dilithium2_aes", 128, oqs_p256_dilithium2_aes_keymgmt_functions),
+    SIGALG("rsa3072_dilithium2_aes", 128, oqs_rsa3072_dilithium2_aes_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3_aes
-    ALG("dilithium3_aes", oqs_dilithium3_aes_keymgmt_functions),
-    ALG("p384_dilithium3_aes", oqs_p384_dilithium3_aes_keymgmt_functions),
+    SIGALG("dilithium3_aes", 192, oqs_dilithium3_aes_keymgmt_functions),
+    SIGALG("p384_dilithium3_aes", 192, oqs_p384_dilithium3_aes_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5_aes
-    ALG("dilithium5_aes", oqs_dilithium5_aes_keymgmt_functions),
-    ALG("p521_dilithium5_aes", oqs_p521_dilithium5_aes_keymgmt_functions),
+    SIGALG("dilithium5_aes", 256, oqs_dilithium5_aes_keymgmt_functions),
+    SIGALG("p521_dilithium5_aes", 256, oqs_p521_dilithium5_aes_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_512
-    ALG("falcon512", oqs_falcon512_keymgmt_functions),
-    ALG("p256_falcon512", oqs_p256_falcon512_keymgmt_functions),
-    ALG("rsa3072_falcon512", oqs_rsa3072_falcon512_keymgmt_functions),
+    SIGALG("falcon512", 128, oqs_falcon512_keymgmt_functions),
+    SIGALG("p256_falcon512", 128, oqs_p256_falcon512_keymgmt_functions),
+    SIGALG("rsa3072_falcon512", 128, oqs_rsa3072_falcon512_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
-    ALG("falcon1024", oqs_falcon1024_keymgmt_functions),
-    ALG("p521_falcon1024", oqs_p521_falcon1024_keymgmt_functions),
+    SIGALG("falcon1024", 256, oqs_falcon1024_keymgmt_functions),
+    SIGALG("p521_falcon1024", 256, oqs_p521_falcon1024_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
-    ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),
-    ALG("p256_sphincsharaka128frobust", oqs_p256_sphincsharaka128frobust_keymgmt_functions),
-    ALG("rsa3072_sphincsharaka128frobust", oqs_rsa3072_sphincsharaka128frobust_keymgmt_functions),
+    SIGALG("sphincsharaka128frobust", 128, oqs_sphincsharaka128frobust_keymgmt_functions),
+    SIGALG("p256_sphincsharaka128frobust", 128, oqs_p256_sphincsharaka128frobust_keymgmt_functions),
+    SIGALG("rsa3072_sphincsharaka128frobust", 128, oqs_rsa3072_sphincsharaka128frobust_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
-    ALG("sphincsharaka128fsimple", oqs_sphincsharaka128fsimple_keymgmt_functions),
-    ALG("p256_sphincsharaka128fsimple", oqs_p256_sphincsharaka128fsimple_keymgmt_functions),
-    ALG("rsa3072_sphincsharaka128fsimple", oqs_rsa3072_sphincsharaka128fsimple_keymgmt_functions),
+    SIGALG("sphincsharaka128fsimple", 128, oqs_sphincsharaka128fsimple_keymgmt_functions),
+    SIGALG("p256_sphincsharaka128fsimple", 128, oqs_p256_sphincsharaka128fsimple_keymgmt_functions),
+    SIGALG("rsa3072_sphincsharaka128fsimple", 128, oqs_rsa3072_sphincsharaka128fsimple_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
-    ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),
-    ALG("p256_sphincssha256128frobust", oqs_p256_sphincssha256128frobust_keymgmt_functions),
-    ALG("rsa3072_sphincssha256128frobust", oqs_rsa3072_sphincssha256128frobust_keymgmt_functions),
+    SIGALG("sphincssha256128frobust", 128, oqs_sphincssha256128frobust_keymgmt_functions),
+    SIGALG("p256_sphincssha256128frobust", 128, oqs_p256_sphincssha256128frobust_keymgmt_functions),
+    SIGALG("rsa3072_sphincssha256128frobust", 128, oqs_rsa3072_sphincssha256128frobust_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
-    ALG("sphincssha256128ssimple", oqs_sphincssha256128ssimple_keymgmt_functions),
-    ALG("p256_sphincssha256128ssimple", oqs_p256_sphincssha256128ssimple_keymgmt_functions),
-    ALG("rsa3072_sphincssha256128ssimple", oqs_rsa3072_sphincssha256128ssimple_keymgmt_functions),
+    SIGALG("sphincssha256128ssimple", 128, oqs_sphincssha256128ssimple_keymgmt_functions),
+    SIGALG("p256_sphincssha256128ssimple", 128, oqs_p256_sphincssha256128ssimple_keymgmt_functions),
+    SIGALG("rsa3072_sphincssha256128ssimple", 128, oqs_rsa3072_sphincssha256128ssimple_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
-    ALG("sphincsshake256128fsimple", oqs_sphincsshake256128fsimple_keymgmt_functions),
-    ALG("p256_sphincsshake256128fsimple", oqs_p256_sphincsshake256128fsimple_keymgmt_functions),
-    ALG("rsa3072_sphincsshake256128fsimple", oqs_rsa3072_sphincsshake256128fsimple_keymgmt_functions),
+    SIGALG("sphincsshake256128fsimple", 128, oqs_sphincsshake256128fsimple_keymgmt_functions),
+    SIGALG("p256_sphincsshake256128fsimple", 128, oqs_p256_sphincsshake256128fsimple_keymgmt_functions),
+    SIGALG("rsa3072_sphincsshake256128fsimple", 128, oqs_rsa3072_sphincsshake256128fsimple_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes

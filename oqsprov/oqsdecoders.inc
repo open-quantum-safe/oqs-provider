@@ -47,22 +47,6 @@ DECODER_w_structure("dilithium5", der, PrivateKeyInfo, dilithium5),
 DECODER_w_structure("dilithium5", der, SubjectPublicKeyInfo, dilithium5),DECODER_w_structure("p521_dilithium5", der, PrivateKeyInfo, p521_dilithium5),
 DECODER_w_structure("p521_dilithium5", der, SubjectPublicKeyInfo, p521_dilithium5),
 #endif
-#ifdef OQS_ENABLE_SIG_dilithium_2_aes
-DECODER_w_structure("dilithium2_aes", der, PrivateKeyInfo, dilithium2_aes),
-DECODER_w_structure("dilithium2_aes", der, SubjectPublicKeyInfo, dilithium2_aes),DECODER_w_structure("p256_dilithium2_aes", der, PrivateKeyInfo, p256_dilithium2_aes),
-DECODER_w_structure("p256_dilithium2_aes", der, SubjectPublicKeyInfo, p256_dilithium2_aes),DECODER_w_structure("rsa3072_dilithium2_aes", der, PrivateKeyInfo, rsa3072_dilithium2_aes),
-DECODER_w_structure("rsa3072_dilithium2_aes", der, SubjectPublicKeyInfo, rsa3072_dilithium2_aes),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_3_aes
-DECODER_w_structure("dilithium3_aes", der, PrivateKeyInfo, dilithium3_aes),
-DECODER_w_structure("dilithium3_aes", der, SubjectPublicKeyInfo, dilithium3_aes),DECODER_w_structure("p384_dilithium3_aes", der, PrivateKeyInfo, p384_dilithium3_aes),
-DECODER_w_structure("p384_dilithium3_aes", der, SubjectPublicKeyInfo, p384_dilithium3_aes),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_5_aes
-DECODER_w_structure("dilithium5_aes", der, PrivateKeyInfo, dilithium5_aes),
-DECODER_w_structure("dilithium5_aes", der, SubjectPublicKeyInfo, dilithium5_aes),DECODER_w_structure("p521_dilithium5_aes", der, PrivateKeyInfo, p521_dilithium5_aes),
-DECODER_w_structure("p521_dilithium5_aes", der, SubjectPublicKeyInfo, p521_dilithium5_aes),
-#endif
 #ifdef OQS_ENABLE_SIG_falcon_512
 DECODER_w_structure("falcon512", der, PrivateKeyInfo, falcon512),
 DECODER_w_structure("falcon512", der, SubjectPublicKeyInfo, falcon512),DECODER_w_structure("p256_falcon512", der, PrivateKeyInfo, p256_falcon512),
@@ -74,29 +58,22 @@ DECODER_w_structure("falcon1024", der, PrivateKeyInfo, falcon1024),
 DECODER_w_structure("falcon1024", der, SubjectPublicKeyInfo, falcon1024),DECODER_w_structure("p521_falcon1024", der, PrivateKeyInfo, p521_falcon1024),
 DECODER_w_structure("p521_falcon1024", der, SubjectPublicKeyInfo, p521_falcon1024),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
-DECODER_w_structure("sphincsharaka128frobust", der, PrivateKeyInfo, sphincsharaka128frobust),
-DECODER_w_structure("sphincsharaka128frobust", der, SubjectPublicKeyInfo, sphincsharaka128frobust),DECODER_w_structure("p256_sphincsharaka128frobust", der, PrivateKeyInfo, p256_sphincsharaka128frobust),
-DECODER_w_structure("p256_sphincsharaka128frobust", der, SubjectPublicKeyInfo, p256_sphincsharaka128frobust),DECODER_w_structure("rsa3072_sphincsharaka128frobust", der, PrivateKeyInfo, rsa3072_sphincsharaka128frobust),
-DECODER_w_structure("rsa3072_sphincsharaka128frobust", der, SubjectPublicKeyInfo, rsa3072_sphincsharaka128frobust),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
-DECODER_w_structure("sphincsharaka128fsimple", der, PrivateKeyInfo, sphincsharaka128fsimple),
-DECODER_w_structure("sphincsharaka128fsimple", der, SubjectPublicKeyInfo, sphincsharaka128fsimple),DECODER_w_structure("p256_sphincsharaka128fsimple", der, PrivateKeyInfo, p256_sphincsharaka128fsimple),
-DECODER_w_structure("p256_sphincsharaka128fsimple", der, SubjectPublicKeyInfo, p256_sphincsharaka128fsimple),DECODER_w_structure("rsa3072_sphincsharaka128fsimple", der, PrivateKeyInfo, rsa3072_sphincsharaka128fsimple),
-DECODER_w_structure("rsa3072_sphincsharaka128fsimple", der, SubjectPublicKeyInfo, rsa3072_sphincsharaka128fsimple),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
-DECODER_w_structure("sphincssha256128frobust", der, PrivateKeyInfo, sphincssha256128frobust),
-DECODER_w_structure("sphincssha256128frobust", der, SubjectPublicKeyInfo, sphincssha256128frobust),DECODER_w_structure("p256_sphincssha256128frobust", der, PrivateKeyInfo, p256_sphincssha256128frobust),
-DECODER_w_structure("p256_sphincssha256128frobust", der, SubjectPublicKeyInfo, p256_sphincssha256128frobust),DECODER_w_structure("rsa3072_sphincssha256128frobust", der, PrivateKeyInfo, rsa3072_sphincssha256128frobust),
-DECODER_w_structure("rsa3072_sphincssha256128frobust", der, SubjectPublicKeyInfo, rsa3072_sphincssha256128frobust),
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_simple
+DECODER_w_structure("sphincssha256128fsimple", der, PrivateKeyInfo, sphincssha256128fsimple),
+DECODER_w_structure("sphincssha256128fsimple", der, SubjectPublicKeyInfo, sphincssha256128fsimple),DECODER_w_structure("p256_sphincssha256128fsimple", der, PrivateKeyInfo, p256_sphincssha256128fsimple),
+DECODER_w_structure("p256_sphincssha256128fsimple", der, SubjectPublicKeyInfo, p256_sphincssha256128fsimple),DECODER_w_structure("rsa3072_sphincssha256128fsimple", der, PrivateKeyInfo, rsa3072_sphincssha256128fsimple),
+DECODER_w_structure("rsa3072_sphincssha256128fsimple", der, SubjectPublicKeyInfo, rsa3072_sphincssha256128fsimple),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
 DECODER_w_structure("sphincssha256128ssimple", der, PrivateKeyInfo, sphincssha256128ssimple),
 DECODER_w_structure("sphincssha256128ssimple", der, SubjectPublicKeyInfo, sphincssha256128ssimple),DECODER_w_structure("p256_sphincssha256128ssimple", der, PrivateKeyInfo, p256_sphincssha256128ssimple),
 DECODER_w_structure("p256_sphincssha256128ssimple", der, SubjectPublicKeyInfo, p256_sphincssha256128ssimple),DECODER_w_structure("rsa3072_sphincssha256128ssimple", der, PrivateKeyInfo, rsa3072_sphincssha256128ssimple),
 DECODER_w_structure("rsa3072_sphincssha256128ssimple", der, SubjectPublicKeyInfo, rsa3072_sphincssha256128ssimple),
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_192f_simple
+DECODER_w_structure("sphincssha256192fsimple", der, PrivateKeyInfo, sphincssha256192fsimple),
+DECODER_w_structure("sphincssha256192fsimple", der, SubjectPublicKeyInfo, sphincssha256192fsimple),DECODER_w_structure("p384_sphincssha256192fsimple", der, PrivateKeyInfo, p384_sphincssha256192fsimple),
+DECODER_w_structure("p384_sphincssha256192fsimple", der, SubjectPublicKeyInfo, p384_sphincssha256192fsimple),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
 DECODER_w_structure("sphincsshake256128fsimple", der, PrivateKeyInfo, sphincsshake256128fsimple),

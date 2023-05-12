@@ -44,7 +44,7 @@ typedef struct {
 } oqs_nid_name_t;
 
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
-#define NID_TABLE_LEN 34
+#define NID_TABLE_LEN 23
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
@@ -54,30 +54,19 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "p384_dilithium3", OQS_SIG_alg_dilithium_3, KEY_TYPE_HYB_SIG, 192 },
        { 0, "dilithium5", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256 },
        { 0, "p521_dilithium5", OQS_SIG_alg_dilithium_5, KEY_TYPE_HYB_SIG, 256 },
-       { 0, "dilithium2_aes", OQS_SIG_alg_dilithium_2_aes, KEY_TYPE_SIG, 128 },
-       { 0, "p256_dilithium2_aes", OQS_SIG_alg_dilithium_2_aes, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "rsa3072_dilithium2_aes", OQS_SIG_alg_dilithium_2_aes, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "dilithium3_aes", OQS_SIG_alg_dilithium_3_aes, KEY_TYPE_SIG, 192 },
-       { 0, "p384_dilithium3_aes", OQS_SIG_alg_dilithium_3_aes, KEY_TYPE_HYB_SIG, 192 },
-       { 0, "dilithium5_aes", OQS_SIG_alg_dilithium_5_aes, KEY_TYPE_SIG, 256 },
-       { 0, "p521_dilithium5_aes", OQS_SIG_alg_dilithium_5_aes, KEY_TYPE_HYB_SIG, 256 },
        { 0, "falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128 },
        { 0, "p256_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128 },
        { 0, "rsa3072_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128 },
        { 0, "falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256 },
        { 0, "p521_falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_HYB_SIG, 256 },
-       { 0, "sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, KEY_TYPE_SIG, 128 },
-       { 0, "p256_sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "rsa3072_sphincsharaka128frobust", OQS_SIG_alg_sphincs_haraka_128f_robust, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "sphincsharaka128fsimple", OQS_SIG_alg_sphincs_haraka_128f_simple, KEY_TYPE_SIG, 128 },
-       { 0, "p256_sphincsharaka128fsimple", OQS_SIG_alg_sphincs_haraka_128f_simple, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "rsa3072_sphincsharaka128fsimple", OQS_SIG_alg_sphincs_haraka_128f_simple, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "sphincssha256128frobust", OQS_SIG_alg_sphincs_sha256_128f_robust, KEY_TYPE_SIG, 128 },
-       { 0, "p256_sphincssha256128frobust", OQS_SIG_alg_sphincs_sha256_128f_robust, KEY_TYPE_HYB_SIG, 128 },
-       { 0, "rsa3072_sphincssha256128frobust", OQS_SIG_alg_sphincs_sha256_128f_robust, KEY_TYPE_HYB_SIG, 128 },
+       { 0, "sphincssha256128fsimple", OQS_SIG_alg_sphincs_sha256_128f_simple, KEY_TYPE_SIG, 128 },
+       { 0, "p256_sphincssha256128fsimple", OQS_SIG_alg_sphincs_sha256_128f_simple, KEY_TYPE_HYB_SIG, 128 },
+       { 0, "rsa3072_sphincssha256128fsimple", OQS_SIG_alg_sphincs_sha256_128f_simple, KEY_TYPE_HYB_SIG, 128 },
        { 0, "sphincssha256128ssimple", OQS_SIG_alg_sphincs_sha256_128s_simple, KEY_TYPE_SIG, 128 },
        { 0, "p256_sphincssha256128ssimple", OQS_SIG_alg_sphincs_sha256_128s_simple, KEY_TYPE_HYB_SIG, 128 },
        { 0, "rsa3072_sphincssha256128ssimple", OQS_SIG_alg_sphincs_sha256_128s_simple, KEY_TYPE_HYB_SIG, 128 },
+       { 0, "sphincssha256192fsimple", OQS_SIG_alg_sphincs_sha256_192f_simple, KEY_TYPE_SIG, 192 },
+       { 0, "p384_sphincssha256192fsimple", OQS_SIG_alg_sphincs_sha256_192f_simple, KEY_TYPE_HYB_SIG, 192 },
        { 0, "sphincsshake256128fsimple", OQS_SIG_alg_sphincs_shake256_128f_simple, KEY_TYPE_SIG, 128 },
        { 0, "p256_sphincsshake256128fsimple", OQS_SIG_alg_sphincs_shake256_128f_simple, KEY_TYPE_HYB_SIG, 128 },
        { 0, "rsa3072_sphincsshake256128fsimple", OQS_SIG_alg_sphincs_shake256_128f_simple, KEY_TYPE_HYB_SIG, 128 },

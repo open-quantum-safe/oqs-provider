@@ -61,15 +61,6 @@ static const char *kemalg_names[] = {
 #ifdef OQS_ENABLE_KEM_bike_l5
     KEMALG2(bikel5, 256),
 #endif
-#ifdef OQS_ENABLE_KEM_kyber_512_90s
-    KEMALG3(kyber90s512, 128),
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_768_90s
-    KEMALG3(kyber90s768, 192),
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_1024_90s
-    KEMALG2(kyber90s1024, 256),
-#endif
 #ifdef OQS_ENABLE_KEM_hqc_128
     KEMALG3(hqc128, 128),
 #endif

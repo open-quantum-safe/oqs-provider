@@ -60,32 +60,20 @@ static const char *sigalg_names[] = {
 #ifdef OQS_ENABLE_SIG_dilithium_5
         "dilithium5","p521_dilithium5",
 #endif
-#ifdef OQS_ENABLE_SIG_dilithium_2_aes
-        "dilithium2_aes","p256_dilithium2_aes","rsa3072_dilithium2_aes",
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_3_aes
-        "dilithium3_aes","p384_dilithium3_aes",
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_5_aes
-        "dilithium5_aes","p521_dilithium5_aes",
-#endif
 #ifdef OQS_ENABLE_SIG_falcon_512
         "falcon512","p256_falcon512","rsa3072_falcon512",
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
         "falcon1024","p521_falcon1024",
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_robust
-        "sphincsharaka128frobust","p256_sphincsharaka128frobust","rsa3072_sphincsharaka128frobust",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_haraka_128f_simple
-        "sphincsharaka128fsimple","p256_sphincsharaka128fsimple","rsa3072_sphincsharaka128fsimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_robust
-        "sphincssha256128frobust","p256_sphincssha256128frobust","rsa3072_sphincssha256128frobust",
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_simple
+        "sphincssha256128fsimple","p256_sphincssha256128fsimple","rsa3072_sphincssha256128fsimple",
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
         "sphincssha256128ssimple","p256_sphincssha256128ssimple","rsa3072_sphincssha256128ssimple",
+#endif
+#ifdef OQS_ENABLE_SIG_sphincs_sha256_192f_simple
+        "sphincssha256192fsimple","p384_sphincssha256192fsimple",
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
         "sphincsshake256128fsimple","p256_sphincsshake256128fsimple","rsa3072_sphincsshake256128fsimple",

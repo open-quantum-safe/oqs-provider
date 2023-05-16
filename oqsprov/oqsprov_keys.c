@@ -821,6 +821,8 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[], int include_priv
         }
         memcpy(key->pubkey, p->data, p->data_size);
     }
+    if (oqsx_key_set_composites(key))
+        return 0;
     return 1;
 }
 

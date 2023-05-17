@@ -34,14 +34,14 @@ This implementation makes available the following quantum safe algorithms:
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_START -->
 - **BIKE**: `bikel1`, `bikel3`, `bikel5`
-- **CRYSTALS-Kyber**: `kyber512`, `kyber768`, `kyber1024`, `kyber90s512`, `kyber90s768`, `kyber90s1024`
+- **CRYSTALS-Kyber**: `kyber512`, `kyber768`, `kyber1024`
 - **FrodoKEM**: `frodo640aes`, `frodo640shake`, `frodo976aes`, `frodo976shake`, `frodo1344aes`, `frodo1344shake`
 - **HQC**: `hqc128`, `hqc192`, `hqc256`†
-- **CRYSTALS-Dilithium**:`dilithium2`\*, `dilithium3`\*, `dilithium5`\*, `dilithium2_aes`\*, `dilithium3_aes`\*, `dilithium5_aes`\*
+- **CRYSTALS-Dilithium**:`dilithium2`\*, `dilithium3`\*, `dilithium5`\*
 - **Falcon**:`falcon512`\*, `falcon1024`\*
-- **SPHINCS-Haraka**:`sphincsharaka128frobust`\*, `sphincsharaka128fsimple`\*, `sphincsharaka128srobust`, `sphincsharaka128ssimple`, `sphincsharaka192frobust`, `sphincsharaka192fsimple`, `sphincsharaka192srobust`, `sphincsharaka192ssimple`, `sphincsharaka256frobust`, `sphincsharaka256fsimple`, `sphincsharaka256srobust`, `sphincsharaka256ssimple`
-- **SPHINCS-SHA256**:`sphincssha256128frobust`\*, `sphincssha256128fsimple`, `sphincssha256128srobust`, `sphincssha256128ssimple`\*, `sphincssha256192frobust`, `sphincssha256192fsimple`, `sphincssha256192srobust`, `sphincssha256192ssimple`, `sphincssha256256frobust`, `sphincssha256256fsimple`, `sphincssha256256srobust`, `sphincssha256256ssimple`
-- **SPHINCS-SHAKE256**:`sphincsshake256128frobust`, `sphincsshake256128fsimple`\*, `sphincsshake256128srobust`, `sphincsshake256128ssimple`, `sphincsshake256192frobust`, `sphincsshake256192fsimple`, `sphincsshake256192srobust`, `sphincsshake256192ssimple`, `sphincsshake256256frobust`, `sphincsshake256256fsimple`, `sphincsshake256256srobust`, `sphincsshake256256ssimple`
+
+- **SPHINCS-SHA256**:`sphincssha256128fsimple`\*, `sphincssha256128ssimple`\*, `sphincssha256192fsimple`\*, `sphincssha256192ssimple`, `sphincssha256256fsimple`, `sphincssha256256ssimple`
+- **SPHINCS-SHAKE256**:`sphincsshake256128fsimple`\*, `sphincsshake256128ssimple`, `sphincsshake256192fsimple`, `sphincsshake256192ssimple`, `sphincsshake256256fsimple`, `sphincsshake256256ssimple`
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 

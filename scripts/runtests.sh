@@ -112,8 +112,11 @@ fi
 export LOCALTESTONLY="Yes"
 
 echo "Version information:"
-$OPENSSL_APP version
-$OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
+$OPENSSL_APP version && $OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
+if [ $? -ne 0 ]; then
+   echo "Baseline openssl invocation failed. Exiting test."
+   exit 1
+fi
 
 # Run interop-tests:
 echo "Cert gen/verify, CMS sign/verify, CA tests for all enabled algorithms commencing..."

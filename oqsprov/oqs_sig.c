@@ -5,11 +5,6 @@
  *
  * Code strongly inspired by OpenSSL DSA signature provider.
  * 
- * ToDo:  Go beyone EVP use cases/testing
- *
- * Significant hurdle: Signature providers of new algorithms are not utilized 
- * properly in OpenSSL3 yet -> Integration won't be seamless and probably 
- * requires quite some (upstream) OpenSSL3 dev investment.
  */
 
 #include "oqs/sig.h"
@@ -382,6 +377,9 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
           (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32, actual_classical_sig_len, digest, digest_len) <= 0)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
         goto endverify;
+      }
+      else {
+	OQS_SIG_PRINTF("OQS SIG: classic verification OK\n");
       }
      /* activate for using pre-existing digest:
       * }

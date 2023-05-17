@@ -12,6 +12,8 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
+echo "oqsprovider-cmssign.sh commencing..."
+
 if [ $# -eq 2 ]; then
 	DGSTNAME=$2
 else
@@ -52,11 +54,11 @@ if [[ "$openssl_version" == "OpenSSL 3.0."* ]]; then
 fi
 
 # dgst test:
-$OPENSSL_APP x509 -provider oqsprovider -provider default -in tmp/$1_srv.crt -pubkey -noout > tmp/$1_srv.pubkey && $OPENSSL_APP cms -in tmp/inputfile -sign -signer tmp/$1_srv.crt -inkey tmp/$1_srv.key -nodetach -outform pem -binary -out tmp/signedfile.cms -md $DGSTNAME -provider oqsprovider -provider default && $OPENSSL_APP dgst -provider oqsprovider -provider default -sign tmp/$1_srv.key -out tmp/dgstsignfile tmp/inputfile
+$OPENSSL_APP x509 -in tmp/$1_srv.crt -pubkey -noout > tmp/$1_srv.pubkey && $OPENSSL_APP cms -in tmp/inputfile -sign -signer tmp/$1_srv.crt -inkey tmp/$1_srv.key -nodetach -outform pem -binary -out tmp/signedfile.cms -md $DGSTNAME && $OPENSSL_APP dgst -sign tmp/$1_srv.key -out tmp/dgstsignfile tmp/inputfile
 
 if [ $? -eq 0 ]; then
 # cms test:
-   $OPENSSL_APP cms -verify -CAfile tmp/$1_CA.crt -inform pem -in tmp/signedfile.cms -crlfeol -out tmp/signeddatafile -provider oqsprovider -provider default && diff tmp/signeddatafile tmp/inputfile && $OPENSSL_APP dgst -provider oqsprovider -provider default -signature tmp/dgstsignfile -verify tmp/$1_srv.pubkey tmp/inputfile
+   $OPENSSL_APP cms -verify -CAfile tmp/$1_CA.crt -inform pem -in tmp/signedfile.cms -crlfeol -out tmp/signeddatafile && diff tmp/signeddatafile tmp/inputfile && $OPENSSL_APP dgst -signature tmp/dgstsignfile -verify tmp/$1_srv.pubkey tmp/inputfile
 else
    exit -1
 fi

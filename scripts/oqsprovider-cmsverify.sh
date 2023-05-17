@@ -36,7 +36,7 @@ fi
 # Assumes certgen has been run before: Quick check for CMS file:
 
 if [ -f tmp/signedfile.cms ]; then
-    $OPENSSL_APP cms -verify -CAfile tmp/$1_CA.crt -inform pem -in tmp/signedfile.cms -crlfeol -out tmp/signeddatafile -provider oqsprovider -provider default
+    $OPENSSL_APP cms -verify -CAfile tmp/$1_CA.crt -inform pem -in tmp/signedfile.cms -crlfeol -out tmp/signeddatafile 
     diff tmp/signeddatafile tmp/inputfile
 else
    echo "File tmp/signedfile.cms not found. Did CMS sign run before? Exiting."

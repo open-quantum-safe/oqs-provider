@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Full build
         run: ./scripts/fullbuild.sh
+      - name: Enable sibling oqsprovider for testing
+        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
       - name: Verify nothing changes on re-generate code

@@ -35,7 +35,7 @@ interop() {
     fi
 
     # Check whether algorithm is supported at all:
-    $OPENSSL_APP list -signature-algorithms -provider oqsprovider | grep $1 > /dev/null 2>&1
+    $OPENSSL_APP list -signature-algorithms | grep $1 > /dev/null 2>&1
     if [ $? -ne 1 ]; then
 	if [ -z "$LOCALTESTONLY" ]; then
             provider2openssl $1 >> interop.log 2>&1 && openssl2provider $1 >> interop.log 2>&1

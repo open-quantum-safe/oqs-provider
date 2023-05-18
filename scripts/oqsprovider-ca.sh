@@ -22,6 +22,8 @@ if [ -z "$LD_LIBRARY_PATH" ]; then
     exit 1
 fi
 
+echo "oqsprovider-ca.sh commencing..."
+
 #rm -rf tmp
 mkdir -p tmp && cd tmp
 rm -rf demoCA && mkdir -p demoCA/newcerts
@@ -49,5 +51,5 @@ if [ $? -ne 0 ]; then
 fi
 
 # Don't forget to use provider(s) when not activated via config file
-$OPENSSL_APP verify -provider oqsprovider -provider default -CAfile $1_rootCA.crt $1.crt
+$OPENSSL_APP verify -CAfile $1_rootCA.crt $1.crt
 

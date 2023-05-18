@@ -35,7 +35,7 @@ interop() {
     fi
 
     # Check whether algorithm is supported at all:
-    $OPENSSL_APP list -signature-algorithms -provider oqsprovider | grep $1 > /dev/null 2>&1
+    $OPENSSL_APP list -signature-algorithms | grep $1 > /dev/null 2>&1
     if [ $? -ne 1 ]; then
 	if [ -z "$LOCALTESTONLY" ]; then
             provider2openssl $1 >> interop.log 2>&1 && openssl2provider $1 >> interop.log 2>&1
@@ -112,8 +112,11 @@ fi
 export LOCALTESTONLY="Yes"
 
 echo "Version information:"
-$OPENSSL_APP version
-$OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
+$OPENSSL_APP version && $OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
+if [ $? -ne 0 ]; then
+   echo "Baseline openssl invocation failed. Exiting test."
+   exit 1
+fi
 
 # Run interop-tests:
 echo "Cert gen/verify, CMS sign/verify, CA tests for all enabled algorithms commencing..."

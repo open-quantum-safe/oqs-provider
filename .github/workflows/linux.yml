@@ -13,6 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        ossl-branch: [openssl-3.1.0, master]
         include:
           - name: alpine
             container: openquantumsafe/ci-alpine-amd64:latest
@@ -29,13 +30,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
+      - name: Enable sibling oqsprovider for testing
+        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
       - name: Verify nothing changes on re-generate code
         run: |
           git config --global user.name "ciuser" && \
           git config --global user.email "ci@openquantumsafe.org" && \
+          git config --global --add safe.directory `pwd` && \
           export LIBOQS_SRC_DIR=`pwd`/liboqs && \
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
           python3 oqs-template/generate.py && \

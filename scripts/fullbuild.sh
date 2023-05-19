@@ -41,7 +41,7 @@ if [ -z "$OPENSSL_INSTALL" ]; then
    if [ ! -d "openssl" ]; then
       echo "openssl not specified and doesn't reside where expected: Cloning and building..."
       # for full debug build add: enable-trace enable-fips --debug
-      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH git://git.openssl.org/openssl.git && cd openssl && ./config --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
+      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH git://git.openssl.org/openssl.git && cd openssl && LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
       if [ $? -ne 0 ]; then
         echo "openssl build failed. Exiting."
         exit -1
@@ -91,7 +91,7 @@ fi
 if [ ! -f "_build/oqsprov/oqsprovider.so" ]; then
    echo "oqsprovider not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
-   BUILD_TYPE=""
+   BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
        cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build

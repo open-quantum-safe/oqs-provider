@@ -56,17 +56,17 @@ const char* oqs_oid_alg_list[OQS_OID_CNT] =
 "1.3.9999.3.8" , "rsa3072_falcon512",
 "1.3.9999.3.9", "falcon1024",
 "1.3.9999.3.10" , "p521_falcon1024",
-"1.3.9999.6.4.13", "sphincssha256128fsimple",
-"1.3.9999.6.4.14" , "p256_sphincssha256128fsimple",
-"1.3.9999.6.4.15" , "rsa3072_sphincssha256128fsimple",
-"1.3.9999.6.4.16", "sphincssha256128ssimple",
-"1.3.9999.6.4.17" , "p256_sphincssha256128ssimple",
-"1.3.9999.6.4.18" , "rsa3072_sphincssha256128ssimple",
-"1.3.9999.6.5.10", "sphincssha256192fsimple",
-"1.3.9999.6.5.11" , "p384_sphincssha256192fsimple",
-"1.3.9999.6.7.13", "sphincsshake256128fsimple",
-"1.3.9999.6.7.14" , "p256_sphincsshake256128fsimple",
-"1.3.9999.6.7.15" , "rsa3072_sphincsshake256128fsimple",
+"1.3.9999.6.4.13", "sphincssha2128fsimple",
+"1.3.9999.6.4.14" , "p256_sphincssha2128fsimple",
+"1.3.9999.6.4.15" , "rsa3072_sphincssha2128fsimple",
+"1.3.9999.6.4.16", "sphincssha2128ssimple",
+"1.3.9999.6.4.17" , "p256_sphincssha2128ssimple",
+"1.3.9999.6.4.18" , "rsa3072_sphincssha2128ssimple",
+"1.3.9999.6.5.10", "sphincssha2192fsimple",
+"1.3.9999.6.5.11" , "p384_sphincssha2192fsimple",
+"1.3.9999.6.7.13", "sphincsshake128fsimple",
+"1.3.9999.6.7.14" , "p256_sphincsshake128fsimple",
+"1.3.9999.6.7.15" , "rsa3072_sphincsshake128fsimple",
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -84,17 +84,17 @@ int oqs_patch_oids(void) {
    if (getenv("OQS_OID_RSA3072_FALCON512")) oqs_oid_alg_list[18] = getenv("OQS_OID_RSA3072_FALCON512");
    if (getenv("OQS_OID_FALCON1024")) oqs_oid_alg_list[20] = getenv("OQS_OID_FALCON1024");
    if (getenv("OQS_OID_P521_FALCON1024")) oqs_oid_alg_list[22] = getenv("OQS_OID_P521_FALCON1024");
-   if (getenv("OQS_OID_SPHINCSSHA256128FSIMPLE")) oqs_oid_alg_list[24] = getenv("OQS_OID_SPHINCSSHA256128FSIMPLE");
-   if (getenv("OQS_OID_P256_SPHINCSSHA256128FSIMPLE")) oqs_oid_alg_list[26] = getenv("OQS_OID_P256_SPHINCSSHA256128FSIMPLE");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHA256128FSIMPLE")) oqs_oid_alg_list[28] = getenv("OQS_OID_RSA3072_SPHINCSSHA256128FSIMPLE");
-   if (getenv("OQS_OID_SPHINCSSHA256128SSIMPLE")) oqs_oid_alg_list[30] = getenv("OQS_OID_SPHINCSSHA256128SSIMPLE");
-   if (getenv("OQS_OID_P256_SPHINCSSHA256128SSIMPLE")) oqs_oid_alg_list[32] = getenv("OQS_OID_P256_SPHINCSSHA256128SSIMPLE");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHA256128SSIMPLE")) oqs_oid_alg_list[34] = getenv("OQS_OID_RSA3072_SPHINCSSHA256128SSIMPLE");
-   if (getenv("OQS_OID_SPHINCSSHA256192FSIMPLE")) oqs_oid_alg_list[36] = getenv("OQS_OID_SPHINCSSHA256192FSIMPLE");
-   if (getenv("OQS_OID_P384_SPHINCSSHA256192FSIMPLE")) oqs_oid_alg_list[38] = getenv("OQS_OID_P384_SPHINCSSHA256192FSIMPLE");
-   if (getenv("OQS_OID_SPHINCSSHAKE256128FSIMPLE")) oqs_oid_alg_list[40] = getenv("OQS_OID_SPHINCSSHAKE256128FSIMPLE");
-   if (getenv("OQS_OID_P256_SPHINCSSHAKE256128FSIMPLE")) oqs_oid_alg_list[42] = getenv("OQS_OID_P256_SPHINCSSHAKE256128FSIMPLE");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FSIMPLE")) oqs_oid_alg_list[44] = getenv("OQS_OID_RSA3072_SPHINCSSHAKE256128FSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[24] = getenv("OQS_OID_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[26] = getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[28] = getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[30] = getenv("OQS_OID_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[32] = getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[34] = getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHA2192FSIMPLE")) oqs_oid_alg_list[36] = getenv("OQS_OID_SPHINCSSHA2192FSIMPLE");
+   if (getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE")) oqs_oid_alg_list[38] = getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[40] = getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[42] = getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[44] = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE");
 ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -129,28 +129,28 @@ int oqs_patch_encodings(void) {
    if (getenv("OQS_ENCODING_FALCON1024_ALGNAME")) oqs_alg_encoding_list[21] = getenv("OQS_ENCODING_FALCON1024_ALGNAME");
    if (getenv("OQS_ENCODING_P521_FALCON1024")) oqs_alg_encoding_list[22] = getenv("OQS_ENCODING_P521_FALCON1024"); 
    if (getenv("OQS_ENCODING_P521_FALCON1024_ALGNAME")) oqs_alg_encoding_list[23] = getenv("OQS_ENCODING_P521_FALCON1024_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHA256128FSIMPLE")) oqs_alg_encoding_list[24] = getenv("OQS_ENCODING_SPHINCSSHA256128FSIMPLE"); 
-   if (getenv("OQS_ENCODING_SPHINCSSHA256128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[25] = getenv("OQS_ENCODING_SPHINCSSHA256128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA256128FSIMPLE")) oqs_alg_encoding_list[26] = getenv("OQS_ENCODING_P256_SPHINCSSHA256128FSIMPLE"); 
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA256128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[27] = getenv("OQS_ENCODING_P256_SPHINCSSHA256128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128FSIMPLE")) oqs_alg_encoding_list[28] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128FSIMPLE"); 
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[29] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHA256128SSIMPLE")) oqs_alg_encoding_list[30] = getenv("OQS_ENCODING_SPHINCSSHA256128SSIMPLE"); 
-   if (getenv("OQS_ENCODING_SPHINCSSHA256128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[31] = getenv("OQS_ENCODING_SPHINCSSHA256128SSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA256128SSIMPLE")) oqs_alg_encoding_list[32] = getenv("OQS_ENCODING_P256_SPHINCSSHA256128SSIMPLE"); 
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA256128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[33] = getenv("OQS_ENCODING_P256_SPHINCSSHA256128SSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128SSIMPLE")) oqs_alg_encoding_list[34] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128SSIMPLE"); 
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[35] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA256128SSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHA256192FSIMPLE")) oqs_alg_encoding_list[36] = getenv("OQS_ENCODING_SPHINCSSHA256192FSIMPLE"); 
-   if (getenv("OQS_ENCODING_SPHINCSSHA256192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[37] = getenv("OQS_ENCODING_SPHINCSSHA256192FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P384_SPHINCSSHA256192FSIMPLE")) oqs_alg_encoding_list[38] = getenv("OQS_ENCODING_P384_SPHINCSSHA256192FSIMPLE"); 
-   if (getenv("OQS_ENCODING_P384_SPHINCSSHA256192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[39] = getenv("OQS_ENCODING_P384_SPHINCSSHA256192FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE")) oqs_alg_encoding_list[40] = getenv("OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE"); 
-   if (getenv("OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[41] = getenv("OQS_ENCODING_SPHINCSSHAKE256128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE256128FSIMPLE")) oqs_alg_encoding_list[42] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE256128FSIMPLE"); 
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE256128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[43] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE256128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE256128FSIMPLE")) oqs_alg_encoding_list[44] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE256128FSIMPLE"); 
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE256128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[45] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE256128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[24] = getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE"); 
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[25] = getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[26] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE"); 
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[27] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[28] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE"); 
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[29] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[30] = getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE"); 
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[31] = getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[32] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE"); 
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[33] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[34] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE"); 
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[35] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE")) oqs_alg_encoding_list[36] = getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE"); 
+   if (getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[37] = getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE")) oqs_alg_encoding_list[38] = getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE"); 
+   if (getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[39] = getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[40] = getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE"); 
+   if (getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[41] = getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[42] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE"); 
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[43] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[44] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE"); 
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[45] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME");
 ///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_END
     return 1;
 }
@@ -210,24 +210,24 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("falcon1024", 256, oqs_signature_functions),
     SIGALG("p521_falcon1024", 256, oqs_signature_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_simple
-    SIGALG("sphincssha256128fsimple", 128, oqs_signature_functions),
-    SIGALG("p256_sphincssha256128fsimple", 128, oqs_signature_functions),
-    SIGALG("rsa3072_sphincssha256128fsimple", 128, oqs_signature_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
+    SIGALG("sphincssha2128fsimple", 128, oqs_signature_functions),
+    SIGALG("p256_sphincssha2128fsimple", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincssha2128fsimple", 128, oqs_signature_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
-    SIGALG("sphincssha256128ssimple", 128, oqs_signature_functions),
-    SIGALG("p256_sphincssha256128ssimple", 128, oqs_signature_functions),
-    SIGALG("rsa3072_sphincssha256128ssimple", 128, oqs_signature_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
+    SIGALG("sphincssha2128ssimple", 128, oqs_signature_functions),
+    SIGALG("p256_sphincssha2128ssimple", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincssha2128ssimple", 128, oqs_signature_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_192f_simple
-    SIGALG("sphincssha256192fsimple", 192, oqs_signature_functions),
-    SIGALG("p384_sphincssha256192fsimple", 192, oqs_signature_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
+    SIGALG("sphincssha2192fsimple", 192, oqs_signature_functions),
+    SIGALG("p384_sphincssha2192fsimple", 192, oqs_signature_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
-    SIGALG("sphincsshake256128fsimple", 128, oqs_signature_functions),
-    SIGALG("p256_sphincsshake256128fsimple", 128, oqs_signature_functions),
-    SIGALG("rsa3072_sphincsshake256128fsimple", 128, oqs_signature_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
+    SIGALG("sphincsshake128fsimple", 128, oqs_signature_functions),
+    SIGALG("p256_sphincsshake128fsimple", 128, oqs_signature_functions),
+    SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_signature_functions),
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     { NULL, NULL, NULL }
@@ -308,24 +308,24 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     SIGALG("falcon1024", 256, oqs_falcon1024_keymgmt_functions),
     SIGALG("p521_falcon1024", 256, oqs_p521_falcon1024_keymgmt_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_simple
-    SIGALG("sphincssha256128fsimple", 128, oqs_sphincssha256128fsimple_keymgmt_functions),
-    SIGALG("p256_sphincssha256128fsimple", 128, oqs_p256_sphincssha256128fsimple_keymgmt_functions),
-    SIGALG("rsa3072_sphincssha256128fsimple", 128, oqs_rsa3072_sphincssha256128fsimple_keymgmt_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
+    SIGALG("sphincssha2128fsimple", 128, oqs_sphincssha2128fsimple_keymgmt_functions),
+    SIGALG("p256_sphincssha2128fsimple", 128, oqs_p256_sphincssha2128fsimple_keymgmt_functions),
+    SIGALG("rsa3072_sphincssha2128fsimple", 128, oqs_rsa3072_sphincssha2128fsimple_keymgmt_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
-    SIGALG("sphincssha256128ssimple", 128, oqs_sphincssha256128ssimple_keymgmt_functions),
-    SIGALG("p256_sphincssha256128ssimple", 128, oqs_p256_sphincssha256128ssimple_keymgmt_functions),
-    SIGALG("rsa3072_sphincssha256128ssimple", 128, oqs_rsa3072_sphincssha256128ssimple_keymgmt_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
+    SIGALG("sphincssha2128ssimple", 128, oqs_sphincssha2128ssimple_keymgmt_functions),
+    SIGALG("p256_sphincssha2128ssimple", 128, oqs_p256_sphincssha2128ssimple_keymgmt_functions),
+    SIGALG("rsa3072_sphincssha2128ssimple", 128, oqs_rsa3072_sphincssha2128ssimple_keymgmt_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_192f_simple
-    SIGALG("sphincssha256192fsimple", 192, oqs_sphincssha256192fsimple_keymgmt_functions),
-    SIGALG("p384_sphincssha256192fsimple", 192, oqs_p384_sphincssha256192fsimple_keymgmt_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
+    SIGALG("sphincssha2192fsimple", 192, oqs_sphincssha2192fsimple_keymgmt_functions),
+    SIGALG("p384_sphincssha2192fsimple", 192, oqs_p384_sphincssha2192fsimple_keymgmt_functions),
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
-    SIGALG("sphincsshake256128fsimple", 128, oqs_sphincsshake256128fsimple_keymgmt_functions),
-    SIGALG("p256_sphincsshake256128fsimple", 128, oqs_p256_sphincsshake256128fsimple_keymgmt_functions),
-    SIGALG("rsa3072_sphincsshake256128fsimple", 128, oqs_rsa3072_sphincsshake256128fsimple_keymgmt_functions),
+#ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
+    SIGALG("sphincsshake128fsimple", 128, oqs_sphincsshake128fsimple_keymgmt_functions),
+    SIGALG("p256_sphincsshake128fsimple", 128, oqs_p256_sphincsshake128fsimple_keymgmt_functions),
+    SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_rsa3072_sphincsshake128fsimple_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes

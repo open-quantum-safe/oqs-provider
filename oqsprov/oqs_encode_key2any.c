@@ -675,39 +675,39 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 # define p521_falcon1024_evp_type       0
 # define p521_falcon1024_input_type      "p521_falcon1024"
 # define p521_falcon1024_pem_type        "p521_falcon1024"
-# define sphincssha256128fsimple_evp_type       0
-# define sphincssha256128fsimple_input_type      "sphincssha256128fsimple"
-# define sphincssha256128fsimple_pem_type        "sphincssha256128fsimple"
-# define p256_sphincssha256128fsimple_evp_type       0
-# define p256_sphincssha256128fsimple_input_type      "p256_sphincssha256128fsimple"
-# define p256_sphincssha256128fsimple_pem_type        "p256_sphincssha256128fsimple"
-# define rsa3072_sphincssha256128fsimple_evp_type       0
-# define rsa3072_sphincssha256128fsimple_input_type      "rsa3072_sphincssha256128fsimple"
-# define rsa3072_sphincssha256128fsimple_pem_type        "rsa3072_sphincssha256128fsimple"
-# define sphincssha256128ssimple_evp_type       0
-# define sphincssha256128ssimple_input_type      "sphincssha256128ssimple"
-# define sphincssha256128ssimple_pem_type        "sphincssha256128ssimple"
-# define p256_sphincssha256128ssimple_evp_type       0
-# define p256_sphincssha256128ssimple_input_type      "p256_sphincssha256128ssimple"
-# define p256_sphincssha256128ssimple_pem_type        "p256_sphincssha256128ssimple"
-# define rsa3072_sphincssha256128ssimple_evp_type       0
-# define rsa3072_sphincssha256128ssimple_input_type      "rsa3072_sphincssha256128ssimple"
-# define rsa3072_sphincssha256128ssimple_pem_type        "rsa3072_sphincssha256128ssimple"
-# define sphincssha256192fsimple_evp_type       0
-# define sphincssha256192fsimple_input_type      "sphincssha256192fsimple"
-# define sphincssha256192fsimple_pem_type        "sphincssha256192fsimple"
-# define p384_sphincssha256192fsimple_evp_type       0
-# define p384_sphincssha256192fsimple_input_type      "p384_sphincssha256192fsimple"
-# define p384_sphincssha256192fsimple_pem_type        "p384_sphincssha256192fsimple"
-# define sphincsshake256128fsimple_evp_type       0
-# define sphincsshake256128fsimple_input_type      "sphincsshake256128fsimple"
-# define sphincsshake256128fsimple_pem_type        "sphincsshake256128fsimple"
-# define p256_sphincsshake256128fsimple_evp_type       0
-# define p256_sphincsshake256128fsimple_input_type      "p256_sphincsshake256128fsimple"
-# define p256_sphincsshake256128fsimple_pem_type        "p256_sphincsshake256128fsimple"
-# define rsa3072_sphincsshake256128fsimple_evp_type       0
-# define rsa3072_sphincsshake256128fsimple_input_type      "rsa3072_sphincsshake256128fsimple"
-# define rsa3072_sphincsshake256128fsimple_pem_type        "rsa3072_sphincsshake256128fsimple"
+# define sphincssha2128fsimple_evp_type       0
+# define sphincssha2128fsimple_input_type      "sphincssha2128fsimple"
+# define sphincssha2128fsimple_pem_type        "sphincssha2128fsimple"
+# define p256_sphincssha2128fsimple_evp_type       0
+# define p256_sphincssha2128fsimple_input_type      "p256_sphincssha2128fsimple"
+# define p256_sphincssha2128fsimple_pem_type        "p256_sphincssha2128fsimple"
+# define rsa3072_sphincssha2128fsimple_evp_type       0
+# define rsa3072_sphincssha2128fsimple_input_type      "rsa3072_sphincssha2128fsimple"
+# define rsa3072_sphincssha2128fsimple_pem_type        "rsa3072_sphincssha2128fsimple"
+# define sphincssha2128ssimple_evp_type       0
+# define sphincssha2128ssimple_input_type      "sphincssha2128ssimple"
+# define sphincssha2128ssimple_pem_type        "sphincssha2128ssimple"
+# define p256_sphincssha2128ssimple_evp_type       0
+# define p256_sphincssha2128ssimple_input_type      "p256_sphincssha2128ssimple"
+# define p256_sphincssha2128ssimple_pem_type        "p256_sphincssha2128ssimple"
+# define rsa3072_sphincssha2128ssimple_evp_type       0
+# define rsa3072_sphincssha2128ssimple_input_type      "rsa3072_sphincssha2128ssimple"
+# define rsa3072_sphincssha2128ssimple_pem_type        "rsa3072_sphincssha2128ssimple"
+# define sphincssha2192fsimple_evp_type       0
+# define sphincssha2192fsimple_input_type      "sphincssha2192fsimple"
+# define sphincssha2192fsimple_pem_type        "sphincssha2192fsimple"
+# define p384_sphincssha2192fsimple_evp_type       0
+# define p384_sphincssha2192fsimple_input_type      "p384_sphincssha2192fsimple"
+# define p384_sphincssha2192fsimple_pem_type        "p384_sphincssha2192fsimple"
+# define sphincsshake128fsimple_evp_type       0
+# define sphincsshake128fsimple_input_type      "sphincsshake128fsimple"
+# define sphincsshake128fsimple_pem_type        "sphincsshake128fsimple"
+# define p256_sphincsshake128fsimple_evp_type       0
+# define p256_sphincsshake128fsimple_input_type      "p256_sphincsshake128fsimple"
+# define p256_sphincsshake128fsimple_pem_type        "p256_sphincsshake128fsimple"
+# define rsa3072_sphincsshake128fsimple_evp_type       0
+# define rsa3072_sphincsshake128fsimple_input_type      "rsa3072_sphincsshake128fsimple"
+# define rsa3072_sphincsshake128fsimple_pem_type        "rsa3072_sphincsshake128fsimple"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -1361,82 +1361,82 @@ MAKE_ENCODER(p521_falcon1024, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(p521_falcon1024, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(p521_falcon1024, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(p521_falcon1024);
-MAKE_ENCODER(sphincssha256128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(sphincssha256128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(sphincssha256128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(sphincssha256128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(sphincssha256128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(sphincssha256128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(sphincssha256128fsimple);
-MAKE_ENCODER(p256_sphincssha256128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(p256_sphincssha256128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(p256_sphincssha256128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(p256_sphincssha256128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(p256_sphincssha256128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(p256_sphincssha256128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(p256_sphincssha256128fsimple);
-MAKE_ENCODER(rsa3072_sphincssha256128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincssha256128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(rsa3072_sphincssha256128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincssha256128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(rsa3072_sphincssha256128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincssha256128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(rsa3072_sphincssha256128fsimple);
-MAKE_ENCODER(sphincssha256128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(sphincssha256128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(sphincssha256128ssimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(sphincssha256128ssimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(sphincssha256128ssimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(sphincssha256128ssimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(sphincssha256128ssimple);
-MAKE_ENCODER(p256_sphincssha256128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(p256_sphincssha256128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(p256_sphincssha256128ssimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(p256_sphincssha256128ssimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(p256_sphincssha256128ssimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(p256_sphincssha256128ssimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(p256_sphincssha256128ssimple);
-MAKE_ENCODER(rsa3072_sphincssha256128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincssha256128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(rsa3072_sphincssha256128ssimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincssha256128ssimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(rsa3072_sphincssha256128ssimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincssha256128ssimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(rsa3072_sphincssha256128ssimple);
-MAKE_ENCODER(sphincssha256192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(sphincssha256192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(sphincssha256192fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(sphincssha256192fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(sphincssha256192fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(sphincssha256192fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(sphincssha256192fsimple);
-MAKE_ENCODER(p384_sphincssha256192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(p384_sphincssha256192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(p384_sphincssha256192fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(p384_sphincssha256192fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(p384_sphincssha256192fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(p384_sphincssha256192fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(p384_sphincssha256192fsimple);
-MAKE_ENCODER(sphincsshake256128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(sphincsshake256128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(sphincsshake256128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(sphincsshake256128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(sphincsshake256128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(sphincsshake256128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(sphincsshake256128fsimple);
-MAKE_ENCODER(p256_sphincsshake256128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(p256_sphincsshake256128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(p256_sphincsshake256128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(p256_sphincsshake256128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(p256_sphincsshake256128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(p256_sphincsshake256128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(p256_sphincsshake256128fsimple);
-MAKE_ENCODER(rsa3072_sphincsshake256128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincsshake256128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(rsa3072_sphincsshake256128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincsshake256128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(rsa3072_sphincsshake256128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(rsa3072_sphincsshake256128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(rsa3072_sphincsshake256128fsimple);
+MAKE_ENCODER(sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(sphincssha2128fsimple);
+MAKE_ENCODER(p256_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(p256_sphincssha2128fsimple);
+MAKE_ENCODER(rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(rsa3072_sphincssha2128fsimple);
+MAKE_ENCODER(sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(sphincssha2128ssimple);
+MAKE_ENCODER(p256_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(p256_sphincssha2128ssimple);
+MAKE_ENCODER(rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(rsa3072_sphincssha2128ssimple);
+MAKE_ENCODER(sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(sphincssha2192fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(sphincssha2192fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(sphincssha2192fsimple);
+MAKE_ENCODER(p384_sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p384_sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p384_sphincssha2192fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p384_sphincssha2192fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p384_sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p384_sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(p384_sphincssha2192fsimple);
+MAKE_ENCODER(sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(sphincsshake128fsimple);
+MAKE_ENCODER(p256_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(p256_sphincsshake128fsimple);
+MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(rsa3072_sphincsshake128fsimple);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END
 

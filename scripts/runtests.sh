@@ -133,17 +133,17 @@ interop p256_falcon512
 interop rsa3072_falcon512
 interop falcon1024
 interop p521_falcon1024
-interop sphincssha256128fsimple
-interop p256_sphincssha256128fsimple
-interop rsa3072_sphincssha256128fsimple
-interop sphincssha256128ssimple
-interop p256_sphincssha256128ssimple
-interop rsa3072_sphincssha256128ssimple
-interop sphincssha256192fsimple
-interop p384_sphincssha256192fsimple
-interop sphincsshake256128fsimple
-interop p256_sphincsshake256128fsimple
-interop rsa3072_sphincsshake256128fsimple
+interop sphincssha2128fsimple
+interop p256_sphincssha2128fsimple
+interop rsa3072_sphincssha2128fsimple
+interop sphincssha2128ssimple
+interop p256_sphincssha2128ssimple
+interop rsa3072_sphincssha2128ssimple
+interop sphincssha2192fsimple
+interop p384_sphincssha2192fsimple
+interop sphincsshake128fsimple
+interop p256_sphincsshake128fsimple
+interop rsa3072_sphincsshake128fsimple
 ##### OQS_TEMPLATE_FRAGMENT_ALGS_END
 
 echo

@@ -40,8 +40,8 @@ This implementation makes available the following quantum safe algorithms:
 - **CRYSTALS-Dilithium**:`dilithium2`\*, `dilithium3`\*, `dilithium5`\*
 - **Falcon**:`falcon512`\*, `falcon1024`\*
 
-- **SPHINCS-SHA256**:`sphincssha256128fsimple`\*, `sphincssha256128ssimple`\*, `sphincssha256192fsimple`\*, `sphincssha256192ssimple`, `sphincssha256256fsimple`, `sphincssha256256ssimple`
-- **SPHINCS-SHAKE256**:`sphincsshake256128fsimple`\*, `sphincsshake256128ssimple`, `sphincsshake256192fsimple`, `sphincsshake256192ssimple`, `sphincsshake256256fsimple`, `sphincsshake256256ssimple`
+- **SPHINCS-SHA2**:`sphincssha2128fsimple`\*, `sphincssha2128ssimple`\*, `sphincssha2192fsimple`\*, `sphincssha2192ssimple`, `sphincssha2256fsimple`, `sphincssha2256ssimple`
+- **SPHINCS-SHAKE**:`sphincsshake128fsimple`\*, `sphincsshake128ssimple`, `sphincsshake192fsimple`, `sphincsshake192ssimple`, `sphincsshake256fsimple`, `sphincsshake256ssimple`
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 

@@ -56,13 +56,14 @@ def gen_sig_table(oqslibdocdir):
             pass
 
         if 'extra_nids' in variant:
-            table.append([variant['name'], variant['extra_nids']['old'][0]['implementation_version'],
-                          variant['extra_nids']['old'][0]['nist-round'], claimed_nist_level, variant['extra_nids']['old'][0]['code_point'],
-                          variant['extra_nids']['old'][0]['oid']])
-            for hybrid in variant['extra_nids']['old'][0]['mix_with']:
+          for i in range(len(variant['extra_nids']['old'])):
+            table.append([variant['name'], variant['extra_nids']['old'][i]['implementation_version'],
+                          variant['extra_nids']['old'][i]['nist-round'], claimed_nist_level, variant['extra_nids']['old'][i]['code_point'],
+                          variant['extra_nids']['old'][i]['oid']])
+            for hybrid in variant['extra_nids']['old'][i]['mix_with']:
                 table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
-                              variant['extra_nids']['old'][0]['implementation_version'],
-                              variant['extra_nids']['old'][0]['nist-round'],
+                              variant['extra_nids']['old'][i]['implementation_version'],
+                              variant['extra_nids']['old'][i]['nist-round'],
                               claimed_nist_level,
                               hybrid['code_point'],
                               hybrid['oid']])

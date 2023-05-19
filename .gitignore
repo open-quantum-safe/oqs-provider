@@ -13,3 +13,5 @@ test/oqs_test_groups
 # test artifacts
 tmp
 interop.log
+# pycache
+oqs-template/__pycache__

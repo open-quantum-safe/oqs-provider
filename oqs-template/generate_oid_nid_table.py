@@ -56,7 +56,6 @@ def gen_sig_table(oqslibdocdir):
             pass
 
         if 'extra_nids' in variant:
-            print(variant)
             table.append([variant['name'], variant['extra_nids']['old'][0]['implementation_version'],
                           variant['extra_nids']['old'][0]['nist-round'], claimed_nist_level, variant['extra_nids']['old'][0]['code_point'],
                           variant['extra_nids']['old'][0]['oid']])

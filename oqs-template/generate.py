@@ -62,8 +62,8 @@ def get_sig_nistlevel(family, alg):
     # translate family names in generate.yml to directory names for liboqs algorithm datasheets
     if family['family'] == 'CRYSTALS-Dilithium': datasheetname = 'dilithium'
     elif family['family'] == 'SPHINCS-Haraka': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHA256': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHAKE256': datasheetname = 'sphincs'
+    elif family['family'] == 'SPHINCS-SHA2': datasheetname = 'sphincs'
+    elif family['family'] == 'SPHINCS-SHAKE': datasheetname = 'sphincs'
     else: datasheetname = family['family'].lower()
     # load datasheet
     algymlfilename = os.path.join(os.environ['LIBOQS_SRC_DIR'], 'docs', 'algorithms', 'sig', '{:s}.yml'.format(datasheetname))

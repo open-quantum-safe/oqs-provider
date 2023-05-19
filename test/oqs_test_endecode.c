@@ -66,17 +66,17 @@ static const char *sigalg_names[] = {
 #ifdef OQS_ENABLE_SIG_falcon_1024
         "falcon1024","p521_falcon1024",
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128f_simple
-        "sphincssha256128fsimple","p256_sphincssha256128fsimple","rsa3072_sphincssha256128fsimple",
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
+        "sphincssha2128fsimple","p256_sphincssha2128fsimple","rsa3072_sphincssha2128fsimple",
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_128s_simple
-        "sphincssha256128ssimple","p256_sphincssha256128ssimple","rsa3072_sphincssha256128ssimple",
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
+        "sphincssha2128ssimple","p256_sphincssha2128ssimple","rsa3072_sphincssha2128ssimple",
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha256_192f_simple
-        "sphincssha256192fsimple","p384_sphincssha256192fsimple",
+#ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
+        "sphincssha2192fsimple","p384_sphincssha2192fsimple",
 #endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake256_128f_simple
-        "sphincsshake256128fsimple","p256_sphincsshake256128fsimple","rsa3072_sphincsshake256128fsimple",
+#ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
+        "sphincsshake128fsimple","p256_sphincsshake128fsimple","rsa3072_sphincsshake128fsimple",
 #endif
 
 ///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END

@@ -519,16 +519,21 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
 
     // insert all OIDs to the global objects list
     for (i=0; i<OQS_OID_CNT;i+=2) {
-	if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+1]))
+        if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+1])) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                return 0;
+        }
 
-	if (!oqs_set_nid((char*)oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1])))
+        if (!oqs_set_nid((char*)oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1]))) {
               ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+              return 0;
+        }
 
-	if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i+1], "", oqs_oid_alg_list[i+1])) {
+        if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i+1], "", oqs_oid_alg_list[i+1])) {
               OQS_PROV_PRINTF2("error registering %s with no hash\n", oqs_oid_alg_list[i+1]);
               ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-	}
+              return 0;
+        }
 
         OQS_PROV_PRINTF3("OQS PROV: successfully registered %s with NID %d\n", oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1]));
 
@@ -540,7 +545,7 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
          ((*provctx = oqsx_newprovctx(libctx, handle, corebiometh)) == NULL ) ) { 
         OQS_PROV_PRINTF("OQS PROV: error creating new provider context\n");
         ERR_raise(ERR_LIB_USER, OQSPROV_R_LIB_CREATE_ERR);
-	goto end_init;
+        goto end_init;
     }
 
     *out = oqsprovider_dispatch_table;

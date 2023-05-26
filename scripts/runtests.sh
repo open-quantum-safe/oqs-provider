@@ -119,32 +119,14 @@ if [ $? -ne 0 ]; then
 fi
 
 # Run interop-tests:
-echo "Cert gen/verify, CMS sign/verify, CA tests for all enabled algorithms commencing..."
-##### OQS_TEMPLATE_FRAGMENT_ALGS_START
-interop dilithium2
-interop p256_dilithium2
-interop rsa3072_dilithium2
-interop dilithium3
-interop p384_dilithium3
-interop dilithium5
-interop p521_dilithium5
-interop falcon512
-interop p256_falcon512
-interop rsa3072_falcon512
-interop falcon1024
-interop p521_falcon1024
-interop sphincssha2128fsimple
-interop p256_sphincssha2128fsimple
-interop rsa3072_sphincssha2128fsimple
-interop sphincssha2128ssimple
-interop p256_sphincssha2128ssimple
-interop rsa3072_sphincssha2128ssimple
-interop sphincssha2192fsimple
-interop p384_sphincssha2192fsimple
-interop sphincsshake128fsimple
-interop p256_sphincsshake128fsimple
-interop rsa3072_sphincsshake128fsimple
-##### OQS_TEMPLATE_FRAGMENT_ALGS_END
+echo "Cert gen/verify, CMS sign/verify, CA tests for all enabled OQS signature algorithms commencing: "
+for alg in `$OPENSSL_APP list -signature-algorithms | grep oqsprovider | sed -e "s/ @ oqsprovider//g" | sed -e "s/^  //g"`
+do 
+   if [ "$1" = "-V" ]; then
+      echo "Testing $alg"
+   fi
+   interop $alg
+done
 
 echo
 

@@ -208,6 +208,7 @@ populate('oqsprov/oqs_encode_key2any.c', config, '/////')
 populate('oqsprov/oqs_decode_der2key.c', config, '/////')
 populate('oqsprov/oqsprov_keys.c', config, '/////')
 populate('scripts/runtests.sh', config, '#####')
+populate('scripts/common.py', config, '#####')
 
 config2 = load_config(include_disabled_sigs=True)
 config2 = complete_config(config2)

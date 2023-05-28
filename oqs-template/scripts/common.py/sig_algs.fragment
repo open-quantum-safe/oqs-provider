@@ -1,0 +1,12 @@
+    
+    # quantum-safe signatures
+    {% for sig in config['sigs'] %}{% for variant in sig['variants'] %}('{{ variant['name'] }}', {{ variant['security'] }}), 
+    {%- endfor %} {%- endfor %}
+    # quantum-safe + classical signatures
+    {% for sig in config['sigs'] -%}
+        {%- for variant in sig['variants'] -%}
+            {%- for classical_alg in variant['mix_with'] -%}
+            ('{{ classical_alg['name'] }}_{{ variant['name'] }}', {{ variant['security'] }}), 
+        {%- endfor -%}
+    {%- endfor %} {%- endfor %}
+

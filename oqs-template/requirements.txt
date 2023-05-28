@@ -1,2 +1,3 @@
 Jinja2==3.0.3
 PyYAML==6.0
+Tabulate==0.9.0

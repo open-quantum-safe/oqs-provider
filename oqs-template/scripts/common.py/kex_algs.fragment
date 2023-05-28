@@ -1,0 +1,19 @@
+{% macro ecx_name(bits) -%}
+{%- if bits == 128 -%} x25519 {%- endif -%}
+{%- if bits == 192 -%} x448 {%- endif -%}
+{%- if bits == 256 -%} {%- print("Impossible bit setting for ECX hybrid") -%} {%- endif -%}
+{%- endmacro -%}
+
+{% macro ecp_name(bits) -%}
+{%- if bits == 128 -%} p256 {%- endif -%}
+{%- if bits == 192 -%} p384 {%- endif -%}
+{%- if bits == 256 -%} p521 {%- endif -%}
+{%- endmacro %}
+    # quantum-safe key exchanges
+    {% for kem in config['kems'] %}('{{ kem['name_group'] }}', {{ kem['bit_security'] }}), {%- endfor %}
+    # quantum-safe + classical NIST key exchanges
+    {% for kem in config['kems'] %}('{{ ecp_name(kem['bit_security']) }}_{{ kem['name_group'] }}', {{ kem['bit_security'] }}), {%- endfor %}
+    # quantum-safe + classical X key exchanges
+    {% for kem in config['kems'] %}{%- if 'nid_ecx_hybrid' in kem %}('{{ ecx_name(kem['bit_security']) }}_{{ kem['name_group'] }}', {{ kem['bit_security'] }}), {%- endif -%}
+    {% endfor %}    
+

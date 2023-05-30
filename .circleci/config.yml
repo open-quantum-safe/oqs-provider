@@ -127,7 +127,7 @@ jobs:
             - run:
                 name: Build OQS-OpenSSL provider
                 command: |
-                   export OPENSSL_INSTALL=`brew config | grep HOMEBREW_PREFIX | sed -e "s/HOMEBREW_PREFIX: //g"`/opt/openssl@3 && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV" && cd .. 
+                   export OPENSSL_INSTALL=`brew config | grep HOMEBREW_PREFIX | sed -e "s/HOMEBREW_PREFIX: //g"`/opt/openssl@3 && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV" && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$OPENSSL_INSTALL/lib" >> "$BASH_ENV"
       - run:
           name: Run tests
           command: |

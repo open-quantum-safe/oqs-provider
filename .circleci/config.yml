@@ -127,11 +127,11 @@ jobs:
             - run:
                 name: Build OQS-OpenSSL provider
                 command: |
-                   ls -laR `brew config | grep HOMEBREW_PREFIX | sed -e "s/HOMEBREW_PREFIX: //g"` && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=`brew config | grep HOMEBREW_PREFIX | sed -e "s/HOMEBREW_PREFIX: //g"`/opt/openssl@3 -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+                   export OPENSSL_INSTALL=`brew config | grep HOMEBREW_PREFIX | sed -e "s/HOMEBREW_PREFIX: //g"`/opt/openssl@3 && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
       - run:
           name: Run tests
           command: |
-             ./scripts/runtests.sh -V
+             echo "OPENSSL_INSTALL=$OPENSSL_INSTALL" && ./scripts/runtests.sh -V
       - run:
           name: Build OQS-OpenSSL provider with QSC encoding support
           command: |

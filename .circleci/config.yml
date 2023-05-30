@@ -53,10 +53,10 @@ jobs:
           condition:
               equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
-      - run:
-          name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
-          command: |
-             pwd && ls && mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
+            - run:
+                name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
+                command: |
+                   pwd && ls && mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
       - run:
           name: Run tests
           command: |
@@ -116,10 +116,18 @@ jobs:
                 command: |
                    git clone --branch master git://git.openssl.org/openssl.git openssl &&
                    cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
-      - run:
-          name: Build OQS-OpenSSL provider
-          command: |
-             mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+            - run:
+               name: Build OQS-OpenSSL provider
+               command: |
+                  mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+      - when:
+          condition:
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
+          steps:
+            - run:
+                name: Build OQS-OpenSSL provider
+                command: |
+                   mkdir _build && cd _build && cmake -GNinja -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
       - run:
           name: Run tests
           command: |

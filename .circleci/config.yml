@@ -131,7 +131,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-             echo "OPENSSL_INSTALL=$OPENSSL_INSTALL" && ls -l _build/lib && ./scripts/runtests.sh -V || otool  -L _build/lib/oqsprovider.dylib || ls -l .local/lib
+             echo "OPENSSL_INSTALL=$OPENSSL_INSTALL" && ls -l _build/lib && ./scripts/runtests.sh -V || otool  -L _build/lib/oqsprovider.dylib
       - run:
           name: Build OQS-OpenSSL provider with QSC encoding support
           command: |
@@ -139,7 +139,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-             ./scripts/runtests.sh -V
+             ./scripts/runtests.sh -V || ls -l .local/lib
       - run:
           name: Run tests (with encodings)
           command: |

@@ -105,7 +105,7 @@ jobs:
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
              export LIBOQS_INSTALLPATH=$(pwd)/.local && cd liboqs && mkdir _build && cd _build &&
              cmake -GNinja -DCMAKE_INSTALL_PREFIX=$LIBOQS_INSTALLPATH << parameters.CMAKE_ARGS >> .. && ninja install &&
-             cd .. && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$LIBOQS_INSTALLPATH" >> "$BASH_ENV" 
+             cd .. && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$LIBOQS_INSTALLPATH/lib" >> "$BASH_ENV" 
       - when:
           condition:
             not:

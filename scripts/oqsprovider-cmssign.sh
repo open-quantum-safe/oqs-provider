@@ -34,7 +34,11 @@ if [ -z "$LD_LIBRARY_PATH" ]; then
     echo "LD_LIBRARY_PATH env var not set. Exiting."
     exit 1
 fi
-export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
+
+# Set OSX DYLD_LIBRARY_PATH if not already externally set
+if [ -z "$DYLD_LIBRARY_PATH" ]; then
+    export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
+fi
 
 # Assumes certgen has been run before: Quick check
 

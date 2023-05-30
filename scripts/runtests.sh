@@ -94,14 +94,19 @@ if [ ! -z "$OQS_SKIP_TESTS" ]; then
    echo "Skipping algs $OQS_SKIP_TESTS"
 fi
 
+# Set OSX DYLD_LIBRARY_PATH if not already externally set
+if [ -z "$DYLD_LIBRARY_PATH" ]; then
+    export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
+fi
+
 echo "Test setup:"
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 echo "OPENSSL_APP=$OPENSSL_APP"
 echo "OPENSSL_CONF=$OPENSSL_CONF"
 echo "OPENSSL_MODULES=$OPENSSL_MODULES"
-
-# Some OSX vodoo
-export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
+if [[ "$OSTYPE" == "darwin"* ]]; then
+echo "DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH"
+fi
 
 # check if we can use docker or not:
 docker info 2>&1 | grep Server > /dev/null

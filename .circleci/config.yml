@@ -127,7 +127,7 @@ jobs:
             - run:
                 name: Build OQS-OpenSSL provider
                 command: |
-                   mkdir _build && cd _build && cmake -GNinja -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+                   ls -laR /opt/homebrew && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl@3 -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
       - run:
           name: Run tests
           command: |

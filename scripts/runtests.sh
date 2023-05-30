@@ -68,10 +68,10 @@ if [ ! -z "$OPENSSL_INSTALL" ]; then
     if [ -f $OPENSSL_INSTALL/ssl/openssl.cnf ]; then
         export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
     fi
-else
-    if [ -z "$OPENSSL_CONF" ]; then
-        export OPENSSL_CONF=$(pwd)/scripts/openssl-ca.cnf
-    fi
+fi
+
+if [ -z "$OPENSSL_CONF" ]; then
+    export OPENSSL_CONF=$(pwd)/scripts/openssl-ca.cnf
 fi
 
 if [ -z "$OPENSSL_APP" ]; then

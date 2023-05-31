@@ -48,7 +48,7 @@ jobs:
             - run:
                 name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
                 command: |
-                   pwd && ls && mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
+                   mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
       - when:
           condition:
               equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
@@ -56,7 +56,7 @@ jobs:
             - run:
                 name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
                 command: |
-                   pwd && ls && mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
+                   mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
       - run:
           name: Run tests
           command: |
@@ -131,7 +131,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-             echo "OPENSSL_INSTALL=$OPENSSL_INSTALL" && ls -l _build/lib && ./scripts/runtests.sh -V || otool  -L _build/lib/oqsprovider.dylib
+             ./scripts/runtests.sh -V
       - run:
           name: Build OQS-OpenSSL provider with QSC encoding support
           command: |
@@ -139,7 +139,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-             ./scripts/runtests.sh -V || ls -l .local/lib
+             ./scripts/runtests.sh -V
       - run:
           name: Run tests (with encodings)
           command: |

@@ -60,10 +60,12 @@ if [ ! -z "$OPENSSL_INSTALL" ]; then
     if [ -f $OPENSSL_INSTALL/bin/openssl ]; then
         export OPENSSL_APP=$OPENSSL_INSTALL/bin/openssl
     fi
-    if [ -d $OPENSSL_INSTALL/lib64 ]; then
-        export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib64
-    elif [ -d $OPENSSL_INSTALL/lib ]; then
-        export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib
+    if [ -z "$LD_LIBRARY_PATH" ]; then
+        if [ -d $OPENSSL_INSTALL/lib64 ]; then
+            export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib64
+        elif [ -d $OPENSSL_INSTALL/lib ]; then
+            export LD_LIBRARY_PATH=$OPENSSL_INSTALL/lib
+        fi
     fi
     if [ -f $OPENSSL_INSTALL/ssl/openssl.cnf ]; then
         export OPENSSL_CONF=$OPENSSL_INSTALL/ssl/openssl.cnf
@@ -87,7 +89,13 @@ if [ -z "$OPENSSL_MODULES" ]; then
 fi
 
 if [ -z "$LD_LIBRARY_PATH" ]; then
-    export LD_LIBRARY_PATH=$(pwd)/.local/lib64
+    if [ -d $(pwd)/.local/lib64 ]; then
+        export LD_LIBRARY_PATH=$(pwd)/.local/lib64
+    else
+        if [ -d $(pwd)/.local/lib ]; then
+            export LD_LIBRARY_PATH=$(pwd)/.local/lib
+        fi
+    fi
 fi
 
 if [ ! -z "$OQS_SKIP_TESTS" ]; then
@@ -122,7 +130,16 @@ fi
 export LOCALTESTONLY="Yes"
 
 echo "Version information:"
-$OPENSSL_APP version && $OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
+$OPENSSL_APP version
+
+# Disable testing for version 3.0.1: Buggy as hell:
+$OPENSSL_APP version | grep "OpenSSL 3.0.1"
+if [ $? -eq 0 ]; then
+   echo "Skipping testing of buggy OpenSSL 3.0.1"
+   exit 0
+fi
+
+$OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
 if [ $? -ne 0 ]; then
    echo "Baseline openssl invocation failed. Exiting test."
    exit 1

@@ -26,13 +26,7 @@ if [ -z "$OPENSSL_APP" ]; then
 fi
 
 if [ -z "$OPENSSL_MODULES" ]; then
-    echo "OPENSSL_MODULES env var not set. Exiting."
-    exit 1
-fi
-
-if [ -z "$LD_LIBRARY_PATH" ]; then
-    echo "LD_LIBRARY_PATH env var not set. Exiting."
-    exit 1
+    echo "Warning: OPENSSL_MODULES env var not set."
 fi
 
 # Set OSX DYLD_LIBRARY_PATH if not already externally set

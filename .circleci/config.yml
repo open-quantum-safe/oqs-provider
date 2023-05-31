@@ -64,8 +64,13 @@ jobs:
       - run:
           name: Run tests (with encodings, positive and negative test)
           command: |
-            ./scripts/runtests_encodings.sh -V
-            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            ./scripts/runtests_encodings.sh -V > log 
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+               cat log
+               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            else 
+               cat log
+            fi
       - run:
           name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >>) with NOPUBKEY_IN_PRIVKEY and QSC encoding support
           command: |
@@ -78,7 +83,12 @@ jobs:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings, positive and negative test)
           command: |
             ./scripts/runtests_encodings.sh -V
-            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+               cat log
+               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            else 
+               cat log
+            fi
 
   macOS:
     description: A template for running tests on macOS
@@ -143,8 +153,13 @@ jobs:
       - run:
           name: Run tests (with encodings)
           command: |
-            ./scripts/runtests_encodings.sh -V
-            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            ./scripts/runtests_encodings.sh -V > log 
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+               cat log
+               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            else 
+               cat log
+            fi
 
 workflows:
   version: 2.1

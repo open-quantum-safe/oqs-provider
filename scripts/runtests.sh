@@ -133,7 +133,7 @@ echo "Version information:"
 $OPENSSL_APP version
 
 # Disable testing for version 3.0.1: Buggy as hell:
-$OPENSSL_APP version | grep "OpenSSL 3.0.1"
+$OPENSSL_APP version | grep "OpenSSL 3.0.1" > /dev/null
 if [ $? -eq 0 ]; then
    echo "Skipping testing of buggy OpenSSL 3.0.1"
    exit 0

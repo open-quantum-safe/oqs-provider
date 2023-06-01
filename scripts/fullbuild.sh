@@ -12,8 +12,10 @@
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
    SHLIBEXT="dylib"
+   STATLIBEXT="dylib"
 else
    SHLIBEXT="so"
+   STATLIBEXT="a"
 fi
 
 if [ $# -gt 0 ]; then
@@ -59,8 +61,8 @@ fi
 
 # Check whether liboqs is built or has been configured:
 if [ -z $liboqs_DIR ]; then
- if [ ! -f ".local/lib/liboqs.a" ]; then
-  echo "need to re-build liboqs..."
+ if [ ! -f ".local/lib/liboqs.$STATLIBEXT" ]; then
+  echo "need to re-build static liboqs..."
   if [ ! -d liboqs ]; then
     echo "cloning liboqs $LIBOQS_BRANCH..."
     git clone --depth 1 --branch $LIBOQS_BRANCH https://github.com/open-quantum-safe/liboqs.git

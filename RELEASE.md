@@ -1,5 +1,5 @@
-oqs-provider 0.5.0-dev
-======================
+oqs-provider 0.5.0
+==================
 
 About
 -----
@@ -17,7 +17,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 Release notes
 =============
 
-This is the development pre-release version 0.5.0 of oqs-provider.
+This is version 0.5.0 of oqs-provider.
 
 Security considerations
 -----------------------
@@ -33,11 +33,20 @@ oqs-provider now also enables use of QSC algorithms during TLS1.3 handshake. The
 
 ### Algorithm updates
 
-None.
+All algorithms no longer supported in the [NIST PQC competition](https://csrc.nist.gov/projects/post-quantum-cryptography) have been removed. All remaining algorithms with the exception of McEliece have been lifted to their final round 3 variants as documented in [liboqs](https://github.com/open-quantum-safe/liboqs/blob/main/RELEASE.md#release-notes). Most notably, algorithm names for Sphincs+ have been changed to the naming chosen by its authors.
 
 ### Functional updates
 
 - Enablement of oqs-provider as a (first) dynamically fetchable OpenSSL3 TLS1.3 signature provider.
+- OSX support
+- Full support for CA functionality
+- Algorithms can now be selected by their respective bit strength using the property string "oqsprovider.security_bits"
+- Documentation of (O)IDs used by the different PQC algorithms used and supported in current and past releases of oqs-openssl and oqs-provider
+- Testing is now completely independent of a source code distribution of OpenSSL being available
+- oqsprovider can be built and installed making use of pre-existing installations of `OpenSSL` and `liboqs`. Details are found in the "scripts" directory's build and test scripts.
+- Automated creation of (Debian) packaging information
+- Graceful handling (by way of functional degradation) of the feature sets contained in different OpenSSL releases; all oqsprovider capabilities are only available when using a version > than OpenSSL3.1.
+- A bug regarding handling of hybrid algorithms has been fixed as well as some memory leaks.
 
 ### Misc updates
 

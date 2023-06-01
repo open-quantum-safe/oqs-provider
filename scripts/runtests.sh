@@ -139,7 +139,7 @@ if [ $? -eq 0 ]; then
    exit 0
 fi
 
-$OPENSSL_APP list -providers -verbose -provider-path _build/lib -provider oqsprovider
+$OPENSSL_APP list -providers -verbose
 if [ $? -ne 0 ]; then
    echo "Baseline openssl invocation failed. Exiting test."
    exit 1

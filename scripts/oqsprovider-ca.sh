@@ -13,13 +13,12 @@ if [ -z "$OPENSSL_APP" ]; then
 fi
 
 if [ -z "$OPENSSL_MODULES" ]; then
-    echo "OPENSSL_MODULES env var not set. Exiting."
-    exit 1
+    echo "Warning: OPENSSL_MODULES env var not set."
 fi
 
-if [ -z "$LD_LIBRARY_PATH" ]; then
-    echo "LD_LIBRARY_PATH env var not set. Exiting."
-    exit 1
+# Set OSX DYLD_LIBRARY_PATH if not already externally set
+if [ -z "$DYLD_LIBRARY_PATH" ]; then
+    export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
 fi
 
 echo "oqsprovider-ca.sh commencing..."

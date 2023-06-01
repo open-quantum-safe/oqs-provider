@@ -4,35 +4,59 @@ version: 2.1
 # https://github.com/CircleCI-Public/circleci-cli/issues/281#issuecomment-472808051
 localCheckout: &localCheckout
   run: |-
+    git config --global --add safe.directory /tmp/_circleci_local_build_repo
     PROJECT_PATH=$(cd ${CIRCLE_WORKING_DIRECTORY}; pwd)
     mkdir -p ${PROJECT_PATH}
     cd /tmp/_circleci_local_build_repo
     git ls-files -z | xargs -0 -s 2090860 tar -c | tar -x -C ${PROJECT_PATH}
     cp -a /tmp/_circleci_local_build_repo/.git ${PROJECT_PATH}
 jobs:
-  ubuntu_focal:
+  ubuntu:
     description: A template for running OQS-OpenSSL tests on x64 Ubuntu Docker VMs
+    parameters:
+      IMAGE:
+        description: "docker image to use."
+        type: string
+      CMAKE_ARGS:
+        description: "Arguments to pass to CMake."
+        type: string
+      OPENSSL_PREINSTALL:
+        description: "OpenSSL version preinstalled."
+        type: string
     docker:
-      - image: openquantumsafe/ci-ubuntu-focal-x86_64:latest
+      - image: << parameters.IMAGE >>
     steps:
       - setup_remote_docker
       - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
       - run:
-          name: Clone and build liboqs (only STD algs)
+          name: Clone and build liboqs (<< parameters.CMAKE_ARGS >>)
           command: |
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
              cd liboqs && mkdir _build && cd _build &&
-             cmake -GNinja -DOQS_ALGS_ENABLED=STD -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
-             cd ..
-      - run:
-          name: Clone and build OpenSSL(3) 
-          command: |
-             git clone --branch master git://git.openssl.org/openssl.git openssl &&
-             cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
-      - run:
-          name: Build OQS-OpenSSL provider (only STD algs with QSC encoding support)
-          command: |
-             mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+             cmake -GNinja << parameters.CMAKE_ARGS >> -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
+             cd .. && cd .. && pwd
+      - when:
+          condition:
+            not:
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
+          steps:
+            - run:
+                name: Clone and build OpenSSL(3) 
+                command: |
+                   git clone --branch master git://git.openssl.org/openssl.git openssl &&
+                   cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
+            - run:
+                name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
+                command: |
+                   mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
+      - when:
+          condition:
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
+          steps:
+            - run:
+                name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
+                command: |
+                   mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
       - run:
           name: Run tests
           command: |
@@ -40,12 +64,17 @@ jobs:
       - run:
           name: Run tests (with encodings, positive and negative test)
           command: |
-            ./scripts/runtests_encodings.sh -V
-            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            ./scripts/runtests_encodings.sh -V > log 
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+               cat log
+               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            else 
+               cat log
+            fi
       - run:
-          name: Build OQS-OpenSSL provider (only STD algs) with NOPUBKEY_IN_PRIVKEY and QSC encoding support
+          name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >>) with NOPUBKEY_IN_PRIVKEY and QSC encoding support
           command: |
-             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DNOPUBKEY_IN_PRIVKEY=ON -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DNOPUBKEY_IN_PRIVKEY=ON -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
       - run:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
           command: |
@@ -54,7 +83,12 @@ jobs:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings, positive and negative test)
           command: |
             ./scripts/runtests_encodings.sh -V
-            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+               cat log
+               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            else 
+               cat log
+            fi
 
   macOS:
     description: A template for running tests on macOS
@@ -62,13 +96,16 @@ jobs:
       CMAKE_ARGS:
         description: "Arguments to pass to CMake."
         type: string
+      OPENSSL_PREINSTALL:
+        description: "OpenSSL version preinstalled."
+        type: string
     macos:
       xcode: "13.2.1"
     steps:
       - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
       - run:
           name: Install dependencies
-          command: env HOMEBREW_NO_AUTO_UPDATE=1 brew install cmake ninja
+          command: env HOMEBREW_NO_AUTO_UPDATE=1 brew install cmake ninja << parameters.OPENSSL_PREINSTALL >>
       - run:
           name: Get system information
           command: sysctl -a | grep machdep.cpu && cc --version
@@ -76,18 +113,31 @@ jobs:
           name: Clone and build liboqs
           command: |
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
-             cd liboqs && mkdir _build && cd _build &&
-             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local << parameters.CMAKE_ARGS >> .. && ninja install &&
-             cd ..
-      - run:
-          name: Clone and build OpenSSL(3) master
-          command: |
-             git clone --branch master git://git.openssl.org/openssl.git openssl &&
-             cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
-      - run:
-          name: Build OQS-OpenSSL provider
-          command: |
-             mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+             export LIBOQS_INSTALLPATH=$(pwd)/.local && cd liboqs && mkdir _build && cd _build &&
+             cmake -GNinja -DCMAKE_INSTALL_PREFIX=$LIBOQS_INSTALLPATH << parameters.CMAKE_ARGS >> .. && ninja install &&
+             cd .. && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$LIBOQS_INSTALLPATH/lib" >> "$BASH_ENV" 
+      - when:
+          condition:
+            not:
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
+          steps:
+            - run:
+                name: Clone and build OpenSSL(3) master
+                command: |
+                   git clone --branch master git://git.openssl.org/openssl.git openssl &&
+                   cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
+            - run:
+               name: Build OQS-OpenSSL provider
+               command: |
+                  export OPENSSL_INSTALL=$(pwd)/.local && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV"
+      - when:
+          condition:
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
+          steps:
+            - run:
+                name: Build OQS-OpenSSL provider
+                command: |
+                   export OPENSSL_INSTALL=`brew config | grep HOMEBREW_PREFIX | sed -e "s/HOMEBREW_PREFIX: //g"`/opt/openssl@3 && mkdir _build && cd _build && liboqs_DIR=`pwd`/../.local cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV" && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$OPENSSL_INSTALL/lib" >> "$BASH_ENV"
       - run:
           name: Run tests
           command: |
@@ -95,7 +145,7 @@ jobs:
       - run:
           name: Build OQS-OpenSSL provider with QSC encoding support
           command: |
-             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
       - run:
           name: Run tests
           command: |
@@ -103,20 +153,36 @@ jobs:
       - run:
           name: Run tests (with encodings)
           command: |
-            ./scripts/runtests_encodings.sh -V
-            ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            ./scripts/runtests_encodings.sh -V > log 
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+               cat log
+               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+            else 
+               cat log
+            fi
 
 workflows:
   version: 2.1
   build:
     jobs:
-      - ubuntu_focal:
+      - ubuntu:
           name: ubuntu-focal
           context: openquantumsafe
+          IMAGE: openquantumsafe/ci-ubuntu-focal-x86_64:latest
+          CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_USE_OPENSSL=OFF
+          OPENSSL_PREINSTALL: openssl@1
+      - ubuntu:
+          name: ubuntu-jammy
+          context: openquantumsafe
+          IMAGE: openquantumsafe/ci-ubuntu-jammy:latest
+          CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_ALGS_ENABLED=STD
+          OPENSSL_PREINSTALL: openssl@3
       - macOS:
           name: macOS-noopenssl
           CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_USE_OPENSSL=OFF
+          OPENSSL_PREINSTALL: openssl
       - macOS:
           name: macOS-shared
           CMAKE_ARGS: -DBUILD_SHARED_LIBS=ON -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
+          OPENSSL_PREINSTALL: openssl@3
 

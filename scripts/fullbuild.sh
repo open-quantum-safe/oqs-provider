@@ -96,6 +96,7 @@ if [ -z $liboqs_DIR ]; then
       exit -1
   fi
  fi
+ export liboqs_DIR=$(pwd)/.local
 fi
 
 # Check whether provider is built:
@@ -105,9 +106,9 @@ if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
    BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       liboqs_DIR=$(pwd)/.local cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -S . -B _build && cmake --build _build
    else
-       liboqs_DIR=$(pwd)/.local cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE -S . -B _build && cmake --build _build
    fi
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."

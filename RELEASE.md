@@ -55,6 +55,8 @@ All algorithms no longer supported in the [NIST PQC competition](https://csrc.ni
 
 ---
 
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.4.0...0.5.0.
+
 Previous Release Notes
 ======================
 
@@ -89,4 +91,5 @@ oqs-provider has been integrated as an external test component for [OpenSSL3 tes
 ---
 
 **Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.3.0...0.4.0.
+
 

@@ -42,6 +42,9 @@ interop() {
 	else
             localalgtest $1
         fi
+    else
+        echo "Algorithm $1 not enabled. Exit testing."
+        exit 1
     fi
 
     if [ $? -ne 0 ]; then
@@ -145,15 +148,32 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
+# Ensure "oqsprovider" is registered:
+$OPENSSL_APP list -providers -verbose | grep oqsprovider > /dev/null
+if [ $? -ne 0 ]; then
+   echo "oqsprovider not registered. Exit test."
+   exit 1
+fi
+
 # Run interop-tests:
 echo "Cert gen/verify, CMS sign/verify, CA tests for all enabled OQS signature algorithms commencing: "
-for alg in `$OPENSSL_APP list -signature-algorithms | grep oqsprovider | sed -e "s/ @ oqsprovider//g" | sed -e "s/^  //g"`
+for alg in `$OPENSSL_APP list -signature-algorithms | grep oqsprovider | sed -e "s/ @ .*//g" | sed -e "s/^  //g"`
 do 
    if [ "$1" = "-V" ]; then
       echo "Testing $alg"
    fi
    interop $alg
+   certsgenerated=1
 done
+
+if [ -z $certsgenerated ]; then
+   echo "No OQS signature algorithms found in provider 'oqsprovider'. No certs generated. Exiting."
+   exit 1
+else
+   if [ "$1" = "-V" ]; then
+      echo "Certificates successfully generated in $(pwd)/tmp"
+   fi
+fi
 
 echo
 

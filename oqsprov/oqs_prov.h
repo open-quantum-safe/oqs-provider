@@ -9,9 +9,6 @@
 
 /* Internal OQS functions for other submodules: not for application use */
 
-/* Set this define to create support for x25519_kyber768 as done by cloudflare */
-// #define CLOUDFLARE
-
 #ifndef OQSX_H
 # define OQSX_H
 
@@ -68,21 +65,6 @@
     if ((condition)) {                        \
         goto gt;                              \
     }
-
-#define ECP_NAME(secbits, oqsname) \
-    (secbits == 128 ? "p256_" #oqsname "" : \
-     secbits == 192 ? "p384_" #oqsname "" : \
-                      "p521_" #oqsname "")
-
-#ifdef CLOUDFLARE
-#define ECX_NAME(secbits, oqsname) \
-    (((secbits == 128) || (!strcmp("kyber768", ""#oqsname""))) ? "x25519_" #oqsname "" : \
-                        "x448_" #oqsname "")
-#else
-#define ECX_NAME(secbits, oqsname) \
-    ((secbits == 128) ? "x25519_" #oqsname "" : \
-                        "x448_" #oqsname "")
-#endif
 
 typedef struct prov_oqs_ctx_st {
     const OSSL_CORE_HANDLE *handle;
@@ -435,52 +417,62 @@ extern const OSSL_DISPATCH oqs_sphincssha2192fsimple_keymgmt_functions[];extern 
 extern const OSSL_DISPATCH oqs_sphincsshake128fsimple_keymgmt_functions[];extern const OSSL_DISPATCH oqs_p256_sphincsshake128fsimple_keymgmt_functions[];extern const OSSL_DISPATCH oqs_rsa3072_sphincsshake128fsimple_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_frodo640aes_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p256_frodo640aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x25519_frodo640aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo640shake_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p256_frodo640shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x25519_frodo640shake_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo976aes_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p384_frodo976aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x448_frodo976aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo976shake_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p384_frodo976shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x448_frodo976shake_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo1344aes_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p521_frodo1344aes_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_frodo1344shake_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p521_frodo1344shake_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber512_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p256_kyber512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x25519_kyber512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber768_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p384_kyber768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x448_kyber768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x25519_kyber768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_p256_kyber768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_kyber1024_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p521_kyber1024_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_bikel1_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p256_bikel1_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x25519_bikel1_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_bikel3_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p384_bikel3_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x448_bikel3_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_bikel5_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p521_bikel5_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_hqc128_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p256_hqc128_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x25519_hqc128_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_hqc192_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_ecp_p384_hqc192_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_x448_hqc192_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_hqc256_keymgmt_functions[];
 
-extern const OSSL_DISPATCH oqs_ecp_frodo640aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo640shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo976aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo976shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo1344aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_kyber1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bikel1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bikel3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_bikel5_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_hqc128_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_hqc192_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecp_hqc256_keymgmt_functions[];
-
-extern const OSSL_DISPATCH oqs_ecx_frodo640aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo640shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo976aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo976shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo1344aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_kyber1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bikel1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bikel3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_bikel5_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_hqc128_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_hqc192_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_hqc256_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_p521_hqc256_keymgmt_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
 
 /* BIO function declarations */

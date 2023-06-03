@@ -1,23 +1,11 @@
-{% macro ecx_name(bits) -%}
-{%- if bits == 128 -%} X25519 {%- endif -%}
-{%- if bits == 192 -%} X448 {%- endif -%}
-{%- if bits == 256 -%} {%- print("Impossible bit setting for ECX hybrid") -%} {%- endif -%}
-{%- endmacro -%}
-
-{% macro ecp_name(bits) -%}
-{%- if bits == 128 -%} P256 {%- endif -%}
-{%- if bits == 192 -%} P384 {%- endif -%}
-{%- if bits == 256 -%} P521 {%- endif -%}
-{%- endmacro %}
-
 {% set cnt = namespace(val=-1) %}
 {%- for kem in config['kems'] %}
    {%- set cnt.val = cnt.val + 1 %}
    if (getenv("OQS_CODEPOINT_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CODEPOINT_{{ kem['name_group']|upper }}"));
-   if (getenv("OQS_CODEPOINT_{{ ecp_name(kem['bit_security']) }}_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id_ecp_hyb = atoi(getenv("OQS_CODEPOINT_{{ ecp_name(kem['bit_security']) }}_{{ kem['name_group']|upper }}"));
- {%- if 'nid_ecx_hybrid' in kem %}
-   if (getenv("OQS_CODEPOINT_{{ ecx_name(kem['bit_security']) }}_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id_ecx_hyb = atoi(getenv("OQS_CODEPOINT_{{ ecx_name(kem['bit_security']) }}_{{ kem['name_group']|upper }}"));
- {%- endif %}
+{%- for hybrid in kem['hybrids'] %}
+   {%- set cnt.val = cnt.val + 1 %}
+   if (getenv("OQS_CODEPOINT_{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CODEPOINT_{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}"));
+{%- endfor %}
 {%- endfor %}
 {% set cnt = namespace(val=-1) %}
 {%- for sig in config['sigs'] %}

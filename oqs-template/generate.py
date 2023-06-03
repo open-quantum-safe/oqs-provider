@@ -97,6 +97,21 @@ def complete_config(config):
           print("Cannot find security level for {:s} {:s}".format(kem['family'], kem['name_group']))
           exit(1)
       kem['bit_security'] = bits_level
+
+      # now add hybrid_nid to hybrid_groups: XXX
+      phyb = {}
+      if (bits_level == 128):
+          phyb['hybrid_group']='p256'
+      elif (bits_level == 192):
+          phyb['hybrid_group']='p384'
+      elif (bits_level == 256):
+          phyb['hybrid_group']='p521'
+      else:
+          print("Warning: Unknown bit level for %s. Cannot assign hybrid." % (kem['group_name']))
+          exit(1)
+      phyb['nid']=kem['nid_hybrid']
+      kem['hybrids'].insert(0, phyb)
+
    for famsig in config['sigs']:
       for sig in famsig['variants']:
          bits_level = nist_to_bits(get_sig_nistlevel(famsig, sig))
@@ -176,8 +191,10 @@ def load_config(include_disabled_sigs=False):
         sig['variants']=newvars
 
     for kem in config['kems']:
+        kem['hybrids'] = []
         try:
             for extra_nid_current in kem['extra_nids']['current']:
+                kem['hybrids'].append(extra_nid_current)
                 if 'hybrid_group' in extra_nid_current and extra_nid_current['hybrid_group'] in ["x25519", "x448"]:
                     extra_hyb_nid = extra_nid_current['nid']
                     if 'nid_ecx_hybrid' in kem:
@@ -185,12 +202,15 @@ def load_config(include_disabled_sigs=False):
                               kem['name_group'], ":", extra_hyb_nid, "in generate.yml,",
                               kem['nid_ecx_hybrid'], "in generate_extras.yml, using generate.yml entry.")
                     kem['nid_ecx_hybrid'] = extra_hyb_nid
-                    break
-        except:
+        except KeyError as ke:
             pass
     return config
 
-config = load_config()
+# extend config with "hybrid_groups" array:
+config = load_config() # extend config with "hybrid_groups" array
+
+# complete config with "bit_security" and "hybrid_group from 
+# nid_hybrid information
 config = complete_config(config)
 
 

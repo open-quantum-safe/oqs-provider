@@ -8,11 +8,12 @@ extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}
 {%- endfor %}
 {% for kem in config['kems'] %}
 extern const OSSL_DISPATCH oqs_{{ kem['name_group'] }}_keymgmt_functions[];
+{% for hybrid in kem['hybrids'] %}
+{% if hybrid['hybrid_group'].startswith('p') -%}
+extern const OSSL_DISPATCH oqs_ecp_{{ hybrid['hybrid_group']}}_{{ kem['name_group'] }}_keymgmt_functions[];
+{%- else -%}
+extern const OSSL_DISPATCH oqs_ecx_{{ hybrid['hybrid_group']}}_{{ kem['name_group'] }}_keymgmt_functions[];
+{%- endif %}
 {%- endfor %}
-{% for kem in config['kems'] %}
-extern const OSSL_DISPATCH oqs_ecp_{{ kem['name_group'] }}_keymgmt_functions[];
-{%- endfor %}
-{% for kem in config['kems'] %}
-extern const OSSL_DISPATCH oqs_ecx_{{ kem['name_group'] }}_keymgmt_functions[];
 {%- endfor %}
 

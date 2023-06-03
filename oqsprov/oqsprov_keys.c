@@ -656,11 +656,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         ON_ERR_GOTO(!evp_ctx, err);
 
         ret2 = (init_kex_fun[primitive - KEY_TYPE_ECP_HYB_KEM])
-#ifdef CLOUDFLARE
-                (((!strcmp("Kyber768", oqs_name)&&(primitive==KEY_TYPE_ECX_HYB_KEM)))?128:bit_security, evp_ctx);
-#else
                 (bit_security, evp_ctx);
-#endif
         ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->keyParam || !evp_ctx->ctx, err);
 
         ret->numkeys = 2;

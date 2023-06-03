@@ -805,16 +805,18 @@ static void *rsa3072_sphincsshake128fsimple_gen_init(void *provctx, int selectio
         { OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS, (void (*)(void))oqsx_gen_settable_params }, \
         { OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load }, \
         { 0, NULL } \
-    }; \
+    };
+
+#define MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(tokalg, tokoqsalg, bit_security) \
                                                       \
     static void *ecp_##tokalg##_new_key(void *provctx) \
     { \
-        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, ECP_NAME(bit_security, tokalg), KEY_TYPE_ECP_HYB_KEM, NULL, bit_security, -1); \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECP_HYB_KEM, NULL, bit_security, -1); \
     } \
                                                       \
     static void *ecp_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, tokoqsalg, ECP_NAME(bit_security, tokalg), KEY_TYPE_ECP_HYB_KEM, bit_security, -1); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, "" #tokalg "", KEY_TYPE_ECP_HYB_KEM, bit_security, -1); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecp_##tokalg##_keymgmt_functions[] = { \
@@ -837,16 +839,17 @@ static void *rsa3072_sphincsshake128fsimple_gen_init(void *provctx, int selectio
         { OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS, (void (*)(void))oqsx_gen_settable_params }, \
         { OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load }, \
         { 0, NULL } \
-    }; \
-                                                      \
+    };
+
+#define MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(tokalg, tokoqsalg, bit_security) \
     static void *ecx_##tokalg##_new_key(void *provctx) \
     { \
-        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, ECX_NAME(bit_security, tokalg), KEY_TYPE_ECX_HYB_KEM, NULL, bit_security, -1); \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg, "" #tokalg "", KEY_TYPE_ECX_HYB_KEM, NULL, bit_security, -1); \
     } \
                                                       \
     static void *ecx_##tokalg##_gen_init(void *provctx, int selection) \
     { \
-        return oqsx_gen_init(provctx, selection, tokoqsalg, ECX_NAME(bit_security, tokalg), KEY_TYPE_ECX_HYB_KEM, bit_security, -1); \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, "" #tokalg "", KEY_TYPE_ECX_HYB_KEM, bit_security, -1); \
     } \
                                                       \
     const OSSL_DISPATCH oqs_ecx_##tokalg##_keymgmt_functions[] = { \
@@ -897,18 +900,71 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(p256_sphincsshake128fsimple)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_sphincsshake128fsimple)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640shake, OQS_KEM_alg_frodokem_640_shake, 128)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_frodo640shake, OQS_KEM_alg_frodokem_640_shake, 128)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_frodo640shake, OQS_KEM_alg_frodokem_640_shake, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976aes, OQS_KEM_alg_frodokem_976_aes, 192)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_frodo976aes, OQS_KEM_alg_frodokem_976_aes, 192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_frodo976aes, OQS_KEM_alg_frodokem_976_aes, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976shake, OQS_KEM_alg_frodokem_976_shake, 192)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_frodo976shake, OQS_KEM_alg_frodokem_976_shake, 192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_frodo976shake, OQS_KEM_alg_frodokem_976_shake, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344aes, OQS_KEM_alg_frodokem_1344_aes, 256)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_frodo1344aes, OQS_KEM_alg_frodokem_1344_aes, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344shake, OQS_KEM_alg_frodokem_1344_shake, 256)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_frodo1344shake, OQS_KEM_alg_frodokem_1344_shake, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(kyber512, OQS_KEM_alg_kyber_512, 128)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_kyber512, OQS_KEM_alg_kyber_512, 128)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_kyber512, OQS_KEM_alg_kyber_512, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(kyber768, OQS_KEM_alg_kyber_768, 192)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_kyber768, OQS_KEM_alg_kyber_768, 192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_kyber768, OQS_KEM_alg_kyber_768, 192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_kyber768, OQS_KEM_alg_kyber_768, 192)
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_kyber768, OQS_KEM_alg_kyber_768, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(kyber1024, OQS_KEM_alg_kyber_1024, 256)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_kyber1024, OQS_KEM_alg_kyber_1024, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(bikel1, OQS_KEM_alg_bike_l1, 128)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_bikel1, OQS_KEM_alg_bike_l1, 128)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_bikel1, OQS_KEM_alg_bike_l1, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(bikel3, OQS_KEM_alg_bike_l3, 192)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_bikel3, OQS_KEM_alg_bike_l3, 192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_bikel3, OQS_KEM_alg_bike_l3, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(bikel5, OQS_KEM_alg_bike_l5, 256)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_bikel5, OQS_KEM_alg_bike_l5, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(hqc128, OQS_KEM_alg_hqc_128, 128)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_hqc128, OQS_KEM_alg_hqc_128, 128)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_hqc128, OQS_KEM_alg_hqc_128, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(hqc192, OQS_KEM_alg_hqc_192, 192)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_hqc192, OQS_KEM_alg_hqc_192, 192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_hqc192, OQS_KEM_alg_hqc_192, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(hqc256, OQS_KEM_alg_hqc_256, 256)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_hqc256, OQS_KEM_alg_hqc_256, 256)
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END

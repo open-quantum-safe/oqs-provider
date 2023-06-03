@@ -9,7 +9,8 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 
 # Code points / algorithm IDs
 
-<!--- OQS_TEMPLATE_FRAGMENT_IDS_START -->|Algorithm name | default ID | enabled | environment variable |
+<!--- OQS_TEMPLATE_FRAGMENT_IDS_START -->
+|Algorithm name | default ID | enabled | environment variable |
 |---------------|:----------:|:-------:|----------------------|
 | frodo640aes | 0x0200 | Yes | OQS_CODEPOINT_FRODO640AES |
 | p256_frodo640aes | 0x2F00 | Yes | OQS_CODEPOINT_P256_FRODO640AES |

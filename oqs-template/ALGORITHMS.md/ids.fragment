@@ -1,3 +1,4 @@
+
 |Algorithm name | default ID | enabled | environment variable |
 |---------------|:----------:|:-------:|----------------------|
 {%- for kem in config['kems']  %}

@@ -21,7 +21,7 @@ Status
 Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
 OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
-signatures including CMS functionality are available via the OpenSSL
+signatures including CMS and CMP functionality are available via the OpenSSL
 EVP interface. Key persistence is provided via the encode/decode
 mechanism and X.509 data structures. Also available is support for 
 TLS1.3 signature functionality via the [OpenSSL3 fetchable signature
@@ -56,6 +56,12 @@ In addition, algorithms not denoted with "\*" above are not enabled for
 TLS operations. This designation can be changed by modifying the
 "enabled" flags in the main [algorithm configuration file](oqs-template/generate.yml)
 and re-running the generator script `python3 oqs-template/generate.py`.
+
+It is possible to select only algorithms of a specific bit strength by using
+the openssl property selection mechanism on the key "oqsprovider.security_bits",
+e.g., as such: `openssl list -kem-algorithms -propquery oqsprovider.security_bits=256`.
+The bit strength of hybrid algorithms is always defined by the bit strength
+of the PQ algorithm.
 
 In order to enable parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic

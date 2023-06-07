@@ -61,7 +61,7 @@ It is possible to select only algorithms of a specific bit strength by using
 the openssl property selection mechanism on the key "oqsprovider.security_bits",
 e.g., as such: `openssl list -kem-algorithms -propquery oqsprovider.security_bits=256`.
 The bit strength of hybrid algorithms is always defined by the bit strength
-of the PQ algorithm.
+of the classic algorithm.
 
 In order to enable parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic

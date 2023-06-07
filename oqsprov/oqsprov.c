@@ -269,8 +269,8 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMBASEALG(kyber768, 192)
     KEMHYBALG(p384_kyber768, 192)
     KEMHYBALG(x448_kyber768, 192)
-    KEMHYBALG(x25519_kyber768, 192)
-    KEMHYBALG(p256_kyber768, 192)
+    KEMHYBALG(x25519_kyber768, 128)
+    KEMHYBALG(p256_kyber768, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_1024
     KEMBASEALG(kyber1024, 256)
@@ -397,8 +397,8 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 
     KEMKMHYBALG(p384_kyber768, 192, ecp)
     KEMKMHYBALG(x448_kyber768, 192, ecx)
-    KEMKMHYBALG(x25519_kyber768, 192, ecx)
-    KEMKMHYBALG(p256_kyber768, 192, ecp)
+    KEMKMHYBALG(x25519_kyber768, 128, ecx)
+    KEMKMHYBALG(p256_kyber768, 128, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_1024
     KEMKMALG(kyber1024, 256)

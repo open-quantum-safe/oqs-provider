@@ -98,7 +98,7 @@ def complete_config(config):
           exit(1)
       kem['bit_security'] = bits_level
 
-      # now add hybrid_nid to hybrid_groups: XXX
+      # now add hybrid_nid to hybrid_groups
       phyb = {}
       if (bits_level == 128):
           phyb['hybrid_group']='p256'
@@ -109,6 +109,7 @@ def complete_config(config):
       else:
           print("Warning: Unknown bit level for %s. Cannot assign hybrid." % (kem['group_name']))
           exit(1)
+      phyb['bit_security']=bits_level
       phyb['nid']=kem['nid_hybrid']
       kem['hybrids'].insert(0, phyb)
 
@@ -194,7 +195,14 @@ def load_config(include_disabled_sigs=False):
         kem['hybrids'] = []
         try:
             for extra_nid_current in kem['extra_nids']['current']:
-                kem['hybrids'].append(extra_nid_current)
+                extra_hybrid = extra_nid_current
+                if extra_nid_current['hybrid_group'] == "x25519" or extra_nid_current['hybrid_group'] == "p256":
+                   extra_hybrid['bit_security']=128
+                if extra_nid_current['hybrid_group'] == "x448" or extra_nid_current['hybrid_group'] == "p384":
+                   extra_hybrid['bit_security']=192
+                if extra_nid_current['hybrid_group'] == "p521":
+                   extra_hybrid['bit_security']=256
+                kem['hybrids'].append(extra_hybrid)
                 if 'hybrid_group' in extra_nid_current and extra_nid_current['hybrid_group'] in ["x25519", "x448"]:
                     extra_hyb_nid = extra_nid_current['nid']
                     if 'nid_ecx_hybrid' in kem:

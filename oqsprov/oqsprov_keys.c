@@ -487,12 +487,16 @@ static const OQSX_EVP_INFO nids_sig[] = {
         { EVP_PKEY_RSA, NID_rsaEncryption   , 0, 398, 1770, 0,  384}, // 128 bit
 };
 
+// These two array need to stay synced:
+static const char* OQSX_ECP_NAMES[] = { "p256", "p384", "p521", 0 };
 static const OQSX_EVP_INFO nids_ecp[] = {
         { EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65 , 121, 32, 0}, // 128 bit
         { EVP_PKEY_EC, NID_secp384r1       , 0, 97 , 167, 48, 0}, // 192 bit
         { EVP_PKEY_EC, NID_secp521r1       , 0, 133, 223, 66, 0}  // 256 bit
 };
 
+// These two array need to stay synced:
+static const char* OQSX_ECX_NAMES[] = { "x25519", "x448", 0 };
 static const OQSX_EVP_INFO nids_ecx[] = {
         { EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
         { EVP_PKEY_X448,   0, 1, 56, 56, 56, 0}, // 192 bit
@@ -535,10 +539,15 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx, char* algna
     return ret;
 }
 
-static const int oqshybkem_init_ecp(int bit_security, OQSX_EVP_CTX *evp_ctx)
+static const int oqshybkem_init_ecp(char* tls_name, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
-    int idx = (bit_security - 128) / 64;
+    int idx = 0;
+    while(idx < sizeof(OQSX_ECP_NAMES)) {
+        if (!strncmp(tls_name, OQSX_ECP_NAMES[idx], 4))
+            break;
+        idx++;
+    }
     ON_ERR_GOTO(idx < 0 || idx > 2, err);
 
     evp_ctx->evp_info = &nids_ecp[idx];
@@ -559,10 +568,16 @@ static const int oqshybkem_init_ecp(int bit_security, OQSX_EVP_CTX *evp_ctx)
     return ret;
 }
 
-static const int oqshybkem_init_ecx(int bit_security, OQSX_EVP_CTX *evp_ctx)
+static const int oqshybkem_init_ecx(char* tls_name, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
-    int idx = (bit_security - 128) / 64;
+    int idx = 0;
+
+    while(idx < sizeof(OQSX_ECX_NAMES)) {
+        if (!strncmp(tls_name, OQSX_ECX_NAMES[idx], 4))
+            break;
+        idx++;
+    }
     ON_ERR_GOTO(idx < 0 || idx > 2, err);
 
     evp_ctx->evp_info = &nids_ecx[idx];
@@ -580,7 +595,7 @@ static const int oqshybkem_init_ecx(int bit_security, OQSX_EVP_CTX *evp_ctx)
     return ret;
 }
 
-static const int (*init_kex_fun[])(int, OQSX_EVP_CTX *) = {
+static const int (*init_kex_fun[])(char *, OQSX_EVP_CTX *) = {
         oqshybkem_init_ecp,
         oqshybkem_init_ecx
 };
@@ -656,11 +671,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
         ON_ERR_GOTO(!evp_ctx, err);
 
         ret2 = (init_kex_fun[primitive - KEY_TYPE_ECP_HYB_KEM])
-#ifdef CLOUDFLARE
-                (((!strcmp("Kyber768", oqs_name)&&(primitive==KEY_TYPE_ECX_HYB_KEM)))?128:bit_security, evp_ctx);
-#else
-                (bit_security, evp_ctx);
-#endif
+                (tls_name, evp_ctx);
         ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->keyParam || !evp_ctx->ctx, err);
 
         ret->numkeys = 2;

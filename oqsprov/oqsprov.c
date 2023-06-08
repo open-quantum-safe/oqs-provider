@@ -157,20 +157,17 @@ int oqs_patch_encodings(void) {
 #endif
 
 #define SIGALG(NAMES, SECBITS, FUNC) { NAMES, "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", FUNC }
-#define KEMALG3(NAMES, SECBITS) \
-    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_generic_kem_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_hybrid_kem_functions }, \
-    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_hybrid_kem_functions }
-#define KEMKMALG3(NAMES, SECBITS) \
-    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"" , oqs_##NAMES##_keymgmt_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_ecp_##NAMES##_keymgmt_functions }, \
-    { ECX_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_ecx_##NAMES##_keymgmt_functions }
-#define KEMALG2(NAMES, SECBITS) \
-    { "" #NAMES "", "provider=oqsprovider", oqs_generic_kem_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_hybrid_kem_functions }
-#define KEMKMALG2(NAMES, SECBITS) \
-    { "" #NAMES "", "provider=oqsprovider", oqs_##NAMES##_keymgmt_functions }, \
-    { ECP_NAME(SECBITS, NAMES), "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_ecp_##NAMES##_keymgmt_functions }
+#define KEMBASEALG(NAMES, SECBITS) \
+    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_generic_kem_functions },
+
+#define KEMHYBALG(NAMES, SECBITS) \
+    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"", oqs_hybrid_kem_functions },
+
+#define KEMKMALG(NAMES, SECBITS) \
+    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"" , oqs_##NAMES##_keymgmt_functions },
+
+#define KEMKMHYBALG(NAMES, SECBITS, HYBTYPE) \
+    { "" #NAMES "", "provider=oqsprovider,oqsprovider.security_bits="#SECBITS"" , oqs_##HYBTYPE##_##NAMES##_keymgmt_functions },
 
 /* Functions provided by the core */
 static OSSL_FUNC_core_gettable_params_fn *c_gettable_params = NULL;
@@ -236,49 +233,76 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_START
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes
-    KEMALG3(frodo640aes, 128),
+    KEMBASEALG(frodo640aes, 128)
+    KEMHYBALG(p256_frodo640aes, 128)
+    KEMHYBALG(x25519_frodo640aes, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_640_shake
-    KEMALG3(frodo640shake, 128),
+    KEMBASEALG(frodo640shake, 128)
+    KEMHYBALG(p256_frodo640shake, 128)
+    KEMHYBALG(x25519_frodo640shake, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_976_aes
-    KEMALG3(frodo976aes, 192),
+    KEMBASEALG(frodo976aes, 192)
+    KEMHYBALG(p384_frodo976aes, 192)
+    KEMHYBALG(x448_frodo976aes, 192)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_976_shake
-    KEMALG3(frodo976shake, 192),
+    KEMBASEALG(frodo976shake, 192)
+    KEMHYBALG(p384_frodo976shake, 192)
+    KEMHYBALG(x448_frodo976shake, 192)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_aes
-    KEMALG2(frodo1344aes, 256),
+    KEMBASEALG(frodo1344aes, 256)
+    KEMHYBALG(p521_frodo1344aes, 256)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_shake
-    KEMALG2(frodo1344shake, 256),
+    KEMBASEALG(frodo1344shake, 256)
+    KEMHYBALG(p521_frodo1344shake, 256)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_512
-    KEMALG3(kyber512, 128),
+    KEMBASEALG(kyber512, 128)
+    KEMHYBALG(p256_kyber512, 128)
+    KEMHYBALG(x25519_kyber512, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_768
-    KEMALG3(kyber768, 192),
+    KEMBASEALG(kyber768, 192)
+    KEMHYBALG(p384_kyber768, 192)
+    KEMHYBALG(x448_kyber768, 192)
+    KEMHYBALG(x25519_kyber768, 128)
+    KEMHYBALG(p256_kyber768, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_1024
-    KEMALG2(kyber1024, 256),
+    KEMBASEALG(kyber1024, 256)
+    KEMHYBALG(p521_kyber1024, 256)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
-    KEMALG3(bikel1, 128),
+    KEMBASEALG(bikel1, 128)
+    KEMHYBALG(p256_bikel1, 128)
+    KEMHYBALG(x25519_bikel1, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l3
-    KEMALG3(bikel3, 192),
+    KEMBASEALG(bikel3, 192)
+    KEMHYBALG(p384_bikel3, 192)
+    KEMHYBALG(x448_bikel3, 192)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l5
-    KEMALG2(bikel5, 256),
+    KEMBASEALG(bikel5, 256)
+    KEMHYBALG(p521_bikel5, 256)
 #endif
 #ifdef OQS_ENABLE_KEM_hqc_128
-    KEMALG3(hqc128, 128),
+    KEMBASEALG(hqc128, 128)
+    KEMHYBALG(p256_hqc128, 128)
+    KEMHYBALG(x25519_hqc128, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_hqc_192
-    KEMALG3(hqc192, 192),
+    KEMBASEALG(hqc192, 192)
+    KEMHYBALG(p384_hqc192, 192)
+    KEMHYBALG(x448_hqc192, 192)
 #endif
 #ifdef OQS_ENABLE_KEM_hqc_256
-    KEMALG2(hqc256, 256),
+    KEMBASEALG(hqc256, 256)
+    KEMHYBALG(p521_hqc256, 256)
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     { NULL, NULL, NULL }
@@ -329,49 +353,91 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes
-    KEMKMALG3(frodo640aes, 128),
+    KEMKMALG(frodo640aes, 128)
+
+    KEMKMHYBALG(p256_frodo640aes, 128, ecp)
+    KEMKMHYBALG(x25519_frodo640aes, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_640_shake
-    KEMKMALG3(frodo640shake, 128),
+    KEMKMALG(frodo640shake, 128)
+
+    KEMKMHYBALG(p256_frodo640shake, 128, ecp)
+    KEMKMHYBALG(x25519_frodo640shake, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_976_aes
-    KEMKMALG3(frodo976aes, 192),
+    KEMKMALG(frodo976aes, 192)
+
+    KEMKMHYBALG(p384_frodo976aes, 192, ecp)
+    KEMKMHYBALG(x448_frodo976aes, 192, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_976_shake
-    KEMKMALG3(frodo976shake, 192),
+    KEMKMALG(frodo976shake, 192)
+
+    KEMKMHYBALG(p384_frodo976shake, 192, ecp)
+    KEMKMHYBALG(x448_frodo976shake, 192, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_aes
-    KEMKMALG2(frodo1344aes, 256),
+    KEMKMALG(frodo1344aes, 256)
+
+    KEMKMHYBALG(p521_frodo1344aes, 256, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_shake
-    KEMKMALG2(frodo1344shake, 256),
+    KEMKMALG(frodo1344shake, 256)
+
+    KEMKMHYBALG(p521_frodo1344shake, 256, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_512
-    KEMKMALG3(kyber512, 128),
+    KEMKMALG(kyber512, 128)
+
+    KEMKMHYBALG(p256_kyber512, 128, ecp)
+    KEMKMHYBALG(x25519_kyber512, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_768
-    KEMKMALG3(kyber768, 192),
+    KEMKMALG(kyber768, 192)
+
+    KEMKMHYBALG(p384_kyber768, 192, ecp)
+    KEMKMHYBALG(x448_kyber768, 192, ecx)
+    KEMKMHYBALG(x25519_kyber768, 128, ecx)
+    KEMKMHYBALG(p256_kyber768, 128, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_1024
-    KEMKMALG2(kyber1024, 256),
+    KEMKMALG(kyber1024, 256)
+
+    KEMKMHYBALG(p521_kyber1024, 256, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
-    KEMKMALG3(bikel1, 128),
+    KEMKMALG(bikel1, 128)
+
+    KEMKMHYBALG(p256_bikel1, 128, ecp)
+    KEMKMHYBALG(x25519_bikel1, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l3
-    KEMKMALG3(bikel3, 192),
+    KEMKMALG(bikel3, 192)
+
+    KEMKMHYBALG(p384_bikel3, 192, ecp)
+    KEMKMHYBALG(x448_bikel3, 192, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l5
-    KEMKMALG2(bikel5, 256),
+    KEMKMALG(bikel5, 256)
+
+    KEMKMHYBALG(p521_bikel5, 256, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_hqc_128
-    KEMKMALG3(hqc128, 128),
+    KEMKMALG(hqc128, 128)
+
+    KEMKMHYBALG(p256_hqc128, 128, ecp)
+    KEMKMHYBALG(x25519_hqc128, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_hqc_192
-    KEMKMALG3(hqc192, 192),
+    KEMKMALG(hqc192, 192)
+
+    KEMKMHYBALG(p384_hqc192, 192, ecp)
+    KEMKMHYBALG(x448_hqc192, 192, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_hqc_256
-    KEMKMALG2(hqc256, 256),
+    KEMKMALG(hqc256, 256)
+
+    KEMKMHYBALG(p521_hqc256, 256, ecp)
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
     //ALG("x25519_sikep434", oqs_ecx_sikep434_keymgmt_functions),

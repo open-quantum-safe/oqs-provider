@@ -21,7 +21,7 @@ Status
 Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
 OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
-signatures including CMS functionality are available via the OpenSSL
+signatures including CMS and CMP functionality are available via the OpenSSL
 EVP interface. Key persistence is provided via the encode/decode
 mechanism and X.509 data structures. Also available is support for 
 TLS1.3 signature functionality via the [OpenSSL3 fetchable signature
@@ -33,15 +33,15 @@ Algorithms
 This implementation makes available the following quantum safe algorithms:
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_START -->
-- **BIKE**: `bikel1`, `bikel3`, `bikel5`
-- **CRYSTALS-Kyber**: `kyber512`, `kyber768`, `kyber1024`
-- **FrodoKEM**: `frodo640aes`, `frodo640shake`, `frodo976aes`, `frodo976shake`, `frodo1344aes`, `frodo1344shake`
-- **HQC**: `hqc128`, `hqc192`, `hqc256`†
-- **CRYSTALS-Dilithium**:`dilithium2`\*, `dilithium3`\*, `dilithium5`\*
-- **Falcon**:`falcon512`\*, `falcon1024`\*
+- **BIKE**: `bikel1`, `p256_bikel1`, `x25519_bikel1`, `bikel3`, `p384_bikel3`, `x448_bikel3`, `bikel5`, `p521_bikel5`
+- **CRYSTALS-Kyber**: `kyber512`, `p256_kyber512`, `x25519_kyber512`, `kyber768`, `p384_kyber768`, `x448_kyber768`, `x25519_kyber768`, `p256_kyber768`, `kyber1024`, `p521_kyber1024`
+- **FrodoKEM**: `frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
+- **HQC**: `hqc128`, `p256_hqc128`, `x25519_hqc128`, `hqc192`, `p384_hqc192`, `x448_hqc192`, `hqc256`, `p521_hqc256`†
+- **CRYSTALS-Dilithium**:`dilithium2`\*, `p256_dilithium2`\*, `rsa3072_dilithium2`\*, `dilithium3`\*, `p384_dilithium3`\*, `dilithium5`\*, `p521_dilithium5`\*
+- **Falcon**:`falcon512`\*, `p256_falcon512`\*, `rsa3072_falcon512`\*, `falcon1024`\*, `p521_falcon1024`\*
 
-- **SPHINCS-SHA2**:`sphincssha2128fsimple`\*, `sphincssha2128ssimple`\*, `sphincssha2192fsimple`\*, `sphincssha2192ssimple`, `sphincssha2256fsimple`, `sphincssha2256ssimple`
-- **SPHINCS-SHAKE**:`sphincsshake128fsimple`\*, `sphincsshake128ssimple`, `sphincsshake192fsimple`, `sphincsshake192ssimple`, `sphincsshake256fsimple`, `sphincsshake256ssimple`
+- **SPHINCS-SHA2**:`sphincssha2128fsimple`\*, `p256_sphincssha2128fsimple`\*, `rsa3072_sphincssha2128fsimple`\*, `sphincssha2128ssimple`\*, `p256_sphincssha2128ssimple`\*, `rsa3072_sphincssha2128ssimple`\*, `sphincssha2192fsimple`\*, `p384_sphincssha2192fsimple`\*, `sphincssha2192ssimple`, `p384_sphincssha2192ssimple`, `sphincssha2256fsimple`, `p521_sphincssha2256fsimple`, `sphincssha2256ssimple`, `p521_sphincssha2256ssimple`
+- **SPHINCS-SHAKE**:`sphincsshake128fsimple`\*, `p256_sphincsshake128fsimple`\*, `rsa3072_sphincsshake128fsimple`\*, `sphincsshake128ssimple`, `p256_sphincsshake128ssimple`, `rsa3072_sphincsshake128ssimple`, `sphincsshake192fsimple`, `p384_sphincsshake192fsimple`, `sphincsshake192ssimple`, `p384_sphincsshake192ssimple`, `sphincsshake256fsimple`, `p521_sphincsshake256fsimple`, `sphincsshake256ssimple`, `p521_sphincsshake256ssimple`
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 
@@ -57,15 +57,16 @@ TLS operations. This designation can be changed by modifying the
 "enabled" flags in the main [algorithm configuration file](oqs-template/generate.yml)
 and re-running the generator script `python3 oqs-template/generate.py`.
 
+It is possible to select only algorithms of a specific bit strength by using
+the openssl property selection mechanism on the key "oqsprovider.security_bits",
+e.g., as such: `openssl list -kem-algorithms -propquery oqsprovider.security_bits=256`.
+The bit strength of hybrid algorithms is always defined by the bit strength
+of the classic algorithm.
+
 In order to enable parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic
-and quantum-safe methods at their respective bit strength:
-
-- if `<KEX>` claims NIST L1 or L2 security, oqs-provider provides the methods `p256_<KEX>` and `x25519_<KEX>`, which combines `<KEX>` with EC curve p256 and X25519, respectively.
-- if `<KEX>` claims NIST L3 or L4 security, oqs-provider provides the methods `p384_<KEX>` and `x448_<KEX>`, which combines `<KEX>` with EC curve p384 and X448, respectively.
-- if `<KEX>` claims NIST L5 security, oqs-provider provides the method `p521_<KEX>`, which combines `<KEX>` with EC curve p521.
-
-For example, since `kyber768` [claims NIST L3 security](https://github.com/open-quantum-safe/liboqs/blob/main/docs/algorithms/kem/kyber.md), the hybrids `x448_kyber768` and `p384_kyber768` are available.
+and quantum-safe methods: These are listed above with a prefix denoting a
+classic algorithm, e.g., for elliptic curve: "p256_".
 
 A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them are documented in [ALGORITHMS.md](ALGORITHMS.md).
@@ -73,7 +74,7 @@ as a method to dynamically adapt them are documented in [ALGORITHMS.md](ALGORITH
 *Note:* `oqsprovider` depends for TLS session setup and hybrid operations
 on OpenSSL providers for classic crypto operations. Therefore it is essential
 that a provider such as `default` or `fips` is configured to be active. See
-`tests/oqs.cnf` for an example.
+`tests/oqs.cnf` or `scripts/openssl-ca.cnf` for examples.
 
 Building and testing -- Quick start
 -----------------------------------

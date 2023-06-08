@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
   // crashes: EVP_SIGNATURE_do_all_provided(libctx, test_oqs_sigs, &errcnt);
   OSSL_PROVIDER_do_all(libctx, test_provider_signatures, &errcnt);
 #else
-  fprintf(stderr, "TLS-SIG handshake test not enabled. Update upstream code.\n");
+  fprintf(stderr, "TLS-SIG handshake test not enabled. Update OpenSSL to more current version.\n");
 #endif
 
   OSSL_LIB_CTX_free(libctx);

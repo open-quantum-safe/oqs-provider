@@ -97,7 +97,8 @@ fi
 if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
    echo "oqsprovider (_build/lib/oqsprovider.$SHLIBEXT) not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
-   BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
+   #BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
+   BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
        cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build

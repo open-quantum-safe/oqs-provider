@@ -1,5 +1,5 @@
 {%- for family, kems in config['kems'] | groupby('family') %}
-- **{{ family }}**: {% for kem in kems -%} `{{ kem['name_group'] }}` {%- if not loop.last %}, {% endif -%}{%- if loop.last and family == 'HQC' -%}†{%- endif -%}{%- endfor -%}
+- **{{ family }}**: {% for kem in kems -%} `{{ kem['name_group'] }}` {%- for hybrid in kem['hybrids'] -%}, `{{ hybrid['hybrid_group']}}_{{ kem['name_group'] }}`{%- endfor -%}{%- if not loop.last %}, {% endif -%}{%- if loop.last and family == 'HQC' -%}†{%- endif -%}{%- endfor -%}
 {%- endfor %}
 {%- for sig in config['sigs'] %}
 {% if sig['variants']|length > 0 -%}
@@ -7,6 +7,7 @@
     {%- for variant in sig['variants'] -%}
 `{{ variant['name'] }}`
 {%- if variant['enable'] -%} \* {%- endif -%}
+{%- for classical_alg in variant['mix_with'] -%} , `{{ classical_alg['name']}}_{{ variant['name'] }}`{%- if variant['enable'] -%} \*  {%- endif -%}{%- endfor -%}
 {%- if not loop.last %}, {% endif -%}
     {%- endfor -%}
 {%- endif -%}

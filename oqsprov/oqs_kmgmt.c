@@ -320,7 +320,7 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY)) != NULL) {
         // hybrid KEMs are special in that the classic length information shall not be passed out:
         if (oqsxk->keytype == KEY_TYPE_ECP_HYB_KEM || oqsxk->keytype == KEY_TYPE_ECX_HYB_KEM) {
-            if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey+SIZE_OF_UINT32, oqsxk->pubkeylen-SIZE_OF_UINT32))
+            if (!OSSL_PARAM_set_octet_string(p, (char*)oqsxk->pubkey+SIZE_OF_UINT32, oqsxk->pubkeylen-SIZE_OF_UINT32))
                 return 0;
         }
         else {

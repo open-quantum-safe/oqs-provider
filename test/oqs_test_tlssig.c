@@ -63,6 +63,7 @@ static int test_oqs_tlssig(const char *sig_name)
   return ret;
 }
 
+/* reactivate when EVP_SIGNATURE_do_all_provided doesn't crash any more:
 static void test_oqs_sigs(EVP_SIGNATURE *evpsig, void *vp) {
 	OSSL_PROVIDER* prov = EVP_SIGNATURE_get0_provider(evpsig);
 	if (!strcmp(OSSL_PROVIDER_get0_name(prov), "oqsprovider")) {
@@ -70,6 +71,7 @@ static void test_oqs_sigs(EVP_SIGNATURE *evpsig, void *vp) {
 		test_oqs_tlssig(EVP_SIGNATURE_get0_name(evpsig)); 
 	}
 }
+*/
 
 static int test_signature(const OSSL_PARAM params[], void *data)
 {

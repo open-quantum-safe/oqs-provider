@@ -22,11 +22,6 @@ endif()
 add_definitions(-DOQSPROVIDER_VERSION_TEXT="${OQSPROVIDER_VERSION_TEXT}")
 message(STATUS "Building commit ${GIT_COMMIT_HASH} in ${CMAKE_SOURCE_DIR}")
 add_definitions(-DOQS_PROVIDER_COMMIT=" \(${GIT_COMMIT_HASH}\)")
-if (NOT WIN32)
-add_compile_options(-Wunused-function)
-else()
-add_definitions(-DOQS_PROVIDER_NOATOMIC)
-endif()
 set(PROVIDER_SOURCE_FILES
   oqsprov.c oqsprov_capabilities.c oqsprov_keys.c
   oqs_kmgmt.c oqs_sig.c oqs_kem.c

@@ -10,6 +10,15 @@ else()
     add_definitions( -DNDEBUG )
 endif()
 
+if(MSVC)
+  set(CMAKE_EXE_LINKER_FLAGS
+      "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
+  add_definitions(-DOQS_PROVIDER_NOATOMIC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+else()
+  add_compile_options(-Wunused-function)
+endif()
+
 option(NOPUBKEY_IN_PRIVKEY "Do not include public keys in private key structures/PKCS#8 " OFF)
 if(${NOPUBKEY_IN_PRIVKEY})
     message(STATUS "Build will not store public keys alongside private keys in PKCS#8 structures")

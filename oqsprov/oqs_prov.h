@@ -27,6 +27,11 @@
 /* internal, but useful OSSL define */
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
 
+#ifdef _MSC_VER
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
+#endif
+
 /* oqsprovider error codes */
 #define OQSPROV_R_INVALID_DIGEST                            1
 #define OQSPROV_R_INVALID_SIZE                              2

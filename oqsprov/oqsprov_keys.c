@@ -136,18 +136,18 @@ static int oqsx_key_set_composites(OQSX_KEY *key) {
 		int classic_pubkey_len, classic_privkey_len;
 
 		if (key->privkey) {
-			key->comp_privkey[0] = key->privkey + SIZE_OF_UINT32;
+			key->comp_privkey[0] = (char*)key->privkey + SIZE_OF_UINT32;
 			DECODE_UINT32(classic_privkey_len, key->privkey);
-			key->comp_privkey[1] = key->privkey + classic_privkey_len + SIZE_OF_UINT32;
+			key->comp_privkey[1] = (char*)key->privkey + classic_privkey_len + SIZE_OF_UINT32;
 		}
 		else {
 			key->comp_privkey[0] = NULL;
 			key->comp_privkey[1] = NULL;
 		}
 		if (key->pubkey) {
-			key->comp_pubkey[0] = key->pubkey + SIZE_OF_UINT32;
+			key->comp_pubkey[0] = (char*)key->pubkey + SIZE_OF_UINT32;
 			DECODE_UINT32(classic_pubkey_len, key->pubkey);
-			key->comp_pubkey[1] = key->pubkey + classic_pubkey_len + SIZE_OF_UINT32;
+			key->comp_pubkey[1] = (char*)key->pubkey + classic_pubkey_len + SIZE_OF_UINT32;
 		}
 		else {
 

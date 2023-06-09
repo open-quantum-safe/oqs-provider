@@ -8,11 +8,14 @@
 # EnvVar OQS_ALGS_ENABLED: If set, defines OQS algs to be enabled, e.g., "STD"
 # EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
 # EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL3
+# EnvVar liboqs_DIR: If set, needs to point to a directory where liboqs has been installed to
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
    SHLIBEXT="dylib"
+   STATLIBEXT="dylib"
 else
    SHLIBEXT="so"
+   STATLIBEXT="a"
 fi
 
 if [ $# -gt 0 ]; then
@@ -56,9 +59,10 @@ if [ -z "$OPENSSL_INSTALL" ]; then
  fi
 fi
 
-# Check whether liboqs is built:
-if [ ! -f ".local/lib/liboqs.a" ]; then
-  echo "liboqs static lib not built..."
+# Check whether liboqs is built or has been configured:
+if [ -z $liboqs_DIR ]; then
+ if [ ! -f ".local/lib/liboqs.$STATLIBEXT" ]; then
+  echo "need to re-build static liboqs..."
   if [ ! -d liboqs ]; then
     echo "cloning liboqs $LIBOQS_BRANCH..."
     git clone --depth 1 --branch $LIBOQS_BRANCH https://github.com/open-quantum-safe/liboqs.git
@@ -81,16 +85,18 @@ if [ ! -f ".local/lib/liboqs.a" ]; then
     fi
   fi
 
- # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
- # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
- #    STD: only include NIST standardized algorithms
- #    NIST_R4: only include algorithms in round 4 of the NIST competition
- #    All: include all algorithms supported by liboqs (default)
- cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
- if [ $? -ne 0 ]; then
-     echo "liboqs build failed. Exiting."
-     exit -1
+  # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
+  # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
+  #    STD: only include NIST standardized algorithms
+  #    NIST_R4: only include algorithms in round 4 of the NIST competition
+  #    All: include all algorithms supported by liboqs (default)
+  cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
+  if [ $? -ne 0 ]; then
+      echo "liboqs build failed. Exiting."
+      exit -1
+  fi
  fi
+ export liboqs_DIR=$(pwd)/.local
 fi
 
 # Check whether provider is built:
@@ -101,9 +107,9 @@ if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
    BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -S . -B _build && cmake --build _build
    else
-       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE -S . -B _build && cmake --build _build
    fi
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."

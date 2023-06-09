@@ -12,7 +12,10 @@
 #ifndef OQSX_H
 # define OQSX_H
 
+#ifndef OQS_PROVIDER_NOATOMIC
 # include <stdatomic.h>
+#endif
+
 # include <openssl/opensslconf.h>
 # include <openssl/bio.h>
 
@@ -133,6 +136,9 @@ typedef enum oqsx_key_type_en OQSX_KEY_TYPE;
 
 struct oqsx_key_st {
     OSSL_LIB_CTX *libctx;
+#ifdef OQS_PROVIDER_NOATOMIC
+    CRYPTO_RWLOCK *lock;
+#endif
     char *propq;
     OQSX_KEY_TYPE keytype;
     OQSX_PROVIDER_CTX oqsx_provider_ctx;
@@ -149,7 +155,10 @@ struct oqsx_key_st {
     size_t pubkeylen;
     size_t bit_security;
     char *tls_name;
-    _Atomic int references;
+#ifndef OQS_PROVIDER_NOATOMIC
+    _Atomic
+#endif
+            int references;
 
     /* point to actual priv key material -- classic key, if present, first
      * i.e., OQS key always at comp_*key[numkeys-1]

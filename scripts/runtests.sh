@@ -156,7 +156,12 @@ if [ $? -ne 0 ]; then
 fi
 
 # Run interop-tests:
+# cleanup log from previous runs:
+rm -f interop.log
+
 echo "Cert gen/verify, CMS sign/verify, CA tests for all enabled OQS signature algorithms commencing: "
+
+# auto-detect all available signature algorithms:
 for alg in `$OPENSSL_APP list -signature-algorithms | grep oqsprovider | sed -e "s/ @ .*//g" | sed -e "s/^  //g"`
 do 
    if [ "$1" = "-V" ]; then

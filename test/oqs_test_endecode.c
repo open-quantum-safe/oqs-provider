@@ -249,8 +249,8 @@ int main(int argc, char *argv[]) {
     OSSL_LIB_CTX_free(libctx);
     OSSL_PROVIDER_unload(dfltprov);
     OSSL_PROVIDER_unload(keyprov);
-    /* crash under 3.0.2?:
-    OSSL_PROVIDER_unload(oqsprov); */
+    if (OPENSSL_VERSION_PREREQ(3,1))
+        OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
     OSSL_LIB_CTX_free(keyctx);
 
     TEST_ASSERT(errcnt == 0)

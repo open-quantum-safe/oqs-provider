@@ -49,39 +49,6 @@ static ENDECODE_PARAMS test_params_list[] = {
                                                                                          OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
 };
 
-static const char *sigalg_names[] = {
-///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_START
-#ifdef OQS_ENABLE_SIG_dilithium_2
-        "dilithium2","p256_dilithium2","rsa3072_dilithium2",
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_3
-        "dilithium3","p384_dilithium3",
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_5
-        "dilithium5","p521_dilithium5",
-#endif
-#ifdef OQS_ENABLE_SIG_falcon_512
-        "falcon512","p256_falcon512","rsa3072_falcon512",
-#endif
-#ifdef OQS_ENABLE_SIG_falcon_1024
-        "falcon1024","p521_falcon1024",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
-        "sphincssha2128fsimple","p256_sphincssha2128fsimple","rsa3072_sphincssha2128fsimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
-        "sphincssha2128ssimple","p256_sphincssha2128ssimple","rsa3072_sphincssha2128ssimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
-        "sphincssha2192fsimple","p384_sphincssha2192fsimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
-        "sphincsshake128fsimple","p256_sphincsshake128fsimple","rsa3072_sphincsshake128fsimple",
-#endif
-
-///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END
-};
-
 static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
                                   OSSL_PARAM *genparams) {
     EVP_PKEY *pkey = NULL;
@@ -236,7 +203,9 @@ static int test_oqs_encdec(const char *sigalg_name) {
 
 int main(int argc, char *argv[]) {
     size_t i;
-    int errcnt = 0, test = 0;
+    int errcnt = 0, test = 0, query_nocache;
+    OSSL_PROVIDER *oqsprov = NULL;
+    const OSSL_ALGORITHM *sigalgs;
 
     T((libctx = OSSL_LIB_CTX_new()) != NULL);
     T(argc == 3);
@@ -251,23 +220,36 @@ int main(int argc, char *argv[]) {
     dfltprov = OSSL_PROVIDER_load(keyctx, "default");
     keyprov = OSSL_PROVIDER_load(keyctx, modulename);
 
-    for (i = 0; i < nelem(sigalg_names); i++) {
-        if (test_oqs_encdec(sigalg_names[i])) {
+    oqsprov = OSSL_PROVIDER_load(libctx, modulename);
+
+    sigalgs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE, &query_nocache);
+
+    if (sigalgs) {
+      for (; sigalgs->algorithm_names != NULL; sigalgs++) {
+        if (test_oqs_encdec(sigalgs->algorithm_names)) {
             fprintf(stderr,
                     cGREEN "  Encoding/Decoding test succeeded: %s" cNORM "\n",
-                    sigalg_names[i]);
+                    sigalgs->algorithm_names);
         } else {
             fprintf(stderr,
                     cRED "  Encoding/Decoding test failed: %s" cNORM "\n",
-                    sigalg_names[i]);
+                    sigalgs->algorithm_names);
             ERR_print_errors_fp(stderr);
             errcnt++;
         }
+      }
+    }
+    else {
+            fprintf(stderr,
+                    cRED "  No signature algorithms found" cNORM "\n");
+            ERR_print_errors_fp(stderr);
+            errcnt++;
     }
 
     OSSL_LIB_CTX_free(libctx);
     OSSL_PROVIDER_unload(dfltprov);
     OSSL_PROVIDER_unload(keyprov);
+    OSSL_PROVIDER_unload(oqsprov);
     OSSL_LIB_CTX_free(keyctx);
 
     TEST_ASSERT(errcnt == 0)

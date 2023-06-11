@@ -14,38 +14,6 @@ static char *certsdir = NULL;
 static char *srpvfile = NULL;
 static char *tmpfilename = NULL;
 
-static const char *sigalg_names[] = {
-///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_START
-#ifdef OQS_ENABLE_SIG_dilithium_2
-  "dilithium2","p256_dilithium2","rsa3072_dilithium2",
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_3
-  "dilithium3","p384_dilithium3",
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_5
-  "dilithium5","p521_dilithium5",
-#endif
-#ifdef OQS_ENABLE_SIG_falcon_512
-  "falcon512","p256_falcon512","rsa3072_falcon512",
-#endif
-#ifdef OQS_ENABLE_SIG_falcon_1024
-  "falcon1024","p521_falcon1024",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
-  "sphincssha2128fsimple","p256_sphincssha2128fsimple","rsa3072_sphincssha2128fsimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
-  "sphincssha2128ssimple","p256_sphincssha2128ssimple","rsa3072_sphincssha2128ssimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
-  "sphincssha2192fsimple","p384_sphincssha2192fsimple",
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
-  "sphincsshake128fsimple","p256_sphincsshake128fsimple","rsa3072_sphincsshake128fsimple",
-#endif
-///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END
-};
-
 // sign-and-hash must work with and without providing a digest algorithm
 static int test_oqs_signatures(const char *sigalg_name)
 {
@@ -124,7 +92,9 @@ static int test_oqs_signatures(const char *sigalg_name)
 int main(int argc, char *argv[])
 {
   size_t i;
-  int errcnt = 0, test = 0;
+  int errcnt = 0, test = 0, query_nocache;
+  OSSL_PROVIDER *oqsprov = NULL;
+  const OSSL_ALGORITHM *sigalgs;
 
   T((libctx = OSSL_LIB_CTX_new()) != NULL);
   T(argc == 3);
@@ -134,19 +104,23 @@ int main(int argc, char *argv[])
   T(OSSL_LIB_CTX_load_config(libctx, configfile));
 
   T(OSSL_PROVIDER_available(libctx, modulename));
+  oqsprov = OSSL_PROVIDER_load(libctx, modulename);
 
-  for (i = 0; i < nelem(sigalg_names); i++) {
-    if (test_oqs_signatures(sigalg_names[i])) {
-      fprintf(stderr,
-              cGREEN "  Signature test succeeded: %s" cNORM "\n",
-              sigalg_names[i]);
-    } else {
-      fprintf(stderr,
-              cRED "  Signature test failed: %s" cNORM "\n",
-              sigalg_names[i]);
-      ERR_print_errors_fp(stderr);
-      errcnt++;
-    }
+  sigalgs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE, &query_nocache);
+  if (sigalgs) {
+      for (; sigalgs->algorithm_names != NULL; sigalgs++) {
+        if (test_oqs_signatures(sigalgs->algorithm_names)) {
+          fprintf(stderr,
+                  cGREEN "  Signature test succeeded: %s" cNORM "\n",
+                  sigalgs->algorithm_names);
+        } else {
+          fprintf(stderr,
+                  cRED "  Signature test failed: %s" cNORM "\n",
+                  sigalgs->algorithm_names);
+          ERR_print_errors_fp(stderr);
+          errcnt++;
+        }
+      }
   }
 
   OSSL_LIB_CTX_free(libctx);

@@ -222,10 +222,6 @@ config = load_config() # extend config with "hybrid_groups" array
 config = complete_config(config)
 
 
-populate('test/oqs_test_signatures.c', config, '/////')
-populate('test/oqs_test_kems.c', config, '/////')
-populate('test/oqs_test_groups.c', config, '/////')
-populate('test/oqs_test_endecode.c', config, '/////')
 populate('oqsprov/oqsencoders.inc', config, '/////')
 populate('oqsprov/oqsdecoders.inc', config, '/////')
 populate('oqsprov/oqs_prov.h', config, '/////')

@@ -249,7 +249,8 @@ int main(int argc, char *argv[]) {
     OSSL_LIB_CTX_free(libctx);
     OSSL_PROVIDER_unload(dfltprov);
     OSSL_PROVIDER_unload(keyprov);
-    OSSL_PROVIDER_unload(oqsprov);
+    /* crash under 3.0.2?:
+    OSSL_PROVIDER_unload(oqsprov); */
     OSSL_LIB_CTX_free(keyctx);
 
     TEST_ASSERT(errcnt == 0)

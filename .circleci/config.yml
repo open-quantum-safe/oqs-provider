@@ -1,5 +1,10 @@
 version: 2.1
 
+parameters:
+  run_downstream_tests:
+    type: boolean
+    default: false
+
 # CircleCI doesn't handle large file sets properly for local builds
 # https://github.com/CircleCI-Public/circleci-cli/issues/281#issuecomment-472808051
 localCheckout: &localCheckout
@@ -161,6 +166,26 @@ jobs:
                cat log
             fi
 
+  trigger-downstream-ci:
+    docker:
+      - image: cimg/base:2020.01
+# Re-enable iff docker enforces rate limitations without auth:
+#        auth:
+#          username: $DOCKER_LOGIN
+#          password: $DOCKER_PASSWORD
+    steps:
+      - run:
+          name: Trigger oqs-demos CI
+          command: |
+            curl --silent \
+                 --write-out "\n%{response_code}\n" \
+                 --user ${BUILD_TRIGGER_TOKEN}: \
+                 --request POST \
+                 --header "Content-Type: application/json" \
+                 -d '{ "branch": "main", "parameters": { "new_openssl_commit": true } }' \
+                 https://circleci.com/api/v2/project/gh/open-quantum-safe/oqs-demos/pipeline | tee curl_out \
+            && grep -q "201" curl_out
+
 workflows:
   version: 2.1
   build:
@@ -185,4 +210,12 @@ workflows:
           name: macOS-shared
           CMAKE_ARGS: -DBUILD_SHARED_LIBS=ON -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
           OPENSSL_PREINSTALL: openssl@3
+  on-main-branch:
+    when:
+      or:
+        - equal: [ main , << pipeline.git.branch >> ]
+        - equal: [ true , << pipeline.parameters.run_downstream_tests >> ]
+    jobs:
+      - trigger-downstream-ci:
+          context: openquantumsafe
 

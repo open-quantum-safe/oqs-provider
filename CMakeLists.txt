@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(oqs-provider LANGUAGES C)
-set(OQSPROVIDER_VERSION_TEXT "0.5.0")
+set(OQSPROVIDER_VERSION_TEXT "0.5.1-dev")
 set(CMAKE_C_STANDARD 11)
 set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -8,6 +8,15 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     message(STATUS "Creating Release build")
     add_definitions( -DNDEBUG )
+endif()
+
+if(MSVC)
+  set(CMAKE_EXE_LINKER_FLAGS
+      "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
+  add_definitions(-DOQS_PROVIDER_NOATOMIC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+else()
+  add_compile_options(-Wunused-function)
 endif()
 
 option(NOPUBKEY_IN_PRIVKEY "Do not include public keys in private key structures/PKCS#8 " OFF)

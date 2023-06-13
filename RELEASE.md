@@ -1,5 +1,5 @@
-oqs-provider 0.5.0
-==================
+oqs-provider 0.5.1-dev
+======================
 
 About
 -----
@@ -16,6 +16,19 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 Release notes
 =============
+
+This is version 0.5.1-dev of oqs-provider.
+
+Security considerations
+-----------------------
+
+None.
+
+What's New
+----------
+
+Previous Release Notes
+======================
 
 This is version 0.5.0 of oqs-provider.
 

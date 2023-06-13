@@ -136,18 +136,18 @@ static int oqsx_key_set_composites(OQSX_KEY *key) {
 		int classic_pubkey_len, classic_privkey_len;
 
 		if (key->privkey) {
-			key->comp_privkey[0] = key->privkey + SIZE_OF_UINT32;
+			key->comp_privkey[0] = (char*)key->privkey + SIZE_OF_UINT32;
 			DECODE_UINT32(classic_privkey_len, key->privkey);
-			key->comp_privkey[1] = key->privkey + classic_privkey_len + SIZE_OF_UINT32;
+			key->comp_privkey[1] = (char*)key->privkey + classic_privkey_len + SIZE_OF_UINT32;
 		}
 		else {
 			key->comp_privkey[0] = NULL;
 			key->comp_privkey[1] = NULL;
 		}
 		if (key->pubkey) {
-			key->comp_pubkey[0] = key->pubkey + SIZE_OF_UINT32;
+			key->comp_pubkey[0] = (char*)key->pubkey + SIZE_OF_UINT32;
 			DECODE_UINT32(classic_pubkey_len, key->pubkey);
-			key->comp_pubkey[1] = key->pubkey + classic_pubkey_len + SIZE_OF_UINT32;
+			key->comp_pubkey[1] = (char*)key->pubkey + classic_pubkey_len + SIZE_OF_UINT32;
 		}
 		else {
 
@@ -612,6 +612,14 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int
 
     if (ret == NULL) goto err;
 
+#ifdef OQS_PROVIDER_NOATOMIC
+     ret->lock = CRYPTO_THREAD_lock_new();
+     if (ret->lock == NULL) {
+         OPENSSL_free(ret);
+         goto err;
+     }
+#endif
+
     if (oqs_name == NULL) {
         OQS_KEY_PRINTF("OQSX_KEY: Fatal error: No OQS key name provided:\n");
         goto err;
@@ -735,10 +743,15 @@ void oqsx_key_free(OQSX_KEY *key)
     if (key == NULL)
         return;
 
+#ifndef OQS_PROVIDER_NOATOMIC
     refcnt = atomic_fetch_sub_explicit(&key->references, 1,
                                        memory_order_relaxed) - 1;
     if (refcnt == 0)
         atomic_thread_fence(memory_order_acquire);
+#else
+    CRYPTO_atomic_add(&key->references, -1, &refcnt, key->lock);
+#endif
+
     OQS_KEY_PRINTF3("%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
     if (refcnt > 0)
         return;
@@ -762,6 +775,9 @@ void oqsx_key_free(OQSX_KEY *key)
     } else
         OQS_SIG_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig);
     OPENSSL_free(key->classical_pkey);
+#ifdef OQS_PROVIDER_NOATOMIC
+    CRYPTO_THREAD_lock_free(key->lock);
+#endif
     OPENSSL_free(key);
 }
 
@@ -769,8 +785,13 @@ int oqsx_key_up_ref(OQSX_KEY *key)
 {
     int refcnt;
 
+#ifndef OQS_PROVIDER_NOATOMIC
     refcnt = atomic_fetch_add_explicit(&key->references, 1,
                                        memory_order_relaxed) + 1;
+#else
+    CRYPTO_atomic_add(&key->references, 1, &refcnt, key->lock);
+#endif
+
     OQS_KEY_PRINTF3("%p:%4d:OQSX_KEY\n", (void*)key, refcnt);
 #ifndef NDEBUG
     assert(refcnt > 1);

@@ -45,7 +45,7 @@ add_test(
     COMMAND oqs_test_tlssig
             "oqsprovider"
             "${CMAKE_CURRENT_SOURCE_DIR}/oqs.cnf"
-            "${CMAKE_CURRENT_BINARY_DIR}/../../tmp"
+            "${CMAKE_CURRENT_BINARY_DIR}/tmp"
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 set_tests_properties(oqs_tlssig

@@ -238,7 +238,7 @@ This can be facilitated for example by using the usual `openssl` commands:
 
 These examples create classic RSA keys but the very same commands can be used
 to create PQ certificates replacing the key type "rsa" with any of the PQ
-signature algorithms [listed above](#Signature_algorithms).
+signature algorithms [listed above](#signature-algorithms).
 
 ## Setting up a (quantum-safe) test server
 
@@ -256,7 +256,7 @@ This can be facilitated for example by running
 By issuing the command `GET /` the quantum-safe crypto enabled OpenSSL3
 server returns details about the established connection.
 
-Any [available quantum-safe/PQ KEM algorithm](#KEM_algorithms) can be selected by passing it in the `-groups` option.
+Any [available quantum-safe/PQ KEM algorithm](#kem-algorithms) can be selected by passing it in the `-groups` option.
 
 ## S/MIME message signing -- Cryptographic Message Syntax (CMS)
 
@@ -274,7 +274,7 @@ Step 1: Create quantum-safe key pair and self-signed certificate:
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider-path _build/lib -provider oqsprovider -provider default
 
 By changing the `-newkey` parameter algorithm name [any of the 
-supported quantum-safe or hybrid algorithms](#Signature_algorithms)
+supported quantum-safe or hybrid algorithms](#signature-algorithms)
 can be utilized instead of the sample algorithm `dilithium3`.
 
 Step 2: Sign data:

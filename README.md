@@ -33,10 +33,15 @@ Algorithms
 This implementation makes available the following quantum safe algorithms:
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_START -->
+### KEM algorithms
+
 - **BIKE**: `bikel1`, `p256_bikel1`, `x25519_bikel1`, `bikel3`, `p384_bikel3`, `x448_bikel3`, `bikel5`, `p521_bikel5`
 - **CRYSTALS-Kyber**: `kyber512`, `p256_kyber512`, `x25519_kyber512`, `kyber768`, `p384_kyber768`, `x448_kyber768`, `x25519_kyber768`, `p256_kyber768`, `kyber1024`, `p521_kyber1024`
 - **FrodoKEM**: `frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
 - **HQC**: `hqc128`, `p256_hqc128`, `x25519_hqc128`, `hqc192`, `p384_hqc192`, `x448_hqc192`, `hqc256`, `p521_hqc256`†
+
+### Signature algorithms
+
 - **CRYSTALS-Dilithium**:`dilithium2`\*, `p256_dilithium2`\*, `rsa3072_dilithium2`\*, `dilithium3`\*, `p384_dilithium3`\*, `dilithium5`\*, `p521_dilithium5`\*
 - **Falcon**:`falcon512`\*, `p256_falcon512`\*, `rsa3072_falcon512`\*, `falcon1024`\*, `p521_falcon1024`\*
 
@@ -206,6 +211,12 @@ One way to do this is to enable it in the OpenSSL config file. Detailed
 explanations can be found for example
 [here](https://wiki.openssl.org/index.php/OpenSSL_3.0#Providers).
 
+An example file activating `oqsprovider` by default is `scripts/openssl-ca.cnf`.
+This can be activated for example by setting the standard OpenSSl environment
+variable "OPENSSL_CONF" to this file before using `openssl`, e.g. in UNIX notation:
+
+    setenv OPENSSL_CONF=scripts/openssl-ca.cnf
+
 Another alternative is to explicitly request its use on the command line.
 The following examples use that option. All examples below assume openssl (3.0)
 to be located in a folder `.local` in the local directory as per the
@@ -216,18 +227,23 @@ eliminates the need for specific PATH setting as showcased below.
 
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/lib -provider oqsprovider 
 
-## Creating (classic) keys and certificates
+## Creating keys and certificates
 
-This can be facilitated for example by running
+This can be facilitated for example by using the usual `openssl` commands:
 
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey rsa -keyout rsa_CA.key -out rsa_CA.crt -nodes -subj "/CN=test CA" -days 365 -config openssl/apps/openssl.cnf
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl genpkey -algorithm rsa -out rsa_srv.key
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -new -newkey rsa -keyout rsa_srv.key -out rsa_srv.csr -nodes -subj "/CN=test server" -config openssl/apps/openssl.cnf
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl x509 -req -in rsa_srv.csr -out rsa_srv.crt -CA rsa_CA.crt -CAkey rsa_CA.key -CAcreateserial -days 365
 
+These examples create classic RSA keys but the very same commands can be used
+to create PQ certificates replacing the key type "rsa" with any of the PQ
+signature algorithms [listed above](#Signature_algorithms).
+
 ## Setting up a (quantum-safe) test server
 
-This can be facilitated for example by running
+A simple server utilizing PQ/quantum-safe KEM algorithms and classic RSA
+certicates can be set up for example by running
 
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake -provider-path _build/lib  -provider default -provider oqsprovider
 
@@ -240,7 +256,7 @@ This can be facilitated for example by running
 By issuing the command `GET /` the quantum-safe crypto enabled OpenSSL3
 server returns details about the established connection.
 
-Any [available KEM algorithm](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable#key-exchange) can be selected by passing it in the `-groups` option.
+Any [available quantum-safe/PQ KEM algorithm](#KEM_algorithms) can be selected by passing it in the `-groups` option.
 
 ## S/MIME message signing -- Cryptographic Message Syntax (CMS)
 
@@ -258,7 +274,7 @@ Step 1: Create quantum-safe key pair and self-signed certificate:
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider-path _build/lib -provider oqsprovider -provider default
 
 By changing the `-newkey` parameter algorithm name [any of the 
-supported quantum-safe or hybrid algorithms](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable#authentication)
+supported quantum-safe or hybrid algorithms](#Signature_algorithms)
 can be utilized instead of the sample algorithm `dilithium3`.
 
 Step 2: Sign data:

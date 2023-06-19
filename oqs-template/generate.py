@@ -193,25 +193,25 @@ def load_config(include_disabled_sigs=False):
 
     for kem in config['kems']:
         kem['hybrids'] = []
-        try:
-            for extra_nid_current in kem['extra_nids']['current']:
-                extra_hybrid = extra_nid_current
-                if extra_nid_current['hybrid_group'] == "x25519" or extra_nid_current['hybrid_group'] == "p256":
-                   extra_hybrid['bit_security']=128
-                if extra_nid_current['hybrid_group'] == "x448" or extra_nid_current['hybrid_group'] == "p384":
-                   extra_hybrid['bit_security']=192
-                if extra_nid_current['hybrid_group'] == "p521":
-                   extra_hybrid['bit_security']=256
-                kem['hybrids'].append(extra_hybrid)
-                if 'hybrid_group' in extra_nid_current and extra_nid_current['hybrid_group'] in ["x25519", "x448"]:
-                    extra_hyb_nid = extra_nid_current['nid']
-                    if 'nid_ecx_hybrid' in kem:
-                        print("Warning, duplicate nid_ecx_hybrid for",
-                              kem['name_group'], ":", extra_hyb_nid, "in generate.yml,",
-                              kem['nid_ecx_hybrid'], "in generate_extras.yml, using generate.yml entry.")
-                    kem['nid_ecx_hybrid'] = extra_hyb_nid
-        except KeyError as ke:
-            pass
+        if 'extra_nids' not in kem or 'current' not in kem['extra_nids']:
+            continue
+        hybrid_nids = set()
+        for extra_hybrid in kem['extra_nids']['current']:
+            if extra_hybrid['hybrid_group'] == "x25519" or extra_hybrid['hybrid_group'] == "p256":
+               extra_hybrid['bit_security'] = 128
+            if extra_hybrid['hybrid_group'] == "x448" or extra_hybrid['hybrid_group'] == "p384":
+               extra_hybrid['bit_security'] = 192
+            if extra_hybrid['hybrid_group'] == "p521":
+               extra_hybrid['bit_security'] = 256
+            kem['hybrids'].append(extra_hybrid)
+            if 'hybrid_group' in extra_hybrid:
+                extra_hybrid_nid = extra_hybrid['nid']
+                if extra_hybrid_nid in hybrid_nids:
+                    print("ERROR: duplicate hybrid NID for", kem['name_group'],
+                          ":", extra_hybrid_nid, "in generate.yml.",
+                          "Curve NIDs may only be specified once per KEM.")
+                    exit(1)
+                hybrid_nids.add(extra_hybrid_nid)
     return config
 
 # extend config with "hybrid_groups" array:

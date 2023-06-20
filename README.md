@@ -27,6 +27,26 @@ mechanism and X.509 data structures. Also available is support for
 TLS1.3 signature functionality via the [OpenSSL3 fetchable signature
 algorithm feature](https://github.com/openssl/openssl/pull/19312).
 
+Standards implemented
+---------------------
+
+This provider adheres to and implements all standards and algorithms
+implemented by its core components, [openssl](https://github.com/openssl/openssl)
+and [liboqs](https://github.com/open-quantum-safe/liboqs), e.g., concerning
+X.509, PKCS#8 or CMS.
+
+It adds additionally the implementation for hybrid TLS keys as documented in
+[Hybrid key exchange in TLS 1.3](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/).
+The same conceptual mechanism of combining classic and PQ keys is 
+implemented in all hybrid signature schemes, e.g., when encoded in X.509 or PKCS#8
+data: (Plain binary/OCTET_STRING representations as e.g. documented in
+[Internet X.509 Public Key Infrastructure: Algorithm Identifiers for Dilithium](https://datatracker.ietf.org/doc/draft-ietf-lamps-dilithium-certificates/)
+of) classic and PQ key material and signatures are simply concatenated. As all
+(O)IDs for the various algorithms together with the algorithms themselves are
+still changing, the following two pages document current and past (O)IDs used by the
+various ´liboqs´-based implementations for [KEM](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-kem-info.md)
+and [Signatures](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md).
+
 Algorithms
 ----------
 

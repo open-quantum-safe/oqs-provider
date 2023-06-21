@@ -587,6 +587,7 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
     for (i=0; i<OQS_OID_CNT;i+=2) {
         if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+1])) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                fprintf(stderr, "error registering NID for %s\n", oqs_oid_alg_list[i+1]);
                 return 0;
         }
 
@@ -596,13 +597,19 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
         }
 
         if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i+1], "", oqs_oid_alg_list[i+1])) {
-              OQS_PROV_PRINTF2("error registering %s with no hash\n", oqs_oid_alg_list[i+1]);
+              fprintf(stderr, "error registering %s with no hash\n", oqs_oid_alg_list[i+1]);
               ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
               return 0;
         }
 
-        OQS_PROV_PRINTF3("OQS PROV: successfully registered %s with NID %d\n", oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1]));
-
+        if (OBJ_sn2nid(oqs_oid_alg_list[i+1]) != 0) {
+            OQS_PROV_PRINTF3("OQS PROV: successfully registered %s with NID %d\n", oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1]));
+        }
+        else {
+            fprintf(stderr, "OQS PROV: Impossible error: NID unregistered for %s.\n", oqs_oid_alg_list[i+1]);
+            return 0;
+        }
+            
     }
 
     // if libctx not yet existing, create a new one

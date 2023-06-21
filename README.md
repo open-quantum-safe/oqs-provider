@@ -201,7 +201,11 @@ By setting `-DNOPUBKEY_IN_PRIVKEY=<ON/OFF>` at compile-time, it can be further s
 
 Building on Windows
 --------------------
-The following steps have been tested on Windows 10 and 11 using MSYS2 MINGW64 and were successful. However, building with Visual Studio 2019 was unsuccessful (see [#47](https://github.com/open-quantum-safe/oqs-provider/issues/47)). Note that the process of building on Windows is considered experimental and may need further adjustments. Please report further issues to [#47](https://github.com/open-quantum-safe/oqs-provider/issues/47). Despite skipping the testing process, setting up a test server and client with post-quantum cryptography algorithms can still be accomplished.
+The following steps have been successfully tested on Windows 10 and 11
+using MSYS2 MINGW64. For building `oqsprovider` successfully using
+Microsoft Visual Studio or `cygwin`, please check out the build
+instructions for that platform in the CI control file at
+[.github/workflows/windows.yml](.github/workflows/windows.yml].
 
 Using
 -----

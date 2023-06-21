@@ -205,7 +205,7 @@ The following steps have been successfully tested on Windows 10 and 11
 using MSYS2 MINGW64. For building `oqsprovider` successfully using
 Microsoft Visual Studio or `cygwin`, please check out the build
 instructions for that platform in the CI control file at
-[.github/workflows/windows.yml](.github/workflows/windows.yml].
+".github/workflows/windows.yml".
 
 Using
 -----

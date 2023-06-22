@@ -42,6 +42,9 @@ include(CheckFunctionExists)
 # Add required includes for openssl and liboqs
 find_package(OpenSSL 3.0 REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
+get_filename_component(OPENSSL_LIB_DIR ${OPENSSL_CRYPTO_LIBRARY} DIRECTORY)
+set(OPENSSL_MODULES_PATH ${OPENSSL_LIB_DIR}/ossl-modules)
+
 find_package(liboqs REQUIRED)
 get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
 message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")

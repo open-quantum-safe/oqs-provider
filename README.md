@@ -203,11 +203,11 @@ By setting `-DNOPUBKEY_IN_PRIVKEY=<ON/OFF>` at compile-time, it can be further s
 
 Building on Windows
 --------------------
-The following steps have been successfully tested on Windows 10 and 11
-using MSYS2 MINGW64. For building `oqsprovider` successfully using
-Microsoft Visual Studio or `cygwin`, please check out the build
-instructions for that platform in the CI control file at
-".github/workflows/windows.yml".
+Building `oqsprovider` following the steps outlined above have been
+successfully tested on Windows 10 and 11 using MSYS2 MINGW64.
+For building `oqsprovider` successfully using Microsoft Visual Studio
+or `cygwin`, please check out the build instructions for those platforms
+in the CI control file at ".github/workflows/windows.yml".
 
 Using
 -----
@@ -233,7 +233,12 @@ eliminates the need for specific PATH setting as showcased below.
 
     LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/lib -provider oqsprovider 
 
-## Creating keys and certificates
+If using a standard install of openssl(3) and including `oqsprovider` activation
+in the global "openssl.cnf" file, the command accordingly gets simplified to:
+
+    openssl list -providers -verbose
+
+## Creating (classic) keys and certificates
 
 This can be facilitated for example by using the usual `openssl` commands:
 

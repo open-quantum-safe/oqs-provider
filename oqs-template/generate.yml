@@ -113,9 +113,9 @@ kems:
         - hybrid_group: "x448"
           nid: '0x2F90'
         - hybrid_group: "x25519"
-          nid: '25497'
+          nid: '0x6399'
         - hybrid_group: "p256"
-          nid: '25498'
+          nid: '0x639A'
       old:
         - implementation_version: NIST Round 2 submission
           nist-round: 2

@@ -382,6 +382,7 @@ Contributors to the `oqsprovider` include:
 - Basil Hess
 - Julian Segeth
 - Alex Zaslavsky
+- Will Childs-Klein
 
 Acknowledgments
 ---------------

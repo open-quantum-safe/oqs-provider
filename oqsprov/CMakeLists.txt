@@ -45,7 +45,7 @@ set_target_properties(oqsprovider
     SOVERSION 1
     # For Windows DLLs
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-target_link_libraries(oqsprovider OQS::oqs ${OPENSSL_CRYPTO_LIBRARY})
+target_link_libraries(oqsprovider OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
 if (USE_ENCODING_LIB)
   target_link_libraries(oqsprovider qsc_key_encoder)
   target_include_directories(oqsprovider PRIVATE ${encoder_LIBRARY_INCLUDE})

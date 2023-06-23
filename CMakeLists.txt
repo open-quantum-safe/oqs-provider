@@ -15,8 +15,10 @@ if(MSVC)
       "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
   add_definitions(-DOQS_PROVIDER_NOATOMIC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  set(OQS_ADDL_SOCKET_LIBS "ws2_32.lib gdi32.lib crypt32.lib")
 else()
   add_compile_options(-Wunused-function)
+  set(OQS_ADDL_SOCKET_LIBS "")
 endif()
 
 option(NOPUBKEY_IN_PRIVKEY "Do not include public keys in private key structures/PKCS#8 " OFF)
@@ -37,9 +39,13 @@ endif()
 include(CheckLibraryExists)
 include(CheckFunctionExists)
 
+# Add required includes for openssl and liboqs
 find_package(OpenSSL 3.0 REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 find_package(liboqs REQUIRED)
+get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
+message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")
+include_directories(${LIBOQS_INCLUDE_DIR})
 
 # Provider module
 add_subdirectory(oqsprov)

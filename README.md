@@ -179,14 +179,14 @@ oqsprovider = oqsprovider_sect
 activate = 1
 ```
 
-This file is typically located at
+This file is typically located at (operating system dependent):
 - /etc/ssl/openssl.cnf (UNIX/Linux)
 - /opt/homebrew/etc/openssl@3/openssl.cnf (OSX Homebrew)
-- C:\Program Files\OpenSSL\openssl.cnf (Windows)
+- C:\Program Files\Common Files\SSL\openssl.cnf (Windows)
 
 Doing this will enable `oqsprovider` to be seamlessly used alongside the other
-`openssl` providers. If successfully done, running `openssl list -providers`
-should output something along these lines:
+`openssl` providers. If successfully done, running, e.g., `openssl list -providers`
+should output something along these lines (version IDs variable of course):
 
 ```
 providers:
@@ -196,7 +196,7 @@ providers:
     status: active
   oqsprovider
     name: OpenSSL OQS Provider
-    version: 0.5.1
+    version: 0.5.0
     status: active
 ```
 

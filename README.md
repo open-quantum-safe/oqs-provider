@@ -30,22 +30,30 @@ algorithm feature](https://github.com/openssl/openssl/pull/19312).
 Standards implemented
 ---------------------
 
-This provider adheres to and implements all standards and algorithms
+For non-post-quantum algorithms, this provider adheres to and implements all standards and algorithms
 implemented by its core components, [openssl](https://github.com/openssl/openssl)
 and [liboqs](https://github.com/open-quantum-safe/liboqs), e.g., concerning
 X.509, PKCS#8 or CMS.
 
-It adds additionally the implementation for hybrid TLS keys as documented in
-[Hybrid key exchange in TLS 1.3](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/).
-The same conceptual mechanism of combining classic and PQ keys is 
-implemented in all hybrid signature schemes, e.g., when encoded in X.509 or PKCS#8
-data: (Plain binary/OCTET_STRING representations as e.g. documented in
-[Internet X.509 Public Key Infrastructure: Algorithm Identifiers for Dilithium](https://datatracker.ietf.org/doc/draft-ietf-lamps-dilithium-certificates/)
-of) classic and PQ key material and signatures are simply concatenated. As all
-(O)IDs for the various algorithms together with the algorithms themselves are
-still changing, the following two pages document current and past (O)IDs used by the
-various ´liboqs´-based implementations for [KEM](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-kem-info.md)
-and [Signatures](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md).
+For post-quantum algorithms, the version of the cryptographic algorithm used depends on the 
+version of liboqs used.  Regarding the integration of post-quantum algorithms into higher level
+components, this provider implements the following standards:
+
+- For TLS:
+  - Hybrid post-quantum / traditional key exchange:
+    - The data structures used follow the Internet-Draft [Hybrid key exchange in TLS 1.3](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/), namely simple concatenation of traditional and post-quantum public keys and shared secrets.
+    - The algorithm identifiers used are documented in [oqs-kem-info.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-kem-info.md).
+  - Hybrid post-quantum / traditional signatures in TLS:
+    - For public keys and digital signatures inside X.509 certificates, see the bullet point on X.509 below.
+    - For digital signatures outside X.509 certificates and in the TLS 1.3 handshake directly, the data structures used follow the same encoding format as that used for X.509 certificates, namely simple concatenation of traditional and post-quantum signatures.
+    - The algorithm identifiers used are documented in [oqs-sig-info.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md).
+- For X.509:
+  - Hybrid post-quantum / traditional public keys and signatures:
+    - The data structures used follow the Internet-Draft [Internet X.509 Public Key Infrastructure: Algorithm Identifiers for Dilithium](https://datatracker.ietf.org/doc/draft-ietf-lamps-dilithium-certificates/), namely simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
+    - The algorithm identifiers (OIDs) used are documented in [oqs-sig-info.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md).
+- For PKCS#8:
+  - Hybrid post-quantum / traditional private keys:
+    - Simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
 
 Algorithms
 ----------

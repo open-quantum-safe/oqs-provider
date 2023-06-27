@@ -51,12 +51,12 @@ if (USE_ENCODING_LIB)
   target_include_directories(oqsprovider PRIVATE ${encoder_LIBRARY_INCLUDE})
 endif()
 install(TARGETS oqsprovider
-        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-        RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+        LIBRARY DESTINATION "${OPENSSL_MODULES_PATH}"
+        RUNTIME DESTINATION "${OPENSSL_MODULES_PATH}")
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_VENDOR "www.openquantumsafe.org")
 set(CPACK_PACKAGE_VERSION ${OQSPROVIDER_VERSION_TEXT})
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, openssl (>= 3.0.0)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, openssl (>= 3.0.0), liboqs (>= 0.8.0)")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "www.openquantumsafe.org")
 include(CPack)
 

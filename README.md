@@ -137,7 +137,7 @@ Example for building and installing liboqs in `.local`:
 
 Further `liboqs` build options are [documented here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).
 
-## Building the provider
+## Building the provider (UNIX - Linux - OSX)
 
 `oqsprovider` using the local OpenSSL3 build as done above can be built for example via the following:
 
@@ -146,23 +146,63 @@ Further `liboqs` build options are [documented here](https://github.com/open-qua
 
 ## Testing
 
-Core component testing can be run via the following command:
+Core component testing can be run via the common `cmake` command:
 
-    (cd _build; ctest)
+    ctest --parallel 5 --test-dir _build --rerun-failed --output-on-failure
 
 Add `-V` to the `ctest` command for verbose output.
 
-*Note*: Some parts of testing depend on OpenSSL components. Be sure to have
-these available (done automatically by the scripts provided).
-See [the test README](test/README.md) for details.
-
 Additional interoperability tests (with OQS-OpenSSL1.1.1) are available in the
-script `scripts/runtests.sh`.
+script `scripts/runtests.sh` but are disabled by default as oqs-openssl111 has
+a smaller set of algorithms and features supported.
 
 ## Packaging
 
 A build target to create .deb packaging is available via the standard `package`
 target, e.g., executing `make package` in the `_build` subdirectory.
+The resultant file can be installed as usual via `dpkg -i ...`.
+
+## Installing the provider
+
+`oqsprovider` can be installed using the common `cmake` command
+
+    cmake --install _build
+
+If it is desired to activate `oqsprovider` by default in the system `openssl.cnf`
+file, amend the "[provider_sect]" as follows:
+
+```
+[provider_sect]
+default = default_sect
+oqsprovider = oqsprovider_sect
+[oqsprovider_sect]
+activate = 1
+```
+
+This file is typically located at (operating system dependent):
+- /etc/ssl/openssl.cnf (UNIX/Linux)
+- /opt/homebrew/etc/openssl@3/openssl.cnf (OSX Homebrew)
+- C:\Program Files\Common Files\SSL\openssl.cnf (Windows)
+
+Doing this will enable `oqsprovider` to be seamlessly used alongside the other
+`openssl` providers. If successfully done, running, e.g., `openssl list -providers`
+should output something along these lines (version IDs variable of course):
+
+```
+providers:
+  default
+    name: OpenSSL Default Provider
+    version: 3.1.1
+    status: active
+  oqsprovider
+    name: OpenSSL OQS Provider
+    version: 0.5.0
+    status: active
+```
+
+If this is the case, all `openssl` commands can be used as usual, extended
+by the option to use quantum safe cryptographic algorithms in addition/instead
+of classical crypto algorithms.
 
 ## Build and test options
 
@@ -171,6 +211,11 @@ target, e.g., executing `make package` in the `_build` subdirectory.
 In order to reduce the size of the oqsprovider, it is possible to limit the number
 of algorithms supported, e.g., to the set of NIST standardized algorithms. This is
 facilitated by setting the `liboqs` build option `-DOQS_ALGS_ENABLED=STD`.
+
+Another option to reduce the size of `oqsprovider` is to have it rely on a
+separate installation of `liboqs` (as a shared library). For such deployment be
+sure to specify the standard [BUILD_SHARED_LIBS](https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html)
+option of `cmake`.
 
 ### ninja
 
@@ -190,16 +235,21 @@ can be disabled in testing. For example
 
     OQS_SKIP_TESTS="sphincs" ./scripts/runtests.sh
 
-excludes all algorithms of the "Sphincs" family.
+excludes all algorithms of the "Sphincs" family (speeding up testing significantly).
 
 *Note*: By default, interoperability testing with oqs-openssl111 is no longer
 performed by default but can be manually enabled in the script `scripts/runtests.sh`.
 
 ### Key Encoding
 
-By setting `-DUSE_ENCODING_LIB=<ON/OFF>` at compile-time, oqs-provider can be compiled with with an an external encoding library `qsc-key-encoder`. Configuring the encodings is done via environment as described in [ALGORITHMS.md](ALGORITHMS.md).
+By setting `-DUSE_ENCODING_LIB=<ON/OFF>` at compile-time, oqs-provider can be
+compiled with with an an external encoding library `qsc-key-encoder`.
+Configuring the encodings is done via environment as described in [ALGORITHMS.md](ALGORITHMS.md).
+The default value is `OFF`.
 
-By setting `-DNOPUBKEY_IN_PRIVKEY=<ON/OFF>` at compile-time, it can be further specified to omit explicitly serializing the public key in a `privateKey` structure. The default value is `OFF`.
+By setting `-DNOPUBKEY_IN_PRIVKEY=<ON/OFF>` at compile-time, it can be further
+specified to omit explicitly serializing the public key in a `privateKey`
+structure. The default value is `OFF`.
 
 Building on Windows
 --------------------

@@ -44,4 +44,13 @@ jobs:
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
           python3 oqs-template/generate.py && \
           ! git status | grep modified
+      - name: Build .deb install package
+        run: cpack
+        working-directory: _build
+      - name: Retain .deb installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: oqsprovider-x64
+          path: _build/*.deb
+
 

@@ -1,4 +1,8 @@
+if (WIN32)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
+else()
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+endif()
 project(oqs-provider LANGUAGES C)
 set(OQSPROVIDER_VERSION_TEXT "0.5.1-dev")
 set(CMAKE_C_STANDARD 11)
@@ -39,9 +43,20 @@ endif()
 include(CheckLibraryExists)
 include(CheckFunctionExists)
 
-# Add required includes for openssl and liboqs
+# Add required includes and install locations for openssl
 find_package(OpenSSL 3.0 REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
+if (WIN32)
+# get_filename_component seems to fail when facing windows paths
+# so use new(er) cmake_path instruction there
+cmake_path(GET OPENSSL_CRYPTO_LIBRARY PARENT_PATH OQS_MODULES_PARENT_PATH)
+cmake_path(APPEND OQS_MODULES_PARENT_PATH "ossl-modules" OUTPUT_VARIABLE OPENSSL_MODULES_PATH)
+else()
+get_filename_component(OPENSSL_LIB_DIR ${OPENSSL_CRYPTO_LIBRARY} DIRECTORY)
+set(OPENSSL_MODULES_PATH ${OPENSSL_LIB_DIR}/ossl-modules)
+endif()
+
+# Add required include for liboqs
 find_package(liboqs REQUIRED)
 get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
 message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")

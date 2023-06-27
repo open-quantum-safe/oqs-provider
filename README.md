@@ -30,13 +30,13 @@ algorithm feature](https://github.com/openssl/openssl/pull/19312).
 Standards implemented
 ---------------------
 
-For non-post-quantum algorithms, this provider adheres to and implements all standards and algorithms
-implemented by its core components, [openssl](https://github.com/openssl/openssl)
-and [liboqs](https://github.com/open-quantum-safe/liboqs), e.g., concerning
-X.509, PKCS#8 or CMS.
+For non-post-quantum algorithms, this provider is basically silent, i.e.,
+permits use of standards and algorithms implemented by [openssl](https://github.com/openssl/openssl)
+, e.g., concerning X.509, PKCS#8 or CMS.
 
-For post-quantum algorithms, the version of the cryptographic algorithm used depends on the 
-version of liboqs used.  Regarding the integration of post-quantum algorithms into higher level
+For post-quantum algorithms, the version of the cryptographic algorithm used
+depends on the version of [liboqs](https://github.com/open-quantum-safe/liboqs) used.
+Regarding the integration of post-quantum algorithms into higher level
 components, this provider implements the following standards:
 
 - For TLS:
@@ -54,6 +54,8 @@ components, this provider implements the following standards:
 - For PKCS#8:
   - Hybrid post-quantum / traditional private keys:
     - Simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
+
+Additionally worthwhile noting is that only quantum-safe [signature algorithms](#signature-algorithms) are persisted via PKCS#8 and X.509. No corresponding encoder/decoder logic exists for quantum safe [KEM algorithms](#kem-algorithms) -- See also #194.
 
 Algorithms
 ----------

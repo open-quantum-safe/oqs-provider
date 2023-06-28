@@ -44,7 +44,7 @@ jobs:
           key: ${{ runner.os }}-openssl32
       - name: Build openssl3 if not cached
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        run: pwd && ./config --prefix=../.localopenssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs
+        run: pwd && ./config --prefix=`pwd`/../.localopenssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs
         working-directory: openssl
       - name: Check OpenSSL install3 
         run: ls -laR .localopenssl32

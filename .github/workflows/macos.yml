@@ -74,7 +74,7 @@ jobs:
         run: brew --version && brew list && brew install --formula -s oqsprovider.rb && brew list
         working-directory: scripts
       - name: Test brew install
-        run: brew config && brew list && brew info oqsprovider && brew info openssl@3 && brew info liboqs && export PATH=/usr/local/opt/openssl@3/bin:$PATH && echo $PATH && which openssl && openssl version && /usr/local/opt/openssl@3/bin/openssl version && ls -laR /usr/local/opt/openssl@3 && /usr/local/opt/openssl@3/bin/openssl list -providers && /usr/local/opt/openssl@3/bin/openssl list -providers -provider oqsprovider
+        run: brew config && brew list && brew info oqsprovider && brew info openssl@3 && brew info liboqs && export PATH=/usr/local/opt/openssl@3/bin:$PATH && echo $PATH && which openssl && openssl version && /usr/local/opt/openssl@3/bin/openssl version && ls -laR /usr/local/opt/openssl@3 && /usr/local/opt/openssl@3/bin/openssl list -providers && /usr/local/opt/openssl@3/bin/openssl list -providers -provider-path /usr/local/Cellar/oqsprovider/0.5.0/lib -provider oqsprovider
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3
         with:

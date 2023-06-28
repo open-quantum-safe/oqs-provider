@@ -46,8 +46,6 @@ jobs:
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         run: pwd && ./config --prefix=`pwd`/../.localopenssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs
         working-directory: openssl
-      - name: Check OpenSSL install3 
-        run: ls -laR .localopenssl32
       - name: Save OpenSSL
         id: cache-openssl-save
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
@@ -70,9 +68,9 @@ jobs:
         run: ls -l  && pwd
         working-directory: _build/lib
       - name: Check Openssl providers
-        run: OPENSSL_MODULES=_build/bin .localopenssl32/bin/openssl list -providers -provider oqsprovider -provider default
+        run: OPENSSL_MODULES=_build/lib .localopenssl32/bin/openssl list -providers -provider oqsprovider -provider default
       - name: Run tests
-        run: PATH=.localopenssl32/bin:$PATH ctest -V
+        run: PATH=../.localopenssl32/bin:$PATH OPENSSL_MODULES=lib ctest -V
         working-directory: _build
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3

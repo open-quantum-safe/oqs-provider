@@ -1,0 +1,80 @@
+name: MacOS tests
+
+on: [pull_request, push]
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+# Run a job for each of the specified os configs:
+    strategy:
+      matrix:
+        os:
+          - macos12.1
+          - macos11.3
+        params:
+          - oqsconfig: -DOQS_ALGS_ENABLED=STD
+    runs-on: ${{matrix.os}}
+    env:
+# Don't overwhelm github CI VMs:
+      MAKE_PARAMS: -j 4
+    steps:
+      - name: Checkout provider
+        uses: actions/checkout@v3
+      - name: Checkout openssl
+        uses: actions/checkout@v3
+        with:
+          set-safe-directory: true
+          repository: openssl/openssl
+          path: openssl
+      - name: checkout liboqs
+        uses: actions/checkout@v3
+        with:
+          set-safe-directory: true
+          repository: open-quantum-safe/liboqs
+          ref: main
+          path: liboqs
+      - name: Retrieve OpenSSL32 from cache
+        id: cache-openssl32
+        uses: actions/cache@v3
+        with:
+          path: /opt/openssl32
+          key: ${{ runner.os }}-openssl32
+      - name: Build openssl3 if not cached
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        run: bash -c "./config --prefix=/opt/openssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs"
+        working-directory: openssl
+      - name: Check OpenSSL install3 
+        run: ls /opt/openssl32
+      - name: build liboqs
+        run: |
+           mkdir _build
+           cd _build
+           cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX=/opt/liboqs ${{ matrix.params.oqsconfig }}  ..
+           ninja
+           ninja install
+        working-directory: liboqs
+      - name: Save OpenSSL
+        id: cache-openssl-save
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            /opt/openssl32
+          key: ${{ runner.os }}-openssl32
+      - name: build oqs-provider
+        run: bash -c "liboqs_DIR=/opt/liboqs cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -S . -B _build && cd _build && ninja && cd .."
+      - name: Check resultant dylib
+        run: ls -l  && pwd
+        working-directory: _build/lib
+      - name: Check Openssl providers
+        run: OPENSSL_MODULES=_build/bin /opt/openssl32/bin/openssl list -providers -provider oqsprovider -provider default
+      - name: Run tests
+        run: PATH=/opt/openssl32/bin:$PATH ctest -V
+        working-directory: _build
+      - name: Retain oqsprovider.dylib
+        uses: actions/upload-artifact@v3
+        with:
+          name: oqs-provider-${{matrix.os}}
+          path: _build/lib/oqsprovider.dylib

@@ -40,19 +40,19 @@ jobs:
         id: cache-openssl32
         uses: actions/cache@v3
         with:
-          path: /opt/openssl32
+          path: .localopenssl32
           key: ${{ runner.os }}-openssl32
       - name: Build openssl3 if not cached
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        run: bash -c "./config --prefix=/opt/openssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs"
+        run: pwd && ./config --prefix=../.localopenssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs
         working-directory: openssl
       - name: Check OpenSSL install3 
-        run: ls /opt/openssl32
+        run: ls -laR .localopenssl32
       - name: build liboqs
         run: |
            mkdir _build
            cd _build
-           cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX=/opt/liboqs ${{ matrix.params.oqsconfig }}  ..
+           cmake -GNinja -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs ${{ matrix.params.oqsconfig }}  ..
            ninja
            ninja install
         working-directory: liboqs
@@ -62,17 +62,17 @@ jobs:
         uses: actions/cache/save@v3
         with:
           path: |
-            /opt/openssl32
+            .localopenssl32
           key: ${{ runner.os }}-openssl32
       - name: build oqs-provider
-        run: bash -c "liboqs_DIR=/opt/liboqs cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -S . -B _build && cd _build && ninja && cd .."
+        run: liboqs_DIR=.localliboqs cmake -GNinja -DOPENSSL_ROOT_DIR=.localopenssl32 -S . -B _build && cd _build && ninja
       - name: Check resultant dylib
         run: ls -l  && pwd
         working-directory: _build/lib
       - name: Check Openssl providers
-        run: OPENSSL_MODULES=_build/bin /opt/openssl32/bin/openssl list -providers -provider oqsprovider -provider default
+        run: OPENSSL_MODULES=_build/bin .localopenssl32/bin/openssl list -providers -provider oqsprovider -provider default
       - name: Run tests
-        run: PATH=/opt/openssl32/bin:$PATH ctest -V
+        run: PATH=.localopenssl32/bin:$PATH ctest -V
         working-directory: _build
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3

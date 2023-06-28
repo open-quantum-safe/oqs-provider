@@ -70,6 +70,9 @@ jobs:
       - name: Run tests
         run: PATH=../.localopenssl32/bin:$PATH ctest -V
         working-directory: _build
+      - name: brew install test
+        run: brew --version && brew list && ls -l /opt/homebrew/Library/Taps/homebrew/homebrew-core/Formula && brew install -s oqsprovider.rb
+        working-directory: scripts
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3
         with:

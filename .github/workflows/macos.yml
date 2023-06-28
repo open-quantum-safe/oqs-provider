@@ -11,8 +11,9 @@ jobs:
     strategy:
       matrix:
         os:
-          - macos12.1
-          - macos11.3
+          - macos-13
+          - macos-12
+          - macos-11
         params:
           - oqsconfig: -DOQS_ALGS_ENABLED=STD
     runs-on: ${{matrix.os}}

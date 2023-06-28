@@ -60,7 +60,7 @@ jobs:
         run: |
            mkdir _build
            cd _build
-           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs ${{ matrix.params.oqsconfig }}  ..
+           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../../.localliboqs ${{ matrix.params.oqsconfig }}  ..
            make $MAKE_PARAMS
            make install
         working-directory: liboqs

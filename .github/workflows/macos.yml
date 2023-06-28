@@ -73,6 +73,8 @@ jobs:
       - name: brew install test
         run: brew --version && brew list && brew install -s oqsprovider.rb
         working-directory: scripts
+      - name: Test brew install
+        run: which openssl && openssl version && openssl list -providers && openssl list -providers -provider oqsprovider
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3
         with:

@@ -14,8 +14,11 @@ jobs:
           - macos-13
           - macos-12
           - macos-11
-        params:
-          - oqsconfig: -DOQS_ALGS_ENABLED=STD
+        platform:
+          - arch: x64
+            oqsconfig: -DOQS_ALGS_ENABLED=STD
+          - arch: arm64
+            oqsconfig: -DOQS_ALGS_ENABLED=STD
     runs-on: ${{matrix.os}}
     env:
 # Don't overwhelm github CI VMs:
@@ -58,7 +61,7 @@ jobs:
         run: |
            mkdir _build
            cd _build
-           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../../.localliboqs ${{ matrix.params.oqsconfig }}  ..
+           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../../.localliboqs ${{ matrix.platform.oqsconfig }}  ..
            make $MAKE_PARAMS
            make install
         working-directory: liboqs
@@ -75,5 +78,5 @@ jobs:
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3
         with:
-          name: oqs-provider-${{matrix.os}}
+          name: oqs-provider-${{matrix.os}}-${{matrix.platform.arch}}
           path: _build/lib/oqsprovider.dylib

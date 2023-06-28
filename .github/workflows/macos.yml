@@ -65,7 +65,7 @@ jobs:
            make install
         working-directory: liboqs
       - name: build oqs-provider
-        run: cmake -Dliboqs_DIR=.localliboqs -DOPENSSL_ROOT_DIR=.localopenssl32 -S . -B _build && cmake --build _build
+        run: liboqs_DIR=.localliboqs cmake -DOPENSSL_ROOT_DIR=.localopenssl32 -S . -B _build && cmake --build _build
       - name: Check resultant dylib
         run: ls -l  && pwd
         working-directory: _build/lib

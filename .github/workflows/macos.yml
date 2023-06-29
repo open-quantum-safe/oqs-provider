@@ -70,8 +70,9 @@ jobs:
       - name: Run tests
         run: PATH=../.localopenssl32/bin:$PATH ctest -V
         working-directory: _build
+      # Try brew install of head: If error message below appears, build and test passed successfully
       - name: brew install test
-        run: brew install --formula -s oqsprovider.rb 2>&1 | grep "Empty installation"
+        run: brew install --HEAD --formula -s oqsprovider.rb 2>&1 | grep "Empty installation"
         working-directory: scripts
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3

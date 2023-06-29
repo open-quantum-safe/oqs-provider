@@ -16,3 +16,13 @@ tmp
 interop.log
 # pycache
 oqs-template/__pycache__
+
+# Visual Studio Code
+.vscode
+
+# Jetbrains IDEs
+.idea
+
+# MacOS
+.DS_Store
+

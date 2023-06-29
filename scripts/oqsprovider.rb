@@ -16,9 +16,10 @@ class Oqsprovider < Formula
     with_env(CC: DevelopmentTools.locate(DevelopmentTools.default_compiler)) do
       system "ctest", "--parallel", "5", "--test-dir", "build", "--rerun-failed", "--output-on-failure"
     end
-    system "cmake", "--install", "build"
-    ohai "Update system openssl.cnf to activate oqsprovider by default;"
-    ohai " otherwise use 'openssl <command> -provider oqsprovider' to activate."
+# Do not install as part of testing -- only when deployed; so comment out for now:
+#    system "cmake", "--install", "build"
+#    ohai "Update system openssl.cnf to activate oqsprovider by default;"
+#    ohai " otherwise use 'openssl <command> -provider oqsprovider' to activate."
   end
 
   test do

@@ -69,6 +69,25 @@ This can be used, for example, to facilitate a release of `oqsprovider`
 to track an old/stable `liboqs` release.
 Default is "main" (most current code).
 
+### liboqs_DIR
+
+If this environment variable is set, `liboqs` is not being built but
+used from the directory specified in this variable: Both `include`
+and `lib` directories must be present in that location.
+By not setting this variable, `liboqs` is build from source.
+
+### LIBOQS_BRANCH
+
+If set, this environment variable designates the `liboqs` branch to
+be built. If this variable is not set, the "main" branch is built.
+
+### MAKE_PARAMS
+
+This environment variable permits passing parameters to the `make`
+command used to build `openssl`, e.g., "-j 8" to activate 8-fold
+parallel builds to reduce the compilation time on a suitable multicore
+machine.
+
 ### OQS_SKIP_TESTS
 
 By setting this tests environment variable, testing of specific
@@ -95,7 +114,10 @@ By default this variable is unset.
 
 ## LIBOQS configuration options
 
-These are [documented here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).
+These are [documented in full here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).
+One option is of particular context here, particularly if building
+`oqs-provider` static, i.e., as a standalone binary not requiring
+presence of `liboqs` during deployment:
 
 ### OQS_ALGS_ENABLED
 

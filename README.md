@@ -13,10 +13,6 @@ in a standard OpenSSL (3.x) distribution by way of implementing a single
 shared library, the OQS
 [provider](https://www.openssl.org/docs/manmaster/man7/provider.html).
 
-This repository has been derived from the [OQS-OpenSSL3 branch in
-https://github.com/open-quantum-safe/openssl](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL3)
-creating a provider that can be built outside the OpenSSL source tree.
-
 Status
 ------
 
@@ -29,35 +25,7 @@ mechanism and X.509 data structures. Also available is support for
 TLS1.3 signature functionality via the [OpenSSL3 fetchable signature
 algorithm feature](https://github.com/openssl/openssl/pull/19312).
 
-Standards implemented
----------------------
-
-For non-post-quantum algorithms, this provider is basically silent, i.e.,
-permits use of standards and algorithms implemented by [openssl](https://github.com/openssl/openssl)
-, e.g., concerning X.509, PKCS#8 or CMS.
-
-For post-quantum algorithms, the version of the cryptographic algorithm used
-depends on the version of [liboqs](https://github.com/open-quantum-safe/liboqs) used.
-Regarding the integration of post-quantum algorithms into higher level
-components, this provider implements the following standards:
-
-- For TLS:
-  - Hybrid post-quantum / traditional key exchange:
-    - The data structures used follow the Internet-Draft [Hybrid key exchange in TLS 1.3](https://datatracker.ietf.org/doc/draft-ietf-tls-hybrid-design/), namely simple concatenation of traditional and post-quantum public keys and shared secrets.
-    - The algorithm identifiers used are documented in [oqs-kem-info.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-kem-info.md).
-  - Hybrid post-quantum / traditional signatures in TLS:
-    - For public keys and digital signatures inside X.509 certificates, see the bullet point on X.509 below.
-    - For digital signatures outside X.509 certificates and in the TLS 1.3 handshake directly, the data structures used follow the same encoding format as that used for X.509 certificates, namely simple concatenation of traditional and post-quantum signatures.
-    - The algorithm identifiers used are documented in [oqs-sig-info.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md).
-- For X.509:
-  - Hybrid post-quantum / traditional public keys and signatures:
-    - The data structures used follow the Internet-Draft [Internet X.509 Public Key Infrastructure: Algorithm Identifiers for Dilithium](https://datatracker.ietf.org/doc/draft-ietf-lamps-dilithium-certificates/), namely simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
-    - The algorithm identifiers (OIDs) used are documented in [oqs-sig-info.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md).
-- For PKCS#8:
-  - Hybrid post-quantum / traditional private keys:
-    - Simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
-
-Additionally worthwhile noting is that only quantum-safe [signature algorithms](#signature-algorithms) are persisted via PKCS#8 and X.509. No corresponding encoder/decoder logic exists for quantum safe [KEM algorithms](#kem-algorithms) -- See also #194.
+The standards implemented are documented in the separate file [STANDARDS.md](STANDARDS.md).
 
 Algorithms
 ----------
@@ -123,9 +91,14 @@ For information the following environment settings may be of most interest:
 - OPENSSL_INSTALL: Directory of an existing, non-standard OpenSSL binary distribution
 - OPENSSL_BRANCH: Tag of a specific OpenSSL release to be built and used in testing
 
+The full documentation for the options to these scripts is available [here](CONFIGURE.md#convenience-build-script-options).
 
 Building and testing
 --------------------
+
+The below describes the basic build-test-install cycle using the standard
+`cmake` tooling. Platform-specific notes are available for [UNIX](NOTES-UNIX.md)
+(incl. MacOS and `cygwin`) and [Windows](NOTES-Windows.md).
 
 ## Configuration options
 
@@ -135,113 +108,15 @@ in [CONFIGURE.md](CONFIGURE.md).
 ## Pre-requisites
 
 To be able to build `oqsprovider`, OpenSSL 3.0 and liboqs need to be installed.
-It's not important where they are installed, just that they are.
+It's not important where they are installed, just that they are. If installed
+in non-standard locations, these must be provided when running `cmake` via
+the variables "OPENSSL_ROOT_DIR" and "liboqs_DIR". See [CONFIGURE.md](CONFIGURE.md)
+for details.
 
-For building, minimum requirements are a C compiler, git access and `cmake`.
-For Linux these commands can typically be installed by running for example
+## Basic steps
 
-    sudo apt install build-essential git cmake
-
-### OpenSSL 3
-
-If OpenSSL3 is not already installed, the following shows an example for building
-and installing the latest/`master` branch of OpenSSL 3 in `.local`:
-
-    git clone git://git.openssl.org/openssl.git
-    cd openssl
-    ./config --prefix=$(echo $(pwd)/../.local) && make && make install_sw
-    cd ..
-
-For [OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
-see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
-
-### liboqs
-
-Example for building and installing liboqs in `.local`:
-
-    git clone https://github.com/open-quantum-safe/liboqs.git
-    cd liboqs
-    cmake -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build
-    cmake --build _build && cmake --install _build
-    cd ..
-
-Further `liboqs` build options are [documented here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).
-
-## Building the provider (UNIX - Linux - OSX)
-
-`oqsprovider` using the local OpenSSL3 build as done above can be built for example via the following:
-
-    cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local -DCMAKE_PREFIX_PATH=$(pwd)/.local -S . -B _build
-    cmake --build _build
-
-## Testing
-
-Core component testing can be run via the common `cmake` command:
-
-    ctest --parallel 5 --test-dir _build --rerun-failed --output-on-failure
-
-Add `-V` to the `ctest` command for verbose output.
-
-Additional interoperability tests (with OQS-OpenSSL1.1.1) are available in the
-script `scripts/runtests.sh` but are disabled by default as oqs-openssl111 has
-a smaller set of algorithms and features supported.
-
-## Packaging
-
-A build target to create .deb packaging is available via the standard `package`
-target, e.g., executing `make package` in the `_build` subdirectory.
-The resultant file can be installed as usual via `dpkg -i ...`.
-
-## Installing the provider
-
-`oqsprovider` can be installed using the common `cmake` command
-
-    cmake --install _build
-
-If it is desired to activate `oqsprovider` by default in the system `openssl.cnf`
-file, amend the "[provider_sect]" as follows:
-
-```
-[provider_sect]
-default = default_sect
-oqsprovider = oqsprovider_sect
-[oqsprovider_sect]
-activate = 1
-```
-
-This file is typically located at (operating system dependent):
-- /etc/ssl/openssl.cnf (UNIX/Linux)
-- /opt/homebrew/etc/openssl@3/openssl.cnf (OSX Homebrew)
-- C:\Program Files\Common Files\SSL\openssl.cnf (Windows)
-
-Doing this will enable `oqsprovider` to be seamlessly used alongside the other
-`openssl` providers. If successfully done, running, e.g., `openssl list -providers`
-should output something along these lines (version IDs variable of course):
-
-```
-providers:
-  default
-    name: OpenSSL Default Provider
-    version: 3.1.1
-    status: active
-  oqsprovider
-    name: OpenSSL OQS Provider
-    version: 0.5.0
-    status: active
-```
-
-If this is the case, all `openssl` commands can be used as usual, extended
-by the option to use quantum safe cryptographic algorithms in addition/instead
-of classical crypto algorithms.
-
-Building on Windows
---------------------
-Building `oqsprovider` following the steps outlined above have been
-successfully tested on Windows 10 and 11 using MSYS2 MINGW64.
-For building `oqsprovider` successfully using Microsoft Visual Studio
-or `cygwin`, please check out the build instructions for those platforms
-in the CI control file at ".github/workflows/windows.yml".
-
+   cmake -S . -B _build && cmake --build _build && ctest --test-dir _build && cmake --install _build
+    
 Using
 -----
 
@@ -270,6 +145,9 @@ used during TLS1.3 operations as documented in https://github.com/openssl/openss
 After https://github.com/openssl/openssl/pull/19312 landed, (also PQ) signature
 algorithms are working in TLS1.3 (handshaking); after https://github.com/openssl/openssl/pull/20486
 has landed, also algorithms with very long signatures are supported.
+
+For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
+see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
 
 Team
 ----

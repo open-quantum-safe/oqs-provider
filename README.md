@@ -94,12 +94,6 @@ TLS operations. This designation can be changed by modifying the
 "enabled" flags in the main [algorithm configuration file](oqs-template/generate.yml)
 and re-running the generator script `python3 oqs-template/generate.py`.
 
-It is possible to select only algorithms of a specific bit strength by using
-the openssl property selection mechanism on the key "oqsprovider.security_bits",
-e.g., as such: `openssl list -kem-algorithms -propquery oqsprovider.security_bits=256`.
-The bit strength of hybrid algorithms is always defined by the bit strength
-of the classic algorithm.
-
 In order to enable parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic
 and quantum-safe methods: These are listed above with a prefix denoting a
@@ -292,147 +286,7 @@ in the CI control file at ".github/workflows/windows.yml".
 Using
 -----
 
-In order to exercise the `oqsprovider`, it needs to be explicitly activated.
-One way to do this is to enable it in the OpenSSL config file. Detailed
-explanations can be found for example
-[here](https://wiki.openssl.org/index.php/OpenSSL_3.0#Providers).
-
-An example file activating `oqsprovider` by default is `scripts/openssl-ca.cnf`.
-This can be activated for example by setting the standard OpenSSl environment
-variable "OPENSSL_CONF" to this file before using `openssl`, e.g. in UNIX notation:
-
-    setenv OPENSSL_CONF=scripts/openssl-ca.cnf
-
-Another alternative is to explicitly request its use on the command line.
-The following examples use that option. All examples below assume openssl (3.0)
-to be located in a folder `.local` in the local directory as per the
-building examples above. Having OpenSSL(3) installed in a standard location
-eliminates the need for specific PATH setting as showcased below.
-
-## Checking provider version information
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl list -providers -verbose -provider-path _build/lib -provider oqsprovider 
-
-If using a standard install of openssl(3) and including `oqsprovider` activation
-in the global "openssl.cnf" file, the command accordingly gets simplified to:
-
-    openssl list -providers -verbose
-
-## Creating (classic) keys and certificates
-
-This can be facilitated for example by using the usual `openssl` commands:
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey rsa -keyout rsa_CA.key -out rsa_CA.crt -nodes -subj "/CN=test CA" -days 365 -config openssl/apps/openssl.cnf
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl genpkey -algorithm rsa -out rsa_srv.key
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -new -newkey rsa -keyout rsa_srv.key -out rsa_srv.csr -nodes -subj "/CN=test server" -config openssl/apps/openssl.cnf
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl x509 -req -in rsa_srv.csr -out rsa_srv.crt -CA rsa_CA.crt -CAkey rsa_CA.key -CAcreateserial -days 365
-
-These examples create classic RSA keys but the very same commands can be used
-to create PQ certificates replacing the key type "rsa" with any of the PQ
-signature algorithms [listed above](#signature-algorithms).
-
-## Setting up a (quantum-safe) test server
-
-A simple server utilizing PQ/quantum-safe KEM algorithms and classic RSA
-certicates can be set up for example by running
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake -provider-path _build/lib  -provider default -provider oqsprovider
-
-## Running a client to interact with (quantum-safe) KEM algorithms
-
-This can be facilitated for example by running
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl s_client -groups frodo640shake -provider-path _build/lib  -provider default -provider oqsprovider
-
-By issuing the command `GET /` the quantum-safe crypto enabled OpenSSL3
-server returns details about the established connection.
-
-Any [available quantum-safe/PQ KEM algorithm](#kem-algorithms) can be selected by passing it in the `-groups` option.
-
-## S/MIME message signing -- Cryptographic Message Syntax (CMS)
-
-Also possible is the creation and verification of quantum-safe digital
-signatures using [CMS](https://datatracker.ietf.org/doc/html/rfc5652).
-
-#### Signing data
-
-For creating signed data, two steps are required: One is the creation
-of a certificate using a QSC algorithm; the second is the use of this
-certificate (and its signature algorithm) to create the signed data:
-
-Step 1: Create quantum-safe key pair and self-signed certificate:
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf -provider-path _build/lib -provider oqsprovider -provider default
-
-By changing the `-newkey` parameter algorithm name [any of the 
-supported quantum-safe or hybrid algorithms](#signature-algorithms)
-can be utilized instead of the sample algorithm `dilithium3`.
-
-Step 2: Sign data:
-
-As
-[the CMS standard](https://datatracker.ietf.org/doc/html/rfc5652#section-5.3)
-requires the presence of a digest algorithm, while quantum-safe crypto
-does not, in difference to the QSC certificate creation command above,
-passing a message digest algorithm via the `-md` parameter is mandatory.
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -in inputfile -sign -signer qsc.crt -inkey qsc.key -nodetach -outform pem -binary -out signedfile -md sha512 -provider-path _build/lib  -provider default -provider oqsprovider
-
-Data to be signed is to be contained in the file named `inputfile`. The
-resultant CMS output is contained in file `signedfile`. The QSC algorithm
-used is the same signature algorithm utilized for signing the certificate
-`qsc.crt`.
-
-#### Verifying data
-
-Continuing the example above, the following command verifies the CMS file
-`signedfile` and outputs the `outputfile`. Its contents should be identical
-to the original data in `inputfile` above.
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile -provider-path _build/lib -provider oqsprovider -provider default
-
-Note that it is also possible to build proper QSC certificate chains
-using the standard OpenSSL calls. For sample code see
-[scripts/oqsprovider-certgen.sh](scripts/oqsprovider-certgen.sh).
-
-### Support of `dgst` (and sign)
-
-Also tested to operate OK is the [openssl dgst](https://www.openssl.org/docs/man3.0/man1/openssl-dgst.html)
-command. Sample invocations building on the keys and certificate files in the examples above:
-
-#### Signing
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/lib -provider oqsprovider -provider default -sign qsc.key -out dgstsignfile inputfile
-
-#### Verifying
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl dgst -provider-path _build/lib -provider oqsprovider -provider default -signature dgstsignfile -verify qsc.pubkey inputfile
-
-The public key can be extracted from the certificate using standard openssl command:
-
-    LD_LIBRARY_PATH=.local/lib64 .local/bin/openssl x509 -provider-path _build/lib -provider oqsprovider -provider default -in qsc.crt -pubkey -noout > qsc.pubkey
-
-The `dgst` command is not tested for interoperability with [oqs-openssl111](https://github.com/open-quantum-safe/openssl).
-
-### Note on randomness provider
-
-`oqsprovider` does not implement its own
-[DRBG](https://csrc.nist.gov/glossary/term/Deterministic_Random_Bit_Generator).
-Therefore by default it relies on OpenSSL to provide one. Thus,
-either the default or fips provider must be loaded for QSC algorithms
-to have access to OpenSSL-provided randomness. Check out
-[OpenSSL provider documentation](https://www.openssl.org/docs/manmaster/man7/provider.html)
-and/or [OpenSSL command line options](https://www.openssl.org/docs/manmaster/man1/openssl.html)
-on how to facilitate this. Or simply use the sample command
-lines documented in this README.
-
-This dependency could be eliminated by building `liboqs` without
-OpenSSL support ([OQS_USE_OPENSSL=OFF](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL)),
-which of course would be an unusual approach for an OpenSSL-OQS provider.
-
-### Note on KEM Decapsulation API
-
-The OpenSSL [`EVP_PKEY_decapsulate` API](https://www.openssl.org/docs/manmaster/man3/EVP_PKEY_decapsulate.html) specifies an explicit return value for failure. For security reasons, most KEM algorithms available from liboqs do not return an error code if decapsulation failed. Successful decapsulation can instead be implicitly verified by comparing the original and the decapsulated message.
+Usage of `oqsprovider` is documented in the separate [USAGE.md](USAGE.md) file.
 
 Note on OpenSSL versions
 ------------------------
@@ -490,6 +344,12 @@ Contributors to the `oqsprovider` include:
 - Julian Segeth
 - Alex Zaslavsky
 - Will Childs-Klein
+
+History
+-------
+
+Documentation on current and past releases ("code history") is documented in
+the separate file [RELEASE.md](RELEASE.md).
 
 Acknowledgments
 ---------------

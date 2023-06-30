@@ -69,7 +69,8 @@ and quantum-safe methods: These are listed above with a prefix denoting a
 classic algorithm, e.g., for elliptic curve: "p256_".
 
 A full list of algorithms, their interoperability code points and OIDs as well
-as a method to dynamically adapt them are documented in [ALGORITHMS.md](ALGORITHMS.md).
+as a method to dynamically adapt them, e.g., for interoperability testing are
+documented in [ALGORITHMS.md](ALGORITHMS.md).
 
 *Note:* `oqsprovider` depends for TLS session setup and hybrid operations
 on OpenSSL providers for classic crypto operations. Therefore it is essential
@@ -115,7 +116,7 @@ for details.
 
 ## Basic steps
 
-   cmake -S . -B _build && cmake --build _build && ctest --test-dir _build && cmake --install _build
+    cmake -S . -B _build && cmake --build _build && ctest --test-dir _build && cmake --install _build
     
 Using
 -----

@@ -93,6 +93,7 @@ In addition, algorithms not denoted with "\*" above are not enabled for
 TLS operations. This designation can be changed by modifying the
 "enabled" flags in the main [algorithm configuration file](oqs-template/generate.yml)
 and re-running the generator script `python3 oqs-template/generate.py`.
+See [CONFIGURE.md](CONFIGURE.md) for details.
 
 In order to enable parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic
@@ -125,6 +126,11 @@ For information the following environment settings may be of most interest:
 
 Building and testing
 --------------------
+
+## Configuration options
+
+All options to configure `oqs-provider` at build- or run-time are documented
+in [CONFIGURE.md](CONFIGURE.md).
 
 ## Pre-requisites
 
@@ -228,53 +234,6 @@ If this is the case, all `openssl` commands can be used as usual, extended
 by the option to use quantum safe cryptographic algorithms in addition/instead
 of classical crypto algorithms.
 
-## Build and test options
-
-### Size optimizations
-
-In order to reduce the size of the oqsprovider, it is possible to limit the number
-of algorithms supported, e.g., to the set of NIST standardized algorithms. This is
-facilitated by setting the `liboqs` build option `-DOQS_ALGS_ENABLED=STD`.
-
-Another option to reduce the size of `oqsprovider` is to have it rely on a
-separate installation of `liboqs` (as a shared library). For such deployment be
-sure to specify the standard [BUILD_SHARED_LIBS](https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html)
-option of `cmake`.
-
-### ninja
-
-By adding the standard CMake option `-GNinja` the ninja build system can be used,
-enabling the usual `ninja`, `ninja test`, or `ninja package` commands.
-
-### NDEBUG
-
-By adding the standard CMake option `-DCMAKE_BUILD_TYPE=Release` to the
-`oqsprovider` build command, debugging output is disabled.
-
-### OQS_SKIP_TESTS
-
-By setting this environment variable, testing of specific
-algorithm families as listed [here](https://github.com/open-quantum-safe/openssl#supported-algorithms)
-can be disabled in testing. For example
-
-    OQS_SKIP_TESTS="sphincs" ./scripts/runtests.sh
-
-excludes all algorithms of the "Sphincs" family (speeding up testing significantly).
-
-*Note*: By default, interoperability testing with oqs-openssl111 is no longer
-performed by default but can be manually enabled in the script `scripts/runtests.sh`.
-
-### Key Encoding
-
-By setting `-DUSE_ENCODING_LIB=<ON/OFF>` at compile-time, oqs-provider can be
-compiled with with an an external encoding library `qsc-key-encoder`.
-Configuring the encodings is done via environment as described in [ALGORITHMS.md](ALGORITHMS.md).
-The default value is `OFF`.
-
-By setting `-DNOPUBKEY_IN_PRIVKEY=<ON/OFF>` at compile-time, it can be further
-specified to omit explicitly serializing the public key in a `privateKey`
-structure. The default value is `OFF`.
-
 Building on Windows
 --------------------
 Building `oqsprovider` following the steps outlined above have been
@@ -311,24 +270,6 @@ used during TLS1.3 operations as documented in https://github.com/openssl/openss
 After https://github.com/openssl/openssl/pull/19312 landed, (also PQ) signature
 algorithms are working in TLS1.3 (handshaking); after https://github.com/openssl/openssl/pull/20486
 has landed, also algorithms with very long signatures are supported.
-
-liboqs dependency
------------------
-
-As `oqsprovider` is dependent on `liboqs` for the implementation of the PQ algorithms
-there is a mechanism to adapt the functionality of a specific `liboqs` version to the
-current `oqsprovider` version: The use of the code generator script `oqs-template/generate.py`
-which in turn is driven by any of the `liboqs` release-specific `oqs-template/generate.yml[-release]`
-files. The same file(s) also define the (default) TLS IDs of all algorithms included and
-therefore represent the interoperability level at a specific point in time (of development
-of `oqsprovider` and `liboqs`).
-
-By default, `oqsprovider` always uses the most current version of `liboqs` code, but by
-setting the environment variable "LIBOQS_BRANCH" when running the `scripts/fullbuild.sh`
-script, code will be generated to utilize a specific, supported `liboqs` release. The
-script `scripts/revertmain.sh` can be used to revert all code back to the default,
-`main`-branch tracking strategy. This can be used, for example, to facilitate a release
-of `oqsprovider` to track an old `liboqs` release.
 
 Team
 ----

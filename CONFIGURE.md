@@ -97,6 +97,14 @@ By default this variable is unset.
 
 These are [documented here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).
 
+### OQS_ALGS_ENABLED
+
+In order to reduce the size of the oqsprovider, it is possible to limit the number
+of algorithms supported, e.g., to the set of NIST standardized algorithms. This is
+facilitated by setting the `liboqs` build option `-DOQS_ALGS_ENABLED=STD` when building
+`liboqs`. The list of algorithms supported by `oqs-provider` is defined by
+the contents of the file `generate.yml` documented in the [pre-build configuration](#pre-build-configuration).
+
 ## Runtime options
 
 The `openssl` [property selection mechanism](https://www.openssl.org/docs/manmaster/man7/property.html)

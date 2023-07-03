@@ -13,14 +13,14 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Pull prerequisites
-        run: brew install openssl@3 liboqs && brew info openssl@3 && brew info liboqs
-      - name: Checkout code
+      - name: Install prerequisites
+        run: brew install liboqs
+      - name: Checkout oqsprovider code
         uses: actions/checkout@v2
-      - name: Full build
-        run: OPENSSL_INSTALL=/usr/local/opt/openssl@3 ./scripts/fullbuild.sh
-      - name: Test
-        run: ./scripts/runtests.sh -V
+      - name: Build oqsprovider
+        run: cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@3 -S . -B _build && cmake --build _build
+      - name: Test oqsprovider
+        run: ctest --test-dir _build
 
   linux_intel:
     runs-on: ubuntu-latest

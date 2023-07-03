@@ -8,6 +8,20 @@ on:
     
 jobs:
 
+  macos_intel:
+    runs-on: macos-13
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Pull prerequisites
+        run: brew install openssl@3 liboqs && brew info openssl@3 && brew info liboqs
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Full build
+        run: OPENSSL_INSTALL=/usr/local/opt/openssl@3 ./scripts/fullbuild.sh
+      - name: Test
+        run: ./scripts/runtests.sh -V
+
   linux_intel:
     runs-on: ubuntu-latest
     strategy:
@@ -29,3 +43,4 @@ jobs:
         run: ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
+

@@ -37,6 +37,14 @@ the specific reference to the build type ensures a shared library with
 release symbols, suitable for use with a release-symbol `openssl` build
 is created.
 
+If `openssl` and/or `liboqs` have not been installed to system standard locations
+use the `cmake` defines "-DOPENSSL_ROOT_DIR" and/or "-Dliboqs_DIR" to utilize
+those, e.g., like this:
+
+    cmake -DOPENSSL_ROOT_DIR=c:\opt\openssl3 -Dliboqs_DIR=c:\liboqs -S . -B _build && cmake --build _build && cmake --install _build
+
+Further configuration options are documented [here](CONFIGURE.md#build-install-options).
+
 ## Test
 
 Standard `ctest` can be used to validate correct operation in build directory `_build`, e.g.:

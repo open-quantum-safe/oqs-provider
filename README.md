@@ -21,9 +21,9 @@ key establishment in TLS1.3 including management of such keys via the
 OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
 signatures including CMS and CMP functionality are available via the OpenSSL
 EVP interface. Key persistence is provided via the encode/decode
-mechanism and X.509 data structures. Also available is support for 
-TLS1.3 signature functionality via the [OpenSSL3 fetchable signature
-algorithm feature](https://github.com/openssl/openssl/pull/19312).
+mechanism and X.509 data structures. Starting with OpenSSL 3.2 support for 
+TLS1.3 signature functionality is available and final glitches for CMS
+have been resolved.
 
 The standards implemented are documented in the separate file [STANDARDS.md](STANDARDS.md).
 
@@ -58,12 +58,10 @@ via the standard commands, i.e.,
 `openssl list -kem-algorithms -provider oqsprovider`.
 
 In addition, algorithms not denoted with "\*" above are not enabled for
-TLS operations. This designation can be changed by modifying the
-"enabled" flags in the main [algorithm configuration file](oqs-template/generate.yml)
-and re-running the generator script `python3 oqs-template/generate.py`.
-See [CONFIGURE.md](CONFIGURE.md) for details.
+TLS operations. This designation [can be changed by modifying the
+"enabled" flags in the main alorithm configuration file](CONFIGURE.md#pre-build-configuration).
 
-In order to enable parallel use of classic and quantum-safe cryptography 
+In order to support parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic
 and quantum-safe methods: These are listed above with a prefix denoting a
 classic algorithm, e.g., for elliptic curve: "p256_".
@@ -71,11 +69,6 @@ classic algorithm, e.g., for elliptic curve: "p256_".
 A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are
 documented in [ALGORITHMS.md](ALGORITHMS.md).
-
-*Note:* `oqsprovider` depends for TLS session setup and hybrid operations
-on OpenSSL providers for classic crypto operations. Therefore it is essential
-that a provider such as `default` or `fips` is configured to be active. See
-`tests/oqs.cnf` or `scripts/openssl-ca.cnf` for examples.
 
 Building and testing -- Quick start
 -----------------------------------
@@ -86,13 +79,7 @@ respectively (tested on Linux Ubuntu and Mint as well as OSX).
 
 By default, these scripts always build and test against the current OpenSSL `master` branch.
 
-These scripts can be configured by setting various environment variables as documented in the scripts.
-For information the following environment settings may be of most interest:
-
-- OPENSSL_INSTALL: Directory of an existing, non-standard OpenSSL binary distribution
-- OPENSSL_BRANCH: Tag of a specific OpenSSL release to be built and used in testing
-
-The full documentation for the options to these scripts is available [here](CONFIGURE.md#convenience-build-script-options).
+These scripts can be [configured by setting various variables](CONFIGURE.md#convenience-build-script-options).
 
 Building and testing
 --------------------
@@ -183,8 +170,8 @@ under grant agreement No 957073.
 Financial support for the development of Open Quantum Safe has been provided
 by Amazon Web Services and the Tutte Institute for Mathematics and Computing.
 
-We'd like to make a special acknowledgement to the companies who have
-dedicated programmer time to contribute source code to OQS, including
+The OQS project would like to make a special acknowledgement to the companies who
+have dedicated programmer time to contribute source code to OQS, including
 Amazon Web Services, evolutionQ, Microsoft Research, Cisco Systems, and IBM Research.
 
 Research projects which developed specific components of OQS have been

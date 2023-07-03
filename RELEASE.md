@@ -27,6 +27,9 @@ None.
 What's New
 ----------
 
+- Support for Windows platform
+- Documentation restructured supporting different platforms
+
 Previous Release Notes
 ======================
 

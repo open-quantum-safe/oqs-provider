@@ -32,6 +32,14 @@ to build in/install from directory `_build`:
 
     cmake -S . -B _build && cmake --build _build && cmake --install _build
 
+If `openssl` and/or `liboqs` have not been installed to system standard locations
+use the `cmake` define "-DOPENSSL_ROOT_DIR" and/or the environment variable 
+"liboqs_DIR" to utilize those, e.g., like this:
+
+    liboqs_DIR=../liboqs cmake -DOPENSSL_ROOT_DIR=/opt/openssl3 -S . -B _build && cmake --build _build && cmake --install _build
+
+Further configuration options are documented [here](CONFIGURE.md#build-install-options).
+
 ## Test
 
 Standard `ctest` can be used to validate correct operation in build directory `_build`, e.g.:

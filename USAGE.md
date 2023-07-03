@@ -97,9 +97,9 @@ of classical crypto algorithms.
 
 This configuration is the one used in all examples below.
 
-*Note*: Be sure to always activate the `openssl` "default" provider as it
-delivers functionality also needed by `oqsprovider` (e.g., random data during
-key generation).
+*Note*: Be sure to always activate either the "default" or "fips" provider as these
+deliver functionality also needed by `oqsprovider` (e.g., for hashing or high
+quality random data during key generation).
 
 ## Checking provider version information
 

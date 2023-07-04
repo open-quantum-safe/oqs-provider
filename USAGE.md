@@ -72,7 +72,8 @@ not be available for use.
 
 The system-wide `openssl.cnf` file is typically located at (operating system dependent):
 - /etc/ssl/ (UNIX/Linux)
-- /opt/homebrew/etc/openssl@3/ (OSX Homebrew)
+- /opt/homebrew/etc/openssl@3/ (MacOS Homebrew on Apple Silicon)
+- /usr/local/etc/openssl@3/ (MacOS Homebrew on Intel Silicon)
 - C:\Program Files\Common Files\SSL\ (Windows)
 
 Adding `oqsprovider` to this file will enable its seamless operation alongside other

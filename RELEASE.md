@@ -54,7 +54,7 @@ All algorithms no longer supported in the [NIST PQC competition](https://csrc.ni
 ### Functional updates
 
 - Enablement of oqs-provider as a (first) dynamically fetchable OpenSSL3 TLS1.3 signature provider.
-- OSX support
+- MacOS support
 - Full support for CA functionality
 - Algorithms can now be selected by their respective bit strength using the property string "oqsprovider.security_bits"
 - Documentation of (O)IDs used by the different PQC algorithms used and supported in current and past releases of oqs-openssl and oqs-provider

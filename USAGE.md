@@ -130,8 +130,8 @@ Also, any classic signature algorithm like "rsa" may be used.
 
 ## Setting up a (quantum-safe) test server
 
-A simple server utilizing a PQ/quantum-safe KEM algorithm and
-certicate can be set up for example by running
+Using keys and certificates as created above, a simple server utilizing a
+PQ/quantum-safe KEM algorithm and certicate can be set up for example by running
 
     openssl s_server -cert dilithium3_srv.crt -key dilithium3_srv.key -www -tls1_3 -groups kyber768:frodo640shake
 

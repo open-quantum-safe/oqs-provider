@@ -118,21 +118,25 @@ quality random data during key generation).
 
 This can be facilitated for example by using the usual `openssl` commands:
 
-    openssl req -x509 -new -newkey rsa -keyout rsa_CA.key -out rsa_CA.crt -nodes -subj "/CN=test CA" -days 365 -config openssl/apps/openssl.cnf
-    openssl genpkey -algorithm rsa -out rsa_srv.key
-    openssl req -new -newkey rsa -keyout rsa_srv.key -out rsa_srv.csr -nodes -subj "/CN=test server" -config openssl/apps/openssl.cnf
-    openssl x509 -req -in rsa_srv.csr -out rsa_srv.crt -CA rsa_CA.crt -CAkey rsa_CA.key -CAcreateserial -days 365
+    openssl req -x509 -new -newkey dilithium3 -keyout dilithium3_CA.key -out dilithium3_CA.crt -nodes -subj "/CN=test CA" -days 365 -config openssl/apps/openssl.cnf
+    openssl genpkey -algorithm dilithium3 -out dilithium3_srv.key
+    openssl req -new -newkey dilithium3 -keyout dilithium3_srv.key -out dilithium3_srv.csr -nodes -subj "/CN=test server" -config openssl/apps/openssl.cnf
+    openssl x509 -req -in dilithium3_srv.csr -out dilithium3_srv.crt -CA dilithium3_CA.crt -CAkey dilithium3_CA.key -CAcreateserial -days 365
 
-These examples create classic RSA keys but the very same commands can be used
-to create PQ certificates replacing the key type "rsa" with any of the PQ
+These examples create QSC dilithium3 keys but the very same commands can be used
+to create PQ certificates replacing the key type "dilithium" with any of the PQ
 signature algorithms [listed above](#signature-algorithms).
+Also, any classic signature algorithm like "rsa" may be used.
 
 ## Setting up a (quantum-safe) test server
 
-A simple server utilizing PQ/quantum-safe KEM algorithms and classic RSA
-certicates can be set up for example by running
+Using keys and certificates as created above, a simple server utilizing a
+PQ/quantum-safe KEM algorithm and certicate can be set up for example by running
 
-    openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake
+    openssl s_server -cert dilithium3_srv.crt -key dilithium3_srv.key -www -tls1_3 -groups kyber768:frodo640shake
+
+Instead of "dilithium3" any [QSC/PQ signature algorithm supported](#signature-algorithms)
+may be used as well as any classic crypto signature algorithm.
 
 ## Running a client to interact with (quantum-safe) KEM algorithms
 

@@ -80,11 +80,8 @@ jobs:
           key: ${{ runner.os }}-cygwinopenssl32
       - name: build oqs-provider
         run: bash -c "git config --global --add safe.directory $(cygpath -u $PWD) && liboqs_DIR='${{ env.IP }}' cmake -GNinja -DCMAKE_C_COMPILER=gcc -DOPENSSL_ROOT_DIR=/opt/openssl32 -S . -B _build && cd _build && ninja && cd .."
-      - name: Adapt oqsprovider.dll name
-        run: bash -c "cp oqsprovider-1.dll oqsprovider.dll"
-        working-directory: _build/bin
       - name: Check Openssl providers
-        run: bash -c "OPENSSL_MODULES=_build/bin /opt/openssl32/bin/openssl list -providers -provider oqsprovider -provider default"
+        run: bash -c "OPENSSL_MODULES=_build/lib /opt/openssl32/bin/openssl list -providers -provider oqsprovider -provider default"
       - name: Run tests
         run: bash -c "echo $PATH && PATH=/opt/openssl32/bin:/usr/bin ctest -V"
         working-directory: _build
@@ -200,5 +197,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: oqs-provider-msvc
-          path: D:/a/oqs-provider/oqs-provider/_build/bin/oqsprovider.dll
+          path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
 

@@ -31,7 +31,7 @@ set(PROVIDER_SOURCE_FILES
 set(PROVIDER_HEADER_FILES
   oqs_prov.h oqs_endecoder_local.h
 )
-add_library(oqsprovider SHARED ${PROVIDER_SOURCE_FILES})
+add_library(oqsprovider MODULE ${PROVIDER_SOURCE_FILES})
 if (USE_ENCODING_LIB)
   add_dependencies(oqsprovider encoder)
 endif()
@@ -43,8 +43,35 @@ set_target_properties(oqsprovider
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     VERSION ${OQSPROVIDER_VERSION_TEXT}
     SOVERSION 1
+    # Compatibility version (-compatibility_version) and current version
+    # (-current_version) are not compatible with a `MODULE` library.
+    # However, `VERSION` and `SOVERSION` set these two flags.
+    # The following two flags remove them.
+    MACHO_COMPATIBILITY_VERSION OFF
+    MACHO_CURRENT_VERSION OFF
     # For Windows DLLs
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+if (APPLE)
+  # OpenSSL looks for `.dylib` files on XNU-based platforms.
+  # Because `MODULE` writes to a `.so` file by default, we must explicitely
+  # set the suffix here.
+  set_target_properties(oqsprovider
+    PROPERTIES
+    SUFFIX ".dylib"
+  )
+endif()
+
+if (CYGWIN OR MSVC)
+  # OpenSSL looks for `.dll` files on Windows platforms.
+  # Because `MODULE` writes to a `.so` file by default, we must explicitely
+  # set the suffix here.
+  set_target_properties(oqsprovider
+    PROPERTIES
+    SUFFIX ".dll"
+  )
+endif()
+
 target_link_libraries(oqsprovider OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
 if (USE_ENCODING_LIB)
   target_link_libraries(oqsprovider qsc_key_encoder)

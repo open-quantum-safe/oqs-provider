@@ -196,7 +196,7 @@ Step 1: Create quantum-safe key pair and self-signed certificate:
     openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf
 
 By changing the `-newkey` parameter algorithm name [any of the 
-supported quantum-safe or hybrid algorithms](#signature-algorithms)
+supported quantum-safe or hybrid algorithms](README.md#signature-algorithms)
 can be utilized instead of the sample algorithm `dilithium3`.
 
 Step 2: Sign data:

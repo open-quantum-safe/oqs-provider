@@ -102,19 +102,50 @@ This configuration is the one used in all examples below.
 deliver functionality also needed by `oqsprovider` (e.g., for hashing or high
 quality random data during key generation).
 
-## Checking provider version information
+## Selecting TLS1.3 default groups
+
+For activating specific [KEMs](README.md#kem-algorithms), two options exist:
+
+### Command line parameter
+
+All commands allowing pre-selecting KEMs for use permit this via the
+`-groups` switch. See example commands below.
+
+### Configuration parameter
+
+The set of acceptable KEM groups can also be set in the `openssl.cnf` file
+as per this example:
+
+```
+[openssl_init]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+system_default = system_default_sect
+
+[system_default_sect]
+Groups = kyber768:kyber1024
+```
+
+Be sure to separate permissible KEM names by colon if specifying several.
+
+## Sample commands
+
+The following section provides example commands for certain standard OpenSSL operations.
+
+### Checking provider version information
 
     openssl list -providers -verbose 
 
-## Checking quantum safe signature algorithms available for use
+### Checking quantum safe signature algorithms available for use
 
     openssl list -signature-algorithms -provider oqsprovider 
 
-## Checking quantum safe KEM algorithms available for use
+### Checking quantum safe KEM algorithms available for use
 
     openssl list -kem-algorithms -provider oqsprovider 
 
-## Creating keys and certificates
+### Creating keys and certificates
 
 This can be facilitated for example by using the usual `openssl` commands:
 
@@ -125,10 +156,10 @@ This can be facilitated for example by using the usual `openssl` commands:
 
 These examples create QSC dilithium3 keys but the very same commands can be used
 to create PQ certificates replacing the key type "dilithium" with any of the PQ
-signature algorithms [listed above](#signature-algorithms).
+[signature algorithms supported](README.md#signature-algorithms).
 Also, any classic signature algorithm like "rsa" may be used.
 
-## Setting up a (quantum-safe) test server
+### Setting up a (quantum-safe) test server
 
 Using keys and certificates as created above, a simple server utilizing a
 PQ/quantum-safe KEM algorithm and certicate can be set up for example by running
@@ -138,7 +169,7 @@ PQ/quantum-safe KEM algorithm and certicate can be set up for example by running
 Instead of "dilithium3" any [QSC/PQ signature algorithm supported](#signature-algorithms)
 may be used as well as any classic crypto signature algorithm.
 
-## Running a client to interact with (quantum-safe) KEM algorithms
+### Running a client to interact with (quantum-safe) KEM algorithms
 
 This can be facilitated for example by running
 
@@ -147,9 +178,9 @@ This can be facilitated for example by running
 By issuing the command `GET /` the quantum-safe crypto enabled OpenSSL3
 server returns details about the established connection.
 
-Any [available quantum-safe/PQ KEM algorithm](#kem-algorithms) can be selected by passing it in the `-groups` option.
+Any [available quantum-safe/PQ KEM algorithm](README.md#kem-algorithms) can be selected by passing it in the `-groups` option.
 
-## S/MIME message signing -- Cryptographic Message Syntax (CMS)
+### S/MIME message signing -- Cryptographic Message Syntax (CMS)
 
 Also possible is the creation and verification of quantum-safe digital
 signatures using [CMS](https://datatracker.ietf.org/doc/html/rfc5652).

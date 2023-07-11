@@ -54,6 +54,14 @@ if [ -z "$OPENSSL_INSTALL" ]; then
       if [ $? -ne 0 ]; then
         echo "openssl build failed. Exiting."
         exit -1
+      else
+         # some cmake versions don't look in "lib64", so aid their search with this softlink
+         cd $OSSL_PREFIX && if [ -d "lib64" ]; then ln -s lib64 lib; fi && cd ..
+         export OPENSSL_INSTALL=$OSSL_PREFIX
+      fi
+   else
+      if [ -d ".local" ]; then
+          export OPENSSL_INSTALL=`pwd`/.local
       fi
    fi
  fi
@@ -85,12 +93,20 @@ if [ -z $liboqs_DIR ]; then
     fi
   fi
 
+  # Ensure liboqs is built against OpenSSL3, not a possibly still system-
+  # installed OpenSSL111: We otherwise have mismatching symbols at runtime
+  # (detected particularly late when building shared)
+  if [ ! -z $OPENSSL_INSTALL ]; then
+    export CMAKE_OPENSSL_LOCATION="-DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL"
+  else
+    export CMAKE_OPENSSL_LOCATION=""
+  fi
   # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
   # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
   #    STD: only include NIST standardized algorithms
   #    NIST_R4: only include algorithms in round 4 of the NIST competition
   #    All: include all algorithms supported by liboqs (default)
-  cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
+  cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED $CMAKE_OPENSSL_LOCATION -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
   if [ $? -ne 0 ]; then
       echo "liboqs build failed. Exiting."
       exit -1

@@ -166,7 +166,7 @@ PQ/quantum-safe KEM algorithm and certicate can be set up for example by running
 
     openssl s_server -cert dilithium3_srv.crt -key dilithium3_srv.key -www -tls1_3 -groups kyber768:frodo640shake
 
-Instead of "dilithium3" any [QSC/PQ signature algorithm supported](#signature-algorithms)
+Instead of "dilithium3" any [QSC/PQ signature algorithm supported](README.md#signature-algorithms)
 may be used as well as any classic crypto signature algorithm.
 
 ### Running a client to interact with (quantum-safe) KEM algorithms

@@ -13,9 +13,9 @@ const char* oqs_oid_alg_list[OQS_OID_CNT] =
 
 {%- for sig in config['sigs'] %}
     {%- for variant in sig['variants'] %}
-"{{ variant['oid'] }}", "{{ variant['name'] }}", 
+"{{ variant['oid'] }}", "{{ variant['name'] }}",
         {%- for classical_alg in variant['mix_with'] %}
-"{{ classical_alg['oid'] }}" , "{{ classical_alg['name'] }}_{{ variant['name'] }}", 
+"{{ classical_alg['oid'] }}" , "{{ classical_alg['name'] }}_{{ variant['name'] }}",
         {%- endfor %}
     {%- endfor %}
 {%- endfor %}

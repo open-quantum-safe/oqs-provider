@@ -46,7 +46,7 @@ jobs:
               equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
-                name: Clone and build OpenSSL(3) 
+                name: Clone and build OpenSSL(3)
                 command: |
                    git clone --branch master git://git.openssl.org/openssl.git openssl &&
                    cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
@@ -69,11 +69,11 @@ jobs:
       - run:
           name: Run tests (with encodings, positive and negative test)
           command: |
-            ./scripts/runtests_encodings.sh -V > log 
-            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+            ./scripts/runtests_encodings.sh -V > log
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
                cat log
                ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-            else 
+            else
                cat log
             fi
       - run:
@@ -88,10 +88,10 @@ jobs:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings, positive and negative test)
           command: |
             ./scripts/runtests_encodings.sh -V
-            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
                cat log
                ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-            else 
+            else
                cat log
             fi
 
@@ -110,7 +110,7 @@ jobs:
       - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
       - run:
           name: Install dependencies
-          command: env HOMEBREW_NO_AUTO_UPDATE=1 brew install cmake ninja << parameters.OPENSSL_PREINSTALL >>
+          command: brew install cmake ninja << parameters.OPENSSL_PREINSTALL >>
       - run:
           name: Get system information
           command: sysctl -a | grep machdep.cpu && cc --version
@@ -120,11 +120,11 @@ jobs:
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
              export LIBOQS_INSTALLPATH=$(pwd)/.local && cd liboqs && mkdir _build && cd _build &&
              cmake -GNinja -DCMAKE_INSTALL_PREFIX=$LIBOQS_INSTALLPATH << parameters.CMAKE_ARGS >> .. && ninja install &&
-             cd .. && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$LIBOQS_INSTALLPATH/lib" >> "$BASH_ENV" 
+             cd .. && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$LIBOQS_INSTALLPATH/lib" >> "$BASH_ENV"
       - when:
           condition:
             not:
-              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
+              equal: [ openssl@3.1, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
                 name: Clone and build OpenSSL(3) master
@@ -137,7 +137,7 @@ jobs:
                   export OPENSSL_INSTALL=$(pwd)/.local && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV"
       - when:
           condition:
-              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
+              equal: [ openssl@3.1, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
                 name: Build OQS-OpenSSL provider
@@ -158,11 +158,11 @@ jobs:
       - run:
           name: Run tests (with encodings)
           command: |
-            ./scripts/runtests_encodings.sh -V > log 
-            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then 
+            ./scripts/runtests_encodings.sh -V > log
+            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
                cat log
                ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-            else 
+            else
                cat log
             fi
 
@@ -209,7 +209,7 @@ workflows:
       - macOS:
           name: macOS-shared
           CMAKE_ARGS: -DBUILD_SHARED_LIBS=ON -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
-          OPENSSL_PREINSTALL: openssl@3
+          OPENSSL_PREINSTALL: openssl@3.1
   on-main-branch:
     when:
       or:

@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <openssl/err.h>
+#include <openssl/provider.h>
 
 /* For controlled success */
 #define T(e)                                    \
@@ -34,3 +35,6 @@
 
 void hexdump(const void *ptr, size_t len);
 int alg_is_enabled(const char *algname);
+
+/* Loads the oqs-provider. */
+void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename, const char *configfile);

@@ -20,7 +20,7 @@ set_tests_properties(oqs_signatures
 endif()
 
 add_executable(oqs_test_signatures oqs_test_signatures.c test_common.c)
-target_link_libraries(oqs_test_signatures ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+target_link_libraries(oqs_test_signatures PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
 
 add_test(
   NAME oqs_kems
@@ -41,7 +41,7 @@ set_tests_properties(oqs_kems
 endif()
 
 add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
-target_link_libraries(oqs_test_kems ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+target_link_libraries(oqs_test_kems PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
 
 add_test(
     NAME oqs_groups
@@ -62,7 +62,7 @@ set_tests_properties(oqs_groups
 )
 endif()
 add_executable(oqs_test_groups oqs_test_groups.c test_common.c tlstest_helpers.c)
-target_link_libraries(oqs_test_groups ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+target_link_libraries(oqs_test_groups PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
 
 add_test(
     NAME oqs_tlssig
@@ -84,10 +84,10 @@ set_tests_properties(oqs_tlssig
 )
 endif()
 add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c tlstest_helpers.c)
-target_link_libraries(oqs_test_tlssig ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+target_link_libraries(oqs_test_tlssig PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
 
 add_executable(oqs_test_endecode oqs_test_endecode.c test_common.c)
-target_link_libraries(oqs_test_endecode ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+target_link_libraries(oqs_test_endecode PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
 add_test(
   NAME oqs_endecode
   COMMAND oqs_test_endecode
@@ -104,4 +104,13 @@ else()
 set_tests_properties(oqs_endecode
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
 )
+endif()
+
+if (OQS_PROVIDER_BUILD_STATIC)
+  targets_set_static_provider(oqs_test_signatures
+    oqs_test_kems
+    oqs_test_groups
+    oqs_test_tlssig
+    oqs_test_endecode
+  )
 endif()

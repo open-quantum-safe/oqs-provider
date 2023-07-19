@@ -530,7 +530,13 @@ static const OSSL_DISPATCH oqsprovider_dispatch_table[] = {
     { 0, NULL }
 };
 
-int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
+#ifdef OQS_PROVIDER_STATIC
+#define OQS_PROVIDER_ENTRYPOINT_NAME oqs_provider_init
+#else
+#define OQS_PROVIDER_ENTRYPOINT_NAME OSSL_provider_init
+#endif // ifdef OQS_PROVIDER_STATIC
+
+int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                        const OSSL_DISPATCH *in,
                        const OSSL_DISPATCH **out,
                        void **provctx)

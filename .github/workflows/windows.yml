@@ -68,7 +68,7 @@ jobs:
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         run: bash -c "./config --prefix=/opt/openssl32 ${{ matrix.platform.config }} && perl configdata.pm --dump && make $MAKE_PARAMS && make install_sw"
         working-directory: openssl
-      - name: Check OpenSSL install3 
+      - name: Check OpenSSL install3
         run: dir c:\cygwin\opt\openssl32
       - name: Save OpenSSL
         id: cache-openssl-save

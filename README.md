@@ -152,6 +152,7 @@ Contributors to the `oqsprovider` include:
 - Julian Segeth
 - Alex Zaslavsky
 - Will Childs-Klein
+- Thomas Bailleux
 
 History
 -------

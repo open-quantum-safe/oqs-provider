@@ -28,6 +28,10 @@ jobs:
       OPENSSL_PREINSTALL:
         description: "OpenSSL version preinstalled."
         type: string
+      OQS_PROVIDER_BUILD_STATIC:
+        description: "Build oqsprovider as a static library"
+        type: boolean
+        default: false
     docker:
       - image: << parameters.IMAGE >>
     steps:
@@ -61,20 +65,30 @@ jobs:
             - run:
                 name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
                 command: |
-                   mkdir _build && cd _build && cmake -GNinja << parameters.CMAKE_ARGS >> -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
+                  oqsprovider_cmake_args="<< parameters.CMAKE_ARGS >>"
+                  if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+                    oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
+                  fi
+                   mkdir _build && cd _build && cmake -GNinja ${oqsprovider_cmake_args} -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
       - run:
           name: Run tests
           command: |
-             ./scripts/runtests.sh -V
+             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+               ctest --test-dir _build/
+             else
+               ./scripts/runtests.sh -V
+             fi
       - run:
           name: Run tests (with encodings, positive and negative test)
           command: |
-            ./scripts/runtests_encodings.sh -V > log
-            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
-               cat log
-               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-            else
-               cat log
+            if ! << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+              ./scripts/runtests_encodings.sh -V > log
+              if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
+                 cat log
+                 ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+              else
+                 cat log
+              fi
             fi
       - run:
           name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >>) with NOPUBKEY_IN_PRIVKEY and QSC encoding support
@@ -83,16 +97,22 @@ jobs:
       - run:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
           command: |
-             ./scripts/runtests.sh -V
+             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+               ctest --test-dir _build/
+             else
+               ./scripts/runtests.sh -V
+             fi
       - run:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings, positive and negative test)
           command: |
-            ./scripts/runtests_encodings.sh -V
-            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
-               cat log
-               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-            else
-               cat log
+            if ! << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+              ./scripts/runtests_encodings.sh -V
+              if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
+                 cat log
+                 ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+              else
+                 cat log
+              fi
             fi
 
   macOS:
@@ -104,6 +124,10 @@ jobs:
       OPENSSL_PREINSTALL:
         description: "OpenSSL version preinstalled."
         type: string
+      OQS_PROVIDER_BUILD_STATIC:
+        description: "Build oqsprovider as a static library"
+        type: boolean
+        default: false
     macos:
       xcode: "13.2.1"
     steps:
@@ -134,7 +158,11 @@ jobs:
             - run:
                name: Build OQS-OpenSSL provider
                command: |
-                  export OPENSSL_INSTALL=$(pwd)/.local && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV"
+                  oqsprovider_cmake_args="<< parameters.CMAKE_ARGS >>"
+                  if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+                    oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
+                  fi
+                  export OPENSSL_INSTALL=$(pwd)/.local && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local ${oqsprovider_cmake_args} .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV"
       - when:
           condition:
               equal: [ openssl@3.1, << parameters.OPENSSL_PREINSTALL >> ]
@@ -146,24 +174,38 @@ jobs:
       - run:
           name: Run tests
           command: |
-             ./scripts/runtests.sh -V
+             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+               ctest --test-dir _build/ --output-on-failure
+             else
+               ./scripts/runtests.sh -V
+             fi
       - run:
           name: Build OQS-OpenSSL provider with QSC encoding support
           command: |
-             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local << parameters.CMAKE_ARGS >> .. && ninja
+             oqsprovider_cmake_args="<< parameters.CMAKE_ARGS >>"
+             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+               oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
+             fi
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local ${oqsprovider_cmake_args} .. && ninja
       - run:
           name: Run tests
           command: |
-             ./scripts/runtests.sh -V
+             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+               ctest --test-dir _build/ --output-on-failure
+             else
+               ./scripts/runtests.sh -V
+             fi
       - run:
           name: Run tests (with encodings)
           command: |
-            ./scripts/runtests_encodings.sh -V > log
-            if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
-               cat log
-               ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-            else
-               cat log
+            if ! << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
+              ./scripts/runtests_encodings.sh -V > log
+              if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
+                 cat log
+                 ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
+              else
+                 cat log
+              fi
             fi
 
   trigger-downstream-ci:
@@ -202,6 +244,13 @@ workflows:
           IMAGE: openquantumsafe/ci-ubuntu-jammy:latest
           CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_ALGS_ENABLED=STD
           OPENSSL_PREINSTALL: openssl@3
+      - ubuntu:
+          name: ubuntu-jammy-static
+          context: openquantumsafe
+          IMAGE: openquantumsafe/ci-ubuntu-jammy:latest
+          OQS_PROVIDER_BUILD_STATIC: true
+          CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_ALGS_ENABLED=STD
+          OPENSSL_PREINSTALL: openssl@3
       - macOS:
           name: macOS-noopenssl
           CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_USE_OPENSSL=OFF
@@ -209,6 +258,11 @@ workflows:
       - macOS:
           name: macOS-shared
           CMAKE_ARGS: -DBUILD_SHARED_LIBS=ON -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
+          OPENSSL_PREINSTALL: openssl@3.1
+      - macOS:
+          name: macOS-static
+          OQS_PROVIDER_BUILD_STATIC: true
+          CMAKE_ARGS: -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
           OPENSSL_PREINSTALL: openssl@3.1
   on-main-branch:
     when:

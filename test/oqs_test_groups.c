@@ -139,10 +139,9 @@ int main(int argc, char *argv[])
   T(cert = test_mk_file_path(certsdir, "servercert.pem"));
   T(privkey = test_mk_file_path(certsdir, "serverkey.pem"));
 
-  T(OSSL_LIB_CTX_load_config(libctx, configfile));
+  load_oqs_provider(libctx, modulename, configfile);
 
-  T(OSSL_PROVIDER_available(libctx, modulename));
-  T(OSSL_PROVIDER_available(libctx, "default")); 
+  T(OSSL_PROVIDER_available(libctx, "default"));
 
   T(OSSL_PROVIDER_do_all(libctx, test_provider_groups, &errcnt));
 

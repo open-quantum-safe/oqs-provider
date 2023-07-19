@@ -26,11 +26,14 @@ If applicable, add screenshots to help explain your problem.
 **Environment (please complete the following information):**
  - OS: [e.g. Ubuntu 20]
  - OpenSSL version [e.g., 3.2.0-dev]
- - Version [e.g. 0.4.0]
+ - oqsprovider version [e.g. 0.4.0]
 
 Please run the following commands to obtain the version information:
  - For OpenSSL: `openssl version` 
  - For oqsprovider: `openssl list -providers`
+
+If `oqsprovider` is not listed as active, be sure to first follow all
+[USAGE guidance](https://github.com/open-quantum-safe/oqs-provider/blob/main/USAGE.md).
 
 **Additional context**
 Add any other context about the problem here.

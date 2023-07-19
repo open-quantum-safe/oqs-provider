@@ -33,3 +33,29 @@ int alg_is_enabled(const char *algname) {
     return strstr(algname, alglist) == NULL;
 }
 
+#ifdef OQS_PROVIDER_STATIC
+#define OQS_PROVIDER_ENTRYPOINT_NAME oqs_provider_init
+#else
+#define OQS_PROVIDER_ENTRYPOINT_NAME OSSL_provider_init
+#endif // ifdef OQS_PROVIDER_STATIC
+
+#ifndef OQS_PROVIDER_STATIC
+
+/* Loads the oqs-provider from a shared module (.so). */
+void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename, const char *configfile) {
+  T(OSSL_LIB_CTX_load_config(libctx, configfile));
+  T(OSSL_PROVIDER_available(libctx, modulename));
+}
+
+#else
+
+extern OSSL_provider_init_fn OQS_PROVIDER_ENTRYPOINT_NAME;
+
+/* Loads the statically linked oqs-provider. */
+void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename, const char *configfile) {
+  (void)configfile;
+  T(OSSL_PROVIDER_add_builtin(libctx, modulename, OQS_PROVIDER_ENTRYPOINT_NAME));
+  T(OSSL_PROVIDER_load(libctx, "default"));
+}
+
+# endif // ifndef OQS_PROVIDER_STATIC

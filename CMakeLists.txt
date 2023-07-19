@@ -40,6 +40,11 @@ else()
     message(STATUS "Build will not include external encoding library for SPKI/PKCS#8")
 endif()
 
+option(OQS_PROVIDER_BUILD_STATIC "Build a static library instead of a shared library" OFF)
+if(OQS_PROVIDER_BUILD_STATIC AND BUILD_SHARED_LIBS)
+  message(FATAL_ERROR "`OQS_PROVIDER_BUILD_STATIC` is not compatible with `BUILD_SHARED_LIBS`.")
+endif()
+
 include(CheckLibraryExists)
 include(CheckFunctionExists)
 
@@ -61,6 +66,16 @@ find_package(liboqs REQUIRED)
 get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
 message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")
 include_directories(${LIBOQS_INCLUDE_DIR})
+
+# Hints the compiler on the fact that the provider is being compiled into a static library.
+function(targets_set_static_provider)
+  foreach(target ${ARGN})
+    target_compile_definitions(${target} PRIVATE "OQS_PROVIDER_STATIC")
+    if(NOT target STREQUAL oqsprovider)
+      target_link_libraries(${target} PRIVATE oqsprovider)
+    endif()
+  endforeach()
+endfunction()
 
 # Provider module
 add_subdirectory(oqsprov)

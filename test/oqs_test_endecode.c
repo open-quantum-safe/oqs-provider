@@ -212,14 +212,14 @@ int main(int argc, char *argv[]) {
     modulename = argv[1];
     configfile = argv[2];
 
-    T(OSSL_LIB_CTX_load_config(libctx, configfile));
+    load_oqs_provider(libctx, modulename, configfile);
 
-    T(OSSL_PROVIDER_available(libctx, modulename));
     keyctx = OSSL_LIB_CTX_new();
-    dfltprov = OSSL_PROVIDER_load(NULL, "default");
+
+    load_oqs_provider(keyctx, modulename, configfile);
+
     dfltprov = OSSL_PROVIDER_load(keyctx, "default");
     keyprov = OSSL_PROVIDER_load(keyctx, modulename);
-
     oqsprov = OSSL_PROVIDER_load(libctx, modulename);
 
     sigalgs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE, &query_nocache);

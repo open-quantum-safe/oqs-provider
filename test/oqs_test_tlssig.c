@@ -85,7 +85,7 @@ static void test_oqs_sigs(EVP_SIGNATURE *evpsig, void *vp) {
 	OSSL_PROVIDER* prov = EVP_SIGNATURE_get0_provider(evpsig);
 	if (!strcmp(OSSL_PROVIDER_get0_name(prov), "oqsprovider")) {
 		printf("Commencing test of %s:\n", EVP_SIGNATURE_get0_name(evpsig));
-		test_oqs_tlssig(EVP_SIGNATURE_get0_name(evpsig)); 
+		test_oqs_tlssig(EVP_SIGNATURE_get0_name(evpsig));
 	}
 }
 */
@@ -153,10 +153,9 @@ int main(int argc, char *argv[])
   configfile = argv[2];
   certsdir = argv[3];
 
-  T(OSSL_LIB_CTX_load_config(libctx, configfile));
+  load_oqs_provider(libctx, modulename, configfile);
 
-  T(OSSL_PROVIDER_available(libctx, modulename));
-  T(OSSL_PROVIDER_available(libctx, "default")); 
+  T(OSSL_PROVIDER_available(libctx, "default"));
 
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
   // crashes: EVP_SIGNATURE_do_all_provided(libctx, test_oqs_sigs, &errcnt);

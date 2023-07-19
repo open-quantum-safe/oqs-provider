@@ -4,9 +4,9 @@ oqs-provider 0.5.1-dev
 About
 -----
 
-The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on our website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.  
+The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on our website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.
 
-**oqs-provider** is a standalone prototype [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and hybrid key exchange for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS ond dgst operations. 
+**oqs-provider** is a standalone prototype [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and hybrid key exchange for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS ond dgst operations.
 
 When deployed, the `oqs-provider` binary (shared library) thus adds support for quantum-safe cryptographic operations to any standard OpenSSL(v3) installation.
 
@@ -29,6 +29,7 @@ What's New
 
 - Support for Windows platform
 - Documentation restructured supporting different platforms
+- Enable statically linkable oqsprovider
 
 Previous Release Notes
 ======================
@@ -86,7 +87,7 @@ This release removes Rainbow level 1 and all variants of SIDH and SIKE due to cr
 What's New
 ----------
 
-This release continues from the 0.3.0 release of oqs-provider and is fully tested to be used in conjunction with version 0.7.2 of [liboqs](https://github.com/open-quantum-safe/liboqs). 
+This release continues from the 0.3.0 release of oqs-provider and is fully tested to be used in conjunction with version 0.7.2 of [liboqs](https://github.com/open-quantum-safe/liboqs).
 
 oqs-provider has been integrated as an external test component for [OpenSSL3 testing](https://github.com/openssl/openssl/blob/master/test/README-external.md#oqsprovider-test-suite) and will thus remain in line with any possibly required provider API enhancements.
 
@@ -110,7 +111,7 @@ oqs-provider has been integrated as an external test component for [OpenSSL3 tes
 
 # 0.3.0 - January 2022
 
-## About 
+## About
 
 This is the first official release of `oqsprovider`, a plugin/shared library making available quantum safe cryptography (QSC) to [OpenSSL (3)](https://www.openssl.org/) installations via the [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) API. Work on this project began in [oqs-openssl](https://github.com/open-quantum-safe/openssl)'s branch "OQS-OpenSSL3" by [@baentsch](https://github.com/baentsch). This original code dependent on OpenSSL APIs was transferred into a standalone project by [@levitte](https://github.com/levitte) and subsequently branched by the OQS project into this code base.
 

@@ -58,24 +58,26 @@ set_target_properties(oqsprovider
     # For Windows DLLs
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-if (APPLE)
-  # OpenSSL looks for `.dylib` files on XNU-based platforms.
-  # Because `MODULE` writes to a `.so` file by default, we must explicitely
-  # set the suffix here.
-  set_target_properties(oqsprovider
-    PROPERTIES
-    SUFFIX ".dylib"
-  )
-endif()
+if (NOT OQS_PROVIDER_BUILD_STATIC)
+  if (APPLE)
+    # OpenSSL looks for `.dylib` files on XNU-based platforms.
+    # Because `MODULE` writes to a `.so` file by default, we must explicitely
+    # set the suffix here.
+    set_target_properties(oqsprovider
+      PROPERTIES
+      SUFFIX ".dylib"
+    )
+  endif()
 
-if (CYGWIN OR MSVC)
-  # OpenSSL looks for `.dll` files on Windows platforms.
-  # Because `MODULE` writes to a `.so` file by default, we must explicitely
-  # set the suffix here.
-  set_target_properties(oqsprovider
-    PROPERTIES
-    SUFFIX ".dll"
-  )
+  if (CYGWIN OR MSVC)
+    # OpenSSL looks for `.dll` files on Windows platforms.
+    # Because `MODULE` writes to a `.so` file by default, we must explicitely
+    # set the suffix here.
+    set_target_properties(oqsprovider
+      PROPERTIES
+      SUFFIX ".dll"
+    )
+  endif()
 endif()
 
 target_link_libraries(oqsprovider PUBLIC OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})

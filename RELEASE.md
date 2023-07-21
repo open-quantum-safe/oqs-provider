@@ -1,12 +1,10 @@
-oqs-provider 0.5.1-dev
-======================
+# oqs-provider 0.5.1-rc1
 
-About
------
+## About
 
 The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on our website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.
 
-**oqs-provider** is a standalone prototype [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and hybrid key exchange for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS ond dgst operations.
+**oqs-provider** is a standalone [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and hybrid key exchange for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS ond dgst operations.
 
 When deployed, the `oqs-provider` binary (shared library) thus adds support for quantum-safe cryptographic operations to any standard OpenSSL(v3) installation.
 
@@ -14,22 +12,59 @@ In general, the oqs-provider `main` branch is meant to be useable in conjunction
 
 Further details on building, testing and use can be found in [README.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/README.md). See in particular limitations on intended use.
 
-Release notes
-=============
+## Release notes
 
-This is version 0.5.1-dev of oqs-provider.
+This is version 0.5.1-rc1 of oqs-provider.
 
-Security considerations
------------------------
+### Security considerations
 
 None.
 
-What's New
-----------
+### What's New
+
+This release continues from the 0.5.0 release of oqs-provider and is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs). This release is guaranteed to be in sync with v0.8.0 of `liboqs`.
+
+### Additional new feature highlights
 
 - Support for Windows platform
+- Added `brew` support for MacOS
 - Documentation restructured supporting different platforms
 - Enable statically linkable oqsprovider
+
+#### What's Changed (full commit list)
+
+* trigger oqs-demos build when pushing to main by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/182
+* Enable building on platforms without _Atomic support by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/183
+* Standalone ctest by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/184
+* Convert oqs-kem-info.md code points to hex by @WillChilds-Klein in https://github.com/open-quantum-safe/oqs-provider/pull/188
+* Documentation update by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/187
+* Add full Windows support by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/192
+* Improve installation by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/196
+* document specs [skip ci] by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/190
+* Add .DS_Store (macOS), .vscode (visual studio code), and .idea (Jetbr… by @planetf1 in https://github.com/open-quantum-safe/oqs-provider/pull/200
+* first test for macos CI by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/198
+* Add brew to preinstall test matrix by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/205
+* General documentation overhaul by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/204
+* change TLS demo to use QSC alg [skip ci] by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/208
+* Build a module instead of a shared library. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/207
+* explain groups in USAGE [skip ci] by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/214
+* ensure OpenSSL3 is linked to liboqs during script build by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/212
+* Remove trailing whitespaces in generated code. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/215
+* Fix a minor bug in the `runtests.sh`. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/216
+* Specify version `3.1` while installing OpenSSL using brew. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/217
+* Allow the user to build oqs-provider as a static library. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/201
+* Add a line to `RELEASE.md` to highlight the support for static libraries by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/220
+* Enhance github bug report template by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/219
+* Use OpenSSL 3 if available to build liboqs on CircleCI/macOS. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/222
+* Fix a bug in the CMake script. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/221
+
+#### New Contributors
+
+* @WillChilds-Klein made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/188
+* @planetf1 made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/200
+* @thb-sb made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/207
+
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.5.0...0.5.1
 
 Previous Release Notes
 ======================

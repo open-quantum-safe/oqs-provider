@@ -14,6 +14,21 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
+This is version 0.5.2-dev of oqs-provider.
+
+### Security considerations
+
+None.
+
+### What's New
+
+This release continues from the 0.5.1 release of oqs-provider and is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs). This code is in sync with `liboqs` "main" branch.
+
+### Additional new feature highlights
+
+Previous Release Notes
+======================
+
 This is version 0.5.1 of oqs-provider.
 
 ### Security considerations
@@ -66,10 +81,7 @@ This release continues from the 0.5.0 release of oqs-provider and is fully teste
 
 **Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.5.0...0.5.1
 
-Previous Release Notes
-======================
-
-This is version 0.5.0 of oqs-provider.
+# This is version 0.5.0 of oqs-provider.
 
 Security considerations
 -----------------------

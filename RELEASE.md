@@ -1,4 +1,4 @@
-# oqs-provider 0.5.1
+# oqs-provider 0.5.2-dev
 
 ## About
 
@@ -14,7 +14,22 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is version 0.5.1 of oqs-provider.
+This is version 0.5.2-dev of oqs-provider.
+
+### Security considerations
+
+None.
+
+### What's New
+
+This release continues from the 0.5.1 release of oqs-provider and is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs). This code is in sync with `liboqs` "main" branch.
+
+### Additional new feature highlights
+
+Previous Release Notes
+======================
+
+## This is version 0.5.1 of oqs-provider.
 
 ### Security considerations
 
@@ -66,10 +81,7 @@ This release continues from the 0.5.0 release of oqs-provider and is fully teste
 
 **Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.5.0...0.5.1
 
-Previous Release Notes
-======================
-
-This is version 0.5.0 of oqs-provider.
+## This is version 0.5.0 of oqs-provider.
 
 Security considerations
 -----------------------
@@ -109,10 +121,7 @@ All algorithms no longer supported in the [NIST PQC competition](https://csrc.ni
 
 **Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.4.0...0.5.0.
 
-Previous Release Notes
-======================
-
-This is version 0.4.0 of oqs-provider.
+## This is version 0.4.0 of oqs-provider.
 
 Security considerations
 -----------------------
@@ -144,7 +153,7 @@ oqs-provider has been integrated as an external test component for [OpenSSL3 tes
 
 **Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.3.0...0.4.0.
 
-# 0.3.0 - January 2022
+## 0.3.0 - January 2022
 
 ## About
 

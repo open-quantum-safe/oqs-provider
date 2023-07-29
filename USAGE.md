@@ -19,7 +19,7 @@ OpenSSL 3.2.0-dev  (Library: OpenSSL 3.2.0-dev )
 
 ## Activation
 
-Every OpenSSL provider needs to be activated for use. There are two main ways
+Every OpenSSL provider needs to be activated for use. There are three main ways
 for this:
 
 ### Explicit command line option
@@ -40,11 +40,27 @@ provider binary is located. This is of particular use if the provider did not
 (yet) get installed in the system location, which typically is in `lib/ossl-modules`
 in the main `openssl` installation tree.
 
+### C API
+
+If activation of `oqsprovider` should be hard-coded in a C program, use of the
+standard [OSSL_PROVIDER_load](https://www.openssl.org/docs/man3.1/man3/OSSL_PROVIDER_load.html)
+API may be considered, e.g., as such:
+
+    OSSL_PROVIDER_load(OSSL_LIB_CTX_new(), "oqsprovider");
+
+The provider (binary) search path may be set via the [OSSL_PROVIDER_set_default_search_path](https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_set_default_search_path.html) API.
+
+#### Static linking
+
+If all code should be "baked" into one executable, be sure to statically build
+`oqsprovider` using the `OQS_PROVIDER_BUILD_STATIC` configuration option and use
+the integration code [documented](CONFIGURE.md#oqs_provider_build_static).
+
 ### Configuration file
 
-As an alternative to passing command line parameters, providers can be activated
-for general use by adding instructions to the `openssl.cnf` file. In the case of
-`oqs-provider` add these lines to achieve this:
+As an alternative to passing command line parameters or hard-coding C code, providers
+can be activated for general use by adding instructions to the `openssl.cnf` file.
+In the case of `oqs-provider` add these lines to achieve this:
 
 ```
 [provider_sect]
@@ -104,12 +120,21 @@ quality random data during key generation).
 
 ## Selecting TLS1.3 default groups
 
-For activating specific [KEMs](README.md#kem-algorithms), two options exist:
+For activating specific [KEMs](README.md#kem-algorithms), three options exist:
 
 ### Command line parameter
 
-All commands allowing pre-selecting KEMs for use permit this via the
-`-groups` switch. See example commands below.
+All commands allowing pre-selecting KEMs for use permit this via the standard
+OpenSSL [-groups](https://www.openssl.org/docs/manmaster/man3/SSL_CONF_cmd.html) command line option.
+See example commands [below](#running-a-client-to-interact-with-quantum-safe-kem-algorithms).
+
+### C API
+
+If activation of specific KEM groups should be hard-coded into a C program,
+use the standard OpenSSL [SSL_set1_groups_list](https://www.openssl.org/docs/manmaster/man3/SSL_set1_groups_list.html)
+API, e.g., as such:
+
+    SSL_set1_groups_list(ssl, "kyber768:kyber1024");
 
 ### Configuration parameter
 
@@ -155,19 +180,21 @@ This can be facilitated for example by using the usual `openssl` commands:
     openssl x509 -req -in dilithium3_srv.csr -out dilithium3_srv.crt -CA dilithium3_CA.crt -CAkey dilithium3_CA.key -CAcreateserial -days 365
 
 These examples create QSC dilithium3 keys but the very same commands can be used
-to create PQ certificates replacing the key type "dilithium" with any of the PQ
+to create QSC certificates replacing the key type "dilithium3" with any of the QSC
 [signature algorithms supported](README.md#signature-algorithms).
-Also, any classic signature algorithm like "rsa" may be used.
+Of course, also any classic signature algorithm like "rsa" may be used.
 
 ### Setting up a (quantum-safe) test server
 
 Using keys and certificates as created above, a simple server utilizing a
-PQ/quantum-safe KEM algorithm and certicate can be set up for example by running
+quantum-safe (QSC) KEM algorithm and certicate can be set up for example by running
 
     openssl s_server -cert dilithium3_srv.crt -key dilithium3_srv.key -www -tls1_3 -groups kyber768:frodo640shake
 
-Instead of "dilithium3" any [QSC/PQ signature algorithm supported](README.md#signature-algorithms)
+Instead of "dilithium3" any [QSC signature algorithm supported](README.md#signature-algorithms)
 may be used as well as any classic crypto signature algorithm.
+Instead of "kyber768:frodo640shake" any combination of [QSC KEM algorithm(s)](README.md#kem-algorithms)
+and classic crypto KEM algorithm(s) may be specified.
 
 ### Running a client to interact with (quantum-safe) KEM algorithms
 
@@ -178,7 +205,7 @@ This can be facilitated for example by running
 By issuing the command `GET /` the quantum-safe crypto enabled OpenSSL3
 server returns details about the established connection.
 
-Any [available quantum-safe/PQ KEM algorithm](README.md#kem-algorithms) can be selected by passing it in the `-groups` option.
+Any [available quantum-safe KEM algorithm](README.md#kem-algorithms) can be selected by passing it in the `-groups` option.
 
 ### S/MIME message signing -- Cryptographic Message Syntax (CMS)
 

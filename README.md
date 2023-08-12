@@ -80,7 +80,7 @@ respectively (tested on Linux Ubuntu and Mint as well as MacOS).
 
 By default, these scripts always build and test against the current OpenSSL `master` branch.
 
-These scripts can be [configured by setting various variables](CONFIGURE.md#convenience-build-script-options).
+These scripts can be [configured by setting various variables](CONFIGURE.md#convenience-build-script-options). Please note that these scripts do _not_ install `oqsprovider`. This can be facilitated by running `cmake --install _build` (and following the [activation instructions](USAGE.md#activation).
 
 Building and testing
 --------------------

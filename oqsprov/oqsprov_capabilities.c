@@ -425,7 +425,6 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
 int oqs_provider_get_capabilities(void *provctx, const char *capability,
                               OSSL_CALLBACK *cb, void *arg)
 {
-printf("Get capabilities for %s\n", capability);
     if (strcasecmp(capability, "TLS-GROUP") == 0)
         return oqs_group_capability(cb, arg);
 

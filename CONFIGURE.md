@@ -25,6 +25,11 @@ in a standard OS deployment location.
 By setting this `cmake` configuration option to "Release" all debug output is disabled.
 This is the default setting.
 
+In case of any problem, setting this value to "Debug" is _highly_ recommended to
+activate further warning messages. In particular, when "Debug" has been set, distinct
+[debugging capabilities](https://github.com/open-quantum-safe/oqs-provider/wiki/Debugging)
+are activated and additional setup warnings are output.
+
 ### liboqs_DIR
 
 This environment variable must be set to the location of the `liboqs` installation to be

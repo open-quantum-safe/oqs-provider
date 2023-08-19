@@ -425,13 +425,18 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
 int oqs_provider_get_capabilities(void *provctx, const char *capability,
                               OSSL_CALLBACK *cb, void *arg)
 {
+printf("Get capabilities for %s\n", capability);
     if (strcasecmp(capability, "TLS-GROUP") == 0)
         return oqs_group_capability(cb, arg);
 
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
     if (strcasecmp(capability, "TLS-SIGALG") == 0)
         return oqs_sigalg_capability(cb, arg);
-#endif
+#else
+#ifndef NDEBUG
+    fprintf(stderr, "Warning: OSSL_CAPABILITY_TLS_SIGALG_NAME unset. OpenSSL version used that does not support pluggable signature capabilities. Recommend upgrading OpenSSL installation.\n");
+#endif /* NDEBUG */
+#endif /* OSSL_CAPABILITY_TLS_SIGALG_NAME */
 
     /* We don't support this capability */
     return 0;

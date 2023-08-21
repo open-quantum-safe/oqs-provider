@@ -551,7 +551,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
     #endif
     }else{
         int len, i;
-        char *name = OPENSSL_malloc(strlen(oqsxkey->tls_name));
+//        char *name = OPENSSL_malloc(strlen(oqsxkey->tls_name));
         if((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
 
@@ -560,7 +560,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
             aType = ASN1_TYPE_new();
             aString = ASN1_OCTET_STRING_new();
             temp = NULL;
-            get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i, name);
+            char *name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
 
             len = oqsxkey->pubkeylen_cmp[i];
             buf = OPENSSL_memdup(oqsxkey->comp_pubkey[i], len);
@@ -582,10 +582,10 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
 
             if (!sk_ASN1_TYPE_push(sk, aType))
                 return -1;
-
+        OPENSSL_free(name);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
-        OPENSSL_free(name);
+        
         return keybloblen;
     }
 
@@ -695,7 +695,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         }
     }else{
         int i;
-        name = OPENSSL_malloc(strlen(oqsxkey->tls_name));;
+//        name = OPENSSL_malloc(strlen(oqsxkey->tls_name));;
         if((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
 
@@ -704,7 +704,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             aType = ASN1_TYPE_new();
             aString = ASN1_OCTET_STRING_new();
             temp = NULL;
-            get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i, name);
+            name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
 
             buflen = oqsxkey->privkeylen_cmp[i] + oqsxkey->pubkeylen_cmp[i];
             buf = OPENSSL_malloc(buflen);
@@ -728,10 +728,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 
             if (!sk_ASN1_TYPE_push(sk, aType))
                 return -1;
-
+        OPENSSL_free(name);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
-        OPENSSL_free(name);
         OPENSSL_free(temp);
         OPENSSL_free(p8info_internal);
         OPENSSL_free(aType);

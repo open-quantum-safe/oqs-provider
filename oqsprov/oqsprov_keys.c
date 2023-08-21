@@ -158,9 +158,10 @@ static char *get_oqsname(int nid)
     return 0;
 }
 
-int get_cmpname(int nid, int index, char* name)
+char* get_cmpname(int nid, int index)
 {
     int i, j;
+    char* name;
     for (i = 0; i < NID_TABLE_LEN; i++)
     {
         if (nid_names[i].nid == nid){
@@ -168,9 +169,10 @@ int get_cmpname(int nid, int index, char* name)
             char* token = strtok(s, "_");
             for (j = 0; j < index; j ++)
                 token = strtok(NULL, "_");
-            OPENSSL_strlcpy(name, token, strlen(token) + 1);
+            name = OPENSSL_strdup(token);
+//            OPENSSL_strlcpy(name, token, strlen(token) + 1);
             OPENSSL_free(s);
-            return 1;
+            return name;
         }
     }
     return 0;
@@ -603,11 +605,11 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
     }
     if (key->keytype == KEY_TYPE_CMP_SIG){
         int i;
-        char *name = OPENSSL_malloc(strlen(key->tls_name));
+//        char *name = OPENSSL_malloc(strlen(key->tls_name));
         if (op == KEY_OP_PUBLIC){
 
             for (i = 0; i < key->numkeys; i++){
-                get_cmpname(OBJ_sn2nid(key->tls_name), i, name);
+                char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
                 if (get_oqsname_fromtls(name) == 0){
                     EVP_PKEY *npk = EVP_PKEY_new();
                     if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype != EVP_PKEY_RSA)
@@ -622,6 +624,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                         goto err;
                     }
                 }
+                OPENSSL_free(name);
                 
             }
         }
@@ -629,7 +632,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
         if (op == KEY_OP_PRIVATE){
 
             for (i = 0; i < key->numkeys; i++){
-                get_cmpname(OBJ_sn2nid(key->tls_name), i, name);
+                char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
                 if (get_oqsname_fromtls(name) == 0){
                     const unsigned char *enc_privkey = key->comp_privkey[i];
                     key->cmp_classical_pkey[i] = d2i_PrivateKey(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, NULL, &enc_privkey, key->privkeylen_cmp[i]);
@@ -639,10 +642,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                         goto err;
                     }
                 }
-                
+                OPENSSL_free(name);
             }
         }
-        OPENSSL_free(name);
     }
 
     return key;
@@ -1053,11 +1055,11 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         break;
     case KEY_TYPE_CMP_SIG:
         int i;
-        char* name = OPENSSL_malloc(strlen(tls_name));
+//        char* name = OPENSSL_malloc(strlen(tls_name));
         ret->numkeys = get_qntcmp(OBJ_sn2nid(tls_name));
         ret->privkeylen = 0;
         ret->pubkeylen = 0;
-        ret->oqsx_provider_ctx = OPENSSL_malloc(ret->numkeys * sizeof(void *));
+        ret->oqsx_provider_ctx = OPENSSL_malloc(ret->numkeys * sizeof(OQSX_PROVIDER_CTX));
         ret->privkeylen_cmp = OPENSSL_malloc(ret->numkeys * sizeof(void *));
         ret->pubkeylen_cmp = OPENSSL_malloc(ret->numkeys * sizeof(void *));
         ret->comp_privkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
@@ -1065,7 +1067,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->cmp_classical_pkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
 
         for (i = 0; i < ret->numkeys; i++){
-            get_cmpname(OBJ_sn2nid(tls_name), i, name);
+            char *name = get_cmpname(OBJ_sn2nid(tls_name), i);
             if (get_oqsname_fromtls(name) != 0)
             {
                 ret->oqsx_provider_ctx[i].oqsx_qs_ctx.sig = OQS_SIG_new(get_oqsname_fromtls(name));
@@ -1090,8 +1092,11 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
             }
             ret->privkeylen += ret->privkeylen_cmp[i];
             ret->pubkeylen += ret->pubkeylen_cmp[i];   
+            OPENSSL_free(name);
         }
         ret->keytype = primitive;
+        
+        
 
         break;
     default:
@@ -1165,16 +1170,14 @@ void oqsx_key_free(OQSX_KEY *key)
     } 
     if(key->keytype == KEY_TYPE_CMP_SIG){
         int i;
-        char *name = OPENSSL_malloc(strlen(key->tls_name));;
+//        char *name = OPENSSL_malloc(strlen(key->tls_name));;
         for (i = 0; i < key->numkeys; i ++){
-            get_cmpname(OBJ_sn2nid(key->tls_name), i, name);
+            char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
             if (get_oqsname_fromtls(name))
                 OQS_SIG_free(key->oqsx_provider_ctx[i].oqsx_qs_ctx.sig);
-            else
-                OPENSSL_free(key->oqsx_provider_ctx[i].oqsx_evp_ctx);
-            
+            OPENSSL_free(name);
         }
-        OPENSSL_free(name);
+        
 
     }
     else
@@ -1429,10 +1432,10 @@ int oqsx_key_gen(OQSX_KEY *key)
     else if (key->keytype == KEY_TYPE_CMP_SIG)
     {
         int i;
-        char* name = OPENSSL_malloc(strlen(key->tls_name));
+//        char* name = OPENSSL_malloc(strlen(key->tls_name));
         ret = oqsx_key_set_composites(key);
         for (i = 0; i < key->numkeys; i++){
-            get_cmpname(OBJ_sn2nid(key->tls_name), i, name);
+            char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
             if (get_oqsname_fromtls(name) == 0)
             {
 //                if (i == 0)
@@ -1448,7 +1451,7 @@ int oqsx_key_gen(OQSX_KEY *key)
                 ret = OQS_SIG_keypair(key->oqsx_provider_ctx[i].oqsx_qs_ctx.sig, key->comp_pubkey[i], key->comp_privkey[i]);
                 ON_ERR_GOTO(ret, err);
             }
-
+        OPENSSL_free(name);
             
         }
 
@@ -1497,16 +1500,16 @@ int oqsx_key_maxsize(OQSX_KEY *key)
     {
         int aux = sizeof(CompositeSignature);
         int i;
-        char *name = OPENSSL_malloc(strlen(key->tls_name));;
+//        char *name = OPENSSL_malloc(strlen(key->tls_name));;
         for (i = 0; i < key->numkeys; i ++){
-            get_cmpname(OBJ_sn2nid(key->tls_name), i, name);
+            char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
             if (get_oqsname_fromtls(name) == 0)
                 aux += key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->length_signature;
             else
                 aux += key->oqsx_provider_ctx[i].oqsx_qs_ctx.sig->length_signature;
-            
+            OPENSSL_free(name); 
         }
-        OPENSSL_free(name);          
+                 
         return aux;
     }
     default:

@@ -431,7 +431,11 @@ int oqs_provider_get_capabilities(void *provctx, const char *capability,
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
     if (strcasecmp(capability, "TLS-SIGALG") == 0)
         return oqs_sigalg_capability(cb, arg);
-#endif
+#else
+#ifndef NDEBUG
+    fprintf(stderr, "Warning: OSSL_CAPABILITY_TLS_SIGALG_NAME not defined: OpenSSL version used that does not support pluggable signature capabilities.\nUpgrading OpenSSL installation recommended to enable QSC TLS signature support.\n\n");
+#endif /* NDEBUG */
+#endif /* OSSL_CAPABILITY_TLS_SIGALG_NAME */
 
     /* We don't support this capability */
     return 0;

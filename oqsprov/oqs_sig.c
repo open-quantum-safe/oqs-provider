@@ -377,64 +377,77 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         oqs_sig_len = oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->length_signature;
         buf = OPENSSL_malloc(oqs_sig_len);
         const EVP_MD *classical_md;
+        EVP_MD_CTX* evp_ctx = EVP_MD_CTX_new();
         int digest_len;
+        int aux;
         unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
 
-        if ((classical_ctx_sign = EVP_PKEY_CTX_new(oqs_key_classic, NULL)) == NULL ||
-            EVP_PKEY_sign_init(classical_ctx_sign) <= 0)
-        {
-          ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-          goto endsign;
-        }
-
-        if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA)
-        {
-          if (EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign, RSA_PKCS1_PADDING) <= 0)
+        if (name[0] == 'e'){ //ed25519 or ed448
+          if (EVP_DigestSignInit(evp_ctx, NULL, NULL, NULL, oqs_key_classic) <= 0 ||
+              EVP_DigestSign(evp_ctx, buf, &oqs_sig_len, tbs, tbslen) <= 0){
+            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+            goto endsign;
+          }
+        }else {
+          if ((classical_ctx_sign = EVP_PKEY_CTX_new(oqs_key_classic, NULL)) == NULL ||
+              EVP_PKEY_sign_init(classical_ctx_sign) <= 0)
           {
             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
             goto endsign;
           }
-        }
-        if (name[0] == 'p')
-        {
-          if (name[1] == '2')
-          { // p256
+
+          if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA)
+          {
+            if (EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign, RSA_PKCS1_PADDING) <= 0)
+            {
+              ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+              goto endsign;
+            }
+          }
+          if (name[0] == 'p' || name[0] == 'b')
+          {
+            if(name[0] == 'p')
+              aux = 1;
+            else aux = 2;
+            if (name[aux] == '2')
+            { // p256
+              classical_md = EVP_sha256();
+              digest_len = SHA256_DIGEST_LENGTH;
+              SHA256(tbs, tbslen, (unsigned char *)&digest);
+            }
+            if (name[aux] == '3')
+            { // p384
+              classical_md = EVP_sha384();
+              digest_len = SHA384_DIGEST_LENGTH;
+              SHA384(tbs, tbslen, (unsigned char *)&digest);
+            }
+            if (name[aux] == '5')
+            { // p521
+              classical_md = EVP_sha512();
+              digest_len = SHA512_DIGEST_LENGTH;
+              SHA512(tbs, tbslen, (unsigned char *)&digest);
+            }
+          }
+          else
+          { // rsa3072
             classical_md = EVP_sha256();
             digest_len = SHA256_DIGEST_LENGTH;
             SHA256(tbs, tbslen, (unsigned char *)&digest);
           }
-          if (name[1] == '3')
-          { // p384
-            classical_md = EVP_sha384();
-            digest_len = SHA384_DIGEST_LENGTH;
-            SHA384(tbs, tbslen, (unsigned char *)&digest);
-          }
-          if (name[1] == '5')
-          { // p521
-            classical_md = EVP_sha512();
-            digest_len = SHA512_DIGEST_LENGTH;
-            SHA512(tbs, tbslen, (unsigned char *)&digest);
-          }
-        }
-        else
-        { // rsa3072
-          classical_md = EVP_sha256();
-          digest_len = SHA256_DIGEST_LENGTH;
-          SHA256(tbs, tbslen, (unsigned char *)&digest);
-        }
 
-        if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign, classical_md) <= 0) ||
-            (EVP_PKEY_sign(classical_ctx_sign, buf, &oqs_sig_len, digest, digest_len) <= 0))
-        {
-          ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-          goto endsign;
-        }
+          if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign, classical_md) <= 0) ||
+              (EVP_PKEY_sign(classical_ctx_sign, buf, &oqs_sig_len, digest, digest_len) <= 0))
+          {
+            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+            goto endsign;
+          }
 
-        if (oqs_sig_len > oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->length_signature)
-        {
-          /* sig is bigger than expected */
-          ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
-          goto endsign;
+          if (oqs_sig_len > oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->length_signature)
+          {
+            /* sig is bigger than expected */
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
+            goto endsign;
+          }
         }
       }
 /*      comp_sig = ASN1_BIT_STRING_new();
@@ -600,6 +613,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
       }else{
         const EVP_MD *classical_md;
         int digest_len;
+        int aux;
+        EVP_MD_CTX* evp_ctx = EVP_MD_CTX_new();
         unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
 
         if ((ctx_verify = EVP_PKEY_CTX_new(oqsxkey->cmp_classical_pkey[i], NULL)) == NULL ||
@@ -616,21 +631,24 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             goto endverify;
           }
         }
-        if (name[0] == 'p')
+        if (name[0] == 'p' || name[0] == 'b')
         {
-          if (name[1] == '2')
+          if (name[0] == 'p')
+            aux = 1;
+          else aux = 2; 
+          if (name[aux] == '2')
           { // p256
             classical_md = EVP_sha256();
             digest_len = SHA256_DIGEST_LENGTH;
             SHA256(tbs, tbslen, (unsigned char *)&digest);
           }
-          if (name[1] == '3')
+          if (name[aux] == '3')
           { // p384
             classical_md = EVP_sha384();
             digest_len = SHA384_DIGEST_LENGTH;
             SHA384(tbs, tbslen, (unsigned char *)&digest);
           }
-          if (name[1] == '5')
+          if (name[aux] == '5')
           { // p521
             classical_md = EVP_sha512();
             digest_len = SHA512_DIGEST_LENGTH;
@@ -643,7 +661,13 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
           digest_len = SHA256_DIGEST_LENGTH;
           SHA256(tbs, tbslen, (unsigned char *)&digest);
         }
-        if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <= 0) ||
+        if(name[0] == 'e'){ //ed25519 or ed448
+          if((!EVP_DigestVerifyInit(evp_ctx, NULL, NULL, NULL, oqsxkey->cmp_classical_pkey[i]) ||
+              !EVP_DigestVerify(evp_ctx, buf, buf_len, tbs, tbslen) != 1)){
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
+            goto endverify;
+          }
+        } else if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <= 0) ||
             (EVP_PKEY_verify(ctx_verify, buf, buf_len, digest, digest_len) <= 0))
         {
           ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);

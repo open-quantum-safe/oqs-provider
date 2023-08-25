@@ -826,18 +826,36 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define rsa3072_sphincsshake128fsimple_input_type \
     "rsa3072_sphincsshake128fsimple"
 #define rsa3072_sphincsshake128fsimple_pem_type "rsa3072_sphincsshake128fsimple"
-
 # define dilithium3_rsa3072_evp_type             0
 # define dilithium3_rsa3072_input_type           "dilithium3_rsa3072"
 # define dilithium3_rsa3072_pem_type             "dilithium3_rsa3072"
-
 # define dilithium3_p256_evp_type                0
 # define dilithium3_p256_input_type              "dilithium3_p256"
 # define dilithium3_p256_pem_type                "dilithium3_p256"
-
 # define falcon512_p256_evp_type                 0
 # define falcon512_p256_input_type               "falcon512_p256"
 # define falcon512_p256_pem_type                 "falcon512_p256"
+# define dilithium5_p384_evp_type                0
+# define dilithium5_p384_input_type              "dilithium5_p384"
+# define dilithium5_p384_pem_type                "dilithium5_p384"
+# define dilithium3_bp256_evp_type               0
+# define dilithium3_bp256_input_type             "dilithium3_bp256"
+# define dilithium3_bp256_pem_type               "dilithium3_bp256"
+# define dilithium3_ed25519_evp_type             0
+# define dilithium3_ed25519_input_type           "dilithium3_ed25519"
+# define dilithium3_ed25519_pem_type             "dilithium3_ed25519"
+# define dilithium5_bp384_evp_type               0
+# define dilithium5_bp384_input_type             "dilithium5_bp384"
+# define dilithium5_bp384_pem_type               "dilithium5_bp384"
+# define dilithium5_ed448_evp_type               0
+# define dilithium5_ed448_input_type             "dilithium5_ed448"
+# define dilithium5_ed448_pem_type               "dilithium5_ed448"
+# define falcon512_bp256_evp_type                0
+# define falcon512_bp256_input_type              "falcon512_bp256"
+# define falcon512_bp256_pem_type                "falcon512_bp256"
+# define falcon512_ed25519_evp_type              0
+# define falcon512_ed25519_input_type            "falcon512_ed25519"
+# define falcon512_ed25519_pem_type              "falcon512_ed25519"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -1578,4 +1596,46 @@ MAKE_ENCODER(falcon512_p256, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(falcon512_p256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(falcon512_p256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(falcon512_p256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(dilithium5_p384, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium5_p384, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium5_p384, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium5_p384, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium5_p384, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium5_p384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(dilithium3_bp256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_bp256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_bp256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_bp256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium3_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(dilithium3_ed25519, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_ed25519, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_ed25519, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_ed25519, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_ed25519, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium3_ed25519, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(dilithium5_bp384, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium5_bp384, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium5_bp384, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium5_bp384, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium5_bp384, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium5_bp384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(dilithium5_ed448, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium5_ed448, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium5_ed448, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium5_ed448, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium5_ed448, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium5_ed448, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(falcon512_bp256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(falcon512_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(falcon512_bp256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(falcon512_bp256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(falcon512_bp256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(falcon512_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(falcon512_ed25519, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(falcon512_ed25519, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(falcon512_ed25519, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(falcon512_ed25519, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(falcon512_ed25519, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(falcon512_ed25519, oqsx, SubjectPublicKeyInfo, pem);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

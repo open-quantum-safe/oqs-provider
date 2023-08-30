@@ -41,33 +41,47 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
  * List of all algorithms with given OIDs
  */
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
-#define OQS_OID_CNT 46
+#define OQS_OID_CNT 175
 const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {
-"1.3.6.1.4.1.2.267.7.4.4", "dilithium2",
-"1.3.9999.2.7.1" , "p256_dilithium2",
-"1.3.9999.2.7.2" , "rsa3072_dilithium2",
-"1.3.6.1.4.1.2.267.7.6.5", "dilithium3",
-"1.3.9999.2.7.3" , "p384_dilithium3",
-"1.3.6.1.4.1.2.267.7.8.7", "dilithium5",
-"1.3.9999.2.7.4" , "p521_dilithium5",
-"1.3.9999.3.6", "falcon512",
-"1.3.9999.3.7" , "p256_falcon512",
-"1.3.9999.3.8" , "rsa3072_falcon512",
-"1.3.9999.3.9", "falcon1024",
-"1.3.9999.3.10" , "p521_falcon1024",
-"1.3.9999.6.4.13", "sphincssha2128fsimple",
-"1.3.9999.6.4.14" , "p256_sphincssha2128fsimple",
-"1.3.9999.6.4.15" , "rsa3072_sphincssha2128fsimple",
-"1.3.9999.6.4.16", "sphincssha2128ssimple",
-"1.3.9999.6.4.17" , "p256_sphincssha2128ssimple",
-"1.3.9999.6.4.18" , "rsa3072_sphincssha2128ssimple",
-"1.3.9999.6.5.10", "sphincssha2192fsimple",
-"1.3.9999.6.5.11" , "p384_sphincssha2192fsimple",
-"1.3.9999.6.7.13", "sphincsshake128fsimple",
-"1.3.9999.6.7.14" , "p256_sphincsshake128fsimple",
-"1.3.9999.6.7.15" , "rsa3072_sphincsshake128fsimple",
+"1.3.6.1.4.1.2.267.7.4.4", "dilithium2", "dilithium2", NULL, "dilithium2",
+"1.3.9999.2.7.1" , "p256_dilithium2", "p256_dilithium2", NULL, "p256_dilithium2",
+"1.3.9999.2.7.2" , "rsa3072_dilithium2",  "rsa3072_dilithium2", NULL, "rsa3072_dilithium2",
+"1.3.6.1.4.1.2.267.7.6.5", "dilithium3", "dilithium3", NULL, "dilithium3",
+"1.3.9999.2.7.3" , "p384_dilithium3", "p384_dilithium3", NULL, "p384_dilithium3",
+"1.3.6.1.4.1.2.267.7.8.7", "dilithium5", "dilithium5", NULL, "dilithium5",
+"1.3.9999.2.7.4" , "p521_dilithium5", "p521_dilithium5", NULL, "p521_dilithium5",
+"1.3.9999.3.6", "falcon512", "falcon512", NULL, "falcon512",
+"1.3.9999.3.7" , "p256_falcon512", "p256_falcon512", NULL, "p256_falcon512",
+"1.3.9999.3.8" , "rsa3072_falcon512", "rsa3072_falcon512", NULL, "rsa3072_falcon512",
+"1.3.9999.3.9", "falcon1024", "falcon1024", NULL, "falcon1024",
+"1.3.9999.3.10" , "p521_falcon1024", "p521_falcon1024", NULL, "p521_falcon1024",
+"1.3.9999.6.4.13", "sphincssha2128fsimple", "sphincssha2128fsimple", NULL, "sphincssha2128fsimple",
+"1.3.9999.6.4.14" , "p256_sphincssha2128fsimple", "p256_sphincssha2128fsimple", NULL, "p256_sphincssha2128fsimple",
+"1.3.9999.6.4.15" , "rsa3072_sphincssha2128fsimple", "rsa3072_sphincssha2128fsimple", NULL, "rsa3072_sphincssha2128fsimple",
+"1.3.9999.6.4.16", "sphincssha2128ssimple", "sphincssha2128ssimple", NULL, "sphincssha2128ssimple",
+"1.3.9999.6.4.17" , "p256_sphincssha2128ssimple", "p256_sphincssha2128ssimple", NULL, "p256_sphincssha2128ssimple",
+"1.3.9999.6.4.18" , "rsa3072_sphincssha2128ssimple", "rsa3072_sphincssha2128ssimple", NULL, "rsa3072_sphincssha2128ssimple",
+"1.3.9999.6.5.10", "sphincssha2192fsimple", "sphincssha2192fsimple", NULL, "sphincssha2192fsimple",
+"1.3.9999.6.5.11" , "p384_sphincssha2192fsimple", "p384_sphincssha2192fsimple", NULL, "p384_sphincssha2192fsimple",
+"1.3.9999.6.7.13", "sphincsshake128fsimple", "sphincsshake128fsimple", NULL, "sphincsshake128fsimple",
+"1.3.9999.6.7.14" , "p256_sphincsshake128fsimple", "p256_sphincsshake128fsimple", NULL, "p256_sphincsshake128fsimple",
+"1.3.9999.6.7.15" , "rsa3072_sphincsshake128fsimple", "rsa3072_sphincsshake128fsimple", NULL, "rsa3072_sphincsshake128fsimple",
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
+"1.3.6.1.4.1.18227.999.1.1.1", "DILITHIUM2-SHA256", "dilithium2WithSha256", "SHA256", "dilithium2",
+"1.3.6.1.4.1.18227.999.1.1.2", "DILITHIUM2-SHA384", "dilithium2WithSha384", "SHA384", "dilithium2",
+"1.3.6.1.4.1.18227.999.1.1.3", "DILITHIUM2-SHA512", "dilithium2WithSha512", "SHA512", "dilithium2",
+"1.3.6.1.4.1.18227.999.1.1.4", "DILITHIUM2-SHA3_256", "dilithium2WithSha3At256", "SHA3-256", "dilithium2",
+"1.3.6.1.4.1.18227.999.1.1.5", "DILITHIUM2-SHA3_384", "dilithium2WithSha3At384", "SHA3-384", "dilithium2",
+"1.3.6.1.4.1.18227.999.1.1.6", "DILITHIUM2-SHA3_512", "dilithium2WithSha3At512", "SHA3-512", "dilithium2",
+
+"1.3.6.1.4.1.18227.999.1.2.2", "DILITHIUM3-SHA384", "dilithium3WithSha384", "SHA384", "dilithium3",
+"1.3.6.1.4.1.18227.999.1.2.3", "DILITHIUM3-SHA512", "dilithium3WithSha512", "SHA512", "dilithium3",
+"1.3.6.1.4.1.18227.999.1.2.5", "DILITHIUM3-SHA3_384", "dilithium3WithSha3At384", "SHA3-384", "dilithium3",
+"1.3.6.1.4.1.18227.999.1.2.6", "DILITHIUM3-SHA3_512", "dilithium3WithSha3At512", "SHA3-512", "dilithium3",
+
+"1.3.6.1.4.1.18227.999.1.3.3", "DILITHIUM5-SHA512", "dilithium5WithSha512", "SHA512", "dilithium5",
+"1.3.6.1.4.1.18227.999.1.3.6", "DILITHIUM5-SHA3_512", "dilithium5WithSha3At512", "SHA3-512", "dilithium5",
 };
 
 int oqs_patch_oids(void) {
@@ -590,22 +604,23 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         return 0;
 
     // insert all OIDs to the global objects list
-    for (i=0; i<OQS_OID_CNT;i+=2) {
-        if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+1])) {
+    for (i=0; i<OQS_OID_CNT;i+=5) {
+        if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+2])) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
                 fprintf(stderr, "error registering NID for %s\n", oqs_oid_alg_list[i+1]);
                 return 0;
         }
 
         if (!oqs_set_nid((char*)oqs_oid_alg_list[i+1], OBJ_sn2nid(oqs_oid_alg_list[i+1]))) {
+              fprintf(stderr, "error setting the internal cache NID for %s\n", oqs_oid_alg_list[i+1]);
               ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
               return 0;
         }
 
-        if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i+1], "", oqs_oid_alg_list[i+1])) {
-              fprintf(stderr, "error registering %s with no hash\n", oqs_oid_alg_list[i+1]);
-              ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-              return 0;
+        if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+3], oqs_oid_alg_list[i+4])) {
+            fprintf(stderr, "error registering algorithm %s (pkey: %s, digest: %s)\n", oqs_oid_alg_list[i+1], oqs_oid_alg_list[i+3], oqs_oid_alg_list[i+4]);
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+            return 0;
         }
 
         if (OBJ_sn2nid(oqs_oid_alg_list[i+1]) != 0) {

@@ -44,6 +44,7 @@ static OSSL_FUNC_signature_verify_fn oqs_sig_verify;
 static OSSL_FUNC_signature_digest_sign_init_fn oqs_sig_digest_sign_init;
 static OSSL_FUNC_signature_digest_sign_update_fn oqs_sig_digest_signverify_update;
 static OSSL_FUNC_signature_digest_sign_final_fn oqs_sig_digest_sign_final;
+static OSSL_FUNC_signature_digest_sign_fn oqs_sig_digest_sign;
 static OSSL_FUNC_signature_digest_verify_init_fn oqs_sig_digest_verify_init;
 static OSSL_FUNC_signature_digest_verify_update_fn oqs_sig_digest_signverify_update;
 static OSSL_FUNC_signature_digest_verify_final_fn oqs_sig_digest_verify_final;
@@ -57,18 +58,6 @@ static OSSL_FUNC_signature_get_ctx_md_params_fn oqs_sig_get_ctx_md_params;
 static OSSL_FUNC_signature_gettable_ctx_md_params_fn oqs_sig_gettable_ctx_md_params;
 static OSSL_FUNC_signature_set_ctx_md_params_fn oqs_sig_set_ctx_md_params;
 static OSSL_FUNC_signature_settable_ctx_md_params_fn oqs_sig_settable_ctx_md_params;
-
-// OIDS:
-static int get_aid(unsigned char** oidbuf, const char *tls_name) {
-   X509_ALGOR *algor = X509_ALGOR_new();
-   int aidlen = 0;
-
-   X509_ALGOR_set0(algor, OBJ_txt2obj(tls_name, 0), V_ASN1_UNDEF, NULL);
-
-   aidlen = i2d_X509_ALGOR(algor, oidbuf); 
-   X509_ALGOR_free(algor);
-   return(aidlen);
-}
 
 /*
  * What's passed as an actual key is defined by the KEYMGMT interface.
@@ -101,6 +90,76 @@ typedef struct {
     unsigned char* mddata;
     int operation;
 } PROV_OQSSIG_CTX;
+
+// OIDS:
+static int get_aid(unsigned char** oidbuf, const char *tls_name, const char * mdname, PROV_OQSSIG_CTX *ctx) {
+
+  X509_ALGOR *algor = NULL;
+  EVP_MD * digest_alg = NULL;
+
+  int aidlen = 0;
+  int sig_alg = 0;
+  int digest_nid = 0;
+
+  // Input checks
+  if (!tls_name || !ctx) {
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+    return 0;
+  }
+
+  // Retireves the NID for the PKEY type
+  int pkey_nid = OBJ_txt2nid(tls_name);
+  if (pkey_nid == NID_undef) {
+    OQS_SIG_PRINTF2("OQS SIG provider: can not get the id for pkey %s\n", tls_name);
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+    return 0;
+  }
+
+  // Retrieves the NID for the digest (if any)
+  if (mdname != NULL 
+      && strncmp(mdname, "NULL", 4) 
+      && strncmp(mdname, "null", 4)
+      && strncmp(mdname, "undef", 5)
+      && strncmp(mdname, "UNDEF", 5)) {
+    digest_alg = EVP_MD_fetch(ctx->libctx, mdname, NULL);
+  } else if (ctx->md != NULL && ctx->md != EVP_md_null()) {
+    digest_alg = ctx->md;
+  } else {
+    digest_alg = NULL;
+  }
+  
+  if (digest_alg) {
+    digest_nid = EVP_MD_nid(digest_alg);
+    if (digest_nid == NID_undef) {
+        OQS_SIG_PRINTF2("OQS SIG provider: can not get the id for digest %s\n", mdname);
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST);
+        return 0;
+    }
+  }
+
+   // Retrieves the NID for the signature algorithm
+  if (!OBJ_find_sigid_by_algs(&sig_alg, digest_nid, pkey_nid) || sig_alg == NID_undef) {
+    OQS_SIG_PRINTF3("OQS SIG provider: failure to find algorithm for %s and %s\n", tls_name, mdname);
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_MISSING_OID);
+    return 0;
+  }
+
+  // Allocate the new algorithm
+  algor = X509_ALGOR_new();
+  if (!algor) {
+    OQS_SIG_PRINTF("OQS SIG provider: null param error algor\n");
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_LIB_CREATE_ERR);
+    return 0;
+  }
+
+   // Set the algorithm
+   X509_ALGOR_set0(algor, OBJ_nid2obj(sig_alg), V_ASN1_UNDEF, NULL);
+
+  // Encodes the algorithm and returns the encoded data length
+  aidlen = i2d_X509_ALGOR(algor, oidbuf); 
+  X509_ALGOR_free(algor);
+  return(aidlen);
+}
 
 static void *oqs_sig_newctx(void *provctx, const char *propq)
 {
@@ -147,7 +206,7 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
         if (ctx->aid) 
             OPENSSL_free(ctx->aid);
         ctx->aid = NULL; // ensure next function allocates memory
-        ctx->aid_len = get_aid(&(ctx->aid), ctx->sig->tls_name);
+        ctx->aid_len = get_aid(&(ctx->aid), ctx->sig->tls_name, mdname, ctx);
 
         ctx->md = md;
         OPENSSL_strlcpy(ctx->mdname, mdname, sizeof(ctx->mdname));
@@ -553,6 +612,122 @@ int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
     	return oqs_sig_verify(vpoqs_sigctx, sig, siglen, poqs_sigctx->mddata, poqs_sigctx->mdsize);
 }
 
+int oqs_sig_digest_sign(void *ctx,
+                        unsigned char *sig, size_t *siglen,
+                        size_t sigsize, const unsigned char *tbs,
+                        size_t tbslen) {
+
+  PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)ctx;
+
+  // Input checks
+  if (!ctx || !siglen || !tbs || !tbslen) {
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+    return 0;
+  }
+
+  // Verify we have all our ducks in a row
+  if (!poqs_sigctx->sig || !poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig) {
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_NO_PRIVATE_KEY);
+    return 0;
+  }
+
+  // Checks the digest was already setup
+  if (!poqs_sigctx->md || !poqs_sigctx->mdctx) {
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST);
+    return 0;
+  }
+
+  // Sends back the signature size if no buffer was provided
+  if (!sig) {
+    // Estimates the signature size
+    if (!oqs_sig_sign(ctx, sig, siglen, sigsize, tbs, tbslen)) {
+      ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
+      return 0;
+    }
+    // All Done
+    return 1;
+  }
+
+  // Calculates the digest
+  unsigned char tbs_digest[EVP_MAX_MD_SIZE];
+  unsigned int tbs_digest_len = sizeof(tbs_digest);
+
+  // Checks for private key in the context
+  if (!EVP_Digest(tbs, tbslen, tbs_digest, &tbs_digest_len, poqs_sigctx->md, NULL)) {
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST);
+    return 0;
+  }
+
+  // Generates the signature on the digest
+  if (!oqs_sig_sign(ctx, sig, siglen, sigsize, tbs_digest, tbs_digest_len)) {
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
+    return 0;
+  }
+
+  // Success
+  return 1;
+}
+
+int oqs_sig_digest_verify(void *ctx, const unsigned char *sig,
+                               size_t siglen, const unsigned char *tbs,
+                               size_t tbslen) {
+  
+  PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)ctx;
+    // Retrieves the context
+
+  EVP_MD * md = NULL;
+    // The digest to use
+
+  unsigned char tbs_digest[EVP_MAX_MD_SIZE];
+  unsigned int tbs_digest_len = sizeof(tbs_digest);
+    // Buffer for the digest
+
+  // Input checks
+  if (!ctx || !sig || !siglen || !tbs || !tbslen) {
+    ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+    return 0;
+  }
+
+  // Checks if we have a valid digest
+  if (!poqs_sigctx->md 
+      && poqs_sigctx->mdname[0] 
+      && OPENSSL_strncasecmp(poqs_sigctx->mdname, "UNDEF", 5) != 0) {
+    // Fetch the MD
+    md = EVP_MD_fetch(poqs_sigctx->libctx, poqs_sigctx->mdname, NULL);
+    if (!md) {
+      ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST);
+      return 0;
+    }
+  } else if (poqs_sigctx->md) {
+    // Use the configured digest
+    md = poqs_sigctx->md;
+  }
+
+  if (md) {
+    // Checks for private key in the context
+    if (!EVP_Digest(tbs, tbslen, tbs_digest, &tbs_digest_len, md, NULL)) {
+      ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST);
+      return 0;
+    }
+    // Use passed digest
+    int success = oqs_sig_verify(ctx, sig, siglen, tbs_digest, tbs_digest_len);
+    if (!success) {
+      if (!poqs_sigctx->md) EVP_MD_free(md);
+      return 0;
+    }
+  } else {
+    // No digest, use the data directly
+    int success = oqs_sig_verify(ctx, sig, siglen, tbs, tbslen);
+    if (!success) {
+      if (!poqs_sigctx->md) EVP_MD_free(md);
+      return 0;
+    }
+  }
+
+  // Success
+  return 1;
+}
+
 static void oqs_sig_freectx(void *vpoqs_sigctx)
 {
     PROV_OQSSIG_CTX *ctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
@@ -643,7 +818,7 @@ static int oqs_sig_get_ctx_params(void *vpoqs_sigctx, OSSL_PARAM *params)
     p = OSSL_PARAM_locate(params, OSSL_SIGNATURE_PARAM_ALGORITHM_ID);
 
     if (poqs_sigctx->aid == NULL) {
-        poqs_sigctx->aid_len = get_aid(&(poqs_sigctx->aid), poqs_sigctx->sig->tls_name);
+        poqs_sigctx->aid_len = get_aid(&(poqs_sigctx->aid), poqs_sigctx->sig->tls_name, NULL, poqs_sigctx);
     }
 
     if (p != NULL
@@ -702,6 +877,7 @@ static int oqs_sig_set_ctx_params(void *vpoqs_sigctx, const OSSL_PARAM params[])
 
 static const OSSL_PARAM known_settable_ctx_params[] = {
     OSSL_PARAM_utf8_string(OSSL_SIGNATURE_PARAM_DIGEST, NULL, 0),
+    OSSL_PARAM_utf8_string(OSSL_SIGNATURE_PARAM_ALGORITHM_ID, NULL, 0),
     OSSL_PARAM_utf8_string(OSSL_SIGNATURE_PARAM_PROPERTIES, NULL, 0),
     OSSL_PARAM_END
 };
@@ -775,6 +951,10 @@ const OSSL_DISPATCH oqs_signature_functions[] = {
     { OSSL_FUNC_SIGNATURE_SIGN, (void (*)(void))oqs_sig_sign },
     { OSSL_FUNC_SIGNATURE_VERIFY_INIT, (void (*)(void))oqs_sig_verify_init },
     { OSSL_FUNC_SIGNATURE_VERIFY, (void (*)(void))oqs_sig_verify },
+    { OSSL_FUNC_SIGNATURE_DIGEST_SIGN, 
+      (void (*)(void))oqs_sig_digest_sign },
+    { OSSL_FUNC_SIGNATURE_DIGEST_VERIFY,
+      (void (*)(void))oqs_sig_digest_verify },
     { OSSL_FUNC_SIGNATURE_DIGEST_SIGN_INIT,
       (void (*)(void))oqs_sig_digest_sign_init },
     { OSSL_FUNC_SIGNATURE_DIGEST_SIGN_UPDATE,

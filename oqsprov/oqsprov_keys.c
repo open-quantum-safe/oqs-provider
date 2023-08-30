@@ -46,7 +46,7 @@ typedef struct {
 static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
-#define NID_TABLE_LEN 23
+#define NID_TABLE_LEN 35
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
@@ -73,6 +73,20 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "p256_sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple, KEY_TYPE_HYB_SIG, 128 },
        { 0, "rsa3072_sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple, KEY_TYPE_HYB_SIG, 128 },
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
+       { 0, "DILITHIUM2-SHA256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "DILITHIUM2-SHA384", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "DILITHIUM2-SHA512", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "DILITHIUM2-SHA3_256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "DILITHIUM2-SHA3_384", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "DILITHIUM2-SHA3_512", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+
+       { 0, "DILITHIUM3-SHA384", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192 },
+       { 0, "DILITHIUM3-SHA512", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192 },
+       { 0, "DILITHIUM3-SHA3_384", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192 },
+       { 0, "DILITHIUM3-SHA3_512", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192 },
+
+       { 0, "DILITHIUM5-SHA512", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256 },
+       { 0, "DILITHIUM5-SHA3_512", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256 },
 };
 
 int oqs_set_nid(char* tlsname, int nid) {

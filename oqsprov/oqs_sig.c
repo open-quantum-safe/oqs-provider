@@ -90,6 +90,8 @@ typedef struct {
     // for collecting data if no MD is active:
     unsigned char* mddata;
     int operation;
+    // Hash-n-sign (no need to re-hash for the traditional part)
+    int is_pre_hashed;
 } PROV_OQSSIG_CTX;
 
 // OIDS:
@@ -178,6 +180,8 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
         poqs_sigctx = NULL;
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
     }
+
+    poqs_sigctx->is_pre_hashed = 0;
     return poqs_sigctx;
 }
 
@@ -306,9 +310,13 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
          * uncomment the following line if using pre-performed hash:
 	 * if (poqs_sigctx->mdctx == NULL) { // hashing not yet done
          */
+
+        int digest_len;
+        unsigned char digest[EVP_MAX_MD_SIZE]; /* init with max length */
+
+        if (!poqs_sigctx->is_pre_hashed) {
+
           const EVP_MD *classical_md;
-          int digest_len;
-          unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
 
           /* classical schemes can't sign arbitrarily large data; we hash it first */
           switch (oqs_key->claimed_nist_level) {
@@ -331,11 +339,25 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             SHA512(tbs, tbslen, (unsigned char*) &digest);
             break;
           }
-          if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign, classical_md) <= 0) ||
-              (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32, &actual_classical_sig_len, digest, digest_len) <= 0)) {
+          if (EVP_PKEY_CTX_set_signature_md(classical_ctx_sign, classical_md) <= 0) {
             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
             goto endsign;
           }
+        } else {
+          // Pre-Hashed Data, no need to hash again
+          if (tbslen > sizeof(digest)) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
+            goto endsign;
+          }
+          memcpy(digest, tbs, tbslen);
+          digest_len = tbslen;
+        }
+        // Hashing done, just sign
+        if (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32, &actual_classical_sig_len, digest, digest_len) <= 0) {
+          ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+          goto endsign;
+        }
+
       /* activate in case we want to use pre-performed hashes:
        * }
        * else { // hashing done before; just sign:
@@ -395,7 +417,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
       const EVP_MD *classical_md;
       size_t actual_classical_sig_len = 0;
       int digest_len;
-      unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
+      unsigned char digest[EVP_MAX_MD_SIZE]; /* init with max length */
 
       if ((ctx_verify = EVP_PKEY_CTX_new(oqsxkey->classical_pkey, NULL)) == NULL ||
           EVP_PKEY_verify_init(ctx_verify) <= 0) {
@@ -410,37 +432,58 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
       }
       DECODE_UINT32(actual_classical_sig_len, sig);
 
-      /* same as with sign: activate if pre-existing hashing to be used:
-       *  if (poqs_sigctx->mdctx == NULL) { // hashing not yet done
-       */
-      switch (oqs_key->claimed_nist_level) {
-      case 1:
-        classical_md = EVP_sha256();
-        digest_len = SHA256_DIGEST_LENGTH;
-        SHA256(tbs, tbslen, (unsigned char*) &digest);
-        break;
-      case 2:
-      case 3:
-        classical_md = EVP_sha384();
-        digest_len = SHA384_DIGEST_LENGTH;
-        SHA384(tbs, tbslen, (unsigned char*) &digest);
-        break;
-      case 4:
-      case 5:
-      default:
-        classical_md = EVP_sha512();
-        digest_len = SHA512_DIGEST_LENGTH;
-        SHA512(tbs, tbslen, (unsigned char*) &digest);
-        break;
+      if (!poqs_sigctx->is_pre_hashed) {
+        
+        /* same as with sign: activate if pre-existing hashing to be used:
+        *  if (poqs_sigctx->mdctx == NULL) { // hashing not yet done
+        */
+        switch (oqs_key->claimed_nist_level) {
+        case 1:
+          classical_md = EVP_sha256();
+          digest_len = SHA256_DIGEST_LENGTH;
+          SHA256(tbs, tbslen, (unsigned char*) &digest);
+          break;
+        case 2:
+        case 3:
+          classical_md = EVP_sha384();
+          digest_len = SHA384_DIGEST_LENGTH;
+          SHA384(tbs, tbslen, (unsigned char*) &digest);
+          break;
+        case 4:
+        case 5:
+        default:
+          classical_md = EVP_sha512();
+          digest_len = SHA512_DIGEST_LENGTH;
+          SHA512(tbs, tbslen, (unsigned char*) &digest);
+          break;
+        }
+
+        if (EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <= 0) {
+          ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
+          goto endverify;
+        }
+
+      } else {
+        
+        // Pre-Hashed Data, no need to hash again
+        if (tbslen > sizeof(digest)) {
+          ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
+          goto endverify;
+        }
+
+        // Copy data and length
+        memcpy(digest, tbs, tbslen);
+        digest_len = tbslen;
       }
-      if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <= 0) ||
-          (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32, actual_classical_sig_len, digest, digest_len) <= 0)) {
+
+      if (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32, actual_classical_sig_len, digest, digest_len) <= 0) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
         goto endverify;
       }
       else {
-	OQS_SIG_PRINTF("OQS SIG: classic verification OK\n");
+        OQS_SIG_PRINTF("OQS SIG: classic verification OK\n");
       }
+      
      /* activate for using pre-existing digest:
       * }
       *  else { // hashing already done:
@@ -632,15 +675,20 @@ int oqs_sig_digest_sign(void *ctx,
     return 0;
   }
 
-  // Checks the digest was already setup
-  if (!poqs_sigctx->md || !poqs_sigctx->mdctx) {
-    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST);
-    return 0;
-  }
-
   // Sends back the signature size if no buffer was provided
   if (!sig) {
     // Estimates the signature size
+    if (!oqs_sig_sign(ctx, sig, siglen, sigsize, tbs, tbslen)) {
+      ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
+      return 0;
+    }
+    // All Done
+    return 1;
+  }
+
+  // If no digest is configured, we do not use any
+  if (!poqs_sigctx->md || !poqs_sigctx->mdctx) {
+    // Generates the signature on the data (direct signing)
     if (!oqs_sig_sign(ctx, sig, siglen, sigsize, tbs, tbslen)) {
       ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
       return 0;
@@ -658,6 +706,9 @@ int oqs_sig_digest_sign(void *ctx,
     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST);
     return 0;
   }
+
+  // Signals the traditional that no additional hashing is needed
+  poqs_sigctx->is_pre_hashed = 1;
 
   // Generates the signature on the digest
   if (!oqs_sig_sign(ctx, sig, siglen, sigsize, tbs_digest, tbs_digest_len)) {

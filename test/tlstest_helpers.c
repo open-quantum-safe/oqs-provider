@@ -1,35 +1,32 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
-#include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <openssl/ssl.h>
 
-#define MAXLOOPS    1000000
+#define MAXLOOPS 1000000
 
 /* Stolen from openssl/tests/sslapitest.c: */
-int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename, char *privkeyfilename)
+int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename,
+                    char *privkeyfilename)
 {
-    EVP_PKEY_CTX * evpctx = EVP_PKEY_CTX_new_from_name(libctx, algname, NULL);
+    EVP_PKEY_CTX *evpctx = EVP_PKEY_CTX_new_from_name(libctx, algname, NULL);
     EVP_PKEY *pkey = NULL;
     X509 *x509 = X509_new();
     X509_NAME *name = NULL;
     BIO *keybio = NULL, *certbio = NULL;
     int ret = 1;
 
-    if (!evpctx
-        || !EVP_PKEY_keygen_init(evpctx)
-        || !EVP_PKEY_generate(evpctx, &pkey)
-        || !pkey
-        || !x509
+    if (!evpctx || !EVP_PKEY_keygen_init(evpctx)
+        || !EVP_PKEY_generate(evpctx, &pkey) || !pkey || !x509
         || !ASN1_INTEGER_set(X509_get_serialNumber(x509), 1)
         || !X509_gmtime_adj(X509_getm_notBefore(x509), 0)
         || !X509_gmtime_adj(X509_getm_notAfter(x509), 31536000L)
-        || !X509_set_pubkey(x509, pkey)
-        || !(name = X509_get_subject_name(x509))
-        || !X509_NAME_add_entry_by_txt(name, "C",  MBSTRING_ASC,
-                           (unsigned char *)"CH", -1, -1, 0)
-        || !X509_NAME_add_entry_by_txt(name, "O",  MBSTRING_ASC,
-                           (unsigned char *)"test.org", -1, -1, 0)
+        || !X509_set_pubkey(x509, pkey) || !(name = X509_get_subject_name(x509))
+        || !X509_NAME_add_entry_by_txt(name, "C", MBSTRING_ASC,
+                                       (unsigned char *)"CH", -1, -1, 0)
+        || !X509_NAME_add_entry_by_txt(name, "O", MBSTRING_ASC,
+                                       (unsigned char *)"test.org", -1, -1, 0)
         || !X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC,
-                           (unsigned char *)"localhost", -1, -1, 0)
+                                       (unsigned char *)"localhost", -1, -1, 0)
         || !X509_set_issuer_name(x509, name)
         || !X509_sign(x509, pkey, EVP_sha1())
         || !(keybio = BIO_new_file(privkeyfilename, "wb"))
@@ -47,7 +44,8 @@ int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename, cha
 }
 /* end steal */
 int create_tls1_3_ctx_pair(OSSL_LIB_CTX *libctx, SSL_CTX **sctx, SSL_CTX **cctx,
-                        char *certfile, char *privkeyfile) {
+                           char *certfile, char *privkeyfile)
+{
     SSL_CTX *serverctx = NULL, *clientctx = NULL;
 
     if (sctx == NULL || cctx == NULL)
@@ -59,18 +57,16 @@ int create_tls1_3_ctx_pair(OSSL_LIB_CTX *libctx, SSL_CTX **sctx, SSL_CTX **cctx,
     if (serverctx == NULL || clientctx == NULL)
         goto err;
 
-    SSL_CTX_set_options(serverctx,SSL_OP_ALLOW_CLIENT_RENEGOTIATION);
-    SSL_CTX_set_min_proto_version(serverctx,TLS1_3_VERSION);
-    SSL_CTX_set_max_proto_version(serverctx,TLS1_3_VERSION);
-    SSL_CTX_set_min_proto_version(clientctx,TLS1_3_VERSION);
-    SSL_CTX_set_max_proto_version(clientctx,TLS1_3_VERSION);
+    SSL_CTX_set_options(serverctx, SSL_OP_ALLOW_CLIENT_RENEGOTIATION);
+    SSL_CTX_set_min_proto_version(serverctx, TLS1_3_VERSION);
+    SSL_CTX_set_max_proto_version(serverctx, TLS1_3_VERSION);
+    SSL_CTX_set_min_proto_version(clientctx, TLS1_3_VERSION);
+    SSL_CTX_set_max_proto_version(clientctx, TLS1_3_VERSION);
 
-    if (!SSL_CTX_use_certificate_file(serverctx, certfile,
-        SSL_FILETYPE_PEM) )
+    if (!SSL_CTX_use_certificate_file(serverctx, certfile, SSL_FILETYPE_PEM))
         goto err;
 
-    if (!SSL_CTX_use_PrivateKey_file(serverctx,privkeyfile,
-        SSL_FILETYPE_PEM))
+    if (!SSL_CTX_use_PrivateKey_file(serverctx, privkeyfile, SSL_FILETYPE_PEM))
         goto err;
 
     if (!SSL_CTX_check_private_key(serverctx))
@@ -80,18 +76,19 @@ int create_tls1_3_ctx_pair(OSSL_LIB_CTX *libctx, SSL_CTX **sctx, SSL_CTX **cctx,
     *cctx = clientctx;
     return 1;
 
-    err:
+err:
     SSL_CTX_free(serverctx);
     SSL_CTX_free(clientctx);
     return 0;
 }
 
 int create_tls_objects(SSL_CTX *serverctx, SSL_CTX *clientctx, SSL **sssl,
-                       SSL **cssl) {
+                       SSL **cssl)
+{
     SSL *serverssl = NULL, *clientssl = NULL;
     BIO *s_to_c_bio = NULL, *c_to_s_bio = NULL;
 
-    if(serverctx == NULL || clientctx == NULL)
+    if (serverctx == NULL || clientctx == NULL)
         goto err;
 
     serverssl = SSL_new(serverctx);
@@ -121,7 +118,7 @@ int create_tls_objects(SSL_CTX *serverctx, SSL_CTX *clientctx, SSL **sssl,
 
     return 1;
 
-    err:
+err:
     SSL_free(serverssl);
     SSL_free(clientssl);
     BIO_free(s_to_c_bio);
@@ -131,17 +128,16 @@ int create_tls_objects(SSL_CTX *serverctx, SSL_CTX *clientctx, SSL **sssl,
 }
 
 /* Create an SSL connection, but does not read any post-handshake
-* NewSessionTicket messages.
-* We stop the connection attempt (and return a failure value) if either peer
-* has SSL_get_error() return the value in the |want| parameter. The connection
-* attempt could be restarted by a subsequent call to this function.
-*/
+ * NewSessionTicket messages.
+ * We stop the connection attempt (and return a failure value) if either peer
+ * has SSL_get_error() return the value in the |want| parameter. The connection
+ * attempt could be restarted by a subsequent call to this function.
+ */
 int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
                                int read)
 {
     int retc = -1, rets = -1, err, abortctr = 0;
     int clienterr = 0, servererr = 0;
-
 
     do {
         err = SSL_ERROR_WANT_WRITE;
@@ -167,8 +163,7 @@ int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
                 err = SSL_get_error(serverssl, rets);
         }
 
-        if (!servererr && rets <= 0
-            && err != SSL_ERROR_WANT_READ
+        if (!servererr && rets <= 0 && err != SSL_ERROR_WANT_READ
             && err != SSL_ERROR_WANT_X509_LOOKUP) {
             fprintf(stderr, "SSL_accept() failed %d, %d", rets, err);
             if (want != SSL_ERROR_SSL)
@@ -185,7 +180,7 @@ int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
             return 0;
         }
 
-    } while (retc <=0 || rets <= 0);
+    } while (retc <= 0 || rets <= 0);
 
     return 1;
 }
@@ -210,7 +205,7 @@ int create_tls_connection(SSL *serverssl, SSL *clientssl, int want)
      */
     for (i = 0; i < 2; i++) {
         if (SSL_read_ex(clientssl, &buf, sizeof(buf), &readbytes) > 0) {
-            if (readbytes !=0)
+            if (readbytes != 0)
                 return 0;
         } else if (SSL_get_error(clientssl, 0) != SSL_ERROR_WANT_READ) {
             return 0;
@@ -219,4 +214,3 @@ int create_tls_connection(SSL *serverssl, SSL *clientssl, int want)
 
     return 1;
 }
-

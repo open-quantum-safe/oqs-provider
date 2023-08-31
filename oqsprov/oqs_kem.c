@@ -4,30 +4,35 @@
  * OQS OpenSSL 3 provider
  *
  * Code strongly inspired by OpenSSL rsa kem.
- * 
+ *
  * ToDo: Adding hybrid alg support; More testing with more key types.
  */
 
-#include <openssl/crypto.h>
-#include <openssl/evp.h>
-#include <openssl/ec.h>
+#include "oqs_prov.h"
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
-#include <openssl/params.h>
+#include <openssl/crypto.h>
+#include <openssl/ec.h>
 #include <openssl/err.h>
+#include <openssl/evp.h>
+#include <openssl/params.h>
 #include <string.h>
-#include "oqs_prov.h"
 
 #ifdef NDEBUG
-#define OQS_KEM_PRINTF(a)
-#define OQS_KEM_PRINTF2(a, b)
-#define OQS_KEM_PRINTF3(a, b, c)
+#    define OQS_KEM_PRINTF(a)
+#    define OQS_KEM_PRINTF2(a, b)
+#    define OQS_KEM_PRINTF3(a, b, c)
 #else
-#define OQS_KEM_PRINTF(a) if (getenv("OQSKEM")) printf(a)
-#define OQS_KEM_PRINTF2(a, b) if (getenv("OQSKEM")) printf(a, b)
-#define OQS_KEM_PRINTF3(a, b, c) if (getenv("OQSKEM")) printf(a, b, c)
+#    define OQS_KEM_PRINTF(a) \
+        if (getenv("OQSKEM")) \
+        printf(a)
+#    define OQS_KEM_PRINTF2(a, b) \
+        if (getenv("OQSKEM"))     \
+        printf(a, b)
+#    define OQS_KEM_PRINTF3(a, b, c) \
+        if (getenv("OQSKEM"))        \
+        printf(a, b, c)
 #endif // NDEBUG
-
 
 static OSSL_FUNC_kem_newctx_fn oqs_kem_newctx;
 static OSSL_FUNC_kem_encapsulate_init_fn oqs_kem_encaps_init;
@@ -49,7 +54,7 @@ typedef struct {
 
 static void *oqs_kem_newctx(void *provctx)
 {
-    PROV_OQSKEM_CTX *pkemctx =  OPENSSL_zalloc(sizeof(PROV_OQSKEM_CTX));
+    PROV_OQSKEM_CTX *pkemctx = OPENSSL_zalloc(sizeof(PROV_OQSKEM_CTX));
 
     OQS_KEM_PRINTF("OQS KEM provider called: newctx\n");
     if (pkemctx == NULL)
@@ -73,8 +78,9 @@ static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem, int operation)
 {
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
-    OQS_KEM_PRINTF3("OQS KEM provider called: _init : New: %p; old: %p \n", vkem, pkemctx->kem);
-    if (pkemctx == NULL || vkem == NULL || !oqsx_key_up_ref(vkem)) 
+    OQS_KEM_PRINTF3("OQS KEM provider called: _init : New: %p; old: %p \n",
+                    vkem, pkemctx->kem);
+    if (pkemctx == NULL || vkem == NULL || !oqsx_key_up_ref(vkem))
         return 0;
     oqsx_key_free(pkemctx->kem);
     pkemctx->kem = vkem;
@@ -82,13 +88,15 @@ static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem, int operation)
     return 1;
 }
 
-static int oqs_kem_encaps_init(void *vpkemctx, void *vkem, const OSSL_PARAM params[])
+static int oqs_kem_encaps_init(void *vpkemctx, void *vkem,
+                               const OSSL_PARAM params[])
 {
     OQS_KEM_PRINTF("OQS KEM provider called: encaps_init\n");
     return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_ENCAPSULATE);
 }
 
-static int oqs_kem_decaps_init(void *vpkemctx, void *vkem, const OSSL_PARAM params[])
+static int oqs_kem_decaps_init(void *vpkemctx, void *vkem,
+                               const OSSL_PARAM params[])
 {
     OQS_KEM_PRINTF("OQS KEM provider called: decaps_init\n");
     return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_DECAPSULATE);
@@ -96,8 +104,9 @@ static int oqs_kem_decaps_init(void *vpkemctx, void *vkem, const OSSL_PARAM para
 
 /// Quantum-Safe KEM functions (OQS)
 
-static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out, size_t *outlen,
-                                     unsigned char *secret, size_t *secretlen, int keyslot)
+static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
+                                     size_t *outlen, unsigned char *secret,
+                                     size_t *secretlen, int keyslot)
 {
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQS_KEM *kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
@@ -110,14 +119,18 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out, size_t 
     *outlen = kem_ctx->length_ciphertext;
     *secretlen = kem_ctx->length_shared_secret;
     if (out == NULL || secret == NULL) {
-       OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n", *outlen, *secretlen);
-       return 1;
+        OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n", *outlen,
+                        *secretlen);
+        return 1;
     }
-    return OQS_SUCCESS == OQS_KEM_encaps(kem_ctx, out, secret, pkemctx->kem->comp_pubkey[keyslot]);
+    return OQS_SUCCESS
+           == OQS_KEM_encaps(kem_ctx, out, secret,
+                             pkemctx->kem->comp_pubkey[keyslot]);
 }
 
-static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out, size_t *outlen,
-                                     const unsigned char *in, size_t inlen, int keyslot)
+static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
+                                     size_t *outlen, const unsigned char *in,
+                                     size_t inlen, int keyslot)
 {
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQS_KEM *kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
@@ -128,15 +141,19 @@ static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out, size_t 
         return -1;
     }
     *outlen = kem_ctx->length_shared_secret;
-    if (out == NULL) return 1;
+    if (out == NULL)
+        return 1;
 
-    return OQS_SUCCESS == OQS_KEM_decaps(kem_ctx, out, in, pkemctx->kem->comp_privkey[keyslot]);
+    return OQS_SUCCESS
+           == OQS_KEM_decaps(kem_ctx, out, in,
+                             pkemctx->kem->comp_privkey[keyslot]);
 }
 
 static int oqs_qs_kem_encaps(void *vpkemctx, unsigned char *out, size_t *outlen,
                              unsigned char *secret, size_t *secretlen)
 {
-    return oqs_qs_kem_encaps_keyslot(vpkemctx, out, outlen, secret, secretlen, 0);
+    return oqs_qs_kem_encaps_keyslot(vpkemctx, out, outlen, secret, secretlen,
+                                     0);
 }
 
 static int oqs_qs_kem_decaps(void *vpkemctx, unsigned char *out, size_t *outlen,
@@ -147,8 +164,9 @@ static int oqs_qs_kem_decaps(void *vpkemctx, unsigned char *out, size_t *outlen,
 
 /// EVP KEM functions
 
-static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct, size_t *ctlen,
-                                      unsigned char *secret, size_t *secretlen, int keyslot)
+static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
+                                      size_t *ctlen, unsigned char *secret,
+                                      size_t *secretlen, int keyslot)
 {
     int ret = OQS_SUCCESS, ret2 = 0;
 
@@ -160,7 +178,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct, size_t 
     unsigned char *pubkey_kex = pkemctx->kem->comp_pubkey[keyslot];
 
     // Free at err:
-    EVP_PKEY_CTX *ctx = NULL, *kgctx = NULL;;
+    EVP_PKEY_CTX *ctx = NULL, *kgctx = NULL;
+    ;
     EVP_PKEY *pkey = NULL, *peerpk = NULL;
     unsigned char *ctkex_encoded = NULL;
 
@@ -171,7 +190,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct, size_t 
     *secretlen = kexDeriveLen;
 
     if (ct == NULL || secret == NULL) {
-        OQS_KEM_PRINTF3("EVP KEM returning lengths %ld and %ld\n", *ctlen, *secretlen);
+        OQS_KEM_PRINTF3("EVP KEM returning lengths %ld and %ld\n", *ctlen,
+                        *secretlen);
         return 1;
     }
 
@@ -206,11 +226,12 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct, size_t 
     ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
 
     pkeylen = EVP_PKEY_get1_encoded_public_key(pkey, &ctkex_encoded);
-    ON_ERR_SET_GOTO(pkeylen <= 0 || !ctkex_encoded || pkeylen != pubkey_kexlen, ret, -1, err);
+    ON_ERR_SET_GOTO(pkeylen <= 0 || !ctkex_encoded || pkeylen != pubkey_kexlen,
+                    ret, -1, err);
 
     memcpy(ct, ctkex_encoded, pkeylen);
 
-    err:
+err:
     EVP_PKEY_CTX_free(ctx);
     EVP_PKEY_CTX_free(kgctx);
     EVP_PKEY_free(pkey);
@@ -219,8 +240,10 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct, size_t 
     return ret;
 }
 
-static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret, size_t *secretlen,
-                                      const unsigned char *ct, size_t ctlen, int keyslot)
+static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
+                                      size_t *secretlen,
+                                      const unsigned char *ct, size_t ctlen,
+                                      int keyslot)
 {
     OQS_KEM_PRINTF("OQS KEM provider called: oqs_hyb_kem_decaps\n");
 
@@ -238,13 +261,16 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret, siz
     EVP_PKEY *pkey = NULL, *peerpkey = NULL;
 
     *secretlen = kexDeriveLen;
-    if (secret == NULL) return 1;
+    if (secret == NULL)
+        return 1;
 
     if (evp_ctx->evp_info->raw_key_support) {
-        pkey = EVP_PKEY_new_raw_private_key(evp_ctx->evp_info->keytype, NULL, privkey_kex, privkey_kexlen);
+        pkey = EVP_PKEY_new_raw_private_key(evp_ctx->evp_info->keytype, NULL,
+                                            privkey_kex, privkey_kexlen);
         ON_ERR_SET_GOTO(!pkey, ret, -10, err);
     } else {
-        pkey = d2i_AutoPrivateKey(&pkey, (const unsigned char **)&privkey_kex, privkey_kexlen);
+        pkey = d2i_AutoPrivateKey(&pkey, (const unsigned char **)&privkey_kex,
+                                  privkey_kexlen);
         ON_ERR_SET_GOTO(!pkey, ret, -2, err);
     }
 
@@ -268,7 +294,7 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret, siz
     ret = EVP_PKEY_derive(ctx, secret, &kexDeriveLen);
     ON_ERR_SET_GOTO(ret <= 0, ret, -9, err);
 
-    err:
+err:
     EVP_PKEY_free(peerpkey);
     EVP_PKEY_free(pkey);
     EVP_PKEY_CTX_free(ctx);
@@ -286,17 +312,19 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     size_t ctLen0 = 0, ctLen1 = 0;
     unsigned char *ct0, *ct1, *secret0, *secret1;
 
-    ret = oqs_evp_kem_encaps_keyslot(vpkemctx, NULL, &ctLen0, NULL, &secretLen0, 0);
+    ret = oqs_evp_kem_encaps_keyslot(vpkemctx, NULL, &ctLen0, NULL, &secretLen0,
+                                     0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
-    ret = oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLen1, NULL, &secretLen1, 1);
+    ret = oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLen1, NULL, &secretLen1,
+                                    1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
-
 
     *ctlen = ctLen0 + ctLen1;
     *secretlen = secretLen0 + secretLen1;
 
     if (ct == NULL || secret == NULL) {
-        OQS_KEM_PRINTF3("HYB KEM returning lengths %ld and %ld\n", *ctlen, *secretlen);
+        OQS_KEM_PRINTF3("HYB KEM returning lengths %ld and %ld\n", *ctlen,
+                        *secretlen);
         return 1;
     }
 
@@ -305,18 +333,21 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     secret0 = secret;
     secret1 = secret + secretLen0;
 
-    ret = oqs_evp_kem_encaps_keyslot(vpkemctx, ct0, &ctLen0, secret0, &secretLen0, 0);
+    ret = oqs_evp_kem_encaps_keyslot(vpkemctx, ct0, &ctLen0, secret0,
+                                     &secretLen0, 0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
-    ret = oqs_qs_kem_encaps_keyslot(vpkemctx, ct1, &ctLen1, secret1, &secretLen1, 1);
+    ret = oqs_qs_kem_encaps_keyslot(vpkemctx, ct1, &ctLen1, secret1,
+                                    &secretLen1, 1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
-    err:
+err:
     return ret;
 }
 
-static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret, size_t *secretlen,
-                              const unsigned char *ct, size_t ctlen)
+static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
+                              size_t *secretlen, const unsigned char *ct,
+                              size_t ctlen)
 {
     int ret = OQS_SUCCESS;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
@@ -335,7 +366,8 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret, size_t *sec
 
     *secretlen = secretLen0 + secretLen1;
 
-    if (secret == NULL) return 1;
+    if (secret == NULL)
+        return 1;
 
     ctLen0 = evp_ctx->evp_info->length_public_key;
     ctLen1 = qs_ctx->length_ciphertext;
@@ -347,36 +379,36 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret, size_t *sec
     secret0 = secret;
     secret1 = secret + secretLen0;
 
-    ret = oqs_evp_kem_decaps_keyslot(vpkemctx, secret0, &secretLen0, ct0, ctLen0, 0);
+    ret = oqs_evp_kem_decaps_keyslot(vpkemctx, secret0, &secretLen0, ct0,
+                                     ctLen0, 0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
-    ret = oqs_qs_kem_decaps_keyslot(vpkemctx, secret1, &secretLen1, ct1, ctLen1, 1);
+    ret = oqs_qs_kem_decaps_keyslot(vpkemctx, secret1, &secretLen1, ct1, ctLen1,
+                                    1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
-    err:
+err:
     return ret;
 }
 
-#define MAKE_KEM_FUNCTIONS(alg) \
-    const OSSL_DISPATCH oqs_##alg##_kem_functions[] = { \
-      { OSSL_FUNC_KEM_NEWCTX, (void (*)(void))oqs_kem_newctx }, \
-      { OSSL_FUNC_KEM_ENCAPSULATE_INIT, (void (*)(void))oqs_kem_encaps_init }, \
-      { OSSL_FUNC_KEM_ENCAPSULATE, (void (*)(void))oqs_qs_kem_encaps }, \
-      { OSSL_FUNC_KEM_DECAPSULATE_INIT, (void (*)(void))oqs_kem_decaps_init }, \
-      { OSSL_FUNC_KEM_DECAPSULATE, (void (*)(void))oqs_qs_kem_decaps }, \
-      { OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx }, \
-      { 0, NULL } \
-  };
+#define MAKE_KEM_FUNCTIONS(alg)                                                \
+    const OSSL_DISPATCH oqs_##alg##_kem_functions[] = {                        \
+        {OSSL_FUNC_KEM_NEWCTX, (void (*)(void))oqs_kem_newctx},                \
+        {OSSL_FUNC_KEM_ENCAPSULATE_INIT, (void (*)(void))oqs_kem_encaps_init}, \
+        {OSSL_FUNC_KEM_ENCAPSULATE, (void (*)(void))oqs_qs_kem_encaps},        \
+        {OSSL_FUNC_KEM_DECAPSULATE_INIT, (void (*)(void))oqs_kem_decaps_init}, \
+        {OSSL_FUNC_KEM_DECAPSULATE, (void (*)(void))oqs_qs_kem_decaps},        \
+        {OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx},              \
+        {0, NULL}};
 
-#define MAKE_HYB_KEM_FUNCTIONS(alg) \
-    const OSSL_DISPATCH oqs_##alg##_kem_functions[] = { \
-      { OSSL_FUNC_KEM_NEWCTX, (void (*)(void))oqs_kem_newctx }, \
-      { OSSL_FUNC_KEM_ENCAPSULATE_INIT, (void (*)(void))oqs_kem_encaps_init }, \
-      { OSSL_FUNC_KEM_ENCAPSULATE, (void (*)(void))oqs_hyb_kem_encaps }, \
-      { OSSL_FUNC_KEM_DECAPSULATE_INIT, (void (*)(void))oqs_kem_decaps_init }, \
-      { OSSL_FUNC_KEM_DECAPSULATE, (void (*)(void))oqs_hyb_kem_decaps }, \
-      { OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx }, \
-      { 0, NULL } \
-  };
+#define MAKE_HYB_KEM_FUNCTIONS(alg)                                            \
+    const OSSL_DISPATCH oqs_##alg##_kem_functions[] = {                        \
+        {OSSL_FUNC_KEM_NEWCTX, (void (*)(void))oqs_kem_newctx},                \
+        {OSSL_FUNC_KEM_ENCAPSULATE_INIT, (void (*)(void))oqs_kem_encaps_init}, \
+        {OSSL_FUNC_KEM_ENCAPSULATE, (void (*)(void))oqs_hyb_kem_encaps},       \
+        {OSSL_FUNC_KEM_DECAPSULATE_INIT, (void (*)(void))oqs_kem_decaps_init}, \
+        {OSSL_FUNC_KEM_DECAPSULATE, (void (*)(void))oqs_hyb_kem_decaps},       \
+        {OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx},              \
+        {0, NULL}};
 
 // keep this just in case we need to become ALG-specific at some point in time
 MAKE_KEM_FUNCTIONS(generic)

@@ -7,35 +7,41 @@
  * https://www.openssl.org/source/license.html
  */
 
+#include <openssl/asn1.h>
+#include <openssl/asn1t.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/core_object.h>
 #include <openssl/crypto.h>
 #include <openssl/err.h>
 #include <openssl/params.h>
-#include <openssl/pem.h>         /* PEM_BUFSIZE and public PEM functions */
+#include <openssl/pem.h> /* PEM_BUFSIZE and public PEM functions */
 #include <openssl/pkcs12.h>
-#include <openssl/x509.h>
-#include <openssl/asn1.h>
-#include <openssl/asn1t.h>
 #include <openssl/proverr.h>
-//#include "internal/asn1.h"
-//instead just:
+#include <openssl/x509.h>
+// #include "internal/asn1.h"
+// instead just:
 int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb); // TBD: OK to use?
 
 #include "oqs_endecoder_local.h"
 
 #ifdef NDEBUG
-#define OQS_DEC_PRINTF(a)
-#define OQS_DEC_PRINTF2(a, b)
-#define OQS_DEC_PRINTF3(a, b, c)
+#    define OQS_DEC_PRINTF(a)
+#    define OQS_DEC_PRINTF2(a, b)
+#    define OQS_DEC_PRINTF3(a, b, c)
 #else
-#define OQS_DEC_PRINTF(a) if (getenv("OQSDEC")) printf(a)
-#define OQS_DEC_PRINTF2(a, b) if (getenv("OQSDEC")) printf(a, b)
-#define OQS_DEC_PRINTF3(a, b, c) if (getenv("OQSDEC")) printf(a, b, c)
+#    define OQS_DEC_PRINTF(a) \
+        if (getenv("OQSDEC")) \
+        printf(a)
+#    define OQS_DEC_PRINTF2(a, b) \
+        if (getenv("OQSDEC"))     \
+        printf(a, b)
+#    define OQS_DEC_PRINTF3(a, b, c) \
+        if (getenv("OQSDEC"))        \
+        printf(a, b, c)
 #endif // NDEBUG
 
-struct der2key_ctx_st;           /* Forward declaration */
+struct der2key_ctx_st; /* Forward declaration */
 typedef int check_key_fn(void *, struct der2key_ctx_st *ctx);
 typedef void adjust_key_fn(void *, struct der2key_ctx_st *ctx);
 typedef void free_key_fn(void *);
@@ -84,9 +90,10 @@ struct keytype_desc_st {
 
 // Start steal. Alternative: Open up d2i_X509_PUBKEY_INTERNAL
 // as per https://github.com/openssl/openssl/issues/16697 (TBD)
-// stolen from openssl/crypto/x509/x_pubkey.c as ossl_d2i_X509_PUBKEY_INTERNAL not public: 
-// dangerous internal struct dependency: Suggest opening up ossl_d2i_X509_PUBKEY_INTERNAL
-// or find out how to decode X509 with own ASN1 calls
+// stolen from openssl/crypto/x509/x_pubkey.c as ossl_d2i_X509_PUBKEY_INTERNAL
+// not public: dangerous internal struct dependency: Suggest opening up
+// ossl_d2i_X509_PUBKEY_INTERNAL or find out how to decode X509 with own ASN1
+// calls
 struct X509_pubkey_st {
     X509_ALGOR *algor;
     ASN1_BIT_STRING *public_key;
@@ -101,13 +108,16 @@ struct X509_pubkey_st {
     unsigned int flag_force_legacy : 1;
 };
 
-ASN1_SEQUENCE(X509_PUBKEY_INTERNAL) = {
-        ASN1_SIMPLE(X509_PUBKEY, algor, X509_ALGOR),
-        ASN1_SIMPLE(X509_PUBKEY, public_key, ASN1_BIT_STRING)
-} static_ASN1_SEQUENCE_END_name(X509_PUBKEY, X509_PUBKEY_INTERNAL)
+ASN1_SEQUENCE(X509_PUBKEY_INTERNAL)
+    = {ASN1_SIMPLE(X509_PUBKEY, algor, X509_ALGOR),
+       ASN1_SIMPLE(
+           X509_PUBKEY, public_key,
+           ASN1_BIT_STRING)} static_ASN1_SEQUENCE_END_name(X509_PUBKEY,
+                                                           X509_PUBKEY_INTERNAL)
 
-X509_PUBKEY *oqsx_d2i_X509_PUBKEY_INTERNAL(const unsigned char **pp,
-                                           long len, OSSL_LIB_CTX *libctx)
+          X509_PUBKEY
+      * oqsx_d2i_X509_PUBKEY_INTERNAL(const unsigned char **pp, long len,
+                                      OSSL_LIB_CTX *libctx)
 {
     X509_PUBKEY *xpub = OPENSSL_zalloc(sizeof(*xpub));
 
@@ -118,7 +128,6 @@ X509_PUBKEY *oqsx_d2i_X509_PUBKEY_INTERNAL(const unsigned char **pp,
                                            libctx, NULL);
 }
 // end steal TBD
-
 
 /*
  * Context used for DER to key decoding.
@@ -132,8 +141,9 @@ struct der2key_ctx_st {
     unsigned int flag_fatal : 1;
 };
 
-int oqs_read_der(PROV_OQS_CTX *provctx, OSSL_CORE_BIO *cin,  unsigned char **data,
-                  long *len) {
+int oqs_read_der(PROV_OQS_CTX *provctx, OSSL_CORE_BIO *cin,
+                 unsigned char **data, long *len)
+{
     OQS_DEC_PRINTF("OQS DEC provider: oqs_read_der called.\n");
 
     BUF_MEM *mem = NULL;
@@ -152,16 +162,20 @@ int oqs_read_der(PROV_OQS_CTX *provctx, OSSL_CORE_BIO *cin,  unsigned char **dat
 typedef void *key_from_pkcs8_t(const PKCS8_PRIV_KEY_INFO *p8inf,
                                OSSL_LIB_CTX *libctx, const char *propq);
 static void *oqs_der2key_decode_p8(const unsigned char **input_der,
-                               long input_der_len, struct der2key_ctx_st *ctx,
-                               key_from_pkcs8_t *key_from_pkcs8)
+                                   long input_der_len,
+                                   struct der2key_ctx_st *ctx,
+                                   key_from_pkcs8_t *key_from_pkcs8)
 {
     PKCS8_PRIV_KEY_INFO *p8inf = NULL;
     const X509_ALGOR *alg = NULL;
     void *key = NULL;
 
-    OQS_DEC_PRINTF2("OQS DEC provider: oqs_der2key_decode_p8 called. Keytype: %d.\n", ctx->desc->evp_type);
+    OQS_DEC_PRINTF2(
+        "OQS DEC provider: oqs_der2key_decode_p8 called. Keytype: %d.\n",
+        ctx->desc->evp_type);
 
-    if ((p8inf = d2i_PKCS8_PRIV_KEY_INFO(NULL, input_der, input_der_len)) != NULL
+    if ((p8inf = d2i_PKCS8_PRIV_KEY_INFO(NULL, input_der, input_der_len))
+            != NULL
         && PKCS8_pkey_get0(NULL, NULL, NULL, &alg, p8inf)
         && OBJ_obj2nid(alg->algorithm) == ctx->desc->evp_type)
         key = key_from_pkcs8(p8inf, PROV_OQS_LIBCTX_OF(ctx->provctx), NULL);
@@ -170,14 +184,14 @@ static void *oqs_der2key_decode_p8(const unsigned char **input_der,
     return key;
 }
 
-OQSX_KEY *oqsx_d2i_PUBKEY(OQSX_KEY **a,
-                          const unsigned char **pp, long length)
+OQSX_KEY *oqsx_d2i_PUBKEY(OQSX_KEY **a, const unsigned char **pp, long length)
 {
     OQSX_KEY *key = NULL;
     // taken from internal code for d2i_PUBKEY_int:
     X509_PUBKEY *xpk;
 
-    OQS_DEC_PRINTF2("OQS DEC provider: oqsx_d2i_PUBKEY called with length %ld\n", length);
+    OQS_DEC_PRINTF2(
+        "OQS DEC provider: oqsx_d2i_PUBKEY called with length %ld\n", length);
 
     // only way to re-create X509 object?? TBD
     xpk = oqsx_d2i_X509_PUBKEY_INTERNAL(pp, length, NULL);
@@ -194,26 +208,30 @@ OQSX_KEY *oqsx_d2i_PUBKEY(OQSX_KEY **a,
     return key;
 }
 
-
 /* ---------------------------------------------------------------------- */
 
 static OSSL_FUNC_decoder_freectx_fn der2key_freectx;
 static OSSL_FUNC_decoder_decode_fn oqs_der2key_decode;
 static OSSL_FUNC_decoder_export_object_fn der2key_export_object;
 
-static struct der2key_ctx_st *
-der2key_newctx(void *provctx, struct keytype_desc_st *desc, const char* tls_name)
+static struct der2key_ctx_st *der2key_newctx(void *provctx,
+                                             struct keytype_desc_st *desc,
+                                             const char *tls_name)
 {
     struct der2key_ctx_st *ctx = OPENSSL_zalloc(sizeof(*ctx));
 
-    OQS_DEC_PRINTF3("OQS DEC provider: der2key_newctx called with tls_name %s. Keytype: %d\n", tls_name, desc->evp_type);
+    OQS_DEC_PRINTF3(
+        "OQS DEC provider: der2key_newctx called with tls_name %s. Keytype: %d\n",
+        tls_name, desc->evp_type);
 
     if (ctx != NULL) {
         ctx->provctx = provctx;
         ctx->desc = desc;
         if (desc->evp_type == 0) {
-           ctx->desc->evp_type = OBJ_sn2nid(tls_name);
-           OQS_DEC_PRINTF2("OQS DEC provider: der2key_newctx set evp_type to %d\n", ctx->desc->evp_type);
+            ctx->desc->evp_type = OBJ_sn2nid(tls_name);
+            OQS_DEC_PRINTF2(
+                "OQS DEC provider: der2key_newctx set evp_type to %d\n",
+                ctx->desc->evp_type);
         }
     }
     return ctx;
@@ -233,14 +251,14 @@ static int der2key_check_selection(int selection,
      * The selections are kinda sorta "levels", i.e. each selection given
      * here is assumed to include those following.
      */
-    int checks[] = {
-        OSSL_KEYMGMT_SELECT_PRIVATE_KEY,
-        OSSL_KEYMGMT_SELECT_PUBLIC_KEY,
-        OSSL_KEYMGMT_SELECT_ALL_PARAMETERS
-    };
+    int checks[]
+        = {OSSL_KEYMGMT_SELECT_PRIVATE_KEY, OSSL_KEYMGMT_SELECT_PUBLIC_KEY,
+           OSSL_KEYMGMT_SELECT_ALL_PARAMETERS};
     size_t i;
 
-    OQS_DEC_PRINTF3("OQS DEC provider: der2key_check_selection called with selection %d (%d).\n", selection, desc->selection_mask);
+    OQS_DEC_PRINTF3(
+        "OQS DEC provider: der2key_check_selection called with selection %d (%d).\n",
+        selection, desc->selection_mask);
 
     /* The decoder implementations made here support guessing */
     if (selection == 0)
@@ -254,7 +272,9 @@ static int der2key_check_selection(int selection,
          * If the caller asked for the currently checked bit(s), return
          * whether the decoder description says it's supported.
          */
-        OQS_DEC_PRINTF3("OQS DEC provider: der2key_check_selection returning %d (%d).\n", check1, check2);
+        OQS_DEC_PRINTF3(
+            "OQS DEC provider: der2key_check_selection returning %d (%d).\n",
+            check1, check2);
 
         if (check1)
             return check2;
@@ -265,8 +285,8 @@ static int der2key_check_selection(int selection,
 }
 
 static int oqs_der2key_decode(void *vctx, OSSL_CORE_BIO *cin, int selection,
-                          OSSL_CALLBACK *data_cb, void *data_cbarg,
-                          OSSL_PASSPHRASE_CALLBACK *pw_cb, void *pw_cbarg)
+                              OSSL_CALLBACK *data_cb, void *data_cbarg,
+                              OSSL_PASSPHRASE_CALLBACK *pw_cb, void *pw_cbarg)
 {
     struct der2key_ctx_st *ctx = vctx;
     unsigned char *der = NULL;
@@ -297,7 +317,7 @@ static int oqs_der2key_decode(void *vctx, OSSL_CORE_BIO *cin, int selection,
     if (!ok)
         goto next;
 
-    ok = 0;                      /* Assume that we fail */
+    ok = 0; /* Assume that we fail */
 
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
         derp = der;
@@ -335,8 +355,7 @@ static int oqs_der2key_decode(void *vctx, OSSL_CORE_BIO *cin, int selection,
      * classes of key types that have subtle variants, like RSA-PSS keys as
      * opposed to plain RSA keys.
      */
-    if (key != NULL
-        && ctx->desc->check_key != NULL
+    if (key != NULL && ctx->desc->check_key != NULL
         && !ctx->desc->check_key(key, ctx)) {
         ctx->desc->free_key(key);
         key = NULL;
@@ -345,7 +364,7 @@ static int oqs_der2key_decode(void *vctx, OSSL_CORE_BIO *cin, int selection,
     if (key != NULL && ctx->desc->adjust_key != NULL)
         ctx->desc->adjust_key(key, ctx);
 
- next:
+next:
     /*
      * Indicated that we successfully decoded something, or not at all.
      * Ending up "empty handed" is not an error.
@@ -364,35 +383,32 @@ static int oqs_der2key_decode(void *vctx, OSSL_CORE_BIO *cin, int selection,
         OSSL_PARAM params[4];
         int object_type = OSSL_OBJECT_PKEY;
 
-        params[0] =
-            OSSL_PARAM_construct_int(OSSL_OBJECT_PARAM_TYPE, &object_type);
-        params[1] =
-            OSSL_PARAM_construct_utf8_string(OSSL_OBJECT_PARAM_DATA_TYPE,
-                                             (char *)ctx->desc->keytype_name,
-                                             0);
+        params[0]
+            = OSSL_PARAM_construct_int(OSSL_OBJECT_PARAM_TYPE, &object_type);
+        params[1] = OSSL_PARAM_construct_utf8_string(
+            OSSL_OBJECT_PARAM_DATA_TYPE, (char *)ctx->desc->keytype_name, 0);
         /* The address of the key becomes the octet string */
-        params[2] =
-            OSSL_PARAM_construct_octet_string(OSSL_OBJECT_PARAM_REFERENCE,
-                                              &key, sizeof(key));
+        params[2] = OSSL_PARAM_construct_octet_string(
+            OSSL_OBJECT_PARAM_REFERENCE, &key, sizeof(key));
         params[3] = OSSL_PARAM_construct_end();
 
         ok = data_cb(params, data_cbarg);
     }
 
- end:
+end:
     ctx->desc->free_key(key);
     OPENSSL_free(der);
 
     return ok;
 }
 
-static int der2key_export_object(void *vctx,
-                                 const void *reference, size_t reference_sz,
-                                 OSSL_CALLBACK *export_cb, void *export_cbarg)
+static int der2key_export_object(void *vctx, const void *reference,
+                                 size_t reference_sz, OSSL_CALLBACK *export_cb,
+                                 void *export_cbarg)
 {
     struct der2key_ctx_st *ctx = vctx;
-    OSSL_FUNC_keymgmt_export_fn *export =
-        oqs_prov_get_keymgmt_export(ctx->desc->fns);
+    OSSL_FUNC_keymgmt_export_fn *export
+        = oqs_prov_get_keymgmt_export(ctx->desc->fns);
     void *keydata;
 
     OQS_DEC_PRINTF("OQS DEC provider: der2key_export_object called.\n");
@@ -409,12 +425,12 @@ static int der2key_export_object(void *vctx,
 /* ---------------------------------------------------------------------- */
 
 static void *oqsx_d2i_PKCS8(void **key, const unsigned char **der, long der_len,
-                           struct der2key_ctx_st *ctx)
+                            struct der2key_ctx_st *ctx)
 {
     OQS_DEC_PRINTF("OQS DEC provider: oqsx_d2i_PKCS8 called.\n");
 
     return oqs_der2key_decode_p8(der, der_len, ctx,
-                             (key_from_pkcs8_t *)oqsx_key_from_pkcs8);
+                                 (key_from_pkcs8_t *)oqsx_key_from_pkcs8);
 }
 
 static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx)
@@ -424,10 +440,8 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx)
     oqsx_key_set0_libctx(key, PROV_OQS_LIBCTX_OF(ctx->provctx));
 }
 
-
 // OQS provider uses NIDs generated at load time as EVP_type identifiers
 // so initially this must be 0 and set to a real value by OBJ_sn2nid later
-
 
 /* ---------------------------------------------------------------------- */
 
@@ -435,101 +449,41 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx)
  * The DO_ macros help define the selection mask and the method functions
  * for each kind of object we want to decode.
  */
-#define DO_type_specific_keypair(keytype)               \
-    "type-specific", 0,                                 \
-        ( OSSL_KEYMGMT_SELECT_KEYPAIR ),                \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
+#define DO_type_specific_keypair(keytype)                                      \
+    "type-specific", 0, (OSSL_KEYMGMT_SELECT_KEYPAIR), NULL, NULL, NULL, NULL, \
+        NULL, NULL, oqsx_key_adjust, (free_key_fn *)oqsx_key_free
+
+#define DO_type_specific_pub(keytype)                                       \
+    "type-specific", 0, (OSSL_KEYMGMT_SELECT_PUBLIC_KEY), NULL, NULL, NULL, \
+        NULL, NULL, NULL, oqsx_key_adjust, (free_key_fn *)oqsx_key_free
+
+#define DO_type_specific_priv(keytype)                                       \
+    "type-specific", 0, (OSSL_KEYMGMT_SELECT_PRIVATE_KEY), NULL, NULL, NULL, \
+        NULL, NULL, NULL, oqsx_key_adjust, (free_key_fn *)oqsx_key_free
+
+#define DO_type_specific_params(keytype)                                  \
+    "type-specific", 0, (OSSL_KEYMGMT_SELECT_ALL_PARAMETERS), NULL, NULL, \
+        NULL, NULL, NULL, NULL, oqsx_key_adjust, (free_key_fn *)oqsx_key_free
+
+#define DO_type_specific(keytype)                                          \
+    "type-specific", 0, (OSSL_KEYMGMT_SELECT_ALL), NULL, NULL, NULL, NULL, \
+        NULL, NULL, oqsx_key_adjust, (free_key_fn *)oqsx_key_free
+
+#define DO_type_specific_no_pub(keytype)                     \
+    "type-specific", 0,                                      \
+        (OSSL_KEYMGMT_SELECT_PRIVATE_KEY                     \
+         | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS),              \
+        NULL, NULL, NULL, NULL, NULL, NULL, oqsx_key_adjust, \
         (free_key_fn *)oqsx_key_free
 
-#define DO_type_specific_pub(keytype)                   \
-    "type-specific", 0,                                 \
-        ( OSSL_KEYMGMT_SELECT_PUBLIC_KEY ),             \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
+#define DO_PrivateKeyInfo(keytype)                                            \
+    "PrivateKeyInfo", 0, (OSSL_KEYMGMT_SELECT_PRIVATE_KEY), NULL, NULL, NULL, \
+        oqsx_d2i_PKCS8, NULL, NULL, oqsx_key_adjust,                          \
         (free_key_fn *)oqsx_key_free
 
-#define DO_type_specific_priv(keytype)                  \
-    "type-specific", 0,                                 \
-        ( OSSL_KEYMGMT_SELECT_PRIVATE_KEY ),            \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
-        (free_key_fn *)oqsx_key_free
-
-#define DO_type_specific_params(keytype)                \
-    "type-specific", 0,                                 \
-        ( OSSL_KEYMGMT_SELECT_ALL_PARAMETERS ),         \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
-        (free_key_fn *)oqsx_key_free
-
-#define DO_type_specific(keytype)                       \
-    "type-specific", 0,                                 \
-        ( OSSL_KEYMGMT_SELECT_ALL ),                    \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
-        (free_key_fn *)oqsx_key_free
-
-#define DO_type_specific_no_pub(keytype)                \
-    "type-specific", 0,                                 \
-        ( OSSL_KEYMGMT_SELECT_PRIVATE_KEY               \
-          | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS ),       \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
-        (free_key_fn *)oqsx_key_free
-
-#define DO_PrivateKeyInfo(keytype)                      \
-    "PrivateKeyInfo", 0,                                \
-        ( OSSL_KEYMGMT_SELECT_PRIVATE_KEY ),            \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_d2i_PKCS8,                                 \
-        NULL,                                           \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
-        (free_key_fn *)oqsx_key_free
-
-#define DO_SubjectPublicKeyInfo(keytype)                \
-    "SubjectPublicKeyInfo", 0,                          \
-        ( OSSL_KEYMGMT_SELECT_PUBLIC_KEY ),             \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        NULL,                                           \
-        (d2i_of_void *)oqsx_d2i_PUBKEY,                 \
-        NULL,                                           \
-        oqsx_key_adjust,                                \
+#define DO_SubjectPublicKeyInfo(keytype)                                     \
+    "SubjectPublicKeyInfo", 0, (OSSL_KEYMGMT_SELECT_PUBLIC_KEY), NULL, NULL, \
+        NULL, NULL, (d2i_of_void *)oqsx_d2i_PUBKEY, NULL, oqsx_key_adjust,   \
         (free_key_fn *)oqsx_key_free
 
 /*
@@ -550,39 +504,34 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx)
  *              structure.
  */
 // reverted const to be able to change NID/evp_type after assignment
-#define MAKE_DECODER(keytype_name, keytype, type, kind)                 \
-    static struct keytype_desc_st kind##_##keytype##_desc =       \
-        { keytype_name, oqs_##keytype##_keymgmt_functions,             \
-          DO_##kind(keytype) };                                         \
-                                                                        \
-    static OSSL_FUNC_decoder_newctx_fn kind##_der2##keytype##_newctx;   \
-                                                                        \
-    static void *kind##_der2##keytype##_newctx(void *provctx)           \
-    {                                                                   \
-        OQS_DEC_PRINTF("OQS DEC provider: _newctx called.\n");     \
-        return der2key_newctx(provctx, &kind##_##keytype##_desc, keytype_name );       \
-    }                                                                   \
-    static int kind##_der2##keytype##_does_selection(void *provctx,     \
-                                                     int selection)     \
-    {                                                                   \
-        OQS_DEC_PRINTF("OQS DEC provider: _does_selection called.\n");     \
-        return der2key_check_selection(selection,                       \
-                                       &kind##_##keytype##_desc);       \
-    }                                                                   \
-    const OSSL_DISPATCH                                                 \
-    oqs_##kind##_der_to_##keytype##_decoder_functions[] = {            \
-        { OSSL_FUNC_DECODER_NEWCTX,                                     \
-          (void (*)(void))kind##_der2##keytype##_newctx },              \
-        { OSSL_FUNC_DECODER_FREECTX,                                    \
-          (void (*)(void))der2key_freectx },                            \
-        { OSSL_FUNC_DECODER_DOES_SELECTION,                             \
-          (void (*)(void))kind##_der2##keytype##_does_selection },      \
-        { OSSL_FUNC_DECODER_DECODE,                                     \
-          (void (*)(void))oqs_der2key_decode },                             \
-        { OSSL_FUNC_DECODER_EXPORT_OBJECT,                              \
-          (void (*)(void))der2key_export_object },                      \
-        { 0, NULL }                                                     \
-    }
+#define MAKE_DECODER(keytype_name, keytype, type, kind)                       \
+    static struct keytype_desc_st kind##_##keytype##_desc = {                 \
+        keytype_name, oqs_##keytype##_keymgmt_functions, DO_##kind(keytype)}; \
+                                                                              \
+    static OSSL_FUNC_decoder_newctx_fn kind##_der2##keytype##_newctx;         \
+                                                                              \
+    static void *kind##_der2##keytype##_newctx(void *provctx)                 \
+    {                                                                         \
+        OQS_DEC_PRINTF("OQS DEC provider: _newctx called.\n");                \
+        return der2key_newctx(provctx, &kind##_##keytype##_desc,              \
+                              keytype_name);                                  \
+    }                                                                         \
+    static int kind##_der2##keytype##_does_selection(void *provctx,           \
+                                                     int selection)           \
+    {                                                                         \
+        OQS_DEC_PRINTF("OQS DEC provider: _does_selection called.\n");        \
+        return der2key_check_selection(selection, &kind##_##keytype##_desc);  \
+    }                                                                         \
+    const OSSL_DISPATCH oqs_##kind##_der_to_##keytype##_decoder_functions[]   \
+        = {{OSSL_FUNC_DECODER_NEWCTX,                                         \
+            (void (*)(void))kind##_der2##keytype##_newctx},                   \
+           {OSSL_FUNC_DECODER_FREECTX, (void (*)(void))der2key_freectx},      \
+           {OSSL_FUNC_DECODER_DOES_SELECTION,                                 \
+            (void (*)(void))kind##_der2##keytype##_does_selection},           \
+           {OSSL_FUNC_DECODER_DECODE, (void (*)(void))oqs_der2key_decode},    \
+           {OSSL_FUNC_DECODER_EXPORT_OBJECT,                                  \
+            (void (*)(void))der2key_export_object},                           \
+           {0, NULL}}
 
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_START
 MAKE_DECODER("dilithium2", dilithium2, oqsx, PrivateKeyInfo);
@@ -590,7 +539,8 @@ MAKE_DECODER("dilithium2", dilithium2, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER("p256_dilithium2", p256_dilithium2, oqsx, PrivateKeyInfo);
 MAKE_DECODER("p256_dilithium2", p256_dilithium2, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER("rsa3072_dilithium2", rsa3072_dilithium2, oqsx, PrivateKeyInfo);
-MAKE_DECODER("rsa3072_dilithium2", rsa3072_dilithium2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("rsa3072_dilithium2", rsa3072_dilithium2, oqsx,
+             SubjectPublicKeyInfo);
 MAKE_DECODER("dilithium3", dilithium3, oqsx, PrivateKeyInfo);
 MAKE_DECODER("dilithium3", dilithium3, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER("p384_dilithium3", p384_dilithium3, oqsx, PrivateKeyInfo);
@@ -604,32 +554,54 @@ MAKE_DECODER("falcon512", falcon512, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER("p256_falcon512", p256_falcon512, oqsx, PrivateKeyInfo);
 MAKE_DECODER("p256_falcon512", p256_falcon512, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER("rsa3072_falcon512", rsa3072_falcon512, oqsx, PrivateKeyInfo);
-MAKE_DECODER("rsa3072_falcon512", rsa3072_falcon512, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("rsa3072_falcon512", rsa3072_falcon512, oqsx,
+             SubjectPublicKeyInfo);
 MAKE_DECODER("falcon1024", falcon1024, oqsx, PrivateKeyInfo);
 MAKE_DECODER("falcon1024", falcon1024, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER("p521_falcon1024", p521_falcon1024, oqsx, PrivateKeyInfo);
 MAKE_DECODER("p521_falcon1024", p521_falcon1024, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("sphincssha2128fsimple", sphincssha2128fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("sphincssha2128fsimple", sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("sphincssha2128ssimple", sphincssha2128ssimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("sphincssha2128ssimple", sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("sphincssha2192fsimple", sphincssha2192fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("sphincssha2192fsimple", sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("sphincsshake128fsimple", sphincsshake128fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("sphincsshake128fsimple", sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER("rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo);
-MAKE_DECODER("rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
+             oqsx, PrivateKeyInfo);
+MAKE_DECODER("rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
+             oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
+             oqsx, PrivateKeyInfo);
+MAKE_DECODER("rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
+             oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER("sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER("p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER("rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
+             oqsx, PrivateKeyInfo);
+MAKE_DECODER("rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
+             oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END
-

@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 
-#include <openssl/provider.h>
-#include <openssl/encoder.h>
+#include "oqs/oqs.h"
+#include "test_common.h"
+#include <openssl/buffer.h>
+#include <openssl/core_names.h>
 #include <openssl/decoder.h>
+#include <openssl/encoder.h>
 #include <openssl/evp.h>
 #include <openssl/pem.h>
-#include <openssl/buffer.h>
-#include <string.h>
-#include "test_common.h"
-#include <openssl/core_names.h>
+#include <openssl/provider.h>
 #include <openssl/trace.h>
-#include "oqs/oqs.h"
+#include <string.h>
 
 static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
@@ -22,7 +22,7 @@ static OSSL_LIB_CTX *testctx = NULL;
 static OSSL_PROVIDER *dfltprov = NULL;
 static OSSL_PROVIDER *keyprov = NULL;
 
-#define nelem(a) (sizeof(a)/sizeof((a)[0]))
+#define nelem(a) (sizeof(a) / sizeof((a)[0]))
 
 typedef struct endecode_params_st {
     char *format;
@@ -34,23 +34,25 @@ typedef struct endecode_params_st {
 } ENDECODE_PARAMS;
 
 static ENDECODE_PARAMS test_params_list[] = {
-        {"PEM", "PrivateKeyInfo",          NULL, NULL,
-                                                                                         OSSL_KEYMGMT_SELECT_KEYPAIR |
-                                                                                         OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
-        {"PEM", "EncryptedPrivateKeyInfo", NULL, "Pass the holy handgrenade of antioch", OSSL_KEYMGMT_SELECT_KEYPAIR |
-                                                                                         OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS},
-        {"PEM", "SubjectPublicKeyInfo",    NULL, NULL,                                   OSSL_KEYMGMT_SELECT_PUBLIC_KEY |
-                                                                                         OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
-        {"DER", "PrivateKeyInfo",          NULL, NULL,                                   OSSL_KEYMGMT_SELECT_KEYPAIR |
-                                                                                         OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
-        {"DER", "EncryptedPrivateKeyInfo", NULL, "Pass the holy handgrenade of antioch", OSSL_KEYMGMT_SELECT_KEYPAIR |
-                                                                                         OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS},
-        {"DER", "SubjectPublicKeyInfo",    NULL, NULL,                                   OSSL_KEYMGMT_SELECT_PUBLIC_KEY |
-                                                                                         OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
+    {"PEM", "PrivateKeyInfo", NULL, NULL,
+     OSSL_KEYMGMT_SELECT_KEYPAIR | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
+    {"PEM", "EncryptedPrivateKeyInfo", NULL,
+     "Pass the holy handgrenade of antioch",
+     OSSL_KEYMGMT_SELECT_KEYPAIR | OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS},
+    {"PEM", "SubjectPublicKeyInfo", NULL, NULL,
+     OSSL_KEYMGMT_SELECT_PUBLIC_KEY | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
+    {"DER", "PrivateKeyInfo", NULL, NULL,
+     OSSL_KEYMGMT_SELECT_KEYPAIR | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
+    {"DER", "EncryptedPrivateKeyInfo", NULL,
+     "Pass the holy handgrenade of antioch",
+     OSSL_KEYMGMT_SELECT_KEYPAIR | OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS},
+    {"DER", "SubjectPublicKeyInfo", NULL, NULL,
+     OSSL_KEYMGMT_SELECT_PUBLIC_KEY | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
 };
 
 static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
-                                  OSSL_PARAM *genparams) {
+                                  OSSL_PARAM *genparams)
+{
     EVP_PKEY *pkey = NULL;
     EVP_PKEY_CTX *ctx = NULL;
 
@@ -60,33 +62,32 @@ static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
     }
 
     ctx = (template != NULL)
-          ? EVP_PKEY_CTX_new_from_pkey(keyctx, template, testpropq)
-          : EVP_PKEY_CTX_new_from_name(keyctx, type, testpropq);
+              ? EVP_PKEY_CTX_new_from_pkey(keyctx, template, testpropq)
+              : EVP_PKEY_CTX_new_from_name(keyctx, type, testpropq);
 
     /*
      * No real need to check the errors other than for the cascade
      * effect.  |pkey| will simply remain NULL if something goes wrong.
      */
-    (void) (ctx != NULL
-            && EVP_PKEY_keygen_init(ctx) > 0
-            && (genparams == NULL
-                || EVP_PKEY_CTX_set_params(ctx, genparams) > 0)
-            && EVP_PKEY_keygen(ctx, &pkey) > 0);
+    (void)(ctx != NULL && EVP_PKEY_keygen_init(ctx) > 0
+           && (genparams == NULL || EVP_PKEY_CTX_set_params(ctx, genparams) > 0)
+           && EVP_PKEY_keygen(ctx, &pkey) > 0);
     EVP_PKEY_CTX_free(ctx);
     return pkey;
 }
 
-static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format, const char *structure, const char *pass,
-                                const int selection, void **encoded, long *encoded_len) {
+static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format,
+                                const char *structure, const char *pass,
+                                const int selection, void **encoded,
+                                long *encoded_len)
+{
     OSSL_ENCODER_CTX *ectx;
     BIO *mem_ser = NULL;
     BUF_MEM *mem_buf = NULL;
     const char *cipher = "AES-256-CBC";
     int ok = 0;
 
-    ectx = OSSL_ENCODER_CTX_new_for_pkey(pkey,
-                                         selection,
-                                         format, structure,
+    ectx = OSSL_ENCODER_CTX_new_for_pkey(pkey, selection, format, structure,
                                          NULL);
     if (ectx == NULL) {
         printf("No suitable encoder found\n");
@@ -94,7 +95,8 @@ static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format, const 
     }
 
     if (pass != NULL) {
-        OSSL_ENCODER_CTX_set_passphrase(ectx, (const unsigned char *) pass, strlen(pass));
+        OSSL_ENCODER_CTX_set_passphrase(ectx, (const unsigned char *)pass,
+                                        strlen(pass));
         OSSL_ENCODER_CTX_set_cipher(ectx, cipher, NULL);
     }
     mem_ser = BIO_new(BIO_s_mem());
@@ -116,15 +118,17 @@ static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format, const 
     mem_buf->length = 0;
     ok = 1;
 
-    end:
+end:
     BIO_free(mem_ser);
     OSSL_ENCODER_CTX_free(ectx);
     return ok;
 }
 
-static int decode_EVP_PKEY_prov(const char *input_type, const char *structure, const char *pass,
-                                const char *keytype, const int selection, EVP_PKEY **object,
-                                const void *encoded, const long encoded_len) {
+static int decode_EVP_PKEY_prov(const char *input_type, const char *structure,
+                                const char *pass, const char *keytype,
+                                const int selection, EVP_PKEY **object,
+                                const void *encoded, const long encoded_len)
+{
     EVP_PKEY *pkey = NULL;
     OSSL_DECODER_CTX *dctx = NULL;
     BIO *encoded_bio = NULL;
@@ -135,15 +139,14 @@ static int decode_EVP_PKEY_prov(const char *input_type, const char *structure, c
     if (encoded_bio == NULL)
         goto end;
 
-    dctx = OSSL_DECODER_CTX_new_for_pkey(&pkey,
-                                         input_type, structure,
-                                         keytype, selection,
-                                         keyctx, NULL);
+    dctx = OSSL_DECODER_CTX_new_for_pkey(&pkey, input_type, structure, keytype,
+                                         selection, keyctx, NULL);
     if (dctx == NULL)
         goto end;
 
     if (pass != NULL)
-        OSSL_DECODER_CTX_set_passphrase(dctx, (const unsigned char *) pass, strlen(pass));
+        OSSL_DECODER_CTX_set_passphrase(dctx, (const unsigned char *)pass,
+                                        strlen(pass));
 
     if (!OSSL_DECODER_from_bio(dctx, encoded_bio))
         goto end;
@@ -155,14 +158,15 @@ static int decode_EVP_PKEY_prov(const char *input_type, const char *structure, c
     *object = pkey;
     pkey = NULL;
 
-    end:
+end:
     EVP_PKEY_free(pkey);
     BIO_free(encoded_bio);
     OSSL_DECODER_CTX_free(dctx);
     return ok;
 }
 
-static int test_oqs_encdec(const char *sigalg_name) {
+static int test_oqs_encdec(const char *sigalg_name)
+{
     EVP_PKEY *pkey = NULL;
     EVP_PKEY *decoded_pkey = NULL;
     void *encoded = NULL;
@@ -176,17 +180,18 @@ static int test_oqs_encdec(const char *sigalg_name) {
         if (pkey == NULL)
             goto end;
 
-
-        if (!encode_EVP_PKEY_prov(pkey, test_params_list[i].format, test_params_list[i].structure,
-                                  test_params_list[i].pass, test_params_list[i].selection,
-                                  &encoded, &encoded_len)) {
+        if (!encode_EVP_PKEY_prov(
+                pkey, test_params_list[i].format, test_params_list[i].structure,
+                test_params_list[i].pass, test_params_list[i].selection,
+                &encoded, &encoded_len)) {
             printf("Failed encoding %s", sigalg_name);
             goto end;
         }
-        if (!decode_EVP_PKEY_prov(test_params_list[i].format, test_params_list[i].structure,
-                                  test_params_list[i].pass, test_params_list[i].keytype,
-                                  test_params_list[i].selection,
-                                  &decoded_pkey, encoded, encoded_len)) {
+        if (!decode_EVP_PKEY_prov(
+                test_params_list[i].format, test_params_list[i].structure,
+                test_params_list[i].pass, test_params_list[i].keytype,
+                test_params_list[i].selection, &decoded_pkey, encoded,
+                encoded_len)) {
             printf("Failed decoding %s", sigalg_name);
             goto end;
         }
@@ -195,13 +200,14 @@ static int test_oqs_encdec(const char *sigalg_name) {
             goto end;
     }
     ok = 1;
-    end:
+end:
     EVP_PKEY_free(pkey);
     EVP_PKEY_free(decoded_pkey);
     return ok;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     size_t i;
     int errcnt = 0, test = 0, query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;
@@ -222,38 +228,37 @@ int main(int argc, char *argv[]) {
     keyprov = OSSL_PROVIDER_load(keyctx, modulename);
     oqsprov = OSSL_PROVIDER_load(libctx, modulename);
 
-    sigalgs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE, &query_nocache);
+    sigalgs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
+                                            &query_nocache);
 
     if (sigalgs) {
-      for (; sigalgs->algorithm_names != NULL; sigalgs++) {
-        if (test_oqs_encdec(sigalgs->algorithm_names)) {
-            fprintf(stderr,
-                    cGREEN "  Encoding/Decoding test succeeded: %s" cNORM "\n",
-                    sigalgs->algorithm_names);
-        } else {
-            fprintf(stderr,
-                    cRED "  Encoding/Decoding test failed: %s" cNORM "\n",
-                    sigalgs->algorithm_names);
-            ERR_print_errors_fp(stderr);
-            errcnt++;
+        for (; sigalgs->algorithm_names != NULL; sigalgs++) {
+            if (test_oqs_encdec(sigalgs->algorithm_names)) {
+                fprintf(stderr,
+                        cGREEN "  Encoding/Decoding test succeeded: %s" cNORM
+                               "\n",
+                        sigalgs->algorithm_names);
+            } else {
+                fprintf(stderr,
+                        cRED "  Encoding/Decoding test failed: %s" cNORM "\n",
+                        sigalgs->algorithm_names);
+                ERR_print_errors_fp(stderr);
+                errcnt++;
+            }
         }
-      }
-    }
-    else {
-            fprintf(stderr,
-                    cRED "  No signature algorithms found" cNORM "\n");
-            ERR_print_errors_fp(stderr);
-            errcnt++;
+    } else {
+        fprintf(stderr, cRED "  No signature algorithms found" cNORM "\n");
+        ERR_print_errors_fp(stderr);
+        errcnt++;
     }
 
     OSSL_LIB_CTX_free(libctx);
     OSSL_PROVIDER_unload(dfltprov);
     OSSL_PROVIDER_unload(keyprov);
-    if (OPENSSL_VERSION_PREREQ(3,1))
+    if (OPENSSL_VERSION_PREREQ(3, 1))
         OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
     OSSL_LIB_CTX_free(keyctx);
 
     TEST_ASSERT(errcnt == 0)
     return !test;
 }
-

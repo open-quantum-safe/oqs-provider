@@ -34,7 +34,7 @@ fi
 if [ -z "$OQS_ALGS_ENABLED" ]; then
    export DOQS_ALGS_ENABLED=""
 else
-   export DOQS_ALGS_ENABLED="$OQS_ALGS_ENABLED"
+   export DOQS_ALGS_ENABLED="-DOQS_ALGS_ENABLED=$OQS_ALGS_ENABLED"
 fi
 
 if [ -z "$OPENSSL_INSTALL" ]; then

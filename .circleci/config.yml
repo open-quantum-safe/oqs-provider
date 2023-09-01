@@ -240,6 +240,19 @@ jobs:
               fi
             fi
 
+  check-clang-format:
+    docker:
+      - image: cimg/base:2022.12
+    steps:
+      - run:
+          name: Install dependencies
+          command: sudo apt-get update && sudo apt-get install -y clang-format
+      - checkout
+      - run:
+          name: Check coding style using clang-format
+          command: |
+            find . -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs clang-format --dry-run --Werror
+
   trigger-downstream-ci:
     docker:
       - image: cimg/base:2020.01
@@ -264,6 +277,7 @@ workflows:
   version: 2.1
   build:
     jobs:
+      - check-clang-format
       - ubuntu:
           name: ubuntu-focal
           context: openquantumsafe

@@ -1,3 +1,5 @@
+
+// clang-format off
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
 #ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
@@ -16,4 +18,5 @@
 {%- endfor %}
 #endif
 {%- endfor %}
+// clang-format on
 

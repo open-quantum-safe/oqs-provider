@@ -742,6 +742,13 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
             return 0;
         }
 
+        /* create object (NID) again to avoid setup corner case problems
+         * see https://github.com/openssl/openssl/discussions/21903
+         * Not testing for errors is intentional.
+         */
+        OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
+                   oqs_oid_alg_list[i + 1]);
+
         if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
                          OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
@@ -764,6 +771,7 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
             fprintf(stderr,
                     "OQS PROV: Impossible error: NID unregistered for %s.\n",
                     oqs_oid_alg_list[i + 1]);
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
             return 0;
         }
     }

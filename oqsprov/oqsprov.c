@@ -691,6 +691,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
     int i, rc = 0;
+    char *opensslv;
+    const char *versionp;
+    OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
+                                     &opensslv, sizeof(&opensslv), 0},
+                                    {NULL, 0, NULL, 0, 0}};
 
     OQS_init();
 
@@ -729,8 +734,14 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     }
 
     // we need these functions:
-    if (c_obj_create == NULL || c_obj_add_sigid == NULL)
+    if (c_obj_create == NULL || c_obj_add_sigid == NULL || c_get_params == NULL)
         return 0;
+
+    // we need to know the version of the calling core to activate
+    // suitable bug workarounds
+    if (c_get_params(handle, version_request)) {
+        versionp = *(void **)version_request[0].data;
+    }
 
     // insert all OIDs to the global objects list
     for (i = 0; i < OQS_OID_CNT; i += 2) {
@@ -745,9 +756,12 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         /* create object (NID) again to avoid setup corner case problems
          * see https://github.com/openssl/openssl/discussions/21903
          * Not testing for errors is intentional.
+         * At least one core version hangs up; so don't do this there:
          */
-        OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
-                   oqs_oid_alg_list[i + 1]);
+        if (strcmp("3.1.0", versionp)) {
+            OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
+                       oqs_oid_alg_list[i + 1]);
+        }
 
         if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
                          OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {

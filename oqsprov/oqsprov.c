@@ -691,21 +691,26 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
     int i, rc = 0;
+    char *opensslv;
+    const char *ossl_versionp = NULL;
+    OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
+                                     &opensslv, sizeof(&opensslv), 0},
+                                    {NULL, 0, NULL, 0, 0}};
 
     OQS_init();
 
     if (!oqs_prov_bio_from_dispatch(in))
-        return 0;
+        goto end_init;
 
     if (!oqs_patch_codepoints())
-        return 0;
+        goto end_init;
 
     if (!oqs_patch_oids())
-        return 0;
+        goto end_init;
 
 #ifdef USE_ENCODING_LIB
     if (!oqs_patch_encodings())
-        return 0;
+        goto end_init;
 #endif
 
     for (; in->function_id != 0; in++) {
@@ -729,8 +734,14 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     }
 
     // we need these functions:
-    if (c_obj_create == NULL || c_obj_add_sigid == NULL)
-        return 0;
+    if (c_obj_create == NULL || c_obj_add_sigid == NULL || c_get_params == NULL)
+        goto end_init;
+
+    // we need to know the version of the calling core to activate
+    // suitable bug workarounds
+    if (c_get_params(handle, version_request)) {
+        ossl_versionp = *(void **)version_request[0].data;
+    }
 
     // insert all OIDs to the global objects list
     for (i = 0; i < OQS_OID_CNT; i += 2) {
@@ -739,13 +750,23 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
             ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
             fprintf(stderr, "error registering NID for %s\n",
                     oqs_oid_alg_list[i + 1]);
-            return 0;
+            goto end_init;
+        }
+
+        /* create object (NID) again to avoid setup corner case problems
+         * see https://github.com/openssl/openssl/discussions/21903
+         * Not testing for errors is intentional.
+         * At least one core version hangs up; so don't do this there:
+         */
+        if (strcmp("3.1.0", ossl_versionp)) {
+            OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
+                       oqs_oid_alg_list[i + 1]);
         }
 
         if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
                          OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            return 0;
+            goto end_init;
         }
 
         if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
@@ -753,7 +774,7 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
             fprintf(stderr, "error registering %s with no hash\n",
                     oqs_oid_alg_list[i + 1]);
             ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            return 0;
+            goto end_init;
         }
 
         if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
@@ -764,7 +785,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
             fprintf(stderr,
                     "OQS PROV: Impossible error: NID unregistered for %s.\n",
                     oqs_oid_alg_list[i + 1]);
-            return 0;
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+            goto end_init;
         }
     }
 
@@ -792,9 +814,18 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
 end_init:
     if (!rc) {
-        OSSL_LIB_CTX_free(libctx);
-        oqsprovider_teardown(*provctx);
-        *provctx = NULL;
+        if (ossl_versionp)
+            OQS_PROV_PRINTF2(
+                "oqsprovider init failed for OpenSSL core version %s\n",
+                ossl_versionp);
+        else
+            OQS_PROV_PRINTF("oqsprovider init failed for OpenSSL\n");
+        if (libctx)
+            OSSL_LIB_CTX_free(libctx);
+        if (provctx && *provctx) {
+            oqsprovider_teardown(*provctx);
+            *provctx = NULL;
+        }
     }
     return rc;
 }

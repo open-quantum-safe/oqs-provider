@@ -35,6 +35,16 @@ Please run the following commands to obtain the version information:
 If `oqsprovider` is not listed as active, be sure to first follow all
 [USAGE guidance](https://github.com/open-quantum-safe/oqs-provider/blob/main/USAGE.md).
 
+If reporting bugs triggered by OpenSSL API integrations, e.g. running
+a provider build [statically](https://github.com/open-quantum-safe/oqs-provider/blob/main/CONFIGURE.md#oqs_provider_build_static)
+or directly invoking any OpenSSL API, be sure to retrieve and report all errors
+reported by using the OpenSSL [ERR_get_error_all](https://www.openssl.org/docs/man3.1/man3/ERR_get_error_all.html)
+function.
+
+Bug reports generated from [Debug builds](https://github.com/open-quantum-safe/oqs-provider/wiki/Debugging)
+wth the debug environment variable "OQSPROV=1" set will be particularly helpful to find underlying
+problems.
+
 **Additional context**
 Add any other context about the problem here.
 

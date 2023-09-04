@@ -136,7 +136,7 @@ export LOCALTESTONLY="Yes"
 echo "Version information:"
 "${OPENSSL_APP}" version
 
-# Disable testing for version a few versions: Buggy as hell:
+# Disable testing for a few versions: Buggy as hell:
 if "${OPENSSL_APP}" version | grep -qE 'OpenSSL (3\.0\.(0|1|4)) '; then
    echo "Skipping testing of buggy OpenSSL versions 3.0.0, 3.0.1 and 3.0.4"
    exit 0

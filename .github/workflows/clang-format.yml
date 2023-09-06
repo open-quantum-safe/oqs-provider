@@ -1,0 +1,24 @@
+name: clang-format tests
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    container:
+      image: openquantumsafe/ci-ubuntu-jammy:latest
+    steps:
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y clang-format
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check coding style using clang-format
+        run: find . -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs clang-format --dry-run --Werror

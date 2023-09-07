@@ -55,4 +55,74 @@ jobs:
           name: oqsprovider-x64
           path: _build/*.deb
 
+  asan_linux_intel:
+    name: "Security checks"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    container:
+      image: openquantumsafe/ci-ubuntu-jammy:latest
+    env:
+      CC: "clang"
+      CXX: "clang++"
+      ASAN_C_FLAGS: "-fsanitize=address -fno-omit-frame-pointer"
+      ASAN_OPTIONS: "detect_stack_use_after_return=1,detect_leaks=1"
+      OPENSSL_BRANCH: "openssl-3.1"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y clang llvm ninja-build git cmake libclang-rt-14-dev libclang-common-14-dev
+
+      - name: Clone and build OpenSSL(3) with ASan
+        run: |
+          git clone --depth=1 --branch "${OPENSSL_BRANCH}" https://github.com/openssl/openssl.git openssl
+          cd openssl
+          mkdir install
+          ./Configure --openssldir="${PWD}/install" \
+                      --prefix="${PWD}/install" \
+                      --debug \
+                      enable-asan \
+                      no-tests
+          make -j$(nproc)
+          make install_sw
+          cd ..
+
+      - name: Clone and build liboqs with ASan
+        run: |
+          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          cd liboqs
+          mkdir build install
+          cmake -GNinja -B build \
+                -DCMAKE_BUILD_TYPE=Debug \
+                -DOQS_USE_OPENSSL=OFF \
+                -DCMAKE_C_FLAGS="${ASAN_C_FLAGS}" \
+                -DCMAKE_EXE_LINKER_FLAGS="${ASAN_C_FLAGS}" \
+                -DCMAKE_INSTALL_PREFIX="${PWD}/install"
+          cmake --build build -j$(nproc)
+          cmake --install build
+          cd ..
+
+      - name: Build oqs-provider with ASan
+        run: |
+          cmake -GNinja -B build \
+                -DCMAKE_BUILD_TYPE=Debug \
+                -DOPENSSL_ROOT_DIR="$PWD/openssl/install" \
+                -Dliboqs_DIR="$PWD/liboqs/install/lib/cmake/liboqs" \
+                -DCMAKE_C_FLAGS="${ASAN_C_FLAGS}" \
+                -DCMAKE_EXE_LINKER_FLAGS="${ASAN_C_FLAGS}"
+          cmake --build build -j$(nproc)
+
+      - name: Verify that test binaries are linked against ASan
+        run: |
+          find build/test/ -type f -perm '/u=x' | while read -r test_bin; do
+            if ! nm "${test_bin}" | grep -q '__local_asan_preinit'; then
+              echo "ASan not found in ${test_bin}"
+              exit 1
+            fi
+          done
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
 

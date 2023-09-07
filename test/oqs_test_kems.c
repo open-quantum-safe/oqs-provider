@@ -15,7 +15,9 @@ static int test_oqs_kems(const char *kemalg_name)
     EVP_MD_CTX *mdctx = NULL;
     EVP_PKEY_CTX *ctx = NULL;
     EVP_PKEY *key = NULL;
-    unsigned char *out, *secenc, *secdec;
+    unsigned char *out = NULL;
+    unsigned char *secenc = NULL;
+    unsigned char *secdec = NULL;
     size_t outlen, seclen;
 
     int testresult = 1;
@@ -34,7 +36,7 @@ static int test_oqs_kems(const char *kemalg_name)
 
         if (!testresult)
             goto err;
-        OPENSSL_free(ctx);
+        EVP_PKEY_CTX_free(ctx);
         ctx = NULL;
 
         testresult
@@ -64,7 +66,10 @@ static int test_oqs_kems(const char *kemalg_name)
 
 err:
     EVP_PKEY_free(key);
-    OPENSSL_free(ctx);
+    EVP_PKEY_CTX_free(ctx);
+    OPENSSL_free(out);
+    OPENSSL_free(secenc);
+    OPENSSL_free(secdec);
     return testresult;
 }
 

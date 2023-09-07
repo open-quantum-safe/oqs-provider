@@ -57,7 +57,7 @@ static int test_oqs_signatures(const char *sigalg_name)
 
     EVP_MD_CTX_free(mdctx);
     EVP_PKEY_free(key);
-    OPENSSL_free(ctx);
+    EVP_PKEY_CTX_free(ctx);
     OPENSSL_free(sig);
     mdctx = NULL;
     key = NULL;
@@ -84,7 +84,7 @@ static int test_oqs_signatures(const char *sigalg_name)
 
     EVP_MD_CTX_free(mdctx);
     EVP_PKEY_free(key);
-    OPENSSL_free(ctx);
+    EVP_PKEY_CTX_free(ctx);
     OPENSSL_free(sig);
     return testresult;
 }

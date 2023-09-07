@@ -197,6 +197,7 @@ OQSX_KEY *oqsx_d2i_PUBKEY(OQSX_KEY **a, const unsigned char **pp, long length)
     xpk = oqsx_d2i_X509_PUBKEY_INTERNAL(pp, length, NULL);
 
     key = oqsx_key_from_x509pubkey(xpk, NULL, NULL);
+    X509_PUBKEY_free(xpk);
 
     if (key == NULL)
         return NULL;

@@ -78,8 +78,7 @@ static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
 
 static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format,
                                 const char *structure, const char *pass,
-                                const int selection, void **encoded,
-                                long *encoded_len)
+                                const int selection, BUF_MEM **encoded)
 {
     OSSL_ENCODER_CTX *ectx;
     BIO *mem_ser = NULL;
@@ -110,8 +109,9 @@ static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format,
         goto end;
 
     /* pkey was successfully encoded into the bio */
-    *encoded = mem_buf->data;
-    *encoded_len = mem_buf->length;
+    *encoded = BUF_MEM_new();
+    (*encoded)->data = mem_buf->data;
+    (*encoded)->length = mem_buf->length;
 
     /* Detach the encoded output */
     mem_buf->data = NULL;
@@ -159,9 +159,9 @@ static int decode_EVP_PKEY_prov(const char *input_type, const char *structure,
     pkey = NULL;
 
 end:
-    EVP_PKEY_free(pkey);
     BIO_free(encoded_bio);
     OSSL_DECODER_CTX_free(dctx);
+    EVP_PKEY_free(pkey);
     return ok;
 }
 
@@ -169,40 +169,45 @@ static int test_oqs_encdec(const char *sigalg_name)
 {
     EVP_PKEY *pkey = NULL;
     EVP_PKEY *decoded_pkey = NULL;
-    void *encoded = NULL;
-    long encoded_len = 0;
+    BUF_MEM *encoded = NULL;
     size_t i;
     int ok = 0;
 
     for (i = 0; i < nelem(test_params_list); i++) {
-
         pkey = oqstest_make_key(sigalg_name, NULL, NULL);
         if (pkey == NULL)
             goto end;
 
-        if (!encode_EVP_PKEY_prov(
-                pkey, test_params_list[i].format, test_params_list[i].structure,
-                test_params_list[i].pass, test_params_list[i].selection,
-                &encoded, &encoded_len)) {
+        if (!encode_EVP_PKEY_prov(pkey, test_params_list[i].format,
+                                  test_params_list[i].structure,
+                                  test_params_list[i].pass,
+                                  test_params_list[i].selection, &encoded)) {
             printf("Failed encoding %s", sigalg_name);
             goto end;
         }
         if (!decode_EVP_PKEY_prov(
                 test_params_list[i].format, test_params_list[i].structure,
                 test_params_list[i].pass, test_params_list[i].keytype,
-                test_params_list[i].selection, &decoded_pkey, encoded,
-                encoded_len)) {
+                test_params_list[i].selection, &decoded_pkey, encoded->data,
+                encoded->length)) {
             printf("Failed decoding %s", sigalg_name);
             goto end;
         }
 
         if (EVP_PKEY_eq(pkey, decoded_pkey) != 1)
             goto end;
+        EVP_PKEY_free(pkey);
+        pkey = NULL;
+        EVP_PKEY_free(decoded_pkey);
+        decoded_pkey = NULL;
+        BUF_MEM_free(encoded);
+        encoded = NULL;
     }
     ok = 1;
 end:
     EVP_PKEY_free(pkey);
     EVP_PKEY_free(decoded_pkey);
+    BUF_MEM_free(encoded);
     return ok;
 }
 
@@ -252,11 +257,11 @@ int main(int argc, char *argv[])
         errcnt++;
     }
 
-    OSSL_LIB_CTX_free(libctx);
     OSSL_PROVIDER_unload(dfltprov);
     OSSL_PROVIDER_unload(keyprov);
     if (OPENSSL_VERSION_PREREQ(3, 1))
         OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
+    OSSL_LIB_CTX_free(libctx);
     OSSL_LIB_CTX_free(keyctx);
 
     TEST_ASSERT(errcnt == 0)

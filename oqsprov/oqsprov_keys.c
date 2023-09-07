@@ -580,16 +580,21 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
 
     if (idx < 3) { // EC
         ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
-        ON_ERR_GOTO(ret <= 0, err);
+        ON_ERR_GOTO(ret <= 0, free_evp_ctx);
 
         ret = EVP_PKEY_CTX_set_ec_paramgen_curve_nid(evp_ctx->ctx,
                                                      evp_ctx->evp_info->nid);
-        ON_ERR_GOTO(ret <= 0, err);
+        ON_ERR_GOTO(ret <= 0, free_evp_ctx);
 
         ret = EVP_PKEY_paramgen(evp_ctx->ctx, &evp_ctx->keyParam);
-        ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, err);
+        ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, free_evp_ctx);
     }
     // RSA bit length set only during keygen
+    goto err;
+
+free_evp_ctx:
+    EVP_PKEY_CTX_free(evp_ctx->ctx);
+    evp_ctx->ctx = NULL;
 
 err:
     return ret;
@@ -867,12 +872,14 @@ void oqsx_key_free(OQSX_KEY *key)
     else if (key->keytype == KEY_TYPE_ECP_HYB_KEM
              || key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         OQS_KEM_free(key->oqsx_provider_ctx.oqsx_qs_ctx.kem);
+    } else
+        OQS_SIG_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig);
+    EVP_PKEY_free(key->classical_pkey);
+    if (key->oqsx_provider_ctx.oqsx_evp_ctx) {
         EVP_PKEY_CTX_free(key->oqsx_provider_ctx.oqsx_evp_ctx->ctx);
         EVP_PKEY_free(key->oqsx_provider_ctx.oqsx_evp_ctx->keyParam);
         OPENSSL_free(key->oqsx_provider_ctx.oqsx_evp_ctx);
-    } else
-        OQS_SIG_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig);
-    OPENSSL_free(key->classical_pkey);
+    }
 #ifdef OQS_PROVIDER_NOATOMIC
     CRYPTO_THREAD_lock_free(key->lock);
 #endif
@@ -1036,6 +1043,7 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
         EVP_PKEY *ck2 = d2i_PrivateKey(ctx->evp_info->keytype, NULL,
                                        &privkey_enc2, privkeylen);
         ON_ERR_SET_GOTO(!ck2, ret, -14, errhyb);
+        EVP_PKEY_free(ck2);
     }
     ENCODE_UINT32(pubkey, pubkeylen);
     ENCODE_UINT32(privkey, privkeylen);
@@ -1087,6 +1095,7 @@ int oqsx_key_gen(OQSX_KEY *key)
             ret = oqsx_key_gen_oqs(key, 0);
         } else {
             EVP_PKEY_free(pkey);
+            pkey = NULL;
             ret = oqsx_key_gen_oqs(key, 1);
         }
     } else if (key->keytype == KEY_TYPE_SIG) {

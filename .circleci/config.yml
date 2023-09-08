@@ -280,19 +280,16 @@ workflows:
       - check-clang-format
       - ubuntu:
           name: ubuntu-focal
-          context: openquantumsafe
           IMAGE: openquantumsafe/ci-ubuntu-focal-x86_64:latest
           CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_USE_OPENSSL=OFF
           OPENSSL_PREINSTALL: openssl@1
       - ubuntu:
           name: ubuntu-jammy
-          context: openquantumsafe
           IMAGE: openquantumsafe/ci-ubuntu-jammy:latest
           CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_ALGS_ENABLED=STD
           OPENSSL_PREINSTALL: openssl@3
       - ubuntu:
           name: ubuntu-jammy-static
-          context: openquantumsafe
           IMAGE: openquantumsafe/ci-ubuntu-jammy:latest
           OQS_PROVIDER_BUILD_STATIC: true
           CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_ALGS_ENABLED=STD

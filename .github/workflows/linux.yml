@@ -126,3 +126,81 @@ jobs:
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
 
+  linux_aarch64:
+    name: "aarch64 cross-compilation"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    container:
+      image: openquantumsafe/ci-ubuntu-jammy:latest
+    env:
+      OPENSSL_BRANCH: "master"
+      INSTALL_DIR: "/opt/install"
+      CMAKE_TOOLCHAIN_FILE: "/opt/linux-aarch64-toolchain.cmake"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y ninja-build git cmake nodejs gcc-aarch64-linux-gnu libc6-dev-arm64-cross qemu-user
+
+      - name: Prepare install directory
+        run: mkdir -p "${INSTALL_DIR}"
+
+      - name: Clone and build OpenSSL(3) for linux-aarch64
+        working-directory: /opt/
+        run: |
+          git clone --depth=1 --branch "${OPENSSL_BRANCH}" https://github.com/openssl/openssl.git openssl
+          cd openssl
+          ./Configure linux-aarch64 no-tests --prefix="${INSTALL_DIR}" \
+                                    --openssldir="${INSTALL_DIR}" \
+                                    --cross-compile-prefix=aarch64-linux-gnu- \
+                                    --release
+          make -j$(nproc)
+          make install_sw
+
+      - name: Write CMake toolchain file for liboqs and oqs-provider
+        run: |
+          echo "set(CMAKE_SYSTEM_NAME Linux) \n
+                set(CMAKE_SYSTEM_PROCESSOR aarch64) \n
+                set(CMAKE_C_COMPILER "/usr/bin/aarch64-linux-gnu-gcc")\n" > "${CMAKE_TOOLCHAIN_FILE}"
+
+      - name: Clone and build liboqs for linux-aarch64
+        working-directory: /opt/
+        run: |
+          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          cd liboqs
+          mkdir build install
+          cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \
+                -GNinja -B build \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
+                -DOQS_USE_OPENSSL=OFF
+          cmake --build build -j$(nproc)
+          cmake --install build
+
+      - name: Build oqs-provider for linux-aarch64
+        run: |
+          cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \
+                -GNinja -B build \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
+                -DOPENSSL_ROOT_DIR="${INSTALL_DIR}" \
+                -Dliboqs_DIR="${INSTALL_DIR}/lib/cmake/liboqs"
+          cmake --build build -j$(nproc)
+          cmake --install build
+
+      - name: Run tests with qemu-aarch64
+        run: |
+            cmake -B build -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-aarch64;-L;/usr/aarch64-linux-gnu"
+            ctest --test-dir build/
+
+      - name: Build .deb install package
+        run: cpack
+        working-directory: build
+      - name: Retain .deb installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: oqsprovider-aarch64
+          path: build/*.deb

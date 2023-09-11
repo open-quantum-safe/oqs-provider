@@ -73,6 +73,10 @@ DECODER_w_structure("dilithium2", der, PrivateKeyInfo, dilithium2),
                         dilithium3_ed25519),
     DECODER_w_structure("dilithium3_ed25519", der, SubjectPublicKeyInfo, 
                         dilithium3_ed25519),
+    DECODER_w_structure("dilithium3_pss", der, PrivateKeyInfo, 
+                        dilithium3_pss),
+    DECODER_w_structure("dilithium3_pss", der, SubjectPublicKeyInfo, 
+                        dilithium3_pss),
 
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5

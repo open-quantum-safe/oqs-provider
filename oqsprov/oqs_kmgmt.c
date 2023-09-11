@@ -960,6 +960,16 @@ static void *falcon512_ed25519_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_falcon_512, "falcon512_ed25519", KEY_TYPE_CMP_SIG, 128);
 }
 
+static void *dilithium3_pss_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_dilithium_3, "dilithium3_pss", KEY_TYPE_CMP_SIG, NULL, 128);
+}
+
+static void *dilithium3_pss_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_dilithium_3, "dilithium3_pss", KEY_TYPE_CMP_SIG, 128);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                       \
@@ -1142,6 +1152,7 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium5_bp384)
 MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium5_ed448)
 MAKE_SIG_KEYMGMT_FUNCTIONS(falcon512_bp256)
 MAKE_SIG_KEYMGMT_FUNCTIONS(falcon512_ed25519)
+MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium3_pss)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 

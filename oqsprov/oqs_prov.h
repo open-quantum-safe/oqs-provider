@@ -787,6 +787,14 @@ extern const OSSL_DISPATCH oqs_falcon512_ed25519_to_SubjectPublicKeyInfo_der_enc
 extern const OSSL_DISPATCH oqs_falcon512_ed25519_to_SubjectPublicKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_falcon512_ed25519_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_falcon512_ed25519_decoder_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_pss_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_pss_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_pss_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_pss_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_pss_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_pss_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_dilithium3_pss_decoder_functions[];
+extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_dilithium3_pss_decoder_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ENDECODER_FUNCTIONS_END
 
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
@@ -826,6 +834,7 @@ extern const OSSL_DISPATCH oqs_dilithium5_bp384_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_dilithium5_ed448_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_falcon512_bp256_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_falcon512_ed25519_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_pss_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_frodo640aes_keymgmt_functions[];
 

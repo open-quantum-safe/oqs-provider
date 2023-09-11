@@ -1638,4 +1638,10 @@ MAKE_ENCODER(falcon512_ed25519, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(falcon512_ed25519, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(falcon512_ed25519, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(falcon512_ed25519, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_ENCODER(dilithium3_pss, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_pss, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_pss, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(dilithium3_pss, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(dilithium3_pss, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(dilithium3_pss, oqsx, SubjectPublicKeyInfo, pem);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

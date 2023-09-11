@@ -409,8 +409,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             if(name[0] == 'p')
               aux = 1;
             else aux = 2;
-            if (name[aux] == '2')
-            { // p256
+            if (name[aux] == '2' || name[aux] == 's')
+            { // p256 && pss
               classical_md = EVP_sha256();
               digest_len = SHA256_DIGEST_LENGTH;
               SHA256(tbs, tbslen, (unsigned char *)&digest);

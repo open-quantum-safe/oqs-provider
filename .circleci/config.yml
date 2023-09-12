@@ -313,6 +313,10 @@ workflows:
         - equal: [ main , << pipeline.git.branch >> ]
         - equal: [ true , << pipeline.parameters.run_downstream_tests >> ]
     jobs:
+      - hold:
+          type: approval
       - trigger-downstream-ci:
           context: openquantumsafe
+          requires:
+            - hold
 

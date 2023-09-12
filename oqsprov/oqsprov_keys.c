@@ -836,7 +836,7 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
         idx += 5;
     else if (!strncmp(algname, "pss", 3))
         idx += 6;
-    else if (algname[0] != 'p' || algname[0] != 'e') 
+    else if (algname[0] != 'p' && algname[0] != 'e') 
     {
         if (algname[0] == 'b'){  //bp
             if (algname[2] == '2') //bp256

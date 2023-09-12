@@ -404,6 +404,15 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
               goto endsign;
             }
           }
+          if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA_PSS)
+          {
+            if ((EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign, RSA_PKCS1_PSS_PADDING) <= 0) ||
+                (EVP_PKEY_CTX_set_rsa_pss_saltlen(classical_ctx_sign, 64) <= 0))
+            {
+              ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+              goto endsign;
+            }
+          }
           if (name[0] == 'p' || name[0] == 'b')
           {
             if(name[0] == 'p')

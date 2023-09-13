@@ -601,7 +601,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
     int keybloblen, nid;
     STACK_OF(ASN1_TYPE) *sk = NULL;
     ASN1_TYPE *aType = NULL;
-    ASN1_STRING *aString = NULL;
+    ASN1_STRING *aString = NULL, *tempOct = NULL;
     unsigned char *temp = NULL;
     char* name;
     PKCS8_PRIV_KEY_INFO *p8info_internal = NULL;
@@ -703,15 +703,16 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             p8info_internal = PKCS8_PRIV_KEY_INFO_new();
             aType = ASN1_TYPE_new();
             aString = ASN1_OCTET_STRING_new();
+            tempOct = ASN1_OCTET_STRING_new();
             temp = NULL;
             name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
 
-            buflen = oqsxkey->privkeylen_cmp[i] + oqsxkey->pubkeylen_cmp[i];
+            buflen = oqsxkey->privkeylen_cmp[i];// + oqsxkey->pubkeylen_cmp[i];
             buf = OPENSSL_malloc(buflen);
             memcpy(buf, oqsxkey->comp_privkey[i], oqsxkey->privkeylen_cmp[i]);
-            memcpy(buf + oqsxkey->privkeylen_cmp[i], oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
+//            memcpy(buf + oqsxkey->privkeylen_cmp[i], oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
 
-            if(get_oqsname_fromtls(name) == 0)
+/*            if(get_oqsname_fromtls(name) == 0)
                 nid = oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->nid;
             else
                 nid = OBJ_sn2nid(name);
@@ -722,7 +723,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
                 keybloblen = 0; // signal error
             }
-
+*/
+            
+            ASN1_STRING_set0(tempOct, buf, buflen);
+            keybloblen = i2d_ASN1_OCTET_STRING(tempOct, &temp);
             ASN1_STRING_set0(aString, temp, keybloblen);
             ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, aString);
 
@@ -735,6 +739,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         OPENSSL_free(p8info_internal);
         OPENSSL_free(aType);
         OPENSSL_free(aString);
+        OPENSSL_free(tempOct);
         OPENSSL_free(sk);
     }
     OPENSSL_secure_clear_free(buf, buflen);

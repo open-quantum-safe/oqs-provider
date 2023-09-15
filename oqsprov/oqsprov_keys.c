@@ -650,18 +650,13 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                 char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
                 if (get_oqsname_fromtls(name) == 0){
                     EVP_PKEY *npk = EVP_PKEY_new();
-                    if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype != EVP_PKEY_RSA &&
-                        key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype != EVP_PKEY_RSA_PSS)
+                    if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype != EVP_PKEY_RSA )                    
                     {
                         npk = setECParams(npk, key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->nid);
                     }
                     const unsigned char *enc_pubkey = key->comp_pubkey[i];
                     if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->raw_key_support == 0){
-                        if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype != EVP_PKEY_RSA_PSS)
-                            key->cmp_classical_pkey[i] = d2i_PublicKey(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, &npk, &enc_pubkey, key->pubkeylen_cmp[i]);
-                        else
-                            key->cmp_classical_pkey[i] = d2i_PUBKEY(&npk, &enc_pubkey, key->pubkeylen_cmp[i]);
-
+                        key->cmp_classical_pkey[i] = d2i_PublicKey(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, &npk, &enc_pubkey, key->pubkeylen_cmp[i]);
                     }else
                         key->cmp_classical_pkey[i] = OPENSSL_memdup(enc_pubkey, key->pubkeylen_cmp[i]);
                     
@@ -827,7 +822,7 @@ static const OQSX_EVP_INFO nids_sig[] = {
     {EVP_PKEY_EC, NID_brainpoolP256r1, 0, 65, 122, 32, 72},  // 256 bit
     {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 104}, // 384 bit
     {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1770, 0, 384}, // 128 bit
-    {EVP_PKEY_RSA_PSS, NID_rsassaPss, 0, 474, 1847, 0, 384},
+//    {EVP_PKEY_RSA_PSS, NID_rsaEncryption, 0, 398, 1770, 0, 384},
     {EVP_PKEY_ED25519, NID_ED25519, 1 , 32, 32, 32, 72},      // 128 bit
     {EVP_PKEY_ED448, NID_ED448, 1 , 57, 57, 57, 122},         // 192 bit
     
@@ -856,10 +851,8 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
     int idx = (bit_security - 128) / 64;
     ON_ERR_GOTO(idx < 0 || idx > 5, err);
 
-    if (!strncmp(algname, "rsa3072", 7))
+    if (!strncmp(algname, "rsa3072", 7) || !strncmp(algname, "pss", 3))
         idx += 5;
-    else if (!strncmp(algname, "pss", 3))
-        idx += 6;
     else if (algname[0] != 'p' && algname[0] != 'e') 
     {
         if (algname[0] == 'b'){  //bp
@@ -874,11 +867,11 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
         }
     }
 
-    ON_ERR_GOTO(idx < 0 || idx > 6, err);
+    ON_ERR_GOTO(idx < 0 || idx > 5, err);
 
     if(algname[0] == 'e') //ED25519 or ED448
     {
-        evp_ctx->evp_info = &nids_sig[idx + 7];
+        evp_ctx->evp_info = &nids_sig[idx + 6];
 
         evp_ctx->keyParam = EVP_PKEY_new();
         ON_ERR_SET_GOTO(!evp_ctx->keyParam, ret, -1, err);
@@ -1418,11 +1411,12 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
 
     ret2 = EVP_PKEY_keygen_init(kgctx);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
-    if (ctx->evp_info->keytype == EVP_PKEY_RSA) {
+    if (ctx->evp_info->nid == NID_rsaEncryption)
+    {
         ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     }
-    if (ctx->evp_info->keytype == EVP_PKEY_RSA_PSS)
+/*    if (ctx->evp_info->keytype == EVP_PKEY_RSA_PSS)
     {   
         ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
@@ -1433,7 +1427,7 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
         ret2 = EVP_PKEY_CTX_set_rsa_pss_keygen_saltlen(kgctx, 64);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     }
-
+*/
     ret2 = EVP_PKEY_keygen(kgctx, &pkey);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, -2, errhyb);
     
@@ -1459,10 +1453,7 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
     } else {
         unsigned char *pubkey_enc = pubkey + aux;
         const unsigned char *pubkey_enc2 = pubkey + aux;
-        if(ctx->evp_info->keytype != EVP_PKEY_RSA_PSS)
-            pubkeylen = i2d_PublicKey(pkey, &pubkey_enc);
-        else
-            pubkeylen = i2d_PUBKEY(pkey, &pubkey_enc);
+        pubkeylen = i2d_PublicKey(pkey, &pubkey_enc);
         ON_ERR_SET_GOTO(!pubkey_enc || pubkeylen > (int)ctx->evp_info->length_public_key, ret, -11, errhyb);
         unsigned char *privkey_enc = privkey + aux;
         const unsigned char *privkey_enc2 = privkey + aux;

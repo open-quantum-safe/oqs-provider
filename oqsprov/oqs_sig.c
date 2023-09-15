@@ -396,7 +396,16 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             goto endsign;
           }
 
-          if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA)
+          if (!strncmp(name, "pss", 3))
+          {
+            if ((EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign, RSA_PKCS1_PSS_PADDING) <= 0) ||
+                (EVP_PKEY_CTX_set_rsa_pss_saltlen(classical_ctx_sign, 64) <= 0) ||
+                (EVP_PKEY_CTX_set_rsa_mgf1_md(classical_ctx_sign, EVP_sha256()) <= 0))
+            {
+              ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+              goto endsign;
+            }
+          } else if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA)
           {
             if (EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign, RSA_PKCS1_PADDING) <= 0)
             {
@@ -404,15 +413,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
               goto endsign;
             }
           }
-          if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA_PSS)
-          {
-            if ((EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign, RSA_PKCS1_PSS_PADDING) <= 0) ||
-                (EVP_PKEY_CTX_set_rsa_pss_saltlen(classical_ctx_sign, 64) <= 0))
-            {
-              ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-              goto endsign;
-            }
-          }
+
           if (name[0] == 'p' || name[0] == 'b')
           {
             if(name[0] == 'p')
@@ -438,18 +439,19 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             }
           }
           else
-          { // rsa3072
-            classical_md = EVP_sha256();
-            digest_len = SHA256_DIGEST_LENGTH;
-            SHA256(tbs, tbslen, (unsigned char *)&digest);
+          {// rsa3072
+              classical_md = EVP_sha256();
+              digest_len = SHA256_DIGEST_LENGTH;
+              SHA256(tbs, tbslen, (unsigned char *)&digest);
+              
           }
 
           if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign, classical_md) <= 0) ||
               (EVP_PKEY_sign(classical_ctx_sign, buf, &oqs_sig_len, digest, digest_len) <= 0))
-          {
-            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-            goto endsign;
-          }
+              {
+                ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+                goto endsign;
+              }
 
           if (oqs_sig_len > oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->length_signature)
           {

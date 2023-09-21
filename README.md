@@ -182,3 +182,15 @@ Sciences and Engineering Research Council of Canada (NSERC); see
 [here](https://openquantumsafe.org/papers/SAC-SteMos16.pdf) and
 [here](https://openquantumsafe.org/papers/NISTPQC-CroPaqSte19.pdf)
 for funding acknowledgments.
+
+# Disclaimers
+
+## Standard software disclaimer
+
+THIS SOFTWARE IS PROVIDED WITH NO WARRANTIES, EXPRESS OR IMPLIED, AND
+ALL IMPLIED WARRANTIES ARE DISCLAIMED, INCLUDING ANY WARRANTY OF
+MERCHANTABILITY AND WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.
+
+## Component disclaimer
+
+[liboqs disclaimer](https://github.com/open-quantum-safe/liboqs#limitations-and-security)

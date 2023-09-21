@@ -28,16 +28,16 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | p521_frodo1344aes | 0x2F04 | Yes | OQS_CODEPOINT_P521_FRODO1344AES |
 | frodo1344shake | 0x0205 | Yes | OQS_CODEPOINT_FRODO1344SHAKE |
 | p521_frodo1344shake | 0x2F05 | Yes | OQS_CODEPOINT_P521_FRODO1344SHAKE |
-| kyber512 | 0x023A | Yes | OQS_CODEPOINT_KYBER512 |
-| p256_kyber512 | 0x2F3A | Yes | OQS_CODEPOINT_P256_KYBER512 |
-| x25519_kyber512 | 0x2F39 | Yes | OQS_CODEPOINT_X25519_KYBER512 |
-| kyber768 | 0x023C | Yes | OQS_CODEPOINT_KYBER768 |
-| p384_kyber768 | 0x2F3C | Yes | OQS_CODEPOINT_P384_KYBER768 |
-| x448_kyber768 | 0x2F90 | Yes | OQS_CODEPOINT_X448_KYBER768 |
-| x25519_kyber768 | 0x6399 | Yes | OQS_CODEPOINT_X25519_KYBER768 |
-| p256_kyber768 | 0x639A | Yes | OQS_CODEPOINT_P256_KYBER768 |
-| kyber1024 | 0x023D | Yes | OQS_CODEPOINT_KYBER1024 |
-| p521_kyber1024 | 0x2F3D | Yes | OQS_CODEPOINT_P521_KYBER1024 |
+| kyber512 | 0x0244 | Yes | OQS_CODEPOINT_KYBER512 |
+| p256_kyber512 | 0x2F44 | Yes | OQS_CODEPOINT_P256_KYBER512 |
+| x25519_kyber512 | 0x2FB0 | Yes | OQS_CODEPOINT_X25519_KYBER512 |
+| kyber768 | 0x0245 | Yes | OQS_CODEPOINT_KYBER768 |
+| p384_kyber768 | 0x2F45 | Yes | OQS_CODEPOINT_P384_KYBER768 |
+| x448_kyber768 | 0x2FB1 | Yes | OQS_CODEPOINT_X448_KYBER768 |
+| x25519_kyber768 | 0x2FB2 | Yes | OQS_CODEPOINT_X25519_KYBER768 |
+| p256_kyber768 | 0x2FB3 | Yes | OQS_CODEPOINT_P256_KYBER768 |
+| kyber1024 | 0x0246 | Yes | OQS_CODEPOINT_KYBER1024 |
+| p521_kyber1024 | 0x2F46 | Yes | OQS_CODEPOINT_P521_KYBER1024 |
 | bikel1 | 0x0241 | Yes | OQS_CODEPOINT_BIKEL1 |
 | p256_bikel1 | 0x2F41 | Yes | OQS_CODEPOINT_P256_BIKEL1 |
 | x25519_bikel1 | 0x2FAE | Yes | OQS_CODEPOINT_X25519_BIKEL1 |
@@ -54,13 +54,13 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | x448_hqc192 | 0x2FAD | Yes | OQS_CODEPOINT_X448_HQC192 |
 | hqc256 | 0x022E | Yes | OQS_CODEPOINT_HQC256 |
 | p521_hqc256 | 0x2F2E | Yes | OQS_CODEPOINT_P521_HQC256 |
-| dilithium2 | 0xfea0 |Yes| OQS_CODEPOINT_DILITHIUM2
-| p256_dilithium2 | 0xfea1 |Yes| OQS_CODEPOINT_P256_DILITHIUM2
-| rsa3072_dilithium2 | 0xfea2 |Yes| OQS_CODEPOINT_RSA3072_DILITHIUM2
-| dilithium3 | 0xfea3 |Yes| OQS_CODEPOINT_DILITHIUM3
-| p384_dilithium3 | 0xfea4 |Yes| OQS_CODEPOINT_P384_DILITHIUM3
-| dilithium5 | 0xfea5 |Yes| OQS_CODEPOINT_DILITHIUM5
-| p521_dilithium5 | 0xfea6 |Yes| OQS_CODEPOINT_P521_DILITHIUM5
+| dilithium2 | 0xfed0 |Yes| OQS_CODEPOINT_DILITHIUM2
+| p256_dilithium2 | 0xfed1 |Yes| OQS_CODEPOINT_P256_DILITHIUM2
+| rsa3072_dilithium2 | 0xfed2 |Yes| OQS_CODEPOINT_RSA3072_DILITHIUM2
+| dilithium3 | 0xfed3 |Yes| OQS_CODEPOINT_DILITHIUM3
+| p384_dilithium3 | 0xfed4 |Yes| OQS_CODEPOINT_P384_DILITHIUM3
+| dilithium5 | 0xfed5 |Yes| OQS_CODEPOINT_DILITHIUM5
+| p521_dilithium5 | 0xfed6 |Yes| OQS_CODEPOINT_P521_DILITHIUM5
 | falcon512 | 0xfeae |Yes| OQS_CODEPOINT_FALCON512
 | p256_falcon512 | 0xfeaf |Yes| OQS_CODEPOINT_P256_FALCON512
 | rsa3072_falcon512 | 0xfeb0 |Yes| OQS_CODEPOINT_RSA3072_FALCON512
@@ -119,13 +119,13 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 <!--- OQS_TEMPLATE_FRAGMENT_OIDS_START -->
 |Algorithm name |    default OID    | enabled | environment variable |
 |---------------|:-----------------:|:-------:|----------------------|
-| dilithium2 | 1.3.6.1.4.1.2.267.7.4.4 |Yes| OQS_OID_DILITHIUM2
-| p256_dilithium2 | 1.3.9999.2.7.1 |Yes| OQS_OID_P256_DILITHIUM2
-| rsa3072_dilithium2 | 1.3.9999.2.7.2 |Yes| OQS_OID_RSA3072_DILITHIUM2
-| dilithium3 | 1.3.6.1.4.1.2.267.7.6.5 |Yes| OQS_OID_DILITHIUM3
-| p384_dilithium3 | 1.3.9999.2.7.3 |Yes| OQS_OID_P384_DILITHIUM3
-| dilithium5 | 1.3.6.1.4.1.2.267.7.8.7 |Yes| OQS_OID_DILITHIUM5
-| p521_dilithium5 | 1.3.9999.2.7.4 |Yes| OQS_OID_P521_DILITHIUM5
+| dilithium2 | 1.3.6.1.4.1.2.267.12.4.4 |Yes| OQS_OID_DILITHIUM2
+| p256_dilithium2 | 1.3.9999.2.7.5 |Yes| OQS_OID_P256_DILITHIUM2
+| rsa3072_dilithium2 | 1.3.9999.2.7.6 |Yes| OQS_OID_RSA3072_DILITHIUM2
+| dilithium3 | 1.3.6.1.4.1.2.267.12.6.5 |Yes| OQS_OID_DILITHIUM3
+| p384_dilithium3 | 1.3.9999.2.7.7 |Yes| OQS_OID_P384_DILITHIUM3
+| dilithium5 | 1.3.6.1.4.1.2.267.12.8.7 |Yes| OQS_OID_DILITHIUM5
+| p521_dilithium5 | 1.3.9999.2.7.8 |Yes| OQS_OID_P521_DILITHIUM5
 | falcon512 | 1.3.9999.3.6 |Yes| OQS_OID_FALCON512
 | p256_falcon512 | 1.3.9999.3.7 |Yes| OQS_OID_P256_FALCON512
 | rsa3072_falcon512 | 1.3.9999.3.8 |Yes| OQS_OID_RSA3072_FALCON512

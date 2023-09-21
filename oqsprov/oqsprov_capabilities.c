@@ -57,19 +57,19 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {0x0205, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F05, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x023A, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x0244, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F3A, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F39, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x023C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F44, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB0, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x0245, 192, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F3C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F90, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x6399, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x639A, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x023D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F45, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB1, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB2, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB3, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x0246, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F3D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F46, 256, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x0241, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F41, 128, TLS1_3_VERSION, 0, -1, -1, 1},
@@ -231,10 +231,10 @@ typedef struct oqs_sigalg_constants_st {
 static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_START
-    {0xfea0, 128, TLS1_3_VERSION, 0}, {0xfea1, 128, TLS1_3_VERSION, 0},
-    {0xfea2, 128, TLS1_3_VERSION, 0}, {0xfea3, 192, TLS1_3_VERSION, 0},
-    {0xfea4, 192, TLS1_3_VERSION, 0}, {0xfea5, 256, TLS1_3_VERSION, 0},
-    {0xfea6, 256, TLS1_3_VERSION, 0}, {0xfeae, 128, TLS1_3_VERSION, 0},
+    {0xfed0, 128, TLS1_3_VERSION, 0}, {0xfed1, 128, TLS1_3_VERSION, 0},
+    {0xfed2, 128, TLS1_3_VERSION, 0}, {0xfed3, 192, TLS1_3_VERSION, 0},
+    {0xfed4, 192, TLS1_3_VERSION, 0}, {0xfed5, 256, TLS1_3_VERSION, 0},
+    {0xfed6, 256, TLS1_3_VERSION, 0}, {0xfeae, 128, TLS1_3_VERSION, 0},
     {0xfeaf, 128, TLS1_3_VERSION, 0}, {0xfeb0, 128, TLS1_3_VERSION, 0},
     {0xfeb1, 256, TLS1_3_VERSION, 0}, {0xfeb2, 256, TLS1_3_VERSION, 0},
     {0xfeb3, 128, TLS1_3_VERSION, 0}, {0xfeb4, 128, TLS1_3_VERSION, 0},
@@ -468,23 +468,23 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_START
 #    ifdef OQS_ENABLE_SIG_dilithium_2
     OQS_SIGALG_ENTRY(dilithium2, dilithium2, dilithium2,
-                     "1.3.6.1.4.1.2.267.7.4.4", 0),
+                     "1.3.6.1.4.1.2.267.12.4.4", 0),
     OQS_SIGALG_ENTRY(p256_dilithium2, p256_dilithium2, p256_dilithium2,
-                     "1.3.9999.2.7.1", 1),
+                     "1.3.9999.2.7.5", 1),
     OQS_SIGALG_ENTRY(rsa3072_dilithium2, rsa3072_dilithium2, rsa3072_dilithium2,
-                     "1.3.9999.2.7.2", 2),
+                     "1.3.9999.2.7.6", 2),
 #    endif
 #    ifdef OQS_ENABLE_SIG_dilithium_3
     OQS_SIGALG_ENTRY(dilithium3, dilithium3, dilithium3,
-                     "1.3.6.1.4.1.2.267.7.6.5", 3),
+                     "1.3.6.1.4.1.2.267.12.6.5", 3),
     OQS_SIGALG_ENTRY(p384_dilithium3, p384_dilithium3, p384_dilithium3,
-                     "1.3.9999.2.7.3", 4),
+                     "1.3.9999.2.7.7", 4),
 #    endif
 #    ifdef OQS_ENABLE_SIG_dilithium_5
     OQS_SIGALG_ENTRY(dilithium5, dilithium5, dilithium5,
-                     "1.3.6.1.4.1.2.267.7.8.7", 5),
+                     "1.3.6.1.4.1.2.267.12.8.7", 5),
     OQS_SIGALG_ENTRY(p521_dilithium5, p521_dilithium5, p521_dilithium5,
-                     "1.3.9999.2.7.4", 6),
+                     "1.3.9999.2.7.8", 6),
 #    endif
 #    ifdef OQS_ENABLE_SIG_falcon_512
     OQS_SIGALG_ENTRY(falcon512, falcon512, falcon512, "1.3.9999.3.6", 7),

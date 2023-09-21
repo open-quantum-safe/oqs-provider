@@ -25,7 +25,7 @@ else()
   set(OQS_ADDL_SOCKET_LIBS "")
 endif()
 
-option(NOPUBKEY_IN_PRIVKEY "Do not include public keys in private key structures/PKCS#8 " OFF)
+option(NOPUBKEY_IN_PRIVKEY "Do not include public keys in private key structures/PKCS#8 " ON)
 if(${NOPUBKEY_IN_PRIVKEY})
     message(STATUS "Build will not store public keys alongside private keys in PKCS#8 structures")
     add_compile_definitions( NOPUBKEY_IN_PRIVKEY )

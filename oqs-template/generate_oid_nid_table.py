@@ -138,7 +138,7 @@ def gen_kem_table(oqslibdocdir):
                               entry['hybrid_group'] if 'hybrid_group' in entry else ""])
 
   # sort by:  family, version, security level, variant, hybrid
-  table.sort(key = lambda row: "{:s}|{:s}|{:d}|{:s}|{:s}".format(row[0], row[1], row[3], row[2], row[5]))
+  table.sort(key = lambda row: "{:s}|{:s}|{:s}|{:s}|{:s}".format(row[0], row[1], str(row[3]), row[2], row[5]))
 
   table = [table_header] + table
 

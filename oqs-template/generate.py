@@ -239,4 +239,4 @@ populate('ALGORITHMS.md', config2, '<!---')
 populate('README.md', config2, '<!---')
 print("All files generated")
 os.environ["LIBOQS_DOCS_DIR"]=os.path.join(os.environ["LIBOQS_SRC_DIR"], "docs")
-#import generate_oid_nid_table
+import generate_oid_nid_table

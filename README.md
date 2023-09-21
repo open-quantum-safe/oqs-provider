@@ -28,6 +28,8 @@ have been resolved.
 
 The standards implemented are documented in the separate file [STANDARDS.md](STANDARDS.md).
 
+THIS IS THE INTEROP-TEST BRANCH OF OQSPROVIDER. DO NOT USE FOR ANY OTHER PURPOSE.
+
 Algorithms
 ----------
 

@@ -22,6 +22,36 @@ All PRs should move to "Ready for Review" stage only if all CI tests pass (are g
 The OQS core team is happy to provide feedback also to Draft PRs in order to improve
 them before the final "Review" stage.
 
+### Coding style
+
+This project has adopted the [OpenSSL coding style](https://www.openssl.org/policies/technical/coding-style.html).
+To check adherence of any new code to this, it therefore is highly recommended to
+run the following command in the project main directory prior to finishing a PR:
+
+    find oqsprov -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs clang-format --dry-run --Werror
+
+### Running CI locally
+
+#### CircleCI
+
+If encountering CI errors in CircleCI, it may be helpful to execute the test jobs
+locally to debug. This can be facilitated by executing the command
+
+   circleci local execute --job some-test-job
+
+assuming "some-test-job" is the name of the test to be executed and the CircleCI
+[command line tools have been installed](https://circleci.com/docs/local-cli).
+
+#### Github CI
+
+[Act](https://github.com/nektos/act) is a tool facilitating local execution of
+github CI jobs. When executed in the main `oqsprovider` directory, 
+
+    act -l Displays all github CI jobs
+    act -j some-job Executes "some-job"
+
+When installing `act` as a github extension, prefix the commands with `gh `.
+
 ### New features
 
 Any PR introducing a new feature is expected to contain a test of this feature

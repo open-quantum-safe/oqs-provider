@@ -724,7 +724,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 keybloblen = 0; // signal error
             }
 */
-            
             ASN1_STRING_set0(tempOct, buf, buflen);
             keybloblen = i2d_ASN1_OCTET_STRING(tempOct, &temp);
             ASN1_STRING_set0(aString, temp, keybloblen);
@@ -732,7 +731,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 
             if (!sk_ASN1_TYPE_push(sk, aType))
                 return -1;
-        OPENSSL_free(name);
+            OPENSSL_free(name);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
         OPENSSL_free(temp);

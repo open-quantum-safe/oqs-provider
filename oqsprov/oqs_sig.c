@@ -471,9 +471,11 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
        if (i == 0){ 
         compsig->sig1->data = OPENSSL_memdup(buf, oqs_sig_len);
         compsig->sig1->length = oqs_sig_len;
+        compsig->sig1->flags = 8; //set as 8 to not check for unused bits
       }else{
         compsig->sig2->data = OPENSSL_memdup(buf, oqs_sig_len);
         compsig->sig2->length = oqs_sig_len;
+        compsig->sig2->flags = 8; //set as 8 to not check for unused bits
       } 
 
     OPENSSL_free(name);

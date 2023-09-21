@@ -654,6 +654,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                     {
                         npk = setECParams(npk, key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->nid);
                     }
+
                     const unsigned char *enc_pubkey = key->comp_pubkey[i];
                     if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->raw_key_support == 0){
                         key->cmp_classical_pkey[i] = d2i_PublicKey(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, &npk, &enc_pubkey, key->pubkeylen_cmp[i]);
@@ -1411,11 +1412,12 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
 
     ret2 = EVP_PKEY_keygen_init(kgctx);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
-    if (ctx->evp_info->nid == NID_rsaEncryption)
+    if (ctx->evp_info->keytype == EVP_PKEY_RSA)
     {
         ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     }
+
 /*    if (ctx->evp_info->keytype == EVP_PKEY_RSA_PSS)
     {   
         ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);

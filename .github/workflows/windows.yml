@@ -223,8 +223,8 @@ jobs:
           id: cache-openssl32
           uses: actions/cache@v3
           with:
-            path: c:\openssl32
-            key: ${{ runner.os }}-msvcopenssl32
+            path: c:\openssl35
+            key: ${{ runner.os }}-msvcopenssl35
         - uses: actions/checkout@v3
         - name: Checkout OpenSSL master
           if: steps.cache-openssl32.outputs.cache-hit != 'true'

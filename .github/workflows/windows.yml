@@ -210,6 +210,9 @@ jobs:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
             osslconfig: no-shared no-fips VC-WIN64A-masm
+        toolchain: 
+        - .CMake/toolchain_windows_x86.cmake
+        - .CMake/toolchain_windows_amd64.cmake
         msarch:
           - x64
 # - arm64
@@ -256,11 +259,9 @@ jobs:
         - name: build liboqs
           run: |
             cmake --version
-            mkdir build
-            cd build
-            cmake -DCMAKE_C_FLAGS="/wd5105" -A ${{matrix.msarch}} -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
-            cmake --build . 
-            cmake --build . --target INSTALL
+            cmake -B build --toolchain ${{ matrix.toolchain }} .
+            cmake --build build 
+            cmake --build build --target INSTALL
           working-directory: liboqs
         - name: prepare the OpenSSL build directory
           if: steps.cache-openssl32.outputs.cache-hit != 'true'
@@ -276,10 +277,6 @@ jobs:
           if: steps.cache-openssl32.outputs.cache-hit != 'true'
           working-directory: openssl\_build
           run: nmake /S
-# Skip testing openssl for now
-#      - name: test
-#        working-directory: openssl\_build
-#        run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz* HARNESS_JOBS=4
         - name: OpenSSL install
 # Run on 64 bit only as 32 bit is slow enough already
           if: steps.cache-openssl32.outputs.cache-hit != 'true'

@@ -211,12 +211,9 @@ jobs:
             oqsconfig: -DOQS_ALGS_ENABLED=STD
             osslconfig: no-shared no-fips VC-WIN64A
         toolchain: 
-#        - .CMake/toolchain_windows_x86.cmake
         - .CMake/toolchain_windows_amd64.cmake
         msarch:
           - x64
-# - arm64
-# - x86
     runs-on: ${{matrix.os}}
     steps:
         - name: Restore native OpenSSL32 cache
@@ -236,9 +233,8 @@ jobs:
         - uses: actions/checkout@v3
           with:
             set-safe-directory: true
-            repository: qnfm/liboqs
+            repository: open-quantum-safe/liboqs
             path: liboqs
-            ref:  cmake_vs
         - uses: ilammy/msvc-dev-cmd@v1
           with:
             arch: ${{ matrix.platform.arch }}
@@ -247,7 +243,6 @@ jobs:
           with:
             msbuild-architecture: ${{matrix.msarch}}
             vs-version: '[16.10,]'
-            #Only windows 2022 image equiped with msvc of 17 version, build liboqs againt version 16 msvc will fail. 
         - name: Setup nasm for OpenSSL build
           uses: ilammy/setup-nasm@v1
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'

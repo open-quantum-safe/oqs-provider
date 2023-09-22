@@ -199,3 +199,111 @@ jobs:
           name: oqs-provider-msvc
           path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
 
+  msvc_native:
+# Run a job for each of the specified target architectures:
+    strategy:
+      matrix:
+        os:
+          - windows-2019
+#          - windows-2022
+        platform:
+          - arch: win64
+            oqsconfig: -DOQS_ALGS_ENABLED=STD
+            osslconfig: no-shared no-fips VC-WIN64A-masm
+        msarch:
+          - x64
+# - arm64
+# - x86
+    runs-on: ${{matrix.os}}
+    steps:
+        - name: Restore OpenSSL32 cache
+          id: cache-openssl32
+          uses: actions/cache@v3
+          with:
+            path: c:\openssl32
+            key: ${{ runner.os }}-msvcopenssl32
+        - uses: actions/checkout@v3
+        - name: Checkout OpenSSL master
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          uses: actions/checkout@v3
+          with:
+            set-safe-directory: true
+            repository: openssl/openssl
+            path: openssl
+        - uses: actions/checkout@v3
+          with:
+            set-safe-directory: true
+            repository: open-quantum-safe/liboqs
+            path: liboqs
+        - uses: ilammy/msvc-dev-cmd@v1
+          with:
+            arch: ${{ matrix.platform.arch }}
+        - name: Add msbuild to PATH
+          uses: microsoft/setup-msbuild@v1
+          with:
+            msbuild-architecture: ${{matrix.msarch}}
+            vs-version: '[16,]'
+            #Only windows 2022 image equiped with msvc of 17 version, build liboqs againt version 16 msvc will fail. 
+        - name: Setup nasm for OpenSSL build
+          uses: ilammy/setup-nasm@v1
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          with:
+            platform: ${{ matrix.platform.arch }}
+        - name: Setup perl for OpenSSL build
+          uses: shogo82148/actions-setup-perl@v1
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        - name: build liboqs
+          run: |
+            cmake --version
+            mkdir build
+            cd build
+            cmake -DCMAKE_C_FLAGS="/wd5105" -A ${{matrix.msarch}} -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
+            cmake --build . 
+            cmake --build . --target INSTALL
+          working-directory: liboqs
+        - name: prepare the OpenSSL build directory
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          run: mkdir _build
+          working-directory: openssl
+        - name: OpenSSL config
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          working-directory: openssl\_build
+          run: |
+            perl ..\Configure --banner=Configured --prefix=c:\openssl32 no-makedepend ${{ matrix.platform.osslconfig }}
+            perl configdata.pm --dump
+        - name: OpenSSL build
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          working-directory: openssl\_build
+          run: nmake /S
+# Skip testing openssl for now
+#      - name: test
+#        working-directory: openssl\_build
+#        run: nmake test VERBOSE_FAILURE=yes TESTS=-test_fuzz* HARNESS_JOBS=4
+        - name: OpenSSL install
+# Run on 64 bit only as 32 bit is slow enough already
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          run: |
+            mkdir c:\openssl32
+            nmake install_sw
+          working-directory: openssl\_build
+        - name: Save OpenSSL
+          id: cache-openssl-save
+          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          uses: actions/cache/save@v3
+          with:
+            path: |
+              c:\openssl32
+            key: ${{ runner.os }}-msvcopenssl32
+        - name: build oqs-provider
+          run: |
+            cmake -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+            cmake --build _build
+        - name: Run tests
+          run: |
+            cmake --build _build --target RUN_TESTS
+        - name: Retain oqsprovider.dll
+          uses: actions/upload-artifact@v3
+          with:
+            name: oqs-provider-msvc
+            path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
+          

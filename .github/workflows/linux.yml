@@ -30,7 +30,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
+        run: LIBOQS_BRANCH=standard OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test

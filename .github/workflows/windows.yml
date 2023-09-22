@@ -233,8 +233,9 @@ jobs:
         - uses: actions/checkout@v3
           with:
             set-safe-directory: true
-            repository: open-quantum-safe/liboqs
+            repository: qnfm/liboqs
             path: liboqs
+            ref:  cmake_vs
         - uses: ilammy/msvc-dev-cmd@v1
           with:
             arch: ${{ matrix.platform.arch }}

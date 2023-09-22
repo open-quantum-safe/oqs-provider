@@ -219,15 +219,15 @@ jobs:
 # - x86
     runs-on: ${{matrix.os}}
     steps:
-        - name: Restore OpenSSL32 cache
-          id: cache-openssl32
+        - name: Restore native OpenSSL32 cache
+          id: cache-openssl32n
           uses: actions/cache@v3
           with:
-            path: c:\openssl35
-            key: ${{ runner.os }}-msvcopenssl35
+            path: c:\openssl32n
+            key: ${{ runner.os }}-msvcopenssl32n
         - uses: actions/checkout@v3
         - name: Checkout OpenSSL master
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           uses: actions/checkout@v3
           with:
             set-safe-directory: true
@@ -250,12 +250,12 @@ jobs:
             #Only windows 2022 image equiped with msvc of 17 version, build liboqs againt version 16 msvc will fail. 
         - name: Setup nasm for OpenSSL build
           uses: ilammy/setup-nasm@v1
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           with:
             platform: ${{ matrix.platform.arch }}
         - name: Setup perl for OpenSSL build
           uses: shogo82148/actions-setup-perl@v1
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
         - name: build liboqs
           run: |
             cmake --version
@@ -264,37 +264,37 @@ jobs:
             cmake --build build --target INSTALL
           working-directory: liboqs
         - name: prepare the OpenSSL build directory
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           run: mkdir _build
           working-directory: openssl
         - name: OpenSSL config
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           working-directory: openssl\_build
           run: |
-            perl ..\Configure --banner=Configured --prefix=c:\openssl32 no-makedepend ${{ matrix.platform.osslconfig }}
+            perl ..\Configure --banner=Configured --prefix=c:\openssl32n no-makedepend ${{ matrix.platform.osslconfig }}
             perl configdata.pm --dump
         - name: OpenSSL build
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           working-directory: openssl\_build
           run: nmake /S
         - name: OpenSSL install
 # Run on 64 bit only as 32 bit is slow enough already
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           run: |
-            mkdir c:\openssl32
+            mkdir c:\openssl32n
             nmake install_sw
           working-directory: openssl\_build
         - name: Save OpenSSL
           id: cache-openssl-save
-          if: steps.cache-openssl32.outputs.cache-hit != 'true'
+          if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           uses: actions/cache/save@v3
           with:
             path: |
-              c:\openssl32
-            key: ${{ runner.os }}-msvcopenssl32
+              c:\openssl32n
+            key: ${{ runner.os }}-msvcopenssl32n
         - name: build oqs-provider
           run: |
-            cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+            cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
             cmake --build _build
         - name: Run tests
           run: |

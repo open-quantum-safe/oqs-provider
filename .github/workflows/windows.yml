@@ -298,7 +298,7 @@ jobs:
             cmake --build _build
         - name: Run tests
           run: |
-            ctest -V --test-dir build -C Debug
+            ctest -V --test-dir _build -C Debug
         - name: Retain oqsprovider.dll
           uses: actions/upload-artifact@v3
           with:

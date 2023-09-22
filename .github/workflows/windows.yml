@@ -295,10 +295,11 @@ jobs:
         - name: build oqs-provider
           run: |
             cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
-            cmake --build _build
+            cmake -DCMAKE_BUILD_TYPE=Debug --build _build
         - name: Run tests
           run: |
-            ctest -V --test-dir _build -C Debug
+            cmake -DCMAKE_BUILD_TYPE=Debug --build _build --target RUN_TESTS
+        - name: Run tests
         - name: Retain oqsprovider.dll
           uses: actions/upload-artifact@v3
           with:

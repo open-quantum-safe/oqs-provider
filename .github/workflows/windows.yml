@@ -243,7 +243,7 @@ jobs:
           uses: microsoft/setup-msbuild@v1
           with:
             msbuild-architecture: ${{matrix.msarch}}
-            vs-version: '[16,]'
+            vs-version: '[16.10,]'
             #Only windows 2022 image equiped with msvc of 17 version, build liboqs againt version 16 msvc will fail. 
         - name: Setup nasm for OpenSSL build
           uses: ilammy/setup-nasm@v1

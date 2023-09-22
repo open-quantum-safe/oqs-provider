@@ -205,13 +205,13 @@ jobs:
       matrix:
         os:
           - windows-2019
-#          - windows-2022
+          - windows-2022
         platform:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
             osslconfig: no-shared no-fips VC-WIN64A-masm
         toolchain: 
-        - .CMake/toolchain_windows_x86.cmake
+#        - .CMake/toolchain_windows_x86.cmake
         - .CMake/toolchain_windows_amd64.cmake
         msarch:
           - x64
@@ -294,11 +294,11 @@ jobs:
             key: ${{ runner.os }}-msvcopenssl32
         - name: build oqs-provider
           run: |
-            cmake -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+            cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
             cmake --build _build
         - name: Run tests
           run: |
-            cmake --build _build --target RUN_TESTS
+            ctest -V --test-dir build -C Debug
         - name: Retain oqsprovider.dll
           uses: actions/upload-artifact@v3
           with:

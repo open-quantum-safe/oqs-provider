@@ -214,6 +214,9 @@ jobs:
         - .CMake/toolchain_windows_amd64.cmake
         msarch:
           - x64
+        type:
+          - Debug
+          - Release
     runs-on: ${{matrix.os}}
     steps:
         - name: Restore native OpenSSL32 cache
@@ -289,11 +292,11 @@ jobs:
             key: ${{ runner.os }}-msvcopenssl32n
         - name: build oqs-provider
           run: |
-            cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
-            cmake --build _build
+            cmake -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+            cmake --build _build --config=${{ matrix.type }}
         - name: Run tests
           run: |
-            ctest --test-dir _build -C Debug
+            ctest --test-dir _build -C ${{ matrix.type }}
         - name: Retain oqsprovider.dll
           uses: actions/upload-artifact@v3
           with:

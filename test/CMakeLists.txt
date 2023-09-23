@@ -1,6 +1,6 @@
 include(GNUInstallDirs)
 if (CMAKE_GENERATOR MATCHES "Visual Studio")
-set(OQS_PROV_BINARY_DIR ${CMAKE_BINARY_DIR}/lib/Debug)
+set(OQS_PROV_BINARY_DIR ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE})
 else()
 set(OQS_PROV_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 endif()

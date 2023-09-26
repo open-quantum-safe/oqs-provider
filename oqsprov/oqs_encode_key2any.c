@@ -588,6 +588,11 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
 //        OPENSSL_free(name);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
+        OPENSSL_free(temp);
+        OPENSSL_free(aType);
+        OPENSSL_free(aString);
+        OPENSSL_free(tempOct);
+        OPENSSL_free(sk);
         
         return keybloblen;
     }
@@ -746,7 +751,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
         OPENSSL_free(temp);
-        OPENSSL_free(p8info_internal);
+//        OPENSSL_free(p8info_internal);
         OPENSSL_free(aType);
         OPENSSL_free(aString);
         OPENSSL_free(tempOct);

@@ -733,11 +733,11 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
                 aType = sk_ASN1_TYPE_pop(sk); 
                 buf = aType->value.sequence->data;
                 buflen = aType->value.sequence->length;
-
+/*
                 p8info_buf = d2i_X509_PUBKEY(&p8info_buf, &buf, buflen);
                 if (!X509_PUBKEY_get0_param(NULL, &buf, &buflen, NULL, p8info_buf))
                     return NULL;
-                
+*/                
                 aux += buflen;
                 memcpy(concat_key + plen - aux, buf, buflen);
             }
@@ -796,10 +796,10 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                 buf = aType->value.sequence->data;
                 buflen = aType->value.sequence->length;
 
-                p8info_buf = d2i_PKCS8_PRIV_KEY_INFO(&p8info_buf, &buf, buflen);
+/*                p8info_buf = d2i_PKCS8_PRIV_KEY_INFO(&p8info_buf, &buf, buflen);
                 if (!PKCS8_pkey_get0(NULL, &buf, &buflen, NULL, p8info_buf))
                     return NULL;
-                
+*/                
                 aux += buflen;
                 memcpy(concat_key + plen - aux, buf, buflen);
             }

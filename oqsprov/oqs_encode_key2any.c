@@ -507,7 +507,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
     int keybloblen, nid;
     STACK_OF(ASN1_TYPE) *sk = NULL;
     ASN1_TYPE *aType = NULL;
-    ASN1_STRING *aString = NULL;
+    ASN1_STRING *aString = NULL, *tempOct = NULL;
     unsigned char *temp = NULL;
     X509_PUBKEY *p8info_internal = NULL;
     int ret = 0;
@@ -559,13 +559,14 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
             p8info_internal = X509_PUBKEY_new();
             aType = ASN1_TYPE_new();
             aString = ASN1_OCTET_STRING_new();
+            tempOct = ASN1_OCTET_STRING_new();
             temp = NULL;
-            char *name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
+//            char *name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
 
             len = oqsxkey->pubkeylen_cmp[i];
             buf = OPENSSL_memdup(oqsxkey->comp_pubkey[i], len);
 
-            if(get_oqsname_fromtls(name) == 0)
+/*            if(get_oqsname_fromtls(name) == 0)
                 nid = oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->nid;
             else
                 nid = OBJ_sn2nid(name);
@@ -576,13 +577,15 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
                 ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
                 keybloblen = 0; // signal error
             }  
-
+*/
+            ASN1_STRING_set0(tempOct, buf, len);
+            keybloblen = i2d_ASN1_OCTET_STRING(tempOct, &temp);
             ASN1_STRING_set0(aString, temp, keybloblen);
             ASN1_TYPE_set(aType, V_ASN1_SEQUENCE, aString);
 
             if (!sk_ASN1_TYPE_push(sk, aType))
                 return -1;
-        OPENSSL_free(name);
+//        OPENSSL_free(name);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
         
@@ -714,7 +717,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 DECODE_UINT32(buflen, enc_len);
                 buflen += 4;
                 OPENSSL_free(enc_len);
-                //RSA needs it, maybe others classical also needs?
             }else
                 buflen = oqsxkey->privkeylen_cmp[i];// + oqsxkey->pubkeylen_cmp[i];
             buf = OPENSSL_malloc(buflen);

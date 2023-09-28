@@ -380,6 +380,157 @@ EVP_PKEY *setECParams(EVP_PKEY *eck, int nid)
     }
 }
 
+/* Key codes */
+
+static const OQSX_EVP_INFO nids_sig[] = {
+    {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 72}, // 128 bit
+    {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 104},       // 192 bit - p384
+    {EVP_PKEY_EC, NID_secp521r1, 0, 133, 223, 66, 141},      // 256 bit
+    {EVP_PKEY_EC, NID_brainpoolP256r1, 0, 65, 122, 32, 72},  // 256 bit
+    {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 104}, // 384 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1770, 0, 384}, // 128 bit
+    {EVP_PKEY_ED25519, NID_ED25519, 1 , 32, 32, 32, 72},      // 128 bit
+    {EVP_PKEY_ED448, NID_ED448, 1 , 57, 57, 57, 122},         // 192 bit
+    
+};
+// These two array need to stay synced:
+static const char *OQSX_ECP_NAMES[] = {"p256", "p384", "p521", 0};
+static const OQSX_EVP_INFO nids_ecp[] = {
+    {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 0}, // 128 bit
+    {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 0},        // 192 bit
+    {EVP_PKEY_EC, NID_secp521r1, 0, 133, 223, 66, 0}        // 256 bit
+};
+
+// These two array need to stay synced:
+static const char *OQSX_ECX_NAMES[] = {"x25519", "x448", 0};
+static const OQSX_EVP_INFO nids_ecx[] = {
+    {EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
+    {EVP_PKEY_X448, 0, 1, 56, 56, 56, 0},   // 192 bit
+    {0, 0, 0, 0, 0, 0, 0}                   // 256 bit
+};
+
+static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
+                            char *algname)
+{
+    int ret = 1;
+    int idx = (bit_security - 128) / 64;
+    ON_ERR_GOTO(idx < 0 || idx > 5, err);
+
+    if (!strncmp(algname, "rsa3072", 7) || !strncmp(algname, "pss", 3))
+        idx += 5;
+    else if (algname[0] != 'p' && algname[0] != 'e') 
+    {
+        if (algname[0] == 'b'){  //bp
+            if (algname[2] == '2') //bp256
+                idx += 1;
+        }
+        else
+        {
+            OQS_KEY_PRINTF2("OQS KEY: Incorrect hybrid name: %s\n", algname);
+            ret = 0;
+            goto err;
+        }
+    }
+
+    ON_ERR_GOTO(idx < 0 || idx > 5, err);
+
+    if(algname[0] == 'e') //ED25519 or ED448
+    {
+        evp_ctx->evp_info = &nids_sig[idx + 6];
+
+        evp_ctx->keyParam = EVP_PKEY_new();
+        ON_ERR_SET_GOTO(!evp_ctx->keyParam, ret, -1, err);
+
+        ret = EVP_PKEY_set_type(evp_ctx->keyParam, evp_ctx->evp_info->keytype);
+        ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
+
+        evp_ctx->ctx = EVP_PKEY_CTX_new(evp_ctx->keyParam, NULL);
+        ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err);
+    } else {
+        evp_ctx->evp_info = &nids_sig[idx];
+
+        evp_ctx->ctx = EVP_PKEY_CTX_new_id(evp_ctx->evp_info->keytype, NULL);
+        ON_ERR_GOTO(!evp_ctx->ctx, err);
+    
+        if (idx < 5)
+        { // EC
+                ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
+                ON_ERR_GOTO(ret <= 0, err);
+
+        ret = EVP_PKEY_CTX_set_ec_paramgen_curve_nid(evp_ctx->ctx,
+                                                     evp_ctx->evp_info->nid);
+        ON_ERR_GOTO(ret <= 0, free_evp_ctx);
+
+        ret = EVP_PKEY_paramgen(evp_ctx->ctx, &evp_ctx->keyParam);
+        ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, free_evp_ctx);
+    }
+    // RSA bit length set only during keygen
+    goto err;
+
+free_evp_ctx:
+    EVP_PKEY_CTX_free(evp_ctx->ctx);
+    evp_ctx->ctx = NULL;
+
+err:
+    return ret;
+}
+
+sstatic const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx)
+{
+    int ret = 1;
+    int idx = 0;
+    while (idx < sizeof(OQSX_ECP_NAMES)) {
+        if (!strncmp(tls_name, OQSX_ECP_NAMES[idx], 4))
+            break;
+        idx++;
+    }
+    ON_ERR_GOTO(idx < 0 || idx > 2, err);
+
+    evp_ctx->evp_info = &nids_ecp[idx];
+
+    evp_ctx->ctx = EVP_PKEY_CTX_new_id(evp_ctx->evp_info->keytype, NULL);
+    ON_ERR_GOTO(!evp_ctx->ctx, err);
+
+    ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
+    ON_ERR_GOTO(ret <= 0, err);
+
+    ret = EVP_PKEY_CTX_set_ec_paramgen_curve_nid(evp_ctx->ctx,
+                                                 evp_ctx->evp_info->nid);
+    ON_ERR_GOTO(ret <= 0, err);
+
+    ret = EVP_PKEY_paramgen(evp_ctx->ctx, &evp_ctx->keyParam);
+    ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, err);
+
+err:
+    return ret;
+}
+
+static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx)
+{
+    int ret = 1;
+    int idx = 0;
+
+    while (idx < sizeof(OQSX_ECX_NAMES)) {
+        if (!strncmp(tls_name, OQSX_ECX_NAMES[idx], 4))
+            break;
+        idx++;
+    }
+    ON_ERR_GOTO(idx < 0 || idx > 2, err);
+
+    evp_ctx->evp_info = &nids_ecx[idx];
+
+    evp_ctx->keyParam = EVP_PKEY_new();
+    ON_ERR_SET_GOTO(!evp_ctx->keyParam, ret, -1, err);
+
+    ret = EVP_PKEY_set_type(evp_ctx->keyParam, evp_ctx->evp_info->keytype);
+    ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
+
+    evp_ctx->ctx = EVP_PKEY_CTX_new(evp_ctx->keyParam, NULL);
+    ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err);
+
+err:
+    return ret;
+}
 
 /* Re-create OQSX_KEY from encoding(s): Same end-state as after ken-gen */
 static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
@@ -456,6 +607,45 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
         }
 #endif
     } else {
+        if  (key->keytype == KEY_TYPE_CMP_SIG){
+            size_t privlen = 0;
+            size_t publen = 0;
+            size_t previous_privlen = 0;
+            size_t previous_publen = 0;
+            int pqc_pub_enc = 0;
+            int i;
+            
+            //check if key is the right size
+            for (i = 0; i < key->numkeys; i++){
+                char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
+                    privlen = key->privkeylen_cmp[i];
+                if (get_oqsname_fromtls(name) == 0)//classical key
+                    publen = 0;
+                else//PQC key
+                    publen = key->pubkeylen_cmp[i]; //pubkey in PQC privkey is OPTIONAL
+                
+                previous_privlen += privlen;
+                previous_publen += publen;
+                OPENSSL_free(name);
+            }               
+            if (previous_privlen != plen)
+            {
+                //is ok, PQC pubkey might be in privkey
+                pqc_pub_enc = 1;
+                if (previous_privlen + previous_publen != plen){
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    goto err;
+                }
+            }
+            if (oqsx_key_allocate_keymaterial(key, 1))
+            {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err;
+            }
+            previous_privlen = 0;
+            previous_publen = 0;
+
+        }else{ 
         int classical_privatekey_len = 0;
         // for plain OQS keys, we expect OQS priv||OQS pub key
         size_t actualprivkeylen = key->privkeylen;
@@ -563,8 +753,45 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                     previous_privlen += privlen;
                     previous_publen += publen;
                 }
+                for (i =0; i < key->numkeys; i++){
+                size_t classic_publen = 0;
+                char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
+                if (get_oqsname_fromtls(name) == 0){//classical key
+                    publen = 0; //no pubkey encoded with privkey on classical keys. will recreate the pubkey later
+                    if(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA){ //get the RSA real key size
+                        unsigned char* enc_len = OPENSSL_strndup(p + previous_privlen + previous_publen, 4);
+                        OPENSSL_cleanse(enc_len, 2);
+                        DECODE_UINT32(privlen, enc_len);
+                        privlen += 4;
+                        OPENSSL_free(enc_len);
+                    }else
+                        privlen = key->privkeylen_cmp[i];               
+                }else{//PQC key
+                    privlen = key->privkeylen_cmp[i];
+                    if (pqc_pub_enc)
+                        publen = key->pubkeylen_cmp[i];
+                    else
+                        publen = 0;
+                    
+                }                
+                memcpy(key->privkey + previous_privlen, p + previous_privlen + previous_publen, privlen);
+                memcpy(key->pubkey + previous_publen, p + privlen + previous_privlen + previous_publen, publen);
+                previous_privlen += privlen;
+                previous_publen += publen;
+                OPENSSL_free(name);
+            }
 
         }else{
+            if (key->privkeylen + key->pubkeylen != plen)
+            {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err;
+            }
+            if (oqsx_key_allocate_keymaterial(key, 1))
+            {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err;
+            }
             memcpy(key->privkey, p, key->privkeylen);
             memcpy(key->pubkey, p + key->privkeylen, key->pubkeylen);
         }
@@ -656,11 +883,10 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                     }
 
                     const unsigned char *enc_pubkey = key->comp_pubkey[i];
-                    if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->raw_key_support == 0){
+                    if (!key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->raw_key_support){
                         key->cmp_classical_pkey[i] = d2i_PublicKey(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, &npk, &enc_pubkey, key->pubkeylen_cmp[i]);
                     }else
-                        key->cmp_classical_pkey[i] = OPENSSL_memdup(enc_pubkey, key->pubkeylen_cmp[i]);
-                    
+                        key->cmp_classical_pkey[i] = EVP_PKEY_new_raw_public_key(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, NULL, enc_pubkey, key->pubkeylen_cmp[i]);                    
                     if (!key->cmp_classical_pkey[i])
                     {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
@@ -678,14 +904,29 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                 char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
                 if (get_oqsname_fromtls(name) == 0){
                     const unsigned char *enc_privkey = key->comp_privkey[i];
-                    if (key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->raw_key_support == 0)
+                    if (!key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->raw_key_support)
                         key->cmp_classical_pkey[i] = d2i_PrivateKey(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, NULL, &enc_privkey, key->privkeylen_cmp[i]);
                     else
-                        key->cmp_classical_pkey[i] = OPENSSL_memdup(enc_privkey, key->pubkeylen_cmp[i]);
+                        key->cmp_classical_pkey[i] = EVP_PKEY_new_raw_private_key(key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype, NULL, enc_privkey, key->privkeylen_cmp[i]);
                     if (!key->cmp_classical_pkey[i])
                     {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                         goto err;
+                    }
+                    if (!key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->raw_key_support){
+                        unsigned char* comp_pubkey = key->comp_pubkey[i];
+                        int pubkeylen = i2d_PublicKey(key->cmp_classical_pkey[i], &comp_pubkey);
+                        if (pubkeylen != key->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->length_public_key){
+                            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                            goto err;
+                        }
+                    }else{
+                        size_t pubkeylen = key->pubkeylen_cmp[i];
+                        int ret = EVP_PKEY_get_raw_public_key(key->cmp_classical_pkey[i], key->comp_pubkey[i], &pubkeylen);
+                        if (ret <= 0){
+                            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                            goto err;
+                        }
                     }
                 }
                 OPENSSL_free(name);
@@ -763,7 +1004,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     ASN1_TYPE *aType = NULL;
     const unsigned char *buf;
     unsigned char *concat_key;
-    int count, aux, i, buflen;
+    int count, aux, i, buflen, rsa_diff = 0;
     PKCS8_PRIV_KEY_INFO *p8info_buf = PKCS8_PRIV_KEY_INFO_new();
 
     if (!PKCS8_pkey_get0(NULL, &p, &plen, &palg, p8inf))
@@ -793,6 +1034,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
             aux = 0;
             for (i = 0; i < count; i++){
                 aType = sk_ASN1_TYPE_pop(sk); 
+                char *name = get_cmpname(OBJ_obj2nid(palg->algorithm), count - 1 - i);
                 buf = aType->value.sequence->data;
                 buflen = aType->value.sequence->length;
 
@@ -802,170 +1044,27 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
 */                
                 aux += buflen;
                 memcpy(concat_key + plen - aux, buf, buflen);
+                //if is a RSA key the actual encoding size might be different from max size
+                //we calculate that difference for to facilitate the key reconstruction
+                if(!strncmp(name, "rsa3072", 7) || !strncmp(name, "pss", 3)) 
+                    rsa_diff = nids_sig[5].length_private_key - buflen;  
+                OPENSSL_free(name);
             }
 
             p = concat_key + plen - aux;
             plen = aux;
         }
     }
+    if (rsa_diff > 4){//diff is too big, this means an decoding error
+        ASN1_OCTET_STRING_free(oct);
+        return NULL;
+    }
+        
 
-    oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PRIVATE, libctx, propq);
+    oqsx = oqsx_key_op(palg, p, plen + rsa_diff, KEY_OP_PRIVATE,
+                        libctx, propq);
     ASN1_OCTET_STRING_free(oct);
     return oqsx;
-}
-
-/* Key codes */
-
-static const OQSX_EVP_INFO nids_sig[] = {
-    {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 72}, // 128 bit
-    {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 104},       // 192 bit - p384
-    {EVP_PKEY_EC, NID_secp521r1, 0, 133, 223, 66, 141},      // 256 bit
-    {EVP_PKEY_EC, NID_brainpoolP256r1, 0, 65, 122, 32, 72},  // 256 bit
-    {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 104}, // 384 bit
-    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1770, 0, 384}, // 128 bit
-//    {EVP_PKEY_RSA_PSS, NID_rsaEncryption, 0, 398, 1770, 0, 384},
-    {EVP_PKEY_ED25519, NID_ED25519, 1 , 32, 32, 32, 72},      // 128 bit
-    {EVP_PKEY_ED448, NID_ED448, 1 , 57, 57, 57, 122},         // 192 bit
-    
-};
-
-// These two array need to stay synced:
-static const char *OQSX_ECP_NAMES[] = {"p256", "p384", "p521", 0};
-static const OQSX_EVP_INFO nids_ecp[] = {
-    {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 0}, // 128 bit
-    {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 0},        // 192 bit
-    {EVP_PKEY_EC, NID_secp521r1, 0, 133, 223, 66, 0}        // 256 bit
-};
-
-// These two array need to stay synced:
-static const char *OQSX_ECX_NAMES[] = {"x25519", "x448", 0};
-static const OQSX_EVP_INFO nids_ecx[] = {
-    {EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
-    {EVP_PKEY_X448, 0, 1, 56, 56, 56, 0},   // 192 bit
-    {0, 0, 0, 0, 0, 0, 0}                   // 256 bit
-};
-
-static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
-                            char *algname)
-{
-    int ret = 1;
-    int idx = (bit_security - 128) / 64;
-    ON_ERR_GOTO(idx < 0 || idx > 5, err);
-
-    if (!strncmp(algname, "rsa3072", 7) || !strncmp(algname, "pss", 3))
-        idx += 5;
-    else if (algname[0] != 'p' && algname[0] != 'e') 
-    {
-        if (algname[0] == 'b'){  //bp
-            if (algname[2] == '2') //bp256
-                idx += 1;
-        }
-        else
-        {
-            OQS_KEY_PRINTF2("OQS KEY: Incorrect hybrid name: %s\n", algname);
-            ret = 0;
-            goto err;
-        }
-    }
-
-    ON_ERR_GOTO(idx < 0 || idx > 5, err);
-
-    if(algname[0] == 'e') //ED25519 or ED448
-    {
-        evp_ctx->evp_info = &nids_sig[idx + 6];
-
-        evp_ctx->keyParam = EVP_PKEY_new();
-        ON_ERR_SET_GOTO(!evp_ctx->keyParam, ret, -1, err);
-
-        ret = EVP_PKEY_set_type(evp_ctx->keyParam, evp_ctx->evp_info->keytype);
-        ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
-
-        evp_ctx->ctx = EVP_PKEY_CTX_new(evp_ctx->keyParam, NULL);
-        ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err);
-    } else {
-        evp_ctx->evp_info = &nids_sig[idx];
-
-        evp_ctx->ctx = EVP_PKEY_CTX_new_id(evp_ctx->evp_info->keytype, NULL);
-        ON_ERR_GOTO(!evp_ctx->ctx, err);
-    
-        if (idx < 5)
-        { // EC
-                ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
-                ON_ERR_GOTO(ret <= 0, err);
-
-        ret = EVP_PKEY_CTX_set_ec_paramgen_curve_nid(evp_ctx->ctx,
-                                                     evp_ctx->evp_info->nid);
-        ON_ERR_GOTO(ret <= 0, free_evp_ctx);
-
-        ret = EVP_PKEY_paramgen(evp_ctx->ctx, &evp_ctx->keyParam);
-        ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, free_evp_ctx);
-    }
-    // RSA bit length set only during keygen
-    goto err;
-
-free_evp_ctx:
-    EVP_PKEY_CTX_free(evp_ctx->ctx);
-    evp_ctx->ctx = NULL;
-
-err:
-    return ret;
-}
-
-static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx)
-{
-    int ret = 1;
-    int idx = 0;
-    while (idx < sizeof(OQSX_ECP_NAMES)) {
-        if (!strncmp(tls_name, OQSX_ECP_NAMES[idx], 4))
-            break;
-        idx++;
-    }
-    ON_ERR_GOTO(idx < 0 || idx > 2, err);
-
-    evp_ctx->evp_info = &nids_ecp[idx];
-
-    evp_ctx->ctx = EVP_PKEY_CTX_new_id(evp_ctx->evp_info->keytype, NULL);
-    ON_ERR_GOTO(!evp_ctx->ctx, err);
-
-    ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
-    ON_ERR_GOTO(ret <= 0, err);
-
-    ret = EVP_PKEY_CTX_set_ec_paramgen_curve_nid(evp_ctx->ctx,
-                                                 evp_ctx->evp_info->nid);
-    ON_ERR_GOTO(ret <= 0, err);
-
-    ret = EVP_PKEY_paramgen(evp_ctx->ctx, &evp_ctx->keyParam);
-    ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, err);
-
-err:
-    return ret;
-}
-
-static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx)
-{
-    int ret = 1;
-    int idx = 0;
-
-    while (idx < sizeof(OQSX_ECX_NAMES)) {
-        if (!strncmp(tls_name, OQSX_ECX_NAMES[idx], 4))
-            break;
-        idx++;
-    }
-    ON_ERR_GOTO(idx < 0 || idx > 2, err);
-
-    evp_ctx->evp_info = &nids_ecx[idx];
-
-    evp_ctx->keyParam = EVP_PKEY_new();
-    ON_ERR_SET_GOTO(!evp_ctx->keyParam, ret, -1, err);
-
-    ret = EVP_PKEY_set_type(evp_ctx->keyParam, evp_ctx->evp_info->keytype);
-    ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
-
-    evp_ctx->ctx = EVP_PKEY_CTX_new(evp_ctx->keyParam, NULL);
-    ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err);
-
-err:
-    return ret;
 }
 
 static const int (*init_kex_fun[])(char *, OQSX_EVP_CTX *)

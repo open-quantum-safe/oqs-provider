@@ -601,7 +601,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
       CompositeSignature* compsig = CompositeSignature_new();
     int i;
 //    char *name = OPENSSL_malloc(strlen(oqsxkey->tls_name));
-    ASN1_STRING *buf;
+    unsigned char *buf;
     size_t buf_len;
     if(d2i_CompositeSignature(&compsig, &sig, siglen) == NULL)
       goto endverify;
@@ -630,62 +630,73 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         EVP_MD_CTX* evp_ctx = EVP_MD_CTX_new();
         unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
 
-        if ((ctx_verify = EVP_PKEY_CTX_new(oqsxkey->cmp_classical_pkey[i], NULL)) == NULL ||
-            EVP_PKEY_verify_init(ctx_verify) <= 0)
-        {
-          ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-          goto endverify;
-        }
-        if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA)
-        {
-          if (EVP_PKEY_CTX_set_rsa_padding(ctx_verify, RSA_PKCS1_PADDING) <= 0)
-          {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+        if(name[0] == 'e'){ //ed25519 or ed448
+          if((EVP_DigestVerifyInit(evp_ctx, NULL, NULL, NULL, oqsxkey->cmp_classical_pkey[i]) <= 0) ||
+              (EVP_DigestVerify(evp_ctx, buf, buf_len, tbs, tbslen) <= 0)){
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
             goto endverify;
           }
-        }
-        if (name[0] == 'p' || name[0] == 'b')
-        {
-          if (name[0] == 'p')
-            aux = 1;
-          else aux = 2; 
-          if (name[aux] == '2')
-          { // p256
+        } else {
+          if ((ctx_verify = EVP_PKEY_CTX_new(oqsxkey->cmp_classical_pkey[i], NULL)) == NULL ||
+              EVP_PKEY_verify_init(ctx_verify) <= 0)
+          {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
+            goto endverify;
+          }
+          if (!strncmp(name, "pss", 3))
+          {
+            if ((EVP_PKEY_CTX_set_rsa_padding(ctx_verify, RSA_PKCS1_PSS_PADDING) <= 0) ||
+                (EVP_PKEY_CTX_set_rsa_pss_saltlen(ctx_verify, 64) <= 0) ||
+                (EVP_PKEY_CTX_set_rsa_mgf1_md(ctx_verify, EVP_sha256()) <= 0))
+            {
+              ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+              goto endverify;
+            }
+          } else if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA)
+          {
+            if (EVP_PKEY_CTX_set_rsa_padding(ctx_verify, RSA_PKCS1_PADDING) <= 0)
+            {
+              ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+              goto endverify;
+            }
+          }
+          if (name[0] == 'p' || name[0] == 'b')
+          {
+            if(name[0] == 'p')
+                aux = 1;
+              else aux = 2;
+            if (name[aux] == '2' || name[aux] == 's')
+            { // p256 && pss
+              classical_md = EVP_sha256();
+              digest_len = SHA256_DIGEST_LENGTH;
+              SHA256(tbs, tbslen, (unsigned char *)&digest);
+            }
+            if (name[aux] == '3')
+            { // p384
+              classical_md = EVP_sha384();
+              digest_len = SHA384_DIGEST_LENGTH;
+              SHA384(tbs, tbslen, (unsigned char *)&digest);
+            }
+            if (name[aux] == '5')
+            { // p521
+              classical_md = EVP_sha512();
+              digest_len = SHA512_DIGEST_LENGTH;
+              SHA512(tbs, tbslen, (unsigned char *)&digest);
+            }
+          }
+          else
+          { // rsa3072
             classical_md = EVP_sha256();
             digest_len = SHA256_DIGEST_LENGTH;
             SHA256(tbs, tbslen, (unsigned char *)&digest);
           }
-          if (name[aux] == '3')
-          { // p384
-            classical_md = EVP_sha384();
-            digest_len = SHA384_DIGEST_LENGTH;
-            SHA384(tbs, tbslen, (unsigned char *)&digest);
-          }
-          if (name[aux] == '5')
-          { // p521
-            classical_md = EVP_sha512();
-            digest_len = SHA512_DIGEST_LENGTH;
-            SHA512(tbs, tbslen, (unsigned char *)&digest);
-          }
-        }
-        else
-        { // rsa3072
-          classical_md = EVP_sha256();
-          digest_len = SHA256_DIGEST_LENGTH;
-          SHA256(tbs, tbslen, (unsigned char *)&digest);
-        }
-        if(name[0] == 'e'){ //ed25519 or ed448
-          if((!EVP_DigestVerifyInit(evp_ctx, NULL, NULL, NULL, oqsxkey->cmp_classical_pkey[i]) ||
-              !EVP_DigestVerify(evp_ctx, buf, buf_len, tbs, tbslen) != 1)){
+          if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <= 0) ||
+              (EVP_PKEY_verify(ctx_verify, buf, buf_len, digest, digest_len) <= 0))
+          {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
             goto endverify;
-          }
-        } else if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <= 0) ||
-            (EVP_PKEY_verify(ctx_verify, buf, buf_len, digest, digest_len) <= 0))
-        {
-          ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-          goto endverify;
-        }       
+          }   
+        }    
       }
 
     OPENSSL_free(name);

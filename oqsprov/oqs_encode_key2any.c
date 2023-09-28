@@ -715,18 +715,21 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             temp = NULL;
             name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
             
-            if(get_oqsname_fromtls(name) == 0 &&
-             oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA){ //get the RSA real key size
-                unsigned char* enc_len = OPENSSL_strndup(oqsxkey->comp_privkey[i], 4);
-                OPENSSL_cleanse(enc_len, 2);
-                DECODE_UINT32(buflen, enc_len);
-                buflen += 4;
-                OPENSSL_free(enc_len);
+            if(get_oqsname_fromtls(name) == 0){
+                if (oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA){ //get the RSA real key size
+                    unsigned char* enc_len = OPENSSL_strndup(oqsxkey->comp_privkey[i], 4);
+                    OPENSSL_cleanse(enc_len, 2);
+                    DECODE_UINT32(buflen, enc_len);
+                    buflen += 4;
+                    OPENSSL_free(enc_len);
+                }else
+                    buflen = oqsxkey->privkeylen_cmp[i];
             }else
-                buflen = oqsxkey->privkeylen_cmp[i];// + oqsxkey->pubkeylen_cmp[i];
+                buflen = oqsxkey->privkeylen_cmp[i] + oqsxkey->pubkeylen_cmp[i];
             buf = OPENSSL_malloc(buflen);
             memcpy(buf, oqsxkey->comp_privkey[i], buflen);
-//            memcpy(buf + oqsxkey->privkeylen_cmp[i], oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
+            if(get_oqsname_fromtls(name) != 0)
+                memcpy(buf + oqsxkey->privkeylen_cmp[i], oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
 
 /*            if(get_oqsname_fromtls(name) == 0)
                 nid = oqsxkey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->nid;

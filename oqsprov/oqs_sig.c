@@ -248,9 +248,6 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     return rv;
   }
 
-
-
-
   if (is_composite)
   {
     max_sig_len = oqsx_key_maxsize(oqsxkey);
@@ -357,9 +354,6 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     unsigned char *buf;
     CompositeSignature *compsig = CompositeSignature_new();
     int i;
-//    char *name = OPENSSL_malloc(strlen(oqsxkey->tls_name));
-//    if((compsig->sig = sk_ASN1_TYPE_new_null()) == NULL)
-//      goto endsign;   
     for (i = 0; i < oqsxkey->numkeys; i++){
       char *name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
 
@@ -461,12 +455,6 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
           }
         }
       }
-/*      comp_sig = ASN1_BIT_STRING_new();
-      comp_sig->data = OPENSSL_memdup(buf, oqs_sig_len);
-      comp_sig->length = oqs_sig_len;
-      if (!sk_ASN1_TYPE_push(compsig->sig, comp_sig))
-        goto endsign;
-*/     
 
        if (i == 0){ 
         compsig->sig1->data = OPENSSL_memdup(buf, oqs_sig_len);
@@ -482,7 +470,6 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     }
     oqs_sig_len = i2d_CompositeSignature(compsig, &sig);
     
-//    OPENSSL_free(compsig->sig);
     OPENSSL_free(compsig);
   }
   else if (OQS_SIG_sign(oqs_key, sig + index, &oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[oqsxkey->numkeys - 1]) != OQS_SUCCESS)
@@ -600,13 +587,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
     if(is_composite){
       CompositeSignature* compsig = CompositeSignature_new();
     int i;
-//    char *name = OPENSSL_malloc(strlen(oqsxkey->tls_name));
     unsigned char *buf;
     size_t buf_len;
     if(d2i_CompositeSignature(&compsig, &sig, siglen) == NULL)
       goto endverify;
-//    if((compsig->sig = sk_ASN1_TYPE_new_null()) == NULL)
-//      goto endverify; 
     for(i = 0; i < oqsxkey->numkeys; i++){
       if (i == 0){
         buf = compsig->sig1->data;
@@ -701,7 +685,6 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
 
     OPENSSL_free(name);
     }
-//    OPENSSL_free(compsig->sig);
     OPENSSL_free(compsig);
   }else
   {

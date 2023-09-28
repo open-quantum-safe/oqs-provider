@@ -187,7 +187,6 @@ char* get_cmpname(int nid, int index)
             for (j = 0; j < index; j ++)
                 token = strtok(NULL, "_");
             name = OPENSSL_strdup(token);
-//            OPENSSL_strlcpy(name, token, strlen(token) + 1);
             OPENSSL_free(s);
             return name;
         }
@@ -973,12 +972,7 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
             for (i = 0; i < count; i++){
                 aType = sk_ASN1_TYPE_pop(sk); 
                 buf = aType->value.sequence->data;
-                buflen = aType->value.sequence->length;
-/*
-                p8info_buf = d2i_X509_PUBKEY(&p8info_buf, &buf, buflen);
-                if (!X509_PUBKEY_get0_param(NULL, &buf, &buflen, NULL, p8info_buf))
-                    return NULL;
-*/                
+                buflen = aType->value.sequence->length;             
                 aux += buflen;
                 memcpy(concat_key + plen - aux, buf, buflen);
             }
@@ -1036,12 +1030,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                 aType = sk_ASN1_TYPE_pop(sk); 
                 char *name = get_cmpname(OBJ_obj2nid(palg->algorithm), count - 1 - i);
                 buf = aType->value.sequence->data;
-                buflen = aType->value.sequence->length;
-
-/*                p8info_buf = d2i_PKCS8_PRIV_KEY_INFO(&p8info_buf, &buf, buflen);
-                if (!PKCS8_pkey_get0(NULL, &buf, &buflen, NULL, p8info_buf))
-                    return NULL;
-*/                
+                buflen = aType->value.sequence->length;         
                 aux += buflen;
                 memcpy(concat_key + plen - aux, buf, buflen);
                 //if is a RSA key the actual encoding size might be different from max size
@@ -1231,7 +1220,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         break;
     case KEY_TYPE_CMP_SIG:
         int i;
-//        char* name = OPENSSL_malloc(strlen(tls_name));
         ret->numkeys = get_qntcmp(OBJ_sn2nid(tls_name));
         ret->privkeylen = 0;
         ret->pubkeylen = 0;
@@ -1346,7 +1334,6 @@ void oqsx_key_free(OQSX_KEY *key)
     } 
     if(key->keytype == KEY_TYPE_CMP_SIG){
         int i;
-//        char *name = OPENSSL_malloc(strlen(key->tls_name));;
         for (i = 0; i < key->numkeys; i ++){
             char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
             if (get_oqsname_fromtls(name))
@@ -1517,18 +1504,6 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     }
 
-/*    if (ctx->evp_info->keytype == EVP_PKEY_RSA_PSS)
-    {   
-        ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
-        ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
-        ret2 = EVP_PKEY_CTX_set_rsa_pss_keygen_mgf1_md(kgctx, EVP_sha256());
-        ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
-        ret2 = EVP_PKEY_CTX_set_rsa_pss_keygen_md(kgctx, EVP_sha256());
-        ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
-        ret2 = EVP_PKEY_CTX_set_rsa_pss_keygen_saltlen(kgctx, 64);
-        ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
-    }
-*/
     ret2 = EVP_PKEY_keygen(kgctx, &pkey);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, -2, errhyb);
     
@@ -1625,16 +1600,12 @@ int oqsx_key_gen(OQSX_KEY *key)
     else if (key->keytype == KEY_TYPE_CMP_SIG)
     {
         int i;
-//        char* name = OPENSSL_malloc(strlen(key->tls_name));
         ret = oqsx_key_set_composites(key);
         for (i = 0; i < key->numkeys; i++){
             char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
             if (get_oqsname_fromtls(name) == 0)
             {
-//                if (i == 0)
-//                    pkey = oqsx_key_gen_evp_key(key->oqsx_provider_ctx[i].oqsx_evp_ctx, key->pubkey, key->privkey, 0);
-//                else
-                    pkey = oqsx_key_gen_evp_key(key->oqsx_provider_ctx[i].oqsx_evp_ctx, key->comp_pubkey[i], key->comp_privkey[i], 0);
+                pkey = oqsx_key_gen_evp_key(key->oqsx_provider_ctx[i].oqsx_evp_ctx, key->comp_pubkey[i], key->comp_privkey[i], 0);
                 ON_ERR_GOTO(pkey == NULL, err);
                 key->cmp_classical_pkey[i] = pkey;
             }
@@ -1692,7 +1663,6 @@ int oqsx_key_maxsize(OQSX_KEY *key)
     {
         int aux = sizeof(CompositeSignature);
         int i;
-//        char *name = OPENSSL_malloc(strlen(key->tls_name));;
         for (i = 0; i < key->numkeys; i ++){
             char *name = get_cmpname(OBJ_sn2nid(key->tls_name), i);
             if (get_oqsname_fromtls(name) == 0)

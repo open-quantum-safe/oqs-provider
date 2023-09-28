@@ -712,10 +712,11 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 buflen = oqsxkey->privkeylen_cmp[i] + oqsxkey->pubkeylen_cmp[i];
 
             buf = OPENSSL_malloc(buflen);
-            
-            if(get_oqsname_fromtls(name) != 0)//include pubkey in privkey for PQC
+            memcpy(buf, oqsxkey->comp_privkey[i], buflen);
+            if(get_oqsname_fromtls(name) != 0){//include pubkey in privkey for PQC
+                memcpy(buf, oqsxkey->comp_privkey[i], oqsxkey->privkeylen_cmp[i]);
                 memcpy(buf + oqsxkey->privkeylen_cmp[i], oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
-            else
+            }else
                 memcpy(buf, oqsxkey->comp_privkey[i], buflen);
 
             ASN1_STRING_set0(tempOct, buf, buflen);

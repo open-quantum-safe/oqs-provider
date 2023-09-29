@@ -213,13 +213,13 @@ end:
     return ok;
 }
 
-static int test_algs(const OSSL_ALGORITHM *algs) {
+static int test_algs(const OSSL_ALGORITHM *algs)
+{
     int errcnt = 0;
     for (; algs->algorithm_names != NULL; algs++) {
         if (test_oqs_encdec(algs->algorithm_names)) {
             fprintf(stderr,
-                    cGREEN "  Encoding/Decoding test succeeded: %s" cNORM
-                           "\n",
+                    cGREEN "  Encoding/Decoding test succeeded: %s" cNORM "\n",
                     algs->algorithm_names);
         } else {
             fprintf(stderr,
@@ -266,8 +266,7 @@ int main(int argc, char *argv[])
     }
 
 #ifdef OQS_KEM_ENCODERS
-    algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM,
-                                         &query_nocache);
+    algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
 
     if (algs) {
         errcnt += test_algs(algs);

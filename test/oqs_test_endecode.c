@@ -165,7 +165,7 @@ end:
     return ok;
 }
 
-static int test_oqs_encdec(const char *sigalg_name)
+static int test_oqs_encdec(const char *alg_name)
 {
     EVP_PKEY *pkey = NULL;
     EVP_PKEY *decoded_pkey = NULL;
@@ -174,7 +174,7 @@ static int test_oqs_encdec(const char *sigalg_name)
     int ok = 0;
 
     for (i = 0; i < nelem(test_params_list); i++) {
-        pkey = oqstest_make_key(sigalg_name, NULL, NULL);
+        pkey = oqstest_make_key(alg_name, NULL, NULL);
         if (pkey == NULL)
             goto end;
 
@@ -182,7 +182,7 @@ static int test_oqs_encdec(const char *sigalg_name)
                                   test_params_list[i].structure,
                                   test_params_list[i].pass,
                                   test_params_list[i].selection, &encoded)) {
-            printf("Failed encoding %s", sigalg_name);
+            printf("Failed encoding %s", alg_name);
             goto end;
         }
         if (!decode_EVP_PKEY_prov(
@@ -190,12 +190,14 @@ static int test_oqs_encdec(const char *sigalg_name)
                 test_params_list[i].pass, test_params_list[i].keytype,
                 test_params_list[i].selection, &decoded_pkey, encoded->data,
                 encoded->length)) {
-            printf("Failed decoding %s", sigalg_name);
+            printf("Failed decoding %s", alg_name);
             goto end;
         }
 
-        if (EVP_PKEY_eq(pkey, decoded_pkey) != 1)
+        if (EVP_PKEY_eq(pkey, decoded_pkey) != 1) {
+            printf("Key equality failed for %s", alg_name);
             goto end;
+        }
         EVP_PKEY_free(pkey);
         pkey = NULL;
         EVP_PKEY_free(decoded_pkey);
@@ -211,12 +213,31 @@ end:
     return ok;
 }
 
+static int test_algs(const OSSL_ALGORITHM *algs) {
+    int errcnt = 0;
+    for (; algs->algorithm_names != NULL; algs++) {
+        if (test_oqs_encdec(algs->algorithm_names)) {
+            fprintf(stderr,
+                    cGREEN "  Encoding/Decoding test succeeded: %s" cNORM
+                           "\n",
+                    algs->algorithm_names);
+        } else {
+            fprintf(stderr,
+                    cRED "  Encoding/Decoding test failed: %s" cNORM "\n",
+                    algs->algorithm_names);
+            ERR_print_errors_fp(stderr);
+            errcnt++;
+        }
+    }
+    return errcnt;
+}
+
 int main(int argc, char *argv[])
 {
     size_t i;
     int errcnt = 0, test = 0, query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;
-    const OSSL_ALGORITHM *sigalgs;
+    const OSSL_ALGORITHM *algs;
 
     T((libctx = OSSL_LIB_CTX_new()) != NULL);
     T(argc == 3);
@@ -233,29 +254,29 @@ int main(int argc, char *argv[])
     keyprov = OSSL_PROVIDER_load(keyctx, modulename);
     oqsprov = OSSL_PROVIDER_load(libctx, modulename);
 
-    sigalgs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
-                                            &query_nocache);
+    algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
+                                         &query_nocache);
 
-    if (sigalgs) {
-        for (; sigalgs->algorithm_names != NULL; sigalgs++) {
-            if (test_oqs_encdec(sigalgs->algorithm_names)) {
-                fprintf(stderr,
-                        cGREEN "  Encoding/Decoding test succeeded: %s" cNORM
-                               "\n",
-                        sigalgs->algorithm_names);
-            } else {
-                fprintf(stderr,
-                        cRED "  Encoding/Decoding test failed: %s" cNORM "\n",
-                        sigalgs->algorithm_names);
-                ERR_print_errors_fp(stderr);
-                errcnt++;
-            }
-        }
+    if (algs) {
+        errcnt += test_algs(algs);
     } else {
         fprintf(stderr, cRED "  No signature algorithms found" cNORM "\n");
         ERR_print_errors_fp(stderr);
         errcnt++;
     }
+
+#ifdef OQS_KEM_ENCODERS
+    algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM,
+                                         &query_nocache);
+
+    if (algs) {
+        errcnt += test_algs(algs);
+    } else {
+        fprintf(stderr, cRED "  No KEM algorithms found" cNORM "\n");
+        ERR_print_errors_fp(stderr);
+        errcnt++;
+    }
+#endif /* OQS_KEM_ENCODERS */
 
     OSSL_PROVIDER_unload(dfltprov);
     OSSL_PROVIDER_unload(keyprov);

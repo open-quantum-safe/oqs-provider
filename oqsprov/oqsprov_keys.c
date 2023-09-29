@@ -52,9 +52,70 @@ typedef struct {
 static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
-#define NID_TABLE_LEN 23
+
+#ifdef OQS_KEM_ENCODERS
+#    define NID_TABLE_LEN 65
+#else
+#    define NID_TABLE_LEN 23
+#endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
+#ifdef OQS_KEM_ENCODERS
+
+    {0, "frodo640aes", OQS_KEM_alg_frodokem_640_aes, KEY_TYPE_KEM, 128},
+    {0, "p256_frodo640aes", OQS_KEM_alg_frodokem_640_aes, KEY_TYPE_ECP_HYB_KEM,
+     128},
+    {0, "x25519_frodo640aes", OQS_KEM_alg_frodokem_640_aes,
+     KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "frodo640shake", OQS_KEM_alg_frodokem_640_shake, KEY_TYPE_KEM, 128},
+    {0, "p256_frodo640shake", OQS_KEM_alg_frodokem_640_shake,
+     KEY_TYPE_ECP_HYB_KEM, 128},
+    {0, "x25519_frodo640shake", OQS_KEM_alg_frodokem_640_shake,
+     KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "frodo976aes", OQS_KEM_alg_frodokem_976_aes, KEY_TYPE_KEM, 192},
+    {0, "p384_frodo976aes", OQS_KEM_alg_frodokem_976_aes, KEY_TYPE_ECP_HYB_KEM,
+     192},
+    {0, "x448_frodo976aes", OQS_KEM_alg_frodokem_976_aes, KEY_TYPE_ECX_HYB_KEM,
+     192},
+    {0, "frodo976shake", OQS_KEM_alg_frodokem_976_shake, KEY_TYPE_KEM, 192},
+    {0, "p384_frodo976shake", OQS_KEM_alg_frodokem_976_shake,
+     KEY_TYPE_ECP_HYB_KEM, 192},
+    {0, "x448_frodo976shake", OQS_KEM_alg_frodokem_976_shake,
+     KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "frodo1344aes", OQS_KEM_alg_frodokem_1344_aes, KEY_TYPE_KEM, 256},
+    {0, "p521_frodo1344aes", OQS_KEM_alg_frodokem_1344_aes,
+     KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "frodo1344shake", OQS_KEM_alg_frodokem_1344_shake, KEY_TYPE_KEM, 256},
+    {0, "p521_frodo1344shake", OQS_KEM_alg_frodokem_1344_shake,
+     KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "kyber512", OQS_KEM_alg_kyber_512, KEY_TYPE_KEM, 128},
+    {0, "p256_kyber512", OQS_KEM_alg_kyber_512, KEY_TYPE_ECP_HYB_KEM, 128},
+    {0, "x25519_kyber512", OQS_KEM_alg_kyber_512, KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "kyber768", OQS_KEM_alg_kyber_768, KEY_TYPE_KEM, 192},
+    {0, "p384_kyber768", OQS_KEM_alg_kyber_768, KEY_TYPE_ECP_HYB_KEM, 192},
+    {0, "x448_kyber768", OQS_KEM_alg_kyber_768, KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "x25519_kyber768", OQS_KEM_alg_kyber_768, KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "p256_kyber768", OQS_KEM_alg_kyber_768, KEY_TYPE_ECP_HYB_KEM, 192},
+    {0, "kyber1024", OQS_KEM_alg_kyber_1024, KEY_TYPE_KEM, 256},
+    {0, "p521_kyber1024", OQS_KEM_alg_kyber_1024, KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_KEM, 128},
+    {0, "p256_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECP_HYB_KEM, 128},
+    {0, "x25519_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_KEM, 192},
+    {0, "p384_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECP_HYB_KEM, 192},
+    {0, "x448_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_KEM, 256},
+    {0, "p521_bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "hqc128", OQS_KEM_alg_hqc_128, KEY_TYPE_KEM, 128},
+    {0, "p256_hqc128", OQS_KEM_alg_hqc_128, KEY_TYPE_ECP_HYB_KEM, 128},
+    {0, "x25519_hqc128", OQS_KEM_alg_hqc_128, KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "hqc192", OQS_KEM_alg_hqc_192, KEY_TYPE_KEM, 192},
+    {0, "p384_hqc192", OQS_KEM_alg_hqc_192, KEY_TYPE_ECP_HYB_KEM, 192},
+    {0, "x448_hqc192", OQS_KEM_alg_hqc_192, KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "hqc256", OQS_KEM_alg_hqc_256, KEY_TYPE_KEM, 256},
+    {0, "p521_hqc256", OQS_KEM_alg_hqc_256, KEY_TYPE_ECP_HYB_KEM, 256},
+
+#endif /* OQS_KEM_ENCODERS */
     {0, "dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
     {0, "p256_dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_HYB_SIG, 128},
@@ -283,6 +344,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         return 0;
     }
+    OQS_KEY_PRINTF2("OQSX KEY: Recreated OQSX key %s\n", key->tls_name);
 
     if (op == KEY_OP_PUBLIC) {
 #ifdef USE_ENCODING_LIB
@@ -439,12 +501,17 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
             goto rec_err;
         }
         if (op == KEY_OP_PUBLIC) {
+            const unsigned char *enc_pubkey = key->comp_pubkey[0];
             DECODE_UINT32(classical_pubkey_len, key->pubkey);
             if (key->evp_info->raw_key_support) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                goto rec_err;
+                key->classical_pkey = EVP_PKEY_new_raw_public_key(
+                    key->evp_info->keytype, NULL, enc_pubkey,
+                    classical_pubkey_len);
+                if (!key->classical_pkey) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    goto rec_err;
+                }
             } else {
-                const unsigned char *enc_pubkey = key->comp_pubkey[0];
                 EVP_PKEY *npk = EVP_PKEY_new();
                 if (key->evp_info->keytype != EVP_PKEY_RSA) {
                     npk = setECParams(npk, key->evp_info->nid);
@@ -461,12 +528,31 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
         }
         if (op == KEY_OP_PRIVATE) {
             DECODE_UINT32(classical_privkey_len, key->privkey);
+            const unsigned char *enc_privkey = key->comp_privkey[0];
+            unsigned char *enc_pubkey = key->comp_pubkey[0];
             if (key->evp_info->raw_key_support) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                goto rec_err;
+                key->classical_pkey = EVP_PKEY_new_raw_private_key(
+                    key->evp_info->keytype, NULL, enc_privkey,
+                    classical_privkey_len);
+                if (!key->classical_pkey) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    goto rec_err;
+                }
+#ifndef NOPUBKEY_IN_PRIVKEY
+                // re-create classic public key part from private key:
+                size_t pubkeylen;
+
+                EVP_PKEY_get_raw_public_key(key->classical_pkey, NULL,
+                                            &pubkeylen);
+                if (pubkeylen != key->evp_info->length_public_key
+                    || EVP_PKEY_get_raw_public_key(key->classical_pkey,
+                                                   enc_pubkey, &pubkeylen)
+                           != 1) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    goto rec_err;
+                }
+#endif
             } else {
-                const unsigned char *enc_privkey = key->comp_privkey[0];
-                unsigned char *enc_pubkey = key->comp_pubkey[0];
                 key->classical_pkey
                     = d2i_PrivateKey(key->evp_info->keytype, NULL, &enc_privkey,
                                      classical_privkey_len);
@@ -780,6 +866,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
               + evp_ctx->evp_info->length_public_key;
         ret->oqsx_provider_ctx.oqsx_evp_ctx = evp_ctx;
         ret->keytype = primitive;
+        ret->evp_info = evp_ctx->evp_info;
         break;
     case KEY_TYPE_HYB_SIG:
         ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = OQS_SIG_new(oqs_name);
@@ -829,7 +916,9 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
             goto err;
     }
 
-    OQS_KEY_PRINTF2("OQSX_KEY: new key created: %p\n", ret);
+    OQS_KEY_PRINTF2("OQSX_KEY: new key created: %s\n", ret->tls_name);
+    OQS_KEY_PRINTF3("OQSX_KEY: new key created: %p (type: %d)\n", ret,
+                    ret->keytype);
     return ret;
 err:
     ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
@@ -1062,8 +1151,7 @@ errhyb:
     return NULL;
 }
 
-/* allocates OQS and classical keys; retains EVP_PKEY on success for sig
- * OQSX_KEY */
+/* allocates OQS and classical keys */
 int oqsx_key_gen(OQSX_KEY *key)
 {
     int ret = 0;
@@ -1090,14 +1178,8 @@ int oqsx_key_gen(OQSX_KEY *key)
         OQS_KEY_PRINTF3("OQSKM: OQSX_KEY privkeylen %ld & pubkeylen: %ld\n",
                         key->privkeylen, key->pubkeylen);
 
-        if (key->keytype == KEY_TYPE_HYB_SIG) {
-            key->classical_pkey = pkey;
-            ret = oqsx_key_gen_oqs(key, 0);
-        } else {
-            EVP_PKEY_free(pkey);
-            pkey = NULL;
-            ret = oqsx_key_gen_oqs(key, 1);
-        }
+        key->classical_pkey = pkey;
+        ret = oqsx_key_gen_oqs(key, key->keytype != KEY_TYPE_HYB_SIG);
     } else if (key->keytype == KEY_TYPE_SIG) {
         ret = !oqsx_key_set_composites(key);
         ON_ERR_GOTO(ret, err);

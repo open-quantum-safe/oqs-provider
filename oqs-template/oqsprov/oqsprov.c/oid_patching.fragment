@@ -1,11 +1,29 @@
 {% set cnt = namespace(val=-2) %}
+
+#ifdef OQS_KEM_ENCODERS
+
+{% set kemcount = namespace(val=-2) %}
+{% for kem in config['kems'] %}
+{% set kemcount.val = kemcount.val + 2 -%}
+   if (getenv("OQS_OID_{{kem['name_group']|upper}}")) oqs_oid_alg_list[{{ kemcount.val }}] = getenv("OQS_OID_{{kem['name_group']|upper}}");
+{% for hybrid in kem['hybrids'] %}
+{% set kemcount.val = kemcount.val + 2 -%}
+   if (getenv("OQS_OID_{{ hybrid['hybrid_group']|upper }}_{{kem['name_group']|upper}}")) oqs_oid_alg_list[{{ kemcount.val }}] = getenv("OQS_OID_{{ hybrid['hybrid_group']|upper }}_{{kem['name_group']|upper}}");
+{%- endfor -%}
+{%- endfor %}
+
+#define OQS_KEMOID_CNT {{ kemcount.val }}+2
+#else
+#define OQS_KEMOID_CNT 0
+#endif /* OQS_KEM_ENCODERS */
+
 {%- for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
       {%- set cnt.val = cnt.val + 2 %}
-   if (getenv("OQS_OID_{{variant['name']|upper}}")) oqs_oid_alg_list[{{ cnt.val }}] = getenv("OQS_OID_{{variant['name']|upper}}");
+   if (getenv("OQS_OID_{{variant['name']|upper}}")) oqs_oid_alg_list[{{ cnt.val }}+OQS_KEMOID_CNT] = getenv("OQS_OID_{{variant['name']|upper}}");
       {%- for classical_alg in variant['mix_with'] %}
          {%- set cnt.val = cnt.val + 2 %}
-   if (getenv("OQS_OID_{{ classical_alg['name']|upper }}_{{variant['name']|upper}}")) oqs_oid_alg_list[{{ cnt.val }}] = getenv("OQS_OID_{{ classical_alg['name']|upper }}_{{variant['name']|upper}}");
+   if (getenv("OQS_OID_{{ classical_alg['name']|upper }}_{{variant['name']|upper}}")) oqs_oid_alg_list[{{ cnt.val }}+OQS_KEMOID_CNT] = getenv("OQS_OID_{{ classical_alg['name']|upper }}_{{variant['name']|upper}}");
       {%- endfor %}
    {%- endfor %}
 {%- endfor %}

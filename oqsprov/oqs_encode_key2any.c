@@ -1160,7 +1160,7 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
     }
 
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
-        int classic_key_len = 0;
+        int classic_key_len = 0 - SIZE_OF_UINT32;
 
         if (okey->numkeys > 1) {
             char classic_label[200];
@@ -1178,7 +1178,7 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
             return 0;
     }
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
-        int classic_key_len = 0;
+        int classic_key_len = 0 - SIZE_OF_UINT32;
 
         if (okey->numkeys > 1) {
             char classic_label[200];

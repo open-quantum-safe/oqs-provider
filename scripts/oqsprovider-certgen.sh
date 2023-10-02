@@ -38,7 +38,9 @@ $OPENSSL_APP verify -CAfile tmp/$1_CA.crt tmp/$1_srv.crt
 # test PEM/DER/TEXT encoder/decoder logic:
 $OPENSSL_APP pkey -text -in tmp/$1_CA.key
 $OPENSSL_APP pkey -in tmp/$1_CA.key -outform DER -out tmp/$1_CA.der
+if command -v xxd &> /dev/null; then
 xxd -i tmp/$1_CA.der
+fi
 
 #fails:
 #$OPENSSL_APP verify -CAfile tmp/$1_CA.crt tmp/$1_srv.crt -provider oqsprovider -provider default

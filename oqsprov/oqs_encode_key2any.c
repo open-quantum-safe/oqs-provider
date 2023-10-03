@@ -1103,7 +1103,6 @@ static int print_labeled_buf(BIO *out, const char *label,
 static int oqsx_to_text(BIO *out, const void *key, int selection)
 {
     OQSX_KEY *okey = (OQSX_KEY *)key;
-    int is_hybrid = 0;
 
     if (out == NULL || okey == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
@@ -1125,7 +1124,6 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
         case KEY_TYPE_ECP_HYB_KEM:
         case KEY_TYPE_ECX_HYB_KEM:
         case KEY_TYPE_HYB_SIG:
-            is_hybrid = 1;
             if (BIO_printf(out, "%s hybrid private key:\n", okey->tls_name)
                 <= 0)
                 return 0;
@@ -1149,7 +1147,6 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
         case KEY_TYPE_ECP_HYB_KEM:
         case KEY_TYPE_ECX_HYB_KEM:
         case KEY_TYPE_HYB_SIG:
-            is_hybrid = 1;
             if (BIO_printf(out, "%s hybrid public key:\n", okey->tls_name) <= 0)
                 return 0;
             break;
@@ -1160,40 +1157,54 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
     }
 
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
-        int classic_key_len = 0;
-
-        if (okey->numkeys > 1) {
-            char classic_label[200];
-            sprintf(classic_label,
-                    "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
-            DECODE_UINT32(classic_key_len, okey->privkey);
-            if (!print_labeled_buf(out, classic_label, okey->comp_privkey[0],
-                                   classic_key_len))
-                return 0;
+        if (okey->privkey) {
+            if (okey->numkeys > 1) { // hybrid key
+                char classic_label[200];
+                int classic_key_len = 0;
+                sprintf(classic_label,
+                        "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
+                DECODE_UINT32(classic_key_len, okey->privkey);
+                if (!print_labeled_buf(out, classic_label,
+                                       okey->comp_privkey[0], classic_key_len))
+                    return 0;
+                /* finally print pure PQ key */
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_privkey[okey->numkeys - 1],
+                                       okey->privkeylen - classic_key_len
+                                           - SIZE_OF_UINT32))
+                    return 0;
+            } else { // plain PQ key
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_privkey[okey->numkeys - 1],
+                                       okey->privkeylen))
+                    return 0;
+            }
         }
-        /* finally print pure PQ key */
-        if (!print_labeled_buf(
-                out, "PQ key material:", okey->comp_privkey[okey->numkeys - 1],
-                okey->privkeylen - classic_key_len - SIZE_OF_UINT32))
-            return 0;
     }
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
-        int classic_key_len = 0;
-
-        if (okey->numkeys > 1) {
-            char classic_label[200];
-            DECODE_UINT32(classic_key_len, okey->pubkey);
-            sprintf(classic_label,
-                    "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
-            if (!print_labeled_buf(out, classic_label, okey->comp_pubkey[0],
-                                   classic_key_len))
-                return 0;
+        if (okey->pubkey) {
+            if (okey->numkeys > 1) { // hybrid key
+                char classic_label[200];
+                int classic_key_len = 0;
+                DECODE_UINT32(classic_key_len, okey->pubkey);
+                sprintf(classic_label,
+                        "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
+                if (!print_labeled_buf(out, classic_label, okey->comp_pubkey[0],
+                                       classic_key_len))
+                    return 0;
+                /* finally print pure PQ key */
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_pubkey[okey->numkeys - 1],
+                                       okey->pubkeylen - classic_key_len
+                                           - SIZE_OF_UINT32))
+                    return 0;
+            } else { // PQ key only
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_pubkey[okey->numkeys - 1],
+                                       okey->pubkeylen))
+                    return 0;
+            }
         }
-        /* finally print pure PQ key */
-        if (!print_labeled_buf(
-                out, "PQ key material:", okey->comp_pubkey[okey->numkeys - 1],
-                okey->pubkeylen - classic_key_len - SIZE_OF_UINT32))
-            return 0;
     }
 
     return 1;

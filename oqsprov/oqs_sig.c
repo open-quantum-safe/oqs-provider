@@ -357,7 +357,9 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     for (i = 0; i < oqsxkey->numkeys; i++){
       char *name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
 
-      if (get_oqsname_fromtls(name)){
+      //pre-hash and concat of oids
+
+      if (get_oqsname_fromtls(name)){ //PQC signing
         oqs_sig_len = oqsxkey->oqsx_provider_ctx[i].oqsx_qs_ctx.sig->length_signature;
         buf = OPENSSL_malloc(oqs_sig_len);
         if (OQS_SIG_sign(oqs_key, buf, &oqs_sig_len, tbs, tbslen, oqsxkey->comp_privkey[i]) != OQS_SUCCESS)

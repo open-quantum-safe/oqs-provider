@@ -842,6 +842,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 # define dilithium3_ed25519_evp_type             0
 # define dilithium3_ed25519_input_type           "dilithium3_ed25519"
 # define dilithium3_ed25519_pem_type             "dilithium3_ed25519"
+# define dilithium3_pss_evp_type                 0
+# define dilithium3_pss_input_type               "dilithium3_pss"
+# define dilithium3_pss_pem_type                 "dilithium3_pss"
 # define dilithium5_bp384_evp_type               0
 # define dilithium5_bp384_input_type             "dilithium5_bp384"
 # define dilithium5_bp384_pem_type               "dilithium5_bp384"

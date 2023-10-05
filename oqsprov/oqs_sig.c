@@ -601,6 +601,9 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         buf = compsig->sig2->data;
         buf_len = compsig->sig2->length;
       }
+
+      //pre-hash and concat of oids
+
       char *name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i);
 
       if (get_oqsname_fromtls(name)){

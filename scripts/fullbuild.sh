@@ -4,6 +4,7 @@
 # Argument -f: Soft clean, ensuring re-build of oqs-provider binary
 # Argument -F: Hard clean, ensuring checkout and build of all dependencies
 # EnvVar MAKE_PARAMS: passed to invocations of make; sample value: "-j"
+# EnvVar OQSPROV_CMAKE_PARAMS: passed to invocations of oqsprovider cmake
 # EnvVar LIBOQS_BRANCH: Defines branch/release of liboqs; default value "main"
 # EnvVar OQS_ALGS_ENABLED: If set, defines OQS algs to be enabled, e.g., "STD"
 # EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
@@ -123,9 +124,9 @@ if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
    BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    else
-       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    fi
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."

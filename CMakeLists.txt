@@ -25,6 +25,12 @@ else()
   set(OQS_ADDL_SOCKET_LIBS "")
 endif()
 
+option(OQS_KEM_ENCODERS "Provide encoders (and decoders) for KEM algorithms " OFF)
+if(${OQS_KEM_ENCODERS})
+    message(STATUS "Build provides support for encoding KEMs")
+    add_compile_definitions( OQS_KEM_ENCODERS )
+endif()
+
 option(NOPUBKEY_IN_PRIVKEY "Do not include public keys in private key structures/PKCS#8 " OFF)
 if(${NOPUBKEY_IN_PRIVKEY})
     message(STATUS "Build will not store public keys alongside private keys in PKCS#8 structures")

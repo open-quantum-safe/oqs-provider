@@ -11,3 +11,15 @@
    {%- endfor %}
 {%- endfor %}
 
+If [OQS_KEM_ENCODERS](CONFIGURE.md#OQS_KEM_ENCODERS) is enabled the following list is also available:
+
+|Algorithm name |    default OID    | environment variable |
+|---------------|:-----------------:|----------------------|
+
+{%- for kem in config['kems'] %}
+| {{kem['name_group']}} | {{ kem['oid'] }} | OQS_OID_{{ kem['name_group']|upper }}
+{%- for hybrid in kem['hybrids'] %}
+| {{ hybrid['hybrid_group'] }}_{{kem['name_group']}} | {{hybrid['hybrid_oid']}} | OQS_OID_{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}
+{%- endfor -%}
+{%- endfor %}
+

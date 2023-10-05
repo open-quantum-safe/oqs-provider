@@ -159,21 +159,22 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
         if ((key1->privkey == NULL && key2->privkey != NULL)
             || (key1->privkey != NULL && key2->privkey == NULL)
             || ((key1->tls_name != NULL && key2->tls_name != NULL)
-                && strcmp(key1->tls_name, key2->tls_name)))
+                && strcmp(key1->tls_name, key2->tls_name))) {
             ok = 0;
-        else
+        } else {
             ok = ((key1->privkey == NULL && key2->privkey == NULL)
                   || ((key1->privkey != NULL)
                       && CRYPTO_memcmp(key1->privkey, key2->privkey,
                                        key1->privkeylen)
                              == 0));
+        }
     }
 
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
         if ((key1->pubkey == NULL && key2->pubkey != NULL)
             || (key1->pubkey != NULL && key2->pubkey == NULL)
             || ((key1->tls_name != NULL && key2->tls_name != NULL)
-                && strcmp(key1->tls_name, key2->tls_name)))
+                && strcmp(key1->tls_name, key2->tls_name))) {
             // special case now: If domain parameter matching requested,
             // consider private key match sufficient:
             ok = ((selection & OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS) != 0)
@@ -181,13 +182,14 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
                  && (CRYPTO_memcmp(key1->privkey, key2->privkey,
                                    key1->privkeylen)
                      == 0);
-        else
+        } else {
             ok = ok
                  && ((key1->pubkey == NULL && key2->pubkey == NULL)
                      || ((key1->pubkey != NULL)
                          && CRYPTO_memcmp(key1->pubkey, key2->pubkey,
                                           key1->pubkeylen)
                                 == 0));
+        }
     }
     if (!ok)
         OQS_KM_PRINTF("OQSKEYMGMT: match failed!\n");

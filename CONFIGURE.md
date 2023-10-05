@@ -50,6 +50,13 @@ By setting this to "ON", it can be specified to omit explicitly serializing
 the public key in a `privateKey` structure, e.g., for interoperability testing.
 The default value is `OFF`.
 
+### OQS_KEM_ENCODERS
+
+By setting this to "ON", `oqsprovider` is configured to provide encoders and decoders for
+KEM algorithms both for public and private key file formats. This increases the size of
+the provider but enables further use cases.
+The default value is `OFF`.
+
 ### OQS_PROVIDER_BUILD_STATIC
 
 By setting `-DOQS_PROVIDER_BUILD_STATIC=ON` at compile-time, oqs-provider can be
@@ -124,6 +131,11 @@ This environment variable permits passing parameters to the `make`
 command used to build `openssl`, e.g., "-j 8" to activate 8-fold
 parallel builds to reduce the compilation time on a suitable multicore
 machine.
+
+### OQSPROV_CMAKE_PARAMS
+
+This environment variable permits passing parameters to the `cmake`
+command used to build `oqsprovider`.
 
 ### OQS_SKIP_TESTS
 

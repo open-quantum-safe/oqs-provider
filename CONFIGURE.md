@@ -110,8 +110,8 @@ code deficiencies related to providers in such old OpenSSL branches.
 
 This defines the branch of `liboqs` against which `oqs-provider` is built.
 This can be used, for example, to facilitate a release of `oqsprovider`
-to track an old/stable `liboqs` release.
-Default is "main" (most current code).
+to track an old/stable `liboqs` release. If this variable is not set, the
+"main" branch is built.
 
 ### liboqs_DIR
 
@@ -119,11 +119,6 @@ If this environment variable is set, `liboqs` is not being built but
 used from the directory specified in this variable: Both `include`
 and `lib` directories must be present in that location.
 By not setting this variable, `liboqs` is build from source.
-
-### LIBOQS_BRANCH
-
-If set, this environment variable designates the `liboqs` branch to
-be built. If this variable is not set, the "main" branch is built.
 
 ### MAKE_PARAMS
 

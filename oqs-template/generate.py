@@ -9,6 +9,8 @@ import shutil
 import subprocess
 import yaml
 
+kemoidcnt=0
+
 # For files generated, the copyright message can be adapted
 # see https://github.com/open-quantum-safe/oqs-provider/issues/2#issuecomment-920904048
 # SPDX message to be leading, OpenSSL Copyright notice to be deleted
@@ -90,6 +92,11 @@ def nist_to_bits(nistlevel):
    else: 
       return None
 
+def get_tmp_kem_oid():
+   global kemoidcnt
+   kemoidcnt = kemoidcnt+1
+   return "1.3.9999.99."+str(kemoidcnt)
+
 def complete_config(config):
    for kem in config['kems']:
       bits_level = nist_to_bits(get_kem_nistlevel(kem))
@@ -111,7 +118,11 @@ def complete_config(config):
           exit(1)
       phyb['bit_security']=bits_level
       phyb['nid']=kem['nid_hybrid']
+      if 'hybrid_oid' in kem: phyb['hybrid_oid']=kem['hybrid_oid']
+      else: phyb['hybrid_oid'] = get_tmp_kem_oid()
       kem['hybrids'].insert(0, phyb)
+      if not 'oid' in kem:
+         kem['oid'] = get_tmp_kem_oid()
 
    for famsig in config['sigs']:
       for sig in famsig['variants']:
@@ -203,6 +214,8 @@ def load_config(include_disabled_sigs=False):
                extra_hybrid['bit_security'] = 192
             if extra_hybrid['hybrid_group'] == "p521":
                extra_hybrid['bit_security'] = 256
+            if not 'hybrid_oid' in extra_hybrid:
+                extra_hybrid['hybrid_oid'] = get_tmp_kem_oid()
             kem['hybrids'].append(extra_hybrid)
             if 'hybrid_group' in extra_hybrid:
                 extra_hybrid_nid = extra_hybrid['nid']

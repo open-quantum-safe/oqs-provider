@@ -1,3 +1,14 @@
+{% for kem in config['kems'] %}
+# define {{ kem['name_group'] }}_evp_type     0
+# define {{ kem['name_group'] }}_input_type    "{{ kem['name_group'] }}"
+# define {{ kem['name_group'] }}_pem_type      "{{ kem['name_group'] }}"
+{% for hybrid in kem['hybrids'] %}
+# define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_evp_type     0
+# define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_input_type    "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"
+# define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_pem_type      "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"
+{%- endfor %}
+{%- endfor %}
+
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
 # define {{ variant['name'] }}_evp_type       0

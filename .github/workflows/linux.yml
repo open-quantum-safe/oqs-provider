@@ -8,6 +8,26 @@ on:
 
 jobs:
 
+  linux_baseline:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cmake-params: [ "", "-DOQS_KEM_ENCODERS=ON" ]
+    container:
+      image: openquantumsafe/ci-ubuntu-jammy:latest
+    env:
+      MAKE_PARAMS: "-j 18"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Full build
+        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} ./scripts/fullbuild.sh
+      - name: Enable sibling oqsprovider for testing
+        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
+      - name: Test
+        run: ./scripts/runtests.sh -V
+
   linux_intel:
     runs-on: ubuntu-latest
     strategy:

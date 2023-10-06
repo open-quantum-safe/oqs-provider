@@ -224,3 +224,85 @@ jobs:
         with:
           name: oqsprovider-aarch64
           path: build/*.deb
+
+  test_cmake_liboqs_dir_value:
+    name: "Test CMake `liboqs_DIR` and `LIBOQS_DIR` values"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    container:
+      image: openquantumsafe/ci-ubuntu-jammy:latest
+    env:
+      OPENSSL_BRANCH: "master"
+      INSTALL_DIR: "/opt/install"
+      LIBOQS_CMAKE_PACKAGE_DIR: "/usr/lib/cmake/liboqs"
+      LIBOQS_CMAKE_PACKAGE_ALT_DIR: "/opt/install/lib/cmake/liboqs"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Prepare install directory
+        run: mkdir -p "${INSTALL_DIR}"
+
+      - name: Clone and build liboqs for linux-aarch64
+        working-directory: /opt/
+        run: |
+          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          cd liboqs
+          mkdir build install
+          cmake -GNinja -B build \
+                -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
+                -DOQS_USE_OPENSSL=OFF
+          cmake --build build -j$(nproc)
+          cmake --install build
+
+      - name: Test oqs-provider CMake script against `liboqs_DIR`, `LIBOQS_DIR`
+        run: |
+          get_liboqs_dir() {
+              cmake -L build/ | grep '^liboqs_DIR' | cut -d'=' -f2
+          }
+
+          cmake -B build -Dliboqs_DIR="${LIBOQS_CMAKE_PACKAGE_ALT_DIR}"
+          cmake -L build/
+          value="$(get_liboqs_dir)"
+          if [ "${value}" != "${LIBOQS_CMAKE_PACKAGE_ALT_DIR}" ]; then
+              echo "liboqs_DIR cache entry did not work: got ${value}, expected ${LIBOQS_CMAKE_PACKAGE_ALT_DIR}"
+              exit 1
+          fi
+
+          rm -rf build
+          cmake -B build -DLIBOQS_DIR="${LIBOQS_CMAKE_PACKAGE_ALT_DIR}"
+          value="$(get_liboqs_dir)"
+          if [ "${value}" != "${LIBOQS_CMAKE_PACKAGE_ALT_DIR}" ]; then
+              echo "LIBOQS_DIR cache entry did not work: got ${value}, expected ${LIBOQS_CMAKE_PACKAGE_ALT_DIR}"
+              exit 1
+          fi
+
+          rm -rf build
+          if cmake -B build -Dliboqs_DIR="${LIBOQS_CMAKE_PACKAGE_DIR}" -DLIBOQS_DIR="${LIBOQS_CMAKE_PACKAGE_ALT_DIR}"; then
+              echo "cmake succeed when it should have failed: liboqs_DIR and LIBOQS_DIR cache entries mismatched"
+              exit 1
+          fi
+
+          rm -rf build
+          env LIBOQS_DIR="${LIBOQS_CMAKE_PACKAGE_ALT_DIR}" cmake -B build
+          value="$(get_liboqs_dir)"
+          if [ "${value}" != "${LIBOQS_CMAKE_PACKAGE_ALT_DIR}" ]; then
+              echo "LIBOQS_DIR environment variable did not work: got ${value}, expected ${LIBOQS_CMAKE_PACKAGE_ALT_DIR}"
+              exit 1
+          fi
+
+          rm -rf build
+          if env LIBOQS_DIR="${LIBOQS_CMAKE_PACKAGE_ALT_DIR}" cmake -B build -Dliboqs_DIR="${LIBOQS_CMAKE_PACKAGE_DIR}"; then
+              echo "cmake succeed when it should have failed: LIBOQS_DIR cache entry and LIBOQS_DIR environment variable mismatched"
+              exit 1
+          fi
+
+          rm -rf build
+          env liboqs_DIR="${LIBOQS_CMAKE_PACKAGE_ALT_DIR}" cmake -B build
+          value="$(get_liboqs_dir)"
+          if [ "${value}" != "${LIBOQS_CMAKE_PACKAGE_ALT_DIR}" ]; then
+              echo "liboqs_DIR environment variable did not work: got ${value}, expected ${LIBOQS_CMAKE_PACKAGE_ALT_DIR}"
+              exit 1
+          fi

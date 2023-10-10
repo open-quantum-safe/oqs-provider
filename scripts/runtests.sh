@@ -180,6 +180,10 @@ fi
 
 echo
 
+# Run interop tests with external sites
+echo "External interop tests commencing"
+${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-externalinterop.sh
+
 # Run built-in tests:
 # Without removing OPENSSL_CONF ctest hangs... ???
 unset OPENSSL_CONF

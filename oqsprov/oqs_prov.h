@@ -200,6 +200,11 @@ struct SignatureModel{
 
 typedef struct SignatureModel CompositeSignature;
 
+char *get_oqsname_fromtls(char *tlsname);
+char *get_oqsname(int nid);
+char* get_cmpname(int nid, int index);
+int get_oqsalg_idx(int nid);
+
 /* Register given NID with tlsname in OSSL3 registry */
 int oqs_set_nid(char *tlsname, int nid);
 

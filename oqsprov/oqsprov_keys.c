@@ -57,9 +57,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define NID_TABLE_LEN 76
+#    define NID_TABLE_LEN 81
 #else
-#    define NID_TABLE_LEN 34
+#    define NID_TABLE_LEN 39
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -173,9 +173,18 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      KEY_TYPE_CMP_SIG, 256},
     {0, "falcon512_ed25519", OQS_SIG_alg_falcon_512, 
      KEY_TYPE_CMP_SIG, 128},
-    {0, "dilithium3_pss", OQS_SIG_alg_dilithium_3, 
+    {0, "dilithium3_pss3072", OQS_SIG_alg_dilithium_3, 
      KEY_TYPE_CMP_SIG, 128},
-
+    {0, "dilithium2_pss2048", OQS_SIG_alg_dilithium_2, 
+     KEY_TYPE_CMP_SIG, 112},
+    {0, "dilithium2_rsa2048", OQS_SIG_alg_dilithium_2, 
+     KEY_TYPE_CMP_SIG, 112},
+    {0, "dilithium2_ed25519", OQS_SIG_alg_dilithium_2, 
+     KEY_TYPE_CMP_SIG, 128},
+    {0, "dilithium2_p256", OQS_SIG_alg_dilithium_2, 
+     KEY_TYPE_CMP_SIG, 128},
+    {0, "dilithium2_bp256", OQS_SIG_alg_dilithium_2, 
+     KEY_TYPE_CMP_SIG, 256},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };
 
@@ -449,8 +458,9 @@ static const OQSX_EVP_INFO nids_sig[] = {
     {EVP_PKEY_EC, NID_brainpoolP256r1, 0, 65, 122, 32, 72},  // 256 bit
     {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 104}, // 384 bit
     {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1770, 0, 384}, // 128 bit
-    {EVP_PKEY_ED25519, NID_ED25519, 1 , 32, 32, 32, 72},      // 128 bit
-    {EVP_PKEY_ED448, NID_ED448, 1 , 57, 57, 57, 122},         // 192 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 270, 1193, 0, 256}, // 112 bit
+    {EVP_PKEY_ED25519, NID_ED25519, 1 , 32, 32, 32, 72},     // 128 bit
+    {EVP_PKEY_ED448, NID_ED448, 1 , 57, 57, 57, 122},        // 192 bit    
     
 };
 // These two array need to stay synced:
@@ -476,9 +486,11 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
     int idx = (bit_security - 128) / 64;
     ON_ERR_GOTO(idx < 0 || idx > 5, err);
 
-    if (!strncmp(algname, "rsa3072", 7) || !strncmp(algname, "pss", 3))
+    if (!strncmp(algname, "rsa", 3) || !strncmp(algname, "pss", 3)){
         idx += 5;
-    else if (algname[0] != 'p' && algname[0] != 'e') 
+        if (bit_security == 112)
+            idx += 1;
+    } else if (algname[0] != 'p' && algname[0] != 'e') 
     {
         if (algname[0] == 'b'){  //bp
             if (algname[2] == '2') //bp256
@@ -492,11 +504,11 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
         }
     }
 
-    ON_ERR_GOTO(idx < 0 || idx > 5, err);
+    ON_ERR_GOTO(idx < 0 || idx > 6, err);
 
     if(algname[0] == 'e') //ED25519 or ED448
     {
-        evp_ctx->evp_info = &nids_sig[idx + 6];
+        evp_ctx->evp_info = &nids_sig[idx + 7];
 
         evp_ctx->keyParam = EVP_PKEY_new();
         ON_ERR_SET_GOTO(!evp_ctx->keyParam, ret, -1, err);
@@ -1095,8 +1107,12 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                 memcpy(concat_key + plen - aux, buf, buflen);
                 //if is a RSA key the actual encoding size might be different from max size
                 //we calculate that difference for to facilitate the key reconstruction
-                if(!strncmp(name, "rsa3072", 7) || !strncmp(name, "pss", 3)) 
-                    rsa_diff = nids_sig[5].length_private_key - buflen;  
+                if(!strncmp(name, "rsa", 3) || !strncmp(name, "pss", 3)) {
+                    if (name[3] == '3') //3072
+                        rsa_diff = nids_sig[5].length_private_key - buflen;  
+                    else    //2048
+                        rsa_diff = nids_sig[6].length_private_key - buflen;
+                }
                 OPENSSL_free(name);
             }
 
@@ -1559,7 +1575,10 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
     ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     if (ctx->evp_info->keytype == EVP_PKEY_RSA)
     {
-        ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
+        if (ctx->evp_info->length_public_key > 270)
+            ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
+        else
+            ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 2048);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     }
 

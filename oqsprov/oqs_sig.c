@@ -227,7 +227,12 @@ static const char *composite_OID_hash[] = {
   "69642D4D4C44534138372D45643434382D5348414B45323536",                                   //dilithium5_ed448
   "69642D46616C636F6E3531322D45434453412D627261696E706F6F6C5032353672312D534841323536",   //falcon512_bp256
   "69642D46616C636F6E3531322D456432353531392D534841353132",                               //falcon512_ed25519
-  "69642D4D4C44534136352D525341333037322D5053532D534841323536",                           //dilithium3_pss
+  "69642D4D4C44534136352D525341333037322D5053532D534841323536",                           //dilithium3_pss3072
+  "69642D4D4C44534134342D525341323034382D5053532D534841323536",                           //dilithium2_pss2048
+  "69642D4D4C44534134342D525341323034382D504B435331352D534841323536",                     //dilithium2_rsa2048
+  "69642D4D4C44534134342D456432353531392D534841353132",                                   //dilithium2_ed25519
+  "69642D4D4C44534134342D45434453412D503235362D534841323536",                             //dilithium2_p256
+  "69642D4D4C44534134342D45434453412D627261696E706F6F6C5032353672312D534841323536,"       //dilithium2_bp256
 };
 
 static const size_t composite_OID_hash_len[] = {
@@ -241,7 +246,12 @@ static const size_t composite_OID_hash_len[] = {
   50,     //dilithium5_ed448
   82,     //falcon512_bp256
   54,     //falcon512_ed25519
-  58,     //dilithium3_pss
+  58,     //dilithium3_pss3072
+  58,     //dilithium2_pss2048
+  61,     //dilithium2_rsa2048
+  50,     //dilithium2_ed25519
+  56,     //dilithium2_p256
+  79,     //dilithium2_bp256
 };
 
 /* On entry to this function, data to be signed (tbs) might have been hashed

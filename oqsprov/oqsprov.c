@@ -49,9 +49,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define OQS_OID_CNT 155
+#    define OQS_OID_CNT 165
 #else
-#    define OQS_OID_CNT 46
+#    define OQS_OID_CNT 78
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -211,7 +211,17 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "2.16.840.1.114027.80.7.1.16", 
     "falcon512_ed25519", 
     "2.16.840.1.114027.80.7.1.6", 
-    "dilithium3_pss", 
+    "dilithium3_pss3072", 
+    "2.16.840.1.114027.80.7.1.1", 
+    "dilithium2_pss2048",
+    "2.16.840.1.114027.80.7.1.2", 
+    "dilithium2_rsa2048",
+    "2.16.840.1.114027.80.7.1.3", 
+    "dilithium2_ed25519",
+    "2.16.840.1.114027.80.7.1.4", 
+    "dilithium2_p256",
+    "2.16.840.1.114027.80.7.1.5", 
+    "dilithium2_bp256",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -568,6 +578,11 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("dilithium2", 128, oqs_signature_functions),
     SIGALG("p256_dilithium2", 128, oqs_signature_functions),
     SIGALG("rsa3072_dilithium2", 128, oqs_signature_functions),
+    SIGALG("dilithium2_pss2048", 128, oqs_signature_functions),
+    SIGALG("dilithium2_rsa2048", 128, oqs_signature_functions),
+    SIGALG("dilithium2_ed25519", 128, oqs_signature_functions),
+    SIGALG("dilithium2_p256", 128, oqs_signature_functions),
+    SIGALG("dilithium2_bp256", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
     SIGALG("dilithium3", 192, oqs_signature_functions),
@@ -576,7 +591,7 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("dilithium3_p256", 192, oqs_signature_functions),
     SIGALG("dilithium3_bp256", 192, oqs_signature_functions),
     SIGALG("dilithium3_ed25519", 192, oqs_signature_functions),
-    SIGALG("dilithium3_pss", 192, oqs_signature_functions),
+    SIGALG("dilithium3_pss3072", 192, oqs_signature_functions),
 
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5
@@ -707,6 +722,11 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     SIGALG("dilithium2", 128, oqs_dilithium2_keymgmt_functions),
     SIGALG("p256_dilithium2", 128, oqs_p256_dilithium2_keymgmt_functions),
     SIGALG("rsa3072_dilithium2", 128, oqs_rsa3072_dilithium2_keymgmt_functions),
+    SIGALG("dilithium2_pss2048", 128, oqs_dilithium2_pss2048_keymgmt_functions),
+    SIGALG("dilithium2_rsa2048", 128, oqs_dilithium2_rsa2048_keymgmt_functions),
+    SIGALG("dilithium2_ed25519", 128, oqs_dilithium2_ed25519_keymgmt_functions),
+    SIGALG("dilithium2_p256", 128, oqs_dilithium2_p256_keymgmt_functions),
+    SIGALG("dilithium2_bp256", 128, oqs_dilithium2_bp256_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
     SIGALG("dilithium3", 192, oqs_dilithium3_keymgmt_functions),
@@ -715,7 +735,7 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     SIGALG("dilithium3_p256", 192, oqs_dilithium3_p256_keymgmt_functions),
     SIGALG("dilithium3_bp256", 192, oqs_dilithium3_bp256_keymgmt_functions),
     SIGALG("dilithium3_ed25519", 192, oqs_dilithium3_ed25519_keymgmt_functions),
-    SIGALG("dilithium3_pss", 192, oqs_dilithium3_pss_keymgmt_functions),
+    SIGALG("dilithium3_pss3072", 192, oqs_dilithium3_pss3072_keymgmt_functions),
 
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_5

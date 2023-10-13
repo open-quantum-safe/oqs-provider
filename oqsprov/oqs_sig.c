@@ -397,15 +397,22 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             SHA512(tbs, tbslen, tbs_hash);
             final_tbslen += SHA512_DIGEST_LENGTH;
           }else{//ed4448
-            unsigned int tbs_hash_len;
-            tbs_hash = OPENSSL_malloc(64);
-            if ((EVP_Digest(tbs, tbslen, tbs_hash, &tbs_hash_len, EVP_shake256(), NULL) <= 0)){
+            EVP_MD_CTX *shake = EVP_MD_CTX_new();
+            unsigned int tbs_hash_len = EVP_MAX_MD_SIZE;
+            tbs_hash = OPENSSL_malloc(tbs_hash_len);
+            
+            if ((EVP_DigestInit_ex(shake, EVP_shake256(), NULL) <= 0)
+                  || (EVP_DigestUpdate(shake, tbs, tbslen)  <= 0) 
+                  || (EVP_DigestFinalXOF(shake, tbs_hash, tbs_hash_len)  <= 0 )){
               ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
               goto endsign;
            }
             final_tbslen += tbs_hash_len;
+            EVP_MD_CTX_free(shake);
           }
-        }else if (name[0] == 'p' || name[0] == 'b' || name[0] == 'r'){ //p256 or p384 or bp256 or bp384 or pss or rsa3072
+        }else if ((name[0] == 'p') 
+                  || (name[0] == 'b')
+                  || (name[0] == 'r')){ //p256 or p384 or bp256 or bp384 or pss or rsa3072
             int aux;
             if (name[0] == 'b')
               aux = 2;
@@ -695,17 +702,22 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             SHA512(tbs, tbslen, tbs_hash);
             final_tbslen += SHA512_DIGEST_LENGTH;
           }else{//ed4448
-            unsigned int tbs_hash_len;
-            tbs_hash = OPENSSL_malloc(64);
-            if ((EVP_Digest(tbs, tbslen, tbs_hash, &tbs_hash_len, EVP_shake256(), NULL) <= 0)){
-              ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+            EVP_MD_CTX *shake = EVP_MD_CTX_new();
+            unsigned int tbs_hash_len = EVP_MAX_MD_SIZE;
+            tbs_hash = OPENSSL_malloc(tbs_hash_len);
+            
+            if ((EVP_DigestInit_ex(shake, EVP_shake256(), NULL) <= 0)
+                  || (EVP_DigestUpdate(shake, tbs, tbslen)  <= 0) 
+                  || (EVP_DigestFinalXOF(shake, tbs_hash, tbs_hash_len)  <= 0 )){
+              ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
               goto endverify;
            }
             final_tbslen += tbs_hash_len;
+            EVP_MD_CTX_free(shake);
           }
-        }else if (name[0] == 'p' 
-                  || name[0] == 'b' 
-                  || name[0] == 'r'){ //p256 or p384 or bp256 or bp384 or pss or rsa3072
+        }else if ((name[0] == 'p') 
+                  || (name[0] == 'b') 
+                  || (name[0] == 'r')){ //p256 or p384 or bp256 or bp384 or pss or rsa3072
             int aux;
             if (name[0] == 'b')
               aux = 2;

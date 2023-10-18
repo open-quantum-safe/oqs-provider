@@ -56,4 +56,3 @@ Current Maintainer(s) and Committer(s) are to be documented below by way of refe
 @dstebila
 @thb-sb
 @christianpacquin
-

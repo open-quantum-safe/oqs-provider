@@ -1,6 +1,6 @@
-# Contributing (policy)
+# Governance
 
-This file documents the contribution guidelines used for this project.
+This file documents the governance guidelines used for this project.
 
 ## Roles
 
@@ -33,6 +33,8 @@ A Maintainer is not permitted to remove another Maintainer's github privileges.
 A Committer automatically may be moved to Contributor status if not actively contributing by discussion or PR review during the last 90 days or if voluntarily suspending this status (leave of absence etc.). If a Maintainer loses the Committer status (or voluntarily steps down from this role) the Committers have to determine whether a new Maintainer needs to be elected.
 
 ## Voting
+
+Change of role or changes to this document is subject to voting.
 
 Votes are to be executed by way of open github discussions. No quorum is needed for votes open for 4 weeks. Urgent matters may be decided by majority vote among Maintainers or 2/3 majority by all Committers within an arbitrary voting period.
 

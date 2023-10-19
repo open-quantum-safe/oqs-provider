@@ -18,9 +18,15 @@ if [ -z "$DYLD_LIBRARY_PATH" ]; then
     export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
 fi
 
+# We assume the value of env var HTTP_PROXY is "http://host.domain:port_num"
+if [ ! -z "${HTTP_PROXY}" ]; then
+    echo "Using Web proxy \"${HTTP_PROXY}\""
+    export USE_PROXY="-proxy ${HTTP_PROXY#http://} -allow_proxy_certs"
+else
+    export USE_PROXY=""
+fi
+
 echo " Cloudflare:"
 export OQS_CODEPOINT_X25519_KYBER512=65072
-(echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | $OPENSSL_APP s_client -connect pq.cloudflareresearch.com:443 -groups x25519_kyber768 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber768Draft00
-(echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | $OPENSSL_APP s_client -connect pq.cloudflareresearch.com:443 -groups x25519_kyber512 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber512Draft00
-
-
+(echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect pq.cloudflareresearch.com:443 -groups x25519_kyber768 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber768Draft00
+(echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect pq.cloudflareresearch.com:443 -groups x25519_kyber512 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber512Draft00

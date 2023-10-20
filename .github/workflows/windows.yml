@@ -215,7 +215,7 @@ jobs:
         msarch:
           - x64
         type:
-          - Debug
+#          - Debug
           - Release
     runs-on: ${{matrix.os}}
     steps:

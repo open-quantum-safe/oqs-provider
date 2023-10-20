@@ -209,7 +209,7 @@ jobs:
         platform:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
-            osslconfig: no-shared no-fips VC-WIN64A-masm
+            osslconfig: no-shared no-fips VC-WIN64A
         toolchain: 
         - .CMake/toolchain_windows_amd64.cmake
         msarch:

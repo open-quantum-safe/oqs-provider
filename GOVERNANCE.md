@@ -6,9 +6,9 @@ This file documents the governance guidelines used for this project.
 
 The following roles exist in the project:
 
-1. Maintainer: Person with github administrative rights.
+1. Maintainer: Person with GitHub administrative rights.
 
-2. Committer: Person with github "Write" privileges; this entails the right and obligation to review PRs by Contributors and to actively participate in discussions.
+2. Committer: Person with GitHub "Write" privileges; this entails the right and obligation to review PRs by Contributors and to actively participate in discussions.
 
 3. Contributor: Person that has contributed code.
 
@@ -28,7 +28,7 @@ As such voting decision may be considered subjective, Contributors striving to b
 
 Any Committer can become Maintainer by majority vote of voting Committers. A current Maintainer can veto such vote. Such veto can be overruled by a 2/3 majority of all Committers.
 
-A Maintainer is not permitted to remove another Maintainer's github privileges.
+A Maintainer is not permitted to remove another Maintainer's GitHub privileges.
 
 A Committer automatically may be moved to Contributor status if not actively contributing by discussion or PR review during the last 90 days or if voluntarily suspending this status (leave of absence etc.). If a Maintainer loses the Committer status and with this, the Maintainer status (or voluntarily steps down from this role) the Committers have to determine whether a new Maintainer needs to be elected.
 
@@ -40,13 +40,13 @@ Depending on the reason for removal, a Maintainer may be converted to Emeritus s
 
 Change of role or changes to this document is subject to voting.
 
-Votes are to be executed by way of open github discussions. No quorum is needed for votes open for 4 weeks. Urgent matters may be decided by majority vote among Maintainers or 2/3 majority by all Committers within an arbitrary voting period.
+Votes are to be executed by way of open GitHub discussions. No quorum is needed for votes open for 4 weeks. Urgent matters may be decided by majority vote among Maintainers or 2/3 majority by all Committers within an arbitrary voting period.
 
 Any Committer may voluntarily temporarily for a documented period step down from the role losing voting rights for the specified period. If such period extends beyond one year, the Committer permanently loses role and rights. The period is documented in this file next to the person's name below.
 
 ## Documentation of roles
 
-Current Maintainer(s) and Committer(s) are to be documented below by way of reference to their github handles.
+Current Maintainer(s) and Committer(s) are to be documented below by way of reference to their GitHub handles.
 
 ### Maintainer(s)
 

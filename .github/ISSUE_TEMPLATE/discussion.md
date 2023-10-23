@@ -10,7 +10,7 @@ We welcome all suggestions for new features or documentation updates
 helping others to make better use of this project.
 
 As with any other topic you'd like to discuss with the community,
-we'd primarily like to invite you to [open a discussion](https://github.com/openssl/openssl/discussions)
+we'd primarily like to invite you to [open a discussion](https://github.com/open-quantum-safe/oqs-provider/discussions)
 item with your concern.
 
 If you have a bug to report please use the [Bug report template](https://github.com/open-quantum-safe/oqs-provider/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=).

@@ -42,7 +42,7 @@ Change of role or changes to this document is subject to voting.
 
 Votes are to be executed by way of open GitHub discussions. No quorum is needed for votes open for 4 weeks. Urgent matters may be decided by majority vote among Maintainers or 2/3 majority by all Committers within an arbitrary voting period.
 
-Any Committer may voluntarily temporarily for a documented period step down from the role losing voting rights for the specified period. If such period extends beyond one year, the Committer permanently loses role and rights. The period is documented in this file next to the person's name below.
+Any Committer may voluntarily temporarily for a documented period step down from the role losing voting rights for the specified period. The period is documented in this file next to the person's name below. If such period extends beyond one year, the Committer loses role and rights. Role and rights may be re-attained via the same process via the voting process described in ["Change of role"](#change-of-role).
 
 ## Documentation of roles
 

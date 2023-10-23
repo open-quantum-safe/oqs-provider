@@ -36,7 +36,8 @@ This environment variable must be set to the location of the `liboqs` installati
 utilized in the build.
 By default, this is un-set, requiring installation of `liboqs` in a standard
 location for the OS.
-This uses a feature of `cmake` which checks for local builds of a package at `<PackageName>_DIR`
+This uses the [`find_package`](https://cmake.org/cmake/help/latest/command/find_package.html)
+command in `cmake`, which checks for local builds of a package at `<PackageName>_DIR`
 
 ### USE_ENCODING_LIB
 

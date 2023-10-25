@@ -1,6 +1,10 @@
 # Governance
 
-This file documents the governance guidelines used for this project.
+## Foreword
+
+This file documents the governance guidelines used for this project. It is principally concerned with defining the roles of project contributors, the associated rights and responsibilities, and the process for transitioning between them. As such, this document is written in a fairly formal and precise tone, so as to be succint and unambiguous. This should not be interpreted as a lack of warmth on the part of the OQS team---we're really quite friendly! We do not intend to act as gatekeepers by laying out this tier of roles and the associated rules. Instead, we hope that clearly defining these roles and the processes for attaining them shows contributors a clear path by which to become more involved in project governance, if they so wish. We welcome all questions, discussions, and contributions, and we would love to have more people on board.
+
+We recognize that some of the policies discussed here can seem intimidating---for instance, revocation of privileges or code of conduct violations. It is our hope that we don't have to rely on these guidelines; however, we believe that it is important to have them in place should they be needed.
 
 ## Roles
 

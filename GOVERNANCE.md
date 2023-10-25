@@ -16,23 +16,23 @@ The following roles exist in the project:
 
 ## Relationships between roles
 
-Any User may also be Contributor. Any Contributor may also be Committer. Any Committer may also be Maintainer. A Maintainer must be a Committer.
+Any User may also be a Contributor. Any Contributor may also be a Committer. Any Committer may also be a Maintainer. A Maintainer must be a Committer.
 
 ## Change of role
 
-Any User may become Contributor by creating a pull request (PR) and getting it successfully reviewed and merged by Committers.
+Any User may become a Contributor by creating a pull request (PR) and getting it successfully reviewed and merged by Committers.
 
-Any Contributor can become Committer by contributing sufficient code and displaying deep subject matter knowledge in discussions such that a majority of Committers vote for this change of role. A Maintainer can veto such vote. Such veto can be overruled by a 2/3 majority of Committers.
+Any Contributor can become a Committer by contributing sufficient code and displaying deep subject matter knowledge in discussions such that a majority of Committers vote for this change of role. A Maintainer can veto such a vote. Such a veto can be overruled by a 2/3 majority of Committers.
 
-As such voting decision may be considered subjective, Contributors striving to become Committers are encouraged to ask for advice by Committers as to what --if anything-- should be done (additionally to already documented knowledge in contributions) to attain this status. Baseline requirements for contributions are documented in [CONTRIBUTING.md](CONTRIBUTING.md). Any Contributor can create a discussion item to request a vote to become Committer.
+As such a voting decision may be considered subjective, Contributors striving to become Committers are encouraged to ask for advice by Committers as to what---if anything---should be done to attain this status (additional to already documented knowledge in contributions). Baseline requirements for contributions are documented in [CONTRIBUTING.md](CONTRIBUTING.md). Any Contributor can create a discussion item to request a vote to become Committer.
 
-Any Committer can become Maintainer by majority vote of voting Committers. A current Maintainer can veto such vote. Such veto can be overruled by a 2/3 majority of all Committers.
+Any Committer can become a Maintainer by majority vote of voting Committers. A current Maintainer can veto such a vote. Such a veto can be overruled by a 2/3 majority of all Committers.
 
 A Maintainer is not permitted to remove another Maintainer's GitHub privileges.
 
-A Committer automatically may be moved to Contributor status if not actively contributing by discussion or PR review during the last 90 days or if voluntarily suspending this status (leave of absence etc.). If a Maintainer loses the Committer status and with this, the Maintainer status (or voluntarily steps down from this role) the Committers have to determine whether a new Maintainer needs to be elected.
+A Committer may be automatically moved to Contributor status if not actively contributing by discussion or PR review during the last 90 days or by voluntarily suspending this status (e.g., by taking a leave of absence). If a Maintainer loses or relinquishes the Committer status and, hence, the Maintainer status, the Committers have to determine whether a new Maintainer needs to be elected.
 
-Any person violating the [code of conduct](CODE_OF_CONDUCT.md), consistently not fulfilling the role responsibilities or other reasons can lose the role held if a simple majority of Committers votes for such removal and no Maintainer vetos that decision. If a Maintainer is to be removed from that role a 2/3 majority of Committers must agree.
+Any person violating the [code of conduct](CODE_OF_CONDUCT.md), consistently not fulfilling the role responsibilities or other reasons can lose the role held if a simple majority of Committers votes for such a removal and no Maintainer vetoes that decision. If a Maintainer is to be removed from that role a 2/3 majority of Committers must agree.
 
 Depending on the reason for removal, a Maintainer may be converted to Emeritus status. Emeritus Maintainers may still be consulted on some project matters, and can be returned to Maintainer status if their availability changes and a simple majority of Committers agrees.
 
@@ -46,18 +46,17 @@ Any Committer may voluntarily temporarily for a documented period step down from
 
 ## Documentation of roles
 
-Current Maintainer(s) and Committer(s) are to be documented below by way of reference to their GitHub handles.
+Current Maintainers and Committers are to be documented below by way of reference to their GitHub handles.
 
-### Maintainer(s)
+### Maintainers
 
 @baentsch
 @dstebila
 
-### Committer(s)
+### Committers
 
 @baentsch
 @bhess
 @dstebila
 @thb-sb
 @christianpacquin
-

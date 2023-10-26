@@ -1097,6 +1097,7 @@ static int key2any_set_ctx_params(void *vctx, const OSSL_PARAM params[])
         }
     }
     OQS_ENC_PRINTF2(" cipher set to %p: \n", ctx->cipher);
+    // not passing in a cipher param will lead to no-op hence no error
     return 1;
 }
 

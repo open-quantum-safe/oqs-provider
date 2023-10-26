@@ -1181,7 +1181,8 @@ static int oqs_sig_set_ctx_params(void *vpoqs_sigctx, const OSSL_PARAM params[])
       return 0;
   }
 
-  return 1;
+    // not passing in parameters we can act on is no error
+    return 1;
 }
 
 static const OSSL_PARAM known_settable_ctx_params[]

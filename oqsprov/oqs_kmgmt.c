@@ -257,6 +257,7 @@ int oqsx_key_to_params(const OQSX_KEY *key, OSSL_PARAM_BLD *tmpl,
                 goto err;
         }
     }
+    // not passing in params to respond to is no error; the response is empty
     ret = 1;
 err:
     return ret;
@@ -373,6 +374,7 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
             return 0;
     }
 
+    // not passing in params to respond to is no error
     return 1;
 }
 
@@ -443,6 +445,7 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[])
         }
     }
 
+    // not passing in params to set is no error, just a no-op
     return 1;
 }
 
@@ -571,6 +574,7 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[])
         if (gctx->propq == NULL)
             return 0;
     }
+    // not passing in params is no error; subsequent operations may fail, though
     return 1;
 }
 

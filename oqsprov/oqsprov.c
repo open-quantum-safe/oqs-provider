@@ -850,6 +850,7 @@ static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_STATUS);
     if (p != NULL && !OSSL_PARAM_set_int(p, 1)) // provider is always running
         return 0;
+    // not passing in params to respond to is no error; response is empty then
     return 1;
 }
 

@@ -34,19 +34,23 @@ Any Committer can become a Maintainer by majority vote of voting Committers. A c
 
 A Maintainer is not permitted to remove another Maintainer's GitHub privileges.
 
-A Committer may be automatically moved to Contributor status if not actively contributing by discussion or PR review during the last 90 days or by voluntarily suspending this status (e.g., by taking a leave of absence). If a Maintainer loses or relinquishes the Committer status and, hence, the Maintainer status, the Committers have to determine whether a new Maintainer needs to be elected.
+A Committer may be automatically moved to Contributor status if not actively contributing by discussion or PR review during the last 90 days or by voluntarily suspending this status (e.g., by taking a ["Leave of absence"](#leave-of-absence)). If a Maintainer loses or relinquishes the Committer status and, hence, the Maintainer status, the Committers have to determine whether a new Maintainer needs to be elected.
 
 Any person violating the [code of conduct](CODE_OF_CONDUCT.md), consistently not fulfilling the role responsibilities or other reasons can lose the role held if a simple majority of Committers votes for such a removal and no Maintainer vetoes that decision. If a Maintainer is to be removed from that role a 2/3 majority of Committers must agree.
 
 Depending on the reason for removal, a Maintainer may be converted to Emeritus status. Emeritus Maintainers may still be consulted on some project matters, and can be returned to Maintainer status if their availability changes and a simple majority of Committers agrees.
+
+## Leave of absence
+
+Any Committer may voluntarily step down from the role for a documented period of time, losing voting rights for that time period. The period is documented in this file next to the person's name below.  At the end of this time period, the Committer automatically regains their voting rights.
+
+A leave of absence may not be longer than a year.  If the Committer needs to be away for longer than that, they must step down from that role unconditionally, and regaining that role becomes subject of normal procedures to become Committer, as described in ["Change of role"](#change-of-role) above.
 
 ## Voting
 
 Change of role or changes to this document is subject to voting.
 
 Votes are to be executed by way of open GitHub discussions. No quorum is needed for votes open for 4 weeks. Urgent matters may be decided by majority vote among Maintainers or 2/3 majority by all Committers within an arbitrary voting period.
-
-Any Committer may voluntarily temporarily for a documented period step down from the role losing voting rights for the specified period. The period is documented in this file next to the person's name below. If such period extends beyond one year, the Committer loses role and rights. Role and rights may be re-attained via the same process via the voting process described in ["Change of role"](#change-of-role).
 
 ## Documentation of roles
 

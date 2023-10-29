@@ -67,4 +67,4 @@ Current Maintainers and Committers are to be documented below by way of referenc
 @bhess
 @dstebila
 @thb-sb
-@christianpacquin
+@christianpaquin

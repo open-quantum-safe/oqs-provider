@@ -84,7 +84,7 @@ jobs:
           name: Run tests
           command: |
              if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir _build/
+               ctest --output-on-failure --test-dir _build/
              else
                ./scripts/runtests.sh -V
              fi

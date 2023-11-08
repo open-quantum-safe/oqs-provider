@@ -1013,44 +1013,49 @@ err:
 int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
                       int include_private)
 {
-    const OSSL_PARAM *p;
+    const OSSL_PARAM *pp1, *pp2;
 
     OQS_KEY_PRINTF("OQSX Key from data called\n");
-    p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PRIV_KEY);
-    if (p != NULL) {
-        if (p->data_type != OSSL_PARAM_OCTET_STRING) {
+    pp1 = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PRIV_KEY);
+    pp2 = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PUB_KEY);
+    // at least one parameter must be given
+    if (pp1 == NULL && pp2 == NULL) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+        return 0;
+    }
+    if (pp1 != NULL) {
+        if (pp1->data_type != OSSL_PARAM_OCTET_STRING) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             return 0;
         }
-        if (key->privkeylen != p->data_size) {
+        if (key->privkeylen != pp1->data_size) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
             return 0;
         }
-        OPENSSL_secure_clear_free(key->privkey, p->data_size);
-        key->privkey = OPENSSL_secure_malloc(p->data_size);
+        OPENSSL_secure_clear_free(key->privkey, pp1->data_size);
+        key->privkey = OPENSSL_secure_malloc(pp1->data_size);
         if (key->privkey == NULL) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             return 0;
         }
-        memcpy(key->privkey, p->data, p->data_size);
+        memcpy(key->privkey, pp1->data, pp1->data_size);
     }
-    p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PUB_KEY);
-    if (p != NULL) {
-        if (p->data_type != OSSL_PARAM_OCTET_STRING) {
+    if (pp2 != NULL) {
+        if (pp2->data_type != OSSL_PARAM_OCTET_STRING) {
             OQS_KEY_PRINTF("invalid data type\n");
             return 0;
         }
-        if (key->pubkeylen != p->data_size) {
+        if (key->pubkeylen != pp2->data_size) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
             return 0;
         }
-        OPENSSL_secure_clear_free(key->pubkey, p->data_size);
-        key->pubkey = OPENSSL_secure_malloc(p->data_size);
+        OPENSSL_secure_clear_free(key->pubkey, pp2->data_size);
+        key->pubkey = OPENSSL_secure_malloc(pp2->data_size);
         if (key->pubkey == NULL) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             return 0;
         }
-        memcpy(key->pubkey, p->data, p->data_size);
+        memcpy(key->pubkey, pp2->data, pp2->data_size);
     }
     if (!oqsx_key_set_composites(key)
         || !oqsx_key_recreate_classickey(

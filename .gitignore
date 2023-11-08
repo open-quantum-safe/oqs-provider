@@ -6,7 +6,8 @@ liboqs
 # installed SW
 .local
 # build directory
-_build
+/_build
+/build
 # generated from openssl src:
 test/ssltestlib.c
 test/ssltestlib.h

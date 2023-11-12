@@ -122,6 +122,7 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | dilithium2 | 1.3.6.1.4.1.2.267.7.4.4 |Yes| OQS_OID_DILITHIUM2
 | p256_dilithium2 | 1.3.9999.2.7.1 |Yes| OQS_OID_P256_DILITHIUM2
 | rsa3072_dilithium2 | 1.3.9999.2.7.2 |Yes| OQS_OID_RSA3072_DILITHIUM2
+| dilithium2WithSha256 | 1.3.6.1.4.1.18227.999.1.1.1 |Yes| OQS_OID_DILITHIUM2WITHSHA256
 | dilithium3 | 1.3.6.1.4.1.2.267.7.6.5 |Yes| OQS_OID_DILITHIUM3
 | p384_dilithium3 | 1.3.9999.2.7.3 |Yes| OQS_OID_P384_DILITHIUM3
 | dilithium5 | 1.3.6.1.4.1.2.267.7.8.7 |Yes| OQS_OID_DILITHIUM5
@@ -220,6 +221,7 @@ By setting environment variables, oqs-provider can be configured to encode keys 
 |Environment Variable | Permissible Values |
 | --- | --- |
 |`OQS_ENCODING_DILITHIUM2`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHA256`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_DILITHIUM3`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_DILITHIUM5`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_FALCON512`|`draft-uni-qsckeys-falcon-00/sk-pk`|

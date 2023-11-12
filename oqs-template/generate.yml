@@ -372,17 +372,27 @@ sigs:
         pretty_name: 'Dilithium2'
         oqs_meth: 'OQS_SIG_alg_dilithium_2'
         oid: '1.3.6.1.4.1.2.267.7.4.4'
-        code_point: '0xfea0'
+        code_point: '0xfe9f'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.2.7.1',
-                    'code_point': '0xfea1'},
+                    'code_point': '0xfea0'},
                    {'name': 'rsa3072',
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.2.7.2',
-                    'code_point': '0xfea2'}]
+                    'code_point': '0xfea1'}]
+
+      -
+        name: 'dilithium2WithSha256'
+        pretty_name: 'DILITHIUM2-SHA256'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.1'
+        digest: SHA256
+        code_point: '0xfea2'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
       -
         name: 'dilithium3'
         pretty_name: 'Dilithium3'
@@ -1224,5 +1234,4 @@ sigs:
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.9.8',
                           'code_point': '0xfe95'}]
-
 

@@ -73,7 +73,12 @@ def get_sig_nistlevel(family, alg):
     # hacks to match names
     def matches(name, alg):
         def simplify(s):
-            return s.lower().replace('_', '').replace('-', '').replace('+', '')
+            s = s.lower().replace('_', '').replace('-', '').replace('+', '')
+            with_index = s.find("with")  # Find the index of the "with" sequence
+            if with_index != -1:  # If "with" is found
+                return s[:with_index]  # Return the substring before "with"
+            else:
+                return s  # Return the original string if "with" is not found
         if simplify(name) == simplify(alg['name']): return True
         return False
     # find the variant that matches

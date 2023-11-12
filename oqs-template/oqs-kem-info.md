@@ -69,11 +69,11 @@
 | FrodoKEM       | NIST Round 3 submission  | frodo976shake  |            3 |                    3 | 0x0203       |                                  |
 | FrodoKEM       | NIST Round 3 submission  | frodo976shake  |            3 |                    3 | 0x2F03       | secp384_r1                       |
 | FrodoKEM       | NIST Round 3 submission  | frodo976shake  |            3 |                    3 | 0x2F83       | x448                             |
-| HQC            | NIST Round 3 submission  | hqc128         |            3 |                    1 | 0x022C       |                                  |
-| HQC            | NIST Round 3 submission  | hqc128         |            3 |                    1 | 0x2F2C       | secp256_r1                       |
-| HQC            | NIST Round 3 submission  | hqc128         |            3 |                    1 | 0x2FAC       | x25519                           |
-| HQC            | NIST Round 3 submission  | hqc192         |            3 |                    3 | 0x022D       |                                  |
-| HQC            | NIST Round 3 submission  | hqc192         |            3 |                    3 | 0x2F2D       | secp384_r1                       |
-| HQC            | NIST Round 3 submission  | hqc192         |            3 |                    3 | 0x2FAD       | x448                             |
-| HQC            | NIST Round 3 submission  | hqc256         |            3 |                    5 | 0x022E       |                                  |
-| HQC            | NIST Round 3 submission  | hqc256         |            3 |                    5 | 0x2F2E       | secp521_r1                       |
+| HQC            | 2023-04-30               | hqc128         |            4 |                    1 | 0x022C       |                                  |
+| HQC            | 2023-04-30               | hqc128         |            4 |                    1 | 0x2F2C       | secp256_r1                       |
+| HQC            | 2023-04-30               | hqc128         |            4 |                    1 | 0x2FAC       | x25519                           |
+| HQC            | 2023-04-30               | hqc192         |            4 |                    3 | 0x022D       |                                  |
+| HQC            | 2023-04-30               | hqc192         |            4 |                    3 | 0x2F2D       | secp384_r1                       |
+| HQC            | 2023-04-30               | hqc192         |            4 |                    3 | 0x2FAD       | x448                             |
+| HQC            | 2023-04-30               | hqc256         |            4 |                    5 | 0x022E       |                                  |
+| HQC            | 2023-04-30               | hqc256         |            4 |                    5 | 0x2F2E       | secp521_r1                       |

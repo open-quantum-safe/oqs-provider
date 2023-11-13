@@ -442,6 +442,69 @@ ENCODER_w_structure("dilithium2WithSha256", dilithium2WithSha256, der, SubjectPu
 ENCODER_w_structure("dilithium2WithSha256", dilithium2WithSha256, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT("dilithium2WithSha256", dilithium2WithSha256),
 #endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2WithSha384", dilithium2WithSha384, der, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha384", dilithium2WithSha384, pem, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha384", dilithium2WithSha384, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha384", dilithium2WithSha384, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha384", dilithium2WithSha384, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("dilithium2WithSha384", dilithium2WithSha384, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("dilithium2WithSha384", dilithium2WithSha384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2WithSha512", dilithium2WithSha512, der, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha512", dilithium2WithSha512, pem, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha512", dilithium2WithSha512, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha512", dilithium2WithSha512, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha512", dilithium2WithSha512, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("dilithium2WithSha512", dilithium2WithSha512, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("dilithium2WithSha512", dilithium2WithSha512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2WithSha3At256", dilithium2WithSha3At256, der, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At256", dilithium2WithSha3At256, pem, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At256", dilithium2WithSha3At256, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At256", dilithium2WithSha3At256, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At256", dilithium2WithSha3At256, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At256", dilithium2WithSha3At256, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("dilithium2WithSha3At256", dilithium2WithSha3At256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2WithSha3At384", dilithium2WithSha3At384, der, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At384", dilithium2WithSha3At384, pem, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At384", dilithium2WithSha3At384, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At384", dilithium2WithSha3At384, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At384", dilithium2WithSha3At384, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At384", dilithium2WithSha3At384, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("dilithium2WithSha3At384", dilithium2WithSha3At384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2WithSha3At512", dilithium2WithSha3At512, der, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At512", dilithium2WithSha3At512, pem, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At512", dilithium2WithSha3At512, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At512", dilithium2WithSha3At512, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At512", dilithium2WithSha3At512, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("dilithium2WithSha3At512", dilithium2WithSha3At512, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("dilithium2WithSha3At512", dilithium2WithSha3At512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2WithShake128", dilithium2WithShake128, der, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake128", dilithium2WithShake128, pem, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake128", dilithium2WithShake128, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake128", dilithium2WithShake128, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake128", dilithium2WithShake128, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("dilithium2WithShake128", dilithium2WithShake128, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("dilithium2WithShake128", dilithium2WithShake128),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+ENCODER_w_structure("dilithium2WithShake256", dilithium2WithShake256, der, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake256", dilithium2WithShake256, pem, PrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake256", dilithium2WithShake256, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake256", dilithium2WithShake256, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("dilithium2WithShake256", dilithium2WithShake256, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("dilithium2WithShake256", dilithium2WithShake256, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("dilithium2WithShake256", dilithium2WithShake256),
+#endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
 ENCODER_w_structure("dilithium3", dilithium3, der, PrivateKeyInfo),
 ENCODER_w_structure("dilithium3", dilithium3, pem, PrivateKeyInfo),

@@ -804,6 +804,27 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 # define dilithium2WithSha256_evp_type       0
 # define dilithium2WithSha256_input_type      "dilithium2WithSha256"
 # define dilithium2WithSha256_pem_type        "dilithium2WithSha256"
+# define dilithium2WithSha384_evp_type       0
+# define dilithium2WithSha384_input_type      "dilithium2WithSha384"
+# define dilithium2WithSha384_pem_type        "dilithium2WithSha384"
+# define dilithium2WithSha512_evp_type       0
+# define dilithium2WithSha512_input_type      "dilithium2WithSha512"
+# define dilithium2WithSha512_pem_type        "dilithium2WithSha512"
+# define dilithium2WithSha3At256_evp_type       0
+# define dilithium2WithSha3At256_input_type      "dilithium2WithSha3At256"
+# define dilithium2WithSha3At256_pem_type        "dilithium2WithSha3At256"
+# define dilithium2WithSha3At384_evp_type       0
+# define dilithium2WithSha3At384_input_type      "dilithium2WithSha3At384"
+# define dilithium2WithSha3At384_pem_type        "dilithium2WithSha3At384"
+# define dilithium2WithSha3At512_evp_type       0
+# define dilithium2WithSha3At512_input_type      "dilithium2WithSha3At512"
+# define dilithium2WithSha3At512_pem_type        "dilithium2WithSha3At512"
+# define dilithium2WithShake128_evp_type       0
+# define dilithium2WithShake128_input_type      "dilithium2WithShake128"
+# define dilithium2WithShake128_pem_type        "dilithium2WithShake128"
+# define dilithium2WithShake256_evp_type       0
+# define dilithium2WithShake256_input_type      "dilithium2WithShake256"
+# define dilithium2WithShake256_pem_type        "dilithium2WithShake256"
 # define dilithium3_evp_type       0
 # define dilithium3_input_type      "dilithium3"
 # define dilithium3_pem_type        "dilithium3"
@@ -1779,6 +1800,55 @@ MAKE_ENCODER(, dilithium2WithSha256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2WithSha256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium2WithSha256, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, dilithium2WithSha256);
+MAKE_ENCODER(, dilithium2WithSha384, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha384, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha384, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha384, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha384, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2WithSha384);
+MAKE_ENCODER(, dilithium2WithSha512, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha512, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha512, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha512, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha512, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha512, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2WithSha512);
+MAKE_ENCODER(, dilithium2WithSha3At256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha3At256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha3At256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2WithSha3At256);
+MAKE_ENCODER(, dilithium2WithSha3At384, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At384, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha3At384, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At384, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha3At384, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2WithSha3At384);
+MAKE_ENCODER(, dilithium2WithSha3At512, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At512, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha3At512, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At512, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithSha3At512, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithSha3At512, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2WithSha3At512);
+MAKE_ENCODER(, dilithium2WithShake128, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithShake128, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithShake128, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithShake128, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithShake128, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithShake128, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2WithShake128);
+MAKE_ENCODER(, dilithium2WithShake256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithShake256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithShake256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithShake256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, dilithium2WithShake256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, dilithium2WithShake256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2WithShake256);
 MAKE_ENCODER(, dilithium3, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3, oqsx, PrivateKeyInfo, der);

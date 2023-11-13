@@ -152,6 +152,34 @@ DECODER_w_structure("rsa3072_dilithium2", der, SubjectPublicKeyInfo, rsa3072_dil
 DECODER_w_structure("dilithium2WithSha256", der, PrivateKeyInfo, dilithium2WithSha256),
 DECODER_w_structure("dilithium2WithSha256", der, SubjectPublicKeyInfo, dilithium2WithSha256),
 #endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2WithSha384", der, PrivateKeyInfo, dilithium2WithSha384),
+DECODER_w_structure("dilithium2WithSha384", der, SubjectPublicKeyInfo, dilithium2WithSha384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2WithSha512", der, PrivateKeyInfo, dilithium2WithSha512),
+DECODER_w_structure("dilithium2WithSha512", der, SubjectPublicKeyInfo, dilithium2WithSha512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2WithSha3At256", der, PrivateKeyInfo, dilithium2WithSha3At256),
+DECODER_w_structure("dilithium2WithSha3At256", der, SubjectPublicKeyInfo, dilithium2WithSha3At256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2WithSha3At384", der, PrivateKeyInfo, dilithium2WithSha3At384),
+DECODER_w_structure("dilithium2WithSha3At384", der, SubjectPublicKeyInfo, dilithium2WithSha3At384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2WithSha3At512", der, PrivateKeyInfo, dilithium2WithSha3At512),
+DECODER_w_structure("dilithium2WithSha3At512", der, SubjectPublicKeyInfo, dilithium2WithSha3At512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2WithShake128", der, PrivateKeyInfo, dilithium2WithShake128),
+DECODER_w_structure("dilithium2WithShake128", der, SubjectPublicKeyInfo, dilithium2WithShake128),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+DECODER_w_structure("dilithium2WithShake256", der, PrivateKeyInfo, dilithium2WithShake256),
+DECODER_w_structure("dilithium2WithShake256", der, SubjectPublicKeyInfo, dilithium2WithShake256),
+#endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
 DECODER_w_structure("dilithium3", der, PrivateKeyInfo, dilithium3),
 DECODER_w_structure("dilithium3", der, SubjectPublicKeyInfo, dilithium3),DECODER_w_structure("p384_dilithium3", der, PrivateKeyInfo, p384_dilithium3),

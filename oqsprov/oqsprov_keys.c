@@ -58,9 +58,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 66
+#define NID_TABLE_LEN 73
 #else
-#define NID_TABLE_LEN 24
+#define NID_TABLE_LEN 31
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -114,6 +114,13 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "p256_dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_HYB_SIG, 128 },
        { 0, "rsa3072_dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_HYB_SIG, 128 },
        { 0, "dilithium2WithSha256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "dilithium2WithSha384", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "dilithium2WithSha512", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "dilithium2WithSha3At256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "dilithium2WithSha3At384", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "dilithium2WithSha3At512", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "dilithium2WithShake128", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
+       { 0, "dilithium2WithShake256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128 },
        { 0, "dilithium3", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192 },
        { 0, "p384_dilithium3", OQS_SIG_alg_dilithium_3, KEY_TYPE_HYB_SIG, 192 },
        { 0, "dilithium5", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256 },

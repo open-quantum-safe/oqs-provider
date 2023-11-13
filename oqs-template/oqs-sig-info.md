@@ -1,9 +1,16 @@
 | Algorithm                                         | Implementation Version                        |   NIST round |   Claimed NIST Level | Code Point   | OID                         |
 |:--------------------------------------------------|:----------------------------------------------|-------------:|---------------------:|:-------------|:----------------------------|
-| dilithium2                                        | 3.1                                           |            3 |                    2 | 0xfe9f       | 1.3.6.1.4.1.2.267.7.4.4     |
-| dilithium2 **hybrid with** p256                   | 3.1                                           |            3 |                    2 | 0xfea0       | 1.3.9999.2.7.1              |
-| dilithium2 **hybrid with** rsa3072                | 3.1                                           |            3 |                    2 | 0xfea1       | 1.3.9999.2.7.2              |
-| dilithium2WithSha256                              | 3.1                                           |            3 |                    2 | 0xfea2       | 1.3.6.1.4.1.18227.999.1.1.1 |
+| dilithium2                                        | 3.1                                           |            3 |                    2 | 0xfe98       | 1.3.6.1.4.1.2.267.7.4.4     |
+| dilithium2 **hybrid with** p256                   | 3.1                                           |            3 |                    2 | 0xfe99       | 1.3.9999.2.7.1              |
+| dilithium2 **hybrid with** rsa3072                | 3.1                                           |            3 |                    2 | 0xfe9a       | 1.3.9999.2.7.2              |
+| dilithium2WithSha256                              | 3.1                                           |            3 |                    2 | 0xfe9b       | 1.3.6.1.4.1.18227.999.1.1.1 |
+| dilithium2WithSha384                              | 3.1                                           |            3 |                    2 | 0xfe9c       | 1.3.6.1.4.1.18227.999.1.1.2 |
+| dilithium2WithSha512                              | 3.1                                           |            3 |                    2 | 0xfe9d       | 1.3.6.1.4.1.18227.999.1.1.3 |
+| dilithium2WithSha3At256                           | 3.1                                           |            3 |                    2 | 0xfe9e       | 1.3.6.1.4.1.18227.999.1.1.4 |
+| dilithium2WithSha3At384                           | 3.1                                           |            3 |                    2 | 0xfe9f       | 1.3.6.1.4.1.18227.999.1.1.5 |
+| dilithium2WithSha3At512                           | 3.1                                           |            3 |                    2 | 0xfea0       | 1.3.6.1.4.1.18227.999.1.1.6 |
+| dilithium2WithShake128                            | 3.1                                           |            3 |                    2 | 0xfea1       | 1.3.6.1.4.1.18227.999.1.1.7 |
+| dilithium2WithShake256                            | 3.1                                           |            3 |                    2 | 0xfea2       | 1.3.6.1.4.1.18227.999.1.1.8 |
 | dilithium3                                        | 3.1                                           |            3 |                    3 | 0xfea3       | 1.3.6.1.4.1.2.267.7.6.5     |
 | dilithium3 **hybrid with** p384                   | 3.1                                           |            3 |                    3 | 0xfea4       | 1.3.9999.2.7.3              |
 | dilithium5                                        | 3.1                                           |            3 |                    5 | 0xfea5       | 1.3.6.1.4.1.2.267.7.8.7     |

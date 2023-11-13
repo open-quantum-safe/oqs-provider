@@ -405,17 +405,17 @@ sigs:
         pretty_name: 'Dilithium2'
         oqs_meth: 'OQS_SIG_alg_dilithium_2'
         oid: '1.3.6.1.4.1.2.267.7.4.4'
-        code_point: '0xfe9f'
+        code_point: '0xfe98'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.2.7.1',
-                    'code_point': '0xfea0'},
+                    'code_point': '0xfe99'},
                    {'name': 'rsa3072',
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.2.7.2',
-                    'code_point': '0xfea1'}]
+                    'code_point': '0xfe9a'}]
 
       -
         name: 'dilithium2WithSha256'
@@ -423,9 +423,80 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_dilithium_2'
         oid: '1.3.6.1.4.1.18227.999.1.1.1'
         digest: SHA256
+        code_point: '0xfe9b'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
+      
+      -
+        name: 'dilithium2WithSha384'
+        pretty_name: 'DILITHIUM2-SHA384'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.2'
+        digest: SHA384
+        code_point: '0xfe9c'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
+
+      -
+        name: 'dilithium2WithSha512'
+        pretty_name: 'DILITHIUM2-SHA512'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.3'
+        digest: SHA512
+        code_point: '0xfe9d'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
+      
+      -
+        name: 'dilithium2WithSha3At256'
+        pretty_name: 'DILITHIUM2-SHA3-256'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.4'
+        digest: SHA3-256
+        code_point: '0xfe9e'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
+
+      -
+        name: 'dilithium2WithSha3At384'
+        pretty_name: 'DILITHIUM2-SHA3-384'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.5'
+        digest: SHA3-384
+        code_point: '0xfe9f'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
+
+      -
+        name: 'dilithium2WithSha3At512'
+        pretty_name: 'DILITHIUM2-SHA3-512'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.6'
+        digest: SHA3-512
+        code_point: '0xfea0'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
+        
+      -
+        name: 'dilithium2WithShake128'
+        pretty_name: 'DILITHIUM2-SHAKE128'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.7'
+        digest: SHAKE128
+        code_point: '0xfea1'
+        supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
+        enable: true
+
+      -
+        name: 'dilithium2WithShake256'
+        pretty_name: 'DILITHIUM2-SHAKE256'
+        oqs_meth: 'OQS_SIG_alg_dilithium_2'
+        oid: '1.3.6.1.4.1.18227.999.1.1.8'
+        digest: SHAKE256
         code_point: '0xfea2'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
+
       -
         name: 'dilithium3'
         pretty_name: 'Dilithium3'

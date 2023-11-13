@@ -54,10 +54,17 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | x448_hqc192 | 0x2FAD | Yes | OQS_CODEPOINT_X448_HQC192 |
 | hqc256 | 0x022E | Yes | OQS_CODEPOINT_HQC256 |
 | p521_hqc256 | 0x2F2E | Yes | OQS_CODEPOINT_P521_HQC256 |
-| dilithium2 | 0xfe9f |Yes| OQS_CODEPOINT_DILITHIUM2
-| p256_dilithium2 | 0xfea0 |Yes| OQS_CODEPOINT_P256_DILITHIUM2
-| rsa3072_dilithium2 | 0xfea1 |Yes| OQS_CODEPOINT_RSA3072_DILITHIUM2
-| dilithium2WithSha256 | 0xfea2 |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHA256
+| dilithium2 | 0xfe98 |Yes| OQS_CODEPOINT_DILITHIUM2
+| p256_dilithium2 | 0xfe99 |Yes| OQS_CODEPOINT_P256_DILITHIUM2
+| rsa3072_dilithium2 | 0xfe9a |Yes| OQS_CODEPOINT_RSA3072_DILITHIUM2
+| dilithium2WithSha256 | 0xfe9b |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHA256
+| dilithium2WithSha384 | 0xfe9c |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHA384
+| dilithium2WithSha512 | 0xfe9d |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHA512
+| dilithium2WithSha3At256 | 0xfe9e |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHA3AT256
+| dilithium2WithSha3At384 | 0xfe9f |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHA3AT384
+| dilithium2WithSha3At512 | 0xfea0 |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHA3AT512
+| dilithium2WithShake128 | 0xfea1 |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHAKE128
+| dilithium2WithShake256 | 0xfea2 |Yes| OQS_CODEPOINT_DILITHIUM2WITHSHAKE256
 | dilithium3 | 0xfea3 |Yes| OQS_CODEPOINT_DILITHIUM3
 | p384_dilithium3 | 0xfea4 |Yes| OQS_CODEPOINT_P384_DILITHIUM3
 | dilithium5 | 0xfea5 |Yes| OQS_CODEPOINT_DILITHIUM5
@@ -124,6 +131,13 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | p256_dilithium2 | 1.3.9999.2.7.1 |Yes| OQS_OID_P256_DILITHIUM2
 | rsa3072_dilithium2 | 1.3.9999.2.7.2 |Yes| OQS_OID_RSA3072_DILITHIUM2
 | dilithium2WithSha256 | 1.3.6.1.4.1.18227.999.1.1.1 |Yes| OQS_OID_DILITHIUM2WITHSHA256
+| dilithium2WithSha384 | 1.3.6.1.4.1.18227.999.1.1.2 |Yes| OQS_OID_DILITHIUM2WITHSHA384
+| dilithium2WithSha512 | 1.3.6.1.4.1.18227.999.1.1.3 |Yes| OQS_OID_DILITHIUM2WITHSHA512
+| dilithium2WithSha3At256 | 1.3.6.1.4.1.18227.999.1.1.4 |Yes| OQS_OID_DILITHIUM2WITHSHA3AT256
+| dilithium2WithSha3At384 | 1.3.6.1.4.1.18227.999.1.1.5 |Yes| OQS_OID_DILITHIUM2WITHSHA3AT384
+| dilithium2WithSha3At512 | 1.3.6.1.4.1.18227.999.1.1.6 |Yes| OQS_OID_DILITHIUM2WITHSHA3AT512
+| dilithium2WithShake128 | 1.3.6.1.4.1.18227.999.1.1.7 |Yes| OQS_OID_DILITHIUM2WITHSHAKE128
+| dilithium2WithShake256 | 1.3.6.1.4.1.18227.999.1.1.8 |Yes| OQS_OID_DILITHIUM2WITHSHAKE256
 | dilithium3 | 1.3.6.1.4.1.2.267.7.6.5 |Yes| OQS_OID_DILITHIUM3
 | p384_dilithium3 | 1.3.9999.2.7.3 |Yes| OQS_OID_P384_DILITHIUM3
 | dilithium5 | 1.3.6.1.4.1.2.267.7.8.7 |Yes| OQS_OID_DILITHIUM5
@@ -223,6 +237,13 @@ By setting environment variables, oqs-provider can be configured to encode keys 
 | --- | --- |
 |`OQS_ENCODING_DILITHIUM2`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_DILITHIUM2WITHSHA256`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHA384`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHA512`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHA3AT256`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHA3AT384`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHA3AT512`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHAKE128`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
+|`OQS_ENCODING_DILITHIUM2WITHSHAKE256`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_DILITHIUM3`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_DILITHIUM5`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_FALCON512`|`draft-uni-qsckeys-falcon-00/sk-pk`|

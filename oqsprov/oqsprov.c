@@ -50,9 +50,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 132
+#define OQS_OID_CNT 146
 #else
-#define OQS_OID_CNT 48
+#define OQS_OID_CNT 62
 #endif
 const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {
@@ -109,6 +109,13 @@ const char* oqs_oid_alg_list[OQS_OID_CNT] =
 "1.3.9999.2.7.1" , "p256_dilithium2",
 "1.3.9999.2.7.2" , "rsa3072_dilithium2",
 "1.3.6.1.4.1.18227.999.1.1.1", "dilithium2WithSha256",
+"1.3.6.1.4.1.18227.999.1.1.2", "dilithium2WithSha384",
+"1.3.6.1.4.1.18227.999.1.1.3", "dilithium2WithSha512",
+"1.3.6.1.4.1.18227.999.1.1.4", "dilithium2WithSha3At256",
+"1.3.6.1.4.1.18227.999.1.1.5", "dilithium2WithSha3At384",
+"1.3.6.1.4.1.18227.999.1.1.6", "dilithium2WithSha3At512",
+"1.3.6.1.4.1.18227.999.1.1.7", "dilithium2WithShake128",
+"1.3.6.1.4.1.18227.999.1.1.8", "dilithium2WithShake256",
 "1.3.6.1.4.1.2.267.7.6.5", "dilithium3",
 "1.3.9999.2.7.3" , "p384_dilithium3",
 "1.3.6.1.4.1.2.267.7.8.7", "dilithium5",
@@ -206,26 +213,33 @@ if (getenv("OQS_OID_P521_HQC256")) oqs_oid_alg_list[82] = getenv("OQS_OID_P521_H
    if (getenv("OQS_OID_P256_DILITHIUM2")) oqs_oid_alg_list[2+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_DILITHIUM2");
    if (getenv("OQS_OID_RSA3072_DILITHIUM2")) oqs_oid_alg_list[4+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_DILITHIUM2");
    if (getenv("OQS_OID_DILITHIUM2WITHSHA256")) oqs_oid_alg_list[6+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHA256");
-   if (getenv("OQS_OID_DILITHIUM3")) oqs_oid_alg_list[8+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM3");
-   if (getenv("OQS_OID_P384_DILITHIUM3")) oqs_oid_alg_list[10+OQS_KEMOID_CNT] = getenv("OQS_OID_P384_DILITHIUM3");
-   if (getenv("OQS_OID_DILITHIUM5")) oqs_oid_alg_list[12+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM5");
-   if (getenv("OQS_OID_P521_DILITHIUM5")) oqs_oid_alg_list[14+OQS_KEMOID_CNT] = getenv("OQS_OID_P521_DILITHIUM5");
-   if (getenv("OQS_OID_FALCON512")) oqs_oid_alg_list[16+OQS_KEMOID_CNT] = getenv("OQS_OID_FALCON512");
-   if (getenv("OQS_OID_P256_FALCON512")) oqs_oid_alg_list[18+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_FALCON512");
-   if (getenv("OQS_OID_RSA3072_FALCON512")) oqs_oid_alg_list[20+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_FALCON512");
-   if (getenv("OQS_OID_FALCON1024")) oqs_oid_alg_list[22+OQS_KEMOID_CNT] = getenv("OQS_OID_FALCON1024");
-   if (getenv("OQS_OID_P521_FALCON1024")) oqs_oid_alg_list[24+OQS_KEMOID_CNT] = getenv("OQS_OID_P521_FALCON1024");
-   if (getenv("OQS_OID_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[26+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHA2128FSIMPLE");
-   if (getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[28+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[30+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE");
-   if (getenv("OQS_OID_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[32+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHA2128SSIMPLE");
-   if (getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[34+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[36+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE");
-   if (getenv("OQS_OID_SPHINCSSHA2192FSIMPLE")) oqs_oid_alg_list[38+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHA2192FSIMPLE");
-   if (getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE")) oqs_oid_alg_list[40+OQS_KEMOID_CNT] = getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE");
-   if (getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[42+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE");
-   if (getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[44+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE");
-   if (getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[46+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_OID_DILITHIUM2WITHSHA384")) oqs_oid_alg_list[8+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHA384");
+   if (getenv("OQS_OID_DILITHIUM2WITHSHA512")) oqs_oid_alg_list[10+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHA512");
+   if (getenv("OQS_OID_DILITHIUM2WITHSHA3AT256")) oqs_oid_alg_list[12+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHA3AT256");
+   if (getenv("OQS_OID_DILITHIUM2WITHSHA3AT384")) oqs_oid_alg_list[14+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHA3AT384");
+   if (getenv("OQS_OID_DILITHIUM2WITHSHA3AT512")) oqs_oid_alg_list[16+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHA3AT512");
+   if (getenv("OQS_OID_DILITHIUM2WITHSHAKE128")) oqs_oid_alg_list[18+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHAKE128");
+   if (getenv("OQS_OID_DILITHIUM2WITHSHAKE256")) oqs_oid_alg_list[20+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM2WITHSHAKE256");
+   if (getenv("OQS_OID_DILITHIUM3")) oqs_oid_alg_list[22+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM3");
+   if (getenv("OQS_OID_P384_DILITHIUM3")) oqs_oid_alg_list[24+OQS_KEMOID_CNT] = getenv("OQS_OID_P384_DILITHIUM3");
+   if (getenv("OQS_OID_DILITHIUM5")) oqs_oid_alg_list[26+OQS_KEMOID_CNT] = getenv("OQS_OID_DILITHIUM5");
+   if (getenv("OQS_OID_P521_DILITHIUM5")) oqs_oid_alg_list[28+OQS_KEMOID_CNT] = getenv("OQS_OID_P521_DILITHIUM5");
+   if (getenv("OQS_OID_FALCON512")) oqs_oid_alg_list[30+OQS_KEMOID_CNT] = getenv("OQS_OID_FALCON512");
+   if (getenv("OQS_OID_P256_FALCON512")) oqs_oid_alg_list[32+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_FALCON512");
+   if (getenv("OQS_OID_RSA3072_FALCON512")) oqs_oid_alg_list[34+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_FALCON512");
+   if (getenv("OQS_OID_FALCON1024")) oqs_oid_alg_list[36+OQS_KEMOID_CNT] = getenv("OQS_OID_FALCON1024");
+   if (getenv("OQS_OID_P521_FALCON1024")) oqs_oid_alg_list[38+OQS_KEMOID_CNT] = getenv("OQS_OID_P521_FALCON1024");
+   if (getenv("OQS_OID_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[40+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[42+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE")) oqs_oid_alg_list[44+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[46+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[48+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE")) oqs_oid_alg_list[50+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHA2192FSIMPLE")) oqs_oid_alg_list[52+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHA2192FSIMPLE");
+   if (getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE")) oqs_oid_alg_list[54+OQS_KEMOID_CNT] = getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE");
+   if (getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[56+OQS_KEMOID_CNT] = getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[58+OQS_KEMOID_CNT] = getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")) oqs_oid_alg_list[60+OQS_KEMOID_CNT] = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE");
 ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -244,46 +258,60 @@ int oqs_patch_encodings(void)
    if (getenv("OQS_ENCODING_RSA3072_DILITHIUM2_ALGNAME")) oqs_alg_encoding_list[5] = getenv("OQS_ENCODING_RSA3072_DILITHIUM2_ALGNAME");
    if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA256")) oqs_alg_encoding_list[6] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA256");
    if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA256_ALGNAME")) oqs_alg_encoding_list[7] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA256_ALGNAME");
-   if (getenv("OQS_ENCODING_DILITHIUM3")) oqs_alg_encoding_list[8] = getenv("OQS_ENCODING_DILITHIUM3");
-   if (getenv("OQS_ENCODING_DILITHIUM3_ALGNAME")) oqs_alg_encoding_list[9] = getenv("OQS_ENCODING_DILITHIUM3_ALGNAME");
-   if (getenv("OQS_ENCODING_P384_DILITHIUM3")) oqs_alg_encoding_list[10] = getenv("OQS_ENCODING_P384_DILITHIUM3");
-   if (getenv("OQS_ENCODING_P384_DILITHIUM3_ALGNAME")) oqs_alg_encoding_list[11] = getenv("OQS_ENCODING_P384_DILITHIUM3_ALGNAME");
-   if (getenv("OQS_ENCODING_DILITHIUM5")) oqs_alg_encoding_list[12] = getenv("OQS_ENCODING_DILITHIUM5");
-   if (getenv("OQS_ENCODING_DILITHIUM5_ALGNAME")) oqs_alg_encoding_list[13] = getenv("OQS_ENCODING_DILITHIUM5_ALGNAME");
-   if (getenv("OQS_ENCODING_P521_DILITHIUM5")) oqs_alg_encoding_list[14] = getenv("OQS_ENCODING_P521_DILITHIUM5");
-   if (getenv("OQS_ENCODING_P521_DILITHIUM5_ALGNAME")) oqs_alg_encoding_list[15] = getenv("OQS_ENCODING_P521_DILITHIUM5_ALGNAME");
-   if (getenv("OQS_ENCODING_FALCON512")) oqs_alg_encoding_list[16] = getenv("OQS_ENCODING_FALCON512");
-   if (getenv("OQS_ENCODING_FALCON512_ALGNAME")) oqs_alg_encoding_list[17] = getenv("OQS_ENCODING_FALCON512_ALGNAME");
-   if (getenv("OQS_ENCODING_P256_FALCON512")) oqs_alg_encoding_list[18] = getenv("OQS_ENCODING_P256_FALCON512");
-   if (getenv("OQS_ENCODING_P256_FALCON512_ALGNAME")) oqs_alg_encoding_list[19] = getenv("OQS_ENCODING_P256_FALCON512_ALGNAME");
-   if (getenv("OQS_ENCODING_RSA3072_FALCON512")) oqs_alg_encoding_list[20] = getenv("OQS_ENCODING_RSA3072_FALCON512");
-   if (getenv("OQS_ENCODING_RSA3072_FALCON512_ALGNAME")) oqs_alg_encoding_list[21] = getenv("OQS_ENCODING_RSA3072_FALCON512_ALGNAME");
-   if (getenv("OQS_ENCODING_FALCON1024")) oqs_alg_encoding_list[22] = getenv("OQS_ENCODING_FALCON1024");
-   if (getenv("OQS_ENCODING_FALCON1024_ALGNAME")) oqs_alg_encoding_list[23] = getenv("OQS_ENCODING_FALCON1024_ALGNAME");
-   if (getenv("OQS_ENCODING_P521_FALCON1024")) oqs_alg_encoding_list[24] = getenv("OQS_ENCODING_P521_FALCON1024");
-   if (getenv("OQS_ENCODING_P521_FALCON1024_ALGNAME")) oqs_alg_encoding_list[25] = getenv("OQS_ENCODING_P521_FALCON1024_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[26] = getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE");
-   if (getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[27] = getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[28] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[29] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[30] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[31] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[32] = getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE");
-   if (getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[33] = getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[34] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[35] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[36] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[37] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE")) oqs_alg_encoding_list[38] = getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE");
-   if (getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[39] = getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE")) oqs_alg_encoding_list[40] = getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE");
-   if (getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[41] = getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[42] = getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE");
-   if (getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[43] = getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[44] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE");
-   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[45] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE_ALGNAME");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[46] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE");
-   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[47] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA384")) oqs_alg_encoding_list[8] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA384");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA384_ALGNAME")) oqs_alg_encoding_list[9] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA384_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA512")) oqs_alg_encoding_list[10] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA512");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA512_ALGNAME")) oqs_alg_encoding_list[11] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA512_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT256")) oqs_alg_encoding_list[12] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT256");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT256_ALGNAME")) oqs_alg_encoding_list[13] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT256_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT384")) oqs_alg_encoding_list[14] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT384");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT384_ALGNAME")) oqs_alg_encoding_list[15] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT384_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT512")) oqs_alg_encoding_list[16] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT512");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT512_ALGNAME")) oqs_alg_encoding_list[17] = getenv("OQS_ENCODING_DILITHIUM2WITHSHA3AT512_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE128")) oqs_alg_encoding_list[18] = getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE128");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE128_ALGNAME")) oqs_alg_encoding_list[19] = getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE128_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE256")) oqs_alg_encoding_list[20] = getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE256");
+   if (getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE256_ALGNAME")) oqs_alg_encoding_list[21] = getenv("OQS_ENCODING_DILITHIUM2WITHSHAKE256_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM3")) oqs_alg_encoding_list[22] = getenv("OQS_ENCODING_DILITHIUM3");
+   if (getenv("OQS_ENCODING_DILITHIUM3_ALGNAME")) oqs_alg_encoding_list[23] = getenv("OQS_ENCODING_DILITHIUM3_ALGNAME");
+   if (getenv("OQS_ENCODING_P384_DILITHIUM3")) oqs_alg_encoding_list[24] = getenv("OQS_ENCODING_P384_DILITHIUM3");
+   if (getenv("OQS_ENCODING_P384_DILITHIUM3_ALGNAME")) oqs_alg_encoding_list[25] = getenv("OQS_ENCODING_P384_DILITHIUM3_ALGNAME");
+   if (getenv("OQS_ENCODING_DILITHIUM5")) oqs_alg_encoding_list[26] = getenv("OQS_ENCODING_DILITHIUM5");
+   if (getenv("OQS_ENCODING_DILITHIUM5_ALGNAME")) oqs_alg_encoding_list[27] = getenv("OQS_ENCODING_DILITHIUM5_ALGNAME");
+   if (getenv("OQS_ENCODING_P521_DILITHIUM5")) oqs_alg_encoding_list[28] = getenv("OQS_ENCODING_P521_DILITHIUM5");
+   if (getenv("OQS_ENCODING_P521_DILITHIUM5_ALGNAME")) oqs_alg_encoding_list[29] = getenv("OQS_ENCODING_P521_DILITHIUM5_ALGNAME");
+   if (getenv("OQS_ENCODING_FALCON512")) oqs_alg_encoding_list[30] = getenv("OQS_ENCODING_FALCON512");
+   if (getenv("OQS_ENCODING_FALCON512_ALGNAME")) oqs_alg_encoding_list[31] = getenv("OQS_ENCODING_FALCON512_ALGNAME");
+   if (getenv("OQS_ENCODING_P256_FALCON512")) oqs_alg_encoding_list[32] = getenv("OQS_ENCODING_P256_FALCON512");
+   if (getenv("OQS_ENCODING_P256_FALCON512_ALGNAME")) oqs_alg_encoding_list[33] = getenv("OQS_ENCODING_P256_FALCON512_ALGNAME");
+   if (getenv("OQS_ENCODING_RSA3072_FALCON512")) oqs_alg_encoding_list[34] = getenv("OQS_ENCODING_RSA3072_FALCON512");
+   if (getenv("OQS_ENCODING_RSA3072_FALCON512_ALGNAME")) oqs_alg_encoding_list[35] = getenv("OQS_ENCODING_RSA3072_FALCON512_ALGNAME");
+   if (getenv("OQS_ENCODING_FALCON1024")) oqs_alg_encoding_list[36] = getenv("OQS_ENCODING_FALCON1024");
+   if (getenv("OQS_ENCODING_FALCON1024_ALGNAME")) oqs_alg_encoding_list[37] = getenv("OQS_ENCODING_FALCON1024_ALGNAME");
+   if (getenv("OQS_ENCODING_P521_FALCON1024")) oqs_alg_encoding_list[38] = getenv("OQS_ENCODING_P521_FALCON1024");
+   if (getenv("OQS_ENCODING_P521_FALCON1024_ALGNAME")) oqs_alg_encoding_list[39] = getenv("OQS_ENCODING_P521_FALCON1024_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[40] = getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[41] = getenv("OQS_ENCODING_SPHINCSSHA2128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[42] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[43] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE")) oqs_alg_encoding_list[44] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[45] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[46] = getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[47] = getenv("OQS_ENCODING_SPHINCSSHA2128SSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[48] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[49] = getenv("OQS_ENCODING_P256_SPHINCSSHA2128SSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE")) oqs_alg_encoding_list[50] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE_ALGNAME")) oqs_alg_encoding_list[51] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHA2128SSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE")) oqs_alg_encoding_list[52] = getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE");
+   if (getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[53] = getenv("OQS_ENCODING_SPHINCSSHA2192FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE")) oqs_alg_encoding_list[54] = getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE");
+   if (getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE_ALGNAME")) oqs_alg_encoding_list[55] = getenv("OQS_ENCODING_P384_SPHINCSSHA2192FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[56] = getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[57] = getenv("OQS_ENCODING_SPHINCSSHAKE128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[58] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[59] = getenv("OQS_ENCODING_P256_SPHINCSSHAKE128FSIMPLE_ALGNAME");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE")) oqs_alg_encoding_list[60] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE");
+   if (getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME")) oqs_alg_encoding_list[61] = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME");
 ///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_END
     return 1;
 }
@@ -335,6 +363,27 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_2
     SIGALG("dilithium2WithSha256", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha384", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha512", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha3At256", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha3At384", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha3At512", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithShake128", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithShake256", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
     SIGALG("dilithium3", 192, oqs_signature_functions),
@@ -465,6 +514,27 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_2
     SIGALG("dilithium2WithSha256", 128, oqs_dilithium2WithSha256_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha384", 128, oqs_dilithium2WithSha384_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha512", 128, oqs_dilithium2WithSha512_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha3At256", 128, oqs_dilithium2WithSha3At256_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha3At384", 128, oqs_dilithium2WithSha3At384_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithSha3At512", 128, oqs_dilithium2WithSha3At512_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithShake128", 128, oqs_dilithium2WithShake128_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    SIGALG("dilithium2WithShake256", 128, oqs_dilithium2WithShake256_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
     SIGALG("dilithium3", 192, oqs_dilithium3_keymgmt_functions),

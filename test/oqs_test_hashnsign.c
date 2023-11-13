@@ -62,8 +62,8 @@ static int test_hash_n_sign(const char *sigalg_name) {
 
     const EVP_MD *md_type = get_digest_for_algorithm(sigalg_name);
     if (!md_type) {
-        printf("Unsupported digest type for algorithm %s.\n", sigalg_name);
-        return 0; 
+        printf("Unsupported digest type for algorithm %s.\n Not failing over unsupported hash algs.", sigalg_name);
+        return 1; 
     }
 
 

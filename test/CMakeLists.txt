@@ -138,5 +138,6 @@ if (OQS_PROVIDER_BUILD_STATIC)
     oqs_test_groups
     oqs_test_tlssig
     oqs_test_endecode
+    oqs_test_hashnsign
   )
 endif()

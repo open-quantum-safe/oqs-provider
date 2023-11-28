@@ -55,8 +55,7 @@ static const EVP_MD *get_digest_for_algorithm(const char *alg_name)
     return md;
 }
 
-static int test_hash_n_sign(const char *sigalg_name)
-{
+static int test_hash_n_sign(const char *sigalg_name) {
     EVP_MD_CTX *mdctx = NULL;
     EVP_PKEY_CTX *pkey_ctx = NULL;
     EVP_PKEY *key = NULL;
@@ -72,67 +71,75 @@ static int test_hash_n_sign(const char *sigalg_name)
 
     const EVP_MD *md_type = get_digest_for_algorithm(sigalg_name);
     if (!md_type) {
-        printf(
-            "Unsupported digest type for algorithm %s.\n Not failing over unsupported hash algs.",
-            sigalg_name);
+        printf("Unsupported digest type for algorithm %s.\n Not failing over unsupported hash algs.", sigalg_name);
         return 1;
     }
 
     pkey_ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL);
     if (!pkey_ctx) {
         printf("EVP_PKEY_CTX_new_from_name failed for %s.\n", sigalg_name);
-        return 0;
+        goto cleanup;
     }
 
     if (EVP_PKEY_keygen_init(pkey_ctx) <= 0) {
         printf("EVP_PKEY_keygen_init failed for %s.\n", sigalg_name);
-        EVP_PKEY_CTX_free(pkey_ctx);
-        return 0;
+        goto cleanup;
     }
 
     if (EVP_PKEY_generate(pkey_ctx, &key) <= 0) {
         printf("EVP_PKEY_generate failed for %s.\n", sigalg_name);
-        EVP_PKEY_CTX_free(pkey_ctx);
-        return 0;
+        goto cleanup;
     }
 
     mdctx = EVP_MD_CTX_new();
     if (mdctx == NULL) {
         printf("EVP_MD_CTX_new failed for %s.\n", sigalg_name);
-        return 0;
+        goto cleanup;
     }
 
     if (EVP_DigestSignInit(mdctx, NULL, md_type, NULL, key) <= 0) {
         printf("EVP_DigestSignInit failed for %s.\n", sigalg_name);
         testresult = 0;
-    } else {
-        if (EVP_DigestSignUpdate(mdctx, msg, strlen(msg)) <= 0) {
-            printf("EVP_DigestSignUpdate failed for %s.\n", sigalg_name);
-            testresult = 0;
-        } else if (EVP_DigestSignFinal(mdctx, NULL, &siglen) <= 0) {
-            printf("EVP_DigestSignFinal (get length) failed for %s.\n",
-                   sigalg_name);
-            testresult = 0;
-        } else {
-            sig = OPENSSL_malloc(siglen);
-            if (sig == NULL) {
-                printf("OPENSSL_malloc failed for %s.\n", sigalg_name);
-                testresult = 0;
-            } else if (EVP_DigestSignFinal(mdctx, sig, &siglen) <= 0) {
-                printf("EVP_DigestSignFinal (get signature) failed for %s.\n",
-                       sigalg_name);
-                testresult = 0;
-            } else {
-                printf("Signature operation successful for %s.\n", sigalg_name);
-                testresult = 1;
-            }
-        }
+        goto cleanup;
     }
 
+    if (EVP_DigestSignUpdate(mdctx, msg, strlen(msg)) <= 0) {
+        printf("EVP_DigestSignUpdate failed for %s.\n", sigalg_name);
+        testresult = 0;
+        goto cleanup;
+    }
+
+    if (EVP_DigestSignFinal(mdctx, NULL, &siglen) <= 0) {
+        printf("EVP_DigestSignFinal (get length) failed for %s.\n", sigalg_name);
+        testresult = 0;
+        goto cleanup;
+    }
+
+    sig = OPENSSL_malloc(siglen);
+    if (sig == NULL) {
+        printf("OPENSSL_malloc failed for %s.\n", sigalg_name);
+        testresult = 0;
+        goto cleanup;
+    }
+
+    if (EVP_DigestSignFinal(mdctx, sig, &siglen) <= 0) {
+        printf("EVP_DigestSignFinal (get signature) failed for %s.\n", sigalg_name);
+        testresult = 0;
+        goto cleanup;
+    }
+
+    printf("Signature operation successful for %s.\n", sigalg_name);
+    testresult = 1;
+
+cleanup:
     if (sig)
         OPENSSL_free(sig);
     if (mdctx)
         EVP_MD_CTX_free(mdctx);
+    if (key)
+        EVP_PKEY_free(key);
+    if (pkey_ctx)
+        EVP_PKEY_CTX_free(pkey_ctx);
 
     return testresult;
 }
@@ -150,6 +157,8 @@ int main(int argc, char *argv[])
     T(argc == 3);
     modulename = argv[1];
     configfile = argv[2];
+
+    printf("Config file: %s\n", configfile);
 
     load_oqs_provider(libctx, modulename, configfile);
 

@@ -77,18 +77,16 @@ add_test(
 # openssl under MSVC seems to have a bug registering NIDs:
 # It only works when setting OPENSSL_CONF, not when loading the same cnf file:
 if (MSVC)
-set_tests_properties(oqs_signatures
+set_tests_properties(oqs_test_hashnsign
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR};OPENSSL_CONF=${CMAKE_CURRENT_SOURCE_DIR}/openssl-ca.cnf"
 )
 else()
-set_tests_properties(oqs_signatures
+set_tests_properties(oqs_test_hashnsign
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
 )
 endif()
-
 add_executable(oqs_test_hashnsign oqs_test_hashnsign.c test_common.c)
 target_link_libraries(oqs_test_hashnsign PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
-
 
 add_test(
     NAME oqs_tlssig

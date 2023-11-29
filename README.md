@@ -60,7 +60,7 @@ via the standard commands, i.e.,
 
 In addition, algorithms not denoted with "\*" above are not enabled for
 TLS operations. This designation [can be changed by modifying the
-"enabled" flags in the main alorithm configuration file](CONFIGURE.md#pre-build-configuration).
+"enabled" flags in the main algorithm configuration file](CONFIGURE.md#pre-build-configuration).
 
 In order to support parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic

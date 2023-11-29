@@ -26,5 +26,5 @@ components, this provider implements the following standards:
   - Hybrid post-quantum / traditional private keys:
     - Simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
 
-Additionally worthwhile noting is that only quantum-safe [signature algorithms](#signature-algorithms) are persisted via PKCS#8 and X.509. No corresponding encoder/decoder logic exists for quantum safe [KEM algorithms](#kem-algorithms) -- See also #194.
+Additionally worthwhile noting is that only quantum-safe [signature algorithms](README.md#signature-algorithms) are persisted via PKCS#8 and X.509. No corresponding encoder/decoder logic exists for quantum safe [KEM algorithms](README.md#kem-algorithms) -- See also [#194](https://github.com/open-quantum-safe/oqs-provider/issues/194).
 

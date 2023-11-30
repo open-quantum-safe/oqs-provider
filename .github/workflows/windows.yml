@@ -204,7 +204,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - windows-2019
+#          - windows-2019
           - windows-2022
         platform:
           - arch: win64
@@ -232,7 +232,6 @@ jobs:
           with:
             set-safe-directory: true
             repository: openssl/openssl
-            ref: openssl-3.2
             path: openssl
         - uses: actions/checkout@v3
           with:

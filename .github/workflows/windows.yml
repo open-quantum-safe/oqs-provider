@@ -32,6 +32,7 @@ jobs:
         with:
           set-safe-directory: true
           repository: openssl/openssl
+          ref: openssl-3.2
           path: openssl
       - name: checkout liboqs
         uses: actions/checkout@v3

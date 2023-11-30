@@ -285,6 +285,10 @@ int get_qntcmp(int nid)
             index++;
         }
         OPENSSL_free(first_token);
+    }else{
+        if (nid_names[i].keytype == KEY_TYPE_HYB_SIG){
+            index = 2;
+        }
     }
     return index;
 }

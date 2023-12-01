@@ -286,7 +286,9 @@ int get_qntcmp(int nid)
         }
         OPENSSL_free(first_token);
     }else{
-        if (nid_names[i].keytype == KEY_TYPE_HYB_SIG){
+        if ((nid_names[i].keytype == KEY_TYPE_HYB_SIG)
+            ||(nid_names[i].keytype == KEY_TYPE_ECP_HYB_KEM)
+            ||(nid_names[i].keytype == KEY_TYPE_ECX_HYB_KEM)){
             index = 2;
         }
     }
@@ -1220,7 +1222,8 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->numkeys = 1;
         ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(sizeof(void *));
-        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(void *));
+        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(OQSX_PROVIDER_CTX));
+        ret->oqsx_provider_ctx[0].oqsx_evp_ctx = NULL;
         ret->oqsx_provider_ctx[0].oqsx_qs_ctx.sig = OQS_SIG_new(oqs_name);
         if (!ret->oqsx_provider_ctx[0].oqsx_qs_ctx.sig) {
             fprintf(
@@ -1259,7 +1262,8 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->numkeys = 1;
         ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(sizeof(void *));
-        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(void *));
+        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(OQSX_PROVIDER_CTX));
+        ret->oqsx_provider_ctx[0].oqsx_evp_ctx = NULL;
         ret->oqsx_provider_ctx[0].oqsx_qs_ctx.kem = OQS_KEM_new(oqs_name);
         if (!ret->oqsx_provider_ctx[0].oqsx_qs_ctx.kem) {
             fprintf(
@@ -1276,7 +1280,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         break;
     case KEY_TYPE_ECX_HYB_KEM:
     case KEY_TYPE_ECP_HYB_KEM:
-        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(void *));
+        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(OQSX_PROVIDER_CTX));
         ret->oqsx_provider_ctx[0].oqsx_qs_ctx.kem = OQS_KEM_new(oqs_name);
         if (!ret->oqsx_provider_ctx[0].oqsx_qs_ctx.kem) {
             fprintf(
@@ -1308,7 +1312,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->evp_info = evp_ctx->evp_info;
         break;
     case KEY_TYPE_HYB_SIG:
-        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(void *));
+        ret->oqsx_provider_ctx = OPENSSL_malloc(sizeof(OQSX_PROVIDER_CTX));
         ret->oqsx_provider_ctx[0].oqsx_qs_ctx.sig = OQS_SIG_new(oqs_name);
         if (!ret->oqsx_provider_ctx[0].oqsx_qs_ctx.sig) {
             fprintf(
@@ -1469,7 +1473,6 @@ void oqsx_key_free(OQSX_KEY *key)
         }  
     }else{
         OQS_SIG_free(key->oqsx_provider_ctx[0].oqsx_qs_ctx.sig);
-        EVP_PKEY_free(key->classical_pkey);
         if (key->oqsx_provider_ctx[0].oqsx_evp_ctx) {
             EVP_PKEY_CTX_free(key->oqsx_provider_ctx[0].oqsx_evp_ctx->ctx);
             EVP_PKEY_free(key->oqsx_provider_ctx[0].oqsx_evp_ctx->keyParam);
@@ -1482,6 +1485,7 @@ void oqsx_key_free(OQSX_KEY *key)
 #ifdef OQS_PROVIDER_NOATOMIC
     CRYPTO_THREAD_lock_free(key->lock);
 #endif
+    OPENSSL_free(key->oqsx_provider_ctx);
     OPENSSL_free(key->classical_pkey);
     OPENSSL_free(key->cmp_classical_pkey);
     OPENSSL_free(key);

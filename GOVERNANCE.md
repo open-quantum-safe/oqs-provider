@@ -44,7 +44,7 @@ Depending on the reason for removal, a Maintainer may be converted to Emeritus s
 
 Any Committer may voluntarily step down from the role for a documented period of time, losing voting rights for that time period. The period is documented in this file next to the person's name below.  At the end of this time period, the Committer automatically regains their voting rights.
 
-A leave of absence may not be longer than a year.  If the Committer needs to be away for longer than that, they must step down from that role unconditionally, and regaining that role becomes subject of normal procedures to become Committer, as described in ["Change of role"](#change-of-role) above.
+A leave of absence may not be longer than a year. If the Committer needs to be away for longer than that, they must step down from that role unconditionally, and regaining that role becomes subject of normal procedures to become Committer, as described in ["Change of role"](#change-of-role) above.
 
 ## Voting
 

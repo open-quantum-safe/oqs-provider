@@ -91,6 +91,9 @@ void load_oqs_provider(OSSL_LIB_CTX *libctx) {
 > **Warning**
 > `OQS_PROVIDER_BUILD_STATIC` and `BUILD_SHARED_LIBS` are mutually exclusive.
 
+See [`examples/static_oqsprovider.c`](examples/static_oqsprovider.c) for a complete
+example of how to load oqsprovider using `OSSL_PROVIDER_add_builtin`.
+
 ## Convenience build script options
 
 For anyone interested in building the complete software stack

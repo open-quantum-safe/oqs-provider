@@ -89,3 +89,6 @@ add_subdirectory(oqsprov)
 # Testing
 enable_testing()
 add_subdirectory(test)
+
+# Examples
+add_subdirectory(examples)

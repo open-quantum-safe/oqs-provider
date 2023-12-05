@@ -110,6 +110,18 @@ set_tests_properties(oqs_endecode
 )
 endif()
 
+add_executable(oqs_test_multi_thread oqs_test_multi_thread.c)
+target_link_libraries(oqs_test_multi_thread PRIVATE ${OPENSSL_CRYPTO_LIBRARY})
+add_test(
+  NAME oqs_multi_thread
+  COMMAND oqs_test_multi_thread
+          "oqsprovider"
+          "${CMAKE_CURRENT_SOURCE_DIR}/openssl-ca.cnf"
+)
+set_tests_properties(oqs_multi_thread
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
+)
+
 if (OQS_PROVIDER_BUILD_STATIC)
   targets_set_static_provider(oqs_test_signatures
     oqs_test_kems

@@ -13,6 +13,7 @@
 #include <openssl/core_names.h>
 #include <openssl/err.h>
 #include <openssl/objects.h>
+#include <openssl/objectserr.h>
 #include <openssl/params.h>
 #include <openssl/provider.h>
 #include <stdio.h>
@@ -917,6 +918,7 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
                                      &opensslv, sizeof(&opensslv), 0},
                                     {NULL, 0, NULL, 0, 0}};
+    unsigned long last_error = 0;
 
     OQS_init();
 
@@ -968,10 +970,14 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     for (i = 0; i < OQS_OID_CNT; i += 2) {
         if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
                           oqs_oid_alg_list[i + 1])) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            fprintf(stderr, "error registering NID for %s\n",
-                    oqs_oid_alg_list[i + 1]);
-            goto end_init;
+            last_error = ERR_peek_last_error();
+            if ((last_error != ERR_PACK(ERR_LIB_OBJ, 0, OBJ_R_OID_EXISTS))
+                || (OBJ_txt2nid(oqs_oid_alg_list[i]) == NID_undef)) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                fprintf(stderr, "error registering NID for %s\n",
+                        oqs_oid_alg_list[i + 1]);
+                goto end_init;
+            }
         }
 
         /* create object (NID) again to avoid setup corner case problems
@@ -1016,9 +1022,12 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         || ((libctx = OSSL_LIB_CTX_new_child(handle, orig_in)) == NULL)
         || ((*provctx = oqsx_newprovctx(libctx, handle, corebiometh))
             == NULL)) {
-        OQS_PROV_PRINTF("OQS PROV: error creating new provider context\n");
-        ERR_raise(ERR_LIB_USER, OQSPROV_R_LIB_CREATE_ERR);
-        goto end_init;
+        last_error = ERR_peek_last_error();
+        if (last_error != ERR_PACK(ERR_LIB_OBJ, 0, OBJ_R_OID_EXISTS)) {
+            OQS_PROV_PRINTF("OQS PROV: error creating new provider context\n");
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_LIB_CREATE_ERR);
+            goto end_init;
+        }
     }
 
     *out = oqsprovider_dispatch_table;

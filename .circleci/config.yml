@@ -166,7 +166,7 @@ jobs:
       - when:
           condition:
             not:
-              equal: [ openssl@3.1, << parameters.OPENSSL_PREINSTALL >> ]
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
                 name: Clone and build OpenSSL(3) master
@@ -186,7 +186,7 @@ jobs:
                   fi
       - when:
           condition:
-              equal: [ openssl@3.1, << parameters.OPENSSL_PREINSTALL >> ]
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
                 name: Build OQS-OpenSSL provider

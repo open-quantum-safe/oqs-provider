@@ -101,7 +101,7 @@ jobs:
         platform:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
-            osslconfig: no-shared no-fips VC-WIN64A-masm
+            osslconfig: no-shared no-fips VC-WIN64A
 #          - arch: win32
 #            oqsconfig: -DOQS_ALGS_ENABLED=STD
 #            osslconfig: --strict-warnings no-fips enable-quic

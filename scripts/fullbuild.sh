@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x #echo on
 # The following variables influence the operation of this build script:
 # Argument -f: Soft clean, ensuring re-build of oqs-provider binary
 # Argument -F: Hard clean, ensuring checkout and build of all dependencies
@@ -32,10 +32,10 @@ if [ -z "$LIBOQS_BRANCH" ]; then
    export LIBOQS_BRANCH=main
 fi
 
-if [ -z "$OQS_ALGS_ENABLED" ]; then
+if [ -z "$DOQS_ALGS_ENABLED" ]; then
    export DOQS_ALGS_ENABLED=""
 else
-   export DOQS_ALGS_ENABLED="-DOQS_ALGS_ENABLED=$OQS_ALGS_ENABLED"
+   export DOQS_ALGS_ENABLED="-DOQS_ALGS_ENABLED=$DOQS_ALGS_ENABLED"
 fi
 
 if [ -z "$OPENSSL_INSTALL" ]; then

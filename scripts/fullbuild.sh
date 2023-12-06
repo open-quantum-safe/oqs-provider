@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x #echo on
+
 # The following variables influence the operation of this build script:
 # Argument -f: Soft clean, ensuring re-build of oqs-provider binary
 # Argument -F: Hard clean, ensuring checkout and build of all dependencies

@@ -1191,7 +1191,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
 {
     OQSX_KEY *ret = OPENSSL_zalloc(sizeof(*ret));
     OQSX_EVP_CTX *evp_ctx = NULL;
-    int ret2 = 0;
+    int ret2 = 0, i;
 
     if (ret == NULL)
         goto err;

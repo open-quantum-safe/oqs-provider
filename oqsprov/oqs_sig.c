@@ -27,7 +27,12 @@
 // TBD: Review what we really need/want: For now go with OSSL settings:
 #define OSSL_MAX_NAME_SIZE      50
 #define OSSL_MAX_PROPQUERY_SIZE 256 /* Property query strings */
-#define COMPOSITE_IDX_ADJUST    23 /*idx to the first composite in the composite idx block*/
+#ifdef OQS_KEM_ENCODERS /*idx to the first composite in the composite idx block*/
+#    define COMPOSITE_IDX_ADJUST    65 
+#else
+#    define COMPOSITE_IDX_ADJUST    23 
+#endif
+
 
 #ifdef NDEBUG
 #    define OQS_SIG_PRINTF(a)

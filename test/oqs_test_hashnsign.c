@@ -66,13 +66,13 @@ static int test_hash_n_sign(const char *sigalg_name)
     int testresult = 0;
 
     if (!alg_is_enabled(sigalg_name)) {
-        printf("Not testing disabled algorithm %s.\n", sigalg_name);
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", sigalg_name);        
         return 1;
     }
 
     const EVP_MD *md_type = get_digest_for_algorithm(sigalg_name);
     if (!md_type) {
-        printf(
+        fprintf(stderr, 
             "Unsupported digest type for algorithm %s.\n Not failing over unsupported hash algs.",
             sigalg_name);
         return 1;
@@ -80,40 +80,40 @@ static int test_hash_n_sign(const char *sigalg_name)
 
     pkey_ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL);
     if (!pkey_ctx) {
-        printf("EVP_PKEY_CTX_new_from_name failed for %s.\n", sigalg_name);
+        fprintf(stderr, "EVP_PKEY_CTX_new_from_name failed for %s.\n", sigalg_name);
         goto cleanup;
     }
 
     if (EVP_PKEY_keygen_init(pkey_ctx) <= 0) {
-        printf("EVP_PKEY_keygen_init failed for %s.\n", sigalg_name);
+        fprintf(stderr, "EVP_PKEY_keygen_init failed for %s.\n", sigalg_name);
         goto cleanup;
     }
 
     if (EVP_PKEY_generate(pkey_ctx, &key) <= 0) {
-        printf("EVP_PKEY_generate failed for %s.\n", sigalg_name);
+        fprintf(stderr, "EVP_PKEY_generate failed for %s.\n", sigalg_name);
         goto cleanup;
     }
 
     mdctx = EVP_MD_CTX_new();
     if (mdctx == NULL) {
-        printf("EVP_MD_CTX_new failed for %s.\n", sigalg_name);
+        fprintf(stderr, "EVP_MD_CTX_new failed for %s.\n", sigalg_name);
         goto cleanup;
     }
 
     if (EVP_DigestSignInit(mdctx, NULL, md_type, NULL, key) <= 0) {
-        printf("EVP_DigestSignInit failed for %s.\n", sigalg_name);
+        fprintf(stderr, "EVP_DigestSignInit failed for %s.\n", sigalg_name);
         testresult = 0;
         goto cleanup;
     }
 
     if (EVP_DigestSignUpdate(mdctx, msg, strlen(msg)) <= 0) {
-        printf("EVP_DigestSignUpdate failed for %s.\n", sigalg_name);
+        fprintf(stderr, "EVP_DigestSignUpdate failed for %s.\n", sigalg_name);
         testresult = 0;
         goto cleanup;
     }
 
     if (EVP_DigestSignFinal(mdctx, NULL, &siglen) <= 0) {
-        printf("EVP_DigestSignFinal (get length) failed for %s.\n",
+        fprintf(stderr, "EVP_DigestSignFinal (get length) failed for %s.\n",
                sigalg_name);
         testresult = 0;
         goto cleanup;
@@ -121,13 +121,13 @@ static int test_hash_n_sign(const char *sigalg_name)
 
     sig = OPENSSL_malloc(siglen);
     if (sig == NULL) {
-        printf("OPENSSL_malloc failed for %s.\n", sigalg_name);
+        fprintf(stderr, "OPENSSL_malloc failed for %s.\n", sigalg_name);
         testresult = 0;
         goto cleanup;
     }
 
     if (EVP_DigestSignFinal(mdctx, sig, &siglen) <= 0) {
-        printf("EVP_DigestSignFinal (get signature) failed for %s.\n",
+        fprintf(stderr,"EVP_DigestSignFinal (get signature) failed for %s.\n",
                sigalg_name);
         testresult = 0;
         goto cleanup;

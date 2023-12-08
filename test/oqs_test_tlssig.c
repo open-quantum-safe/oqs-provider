@@ -59,6 +59,8 @@ static int test_oqs_tlssig(const char *sig_name)
         = create_tls1_3_ctx_pair(libctx, &sctx, &cctx, certpath, privkeypath);
 
     if (!testresult) {
+        fprintf(stderr, "Failed to create TLS context pair.\n");
+        ERR_print_errors_fp(stderr);  // Log SSL errors
         ret = -1;
         goto err;
     }
@@ -72,6 +74,10 @@ static int test_oqs_tlssig(const char *sig_name)
 
     testresult = create_tls_connection(serverssl, clientssl, SSL_ERROR_NONE);
     if (!testresult) {
+        fprintf(stderr, "TLS handshake failed for %s.\n", sig_name);
+        int ssl_err = SSL_get_error(clientssl, testresult); // Or serverssl, depending on which failed
+        fprintf(stderr, "SSL error code: %d\n", ssl_err);
+        ERR_print_errors_fp(stderr); // Detailed SSL error logging
         ret = -5;
         goto err;
     }

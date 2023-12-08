@@ -55,7 +55,8 @@ static const EVP_MD *get_digest_for_algorithm(const char *alg_name)
     return md;
 }
 
-static int test_hash_n_sign(const char *sigalg_name) {
+static int test_hash_n_sign(const char *sigalg_name)
+{
     EVP_MD_CTX *mdctx = NULL;
     EVP_PKEY_CTX *pkey_ctx = NULL;
     EVP_PKEY *key = NULL;
@@ -71,7 +72,9 @@ static int test_hash_n_sign(const char *sigalg_name) {
 
     const EVP_MD *md_type = get_digest_for_algorithm(sigalg_name);
     if (!md_type) {
-        printf("Unsupported digest type for algorithm %s.\n Not failing over unsupported hash algs.", sigalg_name);
+        printf(
+            "Unsupported digest type for algorithm %s.\n Not failing over unsupported hash algs.",
+            sigalg_name);
         return 1;
     }
 
@@ -110,7 +113,8 @@ static int test_hash_n_sign(const char *sigalg_name) {
     }
 
     if (EVP_DigestSignFinal(mdctx, NULL, &siglen) <= 0) {
-        printf("EVP_DigestSignFinal (get length) failed for %s.\n", sigalg_name);
+        printf("EVP_DigestSignFinal (get length) failed for %s.\n",
+               sigalg_name);
         testresult = 0;
         goto cleanup;
     }
@@ -123,7 +127,8 @@ static int test_hash_n_sign(const char *sigalg_name) {
     }
 
     if (EVP_DigestSignFinal(mdctx, sig, &siglen) <= 0) {
-        printf("EVP_DigestSignFinal (get signature) failed for %s.\n", sigalg_name);
+        printf("EVP_DigestSignFinal (get signature) failed for %s.\n",
+               sigalg_name);
         testresult = 0;
         goto cleanup;
     }

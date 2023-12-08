@@ -649,338 +649,338 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 // OQS provider uses NIDs generated at load time as EVP_type identifiers
 // so initially this must be 0 and set to a real value by OBJ_sn2nid later
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_START
-# define frodo640aes_evp_type     0
-# define frodo640aes_input_type    "frodo640aes"
-# define frodo640aes_pem_type      "frodo640aes"
+#define frodo640aes_evp_type   0
+#define frodo640aes_input_type "frodo640aes"
+#define frodo640aes_pem_type   "frodo640aes"
 
-# define p256_frodo640aes_evp_type     0
-# define p256_frodo640aes_input_type    "p256_frodo640aes"
-# define p256_frodo640aes_pem_type      "p256_frodo640aes"
-# define x25519_frodo640aes_evp_type     0
-# define x25519_frodo640aes_input_type    "x25519_frodo640aes"
-# define x25519_frodo640aes_pem_type      "x25519_frodo640aes"
-# define frodo640shake_evp_type     0
-# define frodo640shake_input_type    "frodo640shake"
-# define frodo640shake_pem_type      "frodo640shake"
+#define p256_frodo640aes_evp_type     0
+#define p256_frodo640aes_input_type   "p256_frodo640aes"
+#define p256_frodo640aes_pem_type     "p256_frodo640aes"
+#define x25519_frodo640aes_evp_type   0
+#define x25519_frodo640aes_input_type "x25519_frodo640aes"
+#define x25519_frodo640aes_pem_type   "x25519_frodo640aes"
+#define frodo640shake_evp_type        0
+#define frodo640shake_input_type      "frodo640shake"
+#define frodo640shake_pem_type        "frodo640shake"
 
-# define p256_frodo640shake_evp_type     0
-# define p256_frodo640shake_input_type    "p256_frodo640shake"
-# define p256_frodo640shake_pem_type      "p256_frodo640shake"
-# define x25519_frodo640shake_evp_type     0
-# define x25519_frodo640shake_input_type    "x25519_frodo640shake"
-# define x25519_frodo640shake_pem_type      "x25519_frodo640shake"
-# define frodo976aes_evp_type     0
-# define frodo976aes_input_type    "frodo976aes"
-# define frodo976aes_pem_type      "frodo976aes"
+#define p256_frodo640shake_evp_type     0
+#define p256_frodo640shake_input_type   "p256_frodo640shake"
+#define p256_frodo640shake_pem_type     "p256_frodo640shake"
+#define x25519_frodo640shake_evp_type   0
+#define x25519_frodo640shake_input_type "x25519_frodo640shake"
+#define x25519_frodo640shake_pem_type   "x25519_frodo640shake"
+#define frodo976aes_evp_type            0
+#define frodo976aes_input_type          "frodo976aes"
+#define frodo976aes_pem_type            "frodo976aes"
 
-# define p384_frodo976aes_evp_type     0
-# define p384_frodo976aes_input_type    "p384_frodo976aes"
-# define p384_frodo976aes_pem_type      "p384_frodo976aes"
-# define x448_frodo976aes_evp_type     0
-# define x448_frodo976aes_input_type    "x448_frodo976aes"
-# define x448_frodo976aes_pem_type      "x448_frodo976aes"
-# define frodo976shake_evp_type     0
-# define frodo976shake_input_type    "frodo976shake"
-# define frodo976shake_pem_type      "frodo976shake"
+#define p384_frodo976aes_evp_type   0
+#define p384_frodo976aes_input_type "p384_frodo976aes"
+#define p384_frodo976aes_pem_type   "p384_frodo976aes"
+#define x448_frodo976aes_evp_type   0
+#define x448_frodo976aes_input_type "x448_frodo976aes"
+#define x448_frodo976aes_pem_type   "x448_frodo976aes"
+#define frodo976shake_evp_type      0
+#define frodo976shake_input_type    "frodo976shake"
+#define frodo976shake_pem_type      "frodo976shake"
 
-# define p384_frodo976shake_evp_type     0
-# define p384_frodo976shake_input_type    "p384_frodo976shake"
-# define p384_frodo976shake_pem_type      "p384_frodo976shake"
-# define x448_frodo976shake_evp_type     0
-# define x448_frodo976shake_input_type    "x448_frodo976shake"
-# define x448_frodo976shake_pem_type      "x448_frodo976shake"
-# define frodo1344aes_evp_type     0
-# define frodo1344aes_input_type    "frodo1344aes"
-# define frodo1344aes_pem_type      "frodo1344aes"
+#define p384_frodo976shake_evp_type   0
+#define p384_frodo976shake_input_type "p384_frodo976shake"
+#define p384_frodo976shake_pem_type   "p384_frodo976shake"
+#define x448_frodo976shake_evp_type   0
+#define x448_frodo976shake_input_type "x448_frodo976shake"
+#define x448_frodo976shake_pem_type   "x448_frodo976shake"
+#define frodo1344aes_evp_type         0
+#define frodo1344aes_input_type       "frodo1344aes"
+#define frodo1344aes_pem_type         "frodo1344aes"
 
-# define p521_frodo1344aes_evp_type     0
-# define p521_frodo1344aes_input_type    "p521_frodo1344aes"
-# define p521_frodo1344aes_pem_type      "p521_frodo1344aes"
-# define frodo1344shake_evp_type     0
-# define frodo1344shake_input_type    "frodo1344shake"
-# define frodo1344shake_pem_type      "frodo1344shake"
+#define p521_frodo1344aes_evp_type   0
+#define p521_frodo1344aes_input_type "p521_frodo1344aes"
+#define p521_frodo1344aes_pem_type   "p521_frodo1344aes"
+#define frodo1344shake_evp_type      0
+#define frodo1344shake_input_type    "frodo1344shake"
+#define frodo1344shake_pem_type      "frodo1344shake"
 
-# define p521_frodo1344shake_evp_type     0
-# define p521_frodo1344shake_input_type    "p521_frodo1344shake"
-# define p521_frodo1344shake_pem_type      "p521_frodo1344shake"
-# define kyber512_evp_type     0
-# define kyber512_input_type    "kyber512"
-# define kyber512_pem_type      "kyber512"
+#define p521_frodo1344shake_evp_type   0
+#define p521_frodo1344shake_input_type "p521_frodo1344shake"
+#define p521_frodo1344shake_pem_type   "p521_frodo1344shake"
+#define kyber512_evp_type              0
+#define kyber512_input_type            "kyber512"
+#define kyber512_pem_type              "kyber512"
 
-# define p256_kyber512_evp_type     0
-# define p256_kyber512_input_type    "p256_kyber512"
-# define p256_kyber512_pem_type      "p256_kyber512"
-# define x25519_kyber512_evp_type     0
-# define x25519_kyber512_input_type    "x25519_kyber512"
-# define x25519_kyber512_pem_type      "x25519_kyber512"
-# define kyber768_evp_type     0
-# define kyber768_input_type    "kyber768"
-# define kyber768_pem_type      "kyber768"
+#define p256_kyber512_evp_type     0
+#define p256_kyber512_input_type   "p256_kyber512"
+#define p256_kyber512_pem_type     "p256_kyber512"
+#define x25519_kyber512_evp_type   0
+#define x25519_kyber512_input_type "x25519_kyber512"
+#define x25519_kyber512_pem_type   "x25519_kyber512"
+#define kyber768_evp_type          0
+#define kyber768_input_type        "kyber768"
+#define kyber768_pem_type          "kyber768"
 
-# define p384_kyber768_evp_type     0
-# define p384_kyber768_input_type    "p384_kyber768"
-# define p384_kyber768_pem_type      "p384_kyber768"
-# define x448_kyber768_evp_type     0
-# define x448_kyber768_input_type    "x448_kyber768"
-# define x448_kyber768_pem_type      "x448_kyber768"
-# define x25519_kyber768_evp_type     0
-# define x25519_kyber768_input_type    "x25519_kyber768"
-# define x25519_kyber768_pem_type      "x25519_kyber768"
-# define p256_kyber768_evp_type     0
-# define p256_kyber768_input_type    "p256_kyber768"
-# define p256_kyber768_pem_type      "p256_kyber768"
-# define kyber1024_evp_type     0
-# define kyber1024_input_type    "kyber1024"
-# define kyber1024_pem_type      "kyber1024"
+#define p384_kyber768_evp_type     0
+#define p384_kyber768_input_type   "p384_kyber768"
+#define p384_kyber768_pem_type     "p384_kyber768"
+#define x448_kyber768_evp_type     0
+#define x448_kyber768_input_type   "x448_kyber768"
+#define x448_kyber768_pem_type     "x448_kyber768"
+#define x25519_kyber768_evp_type   0
+#define x25519_kyber768_input_type "x25519_kyber768"
+#define x25519_kyber768_pem_type   "x25519_kyber768"
+#define p256_kyber768_evp_type     0
+#define p256_kyber768_input_type   "p256_kyber768"
+#define p256_kyber768_pem_type     "p256_kyber768"
+#define kyber1024_evp_type         0
+#define kyber1024_input_type       "kyber1024"
+#define kyber1024_pem_type         "kyber1024"
 
-# define p521_kyber1024_evp_type     0
-# define p521_kyber1024_input_type    "p521_kyber1024"
-# define p521_kyber1024_pem_type      "p521_kyber1024"
-# define bikel1_evp_type     0
-# define bikel1_input_type    "bikel1"
-# define bikel1_pem_type      "bikel1"
+#define p521_kyber1024_evp_type   0
+#define p521_kyber1024_input_type "p521_kyber1024"
+#define p521_kyber1024_pem_type   "p521_kyber1024"
+#define bikel1_evp_type           0
+#define bikel1_input_type         "bikel1"
+#define bikel1_pem_type           "bikel1"
 
-# define p256_bikel1_evp_type     0
-# define p256_bikel1_input_type    "p256_bikel1"
-# define p256_bikel1_pem_type      "p256_bikel1"
-# define x25519_bikel1_evp_type     0
-# define x25519_bikel1_input_type    "x25519_bikel1"
-# define x25519_bikel1_pem_type      "x25519_bikel1"
-# define bikel3_evp_type     0
-# define bikel3_input_type    "bikel3"
-# define bikel3_pem_type      "bikel3"
+#define p256_bikel1_evp_type     0
+#define p256_bikel1_input_type   "p256_bikel1"
+#define p256_bikel1_pem_type     "p256_bikel1"
+#define x25519_bikel1_evp_type   0
+#define x25519_bikel1_input_type "x25519_bikel1"
+#define x25519_bikel1_pem_type   "x25519_bikel1"
+#define bikel3_evp_type          0
+#define bikel3_input_type        "bikel3"
+#define bikel3_pem_type          "bikel3"
 
-# define p384_bikel3_evp_type     0
-# define p384_bikel3_input_type    "p384_bikel3"
-# define p384_bikel3_pem_type      "p384_bikel3"
-# define x448_bikel3_evp_type     0
-# define x448_bikel3_input_type    "x448_bikel3"
-# define x448_bikel3_pem_type      "x448_bikel3"
-# define bikel5_evp_type     0
-# define bikel5_input_type    "bikel5"
-# define bikel5_pem_type      "bikel5"
+#define p384_bikel3_evp_type   0
+#define p384_bikel3_input_type "p384_bikel3"
+#define p384_bikel3_pem_type   "p384_bikel3"
+#define x448_bikel3_evp_type   0
+#define x448_bikel3_input_type "x448_bikel3"
+#define x448_bikel3_pem_type   "x448_bikel3"
+#define bikel5_evp_type        0
+#define bikel5_input_type      "bikel5"
+#define bikel5_pem_type        "bikel5"
 
-# define p521_bikel5_evp_type     0
-# define p521_bikel5_input_type    "p521_bikel5"
-# define p521_bikel5_pem_type      "p521_bikel5"
-# define hqc128_evp_type     0
-# define hqc128_input_type    "hqc128"
-# define hqc128_pem_type      "hqc128"
+#define p521_bikel5_evp_type   0
+#define p521_bikel5_input_type "p521_bikel5"
+#define p521_bikel5_pem_type   "p521_bikel5"
+#define hqc128_evp_type        0
+#define hqc128_input_type      "hqc128"
+#define hqc128_pem_type        "hqc128"
 
-# define p256_hqc128_evp_type     0
-# define p256_hqc128_input_type    "p256_hqc128"
-# define p256_hqc128_pem_type      "p256_hqc128"
-# define x25519_hqc128_evp_type     0
-# define x25519_hqc128_input_type    "x25519_hqc128"
-# define x25519_hqc128_pem_type      "x25519_hqc128"
-# define hqc192_evp_type     0
-# define hqc192_input_type    "hqc192"
-# define hqc192_pem_type      "hqc192"
+#define p256_hqc128_evp_type     0
+#define p256_hqc128_input_type   "p256_hqc128"
+#define p256_hqc128_pem_type     "p256_hqc128"
+#define x25519_hqc128_evp_type   0
+#define x25519_hqc128_input_type "x25519_hqc128"
+#define x25519_hqc128_pem_type   "x25519_hqc128"
+#define hqc192_evp_type          0
+#define hqc192_input_type        "hqc192"
+#define hqc192_pem_type          "hqc192"
 
-# define p384_hqc192_evp_type     0
-# define p384_hqc192_input_type    "p384_hqc192"
-# define p384_hqc192_pem_type      "p384_hqc192"
-# define x448_hqc192_evp_type     0
-# define x448_hqc192_input_type    "x448_hqc192"
-# define x448_hqc192_pem_type      "x448_hqc192"
-# define hqc256_evp_type     0
-# define hqc256_input_type    "hqc256"
-# define hqc256_pem_type      "hqc256"
+#define p384_hqc192_evp_type   0
+#define p384_hqc192_input_type "p384_hqc192"
+#define p384_hqc192_pem_type   "p384_hqc192"
+#define x448_hqc192_evp_type   0
+#define x448_hqc192_input_type "x448_hqc192"
+#define x448_hqc192_pem_type   "x448_hqc192"
+#define hqc256_evp_type        0
+#define hqc256_input_type      "hqc256"
+#define hqc256_pem_type        "hqc256"
 
-# define p521_hqc256_evp_type     0
-# define p521_hqc256_input_type    "p521_hqc256"
-# define p521_hqc256_pem_type      "p521_hqc256"
+#define p521_hqc256_evp_type   0
+#define p521_hqc256_input_type "p521_hqc256"
+#define p521_hqc256_pem_type   "p521_hqc256"
 
-
-# define dilithium2_evp_type       0
-# define dilithium2_input_type      "dilithium2"
-# define dilithium2_pem_type        "dilithium2"
-# define p256_dilithium2_evp_type       0
-# define p256_dilithium2_input_type      "p256_dilithium2"
-# define p256_dilithium2_pem_type        "p256_dilithium2"
-# define rsa3072_dilithium2_evp_type       0
-# define rsa3072_dilithium2_input_type      "rsa3072_dilithium2"
-# define rsa3072_dilithium2_pem_type        "rsa3072_dilithium2"
-# define dilithium2WithSha256_evp_type       0
-# define dilithium2WithSha256_input_type      "dilithium2WithSha256"
-# define dilithium2WithSha256_pem_type        "dilithium2WithSha256"
-# define dilithium2WithSha384_evp_type       0
-# define dilithium2WithSha384_input_type      "dilithium2WithSha384"
-# define dilithium2WithSha384_pem_type        "dilithium2WithSha384"
-# define dilithium2WithSha512_evp_type       0
-# define dilithium2WithSha512_input_type      "dilithium2WithSha512"
-# define dilithium2WithSha512_pem_type        "dilithium2WithSha512"
-# define dilithium2WithSha3At256_evp_type       0
-# define dilithium2WithSha3At256_input_type      "dilithium2WithSha3At256"
-# define dilithium2WithSha3At256_pem_type        "dilithium2WithSha3At256"
-# define dilithium2WithSha3At384_evp_type       0
-# define dilithium2WithSha3At384_input_type      "dilithium2WithSha3At384"
-# define dilithium2WithSha3At384_pem_type        "dilithium2WithSha3At384"
-# define dilithium2WithSha3At512_evp_type       0
-# define dilithium2WithSha3At512_input_type      "dilithium2WithSha3At512"
-# define dilithium2WithSha3At512_pem_type        "dilithium2WithSha3At512"
-# define dilithium2WithShake128_evp_type       0
-# define dilithium2WithShake128_input_type      "dilithium2WithShake128"
-# define dilithium2WithShake128_pem_type        "dilithium2WithShake128"
-# define dilithium2WithShake256_evp_type       0
-# define dilithium2WithShake256_input_type      "dilithium2WithShake256"
-# define dilithium2WithShake256_pem_type        "dilithium2WithShake256"
-# define dilithium3_evp_type       0
-# define dilithium3_input_type      "dilithium3"
-# define dilithium3_pem_type        "dilithium3"
-# define p384_dilithium3_evp_type       0
-# define p384_dilithium3_input_type      "p384_dilithium3"
-# define p384_dilithium3_pem_type        "p384_dilithium3"
-# define dilithium3WithSha256_evp_type       0
-# define dilithium3WithSha256_input_type      "dilithium3WithSha256"
-# define dilithium3WithSha256_pem_type        "dilithium3WithSha256"
-# define dilithium3WithSha384_evp_type       0
-# define dilithium3WithSha384_input_type      "dilithium3WithSha384"
-# define dilithium3WithSha384_pem_type        "dilithium3WithSha384"
-# define dilithium3WithSha512_evp_type       0
-# define dilithium3WithSha512_input_type      "dilithium3WithSha512"
-# define dilithium3WithSha512_pem_type        "dilithium3WithSha512"
-# define dilithium3WithSha3At256_evp_type       0
-# define dilithium3WithSha3At256_input_type      "dilithium3WithSha3At256"
-# define dilithium3WithSha3At256_pem_type        "dilithium3WithSha3At256"
-# define dilithium3WithSha3At384_evp_type       0
-# define dilithium3WithSha3At384_input_type      "dilithium3WithSha3At384"
-# define dilithium3WithSha3At384_pem_type        "dilithium3WithSha3At384"
-# define dilithium3WithSha3At512_evp_type       0
-# define dilithium3WithSha3At512_input_type      "dilithium3WithSha3At512"
-# define dilithium3WithSha3At512_pem_type        "dilithium3WithSha3At512"
-# define dilithium3WithShake128_evp_type       0
-# define dilithium3WithShake128_input_type      "dilithium3WithShake128"
-# define dilithium3WithShake128_pem_type        "dilithium3WithShake128"
-# define dilithium3WithShake256_evp_type       0
-# define dilithium3WithShake256_input_type      "dilithium3WithShake256"
-# define dilithium3WithShake256_pem_type        "dilithium3WithShake256"
-# define dilithium5_evp_type       0
-# define dilithium5_input_type      "dilithium5"
-# define dilithium5_pem_type        "dilithium5"
-# define p521_dilithium5_evp_type       0
-# define p521_dilithium5_input_type      "p521_dilithium5"
-# define p521_dilithium5_pem_type        "p521_dilithium5"
-# define dilithium5WithSha256_evp_type       0
-# define dilithium5WithSha256_input_type      "dilithium5WithSha256"
-# define dilithium5WithSha256_pem_type        "dilithium5WithSha256"
-# define dilithium5WithSha384_evp_type       0
-# define dilithium5WithSha384_input_type      "dilithium5WithSha384"
-# define dilithium5WithSha384_pem_type        "dilithium5WithSha384"
-# define dilithium5WithSha512_evp_type       0
-# define dilithium5WithSha512_input_type      "dilithium5WithSha512"
-# define dilithium5WithSha512_pem_type        "dilithium5WithSha512"
-# define dilithium5WithSha3At256_evp_type       0
-# define dilithium5WithSha3At256_input_type      "dilithium5WithSha3At256"
-# define dilithium5WithSha3At256_pem_type        "dilithium5WithSha3At256"
-# define dilithium5WithSha3At384_evp_type       0
-# define dilithium5WithSha3At384_input_type      "dilithium5WithSha3At384"
-# define dilithium5WithSha3At384_pem_type        "dilithium5WithSha3At384"
-# define dilithium5WithSha3At512_evp_type       0
-# define dilithium5WithSha3At512_input_type      "dilithium5WithSha3At512"
-# define dilithium5WithSha3At512_pem_type        "dilithium5WithSha3At512"
-# define dilithium5WithShake128_evp_type       0
-# define dilithium5WithShake128_input_type      "dilithium5WithShake128"
-# define dilithium5WithShake128_pem_type        "dilithium5WithShake128"
-# define dilithium5WithShake256_evp_type       0
-# define dilithium5WithShake256_input_type      "dilithium5WithShake256"
-# define dilithium5WithShake256_pem_type        "dilithium5WithShake256"
-# define falcon512_evp_type       0
-# define falcon512_input_type      "falcon512"
-# define falcon512_pem_type        "falcon512"
-# define p256_falcon512_evp_type       0
-# define p256_falcon512_input_type      "p256_falcon512"
-# define p256_falcon512_pem_type        "p256_falcon512"
-# define rsa3072_falcon512_evp_type       0
-# define rsa3072_falcon512_input_type      "rsa3072_falcon512"
-# define rsa3072_falcon512_pem_type        "rsa3072_falcon512"
-# define falcon512WithSha256_evp_type       0
-# define falcon512WithSha256_input_type      "falcon512WithSha256"
-# define falcon512WithSha256_pem_type        "falcon512WithSha256"
-# define falcon512WithSha384_evp_type       0
-# define falcon512WithSha384_input_type      "falcon512WithSha384"
-# define falcon512WithSha384_pem_type        "falcon512WithSha384"
-# define falcon512WithSha512_evp_type       0
-# define falcon512WithSha512_input_type      "falcon512WithSha512"
-# define falcon512WithSha512_pem_type        "falcon512WithSha512"
-# define falcon512WithSha3At256_evp_type       0
-# define falcon512WithSha3At256_input_type      "falcon512WithSha3At256"
-# define falcon512WithSha3At256_pem_type        "falcon512WithSha3At256"
-# define falcon512WithSha3At384_evp_type       0
-# define falcon512WithSha3At384_input_type      "falcon512WithSha3At384"
-# define falcon512WithSha3At384_pem_type        "falcon512WithSha3At384"
-# define falcon512WithSha3At512_evp_type       0
-# define falcon512WithSha3At512_input_type      "falcon512WithSha3At512"
-# define falcon512WithSha3At512_pem_type        "falcon512WithSha3At512"
-# define falcon512WithShake128_evp_type       0
-# define falcon512WithShake128_input_type      "falcon512WithShake128"
-# define falcon512WithShake128_pem_type        "falcon512WithShake128"
-# define falcon512WithShake256_evp_type       0
-# define falcon512WithShake256_input_type      "falcon512WithShake256"
-# define falcon512WithShake256_pem_type        "falcon512WithShake256"
-# define falcon1024_evp_type       0
-# define falcon1024_input_type      "falcon1024"
-# define falcon1024_pem_type        "falcon1024"
-# define p521_falcon1024_evp_type       0
-# define p521_falcon1024_input_type      "p521_falcon1024"
-# define p521_falcon1024_pem_type        "p521_falcon1024"
-# define falcon1024WithSha256_evp_type       0
-# define falcon1024WithSha256_input_type      "falcon1024WithSha256"
-# define falcon1024WithSha256_pem_type        "falcon1024WithSha256"
-# define falcon1024WithSha384_evp_type       0
-# define falcon1024WithSha384_input_type      "falcon1024WithSha384"
-# define falcon1024WithSha384_pem_type        "falcon1024WithSha384"
-# define falcon1024WithSha512_evp_type       0
-# define falcon1024WithSha512_input_type      "falcon1024WithSha512"
-# define falcon1024WithSha512_pem_type        "falcon1024WithSha512"
-# define falcon1024WithSha3At256_evp_type       0
-# define falcon1024WithSha3At256_input_type      "falcon1024WithSha3At256"
-# define falcon1024WithSha3At256_pem_type        "falcon1024WithSha3At256"
-# define falcon1024WithSha3At384_evp_type       0
-# define falcon1024WithSha3At384_input_type      "falcon1024WithSha3At384"
-# define falcon1024WithSha3At384_pem_type        "falcon1024WithSha3At384"
-# define falcon1024WithSha3At512_evp_type       0
-# define falcon1024WithSha3At512_input_type      "falcon1024WithSha3At512"
-# define falcon1024WithSha3At512_pem_type        "falcon1024WithSha3At512"
-# define falcon1024WithShake128_evp_type       0
-# define falcon1024WithShake128_input_type      "falcon1024WithShake128"
-# define falcon1024WithShake128_pem_type        "falcon1024WithShake128"
-# define falcon1024WithShake256_evp_type       0
-# define falcon1024WithShake256_input_type      "falcon1024WithShake256"
-# define falcon1024WithShake256_pem_type        "falcon1024WithShake256"
-# define sphincssha2128fsimple_evp_type       0
-# define sphincssha2128fsimple_input_type      "sphincssha2128fsimple"
-# define sphincssha2128fsimple_pem_type        "sphincssha2128fsimple"
-# define p256_sphincssha2128fsimple_evp_type       0
-# define p256_sphincssha2128fsimple_input_type      "p256_sphincssha2128fsimple"
-# define p256_sphincssha2128fsimple_pem_type        "p256_sphincssha2128fsimple"
-# define rsa3072_sphincssha2128fsimple_evp_type       0
-# define rsa3072_sphincssha2128fsimple_input_type      "rsa3072_sphincssha2128fsimple"
-# define rsa3072_sphincssha2128fsimple_pem_type        "rsa3072_sphincssha2128fsimple"
-# define sphincssha2128ssimple_evp_type       0
-# define sphincssha2128ssimple_input_type      "sphincssha2128ssimple"
-# define sphincssha2128ssimple_pem_type        "sphincssha2128ssimple"
-# define p256_sphincssha2128ssimple_evp_type       0
-# define p256_sphincssha2128ssimple_input_type      "p256_sphincssha2128ssimple"
-# define p256_sphincssha2128ssimple_pem_type        "p256_sphincssha2128ssimple"
-# define rsa3072_sphincssha2128ssimple_evp_type       0
-# define rsa3072_sphincssha2128ssimple_input_type      "rsa3072_sphincssha2128ssimple"
-# define rsa3072_sphincssha2128ssimple_pem_type        "rsa3072_sphincssha2128ssimple"
-# define sphincssha2192fsimple_evp_type       0
-# define sphincssha2192fsimple_input_type      "sphincssha2192fsimple"
-# define sphincssha2192fsimple_pem_type        "sphincssha2192fsimple"
-# define p384_sphincssha2192fsimple_evp_type       0
-# define p384_sphincssha2192fsimple_input_type      "p384_sphincssha2192fsimple"
-# define p384_sphincssha2192fsimple_pem_type        "p384_sphincssha2192fsimple"
-# define sphincsshake128fsimple_evp_type       0
-# define sphincsshake128fsimple_input_type      "sphincsshake128fsimple"
-# define sphincsshake128fsimple_pem_type        "sphincsshake128fsimple"
-# define p256_sphincsshake128fsimple_evp_type       0
-# define p256_sphincsshake128fsimple_input_type      "p256_sphincsshake128fsimple"
-# define p256_sphincsshake128fsimple_pem_type        "p256_sphincsshake128fsimple"
-# define rsa3072_sphincsshake128fsimple_evp_type       0
-# define rsa3072_sphincsshake128fsimple_input_type      "rsa3072_sphincsshake128fsimple"
-# define rsa3072_sphincsshake128fsimple_pem_type        "rsa3072_sphincsshake128fsimple"
+#define dilithium2_evp_type                      0
+#define dilithium2_input_type                    "dilithium2"
+#define dilithium2_pem_type                      "dilithium2"
+#define p256_dilithium2_evp_type                 0
+#define p256_dilithium2_input_type               "p256_dilithium2"
+#define p256_dilithium2_pem_type                 "p256_dilithium2"
+#define rsa3072_dilithium2_evp_type              0
+#define rsa3072_dilithium2_input_type            "rsa3072_dilithium2"
+#define rsa3072_dilithium2_pem_type              "rsa3072_dilithium2"
+#define dilithium2WithSha256_evp_type            0
+#define dilithium2WithSha256_input_type          "dilithium2WithSha256"
+#define dilithium2WithSha256_pem_type            "dilithium2WithSha256"
+#define dilithium2WithSha384_evp_type            0
+#define dilithium2WithSha384_input_type          "dilithium2WithSha384"
+#define dilithium2WithSha384_pem_type            "dilithium2WithSha384"
+#define dilithium2WithSha512_evp_type            0
+#define dilithium2WithSha512_input_type          "dilithium2WithSha512"
+#define dilithium2WithSha512_pem_type            "dilithium2WithSha512"
+#define dilithium2WithSha3At256_evp_type         0
+#define dilithium2WithSha3At256_input_type       "dilithium2WithSha3At256"
+#define dilithium2WithSha3At256_pem_type         "dilithium2WithSha3At256"
+#define dilithium2WithSha3At384_evp_type         0
+#define dilithium2WithSha3At384_input_type       "dilithium2WithSha3At384"
+#define dilithium2WithSha3At384_pem_type         "dilithium2WithSha3At384"
+#define dilithium2WithSha3At512_evp_type         0
+#define dilithium2WithSha3At512_input_type       "dilithium2WithSha3At512"
+#define dilithium2WithSha3At512_pem_type         "dilithium2WithSha3At512"
+#define dilithium2WithShake128_evp_type          0
+#define dilithium2WithShake128_input_type        "dilithium2WithShake128"
+#define dilithium2WithShake128_pem_type          "dilithium2WithShake128"
+#define dilithium2WithShake256_evp_type          0
+#define dilithium2WithShake256_input_type        "dilithium2WithShake256"
+#define dilithium2WithShake256_pem_type          "dilithium2WithShake256"
+#define dilithium3_evp_type                      0
+#define dilithium3_input_type                    "dilithium3"
+#define dilithium3_pem_type                      "dilithium3"
+#define p384_dilithium3_evp_type                 0
+#define p384_dilithium3_input_type               "p384_dilithium3"
+#define p384_dilithium3_pem_type                 "p384_dilithium3"
+#define dilithium3WithSha256_evp_type            0
+#define dilithium3WithSha256_input_type          "dilithium3WithSha256"
+#define dilithium3WithSha256_pem_type            "dilithium3WithSha256"
+#define dilithium3WithSha384_evp_type            0
+#define dilithium3WithSha384_input_type          "dilithium3WithSha384"
+#define dilithium3WithSha384_pem_type            "dilithium3WithSha384"
+#define dilithium3WithSha512_evp_type            0
+#define dilithium3WithSha512_input_type          "dilithium3WithSha512"
+#define dilithium3WithSha512_pem_type            "dilithium3WithSha512"
+#define dilithium3WithSha3At256_evp_type         0
+#define dilithium3WithSha3At256_input_type       "dilithium3WithSha3At256"
+#define dilithium3WithSha3At256_pem_type         "dilithium3WithSha3At256"
+#define dilithium3WithSha3At384_evp_type         0
+#define dilithium3WithSha3At384_input_type       "dilithium3WithSha3At384"
+#define dilithium3WithSha3At384_pem_type         "dilithium3WithSha3At384"
+#define dilithium3WithSha3At512_evp_type         0
+#define dilithium3WithSha3At512_input_type       "dilithium3WithSha3At512"
+#define dilithium3WithSha3At512_pem_type         "dilithium3WithSha3At512"
+#define dilithium3WithShake128_evp_type          0
+#define dilithium3WithShake128_input_type        "dilithium3WithShake128"
+#define dilithium3WithShake128_pem_type          "dilithium3WithShake128"
+#define dilithium3WithShake256_evp_type          0
+#define dilithium3WithShake256_input_type        "dilithium3WithShake256"
+#define dilithium3WithShake256_pem_type          "dilithium3WithShake256"
+#define dilithium5_evp_type                      0
+#define dilithium5_input_type                    "dilithium5"
+#define dilithium5_pem_type                      "dilithium5"
+#define p521_dilithium5_evp_type                 0
+#define p521_dilithium5_input_type               "p521_dilithium5"
+#define p521_dilithium5_pem_type                 "p521_dilithium5"
+#define dilithium5WithSha256_evp_type            0
+#define dilithium5WithSha256_input_type          "dilithium5WithSha256"
+#define dilithium5WithSha256_pem_type            "dilithium5WithSha256"
+#define dilithium5WithSha384_evp_type            0
+#define dilithium5WithSha384_input_type          "dilithium5WithSha384"
+#define dilithium5WithSha384_pem_type            "dilithium5WithSha384"
+#define dilithium5WithSha512_evp_type            0
+#define dilithium5WithSha512_input_type          "dilithium5WithSha512"
+#define dilithium5WithSha512_pem_type            "dilithium5WithSha512"
+#define dilithium5WithSha3At256_evp_type         0
+#define dilithium5WithSha3At256_input_type       "dilithium5WithSha3At256"
+#define dilithium5WithSha3At256_pem_type         "dilithium5WithSha3At256"
+#define dilithium5WithSha3At384_evp_type         0
+#define dilithium5WithSha3At384_input_type       "dilithium5WithSha3At384"
+#define dilithium5WithSha3At384_pem_type         "dilithium5WithSha3At384"
+#define dilithium5WithSha3At512_evp_type         0
+#define dilithium5WithSha3At512_input_type       "dilithium5WithSha3At512"
+#define dilithium5WithSha3At512_pem_type         "dilithium5WithSha3At512"
+#define dilithium5WithShake128_evp_type          0
+#define dilithium5WithShake128_input_type        "dilithium5WithShake128"
+#define dilithium5WithShake128_pem_type          "dilithium5WithShake128"
+#define dilithium5WithShake256_evp_type          0
+#define dilithium5WithShake256_input_type        "dilithium5WithShake256"
+#define dilithium5WithShake256_pem_type          "dilithium5WithShake256"
+#define falcon512_evp_type                       0
+#define falcon512_input_type                     "falcon512"
+#define falcon512_pem_type                       "falcon512"
+#define p256_falcon512_evp_type                  0
+#define p256_falcon512_input_type                "p256_falcon512"
+#define p256_falcon512_pem_type                  "p256_falcon512"
+#define rsa3072_falcon512_evp_type               0
+#define rsa3072_falcon512_input_type             "rsa3072_falcon512"
+#define rsa3072_falcon512_pem_type               "rsa3072_falcon512"
+#define falcon512WithSha256_evp_type             0
+#define falcon512WithSha256_input_type           "falcon512WithSha256"
+#define falcon512WithSha256_pem_type             "falcon512WithSha256"
+#define falcon512WithSha384_evp_type             0
+#define falcon512WithSha384_input_type           "falcon512WithSha384"
+#define falcon512WithSha384_pem_type             "falcon512WithSha384"
+#define falcon512WithSha512_evp_type             0
+#define falcon512WithSha512_input_type           "falcon512WithSha512"
+#define falcon512WithSha512_pem_type             "falcon512WithSha512"
+#define falcon512WithSha3At256_evp_type          0
+#define falcon512WithSha3At256_input_type        "falcon512WithSha3At256"
+#define falcon512WithSha3At256_pem_type          "falcon512WithSha3At256"
+#define falcon512WithSha3At384_evp_type          0
+#define falcon512WithSha3At384_input_type        "falcon512WithSha3At384"
+#define falcon512WithSha3At384_pem_type          "falcon512WithSha3At384"
+#define falcon512WithSha3At512_evp_type          0
+#define falcon512WithSha3At512_input_type        "falcon512WithSha3At512"
+#define falcon512WithSha3At512_pem_type          "falcon512WithSha3At512"
+#define falcon512WithShake128_evp_type           0
+#define falcon512WithShake128_input_type         "falcon512WithShake128"
+#define falcon512WithShake128_pem_type           "falcon512WithShake128"
+#define falcon512WithShake256_evp_type           0
+#define falcon512WithShake256_input_type         "falcon512WithShake256"
+#define falcon512WithShake256_pem_type           "falcon512WithShake256"
+#define falcon1024_evp_type                      0
+#define falcon1024_input_type                    "falcon1024"
+#define falcon1024_pem_type                      "falcon1024"
+#define p521_falcon1024_evp_type                 0
+#define p521_falcon1024_input_type               "p521_falcon1024"
+#define p521_falcon1024_pem_type                 "p521_falcon1024"
+#define falcon1024WithSha256_evp_type            0
+#define falcon1024WithSha256_input_type          "falcon1024WithSha256"
+#define falcon1024WithSha256_pem_type            "falcon1024WithSha256"
+#define falcon1024WithSha384_evp_type            0
+#define falcon1024WithSha384_input_type          "falcon1024WithSha384"
+#define falcon1024WithSha384_pem_type            "falcon1024WithSha384"
+#define falcon1024WithSha512_evp_type            0
+#define falcon1024WithSha512_input_type          "falcon1024WithSha512"
+#define falcon1024WithSha512_pem_type            "falcon1024WithSha512"
+#define falcon1024WithSha3At256_evp_type         0
+#define falcon1024WithSha3At256_input_type       "falcon1024WithSha3At256"
+#define falcon1024WithSha3At256_pem_type         "falcon1024WithSha3At256"
+#define falcon1024WithSha3At384_evp_type         0
+#define falcon1024WithSha3At384_input_type       "falcon1024WithSha3At384"
+#define falcon1024WithSha3At384_pem_type         "falcon1024WithSha3At384"
+#define falcon1024WithSha3At512_evp_type         0
+#define falcon1024WithSha3At512_input_type       "falcon1024WithSha3At512"
+#define falcon1024WithSha3At512_pem_type         "falcon1024WithSha3At512"
+#define falcon1024WithShake128_evp_type          0
+#define falcon1024WithShake128_input_type        "falcon1024WithShake128"
+#define falcon1024WithShake128_pem_type          "falcon1024WithShake128"
+#define falcon1024WithShake256_evp_type          0
+#define falcon1024WithShake256_input_type        "falcon1024WithShake256"
+#define falcon1024WithShake256_pem_type          "falcon1024WithShake256"
+#define sphincssha2128fsimple_evp_type           0
+#define sphincssha2128fsimple_input_type         "sphincssha2128fsimple"
+#define sphincssha2128fsimple_pem_type           "sphincssha2128fsimple"
+#define p256_sphincssha2128fsimple_evp_type      0
+#define p256_sphincssha2128fsimple_input_type    "p256_sphincssha2128fsimple"
+#define p256_sphincssha2128fsimple_pem_type      "p256_sphincssha2128fsimple"
+#define rsa3072_sphincssha2128fsimple_evp_type   0
+#define rsa3072_sphincssha2128fsimple_input_type "rsa3072_sphincssha2128fsimple"
+#define rsa3072_sphincssha2128fsimple_pem_type   "rsa3072_sphincssha2128fsimple"
+#define sphincssha2128ssimple_evp_type           0
+#define sphincssha2128ssimple_input_type         "sphincssha2128ssimple"
+#define sphincssha2128ssimple_pem_type           "sphincssha2128ssimple"
+#define p256_sphincssha2128ssimple_evp_type      0
+#define p256_sphincssha2128ssimple_input_type    "p256_sphincssha2128ssimple"
+#define p256_sphincssha2128ssimple_pem_type      "p256_sphincssha2128ssimple"
+#define rsa3072_sphincssha2128ssimple_evp_type   0
+#define rsa3072_sphincssha2128ssimple_input_type "rsa3072_sphincssha2128ssimple"
+#define rsa3072_sphincssha2128ssimple_pem_type   "rsa3072_sphincssha2128ssimple"
+#define sphincssha2192fsimple_evp_type           0
+#define sphincssha2192fsimple_input_type         "sphincssha2192fsimple"
+#define sphincssha2192fsimple_pem_type           "sphincssha2192fsimple"
+#define p384_sphincssha2192fsimple_evp_type      0
+#define p384_sphincssha2192fsimple_input_type    "p384_sphincssha2192fsimple"
+#define p384_sphincssha2192fsimple_pem_type      "p384_sphincssha2192fsimple"
+#define sphincsshake128fsimple_evp_type          0
+#define sphincsshake128fsimple_input_type        "sphincsshake128fsimple"
+#define sphincsshake128fsimple_pem_type          "sphincsshake128fsimple"
+#define p256_sphincsshake128fsimple_evp_type     0
+#define p256_sphincsshake128fsimple_input_type   "p256_sphincsshake128fsimple"
+#define p256_sphincsshake128fsimple_pem_type     "p256_sphincsshake128fsimple"
+#define rsa3072_sphincsshake128fsimple_evp_type  0
+#define rsa3072_sphincsshake128fsimple_input_type \
+    "rsa3072_sphincsshake128fsimple"
+#define rsa3072_sphincsshake128fsimple_pem_type "rsa3072_sphincsshake128fsimple"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -1555,7 +1555,6 @@ key2text_encode(void *vctx, const void *key, int selection, OSSL_CORE_BIO *cout,
  */
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_START
 #ifdef OQS_KEM_ENCODERS
-
 
 MAKE_ENCODER(, frodo640aes, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, frodo640aes, oqsx, EncryptedPrivateKeyInfo, pem);
@@ -2246,8 +2245,10 @@ MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p256_sphincssha2128fsimple);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo,
+             der);
+MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo,
+             pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
@@ -2267,8 +2268,10 @@ MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p256_sphincssha2128ssimple);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo,
+             der);
+MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo,
+             pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
@@ -2302,8 +2305,10 @@ MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p256_sphincsshake128fsimple);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo,
+             der);
+MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo,
+             pem);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);

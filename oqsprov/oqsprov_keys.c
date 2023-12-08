@@ -256,7 +256,6 @@ char* get_cmpname(int nid, int index)
         return NULL;
     s = OPENSSL_strdup(nid_names[i].tlsname);
     first_token = strtok_r(s, "_", &s);
-    token;
     if (index == 0){
          name = OPENSSL_strdup(first_token);
     }else{
@@ -1345,7 +1344,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->cmp_classical_pkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));
         break;
     case KEY_TYPE_CMP_SIG:
-        int i;
         ret->numkeys = get_qntcmp(OBJ_sn2nid(tls_name));
         ret->privkeylen = 0;
         ret->pubkeylen = 0;

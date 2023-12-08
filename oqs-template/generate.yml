@@ -834,7 +834,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_512'
         oid: '1.3.6.1.4.1.18227.999.2.3.7.1'
         digest: SHAKE128
-        code_point: '0xfec6'
+        code_point: '0xfec7'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
 
@@ -844,7 +844,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_512'
         oid: '1.3.6.1.4.1.18227.999.2.3.8.1'
         digest: SHAKE256
-        code_point: '0xfec7'
+        code_point: '0xfec8'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
 
@@ -853,13 +853,13 @@ sigs:
         pretty_name: 'Falcon-1024'
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.9999.3.9'
-        code_point: '0xfec8'
+        code_point: '0xfec9'
         supported_encodings: ['draft-uni-qsckeys-falcon-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.3.10',
-                    'code_point': '0xfec9'}]
+                    'code_point': '0xfeca'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
@@ -877,7 +877,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.1.1'
         digest: SHA256
-        code_point: '0xfeca'
+        code_point: '0xfecb'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
       
@@ -887,7 +887,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.2.1'
         digest: SHA384
-        code_point: '0xfecb'
+        code_point: '0xfecc'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
 
@@ -897,7 +897,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.3.1'
         digest: SHA512
-        code_point: '0xfecc'
+        code_point: '0xfecd'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
       
@@ -907,7 +907,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.4.1'
         digest: SHA3-256
-        code_point: '0xfecd'
+        code_point: '0xfece'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
 
@@ -917,7 +917,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.5.1'
         digest: SHA3-384
-        code_point: '0xfece'
+        code_point: '0xfecf'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
 
@@ -927,7 +927,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.6.1'
         digest: SHA3-512
-        code_point: '0xfecf'
+        code_point: '0xfed0'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
         
@@ -937,7 +937,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.7.1'
         digest: SHAKE128
-        code_point: '0xfed0'
+        code_point: '0xfed1'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
 
@@ -947,7 +947,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_falcon_1024'
         oid: '1.3.6.1.4.1.18227.999.2.2.8.1'
         digest: SHAKE256
-        code_point: '0xfed1'
+        code_point: '0xfed2'
         supported_encodings: ['draft-uni-qsckeys-dilithium-00/sk-pk']
         enable: true
   -
@@ -1176,32 +1176,32 @@ sigs:
         pretty_name: 'SPHINCS+-SHA2-128f-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_sha2_128f_simple'
         oid: '1.3.9999.6.4.13'
-        code_point: '0xfeb3'
+        code_point: '0xfe61'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.6.4.14',
-                    'code_point': '0xfeb4'},
+                    'code_point': '0xfe62'},
                    {'name': 'rsa3072',
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.6.4.15',
-                    'code_point': '0xfeb5'}]
+                    'code_point': '0xfe63'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.4.4'
-              code_point: '0xfe61'
+              code_point: '0xfe64'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p256',
                           'pretty_name': 'ECDSA p256',
                           'oid': '1.3.9999.6.4.5',
-                          'code_point': '0xfe62'},
+                          'code_point': '0xfe65'},
                          {'name': 'rsa3072',
                           'pretty_name': 'RSA3072',
                           'oid': '1.3.9999.6.4.6',
-                          'code_point': '0xfe63'}]
+                          'code_point': '0xfe66'}]
       -
         name: 'sphincssha256128srobust'
         pretty_name: 'SPHINCS+-SHA256-128s-robust'
@@ -1211,47 +1211,47 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.4.7'
-              code_point: '0xfe64'
+              code_point: '0xfe67'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p256',
                           'pretty_name': 'ECDSA p256',
                           'oid': '1.3.9999.6.4.8',
-                          'code_point': '0xfe65'},
+                          'code_point': '0xfe68'},
                          {'name': 'rsa3072',
                           'pretty_name': 'RSA3072',
                           'oid': '1.3.9999.6.4.9',
-                          'code_point': '0xfe66'}]
+                          'code_point': '0xfe69'}]
       -
         name: 'sphincssha2128ssimple'
         pretty_name: 'SPHINCS+-SHA2-128s-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_sha2_128s_simple'
         oid: '1.3.9999.6.4.16'
-        code_point: '0xfeb6'
+        code_point: '0xfe6a'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.6.4.17',
-                    'code_point': '0xfeb7'},
+                    'code_point': '0xfe6b'},
                    {'name': 'rsa3072',
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.6.4.18',
-                    'code_point': '0xfeb8'}]
+                    'code_point': '0xfe6c'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.4.10'
-              code_point: '0xfe67'
+              code_point: '0xfe6d'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p256',
                           'pretty_name': 'ECDSA p256',
                           'oid': '1.3.9999.6.4.11',
-                          'code_point': '0xfe68'},
+                          'code_point': '0xfe6e'},
                          {'name': 'rsa3072',
                           'pretty_name': 'RSA3072',
                           'oid': '1.3.9999.6.4.12',
-                          'code_point': '0xfe69'}]
+                          'code_point': '0xfe6f'}]
       -
         name: 'sphincssha256192frobust'
         pretty_name: 'SPHINCS+-SHA256-192f-robust'
@@ -1261,35 +1261,35 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.5.1'
-              code_point: '0xfe6a'
+              code_point: '0xfe70'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.5.2',
-                          'code_point': '0xfe6b'}]
+                          'code_point': '0xfe71'}]
       -
         name: 'sphincssha2192fsimple'
         pretty_name: 'SPHINCS+-SHA2-192f-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_sha2_192f_simple'
         oid: '1.3.9999.6.5.10'
-        code_point: '0xfeb9'
+        code_point: '0xfe72'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.6.5.11',
-                    'code_point': '0xfeba'}]
+                    'code_point': '0xfe73'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.5.3'
-              code_point: '0xfe6c'
+              code_point: '0xfe74'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.5.4',
-                          'code_point': '0xfe6d'}]
+                          'code_point': '0xfe75'}]
       -
         name: 'sphincssha256192srobust'
         pretty_name: 'SPHINCS+-SHA256-192s-robust'
@@ -1299,35 +1299,35 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.5.5'
-              code_point: '0xfe6e'
+              code_point: '0xfe76'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.5.6',
-                          'code_point': '0xfe6f'}]
+                          'code_point': '0xfe77'}]
       -
         name: 'sphincssha2192ssimple'
         pretty_name: 'SPHINCS+-SHA2-192s-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_sha2_192s_simple'
         oid: '1.3.9999.6.5.12'
-        code_point: '0xfebb'
+        code_point: '0xfe78'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.6.5.13',
-                    'code_point': '0xfebc'}]
+                    'code_point': '0xfe79'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.5.7'
-              code_point: '0xfe70'
+              code_point: '0xfe7a'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.5.8',
-                          'code_point': '0xfe71'}]
+                          'code_point': '0xfe7b'}]
       -
         name: 'sphincssha256256frobust'
         pretty_name: 'SPHINCS+-SHA256-256f-robust'
@@ -1337,35 +1337,35 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.6.1'
-              code_point: '0xfe72'
+              code_point: '0xfe7c'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.6.2',
-                          'code_point': '0xfe73'}]
+                          'code_point': '0xfe7d'}]
       -
         name: 'sphincssha2256fsimple'
         pretty_name: 'SPHINCS+-SHA2-256f-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_sha2_256f_simple'
         oid: '1.3.9999.6.6.10'
-        code_point: '0xfebd'
+        code_point: '0xfe7e'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.6.6.11',
-                    'code_point': '0xfebe'}]
+                    'code_point': '0xfe7f'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.6.3'
-              code_point: '0xfe74'
+              code_point: '0xfe80'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.6.4',
-                          'code_point': '0xfe75'}]
+                          'code_point': '0xfe81'}]
       -
         name: 'sphincssha256256srobust'
         pretty_name: 'SPHINCS+-SHA256-256s-robust'
@@ -1375,35 +1375,35 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.6.5'
-              code_point: '0xfe76'
+              code_point: '0xfe82'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.6.6',
-                          'code_point': '0xfe77'}]
+                          'code_point': '0xfe83'}]
       -
         name: 'sphincssha2256ssimple'
         pretty_name: 'SPHINCS+-SHA2-256s-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_sha2_256s_simple'
         oid: '1.3.9999.6.6.12'
-        code_point: '0xfec0'
+        code_point: '0xfe84'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.6.6.13',
-                    'code_point': '0xfec1'}]
+                    'code_point': '0xfe85'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.6.7'
-              code_point: '0xfe78'
+              code_point: '0xfe86'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.6.8',
-                          'code_point': '0xfe79'}]
+                          'code_point': '0xfe89'}]
   -
     family: 'SPHINCS-SHAKE'
     variants:
@@ -1416,47 +1416,47 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.7.1'
-              code_point: '0xfe7a'
+              code_point: '0xff00'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p256',
                           'pretty_name': 'ECDSA p256',
                           'oid': '1.3.9999.6.7.2',
-                          'code_point': '0xfe7b'},
+                          'code_point': '0xff01'},
                          {'name': 'rsa3072',
                           'pretty_name': 'RSA3072',
                           'oid': '1.3.9999.6.7.3',
-                          'code_point': '0xfe7c'}]
+                          'code_point': '0xff02'}]
       -
         name: 'sphincsshake128fsimple'
         pretty_name: 'SPHINCS+-SHAKE-128f-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_shake_128f_simple'
         oid: '1.3.9999.6.7.13'
-        code_point: '0xfec2'
+        code_point: '0xff03'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.6.7.14',
-                    'code_point': '0xfec3'},
+                    'code_point': '0xff04'},
                    {'name': 'rsa3072',
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.6.7.15',
-                    'code_point': '0xfec4'}]
+                    'code_point': '0xff05'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.7.4'
-              code_point: '0xfe7d'
+              code_point: '0xff06'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p256',
                           'pretty_name': 'ECDSA p256',
                           'oid': '1.3.9999.6.7.5',
-                          'code_point': '0xfe7e'},
+                          'code_point': '0xff07'},
                          {'name': 'rsa3072',
                           'pretty_name': 'RSA3072',
                           'oid': '1.3.9999.6.7.6',
-                          'code_point': '0xfe7f'}]
+                          'code_point': '0xff08'}]
       -
         name: 'sphincsshake256128srobust'
         pretty_name: 'SPHINCS+-SHAKE256-128s-robust'
@@ -1466,47 +1466,47 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.7.7'
-              code_point: '0xfe80'
+              code_point: '0xff09'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p256',
                           'pretty_name': 'ECDSA p256',
                           'oid': '1.3.9999.6.7.8',
-                          'code_point': '0xfe81'},
+                          'code_point': '0xff0a'},
                          {'name': 'rsa3072',
                           'pretty_name': 'RSA3072',
                           'oid': '1.3.9999.6.7.9',
-                          'code_point': '0xfe82'}]
+                          'code_point': '0xff0b'}]
       -
         name: 'sphincsshake128ssimple'
         pretty_name: 'SPHINCS+-SHAKE-128s-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_shake_128s_simple'
         oid: '1.3.9999.6.7.16'
-        code_point: '0xfec5'
+        code_point: '0xff0c'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.6.7.17',
-                    'code_point': '0xfec6'},
+                    'code_point': '0xff0d'},
                    {'name': 'rsa3072',
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.6.7.18',
-                    'code_point': '0xfec7'}]
+                    'code_point': '0xff0e'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.7.10'
-              code_point: '0xfe83'
+              code_point: '0xff0f'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p256',
                           'pretty_name': 'ECDSA p256',
                           'oid': '1.3.9999.6.7.11',
-                          'code_point': '0xfe84'},
+                          'code_point': '0xff10'},
                          {'name': 'rsa3072',
                           'pretty_name': 'RSA3072',
                           'oid': '1.3.9999.6.7.12',
-                          'code_point': '0xfe85'}]
+                          'code_point': '0xff11'}]
       -
         name: 'sphincsshake256192frobust'
         pretty_name: 'SPHINCS+-SHAKE256-192f-robust'
@@ -1516,35 +1516,35 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.8.1'
-              code_point: '0xfe86'
+              code_point: '0xff12'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.8.2',
-                          'code_point': '0xfe87'}]
+                          'code_point': '0xff13'}]
       -
         name: 'sphincsshake192fsimple'
         pretty_name: 'SPHINCS+-SHAKE-192f-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_shake_192f_simple'
         oid: '1.3.9999.6.8.10'
-        code_point: '0xfec8'
+        code_point: '0xff14'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.6.8.11',
-                    'code_point': '0xfec9'}]
+                    'code_point': '0xff15'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.8.3'
-              code_point: '0xfe88'
+              code_point: '0xff16'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.8.4',
-                          'code_point': '0xfe89'}]
+                          'code_point': '0xff17'}]
       -
         name: 'sphincsshake256192srobust'
         pretty_name: 'SPHINCS+-SHAKE256-192s-robust'
@@ -1554,35 +1554,35 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.8.5'
-              code_point: '0xfe8a'
+              code_point: '0xff18'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.8.6',
-                          'code_point': '0xfe8b'}]
+                          'code_point': '0xff19'}]
       -
         name: 'sphincsshake192ssimple'
         pretty_name: 'SPHINCS+-SHAKE-192s-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_shake_192s_simple'
         oid: '1.3.9999.6.8.12'
-        code_point: '0xfeca'
+        code_point: '0xff1a'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.6.8.13',
-                    'code_point': '0xfecb'}]
+                    'code_point': '0xff1b'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.8.7'
-              code_point: '0xfe8c'
+              code_point: '0xff1c'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p384',
                           'pretty_name': 'ECDSA p384',
                           'oid': '1.3.9999.6.8.8',
-                          'code_point': '0xfe8d'}]
+                          'code_point': '0xff1d'}]
       -
         name: 'sphincsshake256256frobust'
         pretty_name: 'SPHINCS+-SHAKE256-256f-robust'
@@ -1592,35 +1592,35 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.9.1'
-              code_point: '0xfe8e'
+              code_point: '0xff1e'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.9.2',
-                          'code_point': '0xfe8f'}]
+                          'code_point': '0xff1f'}]
       -
         name: 'sphincsshake256fsimple'
         pretty_name: 'SPHINCS+-SHAKE-256f-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_shake_256f_simple'
         oid: '1.3.9999.6.9.10'
-        code_point: '0xfecc'
+        code_point: '0xff20'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.6.9.11',
-                    'code_point': '0xfecd'}]
+                    'code_point': '0xff21'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.9.3'
-              code_point: '0xfe90'
+              code_point: '0xff22'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.9.4',
-                          'code_point': '0xfe91'}]
+                          'code_point': '0xff23'}]
       -
         name: 'sphincsshake256256srobust'
         pretty_name: 'SPHINCS+-SHAKE256-256s-robust'
@@ -1630,33 +1630,33 @@ sigs:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.9.5'
-              code_point: '0xfe92'
+              code_point: '0xff24'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.9.6',
-                          'code_point': '0xfe93'}]
+                          'code_point': '0xff25'}]
       -
         name: 'sphincsshake256ssimple'
         pretty_name: 'SPHINCS+-SHAKE-256s-simple'
         oqs_meth: 'OQS_SIG_alg_sphincs_shake_256s_simple'
         oid: '1.3.9999.6.9.12'
-        code_point: '0xfece'
+        code_point: '0xff26'
         supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
         enable: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.6.9.13',
-                    'code_point': '0xfecf'}]
+                    'code_point': '0xff27'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.6.9.7'
-              code_point: '0xfe94'
+              code_point: '0xff28'
               supported_encodings: ['draft-uni-qsckeys-sphincsplus-00/sk-pk']
               mix_with: [{'name': 'p521',
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.6.9.8',
-                          'code_point': '0xfe95'}]
+                          'code_point': '0xff29'}]
 

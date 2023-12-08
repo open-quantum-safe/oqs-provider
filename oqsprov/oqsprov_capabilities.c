@@ -81,17 +81,17 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
    { 0x0243, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
    { 0x2F43, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
-   { 0x022C, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0244, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-   { 0x2F2C, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
-   { 0x2FAC, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
-   { 0x022D, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F44, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB0, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0245, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-   { 0x2F2D, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
-   { 0x2FAD, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
-   { 0x022E, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F45, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB1, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0246, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-   { 0x2F2E, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F46, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
 };
 
@@ -264,9 +264,8 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     { 0xfec4, 128, TLS1_3_VERSION, 0 },
     { 0xfec5, 128, TLS1_3_VERSION, 0 },
     { 0xfec6, 128, TLS1_3_VERSION, 0 },
-    { 0xfec6, 128, TLS1_3_VERSION, 0 },
     { 0xfec7, 128, TLS1_3_VERSION, 0 },
-    { 0xfec8, 256, TLS1_3_VERSION, 0 },
+    { 0xfec8, 128, TLS1_3_VERSION, 0 },
     { 0xfec9, 256, TLS1_3_VERSION, 0 },
     { 0xfeca, 256, TLS1_3_VERSION, 0 },
     { 0xfecb, 256, TLS1_3_VERSION, 0 },
@@ -276,17 +275,18 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     { 0xfecf, 256, TLS1_3_VERSION, 0 },
     { 0xfed0, 256, TLS1_3_VERSION, 0 },
     { 0xfed1, 256, TLS1_3_VERSION, 0 },
-    { 0xfeb3, 128, TLS1_3_VERSION, 0 },
-    { 0xfeb4, 128, TLS1_3_VERSION, 0 },
-    { 0xfeb5, 128, TLS1_3_VERSION, 0 },
-    { 0xfeb6, 128, TLS1_3_VERSION, 0 },
-    { 0xfeb7, 128, TLS1_3_VERSION, 0 },
-    { 0xfeb8, 128, TLS1_3_VERSION, 0 },
-    { 0xfeb9, 192, TLS1_3_VERSION, 0 },
-    { 0xfeba, 192, TLS1_3_VERSION, 0 },
-    { 0xfec2, 128, TLS1_3_VERSION, 0 },
-    { 0xfec3, 128, TLS1_3_VERSION, 0 },
-    { 0xfec4, 128, TLS1_3_VERSION, 0 },
+    { 0xfed2, 256, TLS1_3_VERSION, 0 },
+    { 0xfe61, 128, TLS1_3_VERSION, 0 },
+    { 0xfe62, 128, TLS1_3_VERSION, 0 },
+    { 0xfe63, 128, TLS1_3_VERSION, 0 },
+    { 0xfe6a, 128, TLS1_3_VERSION, 0 },
+    { 0xfe6b, 128, TLS1_3_VERSION, 0 },
+    { 0xfe6c, 128, TLS1_3_VERSION, 0 },
+    { 0xfe72, 192, TLS1_3_VERSION, 0 },
+    { 0xfe73, 192, TLS1_3_VERSION, 0 },
+    { 0xff03, 128, TLS1_3_VERSION, 0 },
+    { 0xff04, 128, TLS1_3_VERSION, 0 },
+    { 0xff05, 128, TLS1_3_VERSION, 0 },
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 

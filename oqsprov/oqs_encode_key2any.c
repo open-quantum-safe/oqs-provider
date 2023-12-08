@@ -1475,6 +1475,10 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 <= 0)
                 return 0;
             break;
+        case KEY_TYPE_CMP_SIG:
+            if (BIO_printf(out, "%s composite private key:\n", okey->tls_name) <= 0)
+                return 0;
+            break;
         default:
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
             return 0;
@@ -1497,6 +1501,10 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
             if (BIO_printf(out, "%s hybrid public key:\n", okey->tls_name) <= 0)
                 return 0;
             break;
+        case KEY_TYPE_CMP_SIG:
+            if (BIO_printf(out, "%s composite public key:\n", okey->tls_name) <= 0)
+                return 0;
+            break;
         default:
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
             return 0;
@@ -1505,51 +1513,105 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
 
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
         if (okey->privkey) {
-            if (okey->numkeys > 1) { // hybrid key
-                char classic_label[200];
-                int classic_key_len = 0;
-                sprintf(classic_label,
-                        "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
-                DECODE_UINT32(classic_key_len, okey->privkey);
-                if (!print_labeled_buf(out, classic_label,
-                                       okey->comp_privkey[0], classic_key_len))
-                    return 0;
-                /* finally print pure PQ key */
-                if (!print_labeled_buf(out, "PQ key material:",
-                                       okey->comp_privkey[okey->numkeys - 1],
-                                       okey->privkeylen - classic_key_len
-                                           - SIZE_OF_UINT32))
-                    return 0;
-            } else { // plain PQ key
-                if (!print_labeled_buf(out, "PQ key material:",
-                                       okey->comp_privkey[okey->numkeys - 1],
-                                       okey->privkeylen))
-                    return 0;
+            if (okey->keytype == KEY_TYPE_CMP_SIG){
+                char *name;
+                char label[200];
+                int i, privlen;
+                for (i = 0; i < okey->numkeys; i++){
+                    if ((name = get_cmpname(OBJ_sn2nid(okey->tls_name), i)) == NULL){
+                        OPENSSL_free(name);
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
+                        return 0;
+                    }
+                    sprintf(label, "%s key material:", name);
+
+                    if(get_oqsname_fromtls(name) == 0 //classical key
+                       && okey->oqsx_provider_ctx[i].oqsx_evp_ctx->evp_info->keytype == EVP_PKEY_RSA){ //get the RSA real key size
+                        unsigned char* enc_len = OPENSSL_strndup(okey->comp_privkey[i], 4);
+                        OPENSSL_cleanse(enc_len, 2);
+                        DECODE_UINT32(privlen, enc_len);
+                        privlen += 4;
+                        OPENSSL_free(enc_len);
+                        if (privlen > okey->privkeylen_cmp[i]){
+                            OPENSSL_free(name);
+                            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                            return 0;
+                        }
+                    }else
+                        privlen = okey->privkeylen_cmp[i]; 
+                    if (!print_labeled_buf(out, label,
+                                        okey->comp_privkey[i], privlen))
+                        return 0;
+                    
+                    OPENSSL_free(name);
+                }
+            }else{
+                if (okey->numkeys > 1) { // hybrid key
+                    char classic_label[200];
+                    int classic_key_len = 0;
+                    sprintf(classic_label,
+                            "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
+                    DECODE_UINT32(classic_key_len, okey->privkey);
+                    if (!print_labeled_buf(out, classic_label,
+                                        okey->comp_privkey[0], classic_key_len))
+                        return 0;
+                    /* finally print pure PQ key */
+                    if (!print_labeled_buf(out, "PQ key material:",
+                                        okey->comp_privkey[okey->numkeys - 1],
+                                        okey->privkeylen - classic_key_len
+                                            - SIZE_OF_UINT32))
+                        return 0;
+                } else { // plain PQ key
+                    if (!print_labeled_buf(out, "PQ key material:",
+                                        okey->comp_privkey[okey->numkeys - 1],
+                                        okey->privkeylen))
+                        return 0;
+                }
             }
         }
     }
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
         if (okey->pubkey) {
-            if (okey->numkeys > 1) { // hybrid key
-                char classic_label[200];
-                int classic_key_len = 0;
-                DECODE_UINT32(classic_key_len, okey->pubkey);
-                sprintf(classic_label,
-                        "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
-                if (!print_labeled_buf(out, classic_label, okey->comp_pubkey[0],
-                                       classic_key_len))
-                    return 0;
-                /* finally print pure PQ key */
-                if (!print_labeled_buf(out, "PQ key material:",
-                                       okey->comp_pubkey[okey->numkeys - 1],
-                                       okey->pubkeylen - classic_key_len
-                                           - SIZE_OF_UINT32))
-                    return 0;
-            } else { // PQ key only
-                if (!print_labeled_buf(out, "PQ key material:",
-                                       okey->comp_pubkey[okey->numkeys - 1],
-                                       okey->pubkeylen))
-                    return 0;
+            if (okey->keytype == KEY_TYPE_CMP_SIG){
+                char *name;
+                char label[200];
+                int i;
+                for (i = 0; i < okey->numkeys; i++){
+                    if ((name = get_cmpname(OBJ_sn2nid(okey->tls_name), i)) == NULL){
+                        OPENSSL_free(name);
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
+                        return 0;
+                    }
+                    sprintf(label, "%s key material:", name);
+
+                    if (!print_labeled_buf(out, label,
+                                        okey->comp_pubkey[i], okey->pubkeylen_cmp[i]))
+                        return 0;
+                    
+                    OPENSSL_free(name);
+                }
+            }else{
+                if (okey->numkeys > 1) { // hybrid key
+                    char classic_label[200];
+                    int classic_key_len = 0;
+                    DECODE_UINT32(classic_key_len, okey->pubkey);
+                    sprintf(classic_label,
+                            "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
+                    if (!print_labeled_buf(out, classic_label, okey->comp_pubkey[0],
+                                        classic_key_len))
+                        return 0;
+                    /* finally print pure PQ key */
+                    if (!print_labeled_buf(out, "PQ key material:",
+                                        okey->comp_pubkey[okey->numkeys - 1],
+                                        okey->pubkeylen - classic_key_len
+                                            - SIZE_OF_UINT32))
+                        return 0;
+                } else { // PQ key only
+                    if (!print_labeled_buf(out, "PQ key material:",
+                                        okey->comp_pubkey[okey->numkeys - 1],
+                                        okey->pubkeylen))
+                        return 0;
+                }
             }
         }
     }
@@ -2122,94 +2184,110 @@ MAKE_ENCODER(, dilithium3_rsa3072, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_rsa3072, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_rsa3072, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium3_rsa3072, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium3_rsa3072);
 MAKE_ENCODER(, dilithium3_p256, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_p256, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_p256, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_p256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_p256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium3_p256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium3_p256);
 MAKE_ENCODER(, falcon512_p256, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, falcon512_p256, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, falcon512_p256, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, falcon512_p256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, falcon512_p256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, falcon512_p256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, falcon512_p256);
 MAKE_ENCODER(, dilithium5_p384, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium5_p384, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium5_p384, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium5_p384, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium5_p384, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium5_p384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium5_p384);
 MAKE_ENCODER(, dilithium3_bp256, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_bp256, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_bp256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_bp256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium3_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium3_bp256);
 MAKE_ENCODER(, dilithium3_ed25519, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_ed25519, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_ed25519, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_ed25519, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_ed25519, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium3_ed25519, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium3_ed25519);
 MAKE_ENCODER(, dilithium5_bp384, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium5_bp384, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium5_bp384, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium5_bp384, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium5_bp384, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium5_bp384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium5_bp384);
 MAKE_ENCODER(, dilithium5_ed448, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium5_ed448, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium5_ed448, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium5_ed448, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium5_ed448, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium5_ed448, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium5_ed448);
 MAKE_ENCODER(, falcon512_bp256, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, falcon512_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, falcon512_bp256, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, falcon512_bp256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, falcon512_bp256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, falcon512_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, falcon512_bp256);
 MAKE_ENCODER(, falcon512_ed25519, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, falcon512_ed25519, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, falcon512_ed25519, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, falcon512_ed25519, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, falcon512_ed25519, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, falcon512_ed25519, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, falcon512_ed25519);
 MAKE_ENCODER(, dilithium3_pss3072, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_pss3072, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_pss3072, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium3_pss3072, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium3_pss3072, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium3_pss3072, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium3_pss3072);
 MAKE_ENCODER(, dilithium2_pss2048, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_pss2048, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_pss2048, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_pss2048, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_pss2048, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium2_pss2048, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2_pss2048);
 MAKE_ENCODER(, dilithium2_rsa2048, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_rsa2048, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_rsa2048, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_rsa2048, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_rsa2048, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium2_rsa2048, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2_rsa2048);
 MAKE_ENCODER(, dilithium2_ed25519, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_ed25519, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_ed25519, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_ed25519, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_ed25519, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium2_ed25519, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2_ed25519);
 MAKE_ENCODER(, dilithium2_p256, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_p256, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_p256, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_p256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_p256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium2_p256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2_p256);
 MAKE_ENCODER(, dilithium2_bp256, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_bp256, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, dilithium2_bp256, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, dilithium2_bp256, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, dilithium2_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, dilithium2_bp256);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

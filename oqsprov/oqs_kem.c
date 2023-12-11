@@ -171,7 +171,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
     int ret = OQS_SUCCESS, ret2 = 0;
 
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
-    const OQSX_EVP_CTX *evp_ctx = pkemctx->kem->oqsx_provider_ctx[0].oqsx_evp_ctx;
+    const OQSX_EVP_CTX *evp_ctx
+        = pkemctx->kem->oqsx_provider_ctx[0].oqsx_evp_ctx;
 
     size_t pubkey_kexlen = 0;
     size_t kexDeriveLen = 0, pkeylen = 0;
@@ -249,7 +250,8 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
 
     int ret = OQS_SUCCESS, ret2 = 0;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
-    const OQSX_EVP_CTX *evp_ctx = pkemctx->kem->oqsx_provider_ctx[0].oqsx_evp_ctx;
+    const OQSX_EVP_CTX *evp_ctx
+        = pkemctx->kem->oqsx_provider_ctx[0].oqsx_evp_ctx;
 
     size_t pubkey_kexlen = evp_ctx->evp_info->length_public_key;
     size_t kexDeriveLen = evp_ctx->evp_info->kex_length_secret;
@@ -351,7 +353,8 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
 {
     int ret = OQS_SUCCESS;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
-    const OQSX_EVP_CTX *evp_ctx = pkemctx->kem->oqsx_provider_ctx[0].oqsx_evp_ctx;
+    const OQSX_EVP_CTX *evp_ctx
+        = pkemctx->kem->oqsx_provider_ctx[0].oqsx_evp_ctx;
     const OQS_KEM *qs_ctx = pkemctx->kem->oqsx_provider_ctx[0].oqsx_qs_ctx.kem;
 
     size_t secretLen0 = 0, secretLen1 = 0;

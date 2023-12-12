@@ -224,3 +224,81 @@ jobs:
         with:
           name: oqsprovider-aarch64
           path: build/*.deb
+
+  llvm_code_coverage_linux_intel:
+    name: "Source-based code coverage using LLVM"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    container:
+      image: openquantumsafe/ci-ubuntu-jammy:latest
+    env:
+      CC: "clang"
+      CXX: "clang++"
+      LLVMCOV_C_FLAGS: "-fprofile-instr-generate -fcoverage-mapping"
+      COVERAGE_DIR: "/tmp/oqs-provider-coverage"
+      LLVM_PROFILE_FILE: "/tmp/oqs-provider-coverage/%p.profraw"
+      OPENSSL_BRANCH: "openssl-3.2"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y clang llvm ninja-build git cmake nodejs libclang-rt-14-dev libclang-common-14-dev
+
+      - name: Clone and build OpenSSL(3)
+        run: |
+          git clone --depth=1 --branch "${OPENSSL_BRANCH}" https://github.com/openssl/openssl.git openssl
+          cd openssl
+          mkdir install
+          ./Configure --openssldir="${PWD}/install" \
+                      --prefix="${PWD}/install" \
+                      --release \
+                      no-tests \
+                      no-docs
+          make -j$(nproc)
+          make install_sw
+          cd ..
+
+      - name: Clone and build liboqs
+        run: |
+          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          cd liboqs
+          mkdir build install
+          cmake -GNinja -B build \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DOQS_USE_OPENSSL=OFF \
+                -DCMAKE_INSTALL_PREFIX="${PWD}/install"
+          cmake --build build -j$(nproc)
+          cmake --install build
+          cd ..
+
+      - name: Build oqs-provider with LLVM source-based code coverage
+        run: |
+          cmake -GNinja -B build \
+                -DCMAKE_BUILD_TYPE=Debug \
+                -DOPENSSL_ROOT_DIR="$PWD/openssl/install" \
+                -Dliboqs_DIR="$PWD/liboqs/install/lib/cmake/liboqs" \
+                -DCMAKE_C_FLAGS="${LLVMCOV_C_FLAGS}" \
+                -DCMAKE_EXE_LINKER_FLAGS="${LLVMCOV_C_FLAGS}"
+          cmake --build build -j$(nproc)
+
+      - name: Run the instrumented tests
+        run: mkdir "${COVERAGE_DIR}" && ctest --test-dir build --output-on-failure
+
+      - name: Create the coverage report
+        run: |
+          llvm-profdata merge -sparse "${COVERAGE_DIR}/"*.profraw \
+                -o "${COVERAGE_DIR}/report.profdata"
+
+      - name: Generate HTML report
+        run: |
+          llvm-cov show build/lib/oqsprovider.so --format=html -instr-profile="${COVERAGE_DIR}/report.profdata" \
+                -o coverage_html
+
+      - name: Retain HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: llvm-source-based-code-coverage
+          path: coverage_html
+

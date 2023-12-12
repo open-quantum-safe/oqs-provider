@@ -7,6 +7,9 @@
      {%- for classical_alg in variant['mix_with'] %}
     SIGALG("{{ classical_alg['name'] }}_{{variant['name']}}", {{variant['security']}}, oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_keymgmt_functions),
      {%- endfor %}
+     {%- for composite_alg in variant['composite'] %}
+    SIGALG("{{variant['name']}}_{{ composite_alg['name'] }}", {{composite_alg['security']}}, oqs_{{variant['name']}}_{{ composite_alg['name'] }}_keymgmt_functions),
+     {%- endfor %}
 #endif
    {%- endfor %}
 {%- endfor %}

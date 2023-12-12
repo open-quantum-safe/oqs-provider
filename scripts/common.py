@@ -19,7 +19,8 @@ signatures = [
     'dilithium2','dilithium3','dilithium5','falcon512','falcon1024','sphincssha2128fsimple','sphincssha2128ssimple','sphincssha2192fsimple','sphincsshake128fsimple',
     # post-quantum + classical signatures
     'p256_dilithium2','rsa3072_dilithium2','p384_dilithium3','p521_dilithium5','p256_falcon512','rsa3072_falcon512','p521_falcon1024','p256_sphincssha2128fsimple','rsa3072_sphincssha2128fsimple','p256_sphincssha2128ssimple','rsa3072_sphincssha2128ssimple','p384_sphincssha2192fsimple','p256_sphincsshake128fsimple','rsa3072_sphincsshake128fsimple',
-##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
+    # post-quantum + classical signatures (COMPOSITE)
+    'dilithium2_pss2048','dilithium2_rsa2048','dilithium2_ed25519','dilithium2_p256','dilithium2_bp256','dilithium3_pss3072','dilithium3_rsa3072','dilithium3_p256','dilithium3_bp256','dilithium3_ed25519','dilithium5_p384','dilithium5_bp384','dilithium5_ed448','falcon512_p256','falcon512_bp256','falcon512_ed25519',##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 
 SERVER_START_ATTEMPTS = 10

@@ -27,12 +27,6 @@
 // TBD: Review what we really need/want: For now go with OSSL settings:
 #define OSSL_MAX_NAME_SIZE      50
 #define OSSL_MAX_PROPQUERY_SIZE 256 /* Property query strings */
-#ifdef OQS_KEM_ENCODERS /*idx to the first composite in the composite idx \
-                           block*/
-#    define COMPOSITE_IDX_ADJUST 65
-#else
-#    define COMPOSITE_IDX_ADJUST 23
-#endif
 
 #ifdef NDEBUG
 #    define OQS_SIG_PRINTF(a)
@@ -219,42 +213,45 @@ static int oqs_sig_verify_init(void *vpoqs_sigctx, void *voqssig,
     return oqs_sig_signverify_init(vpoqs_sigctx, voqssig, EVP_PKEY_OP_VERIFY);
 }
 
+// this next two list need to be in order of the last number on the OID from the
+// composite
 static const char *composite_OID_prefix[] = {
-    "69642D4D4C44534136352D525341333037322D504B435331352D534841323536", // dilithium3_rsa3072
-    "69642D4D4C44534136352D45434453412D503235362D534841323536", // dilithium3_p256
-    "69642D46616C6F6E3531322D45434453412D503235362D534841323536", // falcon512_p256
-    "69642D4D4C44534138372D45434453412D503338342D534841333834", // dilithium5_p384
-    "69642D4D4C44534136352D45434453412D627261696E706F6F6C5032353672312D534841323536", // dilithium3_bp256
-    "69642D4D4C44534136352D456432353531392D534841353132", // dilithium3_ed25519
-    "69642D4D4C44534138372D45434453412D627261696E706F6F6C5033383472312D534841333834", // dilithium5_bp384
-    "69642D4D4C44534138372D45643434382D5348414B45323536", // dilithium5_ed448
-    "69642D46616C636F6E3531322D45434453412D627261696E706F6F6C5032353672312D534841323536", // falcon512_bp256
-    "69642D46616C636F6E3531322D456432353531392D534841353132", // falcon512_ed25519
-    "69642D4D4C44534136352D525341333037322D5053532D534841323536", // dilithium3_pss3072
     "69642D4D4C44534134342D525341323034382D5053532D534841323536", // dilithium2_pss2048
     "69642D4D4C44534134342D525341323034382D504B435331352D534841323536", // dilithium2_rsa2048
     "69642D4D4C44534134342D456432353531392D534841353132", // dilithium2_ed25519
     "69642D4D4C44534134342D45434453412D503235362D534841323536", // dilithium2_p256
     "69642D4D4C44534134342D45434453412D627261696E706F6F6C5032353672312D534841323536", // dilithium2_bp256
+    "69642D4D4C44534136352D525341333037322D5053532D534841323536", // dilithium3_pss3072
+    "69642D4D4C44534136352D525341333037322D504B435331352D534841323536", // dilithium3_rsa3072
+    "69642D4D4C44534136352D45434453412D503235362D534841323536", // dilithium3_p256
+    "69642D4D4C44534136352D45434453412D627261696E706F6F6C5032353672312D534841323536", // dilithium3_bp256
+    "69642D4D4C44534136352D456432353531392D534841353132", // dilithium3_ed25519
+    "69642D4D4C44534138372D45434453412D503338342D534841333834", // dilithium5_p384
+    "69642D4D4C44534138372D45434453412D627261696E706F6F6C5033383472312D534841333834", // dilithium5_bp384
+    "69642D4D4C44534138372D45643434382D5348414B45323536", // dilithium5_ed448
+    "69642D46616C6F6E3531322D45434453412D503235362D534841323536", // falcon512_p256
+    "69642D46616C636F6E3531322D45434453412D627261696E706F6F6C5032353672312D534841323536", // falcon512_bp256
+    "69642D46616C636F6E3531322D456432353531392D534841353132", // falcon512_ed25519
+
 };
 
 static const size_t composite_OID_prefix_len[] = {
-    64, // dilithium3_rsa3072
-    56, // dilithium3_p256
-    58, // falcon512_p256
-    56, // dilithium5_p384
-    78, // dilithium3_bp256
-    50, // dilithium3_ed25519
-    78, // dilithium5_bp384
-    50, // dilithium5_ed448
-    82, // falcon512_bp256
-    54, // falcon512_ed25519
-    58, // dilithium3_pss3072
     58, // dilithium2_pss2048
     64, // dilithium2_rsa2048
     50, // dilithium2_ed25519
     56, // dilithium2_p256
     78, // dilithium2_bp256
+    58, // dilithium3_pss3072
+    64, // dilithium3_rsa3072
+    56, // dilithium3_p256
+    78, // dilithium3_bp256
+    50, // dilithium3_ed25519
+    56, // dilithium5_p384
+    78, // dilithium5_bp384
+    50, // dilithium5_ed448
+    58, // falcon512_p256
+    82, // falcon512_bp256
+    54, // falcon512_ed25519
 };
 
 /* On entry to this function, data to be signed (tbs) might have been hashed
@@ -389,10 +386,10 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
         const char *oid_prefix
-            = composite_OID_prefix[get_oqsalg_idx(nid) - COMPOSITE_IDX_ADJUST];
+            = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
         const size_t oid_prefix_len
-            = composite_OID_prefix_len[get_oqsalg_idx(nid)
-                                       - COMPOSITE_IDX_ADJUST];
+            = composite_OID_prefix_len[get_composite_idx(get_oqsalg_idx(nid))
+                                       - 1];
         char *final_tbs;
         size_t final_tbslen = oid_prefix_len;
 
@@ -751,10 +748,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         unsigned char *buf;
         size_t buf_len;
         const char *oid_prefix
-            = composite_OID_prefix[get_oqsalg_idx(nid) - COMPOSITE_IDX_ADJUST];
+            = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
         const size_t oid_prefix_len
-            = composite_OID_prefix_len[get_oqsalg_idx(nid)
-                                       - COMPOSITE_IDX_ADJUST];
+            = composite_OID_prefix_len[get_composite_idx(get_oqsalg_idx(nid))
+                                       - 1];
         char *final_tbs;
         size_t final_tbslen = oid_prefix_len;
 

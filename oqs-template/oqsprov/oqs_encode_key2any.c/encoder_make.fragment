@@ -38,6 +38,15 @@ MAKE_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, SubjectP
 MAKE_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }});
      {%- endfor -%}
+     {%- for composite_alg in variant['composite'] %}
+MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }});
+     {%- endfor -%}
    {%- endfor %}
 {%- endfor %}
 

@@ -4,6 +4,9 @@ MAKE_SIG_KEYMGMT_FUNCTIONS({{variant['name']}})
      {%- for classical_alg in variant['mix_with'] %}
 MAKE_SIG_KEYMGMT_FUNCTIONS({{ classical_alg['name'] }}_{{variant['name']}})
      {%- endfor -%}
+     {%- for composite_alg in variant['composite'] %}
+MAKE_SIG_KEYMGMT_FUNCTIONS({{variant['name']}}_{{ composite_alg['name'] }})
+     {%- endfor -%}
    {%- endfor %}
 {%- endfor %}
 {% for kem in config['kems'] %}

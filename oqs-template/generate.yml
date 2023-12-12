@@ -388,14 +388,14 @@ sigs:
     #                'oid': '2.16.840.1.114027.80.1.8'}]
   -
     # OID scheme for composite variants:
-    #  (2)
-    #  (16)
-    #  (840)
-    #  (1)
-    #  (114027)
-    #  (80)
-    #  (7)
-    #  (1)
+    # joint-iso-itu-t (2)
+    # country (16)
+    # us (840)
+    # organization (1)
+    # entrust (114027)
+    # algorithm (80)
+    # composite (7)
+    # signature (1)
   # -
     # OID scheme for hybrid variants of Dilithium:
     # iso (1)

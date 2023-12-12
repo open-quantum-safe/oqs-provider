@@ -24,7 +24,7 @@ jobs:
       - name: Full build
         run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
-        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
+        run: cd build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
 
@@ -52,7 +52,7 @@ jobs:
       - name: Full build
         run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
-        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
+        run: cd build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
       - name: Verify nothing changes on re-generate code
@@ -68,12 +68,12 @@ jobs:
           ! git status | grep modified
       - name: Build .deb install package
         run: cpack
-        working-directory: _build
+        working-directory: build
       - name: Retain .deb installer
         uses: actions/upload-artifact@v3
         with:
           name: oqsprovider-x64
-          path: _build/*.deb
+          path: build/*.deb
 
   asan_linux_intel:
     name: "Security checks"

@@ -57,17 +57,17 @@ jobs:
           key: ${{ runner.os }}-openssl32
       - name: build liboqs
         run: |
-           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs ${{ matrix.params.oqsconfig }} -S . -B _build 
-           cmake --build _build
-           cmake --install _build
+           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs ${{ matrix.params.oqsconfig }} -S . -B build
+           cmake --build build
+           cmake --install build
         working-directory: liboqs
       - name: build oqs-provider
-        run: liboqs_DIR=.localliboqs cmake -DOPENSSL_ROOT_DIR=.localopenssl32 -S . -B _build && cmake --build _build
+        run: liboqs_DIR=.localliboqs cmake -DOPENSSL_ROOT_DIR=.localopenssl32 -S . -B build && cmake --build build
       - name: Check Openssl providers
-        run: OPENSSL_MODULES=_build/lib .localopenssl32/bin/openssl list -providers -provider oqsprovider -provider default
+        run: OPENSSL_MODULES=build/lib .localopenssl32/bin/openssl list -providers -provider oqsprovider -provider default
       - name: Run tests
         run: PATH=../.localopenssl32/bin:$PATH ctest -V
-        working-directory: _build
+        working-directory: build
       # Try brew install of head: If error message below appears, build and test passed successfully
       - name: brew install test
         run: brew install --HEAD --formula -s oqsprovider.rb 2>&1 | grep "Empty installation"
@@ -76,4 +76,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: oqs-provider-${{matrix.os}}-x64
-          path: _build/lib/oqsprovider.dylib
+          path: build/lib/oqsprovider.dylib

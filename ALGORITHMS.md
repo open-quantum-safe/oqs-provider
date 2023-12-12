@@ -107,7 +107,7 @@ can be used to successfully confirm interoperability between the oqs-provider
 and the Cloudflare infrastructure using this hybrid classic/quantum-safe algorithm:
 
 ```
-OQS_CODEPOINT_X25519_KYBER512=65072  ./openssl/apps/openssl s_client -groups x25519_kyber512 -connect cloudflare.com:443 -provider-path _build/oqsprov -provider oqsprovider -provider default
+OQS_CODEPOINT_X25519_KYBER512=65072  ./openssl/apps/openssl s_client -groups x25519_kyber512 -connect cloudflare.com:443 -provider-path build/oqsprov -provider oqsprovider -provider default
 ```
 
 # OIDs

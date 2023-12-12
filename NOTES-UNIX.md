@@ -28,30 +28,30 @@ to be present to be build, e.g., via `apt install cmake build-essential git`.
 ## Build
 
 Standard `cmake` build sequence can be used (assuming prerequisites are installed)
-to build in/install from directory `_build`:
+to build in/install from directory `build`:
 
-    cmake -S . -B _build && cmake --build _build && cmake --install _build
+    cmake -S . -B build && cmake --build build && cmake --install build
 
 If `openssl` and/or `liboqs` have not been installed to system standard locations
-use the `cmake` define "-DOPENSSL_ROOT_DIR" and/or the environment variable 
+use the `cmake` define "-DOPENSSL_ROOT_DIR" and/or the environment variable
 "liboqs_DIR" to utilize those, e.g., like this:
 
-    liboqs_DIR=../liboqs cmake -DOPENSSL_ROOT_DIR=/opt/openssl3 -S . -B _build && cmake --build _build && cmake --install _build
+    liboqs_DIR=../liboqs cmake -DOPENSSL_ROOT_DIR=/opt/openssl3 -S . -B build && cmake --build build && cmake --install build
 
 Further configuration options are documented [here](CONFIGURE.md#build-install-options).
 
 ## Test
 
-Standard `ctest` can be used to validate correct operation in build directory `_build`, e.g.:
+Standard `ctest` can be used to validate correct operation in build directory `build`, e.g.:
 
-    cd _build && ctest --parallel 5 --rerun-failed --output-on-failure -V
+    cd build && ctest --parallel 5 --rerun-failed --output-on-failure -V
 
 ## Packaging
 
 ### Debian
 
 A build target to create UNIX .deb packaging is available via the standard
-`package` target, e.g., executing `make package` in the `_build` subdirectory.
+`package` target, e.g., executing `make package` in the `build` subdirectory.
 The resultant file can be installed as usual via `dpkg -i ...`.
 
 ### MacOS

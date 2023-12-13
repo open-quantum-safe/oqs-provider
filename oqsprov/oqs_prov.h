@@ -93,7 +93,7 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 #endif
 
 /* helper structure for classic key components in hybrid keys.
- * Actual tables in oqsprov_keys.ce
+ * Actual tables in oqsprov_keys.c
  */
 struct oqsx_evp_info_st {
     int keytype;

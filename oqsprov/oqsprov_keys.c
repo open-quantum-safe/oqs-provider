@@ -419,10 +419,12 @@ EVP_PKEY *setECParams(EVP_PKEY *eck, int nid)
         return d2i_KeyParams(EVP_PKEY_EC, &eck, &params, sizeof(bp384params));
     case NID_ED25519:
         params = ed25519params;
-        return d2i_KeyParams(EVP_PKEY_EC, &eck, &params, sizeof(ed25519params));
+        return d2i_KeyParams(EVP_PKEY_ED25519, &eck, &params,
+                             sizeof(ed25519params));
     case NID_ED448:
         params = ed448params;
-        return d2i_KeyParams(EVP_PKEY_EC, &eck, &params, sizeof(ed448params));
+        return d2i_KeyParams(EVP_PKEY_ED448, &eck, &params,
+                             sizeof(ed448params));
     default:
         return NULL;
     }

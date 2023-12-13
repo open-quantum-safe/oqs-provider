@@ -973,7 +973,11 @@ int get_composite_idx(int idx)
     for (i = 0; i <= 7; i++) { // 7 dots in composite OID
         token = strtok_r(NULL, ".", &s);
     }
-    i = atoi(token);
+    if (token != NULL) {
+        i = atoi(token);
+    } else {
+        i = -1;
+    }
     OPENSSL_free(first_token);
     return i;
 }

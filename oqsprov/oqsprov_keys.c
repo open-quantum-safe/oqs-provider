@@ -824,7 +824,8 @@ err:
 /* Recreate EVP data structure after import. RetVal 0 is error. */
 static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
 {
-    if (key->keytype == KEY_TYPE_HYB_SIG) { // hybrid key
+    if ((key->keytype != KEY_TYPE_CMP_SIG)
+        && (key->numkeys == 2)) { // hybrid key
         int classical_pubkey_len, classical_privkey_len;
         if (!key->evp_info) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_EVPINFO_MISSING);

@@ -154,12 +154,11 @@ struct oqsx_key_st {
 #endif
     char *propq;
     OQSX_KEY_TYPE keytype;
-    OQSX_PROVIDER_CTX *oqsx_provider_ctx;
+    OQSX_PROVIDER_CTX oqsx_provider_ctx;
 #ifdef USE_ENCODING_LIB
     OQSX_ENCODING_CTX oqsx_encoding_ctx;
 #endif
-    EVP_PKEY **cmp_classical_pkey;
-    EVP_PKEY *classical_pkey; // for hybrid sigs
+    EVP_PKEY *classical_pkey; // for hybrid & composite sigs
     const OQSX_EVP_INFO *evp_info;
     size_t numkeys;
 

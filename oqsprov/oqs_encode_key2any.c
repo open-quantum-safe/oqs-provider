@@ -729,8 +729,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             }
 
             if (get_oqsname_fromtls(name) == 0) {
-                if (oqsxkey->oqsx_provider_ctx[i]
-                        .oqsx_evp_ctx->evp_info->keytype
+                if (oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->keytype
                     == EVP_PKEY_RSA) { // get the RSA real key size
                     unsigned char *enc_len
                         = OPENSSL_strndup(oqsxkey->comp_privkey[i], 4);
@@ -1541,8 +1540,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                     sprintf(label, "%s key material:", name);
 
                     if (get_oqsname_fromtls(name) == 0 // classical key
-                        && okey->oqsx_provider_ctx[i]
-                                   .oqsx_evp_ctx->evp_info->keytype
+                        && okey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info
+                                   ->keytype
                                == EVP_PKEY_RSA) { // get the RSA real key size
                         unsigned char *enc_len
                             = OPENSSL_strndup(okey->comp_privkey[i], 4);

@@ -263,16 +263,15 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 {
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQSX_KEY *oqsxkey = poqs_sigctx->sig;
-    OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx[0].oqsx_qs_ctx.sig;
+    OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
     EVP_PKEY *oqs_key_classic = NULL;
     EVP_PKEY *cmp_key_classic = NULL;
-    EVP_PKEY *evpkey = oqsxkey->classical_pkey; // if this value is not NULL,
-                                                // we're running hybrid
+    EVP_PKEY *evpkey = oqsxkey->classical_pkey;
     EVP_PKEY_CTX *classical_ctx_sign = NULL;
 
     OQS_SIG_PRINTF2("OQS SIG provider: sign called for %ld bytes\n", tbslen);
 
-    int is_hybrid = evpkey != NULL;
+    int is_hybrid = (oqsxkey->keytype == KEY_TYPE_HYB_SIG);
     int is_composite = (oqsxkey->keytype == KEY_TYPE_CMP_SIG);
     size_t max_sig_len = 0;
     size_t classical_sig_len = 0, oqs_sig_len = 0;
@@ -474,8 +473,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             }
 
             if (get_oqsname_fromtls(name)) { // PQC signing
-                oqs_sig_len = oqsxkey->oqsx_provider_ctx[i]
-                                  .oqsx_qs_ctx.sig->length_signature;
+                oqs_sig_len = oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig
+                                  ->length_signature;
                 buf = OPENSSL_malloc(oqs_sig_len);
                 if (OQS_SIG_sign(oqs_key, buf, &oqs_sig_len, final_tbs,
                                  final_tbslen, oqsxkey->comp_privkey[i])
@@ -486,17 +485,17 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                     goto endsign;
                 }
             } else { // sign non PQC key on oqs_key
-                oqs_key_classic = oqsxkey->cmp_classical_pkey[i];
-                oqs_sig_len = oqsxkey->oqsx_provider_ctx[i]
-                                  .oqsx_evp_ctx->evp_info->length_signature;
+                oqs_key_classic = oqsxkey->classical_pkey;
+                oqs_sig_len = oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info
+                                  ->length_signature;
                 buf = OPENSSL_malloc(oqs_sig_len);
                 const EVP_MD *classical_md;
-                EVP_MD_CTX *evp_ctx = EVP_MD_CTX_new();
                 int digest_len;
                 unsigned char
                     digest[SHA512_DIGEST_LENGTH]; /* init with max length */
 
                 if (name[0] == 'e') { // ed25519 or ed448
+                    EVP_MD_CTX *evp_ctx = EVP_MD_CTX_new();
                     if ((EVP_DigestSignInit(evp_ctx, NULL, NULL, NULL,
                                             oqs_key_classic)
                          <= 0)
@@ -505,9 +504,11 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                             <= 0)) {
                         ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
                         OPENSSL_free(name);
+                        OPENSSL_free(evp_ctx);
                         OPENSSL_free(buf);
                         goto endsign;
                     }
+                    OPENSSL_free(evp_ctx);
                 } else {
                     if ((classical_ctx_sign
                          = EVP_PKEY_CTX_new(oqs_key_classic, NULL))
@@ -534,8 +535,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                             OPENSSL_free(buf);
                             goto endsign;
                         }
-                    } else if (oqsxkey->oqsx_provider_ctx[i]
-                                   .oqsx_evp_ctx->evp_info->keytype
+                    } else if (oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info
+                                   ->keytype
                                == EVP_PKEY_RSA) {
                         if (EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign,
                                                          RSA_PKCS1_PADDING)
@@ -595,9 +596,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                         goto endsign;
                     }
 
-                    if (oqs_sig_len
-                        > oqsxkey->oqsx_provider_ctx[i]
-                              .oqsx_evp_ctx->evp_info->length_signature) {
+                    if (oqs_sig_len > oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx
+                                          ->evp_info->length_signature) {
                         /* sig is bigger than expected */
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
                         OPENSSL_free(name);
@@ -653,12 +653,11 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
 {
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQSX_KEY *oqsxkey = poqs_sigctx->sig;
-    OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx[0].oqsx_qs_ctx.sig;
-    EVP_PKEY *evpkey = oqsxkey->classical_pkey; // if this value is not NULL,
-                                                // we're running hybrid
+    OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
+    EVP_PKEY *evpkey = oqsxkey->classical_pkey;
     EVP_PKEY_CTX *classical_ctx_sign = NULL;
     EVP_PKEY_CTX *ctx_verify = NULL;
-    int is_hybrid = evpkey != NULL;
+    int is_hybrid = (oqsxkey->keytype == KEY_TYPE_HYB_SIG);
     int is_composite = (oqsxkey->keytype == KEY_TYPE_CMP_SIG);
     size_t classical_sig_len = 0, oqs_sig_len = 0;
     size_t index = 0;
@@ -860,24 +859,26 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                 const EVP_MD *classical_md;
                 int digest_len;
                 int aux;
-                EVP_MD_CTX *evp_ctx = EVP_MD_CTX_new();
                 unsigned char
                     digest[SHA512_DIGEST_LENGTH]; /* init with max length */
 
                 if (name[0] == 'e') { // ed25519 or ed448
+                    EVP_MD_CTX *evp_ctx = EVP_MD_CTX_new();
                     if ((EVP_DigestVerifyInit(evp_ctx, NULL, NULL, NULL,
-                                              oqsxkey->cmp_classical_pkey[i])
+                                              oqsxkey->classical_pkey)
                          <= 0)
                         || (EVP_DigestVerify(evp_ctx, buf, buf_len, final_tbs,
                                              final_tbslen)
                             <= 0)) {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                         OPENSSL_free(name);
+                        OPENSSL_free(evp_ctx);
                         goto endverify;
                     }
+                    OPENSSL_free(evp_ctx);
                 } else {
-                    if (((ctx_verify = EVP_PKEY_CTX_new(
-                              oqsxkey->cmp_classical_pkey[i], NULL))
+                    if (((ctx_verify
+                          = EVP_PKEY_CTX_new(oqsxkey->classical_pkey, NULL))
                          == NULL)
                         || (EVP_PKEY_verify_init(ctx_verify) <= 0)) {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
@@ -897,8 +898,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                             OPENSSL_free(name);
                             goto endverify;
                         }
-                    } else if (oqsxkey->oqsx_provider_ctx[i]
-                                   .oqsx_evp_ctx->evp_info->keytype
+                    } else if (oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info
+                                   ->keytype
                                == EVP_PKEY_RSA) {
                         if (EVP_PKEY_CTX_set_rsa_padding(ctx_verify,
                                                          RSA_PKCS1_PADDING)

@@ -25,8 +25,9 @@
 #include <openssl/types.h>
 
 // TBD: Review what we really need/want: For now go with OSSL settings:
-#define OSSL_MAX_NAME_SIZE      50
-#define OSSL_MAX_PROPQUERY_SIZE 256 /* Property query strings */
+#define OSSL_MAX_NAME_SIZE        50
+#define OSSL_MAX_PROPQUERY_SIZE   256 /* Property query strings */
+#define COMPOSITE_OID_PREFIRX_LEN 26
 
 #ifdef NDEBUG
 #    define OQS_SIG_PRINTF(a)
@@ -213,45 +214,41 @@ static int oqs_sig_verify_init(void *vpoqs_sigctx, void *voqssig,
     return oqs_sig_signverify_init(vpoqs_sigctx, voqssig, EVP_PKEY_OP_VERIFY);
 }
 
-// this next two list need to be in order of the last number on the OID from the
+// this list need to be in order of the last number on the OID from the
 // composite
 static const char *composite_OID_prefix[] = {
-    "69642D4D4C44534134342D525341323034382D5053532D534841323536", // dilithium2_pss2048
-    "69642D4D4C44534134342D525341323034382D504B435331352D534841323536", // dilithium2_rsa2048
-    "69642D4D4C44534134342D456432353531392D534841353132", // dilithium2_ed25519
-    "69642D4D4C44534134342D45434453412D503235362D534841323536", // dilithium2_p256
-    "69642D4D4C44534134342D45434453412D627261696E706F6F6C5032353672312D534841323536", // dilithium2_bp256
-    "69642D4D4C44534136352D525341333037322D5053532D534841323536", // dilithium3_pss3072
-    "69642D4D4C44534136352D525341333037322D504B435331352D534841323536", // dilithium3_rsa3072
-    "69642D4D4C44534136352D45434453412D503235362D534841323536", // dilithium3_p256
-    "69642D4D4C44534136352D45434453412D627261696E706F6F6C5032353672312D534841323536", // dilithium3_bp256
-    "69642D4D4C44534136352D456432353531392D534841353132", // dilithium3_ed25519
-    "69642D4D4C44534138372D45434453412D503338342D534841333834", // dilithium5_p384
-    "69642D4D4C44534138372D45434453412D627261696E706F6F6C5033383472312D534841333834", // dilithium5_bp384
-    "69642D4D4C44534138372D45643434382D5348414B45323536", // dilithium5_ed448
-    "69642D46616C6F6E3531322D45434453412D503235362D534841323536", // falcon512_p256
-    "69642D46616C636F6E3531322D45434453412D627261696E706F6F6C5032353672312D534841323536", // falcon512_bp256
-    "69642D46616C636F6E3531322D456432353531392D534841353132", // falcon512_ed25519
+    "060B6086480186FA6B50080101", // dilithium2_pss2048
+                                  // id-MLDSA44-RSA2048-PSS-SHA256
+    "060B6086480186FA6B50080102", // dilithium2_rsa2048
+                                  // id-MLDSA44-RSA2048-PKCS15-SHA256
+    "060B6086480186FA6B50080103", // dilithium2_ed25519
+                                  // id-MLDSA44-Ed25519-SHA512
+    "060B6086480186FA6B50080104", // dilithium2_p256
+                                  // id-MLDSA44-ECDSA-P256-SHA256
+    "060B6086480186FA6B50080105", // dilithium2_bp256
+                                  // id-MLDSA44-ECDSA-brainpoolP256r1-SHA256
+    "060B6086480186FA6B50080106", // dilithium3_pss3072
+                                  // id-MLDSA65-RSA3072-PSS-SHA512
+    "060B6086480186FA6B50080107", // dilithium3_rsa3072
+                                  // id-MLDSA65-RSA3072-PKCS15-SHA512
+    "060B6086480186FA6B50080108", // dilithium3_p256
+                                  // id-MLDSA65-ECDSA-P256-SHA512
+    "060B6086480186FA6B50080109", // dilithium3_bp256
+                                  // id-MLDSA65-ECDSA-brainpoolP256r1-SHA512
+    "060B6086480186FA6B5008010A", // dilithium3_ed25519
+                                  // id-MLDSA65-Ed25519-SHA512
+    "060B6086480186FA6B5008010B", // dilithium5_p384
+                                  // id-MLDSA87-ECDSA-P384-SHA512
+    "060B6086480186FA6B5008010C", // dilithium5_bp384
+                                  // id-MLDSA87-ECDSA-brainpoolP384r1-SHA512
+    "060B6086480186FA6B5008010D", // dilithium5_ed448 id-MLDSA87-Ed448-SHA512
+    "060B6086480186FA6B5008010E", // falcon512_p256
+                                  // id-Falon512-ECDSA-P256-SHA256
+    "060B6086480186FA6B5008010F", // falcon512_bp256
+                                  // id-Falcon512-ECDSA-brainpoolP256r1-SHA256
+    "060B6086480186FA6B50080110", // falcon512_ed25519
+                                  // id-Falcon512-Ed25519-SHA512
 
-};
-
-static const size_t composite_OID_prefix_len[] = {
-    58, // dilithium2_pss2048
-    64, // dilithium2_rsa2048
-    50, // dilithium2_ed25519
-    56, // dilithium2_p256
-    78, // dilithium2_bp256
-    58, // dilithium3_pss3072
-    64, // dilithium3_rsa3072
-    56, // dilithium3_p256
-    78, // dilithium3_bp256
-    50, // dilithium3_ed25519
-    56, // dilithium5_p384
-    78, // dilithium5_bp384
-    50, // dilithium5_ed448
-    58, // falcon512_p256
-    82, // falcon512_bp256
-    54, // falcon512_ed25519
 };
 
 /* On entry to this function, data to be signed (tbs) might have been hashed
@@ -386,84 +383,54 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
         const char *oid_prefix
             = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
-        const size_t oid_prefix_len
-            = composite_OID_prefix_len[get_composite_idx(get_oqsalg_idx(nid))
-                                       - 1];
         char *final_tbs;
-        size_t final_tbslen = oid_prefix_len;
+        size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN;
+        int aux = 0;
+        unsigned char *tbs_hash;
 
         // prepare the pre hash
         for (i = 0; i < oqsxkey->numkeys; i++) {
             char *name;
+            char *upcase_name;
             if ((name = get_cmpname(nid, i)) == NULL) {
                 ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
                 OPENSSL_free(name);
                 goto endsign;
             }
-            unsigned char *tbs_hash;
-            if (!get_oqsname_fromtls(name)) {
-                if (name[0] == 'e') {     // ed25519 or ed448
-                    if (name[2] == '2') { // ed25519
-                        tbs_hash = OPENSSL_malloc(SHA512_DIGEST_LENGTH);
-                        SHA512(tbs, tbslen, tbs_hash);
-                        final_tbslen += SHA512_DIGEST_LENGTH;
-                    } else { // ed4448
-                        EVP_MD_CTX *shake = EVP_MD_CTX_new();
-                        unsigned int tbs_hash_len = EVP_MAX_MD_SIZE;
-                        tbs_hash = OPENSSL_malloc(tbs_hash_len);
+            upcase_name = get_oqsname_fromtls(name);
 
-                        if ((EVP_DigestInit_ex(shake, EVP_shake256(), NULL)
-                             <= 0)
-                            || (EVP_DigestUpdate(shake, tbs, tbslen) <= 0)
-                            || (EVP_DigestFinalXOF(shake, tbs_hash,
-                                                   tbs_hash_len)
-                                <= 0)) {
-                            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                            OPENSSL_free(name);
-                            goto endsign;
-                        }
-                        final_tbslen += tbs_hash_len;
-                        EVP_MD_CTX_free(shake);
-                    }
-                } else if ((name[0] == 'p') || (name[0] == 'b')
-                           || (name[0] == 'r')) { // p256 or p384 or bp256 or
-                                                  // bp384 or pss or rsa3072
-                    int aux;
-                    if (name[0] == 'b')
-                        aux = 2;
-                    else
-                        aux = 1;
-                    switch (name[aux]) {
-                    case 's': // pss or rsa
-                    case '2': // p256 or bp256
-                        tbs_hash = OPENSSL_malloc(SHA256_DIGEST_LENGTH);
-                        SHA256(tbs, tbslen, tbs_hash);
-                        final_tbslen += SHA256_DIGEST_LENGTH;
-                        break;
-                    case '3': // p384 or bp384
-                        tbs_hash = OPENSSL_malloc(SHA384_DIGEST_LENGTH);
-                        SHA384(tbs, tbslen, tbs_hash);
-                        final_tbslen += SHA384_DIGEST_LENGTH;
-                        break;
-                    default:
-                        ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                        OPENSSL_free(name);
-                        goto endsign;
-                    }
-                } else {
-                    ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                    OPENSSL_free(name);
-                    goto endsign;
-                }
-                final_tbs = OPENSSL_malloc(final_tbslen);
-                memcpy(final_tbs, oid_prefix, oid_prefix_len);
-                memcpy(final_tbs + oid_prefix_len, tbs_hash,
-                       final_tbslen - oid_prefix_len);
-                OPENSSL_free(tbs_hash);
+            if ((upcase_name != 0)
+                    && ((!strcmp(upcase_name, OQS_SIG_alg_dilithium_3))
+                        || (!strcmp(upcase_name, OQS_SIG_alg_dilithium_5)))
+                || (name[0] == 'e')) {
+                aux = 1;
+                OPENSSL_free(name);
+                break;
             }
             OPENSSL_free(name);
         }
+        switch (aux) {
+        case 0:
+            tbs_hash = OPENSSL_malloc(SHA256_DIGEST_LENGTH);
+            SHA256(tbs, tbslen, tbs_hash);
+            final_tbslen += SHA256_DIGEST_LENGTH;
+            break;
+        case 1:
+            tbs_hash = OPENSSL_malloc(SHA512_DIGEST_LENGTH);
+            SHA512(tbs, tbslen, tbs_hash);
+            final_tbslen += SHA512_DIGEST_LENGTH;
+            break;
+        default:
+            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+            goto endsign;
+        }
+        final_tbs = OPENSSL_malloc(final_tbslen);
+        memcpy(final_tbs, oid_prefix, COMPOSITE_OID_PREFIRX_LEN);
+        memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN, tbs_hash,
+               final_tbslen - COMPOSITE_OID_PREFIRX_LEN);
+        OPENSSL_free(tbs_hash);
 
+        // sign
         for (i = 0; i < oqsxkey->numkeys; i++) {
             char *name;
             if ((name = get_cmpname(nid, i)) == NULL) {
@@ -748,89 +715,59 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         size_t buf_len;
         const char *oid_prefix
             = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
-        const size_t oid_prefix_len
-            = composite_OID_prefix_len[get_composite_idx(get_oqsalg_idx(nid))
-                                       - 1];
         char *final_tbs;
-        size_t final_tbslen = oid_prefix_len;
+        size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN;
+        int aux = 0;
+        unsigned char *tbs_hash;
 
         if ((compsig = d2i_CompositeSignature(NULL, &sig, siglen)) == NULL) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
             goto endverify;
         }
 
-        // prepare the pre-hash
+        // prepare the pre hash
         for (i = 0; i < oqsxkey->numkeys; i++) {
             char *name;
+            char *upcase_name;
             if ((name = get_cmpname(nid, i)) == NULL) {
+                ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
                 OPENSSL_free(name);
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                 goto endverify;
             }
-            unsigned char *tbs_hash;
-            if (!get_oqsname_fromtls(name)) {
-                if (name[0] == 'e') {     // ed25519 or ed448
-                    if (name[2] == '2') { // ed25519
-                        tbs_hash = OPENSSL_malloc(SHA512_DIGEST_LENGTH);
-                        SHA512(tbs, tbslen, tbs_hash);
-                        final_tbslen += SHA512_DIGEST_LENGTH;
-                    } else { // ed4448
-                        EVP_MD_CTX *shake = EVP_MD_CTX_new();
-                        unsigned int tbs_hash_len = EVP_MAX_MD_SIZE;
-                        tbs_hash = OPENSSL_malloc(tbs_hash_len);
+            upcase_name = get_oqsname_fromtls(name);
 
-                        if ((EVP_DigestInit_ex(shake, EVP_shake256(), NULL)
-                             <= 0)
-                            || (EVP_DigestUpdate(shake, tbs, tbslen) <= 0)
-                            || (EVP_DigestFinalXOF(shake, tbs_hash,
-                                                   tbs_hash_len)
-                                <= 0)) {
-                            OPENSSL_free(name);
-                            ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-                            goto endverify;
-                        }
-                        final_tbslen += tbs_hash_len;
-                        EVP_MD_CTX_free(shake);
-                    }
-                } else if ((name[0] == 'p') || (name[0] == 'b')
-                           || (name[0] == 'r')) { // p256 or p384 or bp256 or
-                                                  // bp384 or pss or rsa3072
-                    int aux;
-                    if (name[0] == 'b')
-                        aux = 2;
-                    else
-                        aux = 1;
-                    switch (name[aux]) {
-                    case 's': // pss or rsa
-                    case '2': // p256 or bp256
-                        tbs_hash = OPENSSL_malloc(SHA256_DIGEST_LENGTH);
-                        SHA256(tbs, tbslen, tbs_hash);
-                        final_tbslen += SHA256_DIGEST_LENGTH;
-                        break;
-                    case '3': // p384 or bp384
-                        tbs_hash = OPENSSL_malloc(SHA384_DIGEST_LENGTH);
-                        SHA384(tbs, tbslen, tbs_hash);
-                        final_tbslen += SHA384_DIGEST_LENGTH;
-                        break;
-                    default:
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-                        OPENSSL_free(name);
-                        goto endverify;
-                    }
-                } else {
-                    ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-                    OPENSSL_free(name);
-                    goto endverify;
-                }
-                final_tbs = OPENSSL_malloc(final_tbslen);
-                memcpy(final_tbs, oid_prefix, oid_prefix_len);
-                memcpy(final_tbs + oid_prefix_len, tbs_hash,
-                       final_tbslen - oid_prefix_len);
-                OPENSSL_free(tbs_hash);
+            if ((upcase_name != 0)
+                    && ((!strcmp(upcase_name, OQS_SIG_alg_dilithium_3))
+                        || (!strcmp(upcase_name, OQS_SIG_alg_dilithium_5)))
+                || (name[0] == 'e')) {
+                aux = 1;
+                OPENSSL_free(name);
+                break;
             }
             OPENSSL_free(name);
         }
+        switch (aux) {
+        case 0:
+            tbs_hash = OPENSSL_malloc(SHA256_DIGEST_LENGTH);
+            SHA256(tbs, tbslen, tbs_hash);
+            final_tbslen += SHA256_DIGEST_LENGTH;
+            break;
+        case 1:
+            tbs_hash = OPENSSL_malloc(SHA512_DIGEST_LENGTH);
+            SHA512(tbs, tbslen, tbs_hash);
+            final_tbslen += SHA512_DIGEST_LENGTH;
+            break;
+        default:
+            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+            goto endverify;
+        }
+        final_tbs = OPENSSL_malloc(final_tbslen);
+        memcpy(final_tbs, oid_prefix, COMPOSITE_OID_PREFIRX_LEN);
+        memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN, tbs_hash,
+               final_tbslen - COMPOSITE_OID_PREFIRX_LEN);
+        OPENSSL_free(tbs_hash);
 
+        // verify
         for (i = 0; i < oqsxkey->numkeys; i++) {
             if (i == 0) {
                 buf = compsig->sig1->data;

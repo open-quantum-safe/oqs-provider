@@ -43,8 +43,8 @@ This implementation makes available the following quantum safe algorithms:
 
 ### Signature algorithms
 
-- **CRYSTALS-Dilithium**:`dilithium2`\*, `p256_dilithium2`\*, `rsa3072_dilithium2`\*, `dilithium3`\*, `p384_dilithium3`\*, `dilithium5`\*, `p521_dilithium5`\*
-- **Falcon**:`falcon512`\*, `p256_falcon512`\*, `rsa3072_falcon512`\*, `falcon1024`\*, `p521_falcon1024`\*
+- **CRYSTALS-Dilithium**:`dilithium2`\*, `p256_dilithium2`\*, `rsa3072_dilithium2`\*, `dilithium2_pss2048`\*, `dilithium2_rsa2048`\*, `dilithium2_ed25519`\*, `dilithium2_p256`\*, `dilithium2_bp256`\*, `dilithium3`\*, `p384_dilithium3`\*, `dilithium3_pss3072`\*, `dilithium3_rsa3072`\*, `dilithium3_p256`\*, `dilithium3_bp256`\*, `dilithium3_ed25519`\*, `dilithium5`\*, `p521_dilithium5`\*, `dilithium5_p384`\*, `dilithium5_bp384`\*, `dilithium5_ed448`\*
+- **Falcon**:`falcon512`\*, `p256_falcon512`\*, `rsa3072_falcon512`\*, `falcon512_p256`\*, `falcon512_bp256`\*, `falcon512_ed25519`\*, `falcon1024`\*, `p521_falcon1024`\*
 
 - **SPHINCS-SHA2**:`sphincssha2128fsimple`\*, `p256_sphincssha2128fsimple`\*, `rsa3072_sphincssha2128fsimple`\*, `sphincssha2128ssimple`\*, `p256_sphincssha2128ssimple`\*, `rsa3072_sphincssha2128ssimple`\*, `sphincssha2192fsimple`\*, `p384_sphincssha2192fsimple`\*, `sphincssha2192ssimple`, `p384_sphincssha2192ssimple`, `sphincssha2256fsimple`, `p521_sphincssha2256fsimple`, `sphincssha2256ssimple`, `p521_sphincssha2256ssimple`
 - **SPHINCS-SHAKE**:`sphincsshake128fsimple`\*, `p256_sphincsshake128fsimple`\*, `rsa3072_sphincsshake128fsimple`\*, `sphincsshake128ssimple`, `p256_sphincsshake128ssimple`, `rsa3072_sphincsshake128ssimple`, `sphincsshake192fsimple`, `p384_sphincsshake192fsimple`, `sphincsshake192ssimple`, `p384_sphincsshake192ssimple`, `sphincsshake256fsimple`, `p521_sphincsshake256fsimple`, `sphincsshake256ssimple`, `p521_sphincsshake256ssimple`
@@ -63,9 +63,11 @@ TLS operations. This designation [can be changed by modifying the
 "enabled" flags in the main algorithm configuration file](CONFIGURE.md#pre-build-configuration).
 
 In order to support parallel use of classic and quantum-safe cryptography
-this provider also provides different hybrid algorithms, combining classic
-and quantum-safe methods: These are listed above with a prefix denoting a
+this provider also provides different hybrid and composite algorithms, combining classic
+and quantum-safe methods: For hybrid, these are listed above with a prefix denoting a
 classic algorithm, e.g., for elliptic curve: "p256_".
+For composite, these are listed above with a suffix denoting a
+classic algorithm, e.g., for elliptic curve: "_p256".
 
 A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are

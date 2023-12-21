@@ -824,84 +824,6 @@ err:
 /* Recreate EVP data structure after import. RetVal 0 is error. */
 static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
 {
-    if ((key->keytype != KEY_TYPE_CMP_SIG)
-        && (key->numkeys == 2)) { // hybrid key
-        int classical_pubkey_len, classical_privkey_len;
-        if (!key->evp_info) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_EVPINFO_MISSING);
-            goto rec_err;
-        }
-        if (op == KEY_OP_PUBLIC) {
-            const unsigned char *enc_pubkey = key->comp_pubkey[0];
-            DECODE_UINT32(classical_pubkey_len, key->pubkey);
-            if (key->evp_info->raw_key_support) {
-                key->classical_pkey = EVP_PKEY_new_raw_public_key(
-                    key->evp_info->keytype, NULL, enc_pubkey,
-                    classical_pubkey_len);
-                if (!key->classical_pkey) {
-                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                    goto rec_err;
-                }
-            } else {
-                EVP_PKEY *npk = EVP_PKEY_new();
-                if (key->evp_info->keytype != EVP_PKEY_RSA) {
-                    npk = setECParams(npk, key->evp_info->nid);
-                }
-                key->classical_pkey
-                    = d2i_PublicKey(key->evp_info->keytype, &npk, &enc_pubkey,
-                                    classical_pubkey_len);
-                if (!key->classical_pkey) {
-                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                    EVP_PKEY_free(npk);
-                    goto rec_err;
-                }
-            }
-        }
-        if (op == KEY_OP_PRIVATE) {
-            DECODE_UINT32(classical_privkey_len, key->privkey);
-            const unsigned char *enc_privkey = key->comp_privkey[0];
-            unsigned char *enc_pubkey = key->comp_pubkey[0];
-            if (key->evp_info->raw_key_support) {
-                key->classical_pkey = EVP_PKEY_new_raw_private_key(
-                    key->evp_info->keytype, NULL, enc_privkey,
-                    classical_privkey_len);
-                if (!key->classical_pkey) {
-                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                    goto rec_err;
-                }
-#ifndef NOPUBKEY_IN_PRIVKEY
-                // re-create classic public key part from private key:
-                size_t pubkeylen;
-
-                EVP_PKEY_get_raw_public_key(key->classical_pkey, NULL,
-                                            &pubkeylen);
-                if (pubkeylen != key->evp_info->length_public_key
-                    || EVP_PKEY_get_raw_public_key(key->classical_pkey,
-                                                   enc_pubkey, &pubkeylen)
-                           != 1) {
-                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                    goto rec_err;
-                }
-#endif
-            } else {
-                key->classical_pkey
-                    = d2i_PrivateKey(key->evp_info->keytype, NULL, &enc_privkey,
-                                     classical_privkey_len);
-                if (!key->classical_pkey) {
-                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                    goto rec_err;
-                }
-#ifndef NOPUBKEY_IN_PRIVKEY
-                // re-create classic public key part from private key:
-                int pubkeylen = i2d_PublicKey(key->classical_pkey, &enc_pubkey);
-                if (pubkeylen != key->evp_info->length_public_key) {
-                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                    goto rec_err;
-                }
-#endif
-            }
-        }
-    }
     if (key->keytype == KEY_TYPE_CMP_SIG) {
         int i;
         if (op == KEY_OP_PUBLIC) {
@@ -999,6 +921,85 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                     }
                 }
                 OPENSSL_free(name);
+            }
+        }
+    } else {
+        if ((key->numkeys == 2)) { // hybrid key
+            int classical_pubkey_len, classical_privkey_len;
+            if (!key->evp_info) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_EVPINFO_MISSING);
+                goto rec_err;
+            }
+            if (op == KEY_OP_PUBLIC) {
+                const unsigned char *enc_pubkey = key->comp_pubkey[0];
+                DECODE_UINT32(classical_pubkey_len, key->pubkey);
+                if (key->evp_info->raw_key_support) {
+                    key->classical_pkey = EVP_PKEY_new_raw_public_key(
+                        key->evp_info->keytype, NULL, enc_pubkey,
+                        classical_pubkey_len);
+                    if (!key->classical_pkey) {
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                        goto rec_err;
+                    }
+                } else {
+                    EVP_PKEY *npk = EVP_PKEY_new();
+                    if (key->evp_info->keytype != EVP_PKEY_RSA) {
+                        npk = setECParams(npk, key->evp_info->nid);
+                    }
+                    key->classical_pkey
+                        = d2i_PublicKey(key->evp_info->keytype, &npk,
+                                        &enc_pubkey, classical_pubkey_len);
+                    if (!key->classical_pkey) {
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                        EVP_PKEY_free(npk);
+                        goto rec_err;
+                    }
+                }
+            }
+            if (op == KEY_OP_PRIVATE) {
+                DECODE_UINT32(classical_privkey_len, key->privkey);
+                const unsigned char *enc_privkey = key->comp_privkey[0];
+                unsigned char *enc_pubkey = key->comp_pubkey[0];
+                if (key->evp_info->raw_key_support) {
+                    key->classical_pkey = EVP_PKEY_new_raw_private_key(
+                        key->evp_info->keytype, NULL, enc_privkey,
+                        classical_privkey_len);
+                    if (!key->classical_pkey) {
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                        goto rec_err;
+                    }
+#ifndef NOPUBKEY_IN_PRIVKEY
+                    // re-create classic public key part from private key:
+                    size_t pubkeylen;
+
+                    EVP_PKEY_get_raw_public_key(key->classical_pkey, NULL,
+                                                &pubkeylen);
+                    if (pubkeylen != key->evp_info->length_public_key
+                        || EVP_PKEY_get_raw_public_key(key->classical_pkey,
+                                                       enc_pubkey, &pubkeylen)
+                               != 1) {
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                        goto rec_err;
+                    }
+#endif
+                } else {
+                    key->classical_pkey
+                        = d2i_PrivateKey(key->evp_info->keytype, NULL,
+                                         &enc_privkey, classical_privkey_len);
+                    if (!key->classical_pkey) {
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                        goto rec_err;
+                    }
+#ifndef NOPUBKEY_IN_PRIVKEY
+                    // re-create classic public key part from private key:
+                    int pubkeylen
+                        = i2d_PublicKey(key->classical_pkey, &enc_pubkey);
+                    if (pubkeylen != key->evp_info->length_public_key) {
+                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                        goto rec_err;
+                    }
+#endif
+                }
             }
         }
     }

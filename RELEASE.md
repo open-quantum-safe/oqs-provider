@@ -1,4 +1,4 @@
-# oqs-provider 0.5.3-dev
+# oqs-provider 0.5.3
 
 ## About
 
@@ -14,10 +14,42 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is version 0.5.3-dev of oqs-provider.
+This is version 0.5.3 of oqs-provider.
 
+### Security considerations
 
+This improves a non-constant time issue in previous releases for Kyber.
 
+### What's New
+
+This release continues from the 0.5.2 release of oqs-provider and is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs). This release is guaranteed to be in sync with v0.9.1 of `liboqs`.
+
+This release also makes available ready-to-run binaries for Linux (.so), Windows (.dll) and MacOS (.dylib) compiled for `x64` CPUs. Activation and use is documented in [USAGE.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/USAGE.md).
+
+### Additional new feature highlights
+
+- Kyber code update addressing constant time property
+- Code point updates for HQC following code updates in `liboqs`
+- Document project governance
+
+## What's Changed
+* Clarify liboqs_DIR naming convention by @ajbozarth in https://github.com/open-quantum-safe/oqs-provider/pull/292
+* check empty params lists passed by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/296
+* Fix minor typos in documentation by @johnma14 in https://github.com/open-quantum-safe/oqs-provider/pull/304
+* HQC code point update by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/306
+* Fix broken circleci job for macOS by @johnma14 in https://github.com/open-quantum-safe/oqs-provider/pull/305
+* Contribution policy by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/286
+* Fix link in GOVERNANCE.md [skip ci] by @pi-314159 in https://github.com/open-quantum-safe/oqs-provider/pull/309
+* Add a example of how to load oqsprovider using `OSSL_PROVIDER_add_builtin`. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/308
+* Get Windows CI to work again by @qnfm in https://github.com/open-quantum-safe/oqs-provider/pull/310
+* Use `build` directory instead of `_build`. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/314
+
+## New Contributors
+* @ajbozarth made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/292
+* @johnma14 made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/304
+* @pi-314159 made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/309
+
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.5.2...0.5.3
 
 Previous Release Notes
 ======================

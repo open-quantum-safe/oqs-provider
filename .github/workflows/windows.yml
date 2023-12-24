@@ -155,7 +155,7 @@ jobs:
         working-directory: liboqs
       - name: prepare the OpenSSL build directory
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        run: mkdir build
+        run: mkdir _build
         working-directory: openssl
       - name: OpenSSL config
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
@@ -265,7 +265,7 @@ jobs:
           working-directory: liboqs
         - name: prepare the OpenSSL build directory
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
-          run: mkdir build
+          run: mkdir _build
           working-directory: openssl
         - name: OpenSSL config
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'

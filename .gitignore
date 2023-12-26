@@ -1,12 +1,12 @@
 # checked out OSSL variants
-openssl*/*
+openssl*/* 
 openssl
 # checked out liboqs
 liboqs
 # installed SW
 .local
 # build directory
-build
+_build
 # generated from openssl src:
 test/ssltestlib.c
 test/ssltestlib.h

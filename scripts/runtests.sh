@@ -90,7 +90,7 @@ if [ -z "${OPENSSL_APP}" ]; then
 fi
 
 if [ -z "${OPENSSL_MODULES}" ]; then
-    export OPENSSL_MODULES="$(pwd)/build/lib"
+    export OPENSSL_MODULES="$(pwd)/_build/lib"
 fi
 
 if [ -z "${LD_LIBRARY_PATH}" ]; then
@@ -188,7 +188,7 @@ ${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-externalinterop.sh
 # Without removing OPENSSL_CONF ctest hangs... ???
 unset OPENSSL_CONF
 rv=0
-if ! ( cd build && ctest $@ ); then
+if ! ( cd _build && ctest $@ ); then
    rv=1
 fi
 

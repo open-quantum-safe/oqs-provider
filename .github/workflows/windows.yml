@@ -58,8 +58,8 @@ jobs:
            which cmake
            cmake --version
            gcc --version
-           mkdir build
-           cd build
+           mkdir _build
+           cd _build
            cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX="${{ env.IP }}" ${{ matrix.platform.oqsconfig }} -DCMAKE_C_COMPILER=gcc ..
            ninja
            ninja install
@@ -79,17 +79,17 @@ jobs:
             c:\cygwin\opt\openssl32
           key: ${{ runner.os }}-cygwinopenssl32
       - name: build oqs-provider
-        run: bash -c "git config --global --add safe.directory $(cygpath -u $PWD) && liboqs_DIR='${{ env.IP }}' cmake -GNinja -DCMAKE_C_COMPILER=gcc -DOPENSSL_ROOT_DIR=/opt/openssl32 -S . -B build && cd build && ninja && cd .."
+        run: bash -c "git config --global --add safe.directory $(cygpath -u $PWD) && liboqs_DIR='${{ env.IP }}' cmake -GNinja -DCMAKE_C_COMPILER=gcc -DOPENSSL_ROOT_DIR=/opt/openssl32 -S . -B _build && cd _build && ninja && cd .."
       - name: Check Openssl providers
-        run: bash -c "OPENSSL_MODULES=build/lib /opt/openssl32/bin/openssl list -providers -provider oqsprovider -provider default"
+        run: bash -c "OPENSSL_MODULES=_build/lib /opt/openssl32/bin/openssl list -providers -provider oqsprovider -provider default"
       - name: Run tests
         run: bash -c "echo $PATH && PATH=/opt/openssl32/bin:/usr/bin ctest -V"
-        working-directory: build
+        working-directory: _build
       - name: Retain oqsprovider.dll
         uses: actions/upload-artifact@v3
         with:
           name: oqs-provider-cygwin
-          path: D:/a/oqs-provider/oqs-provider/build/bin/oqsprovider.dll
+          path: D:/a/oqs-provider/oqs-provider/_build/bin/oqsprovider.dll
 
   msvc:
 # Run a job for each of the specified target architectures:
@@ -140,10 +140,10 @@ jobs:
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
 # OQS_USE_OPENSSL=OFF by default on Win32
 # if cmake --build fails, try explicit
-# cd build && msbuild ALL_BUILD.vcxproj -p:Configuration=Release
-# fails:          cmake -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -S . -B build
-#          cd build && msbuild ALL_BUILD.vcxproj -p:Configuration=Release && cd ..
-#          cmake --install build
+# cd _build && msbuild ALL_BUILD.vcxproj -p:Configuration=Release
+# fails:          cmake -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -S . -B _build
+#          cd _build && msbuild ALL_BUILD.vcxproj -p:Configuration=Release && cd ..
+#          cmake --install _build
       - name: build liboqs
         run: |
           cmake --version
@@ -188,17 +188,17 @@ jobs:
           key: ${{ runner.os }}-msvcopenssl32
       - name: build oqs-provider
         run: |
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B build
-          cd build
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+          cd _build
           ninja
       - name: Run tests
         run: |
-          ctest -V --test-dir build
+          ctest -V --test-dir _build
       - name: Retain oqsprovider.dll
         uses: actions/upload-artifact@v3
         with:
           name: oqs-provider-msvc
-          path: D:/a/oqs-provider/oqs-provider/build/lib/oqsprovider.dll
+          path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
 
   msvc_native:
 # Run a job for each of the specified target architectures:
@@ -211,7 +211,7 @@ jobs:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
             osslconfig: no-shared no-fips VC-WIN64A
-        toolchain:
+        toolchain: 
         - .CMake/toolchain_windows_amd64.cmake
         msarch:
           - x64
@@ -260,7 +260,7 @@ jobs:
           run: |
             cmake --version
             cmake -B build --toolchain ${{ matrix.toolchain }} .
-            cmake --build build
+            cmake --build build 
             cmake --build build --target INSTALL
           working-directory: liboqs
         - name: prepare the OpenSSL build directory
@@ -294,14 +294,14 @@ jobs:
             key: ${{ runner.os }}-msvcopenssl32n
         - name: build oqs-provider
           run: |
-            cmake -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B build
-            cmake --build build --config=${{ matrix.type }}
+            cmake -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+            cmake --build _build --config=${{ matrix.type }}
         - name: Run tests
           run: |
-            ctest --test-dir build -C ${{ matrix.type }}
+            ctest --test-dir _build -C ${{ matrix.type }}
         - name: Retain oqsprovider.dll
           uses: actions/upload-artifact@v3
           with:
             name: oqs-provider-msvc
-            path: D:/a/oqs-provider/oqs-provider/build/lib/oqsprovider.dll
-
+            path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
+          

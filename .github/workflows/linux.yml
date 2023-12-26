@@ -24,7 +24,7 @@ jobs:
       - name: Full build
         run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
-        run: cd build/lib && ln -s oqsprovider.so oqsprovider2.so
+        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
 
@@ -52,7 +52,7 @@ jobs:
       - name: Full build
         run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=0.9.1 ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
-        run: cd build/lib && ln -s oqsprovider.so oqsprovider2.so
+        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
 # Need to disable due to missing HQC update cherry-pick in liboqs release:
@@ -69,12 +69,12 @@ jobs:
 #          ! git status | grep modified
       - name: Build .deb install package
         run: cpack
-        working-directory: build
+        working-directory: _build
       - name: Retain .deb installer
         uses: actions/upload-artifact@v3
         with:
           name: oqsprovider-x64
-          path: build/*.deb
+          path: _build/*.deb
 
   asan_linux_intel:
     name: "Security checks"

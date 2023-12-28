@@ -22,7 +22,7 @@ key establishment in TLS1.3 including management of such keys via the
 OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
 signatures including CMS and CMP functionality are available via the OpenSSL
 EVP interface. Key persistence is provided via the encode/decode
-mechanism and X.509 data structures. Starting with OpenSSL 3.2 support for
+mechanism and X.509 data structures. Starting with OpenSSL 3.2 support for 
 TLS1.3 signature functionality is available and final glitches for CMS
 have been resolved.
 
@@ -62,7 +62,7 @@ In addition, algorithms not denoted with "\*" above are not enabled for
 TLS operations. This designation [can be changed by modifying the
 "enabled" flags in the main algorithm configuration file](CONFIGURE.md#pre-build-configuration).
 
-In order to support parallel use of classic and quantum-safe cryptography
+In order to support parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic
 and quantum-safe methods: These are listed above with a prefix denoting a
 classic algorithm, e.g., for elliptic curve: "p256_".
@@ -80,7 +80,7 @@ respectively (tested on Linux Ubuntu and Mint as well as MacOS).
 
 By default, these scripts always build and test against the current OpenSSL `master` branch.
 
-These scripts can be [configured by setting various variables](CONFIGURE.md#convenience-build-script-options). Please note that these scripts do _not_ install `oqsprovider`. This can be facilitated by running `cmake --install build` (and following the [activation instructions](USAGE.md#activation).
+These scripts can be [configured by setting various variables](CONFIGURE.md#convenience-build-script-options). Please note that these scripts do _not_ install `oqsprovider`. This can be facilitated by running `cmake --install _build` (and following the [activation instructions](USAGE.md#activation).
 
 Building and testing
 --------------------
@@ -104,8 +104,8 @@ for details.
 
 ## Basic steps
 
-    cmake -S . -B build && cmake --build build && ctest --test-dir build && cmake --install build
-
+    cmake -S . -B _build && cmake --build _build && ctest --test-dir _build && cmake --install _build
+    
 Using
 -----
 

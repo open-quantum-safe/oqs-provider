@@ -21,10 +21,10 @@ fi
 
 if [ $# -gt 0 ]; then
    if [ "$1" == "-f" ]; then
-      rm -rf build
+      rm -rf _build
    fi
    if [ "$1" == "-F" ]; then
-      rm -rf build openssl liboqs .local
+      rm -rf _build openssl liboqs .local
    fi
 fi
 
@@ -107,7 +107,7 @@ if [ -z $liboqs_DIR ]; then
   #    STD: only include NIST standardized algorithms
   #    NIST_R4: only include algorithms in round 4 of the NIST competition
   #    All: include all algorithms supported by liboqs (default)
-  cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED $CMAKE_OPENSSL_LOCATION -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B build && cd build && ninja && ninja install && cd ../..
+  cd liboqs && cmake -GNinja $DOQS_ALGS_ENABLED $CMAKE_OPENSSL_LOCATION -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
   if [ $? -ne 0 ]; then
       echo "liboqs build failed. Exiting."
       exit -1
@@ -117,16 +117,16 @@ if [ -z $liboqs_DIR ]; then
 fi
 
 # Check whether provider is built:
-if [ ! -f "build/lib/oqsprovider.$SHLIBEXT" ]; then
-   echo "oqsprovider (build/lib/oqsprovider.$SHLIBEXT) not built: Building..."
+if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
+   echo "oqsprovider (_build/lib/oqsprovider.$SHLIBEXT) not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
    #BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
    BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B build && cmake --build build
+       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    else
-       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B build && cmake --build build
+       cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    fi
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."

@@ -24,11 +24,11 @@ if [ -d oqs-template ]; then
     # Activate all algorithms
     sed -i "s/enable\: false/enable\: true/g" oqs-template/generate.yml
     python3 oqs-template/generate.py
-    rm -rf build
+    rm -rf _build
     ./scripts/fullbuild.sh
     ./scripts/runtests.sh
     if [ -f .local/bin/openssl ]; then
-        OPENSSL_MODULES=`pwd`/build/lib OPENSSL_CONF=`pwd`/scripts/openssl-ca.cnf python3 -m pytest --numprocesses=auto scripts/test_tls_full.py
+        OPENSSL_MODULES=`pwd`/_build/lib OPENSSL_CONF=`pwd`/scripts/openssl-ca.cnf python3 -m pytest --numprocesses=auto scripts/test_tls_full.py
     else
         echo "For full TLS PQ SIG/KEM matrix test, build (latest) openssl locally."
     fi

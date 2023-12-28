@@ -22,7 +22,7 @@ This improves a non-constant time issue in previous releases for Kyber.
 
 ### What's New
 
-This release continues from the 0.5.2 release of oqs-provider and is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs). This release is guaranteed to be in sync with v0.9.1 of `liboqs`.
+This release continues from the 0.5.2 release of oqs-provider and is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs). This release is functionally guaranteed to be in sync with v0.9.1 of `liboqs` (see note below),
 
 This release also makes available ready-to-run binaries for Linux (.so), Windows (.dll) and MacOS (.dylib) compiled for `x64` CPUs. Activation and use is documented in [USAGE.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/USAGE.md).
 
@@ -42,7 +42,11 @@ This release also makes available ready-to-run binaries for Linux (.so), Windows
 * Fix link in GOVERNANCE.md [skip ci] by @pi-314159 in https://github.com/open-quantum-safe/oqs-provider/pull/309
 * Add a example of how to load oqsprovider using `OSSL_PROVIDER_add_builtin`. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/308
 * Get Windows CI to work again by @qnfm in https://github.com/open-quantum-safe/oqs-provider/pull/310
-* Use `build` directory instead of `_build`. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/314
+* correct upstream and Windows CI snafus by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/322
+
+## Release-specific note
+
+Due to an incomplete cherry-pick in `liboqs`, the code-generator logic in `oqsprovider` does produce incorrect documentation when used in conjunction with `liboqs` release 0.9.1. The corresponding CI test therefore is disabled for this `oqsprovider` release and this note has been created to warn users of this inconsistency in `liboqs` v0.9.1. It has no functional implications.
 
 ## New Contributors
 * @ajbozarth made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/292

@@ -41,7 +41,7 @@ jobs:
           name: Clone and build liboqs (<< parameters.CMAKE_ARGS >>)
           command: |
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
-             cd liboqs && mkdir build && cd build &&
+             cd liboqs && mkdir _build && cd _build &&
              cmake -GNinja << parameters.CMAKE_ARGS >> -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
              cd .. && cd .. && pwd
       - when:
@@ -61,9 +61,9 @@ jobs:
                   if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
                     oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
                   fi
-                  mkdir build && cd build && cmake -GNinja ${oqsprovider_cmake_args} -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
+                  mkdir _build && cd _build && cmake -GNinja ${oqsprovider_cmake_args} -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
                   if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    file build/lib/oqsprovider.a
+                    file _build/lib/oqsprovider.a
                   fi
       - when:
           condition:
@@ -76,15 +76,15 @@ jobs:
                   if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
                     oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
                   fi
-                  mkdir build && cd build && cmake -GNinja ${oqsprovider_cmake_args} -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
+                  mkdir _build && cd _build && cmake -GNinja ${oqsprovider_cmake_args} -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
                   if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    file build/lib/oqsprovider.a
+                    file _build/lib/oqsprovider.a
                   fi
       - run:
           name: Run tests
           command: |
              if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir build/
+               ctest --test-dir _build/
              else
                ./scripts/runtests.sh -V
              fi
@@ -107,15 +107,15 @@ jobs:
             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
               oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
             fi
-            rm -rf build && mkdir build && cd build && cmake -GNinja ${oqsprovider_cmake_args} -DNOPUBKEY_IN_PRIVKEY=ON -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
+            rm -rf _build && mkdir _build && cd _build && cmake -GNinja ${oqsprovider_cmake_args} -DNOPUBKEY_IN_PRIVKEY=ON -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-              file build/lib/oqsprovider.a
+              file _build/lib/oqsprovider.a
             fi
       - run:
           name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
           command: |
              if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir build/
+               ctest --test-dir _build/
              else
                ./scripts/runtests.sh -V
              fi
@@ -159,7 +159,7 @@ jobs:
           name: Clone and build liboqs
           command: |
              git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
-             export LIBOQS_INSTALLPATH=$(pwd)/.local && cd liboqs && mkdir build && cd build &&
+             export LIBOQS_INSTALLPATH=$(pwd)/.local && cd liboqs && mkdir _build && cd _build &&
              export OPENSSL_INSTALL="$(brew --prefix << parameters.OPENSSL_PREINSTALL >> || echo "")"
              cmake -GNinja -DOPENSSL_ROOT_DIR="${OPENSSL_INSTALL}" -DCMAKE_INSTALL_PREFIX=$LIBOQS_INSTALLPATH << parameters.CMAKE_ARGS >> .. && ninja install &&
              cd .. && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$LIBOQS_INSTALLPATH/lib" >> "$BASH_ENV"
@@ -180,9 +180,9 @@ jobs:
                   if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
                     oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
                   fi
-                  export OPENSSL_INSTALL=$(pwd)/.local && mkdir build && cd build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local ${oqsprovider_cmake_args} .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV"
+                  export OPENSSL_INSTALL=$(pwd)/.local && mkdir _build && cd _build && cmake -GNinja -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local ${oqsprovider_cmake_args} .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV"
                   if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    file build/lib/oqsprovider.a
+                    file _build/lib/oqsprovider.a
                   fi
       - when:
           condition:
@@ -196,15 +196,15 @@ jobs:
                     oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
                   fi
                   export OPENSSL_INSTALL="$(brew --prefix << parameters.OPENSSL_PREINSTALL >>)"
-                  mkdir build && cd build && liboqs_DIR=`pwd`/../.local cmake -GNinja -DOPENSSL_ROOT_DIR="${OPENSSL_INSTALL}" ${oqsprovider_cmake_args} .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV" && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$OPENSSL_INSTALL/lib" >> "$BASH_ENV"
+                  mkdir _build && cd _build && liboqs_DIR=`pwd`/../.local cmake -GNinja -DOPENSSL_ROOT_DIR="${OPENSSL_INSTALL}" ${oqsprovider_cmake_args} .. && ninja && echo "export OPENSSL_INSTALL=$OPENSSL_INSTALL" >> "$BASH_ENV" && cd .. && echo "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$OPENSSL_INSTALL/lib" >> "$BASH_ENV"
                   if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    file build/lib/oqsprovider.a
+                    file _build/lib/oqsprovider.a
                   fi
       - run:
           name: Run tests
           command: |
              if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir build/ --output-on-failure
+               ctest --test-dir _build/ --output-on-failure
              else
                ./scripts/runtests.sh -V
              fi
@@ -215,15 +215,15 @@ jobs:
              if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
                oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
              fi
-             rm -rf build && mkdir build && cd build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local ${oqsprovider_cmake_args} .. && ninja
+             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local ${oqsprovider_cmake_args} .. && ninja
              if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               file build/lib/oqsprovider.a
+               file _build/lib/oqsprovider.a
              fi
       - run:
           name: Run tests
           command: |
              if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir build/ --output-on-failure
+               ctest --test-dir _build/ --output-on-failure
              else
                ./scripts/runtests.sh -V
              fi

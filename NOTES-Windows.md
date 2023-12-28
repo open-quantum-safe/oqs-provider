@@ -17,7 +17,7 @@ A complete scripted setup is available in the [CI tooling for oqs-provider](http
 
 ### liboqs
 
-Instructions for building `liboqs` from source is available
+Instructions for building `liboqs` from source is available 
 [here](https://github.com/open-quantum-safe/liboqs#windows).
 
 ## Build tooling
@@ -28,9 +28,9 @@ a C compiler are present, e.g., as in MS Visual Studio 2022.
 ## Build
 
 A standard `cmake` build sequence can be used (assuming prerequisites are installed)
-to build in/install from directory `build`:
+to build in/install from directory `_build`:
 
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/wd5105" -GNinja -S . -B build && cd build && ninja && ninja install
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/wd5105" -GNinja -S . -B _build && cd _build && ninja && ninja install
 
 The specific `CMAKE_C_FLAGS` silence some overly strict warning messages and
 the specific reference to the build type ensures a shared library with
@@ -41,15 +41,15 @@ If `openssl` and/or `liboqs` have not been installed to system standard location
 use the `cmake` defines "-DOPENSSL_ROOT_DIR" and/or "-Dliboqs_DIR" to utilize
 those, e.g., like this:
 
-    cmake -DOPENSSL_ROOT_DIR=c:\opt\openssl3 -Dliboqs_DIR=c:\liboqs -S . -B build && cmake --build build && cmake --install build
+    cmake -DOPENSSL_ROOT_DIR=c:\opt\openssl3 -Dliboqs_DIR=c:\liboqs -S . -B _build && cmake --build _build && cmake --install _build
 
 Further configuration options are documented [here](CONFIGURE.md#build-install-options).
 
 ## Test
 
-Standard `ctest` can be used to validate correct operation in build directory `build`, e.g.:
+Standard `ctest` can be used to validate correct operation in build directory `_build`, e.g.:
 
-    ctest -V --test-dir build
+    ctest -V --test-dir _build
 
 ## Packaging
 

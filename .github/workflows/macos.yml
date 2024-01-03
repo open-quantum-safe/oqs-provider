@@ -35,7 +35,7 @@ jobs:
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: 0.9.1
+          ref: main
           path: liboqs
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32

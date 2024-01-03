@@ -59,12 +59,10 @@ Current Maintainers and Committers are to be documented below by way of referenc
 ### Maintainers
 
 @baentsch
-@dstebila
 
 ### Committers
 
 @baentsch
 @bhess
-@dstebila
 @thb-sb
 @christianpaquin

@@ -129,14 +129,27 @@ has not been not getting back-ported to OpenSSL3.0.
 Also not supported in this version are provider-based signature algorithms
 used during TLS1.3 operations as documented in https://github.com/openssl/openssl/issues/10512.
 
-## 3.2(-dev)
+## 3.2
 
-After https://github.com/openssl/openssl/pull/19312 landed, (also PQ) signature
-algorithms are working in TLS1.3 (handshaking); after https://github.com/openssl/openssl/pull/20486
-has landed, also algorithms with very long signatures are supported.
+This version has full support for all TLS1.3 operations using PQ algorithms
+when deploying `oqsprovider`.
+
+A final configuration limitation for provider-based signature algorithms exists
+as documented in https://github.com/openssl/openssl/issues/22761.
+
+## 3.3(-dev)
+
+When https://github.com/openssl/openssl/pull/22779 land, the last config-time limitation
+for provider-based signatures should be gone.
 
 For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
 see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
+
+Governance & Contributions
+--------------------------
+
+Project governance is documented in [GOVERNANCE.md](GOVERNANCE.md) and contribution
+policy is documented in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Team
 ----
@@ -163,17 +176,17 @@ the separate file [RELEASE.md](RELEASE.md).
 Acknowledgments
 ---------------
 
-The `oqsprovider` project is supported through the [NGI Assure Fund](https://nlnet.nl/assure),
+The `oqsprovider` project had been supported through the [NGI Assure Fund](https://nlnet.nl/assure),
 a fund established by [NLnet](https://nlnet.nl) with financial
 support from the European Commission's [Next Generation Internet programme](https://www.ngi.eu),
 under the aegis of DG Communications Networks, Content and Technology
 under grant agreement No 957073.
 
-Financial support for the development of Open Quantum Safe has been provided
+Financial support for the development of Open Quantum Safe had been provided
 by Amazon Web Services and the Tutte Institute for Mathematics and Computing.
 
 The OQS project would like to make a special acknowledgement to the companies who
-have dedicated programmer time to contribute source code to OQS, including
+had dedicated programmer time to contribute source code to OQS, including
 Amazon Web Services, evolutionQ, Microsoft Research, Cisco Systems, and IBM Research.
 
 Research projects which developed specific components of OQS have been

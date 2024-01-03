@@ -38,7 +38,7 @@ jobs:
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: 0.9.1
+          ref: main
           path: liboqs
       - name: Install cygwin
         uses: cygwin/cygwin-install-action@master
@@ -125,7 +125,7 @@ jobs:
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: 0.9.1
+          ref: main
           path: liboqs
       - uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -238,7 +238,7 @@ jobs:
           with:
             set-safe-directory: true
             repository: open-quantum-safe/liboqs
-            ref: 0.9.1
+            ref: main
             path: liboqs
         - uses: ilammy/msvc-dev-cmd@v1
           with:

@@ -54,7 +54,7 @@ jobs:
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
-        run: ./scripts/runtests.sh -V
+        run: LIBOQS_BRANCH=dev-092 ./scripts/runtests.sh -V
       - name: Verify nothing changes on re-generate code
         run: |
           apt-get update && apt-get install -y clang-format && \
@@ -189,7 +189,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch dev-092 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

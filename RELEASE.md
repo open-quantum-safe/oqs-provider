@@ -1,3 +1,10 @@
+# oqs-provider 0.5.3
+
+This is a maintenance release not changing any `oqsprovider` functionality but only tracking a security update in `liboqs` (0.9.2).
+
+Previous Release Notes
+======================
+
 # oqs-provider 0.5.2
 
 ## About
@@ -68,9 +75,6 @@ This release also makes available ready-to-run binaries for Windows (.dll) and M
 * @mouse07410 made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/288
 
 **Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.5.1...0.5.2
-
-Previous Release Notes
-======================
 
 ## This is version 0.5.1 of oqs-provider.
 

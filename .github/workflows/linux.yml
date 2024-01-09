@@ -50,11 +50,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
+        run: LIBOQS_BRANCH=dev-092 OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
-        run: LIBOQS_BRANCH=dev-092 ./scripts/runtests.sh -V
+        run: ./scripts/runtests.sh -V
       - name: Verify nothing changes on re-generate code
         run: |
           apt-get update && apt-get install -y clang-format && \

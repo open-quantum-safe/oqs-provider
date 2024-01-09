@@ -144,15 +144,6 @@ jobs:
 # fails:          cmake -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -S . -B _build
 #          cd _build && msbuild ALL_BUILD.vcxproj -p:Configuration=Release && cd ..
 #          cmake --install _build
-      - name: build liboqs
-        run: |
-          cmake --version
-          mkdir build
-          cd build
-          cmake -GNinja -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
-          ninja
-          ninja install
-        working-directory: liboqs
       - name: prepare the OpenSSL build directory
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         run: mkdir _build
@@ -186,6 +177,15 @@ jobs:
           path: |
             c:\openssl32
           key: ${{ runner.os }}-msvcopenssl32
+      - name: build liboqs
+        run: |
+          cmake --version
+          mkdir build
+          cd build
+          cmake -GNinja -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
+          ninja
+          ninja install
+        working-directory: liboqs
       - name: build oqs-provider
         run: |
           cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
@@ -256,13 +256,6 @@ jobs:
         - name: Setup perl for OpenSSL build
           uses: shogo82148/actions-setup-perl@v1
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
-        - name: build liboqs
-          run: |
-            cmake --version
-            cmake -B build --toolchain ${{ matrix.toolchain }} .
-            cmake --build build 
-            cmake --build build --target INSTALL
-          working-directory: liboqs
         - name: prepare the OpenSSL build directory
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           run: mkdir _build
@@ -292,6 +285,13 @@ jobs:
             path: |
               c:\openssl32n
             key: ${{ runner.os }}-msvcopenssl32n
+        - name: build liboqs
+          run: |
+            cmake --version
+            cmake -B build --toolchain ${{ matrix.toolchain }} .
+            cmake --build build 
+            cmake --build build --target INSTALL
+          working-directory: liboqs
         - name: build oqs-provider
           run: |
             cmake -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build

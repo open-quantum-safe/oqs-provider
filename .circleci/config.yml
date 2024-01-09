@@ -166,7 +166,7 @@ jobs:
       - when:
           condition:
             not:
-              equal: [ openssl@3.1, << parameters.OPENSSL_PREINSTALL >> ]
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
                 name: Clone and build OpenSSL(3) master
@@ -186,7 +186,7 @@ jobs:
                   fi
       - when:
           condition:
-              equal: [ openssl@3.1, << parameters.OPENSSL_PREINSTALL >> ]
+              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
                 name: Build OQS-OpenSSL provider
@@ -301,12 +301,12 @@ workflows:
       - macOS:
           name: macOS-shared
           CMAKE_ARGS: -DBUILD_SHARED_LIBS=ON -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
-          OPENSSL_PREINSTALL: openssl@3.1
+          OPENSSL_PREINSTALL: openssl@3
       - macOS:
           name: macOS-static
           OQS_PROVIDER_BUILD_STATIC: true
           CMAKE_ARGS: -DOQS_DIST_BUILD=OFF -DOQS_ENABLE_KEM_CLASSIC_MCELIECE=OFF
-          OPENSSL_PREINSTALL: openssl@3.1
+          OPENSSL_PREINSTALL: openssl@3
   on-main-branch:
     when:
       or:

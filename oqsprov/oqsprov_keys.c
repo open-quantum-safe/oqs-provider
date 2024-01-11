@@ -1123,10 +1123,6 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
             plen = aux;
         }
     }
-    if (rsa_diff > 4) { // diff is too big, this means an decoding error
-        ASN1_OCTET_STRING_free(oct);
-        return NULL;
-    }
 
     oqsx = oqsx_key_op(palg, p, plen + rsa_diff, KEY_OP_PRIVATE, libctx, propq);
     ASN1_OCTET_STRING_free(oct);
@@ -1550,10 +1546,11 @@ static EVP_PKEY *oqsx_key_gen_evp_key(OQSX_EVP_CTX *ctx, unsigned char *pubkey,
     ret2 = EVP_PKEY_keygen_init(kgctx);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     if (ctx->evp_info->keytype == EVP_PKEY_RSA) {
-        if (ctx->evp_info->length_public_key > 270)
+        if (ctx->evp_info->length_public_key > 270) {
             ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
-        else
+        } else {
             ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 2048);
+        }
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, errhyb);
     }
 

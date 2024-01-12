@@ -50,7 +50,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: LIBOQS_BRANCH=dev-092 OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
+        run: LIBOQS_BRANCH=0.9.2-rc1 OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -190,7 +190,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch dev-092 https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch 0.9.2-rc1 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

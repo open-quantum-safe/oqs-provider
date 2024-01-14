@@ -150,7 +150,7 @@ jobs:
           cmake --version
           mkdir build
           cd build
-          CC=cl cmake -GNinja -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
+          cmake -GNinja -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
           ninja
           ninja install
         working-directory: liboqs

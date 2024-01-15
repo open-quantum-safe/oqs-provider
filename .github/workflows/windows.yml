@@ -96,8 +96,8 @@ jobs:
     strategy:
       matrix:
         os:
-# liboqs doesn't build under Windows 2019
-#          - windows-2019
+# liboqs doesn't check Windows 2019
+          - windows-2019
           - windows-2022
         platform:
           - arch: win64
@@ -189,7 +189,7 @@ jobs:
           key: ${{ runner.os }}-msvcopenssl32
       - name: build oqs-provider
         run: |
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
           cd _build
           ninja
       - name: Run tests
@@ -206,8 +206,8 @@ jobs:
     strategy:
       matrix:
         os:
-# liboqs doesn't build under Windows 2019
-#          - windows-2019
+# liboqs doesn't check Windows 2019
+          - windows-2019
           - windows-2022
         platform:
           - arch: win64

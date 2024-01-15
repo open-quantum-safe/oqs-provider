@@ -296,7 +296,7 @@ jobs:
             key: ${{ runner.os }}-msvcopenssl32n
         - name: build oqs-provider
           run: |
-            cmake -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+            cmake -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_COMPILER="cl"  -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
             cmake --build _build --config=${{ matrix.type }}
         - name: Run tests
           run: |

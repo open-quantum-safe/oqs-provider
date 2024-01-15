@@ -471,11 +471,11 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                             <= 0)) {
                         ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
                         OPENSSL_free(name);
-                        OPENSSL_free(evp_ctx);
+                        EVP_MD_CTX_free(evp_ctx);
                         OPENSSL_free(buf);
                         goto endsign;
                     }
-                    OPENSSL_free(evp_ctx);
+                    EVP_MD_CTX_free(evp_ctx);
                 } else {
                     if ((classical_ctx_sign
                          = EVP_PKEY_CTX_new(oqs_key_classic, NULL))
@@ -591,9 +591,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         }
         oqs_sig_len = i2d_CompositeSignature(compsig, &sig);
 
-        OPENSSL_free(compsig->sig1->data);
-        OPENSSL_free(compsig->sig2->data);
-        OPENSSL_free(compsig);
+        CompositeSignature_free(compsig);
         OPENSSL_free(final_tbs);
     } else if (OQS_SIG_sign(oqs_key, sig + index, &oqs_sig_len, tbs, tbslen,
                             oqsxkey->comp_privkey[oqsxkey->numkeys - 1])
@@ -809,10 +807,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                             <= 0)) {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                         OPENSSL_free(name);
-                        OPENSSL_free(evp_ctx);
+                        EVP_MD_CTX_free(evp_ctx);
                         goto endverify;
                     }
-                    OPENSSL_free(evp_ctx);
+                    EVP_MD_CTX_free(evp_ctx);
                 } else {
                     if (((ctx_verify
                           = EVP_PKEY_CTX_new(oqsxkey->classical_pkey, NULL))
@@ -893,7 +891,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
 
             OPENSSL_free(name);
         }
-        OPENSSL_free(compsig);
+        CompositeSignature_free(compsig);
         OPENSSL_free(final_tbs);
     } else {
         if (!oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) {

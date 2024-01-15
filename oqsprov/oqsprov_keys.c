@@ -1387,29 +1387,32 @@ void oqsx_key_free(OQSX_KEY *key)
 #endif
 
     OPENSSL_free(key->propq);
+    OPENSSL_free(key->tls_name);
     OPENSSL_secure_clear_free(key->privkey, key->privkeylen);
     OPENSSL_secure_clear_free(key->pubkey, key->pubkeylen);
     OPENSSL_free(key->comp_pubkey);
     OPENSSL_free(key->comp_privkey);
+    if (key->keytype == KEY_TYPE_CMP_SIG) {
+        OPENSSL_free(key->privkeylen_cmp);
+        OPENSSL_free(key->pubkeylen_cmp);
+    }
     if (key->keytype == KEY_TYPE_KEM)
         OQS_KEM_free(key->oqsx_provider_ctx.oqsx_qs_ctx.kem);
     else if (key->keytype == KEY_TYPE_ECP_HYB_KEM
              || key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         OQS_KEM_free(key->oqsx_provider_ctx.oqsx_qs_ctx.kem);
-    } else {
+    } else
         OQS_SIG_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig);
-        if (key->oqsx_provider_ctx.oqsx_evp_ctx) {
-            EVP_PKEY_CTX_free(key->oqsx_provider_ctx.oqsx_evp_ctx->ctx);
-            EVP_PKEY_free(key->oqsx_provider_ctx.oqsx_evp_ctx->keyParam);
-            OPENSSL_free(key->oqsx_provider_ctx.oqsx_evp_ctx);
-        }
+    EVP_PKEY_free(key->classical_pkey);
+    if (key->oqsx_provider_ctx.oqsx_evp_ctx) {
+        EVP_PKEY_CTX_free(key->oqsx_provider_ctx.oqsx_evp_ctx->ctx);
+        EVP_PKEY_free(key->oqsx_provider_ctx.oqsx_evp_ctx->keyParam);
+        OPENSSL_free(key->oqsx_provider_ctx.oqsx_evp_ctx);
     }
-    OPENSSL_free(key->tls_name);
 
 #ifdef OQS_PROVIDER_NOATOMIC
     CRYPTO_THREAD_lock_free(key->lock);
 #endif
-    OPENSSL_free(key->classical_pkey);
     OPENSSL_free(key);
 }
 

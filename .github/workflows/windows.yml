@@ -96,8 +96,9 @@ jobs:
     strategy:
       matrix:
         os:
+# liboqs doesn't check Windows 2019
           - windows-2019
-#          - windows-2022
+          - windows-2022
         platform:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
@@ -149,7 +150,7 @@ jobs:
           cmake --version
           mkdir build
           cd build
-          cmake -GNinja -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
+          cmake -GNinja -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
           ninja
           ninja install
         working-directory: liboqs
@@ -188,7 +189,7 @@ jobs:
           key: ${{ runner.os }}-msvcopenssl32
       - name: build oqs-provider
         run: |
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
           cd _build
           ninja
       - name: Run tests
@@ -205,7 +206,7 @@ jobs:
     strategy:
       matrix:
         os:
-#          - windows-2019
+          - windows-2019
           - windows-2022
         platform:
           - arch: win64
@@ -294,7 +295,7 @@ jobs:
             key: ${{ runner.os }}-msvcopenssl32n
         - name: build oqs-provider
           run: |
-            cmake -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+            cmake --toolchain ${{ matrix.toolchain }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_COMPILER="cl"  -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
             cmake --build _build --config=${{ matrix.type }}
         - name: Run tests
           run: |

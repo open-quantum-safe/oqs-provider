@@ -696,14 +696,11 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
     } else {
         ASN1_TYPE **aType
             = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_TYPE));
-        ASN1_STRING **aString
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_STRING));
-        ASN1_STRING **tempOct
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_STRING));
+        ASN1_OCTET_STRING **aString
+            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_OCTET_STRING));
         unsigned char **temp
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(void *));
-        unsigned char **cbuf
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(void *));
+            = OPENSSL_secure_malloc(oqsxkey->numkeys * sizeof(void *));
+        size_t templen[oqsxkey->numkeys];
         int i;
         if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
@@ -711,19 +708,24 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         for (i = 0; i < oqsxkey->numkeys; i++) {
             aType[i] = ASN1_TYPE_new();
             aString[i] = ASN1_OCTET_STRING_new();
-            tempOct[i] = ASN1_OCTET_STRING_new();
             temp[i] = NULL;
-            buflen = 0;
 
             if ((name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i))
                 == NULL) {
-                OPENSSL_free(name);
-                for (i = 0; i < oqsxkey->numkeys; i++) {
-                    ASN1_OCTET_STRING_free(aString[i]);
-                    ASN1_OCTET_STRING_free(tempOct[i]);
-                    ASN1_TYPE_free(aType[i]);
+                for (int j = 0; j <= i; j++) {
+                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
+                    ASN1_OCTET_STRING_free(aString[j]);
+                    OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                    aType[j]->value.sequence->length);
+                    OPENSSL_clear_free(temp[j], templen[j]);
                 }
-                OPENSSL_free(sk);
+
+                if (sk_ASN1_TYPE_num(sk) != -1)
+                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+                else
+                    ASN1_TYPE_free(aType[i]);
+
+                OPENSSL_free(name);
                 return -1;
             }
 
@@ -737,14 +739,21 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                     buflen += 4;
                     OPENSSL_free(enc_len);
                     if (buflen > oqsxkey->privkeylen_cmp[i]) {
-                        OPENSSL_free(name);
-                        for (i = 0; i < oqsxkey->numkeys; i++) {
-                            ASN1_OCTET_STRING_free(aString[i]);
-                            ASN1_OCTET_STRING_free(tempOct[i]);
-                            ASN1_TYPE_free(aType[i]);
+                        for (int j = 0; j <= i; j++) {
+                            OPENSSL_cleanse(aString[j]->data,
+                                            aString[j]->length);
+                            ASN1_OCTET_STRING_free(aString[j]);
+                            OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                            aType[j]->value.sequence->length);
+                            OPENSSL_clear_free(temp[j], templen[j]);
                         }
-                        OPENSSL_free(sk);
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+
+                        if (sk_ASN1_TYPE_num(sk) != -1)
+                            sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+                        else
+                            ASN1_TYPE_free(aType[i]);
+
+                        OPENSSL_free(name);
                         return -1;
                     }
                 } else
@@ -752,42 +761,52 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             } else
                 buflen = oqsxkey->privkeylen_cmp[i] + oqsxkey->pubkeylen_cmp[i];
 
-            cbuf[i] = OPENSSL_malloc(buflen);
+            buf = OPENSSL_secure_malloc(buflen);
             if (get_oqsname_fromtls(name)
                 != 0) { // include pubkey in privkey for PQC
-                memcpy(cbuf[i], oqsxkey->comp_privkey[i],
+                memcpy(buf, oqsxkey->comp_privkey[i],
                        oqsxkey->privkeylen_cmp[i]);
-                memcpy(cbuf[i] + oqsxkey->privkeylen_cmp[i],
+                memcpy(buf + oqsxkey->privkeylen_cmp[i],
                        oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
             } else
-                memcpy(cbuf[i], oqsxkey->comp_privkey[i], buflen);
+                memcpy(buf, oqsxkey->comp_privkey[i], buflen);
 
-            ASN1_STRING_set0(tempOct[i], cbuf[i], buflen);
-            keybloblen = i2d_ASN1_OCTET_STRING(tempOct[i], &temp[i]);
-            ASN1_STRING_set0(aString[i], temp[i], keybloblen);
-            ASN1_TYPE_set(aType[i], V_ASN1_SEQUENCE, aString[i]);
+            oct.data = buf;
+            oct.length = buflen;
+            templen[i] = i2d_ASN1_OCTET_STRING(&oct, &temp[i]);
+            ASN1_STRING_set(aString[i], temp[i], templen[i]);
+            ASN1_TYPE_set1(aType[i], V_ASN1_SEQUENCE, aString[i]);
 
             if (!sk_ASN1_TYPE_push(sk, aType[i])) {
-                for (i = 0; i < oqsxkey->numkeys; i++) {
-                    ASN1_OCTET_STRING_free(aString[i]);
-                    ASN1_OCTET_STRING_free(tempOct[i]);
-                    ASN1_TYPE_free(aType[i]);
+                for (int j = 0; j <= i; j++) {
+                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
+                    ASN1_OCTET_STRING_free(aString[j]);
+                    OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                    aType[j]->value.sequence->length);
+                    OPENSSL_clear_free(temp[j], templen[j]);
                 }
-                OPENSSL_free(sk);
+
+                sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
                 OPENSSL_free(name);
+                OPENSSL_secure_clear_free(buf, buflen);
                 return -1;
             }
             OPENSSL_free(name);
+            if (i + 1 < oqsxkey->numkeys){ // clear buf and oct if is not the last call
+                OPENSSL_secure_clear_free(buf, buflen);
+            }
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
 
         for (i = 0; i < oqsxkey->numkeys; i++) {
+            OPENSSL_cleanse(aString[i]->data, aString[i]->length);
             ASN1_OCTET_STRING_free(aString[i]);
-            ASN1_OCTET_STRING_free(tempOct[i]);
-            ASN1_TYPE_free(aType[i]);
+            OPENSSL_cleanse(aType[i]->value.sequence->data,
+                            aType[i]->value.sequence->length);
+            OPENSSL_clear_free(temp[i], templen[i]);
         }
-
-        OPENSSL_free(sk);
+        
+        sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
     }
     OPENSSL_secure_clear_free(buf, buflen);
     return keybloblen;

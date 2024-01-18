@@ -1020,7 +1020,6 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
     STACK_OF(ASN1_TYPE) *sk = NULL;
     ASN1_TYPE *aType = NULL;
     ASN1_OCTET_STRING *oct = NULL;
-    X509_PUBKEY *p8info_buf = X509_PUBKEY_new();
     const unsigned char *buf;
     unsigned char *concat_key;
     int count, aux, i, buflen;
@@ -1035,7 +1034,7 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
             return NULL;
         } else {
             count = sk_ASN1_TYPE_num(sk);
-            concat_key = OPENSSL_secure_malloc(plen);
+            concat_key = OPENSSL_zalloc(plen); 
 
             aux = 0;
             for (i = 0; i < count; i++) {
@@ -1043,16 +1042,17 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
                 buf = aType->value.sequence->data;
                 buflen = aType->value.sequence->length;
                 aux += buflen;
-                memcpy(concat_key + plen - aux, buf, buflen);
+                memcpy(concat_key + plen - 1 - aux , buf, buflen);
             }
 
-            p = OPENSSL_memdup(concat_key + plen - aux, aux);
+            p = OPENSSL_memdup(concat_key + plen - 1 - aux, aux); 
+            OPENSSL_clear_free(concat_key, plen); 
             plen = aux;
-            OPENSSL_free(concat_key);
         }
     }
     oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PUBLIC, libctx, propq);
-
+    if (get_keytype(OBJ_obj2nid(palg->algorithm)) == KEY_TYPE_CMP_SIG) 
+        OPENSSL_clear_free(p, plen);
     return oqsx;
 }
 
@@ -1069,7 +1069,6 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     const unsigned char *buf;
     unsigned char *concat_key;
     int count, aux, i, buflen, rsa_diff = 0;
-    PKCS8_PRIV_KEY_INFO *p8info_buf = PKCS8_PRIV_KEY_INFO_new();
 
     if (!PKCS8_pkey_get0(NULL, &p, &plen, &palg, p8inf))
         return 0;
@@ -1090,7 +1089,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
             return NULL;
         } else {
             count = sk_ASN1_TYPE_num(sk);
-            concat_key = OPENSSL_secure_malloc(plen);
+            concat_key = OPENSSL_zalloc(plen);
 
             aux = 0;
             for (i = 0; i < count; i++) {
@@ -1106,7 +1105,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                 buf = aType->value.sequence->data;
                 buflen = aType->value.sequence->length;
                 aux += buflen;
-                memcpy(concat_key + plen - aux, buf, buflen);
+                memcpy(concat_key + plen - 1 - aux, buf, buflen);
                 // if is a RSA key the actual encoding size might be different
                 // from max size we calculate that difference for to facilitate
                 // the key reconstruction
@@ -1119,13 +1118,19 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                 OPENSSL_free(name);
             }
 
-            p = concat_key + plen - aux;
+            p = OPENSSL_memdup(concat_key + plen - 1 - aux, aux);
+            OPENSSL_clear_free(concat_key, plen); 
             plen = aux;
+            sk_ASN1_TYPE_free(sk);
         }
     }
 
     oqsx = oqsx_key_op(palg, p, plen + rsa_diff, KEY_OP_PRIVATE, libctx, propq);
-    ASN1_OCTET_STRING_free(oct);
+    if (get_keytype(OBJ_obj2nid(palg->algorithm)) != KEY_TYPE_CMP_SIG) {
+        ASN1_OCTET_STRING_free(oct);
+    }else{
+        OPENSSL_clear_free(p, plen);
+    }
     return oqsx;
 }
 

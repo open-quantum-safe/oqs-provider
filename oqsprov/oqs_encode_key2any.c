@@ -500,7 +500,8 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
 {
     const OQSX_KEY *oqsxkey = vxkey;
     unsigned char *keyblob, *buf;
-    int keybloblen, nid;
+    int keybloblen, nid, buflen = 0;
+    ASN1_OCTET_STRING oct;
     STACK_OF(ASN1_TYPE) *sk = NULL;
     int ret = 0;
 
@@ -542,55 +543,55 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         }
 #endif
     } else {
-        ASN1_TYPE **aType
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_TYPE));
-        ASN1_STRING **aString
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_STRING));
-        ASN1_STRING **tempOct
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_STRING));
-        unsigned char **temp
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(void *));
-        unsigned char **cbuf
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(void *));
-        int len, i;
         if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
+        ASN1_TYPE *aType[oqsxkey->numkeys];
+        ASN1_OCTET_STRING *aString[oqsxkey->numkeys];
+        unsigned char *temp[oqsxkey->numkeys];
+        size_t templen[oqsxkey->numkeys];
+        int i;
 
         for (i = 0; i < oqsxkey->numkeys; i++) {
             aType[i] = ASN1_TYPE_new();
             aString[i] = ASN1_OCTET_STRING_new();
-            tempOct[i] = ASN1_OCTET_STRING_new();
             temp[i] = NULL;
 
-            len = oqsxkey->pubkeylen_cmp[i];
-            cbuf[i] = OPENSSL_memdup(oqsxkey->comp_pubkey[i], len);
-            ASN1_STRING_set0(tempOct[i], cbuf[i], len);
-            keybloblen = i2d_ASN1_OCTET_STRING(tempOct[i], &temp[i]);
-            ASN1_STRING_set0(aString[i], temp[i], keybloblen);
-            ASN1_TYPE_set(aType[i], V_ASN1_SEQUENCE, aString[i]);
+            buflen = oqsxkey->pubkeylen_cmp[i];
+            buf = OPENSSL_secure_malloc(buflen);
+            memcpy(buf, oqsxkey->comp_pubkey[i], buflen);
+
+            oct.data = buf;
+            oct.length = buflen;
+            templen[i] = i2d_ASN1_OCTET_STRING(&oct, &temp[i]);
+            ASN1_STRING_set(aString[i], temp[i], templen[i]);
+            ASN1_TYPE_set1(aType[i], V_ASN1_SEQUENCE, aString[i]);
 
             if (!sk_ASN1_TYPE_push(sk, aType[i])) {
-                for (i = 0; i < oqsxkey->numkeys; i++) {
-                    OPENSSL_free(temp[i]);
-                    OPENSSL_free(cbuf[i]);
-                    OPENSSL_free(aType[i]);
-                    OPENSSL_free(aString[i]);
-                    OPENSSL_free(tempOct[i]);
+                for (int j = 0; j <= i; j++) {
+                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
+                    ASN1_OCTET_STRING_free(aString[j]);
+                    OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                    aType[j]->value.sequence->length);
+                    OPENSSL_clear_free(temp[j], templen[j]);
                 }
-                OPENSSL_free(sk);
+
+                sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+                OPENSSL_secure_clear_free(buf, buflen);
                 return -1;
             }
+            OPENSSL_secure_clear_free(buf, buflen);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
 
         for (i = 0; i < oqsxkey->numkeys; i++) {
-            OPENSSL_free(temp[i]);
-            OPENSSL_free(cbuf[i]);
-            OPENSSL_free(aType[i]);
-            OPENSSL_free(aString[i]);
-            OPENSSL_free(tempOct[i]);
+            OPENSSL_cleanse(aString[i]->data, aString[i]->length);
+            ASN1_OCTET_STRING_free(aString[i]);
+            OPENSSL_cleanse(aType[i]->value.sequence->data,
+                            aType[i]->value.sequence->length);
+            OPENSSL_clear_free(temp[i], templen[i]);
         }
-        OPENSSL_free(sk);
+
+        sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
 
         return keybloblen;
     }
@@ -694,14 +695,12 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             keybloblen = 0; // signal error
         }
     } else {
-        ASN1_TYPE **aType
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_TYPE));
-        ASN1_OCTET_STRING **aString
-            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_OCTET_STRING));
-        unsigned char **temp
-            = OPENSSL_secure_malloc(oqsxkey->numkeys * sizeof(void *));
+        ASN1_TYPE *aType[oqsxkey->numkeys];
+        ASN1_OCTET_STRING *aString[oqsxkey->numkeys];
+        unsigned char *temp[oqsxkey->numkeys];
         size_t templen[oqsxkey->numkeys];
         int i;
+
         if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
 
@@ -717,7 +716,8 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                     ASN1_OCTET_STRING_free(aString[j]);
                     OPENSSL_cleanse(aType[j]->value.sequence->data,
                                     aType[j]->value.sequence->length);
-                    OPENSSL_clear_free(temp[j], templen[j]);
+                    if (j < i)
+                        OPENSSL_clear_free(temp[j], templen[j]);
                 }
 
                 if (sk_ASN1_TYPE_num(sk) != -1)
@@ -745,7 +745,8 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                             ASN1_OCTET_STRING_free(aString[j]);
                             OPENSSL_cleanse(aType[j]->value.sequence->data,
                                             aType[j]->value.sequence->length);
-                            OPENSSL_clear_free(temp[j], templen[j]);
+                            if (j < i)
+                                OPENSSL_clear_free(temp[j], templen[j]);
                         }
 
                         if (sk_ASN1_TYPE_num(sk) != -1)
@@ -792,7 +793,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 return -1;
             }
             OPENSSL_free(name);
-            if (i + 1 < oqsxkey->numkeys){ // clear buf and oct if is not the last call
+            if (i + 1
+                < oqsxkey
+                      ->numkeys) { // clear buf and oct if is not the last call
                 OPENSSL_secure_clear_free(buf, buflen);
             }
         }
@@ -805,7 +808,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                             aType[i]->value.sequence->length);
             OPENSSL_clear_free(temp[i], templen[i]);
         }
-        
+
         sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
     }
     OPENSSL_secure_clear_free(buf, buflen);

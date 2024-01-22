@@ -1030,11 +1030,12 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
     if (get_keytype(OBJ_obj2nid(palg->algorithm)) == KEY_TYPE_CMP_SIG) {
         sk = d2i_ASN1_SEQUENCE_ANY(NULL, &p, plen);
         if (sk == NULL) {
+            sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             return NULL;
         } else {
             count = sk_ASN1_TYPE_num(sk);
-            concat_key = OPENSSL_zalloc(plen); 
+            concat_key = OPENSSL_zalloc(plen);
 
             aux = 0;
             for (i = 0; i < count; i++) {
@@ -1042,16 +1043,18 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
                 buf = aType->value.sequence->data;
                 buflen = aType->value.sequence->length;
                 aux += buflen;
-                memcpy(concat_key + plen - 1 - aux , buf, buflen);
+                memcpy(concat_key + plen - 1 - aux, buf, buflen);
+                ASN1_TYPE_free(aType);
             }
 
-            p = OPENSSL_memdup(concat_key + plen - 1 - aux, aux); 
-            OPENSSL_clear_free(concat_key, plen); 
+            p = OPENSSL_memdup(concat_key + plen - 1 - aux, aux);
+            OPENSSL_clear_free(concat_key, plen);
             plen = aux;
+            sk_ASN1_TYPE_free(sk);
         }
     }
     oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PUBLIC, libctx, propq);
-    if (get_keytype(OBJ_obj2nid(palg->algorithm)) == KEY_TYPE_CMP_SIG) 
+    if (get_keytype(OBJ_obj2nid(palg->algorithm)) == KEY_TYPE_CMP_SIG)
         OPENSSL_clear_free(p, plen);
     return oqsx;
 }
@@ -1085,6 +1088,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     } else {
         sk = d2i_ASN1_SEQUENCE_ANY(NULL, &p, plen);
         if (sk == NULL) {
+            sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             return NULL;
         } else {
@@ -1116,10 +1120,11 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                         rsa_diff = nids_sig[6].length_private_key - buflen;
                 }
                 OPENSSL_free(name);
+                ASN1_TYPE_free(aType);
             }
 
             p = OPENSSL_memdup(concat_key + plen - 1 - aux, aux);
-            OPENSSL_clear_free(concat_key, plen); 
+            OPENSSL_clear_free(concat_key, plen);
             plen = aux;
             sk_ASN1_TYPE_free(sk);
         }
@@ -1128,7 +1133,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     oqsx = oqsx_key_op(palg, p, plen + rsa_diff, KEY_OP_PRIVATE, libctx, propq);
     if (get_keytype(OBJ_obj2nid(palg->algorithm)) != KEY_TYPE_CMP_SIG) {
         ASN1_OCTET_STRING_free(oct);
-    }else{
+    } else {
         OPENSSL_clear_free(p, plen);
     }
     return oqsx;

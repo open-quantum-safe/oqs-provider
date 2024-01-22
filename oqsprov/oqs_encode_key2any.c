@@ -545,10 +545,13 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
     } else {
         if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
             return -1;
-        ASN1_TYPE *aType[oqsxkey->numkeys];
-        ASN1_OCTET_STRING *aString[oqsxkey->numkeys];
-        unsigned char *temp[oqsxkey->numkeys];
-        size_t templen[oqsxkey->numkeys];
+        ASN1_TYPE **aType
+            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_TYPE *));
+        ASN1_OCTET_STRING **aString
+            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_OCTET_STRING *));
+        unsigned char **temp
+            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(unsigned char *));
+        size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t));
         int i;
 
         for (i = 0; i < oqsxkey->numkeys; i++) {
@@ -577,6 +580,10 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
 
                 sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
                 OPENSSL_secure_clear_free(buf, buflen);
+                OPENSSL_free(aType);
+                OPENSSL_free(aString);
+                OPENSSL_free(temp);
+                OPENSSL_free(templen);
                 return -1;
             }
             OPENSSL_secure_clear_free(buf, buflen);
@@ -592,6 +599,10 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         }
 
         sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+        OPENSSL_free(aType);
+        OPENSSL_free(aString);
+        OPENSSL_free(temp);
+        OPENSSL_free(templen);
 
         return keybloblen;
     }
@@ -695,10 +706,13 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             keybloblen = 0; // signal error
         }
     } else {
-        ASN1_TYPE *aType[oqsxkey->numkeys];
-        ASN1_OCTET_STRING *aString[oqsxkey->numkeys];
-        unsigned char *temp[oqsxkey->numkeys];
-        size_t templen[oqsxkey->numkeys];
+        ASN1_TYPE **aType
+            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_TYPE *));
+        ASN1_OCTET_STRING **aString
+            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_OCTET_STRING *));
+        unsigned char **temp
+            = OPENSSL_malloc(oqsxkey->numkeys * sizeof(unsigned char *));
+        size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t));
         int i;
 
         if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
@@ -725,6 +739,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 else
                     ASN1_TYPE_free(aType[i]);
 
+                OPENSSL_free(aType);
+                OPENSSL_free(aString);
+                OPENSSL_free(temp);
+                OPENSSL_free(templen);
                 OPENSSL_free(name);
                 return -1;
             }
@@ -754,6 +772,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                         else
                             ASN1_TYPE_free(aType[i]);
 
+                        OPENSSL_free(aType);
+                        OPENSSL_free(aString);
+                        OPENSSL_free(temp);
+                        OPENSSL_free(templen);
                         OPENSSL_free(name);
                         return -1;
                     }
@@ -789,6 +811,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 
                 sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
                 OPENSSL_free(name);
+                OPENSSL_free(aType);
+                OPENSSL_free(aString);
+                OPENSSL_free(temp);
+                OPENSSL_free(templen);
                 OPENSSL_secure_clear_free(buf, buflen);
                 return -1;
             }
@@ -810,6 +836,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
         }
 
         sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+        OPENSSL_free(aType);
+        OPENSSL_free(aString);
+        OPENSSL_free(temp);
+        OPENSSL_free(templen);
     }
     OPENSSL_secure_clear_free(buf, buflen);
     return keybloblen;

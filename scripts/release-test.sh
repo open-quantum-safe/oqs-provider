@@ -3,33 +3,35 @@
 # Stop in case of error
 set -e
 
-# To be run as part of a release test only on Linux
-# requires python, pytest, xdist; install e.g. via
-# sudo apt install python3 python3-pytest python3-pytest-xdist python3-psutil
+# Wrapper around the release-test-ci.sh script to preserve uncommitted modifications.
 
-# must be run in main folder
-# multicore machine recommended for fast execution
+# back up git status and checkout a fresh branch with identical staged/unstaged changes
+save_local_git() {
+    # git stash does not have an --allow-empty option, so make sure we have something to stash.
+    # This allows us to safely call git stash pop.
+    tmpfile=$(mktemp ./XXXXXX)
+    git add $tmpfile
+    # back up uncommitted changes
+    git stash push --quiet
+    # restore changes but save stash
+    git stash apply --quiet
+    # delete dummy file
+    git rm -f $tmpfile --quiet
+    # save working branch name
+    working_branch=$(git branch --show-current)
+    # checkout a fresh branch
+    reltest_branch="reltest-$RANDOM"
+    git checkout -b $reltest_branch --quiet
+}
 
-# expect (ideally latest/release-test) liboqs to be already build and present
-if [ -d liboqs ]; then
-   export LIBOQS_SRC_DIR=`pwd`/liboqs
-else
-   echo "liboqs not found. Exiting."
-   exit 1
-fi
+# restore git status
+restore_local_git() {
+    # switch back to working branch; delete temporary branch; reset to HEAD; pop stashed changes; delete dummy file
+    git switch $working_branch --quiet && git branch -D $reltest_branch --quiet && git reset --hard --quiet && git stash pop --quiet && git rm -f $tmpfile --quiet
+}
 
-if [ -d oqs-template ]; then
-    # Activate all algorithms
-    sed -i "s/enable\: false/enable\: true/g" oqs-template/generate.yml
-    python3 oqs-template/generate.py
-    ./scripts/fullbuild.sh
-    ./scripts/runtests.sh
-    if [ -f .local/bin/openssl ]; then
-        OPENSSL_MODULES=`pwd`/_build/lib OPENSSL_CONF=`pwd`/scripts/openssl-ca.cnf python3 -m pytest --numprocesses=auto scripts/test_tls_full.py
-    else
-        echo "For full TLS PQ SIG/KEM matrix test, build (latest) openssl locally."
-    fi
-else
-    echo "$0 must be run in main oqs-provider folder. Exiting."
-fi
-
+save_local_git
+trap restore_local_git EXIT
+# clean out the build directory and run tests
+rm -rf _build
+./scripts/release-test-ci.sh

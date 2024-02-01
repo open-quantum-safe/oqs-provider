@@ -4,6 +4,23 @@ on:
   repository_dispatch:
     types: [ "liboqs-release" ]
 
+# To trigger this job, generate a GitHub personal access token and run the following command:
+#
+# curl --request POST \
+#      --header "Accept: application/vnd.github+json" \
+#      --header "Authorization: Bearer YOUR_TOKEN_HERE" \
+#      --header "X-GitHub-Api-Version: 2022-11-28" \
+#      --data '{
+#                "event_type": "liboqs-release", \
+#                "client_payload": { \
+#                                    "provider_ref": "heads/PROVIDER_BRANCH_NAME_HERE", \
+#                                    "liboqs_ref": "heads/LIBOQS_BRANCH_NAME_HERE" \
+#                                  } \
+#              }' \
+#      https://api.github.com/repos/open-quantum-safe/oqs-provider/dispatches
+#
+# If you wish to target a tag instead of a branch, use "tags/TAG_NAME_HERE" instead of "heads/BRANCH_NAME_HERE".
+
 jobs:
   release-test:
     runs-on: ubuntu-latest
@@ -11,9 +28,9 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy:latest
 
     steps:
-      - name: Check if tracker branch exists
+      - name: Check if requested ref exists
         env:
-          tracker_branch: ${{ github.event.client_payload.tag }}-tracker
+          provider_ref: ${{ github.event.client_payload.provider_ref }}
         run: |
           curl --silent \
                --output /dev/null \
@@ -22,19 +39,20 @@ jobs:
                --header "Accept: application/vnd.github+json" \
                --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                --header "X-GitHub-Api-Version: 2022-11-28" \
-               https://api.github.com/repos/open-quantum-safe/oqs-provider/branches/$tracker_branch | tee curl_out \
+               https://api.github.com/repos/open-quantum-safe/oqs-provider/git/ref/$provider_ref | tee curl_out \
             && grep -q "200" curl_out \
-            && echo "target_branch=$tracker_branch" >> "$GITHUB_ENV" \
-            || echo "target_branch=main" >> "$GITHUB_ENV"
-      - name: Checkout oqs-provider on tracker branch if it exists; otherwise, fall back to main
+            && echo "provider_ref=$provider_ref" >> "$GITHUB_ENV" \
+            || echo "provider_ref=main" >> "$GITHUB_ENV"
+      - name: Checkout oqs-provider on requested ref if it exists; otherwise, fall back to main
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.target_branch }}
-      - name: Checkout liboqs at release tag
+          ref: ${{ env.provider_ref }}
+      # This is designed to be triggered automatically from liboqs CI, so don't bother validating the liboqs ref.
+      - name: Checkout liboqs at requested ref
         uses: actions/checkout@v4
         with:
           repository: open-quantum-safe/liboqs
           path: liboqs
-          ref: ${{ github.event.client_payload.tag }}
+          ref: ${{ github.event.client_payload.liboqs_ref }}
       - name: Run release tests
-        run: ./scripts/release-test.sh
+        run: ./scripts/release-test-ci.sh

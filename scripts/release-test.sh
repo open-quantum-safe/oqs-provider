@@ -19,12 +19,9 @@ else
 fi
 
 if [ -d oqs-template ]; then
-    # just a temp setup
-    git checkout -b reltest
     # Activate all algorithms
     sed -i "s/enable\: false/enable\: true/g" oqs-template/generate.yml
     python3 oqs-template/generate.py
-    rm -rf _build
     ./scripts/fullbuild.sh
     ./scripts/runtests.sh
     if [ -f .local/bin/openssl ]; then
@@ -32,7 +29,6 @@ if [ -d oqs-template ]; then
     else
         echo "For full TLS PQ SIG/KEM matrix test, build (latest) openssl locally."
     fi
-    git reset --hard && git checkout main && git branch -D reltest
 else
     echo "$0 must be run in main oqs-provider folder. Exiting."
 fi

@@ -38,7 +38,7 @@ def get_kem_nistlevel(alg):
     if alg['family'] == 'CRYSTALS-Kyber': datasheetname = 'kyber'
     elif alg['family'] == 'SIDH': datasheetname = 'sike'
     elif alg['family'] == 'NTRU-Prime': datasheetname = 'ntruprime'
-    else: datasheetname = alg['family'].lower()
+    else: datasheetname = alg['family'].lower().replace('-', '_')
     # load datasheet
     algymlfilename = os.path.join(os.environ['LIBOQS_SRC_DIR'], 'docs', 'algorithms', 'kem', '{:s}.yml'.format(datasheetname))
     algyml = yaml.safe_load(file_get_contents(algymlfilename, encoding='utf-8'))
@@ -53,7 +53,7 @@ def get_kem_nistlevel(alg):
         return False
     # find the variant that matches
     for variant in algyml['parameter-sets']:
-        if matches(variant['name'], alg):
+        if matches(variant['name'], alg) or ('alias' in variant and matches(variant['alias'], alg)):
             return variant['claimed-nist-level']
     return None
 
@@ -66,7 +66,7 @@ def get_sig_nistlevel(family, alg):
     elif family['family'] == 'SPHINCS-Haraka': datasheetname = 'sphincs'
     elif family['family'] == 'SPHINCS-SHA2': datasheetname = 'sphincs'
     elif family['family'] == 'SPHINCS-SHAKE': datasheetname = 'sphincs'
-    else: datasheetname = family['family'].lower()
+    else: datasheetname = family['family'].lower().replace('-', '_')
     # load datasheet
     algymlfilename = os.path.join(os.environ['LIBOQS_SRC_DIR'], 'docs', 'algorithms', 'sig', '{:s}.yml'.format(datasheetname))
     algyml = yaml.safe_load(file_get_contents(algymlfilename, encoding='utf-8'))
@@ -78,7 +78,7 @@ def get_sig_nistlevel(family, alg):
         return False
     # find the variant that matches
     for variant in algyml['parameter-sets']:
-        if matches(variant['name'], alg):
+        if matches(variant['name'], alg) or ('alias' in variant and matches(variant['alias'], alg)):
             return variant['claimed-nist-level']
     return None
 

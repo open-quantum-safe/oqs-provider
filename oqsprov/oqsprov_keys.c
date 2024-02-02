@@ -626,7 +626,8 @@ static const OQSX_EVP_INFO nids_sig[] = {
     {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1770, 0, 384}, // 128 bit
 };
 
-// These two array need to stay synced:
+// These two arrays need to stay synced:
+// note only leading 4 chars of alg name are checked
 static const char *OQSX_ECP_NAMES[] = {"p256", "p384", "p521", 0};
 static const OQSX_EVP_INFO nids_ecp[] = {
     {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 0}, // 128 bit
@@ -634,7 +635,8 @@ static const OQSX_EVP_INFO nids_ecp[] = {
     {EVP_PKEY_EC, NID_secp521r1, 0, 133, 223, 66, 0}        // 256 bit
 };
 
-// These two array need to stay synced:
+// These two arrays need to stay synced:
+// note only leading 4 chars of alg name are checked
 static const char *OQSX_ECX_NAMES[] = {"x25519", "x448", 0};
 static const OQSX_EVP_INFO nids_ecx[] = {
     {EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
@@ -690,7 +692,7 @@ static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
     int idx = 0;
-    while (idx < sizeof(OQSX_ECP_NAMES)) {
+    while (idx < OSSL_NELEM(OQSX_ECP_NAMES)) {
         if (!strncmp(tls_name, OQSX_ECP_NAMES[idx], 4))
             break;
         idx++;
@@ -721,7 +723,7 @@ static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx)
     int ret = 1;
     int idx = 0;
 
-    while (idx < sizeof(OQSX_ECX_NAMES)) {
+    while (idx < OSSL_NELEM(OQSX_ECX_NAMES)) {
         if (!strncmp(tls_name, OQSX_ECX_NAMES[idx], 4))
             break;
         idx++;

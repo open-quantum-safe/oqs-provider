@@ -55,4 +55,4 @@ jobs:
           path: liboqs
           ref: ${{ github.event.client_payload.liboqs_ref }}
       - name: Run release tests
-        run: ./scripts/release-test-ci.sh
+        run: OPENSSL_BRANCH=master ./scripts/release-test-ci.sh

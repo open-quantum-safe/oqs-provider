@@ -31,5 +31,6 @@ if [ -d oqs-template ]; then
     fi
 else
     echo "$0 must be run in main oqs-provider folder. Exiting."
+    exit 1
 fi
 

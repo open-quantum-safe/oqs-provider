@@ -851,7 +851,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
 
         ret2 = (init_kex_fun[primitive - KEY_TYPE_ECP_HYB_KEM])(tls_name,
                                                                 evp_ctx);
-        ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->keyParam, err);
+        ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->keyParam, err || !evp_ctx->ctx, err);
 
         ret->numkeys = 2;
         ret->comp_privkey = OPENSSL_malloc(ret->numkeys * sizeof(void *));

@@ -515,6 +515,10 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         buflen = encoding_ctx->encoding_impl->crypto_publickeybytes;
 
         buf = OPENSSL_secure_zalloc(buflen);
+        if (buf == NULL) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            return -1;
+        }
         ret = qsc_encode(encoding_ctx->encoding_ctx,
                          encoding_ctx->encoding_impl, oqsxkey->pubkey, &buf, 0,
                          0, 1);
@@ -591,6 +595,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                             : encoding_ctx->encoding_impl
                                   ->crypto_secretkeybytes_nooptional);
         buf = OPENSSL_secure_zalloc(buflen);
+        if (buf == NULL) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            return -1;
+        }
 
         ret = qsc_encode(encoding_ctx->encoding_ctx,
                          encoding_ctx->encoding_impl,
@@ -603,12 +611,20 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #ifdef NOPUBKEY_IN_PRIVKEY
         buflen = privkeylen;
         buf = OPENSSL_secure_malloc(buflen);
+        if (buf == NULL) {
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            return -1;
+        }
         OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %d\n",
                         buflen);
         memcpy(buf, oqsxkey->privkey, privkeylen);
 #else
     buflen = privkeylen + oqsx_key_get_oqs_public_key_len(oqsxkey);
     buf = OPENSSL_secure_malloc(buflen);
+    if (buf == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        return -1;
+    }
     OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n",
                     buflen);
     memcpy(buf, oqsxkey->privkey, privkeylen);

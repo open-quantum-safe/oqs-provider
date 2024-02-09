@@ -283,8 +283,8 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
      * In this implementation, only public and private keys can be exported,
      * nothing else
      */
-    if (key == NULL) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
+    if (key == NULL || param_cb == NULL) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
         return 0;
     }
 
@@ -302,7 +302,7 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
     }
 
     params = OSSL_PARAM_BLD_to_param(tmpl);
-    if (params == NULL || param_cb == NULL) {
+    if (params == NULL) {
         ok = 0;
         goto err;
     }

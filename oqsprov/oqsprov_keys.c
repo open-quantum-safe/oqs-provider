@@ -54,9 +54,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define NID_TABLE_LEN 65
+#    define NID_TABLE_LEN 105
 #else
-#    define NID_TABLE_LEN 23
+#    define NID_TABLE_LEN 63
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -119,15 +119,55 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
     {0, "p256_dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_dilithium2", OQS_SIG_alg_dilithium_2, KEY_TYPE_HYB_SIG, 128},
+    {0, "dilithium2WithSha256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
+    {0, "dilithium2WithSha384", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
+    {0, "dilithium2WithSha512", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
+    {0, "dilithium2WithSha3At256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
+    {0, "dilithium2WithSha3At384", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
+    {0, "dilithium2WithSha3At512", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
+    {0, "dilithium2WithShake128", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
+    {0, "dilithium2WithShake256", OQS_SIG_alg_dilithium_2, KEY_TYPE_SIG, 128},
     {0, "dilithium3", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
     {0, "p384_dilithium3", OQS_SIG_alg_dilithium_3, KEY_TYPE_HYB_SIG, 192},
+    {0, "dilithium3WithSha256", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
+    {0, "dilithium3WithSha384", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
+    {0, "dilithium3WithSha512", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
+    {0, "dilithium3WithSha3At256", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
+    {0, "dilithium3WithSha3At384", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
+    {0, "dilithium3WithSha3At512", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
+    {0, "dilithium3WithShake128", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
+    {0, "dilithium3WithShake256", OQS_SIG_alg_dilithium_3, KEY_TYPE_SIG, 192},
     {0, "dilithium5", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
     {0, "p521_dilithium5", OQS_SIG_alg_dilithium_5, KEY_TYPE_HYB_SIG, 256},
+    {0, "dilithium5WithSha256", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
+    {0, "dilithium5WithSha384", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
+    {0, "dilithium5WithSha512", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
+    {0, "dilithium5WithSha3At256", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
+    {0, "dilithium5WithSha3At384", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
+    {0, "dilithium5WithSha3At512", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
+    {0, "dilithium5WithShake128", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
+    {0, "dilithium5WithShake256", OQS_SIG_alg_dilithium_5, KEY_TYPE_SIG, 256},
     {0, "falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
     {0, "p256_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},
+    {0, "falcon512WithSha256", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
+    {0, "falcon512WithSha384", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
+    {0, "falcon512WithSha512", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
+    {0, "falcon512WithSha3At256", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
+    {0, "falcon512WithSha3At384", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
+    {0, "falcon512WithSha3At512", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
+    {0, "falcon512WithShake128", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
+    {0, "falcon512WithShake256", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
     {0, "falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
     {0, "p521_falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_HYB_SIG, 256},
+    {0, "falcon1024WithSha256", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
+    {0, "falcon1024WithSha384", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
+    {0, "falcon1024WithSha512", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
+    {0, "falcon1024WithSha3At256", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
+    {0, "falcon1024WithSha3At384", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
+    {0, "falcon1024WithSha3At512", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
+    {0, "falcon1024WithShake128", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
+    {0, "falcon1024WithShake256", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
     {0, "sphincssha2128fsimple", OQS_SIG_alg_sphincs_sha2_128f_simple,
      KEY_TYPE_SIG, 128},
     {0, "p256_sphincssha2128fsimple", OQS_SIG_alg_sphincs_sha2_128f_simple,

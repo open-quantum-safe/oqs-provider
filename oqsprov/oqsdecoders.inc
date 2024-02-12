@@ -7,9 +7,9 @@
  *
  */
 
-#ifndef DECODER_PROVIDER
-#    error Macro DECODER_PROVIDER undefined
-#endif
+// #ifndef DECODER_PROVIDER
+// #    error Macro DECODER_PROVIDER undefined
+// #endif
 
 #define DECODER_STRUCTURE_type_specific_keypair "type-specific"
 #define DECODER_STRUCTURE_type_specific_params  "type-specific"
@@ -200,6 +200,54 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("rsa3072_dilithium2", der, SubjectPublicKeyInfo,
                         rsa3072_dilithium2),
 #endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithSha256", der, PrivateKeyInfo,
+                        dilithium2WithSha256),
+    DECODER_w_structure("dilithium2WithSha256", der, SubjectPublicKeyInfo,
+                        dilithium2WithSha256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithSha384", der, PrivateKeyInfo,
+                        dilithium2WithSha384),
+    DECODER_w_structure("dilithium2WithSha384", der, SubjectPublicKeyInfo,
+                        dilithium2WithSha384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithSha512", der, PrivateKeyInfo,
+                        dilithium2WithSha512),
+    DECODER_w_structure("dilithium2WithSha512", der, SubjectPublicKeyInfo,
+                        dilithium2WithSha512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithSha3At256", der, PrivateKeyInfo,
+                        dilithium2WithSha3At256),
+    DECODER_w_structure("dilithium2WithSha3At256", der, SubjectPublicKeyInfo,
+                        dilithium2WithSha3At256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithSha3At384", der, PrivateKeyInfo,
+                        dilithium2WithSha3At384),
+    DECODER_w_structure("dilithium2WithSha3At384", der, SubjectPublicKeyInfo,
+                        dilithium2WithSha3At384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithSha3At512", der, PrivateKeyInfo,
+                        dilithium2WithSha3At512),
+    DECODER_w_structure("dilithium2WithSha3At512", der, SubjectPublicKeyInfo,
+                        dilithium2WithSha3At512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithShake128", der, PrivateKeyInfo,
+                        dilithium2WithShake128),
+    DECODER_w_structure("dilithium2WithShake128", der, SubjectPublicKeyInfo,
+                        dilithium2WithShake128),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_2
+    DECODER_w_structure("dilithium2WithShake256", der, PrivateKeyInfo,
+                        dilithium2WithShake256),
+    DECODER_w_structure("dilithium2WithShake256", der, SubjectPublicKeyInfo,
+                        dilithium2WithShake256),
+#endif
 #ifdef OQS_ENABLE_SIG_dilithium_3
     DECODER_w_structure("dilithium3", der, PrivateKeyInfo, dilithium3),
     DECODER_w_structure("dilithium3", der, SubjectPublicKeyInfo, dilithium3),
@@ -208,6 +256,54 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("p384_dilithium3", der, SubjectPublicKeyInfo,
                         p384_dilithium3),
 #endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithSha256", der, PrivateKeyInfo,
+                        dilithium3WithSha256),
+    DECODER_w_structure("dilithium3WithSha256", der, SubjectPublicKeyInfo,
+                        dilithium3WithSha256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithSha384", der, PrivateKeyInfo,
+                        dilithium3WithSha384),
+    DECODER_w_structure("dilithium3WithSha384", der, SubjectPublicKeyInfo,
+                        dilithium3WithSha384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithSha512", der, PrivateKeyInfo,
+                        dilithium3WithSha512),
+    DECODER_w_structure("dilithium3WithSha512", der, SubjectPublicKeyInfo,
+                        dilithium3WithSha512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithSha3At256", der, PrivateKeyInfo,
+                        dilithium3WithSha3At256),
+    DECODER_w_structure("dilithium3WithSha3At256", der, SubjectPublicKeyInfo,
+                        dilithium3WithSha3At256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithSha3At384", der, PrivateKeyInfo,
+                        dilithium3WithSha3At384),
+    DECODER_w_structure("dilithium3WithSha3At384", der, SubjectPublicKeyInfo,
+                        dilithium3WithSha3At384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithSha3At512", der, PrivateKeyInfo,
+                        dilithium3WithSha3At512),
+    DECODER_w_structure("dilithium3WithSha3At512", der, SubjectPublicKeyInfo,
+                        dilithium3WithSha3At512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithShake128", der, PrivateKeyInfo,
+                        dilithium3WithShake128),
+    DECODER_w_structure("dilithium3WithShake128", der, SubjectPublicKeyInfo,
+                        dilithium3WithShake128),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_3
+    DECODER_w_structure("dilithium3WithShake256", der, PrivateKeyInfo,
+                        dilithium3WithShake256),
+    DECODER_w_structure("dilithium3WithShake256", der, SubjectPublicKeyInfo,
+                        dilithium3WithShake256),
+#endif
 #ifdef OQS_ENABLE_SIG_dilithium_5
     DECODER_w_structure("dilithium5", der, PrivateKeyInfo, dilithium5),
     DECODER_w_structure("dilithium5", der, SubjectPublicKeyInfo, dilithium5),
@@ -215,6 +311,54 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
                         p521_dilithium5),
     DECODER_w_structure("p521_dilithium5", der, SubjectPublicKeyInfo,
                         p521_dilithium5),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithSha256", der, PrivateKeyInfo,
+                        dilithium5WithSha256),
+    DECODER_w_structure("dilithium5WithSha256", der, SubjectPublicKeyInfo,
+                        dilithium5WithSha256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithSha384", der, PrivateKeyInfo,
+                        dilithium5WithSha384),
+    DECODER_w_structure("dilithium5WithSha384", der, SubjectPublicKeyInfo,
+                        dilithium5WithSha384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithSha512", der, PrivateKeyInfo,
+                        dilithium5WithSha512),
+    DECODER_w_structure("dilithium5WithSha512", der, SubjectPublicKeyInfo,
+                        dilithium5WithSha512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithSha3At256", der, PrivateKeyInfo,
+                        dilithium5WithSha3At256),
+    DECODER_w_structure("dilithium5WithSha3At256", der, SubjectPublicKeyInfo,
+                        dilithium5WithSha3At256),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithSha3At384", der, PrivateKeyInfo,
+                        dilithium5WithSha3At384),
+    DECODER_w_structure("dilithium5WithSha3At384", der, SubjectPublicKeyInfo,
+                        dilithium5WithSha3At384),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithSha3At512", der, PrivateKeyInfo,
+                        dilithium5WithSha3At512),
+    DECODER_w_structure("dilithium5WithSha3At512", der, SubjectPublicKeyInfo,
+                        dilithium5WithSha3At512),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithShake128", der, PrivateKeyInfo,
+                        dilithium5WithShake128),
+    DECODER_w_structure("dilithium5WithShake128", der, SubjectPublicKeyInfo,
+                        dilithium5WithShake128),
+#endif
+#ifdef OQS_ENABLE_SIG_dilithium_5
+    DECODER_w_structure("dilithium5WithShake256", der, PrivateKeyInfo,
+                        dilithium5WithShake256),
+    DECODER_w_structure("dilithium5WithShake256", der, SubjectPublicKeyInfo,
+                        dilithium5WithShake256),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_512
     DECODER_w_structure("falcon512", der, PrivateKeyInfo, falcon512),
@@ -227,6 +371,54 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("rsa3072_falcon512", der, SubjectPublicKeyInfo,
                         rsa3072_falcon512),
 #endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithSha256", der, PrivateKeyInfo,
+                        falcon512WithSha256),
+    DECODER_w_structure("falcon512WithSha256", der, SubjectPublicKeyInfo,
+                        falcon512WithSha256),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithSha384", der, PrivateKeyInfo,
+                        falcon512WithSha384),
+    DECODER_w_structure("falcon512WithSha384", der, SubjectPublicKeyInfo,
+                        falcon512WithSha384),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithSha512", der, PrivateKeyInfo,
+                        falcon512WithSha512),
+    DECODER_w_structure("falcon512WithSha512", der, SubjectPublicKeyInfo,
+                        falcon512WithSha512),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithSha3At256", der, PrivateKeyInfo,
+                        falcon512WithSha3At256),
+    DECODER_w_structure("falcon512WithSha3At256", der, SubjectPublicKeyInfo,
+                        falcon512WithSha3At256),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithSha3At384", der, PrivateKeyInfo,
+                        falcon512WithSha3At384),
+    DECODER_w_structure("falcon512WithSha3At384", der, SubjectPublicKeyInfo,
+                        falcon512WithSha3At384),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithSha3At512", der, PrivateKeyInfo,
+                        falcon512WithSha3At512),
+    DECODER_w_structure("falcon512WithSha3At512", der, SubjectPublicKeyInfo,
+                        falcon512WithSha3At512),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithShake128", der, PrivateKeyInfo,
+                        falcon512WithShake128),
+    DECODER_w_structure("falcon512WithShake128", der, SubjectPublicKeyInfo,
+                        falcon512WithShake128),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_512
+    DECODER_w_structure("falcon512WithShake256", der, PrivateKeyInfo,
+                        falcon512WithShake256),
+    DECODER_w_structure("falcon512WithShake256", der, SubjectPublicKeyInfo,
+                        falcon512WithShake256),
+#endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
     DECODER_w_structure("falcon1024", der, PrivateKeyInfo, falcon1024),
     DECODER_w_structure("falcon1024", der, SubjectPublicKeyInfo, falcon1024),
@@ -234,6 +426,54 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
                         p521_falcon1024),
     DECODER_w_structure("p521_falcon1024", der, SubjectPublicKeyInfo,
                         p521_falcon1024),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithSha256", der, PrivateKeyInfo,
+                        falcon1024WithSha256),
+    DECODER_w_structure("falcon1024WithSha256", der, SubjectPublicKeyInfo,
+                        falcon1024WithSha256),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithSha384", der, PrivateKeyInfo,
+                        falcon1024WithSha384),
+    DECODER_w_structure("falcon1024WithSha384", der, SubjectPublicKeyInfo,
+                        falcon1024WithSha384),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithSha512", der, PrivateKeyInfo,
+                        falcon1024WithSha512),
+    DECODER_w_structure("falcon1024WithSha512", der, SubjectPublicKeyInfo,
+                        falcon1024WithSha512),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithSha3At256", der, PrivateKeyInfo,
+                        falcon1024WithSha3At256),
+    DECODER_w_structure("falcon1024WithSha3At256", der, SubjectPublicKeyInfo,
+                        falcon1024WithSha3At256),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithSha3At384", der, PrivateKeyInfo,
+                        falcon1024WithSha3At384),
+    DECODER_w_structure("falcon1024WithSha3At384", der, SubjectPublicKeyInfo,
+                        falcon1024WithSha3At384),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithSha3At512", der, PrivateKeyInfo,
+                        falcon1024WithSha3At512),
+    DECODER_w_structure("falcon1024WithSha3At512", der, SubjectPublicKeyInfo,
+                        falcon1024WithSha3At512),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithShake128", der, PrivateKeyInfo,
+                        falcon1024WithShake128),
+    DECODER_w_structure("falcon1024WithShake128", der, SubjectPublicKeyInfo,
+                        falcon1024WithShake128),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_1024
+    DECODER_w_structure("falcon1024WithShake256", der, PrivateKeyInfo,
+                        falcon1024WithShake256),
+    DECODER_w_structure("falcon1024WithShake256", der, SubjectPublicKeyInfo,
+                        falcon1024WithShake256),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
     DECODER_w_structure("sphincssha2128fsimple", der, PrivateKeyInfo,

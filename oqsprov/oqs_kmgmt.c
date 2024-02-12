@@ -134,6 +134,11 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
                    keydata2);
     OQS_KM_PRINTF2("OQSKEYMGMT: match called for selection %d\n", selection);
 
+    if (key1 == NULL || key2 == NULL) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+        return 0;
+    }
+
 #ifdef NOPUBKEY_IN_PRIVKEY
     /* Now this is a "leap of faith" logic: If a public-only PKEY and a
      * private-only PKEY are tested for equality we cannot do anything other
@@ -279,8 +284,8 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
      * In this implementation, only public and private keys can be exported,
      * nothing else
      */
-    if (key == NULL) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
+    if (key == NULL || param_cb == NULL) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
         return 0;
     }
 
@@ -328,6 +333,11 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
 {
     OQSX_KEY *oqsxk = key;
     OSSL_PARAM *p;
+
+    if (oqsxk == NULL || params == NULL) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+        return 0;
+    }
 
     OQS_KM_PRINTF2("OQSKEYMGMT: get_params called for %s\n", params[0].key);
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_BITS)) != NULL
@@ -414,6 +424,10 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[])
     const OSSL_PARAM *p;
 
     OQS_KM_PRINTF("OQSKEYMGMT: set_params called\n");
+    if (oqsxkey == NULL) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
+        return 0;
+    }
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY);
     if (p != NULL) {
         size_t used_len;
@@ -487,10 +501,10 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx)
 {
     OQSX_KEY *key;
 
-    OQS_KM_PRINTF3("OQSKEYMGMT: gen called for %s (%s)\n", gctx->oqs_name,
-                   gctx->tls_name);
     if (gctx == NULL)
         return NULL;
+    OQS_KM_PRINTF3("OQSKEYMGMT: gen called for %s (%s)\n", gctx->oqs_name,
+                   gctx->tls_name);
     if ((key = oqsx_key_new(gctx->libctx, gctx->oqs_name, gctx->tls_name,
                             gctx->primitive, gctx->propq, gctx->bit_security,
                             gctx->alg_idx))

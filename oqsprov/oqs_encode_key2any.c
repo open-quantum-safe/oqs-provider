@@ -569,7 +569,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
 
             oct.data = buf;
             oct.length = buflen;
-            oct.flags = 0;
+            oct.flags = 8;
             templen[i] = i2d_ASN1_BIT_STRING(&oct, &temp[i]);
             ASN1_STRING_set(aString[i], temp[i], templen[i]);
             ASN1_TYPE_set1(aType[i], V_ASN1_SEQUENCE, aString[i]);

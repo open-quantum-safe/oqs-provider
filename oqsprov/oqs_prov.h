@@ -205,6 +205,11 @@ char *get_cmpname(int nid, int index);
 int get_oqsalg_idx(int nid);
 int get_composite_idx(int idx);
 
+/* Workaround for not functioning EC PARAM initialization
+ * TBD, check https://github.com/openssl/openssl/issues/16989
+ */
+EVP_PKEY *setECParams(EVP_PKEY *eck, int nid);
+
 /* Register given NID with tlsname in OSSL3 registry */
 int oqs_set_nid(char *tlsname, int nid);
 

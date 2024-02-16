@@ -83,7 +83,9 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            time.sleep(2)
+            print("Server not responding... Going around.")
+            # be more lenient for slow CI servers
+            time.sleep(5)
     server_port = str(server_info.connections()[0].laddr.port)
 
     # Check SERVER_START_ATTEMPTS times to see
@@ -98,7 +100,9 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            time.sleep(2)
+            print("Server not responding... Going around.")
+            # be more lenient for slow CI servers
+            time.sleep(5)
 
     if server_start_attempt > SERVER_START_ATTEMPTS:
         raise Exception('Cannot start OpenSSL server')

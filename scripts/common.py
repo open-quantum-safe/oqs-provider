@@ -83,10 +83,12 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            print("Server not responding... Going around.")
+            print("Server not responding... Going around (%d)." %(server_start_attempt))
             # be more lenient for slow CI servers
             time.sleep(5)
+    print("Server info available after %d attempts." %(server_start_attempt))
     server_port = str(server_info.connections()[0].laddr.port)
+    print("Server running at port %d" % (server_port))
 
     # Check SERVER_START_ATTEMPTS times to see
     # if the server is responsive.
@@ -97,16 +99,18 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
         if result.returncode == 0:
+            print("Connection established.")
             break
         else:
             server_start_attempt += 1
-            print("Server not responding... Going around.")
+            print("Server still not responding... Going around.")
             # be more lenient for slow CI servers
             time.sleep(5)
 
     if server_start_attempt > SERVER_START_ATTEMPTS:
         raise Exception('Cannot start OpenSSL server')
 
+    print("Server running OK.")
     return server, server_port
 
 def gen_keys(ossl, ossl_config, sig_alg, test_artifacts_dir, filename_prefix):

@@ -88,7 +88,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             time.sleep(5)
     print("Server info available after %d attempts." %(server_start_attempt))
     server_port = str(server_info.connections()[0].laddr.port)
-    print("Server running at port %d" % (server_port))
+    print("Server running at port %s" % (server_port))
 
     # Check SERVER_START_ATTEMPTS times to see
     # if the server is responsive.
@@ -108,6 +108,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             time.sleep(5)
 
     if server_start_attempt > SERVER_START_ATTEMPTS:
+        print("Cannot connect after %d attempts" % (server_start_attempt))
         raise Exception('Cannot start OpenSSL server')
 
     print("Server running OK.")

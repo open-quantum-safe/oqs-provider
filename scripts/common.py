@@ -24,9 +24,15 @@ signatures = [
 
 SERVER_START_ATTEMPTS = 10
 
-def all_pq_groups():
+def all_pq_groups(first = 0):
     ag = ""
-    for kex in key_exchanges:
+    half = len(key_exchanges)//2
+    if (first == 0):
+       kexs = key_exchanges[:half]
+    else:
+       kexs = key_exchanges[half:]
+
+    for kex in kexs:
         if len(ag)==0:
            ag = kex 
         else:
@@ -56,7 +62,7 @@ def run_subprocess(command, working_dir='.', expected_returncode=0, input=None, 
         assert False, "Got unexpected return code {}".format(result.returncode)
     return result.stdout.decode('utf-8')
 
-def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
+def start_server(ossl, test_artifacts_dir, sig_alg, worker_id, first):
     command = [ossl, 's_server',
                       '-cert', os.path.join(test_artifacts_dir, '{}_{}_srv.crt'.format(worker_id, sig_alg)),
                       '-key', os.path.join(test_artifacts_dir, '{}_{}_srv.key'.format(worker_id, sig_alg)),
@@ -64,7 +70,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
                       '-tls1_3',
                       '-quiet',
 # add X25519 for baseline server test and all PQ KEMs for single PQ KEM tests:
-                      '-groups', "x25519:"+all_pq_groups(),
+                      '-groups', "x25519:"+all_pq_groups(first),
                       # On UNIX-like systems, binding to TCP port 0
                       # is a request to dynamically generate an unused
                       # port number.
@@ -83,12 +89,9 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            print("Server not responding... Going around (%d)." %(server_start_attempt))
             # be more lenient for slow CI servers
-            time.sleep(5)
-    print("Server info available after %d attempts." %(server_start_attempt))
+            time.sleep(1)
     server_port = str(server_info.connections()[0].laddr.port)
-    print("Server running at port %s" % (server_port))
 
     # Check SERVER_START_ATTEMPTS times to see
     # if the server is responsive.
@@ -99,19 +102,15 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
         if result.returncode == 0:
-            print("Connection established.")
             break
         else:
             server_start_attempt += 1
-            print("Server still not responding... Going around.")
             # be more lenient for slow CI servers
-            time.sleep(5)
+            time.sleep(1)
 
     if server_start_attempt > SERVER_START_ATTEMPTS:
-        print("Cannot connect after %d attempts" % (server_start_attempt))
         raise Exception('Cannot start OpenSSL server')
 
-    print("Server running OK.")
     return server, server_port
 
 def gen_keys(ossl, ossl_config, sig_alg, test_artifacts_dir, filename_prefix):

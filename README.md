@@ -144,6 +144,13 @@ as documented in https://github.com/openssl/openssl/issues/22761.
 When https://github.com/openssl/openssl/pull/22779 land, the last config-time limitation
 for provider-based signatures should be gone.
 
+A limitation present in all OpenSSL versions is the number of default groups
+supported: [At most 44 default groups may be specified](https://github.com/openssl/openssl/issues/23624)
+, e.g., passing to [SSL_CTX_set1_groups](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set1_groups.html).
+Therefore caution is advised activating all KEMs supported by `oqsprovider`:
+This may lead to `openssl` crashing.
+
+
 For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
 see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
 

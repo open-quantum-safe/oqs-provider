@@ -1,5 +1,5 @@
 # This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
-# Next free plain KEM ID: 0x0247, p-hybrid: 0x2F47, X-hybrid: 0x2FB2
+# Next free plain KEM ID: 0x024A, p-hybrid: 0x2F4A, X-hybrid: 0x2FB6
 kems:
   -
     family: 'FrodoKEM'
@@ -145,6 +145,41 @@ kems:
           hybrid_group: secp521_r1
           nid: '0x2F11'
     oqs_alg: 'OQS_KEM_alg_kyber_1024'
+  -
+    family: 'ML-KEM'
+    name_group: 'mlkem512'
+    nid: '0x0247'
+    oid: '1.3.6.1.4.1.22554.5.6.1'
+    nid_hybrid: '0x2F47'
+    hybrid_oid: '1.3.6.1.4.1.22554.5.7.1'
+    oqs_alg: 'OQS_KEM_alg_ml_kem_512'
+    extra_nids:
+      current:
+        - hybrid_group: "x25519"
+          hybrid_oid: '1.3.6.1.4.1.22554.5.8.1'
+          nid: '0x2FB2'
+  -
+    family: 'ML-KEM'
+    name_group: 'mlkem768'
+    nid: '0x0248'
+    oid: '1.3.6.1.4.1.22554.5.6.2'
+    nid_hybrid: '0x2F48'
+    oqs_alg: 'OQS_KEM_alg_ml_kem_768'
+    extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '0x2FB3'
+        - hybrid_group: "x25519"
+          nid: '0x2FB4'
+        - hybrid_group: "p256"
+          nid: '0x2FB5'
+  -
+    family: 'ML-KEM'
+    name_group: 'mlkem1024'
+    nid: '0x0249'
+    oid: '1.3.6.1.4.1.22554.5.6.3'
+    nid_hybrid: '0x2F49'
+    oqs_alg: 'OQS_KEM_alg_ml_kem_1024'
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'
@@ -358,7 +393,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xfed0
+# Next free signature ID: 0xfed7
 sigs:
   # -
     # iso (1)
@@ -557,6 +592,46 @@ sigs:
                           'pretty_name': 'ECDSA p521',
                           'oid': '1.3.9999.2.11.4',
                           'code_point': '0xfead'}]
+  -
+    family: 'ML-DSA'
+    variants:
+      -
+        name: 'mldsa44'
+        pretty_name: 'ML-DSA-44'
+        oqs_meth: 'OQS_SIG_alg_ml_dsa_44'
+        oid: '1.3.6.1.4.1.2.267.12.4.4'
+        code_point: '0xfed0'
+        enable: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.7.1',
+                    'code_point': '0xfed3'},
+                   {'name': 'rsa3072',
+                    'pretty_name': 'RSA3072',
+                    'oid': '1.3.9999.7.2',
+                    'code_point': '0xfed4'}]
+      -
+        name: 'mldsa65'
+        pretty_name: 'ML-DSA-65'
+        oqs_meth: 'OQS_SIG_alg_ml_dsa_65'
+        oid: '1.3.6.1.4.1.2.267.12.6.5'
+        code_point: '0xfed1'
+        enable: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.7.3',
+                    'code_point': '0xfed5'}]
+      -
+        name: 'mldsa87'
+        pretty_name: 'ML-DSA-87'
+        oqs_meth: 'OQS_SIG_alg_ml_dsa_87'
+        oid: '1.3.6.1.4.1.2.267.12.8.7'
+        code_point: '0xfed2'
+        enable: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.7.4',
+                    'code_point': '0xfed6'}]
   -
     # iso (1)
     # identified-organization (3)

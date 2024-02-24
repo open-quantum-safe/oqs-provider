@@ -47,7 +47,7 @@ def gen_sig_table(oqslibdocdir):
             for hybrid in variant['mix_with']:
                 table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
                               liboqs_sigs[sig['family']]['spec-version'],
-                              liboqs_sigs[sig['family']]['nist-round'],
+                              str(liboqs_sigs[sig['family']]['nist-round']),
                               claimed_nist_level,
                               hybrid['code_point'],
                               hybrid['oid']])
@@ -58,12 +58,12 @@ def gen_sig_table(oqslibdocdir):
         if 'extra_nids' in variant:
           for i in range(len(variant['extra_nids']['old'])):
             table.append([variant['name'], variant['extra_nids']['old'][i]['implementation_version'],
-                          variant['extra_nids']['old'][i]['nist-round'], claimed_nist_level, variant['extra_nids']['old'][i]['code_point'],
+                          str(variant['extra_nids']['old'][i]['nist-round']), claimed_nist_level, variant['extra_nids']['old'][i]['code_point'],
                           variant['extra_nids']['old'][i]['oid']])
             for hybrid in variant['extra_nids']['old'][i]['mix_with']:
                 table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
                               variant['extra_nids']['old'][i]['implementation_version'],
-                              variant['extra_nids']['old'][i]['nist-round'],
+                              str(variant['extra_nids']['old'][i]['nist-round']),
                               claimed_nist_level,
                               hybrid['code_point'],
                               hybrid['oid']])
@@ -114,10 +114,10 @@ def gen_kem_table(oqslibdocdir):
 
     try: 
        table.append([kem['family'], implementation_version,
-                     kem['name_group'], liboqs_kems[kem['family']]['nist-round'], claimed_nist_level,
+                     kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
                      kem['nid'], ""])
        table.append([kem['family'], implementation_version,
-                     kem['name_group'], liboqs_kems[kem['family']]['nist-round'], claimed_nist_level,
+                     kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
                      kem['nid_hybrid'], hybrid_elliptic_curve])
     except KeyError as ke:
        # Non-existant NIDs mean this alg is not supported any more
@@ -127,18 +127,18 @@ def gen_kem_table(oqslibdocdir):
         if 'current' in kem['extra_nids']: # assume "current" NIDs to mean liboqs-driven NIST round information:
             for entry in kem['extra_nids']['current']:
                 table.append([kem['family'], implementation_version,
-                              kem['name_group'], liboqs_kems[kem['family']]['nist-round'], claimed_nist_level,
+                              kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
                               entry['nid'], 
                               entry['hybrid_group'] if 'hybrid_group' in entry else ""])
         if 'old' in kem['extra_nids']:
             for entry in kem['extra_nids']['old']:
                 table.append([kem['family'], entry['implementation_version'],
-                              kem['name_group'], entry['nist-round'], claimed_nist_level,
+                              kem['name_group'], str(entry['nist-round']), claimed_nist_level,
                               entry['nid'],
                               entry['hybrid_group'] if 'hybrid_group' in entry else ""])
 
   # sort by:  family, version, security level, variant, hybrid
-  table.sort(key = lambda row: "{:s}|{:s}|{:d}|{:s}|{:s}".format(row[0], row[1], row[3], row[2], row[5]))
+  table.sort(key = lambda row: "{:s}|{:s}|{:s}|{:s}|{:s}".format(row[0], row[1], row[3], row[2], row[5]))
 
   table = [table_header] + table
 

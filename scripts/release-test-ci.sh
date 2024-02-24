@@ -23,7 +23,7 @@ if [ -d oqs-template ]; then
     sed -i "s/enable\: false/enable\: true/g" oqs-template/generate.yml
     python3 oqs-template/generate.py
     ./scripts/fullbuild.sh
-    ./scripts/runtests.sh
+    ./scripts/runtests.sh -V
     if [ -f .local/bin/openssl ]; then
         OPENSSL_MODULES=`pwd`/_build/lib OPENSSL_CONF=`pwd`/scripts/openssl-ca.cnf python3 -m pytest --numprocesses=auto scripts/test_tls_full.py
     else

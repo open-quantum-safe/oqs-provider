@@ -54,10 +54,13 @@ The default value is `OFF`.
 
 ### OQS_KEM_ENCODERS
 
-By setting this to "ON", `oqsprovider` is configured to provide encoders and decoders for
-KEM algorithms both for public and private key file formats. This increases the size of
-the provider but enables further use cases.
-The default value is `OFF`.
+By setting this to "ON", `oqsprovider` is configured to provide encoders
+and decoders for KEM algorithms both for public and private key file formats.
+This increases the size of the provider but enables further use cases.
+The underlying OIDs are chosen at random and should not be relied on for
+future use. For purposes of interoperability testing the chosen OIDs can
+always --at runtime-- be set by [environment variables](https://github.com/open-quantum-safe/oqs-provider/blob/main/ALGORITHMS.md#oids) to arbitrary values
+The default value therefore is `OFF`.
 
 ### OQS_PROVIDER_BUILD_STATIC
 

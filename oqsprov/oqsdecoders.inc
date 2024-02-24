@@ -139,6 +139,41 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("p521_kyber1024", der, SubjectPublicKeyInfo,
                         p521_kyber1024),
 #    endif
+#    ifdef OQS_ENABLE_KEM_ml_kem_512
+    DECODER_w_structure("mlkem512", der, PrivateKeyInfo, mlkem512),
+    DECODER_w_structure("mlkem512", der, SubjectPublicKeyInfo, mlkem512),
+    DECODER_w_structure("p256_mlkem512", der, PrivateKeyInfo, p256_mlkem512),
+    DECODER_w_structure("p256_mlkem512", der, SubjectPublicKeyInfo,
+                        p256_mlkem512),
+    DECODER_w_structure("x25519_mlkem512", der, PrivateKeyInfo,
+                        x25519_mlkem512),
+    DECODER_w_structure("x25519_mlkem512", der, SubjectPublicKeyInfo,
+                        x25519_mlkem512),
+#    endif
+#    ifdef OQS_ENABLE_KEM_ml_kem_768
+    DECODER_w_structure("mlkem768", der, PrivateKeyInfo, mlkem768),
+    DECODER_w_structure("mlkem768", der, SubjectPublicKeyInfo, mlkem768),
+    DECODER_w_structure("p384_mlkem768", der, PrivateKeyInfo, p384_mlkem768),
+    DECODER_w_structure("p384_mlkem768", der, SubjectPublicKeyInfo,
+                        p384_mlkem768),
+    DECODER_w_structure("x448_mlkem768", der, PrivateKeyInfo, x448_mlkem768),
+    DECODER_w_structure("x448_mlkem768", der, SubjectPublicKeyInfo,
+                        x448_mlkem768),
+    DECODER_w_structure("x25519_mlkem768", der, PrivateKeyInfo,
+                        x25519_mlkem768),
+    DECODER_w_structure("x25519_mlkem768", der, SubjectPublicKeyInfo,
+                        x25519_mlkem768),
+    DECODER_w_structure("p256_mlkem768", der, PrivateKeyInfo, p256_mlkem768),
+    DECODER_w_structure("p256_mlkem768", der, SubjectPublicKeyInfo,
+                        p256_mlkem768),
+#    endif
+#    ifdef OQS_ENABLE_KEM_ml_kem_1024
+    DECODER_w_structure("mlkem1024", der, PrivateKeyInfo, mlkem1024),
+    DECODER_w_structure("mlkem1024", der, SubjectPublicKeyInfo, mlkem1024),
+    DECODER_w_structure("p521_mlkem1024", der, PrivateKeyInfo, p521_mlkem1024),
+    DECODER_w_structure("p521_mlkem1024", der, SubjectPublicKeyInfo,
+                        p521_mlkem1024),
+#    endif
 #    ifdef OQS_ENABLE_KEM_bike_l1
     DECODER_w_structure("bikel1", der, PrivateKeyInfo, bikel1),
     DECODER_w_structure("bikel1", der, SubjectPublicKeyInfo, bikel1),
@@ -267,6 +302,31 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
                         dilithium5_ed448),
     DECODER_w_structure("dilithium5_ed448", der, SubjectPublicKeyInfo,
                         dilithium5_ed448),
+#endif
+#ifdef OQS_ENABLE_SIG_ml_dsa_44
+    DECODER_w_structure("mldsa44", der, PrivateKeyInfo, mldsa44),
+    DECODER_w_structure("mldsa44", der, SubjectPublicKeyInfo, mldsa44),
+    DECODER_w_structure("p256_mldsa44", der, PrivateKeyInfo, p256_mldsa44),
+    DECODER_w_structure("p256_mldsa44", der, SubjectPublicKeyInfo,
+                        p256_mldsa44),
+    DECODER_w_structure("rsa3072_mldsa44", der, PrivateKeyInfo,
+                        rsa3072_mldsa44),
+    DECODER_w_structure("rsa3072_mldsa44", der, SubjectPublicKeyInfo,
+                        rsa3072_mldsa44),
+#endif
+#ifdef OQS_ENABLE_SIG_ml_dsa_65
+    DECODER_w_structure("mldsa65", der, PrivateKeyInfo, mldsa65),
+    DECODER_w_structure("mldsa65", der, SubjectPublicKeyInfo, mldsa65),
+    DECODER_w_structure("p384_mldsa65", der, PrivateKeyInfo, p384_mldsa65),
+    DECODER_w_structure("p384_mldsa65", der, SubjectPublicKeyInfo,
+                        p384_mldsa65),
+#endif
+#ifdef OQS_ENABLE_SIG_ml_dsa_87
+    DECODER_w_structure("mldsa87", der, PrivateKeyInfo, mldsa87),
+    DECODER_w_structure("mldsa87", der, SubjectPublicKeyInfo, mldsa87),
+    DECODER_w_structure("p521_mldsa87", der, PrivateKeyInfo, p521_mldsa87),
+    DECODER_w_structure("p521_mldsa87", der, SubjectPublicKeyInfo,
+                        p521_mldsa87),
 #endif
 #ifdef OQS_ENABLE_SIG_falcon_512
     DECODER_w_structure("falcon512", der, PrivateKeyInfo, falcon512),

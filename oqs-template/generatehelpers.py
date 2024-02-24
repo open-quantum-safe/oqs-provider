@@ -24,7 +24,7 @@ def get_kem_nistlevel(alg, docsdir):
     if alg['family'] == 'CRYSTALS-Kyber': datasheetname = 'kyber'
     elif alg['family'] == 'SIDH': datasheetname = 'sike'
     elif alg['family'] == 'NTRU-Prime': datasheetname = 'ntruprime'
-    else: datasheetname = alg['family'].lower()
+    else: datasheetname = alg['family'].lower().replace('-', '_')
     # load datasheet
     try:
         algymlfilename = os.path.join(docsdir, 'algorithms', 'kem', '{:s}.yml'.format(datasheetname))
@@ -44,7 +44,7 @@ def get_kem_nistlevel(alg, docsdir):
         return False
     # find the variant that matches
     for variant in algyml['parameter-sets']:
-        if matches(variant['name'], alg):
+        if matches(variant['name'], alg) or ('alias' in variant and matches(variant['alias'], alg)):
             return variant['claimed-nist-level']
     # Information file for algorithms no longer supported by liboqs:
     oldalgs = yaml.safe_load(file_get_contents(os.path.join("oqs-template", "oldalgs.yml"), encoding='utf-8'))
@@ -61,7 +61,7 @@ def get_sig_nistlevel(family, alg, docsdir):
     elif family['family'] == 'SPHINCS-SHAKE256': datasheetname = 'sphincs'
     elif family['family'] == 'SPHINCS-SHA2': datasheetname = 'sphincs'
     elif family['family'] == 'SPHINCS-SHAKE': datasheetname = 'sphincs'
-    else: datasheetname = family['family'].lower()
+    else: datasheetname = family['family'].lower().replace('-', '_')
     # load datasheet
     algymlfilename = os.path.join(docsdir, 'algorithms', 'sig', '{:s}.yml'.format(datasheetname))
     algyml = yaml.safe_load(file_get_contents(algymlfilename, encoding='utf-8'))
@@ -73,7 +73,7 @@ def get_sig_nistlevel(family, alg, docsdir):
         return False
     # find the variant that matches
     for variant in algyml['parameter-sets']:
-        if matches(variant['name'], alg):
+        if matches(variant['name'], alg) or ('alias' in variant and matches(variant['alias'], alg)):
             return variant['claimed-nist-level']
     # Information file for algorithms no longer supported by liboqs:
     oldalgs = yaml.safe_load(file_get_contents(os.path.join("oqs-template", "oldalgs.yml"), encoding='utf-8'))

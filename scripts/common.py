@@ -7,26 +7,32 @@ import time
 key_exchanges = [
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_START
     # post-quantum key exchanges
-    'frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','kyber512','kyber768','kyber1024','bikel1','bikel3','bikel5','hqc128','hqc192','hqc256',
+    'frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','kyber512','kyber768','kyber1024','mlkem512','mlkem768','mlkem1024','bikel1','bikel3','bikel5','hqc128','hqc192','hqc256',
     # post-quantum + classical key exchanges
-    'p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p256_kyber512','x25519_kyber512','p384_kyber768','x448_kyber768','x25519_kyber768','p256_kyber768','p521_kyber1024','p256_bikel1','x25519_bikel1','p384_bikel3','x448_bikel3','p521_bikel5','p256_hqc128','x25519_hqc128','p384_hqc192','x448_hqc192','p521_hqc256',
+    'p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p256_kyber512','x25519_kyber512','p384_kyber768','x448_kyber768','x25519_kyber768','p256_kyber768','p521_kyber1024','p256_mlkem512','x25519_mlkem512','p384_mlkem768','x448_mlkem768','x25519_mlkem768','p256_mlkem768','p521_mlkem1024','p256_bikel1','x25519_bikel1','p384_bikel3','x448_bikel3','p521_bikel5','p256_hqc128','x25519_hqc128','p384_hqc192','x448_hqc192','p521_hqc256',
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_END
 ]
 signatures = [
     'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
-    'dilithium2','dilithium3','dilithium5','falcon512','falcon1024','sphincssha2128fsimple','sphincssha2128ssimple','sphincssha2192fsimple','sphincsshake128fsimple',
+    'dilithium2','dilithium3','dilithium5','mldsa44','mldsa65','mldsa87','falcon512','falcon1024','sphincssha2128fsimple','sphincssha2128ssimple','sphincssha2192fsimple','sphincsshake128fsimple',
     # post-quantum + classical signatures
-    'p256_dilithium2','rsa3072_dilithium2','p384_dilithium3','p521_dilithium5','p256_falcon512','rsa3072_falcon512','p521_falcon1024','p256_sphincssha2128fsimple','rsa3072_sphincssha2128fsimple','p256_sphincssha2128ssimple','rsa3072_sphincssha2128ssimple','p384_sphincssha2192fsimple','p256_sphincsshake128fsimple','rsa3072_sphincsshake128fsimple',
+    'p256_dilithium2','rsa3072_dilithium2','p384_dilithium3','p521_dilithium5','p256_mldsa44','rsa3072_mldsa44','p384_mldsa65','p521_mldsa87','p256_falcon512','rsa3072_falcon512','p521_falcon1024','p256_sphincssha2128fsimple','rsa3072_sphincssha2128fsimple','p256_sphincssha2128ssimple','rsa3072_sphincssha2128ssimple','p384_sphincssha2192fsimple','p256_sphincsshake128fsimple','rsa3072_sphincsshake128fsimple',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 
 SERVER_START_ATTEMPTS = 10
 
-def all_pq_groups():
+def all_pq_groups(first = 0):
     ag = ""
-    for kex in key_exchanges:
+    half = len(key_exchanges)//2
+    if (first == 0):
+       kexs = key_exchanges[:half]
+    else:
+       kexs = key_exchanges[half:]
+
+    for kex in kexs:
         if len(ag)==0:
            ag = kex 
         else:
@@ -56,7 +62,7 @@ def run_subprocess(command, working_dir='.', expected_returncode=0, input=None, 
         assert False, "Got unexpected return code {}".format(result.returncode)
     return result.stdout.decode('utf-8')
 
-def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
+def start_server(ossl, test_artifacts_dir, sig_alg, worker_id, first):
     command = [ossl, 's_server',
                       '-cert', os.path.join(test_artifacts_dir, '{}_{}_srv.crt'.format(worker_id, sig_alg)),
                       '-key', os.path.join(test_artifacts_dir, '{}_{}_srv.key'.format(worker_id, sig_alg)),
@@ -64,7 +70,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
                       '-tls1_3',
                       '-quiet',
 # add X25519 for baseline server test and all PQ KEMs for single PQ KEM tests:
-                      '-groups', "x25519:"+all_pq_groups(),
+                      '-groups', "x25519:"+all_pq_groups(first),
                       # On UNIX-like systems, binding to TCP port 0
                       # is a request to dynamically generate an unused
                       # port number.
@@ -83,7 +89,8 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            time.sleep(2)
+            # be more lenient for slow CI servers
+            time.sleep(1)
     server_port = str(server_info.connections()[0].laddr.port)
 
     # Check SERVER_START_ATTEMPTS times to see
@@ -98,7 +105,8 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            time.sleep(2)
+            # be more lenient for slow CI servers
+            time.sleep(1)
 
     if server_start_attempt > SERVER_START_ATTEMPTS:
         raise Exception('Cannot start OpenSSL server')

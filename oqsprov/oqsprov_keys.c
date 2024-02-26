@@ -54,7 +54,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define NID_TABLE_LEN 82
+#    define NID_TABLE_LEN 98
 #else
 #    define NID_TABLE_LEN 30
 #endif
@@ -1121,7 +1121,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
             for (i = 0; i < count; i++) {
                 aType = sk_ASN1_TYPE_pop(sk);
                 p8inf_internal = PKCS8_PRIV_KEY_INFO_new();
-                nid = 1;
+                nid = 0;
                 char *name;
                 if ((name
                      = get_cmpname(OBJ_obj2nid(palg->algorithm), count - 1 - i))
@@ -1157,8 +1157,11 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                     for (int j = 0; j < OSSL_NELEM(nids_sig); j++) {
                         if ((nids_sig[j].nid == nid)
                             && (nids_sig[j].length_private_key > buflen)) {
-                            EC_KEY *ec_pkey;
-                            const unsigned char *buf3 = buf;
+                            EVP_PKEY *ec_pkey;
+                            OSSL_PARAM params[2];
+                            int include_pub = 1;
+                            const unsigned char *buf3
+                                = aType->value.sequence->data;
                             unsigned char *buf4, *buf5;
 
                             if (buflen
@@ -1172,20 +1175,26 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                                 sk_ASN1_TYPE_free(sk);
                                 return NULL;
                             }
-                            ec_pkey = EC_KEY_new_by_curve_name(nid);
-                            ec_pkey = d2i_ECPrivateKey(&ec_pkey, &buf3, buflen);
-                            EC_KEY_set_enc_flags(ec_pkey, 0);
+                            ec_pkey = EVP_PKEY_new();
+                            d2i_PrivateKey(EVP_PKEY_EC, &ec_pkey, &buf3,
+                                           aType->value.sequence->length);
+
+                            params[0] = OSSL_PARAM_construct_int(
+                                OSSL_PKEY_PARAM_EC_INCLUDE_PUBLIC,
+                                &include_pub);
+                            params[1] = OSSL_PARAM_construct_end();
+                            EVP_PKEY_set_params(ec_pkey, params);
+
                             buf4 = OPENSSL_malloc(
                                 nids_sig[j].length_private_key);
                             buf5 = buf4;
-                            buflen = i2d_ECPrivateKey(ec_pkey, &buf5);
+                            buflen = i2d_PrivateKey(ec_pkey, &buf5);
 
                             aux += buflen;
                             memcpy(concat_key + plen - 1 - aux, buf4, buflen);
-                            nid = 0; // use as flag to not memcpy twice
 
+                            EVP_PKEY_free(ec_pkey);
                             OPENSSL_clear_free(buf4, buflen);
-                            EC_KEY_free(ec_pkey);
                             break;
                         }
                     }
@@ -1201,7 +1210,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                         key_diff = nids_sig[6].length_private_key - buflen;
                 }
 
-                if (nid) {
+                if (!nid) {
                     aux += buflen;
                     memcpy(concat_key + plen - 1 - aux, buf, buflen);
                 }

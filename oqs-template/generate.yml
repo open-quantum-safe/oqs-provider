@@ -467,26 +467,6 @@ sigs:
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.2.7.2',
                     'code_point': '0xfea2'}]
-        composite:  [{'name': 'pss2048',
-                      'pretty_name': 'RSA PSS 2048',
-                      'security': '112',
-                      'oid': '2.16.840.1.114027.80.8.1.1'},
-                     {'name': 'rsa2048',
-                      'pretty_name': 'RSA2028',
-                      'security': '112',
-                      'oid': '2.16.840.1.114027.80.8.1.2'},
-                     {'name': 'ed25519',
-                      'pretty_name': 'ED25519',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.3'},
-                     {'name': 'p256',
-                      'pretty_name': 'ECDSA p256',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.4'},
-                     {'name': 'bp256',
-                      'pretty_name': 'ECDSA brainpoolP256r1',
-                      'security': '256',
-                      'oid': '2.16.840.1.114027.80.8.1.5'}]
       -
         name: 'dilithium3'
         pretty_name: 'Dilithium3'
@@ -499,26 +479,6 @@ sigs:
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.2.7.3',
                     'code_point': '0xfea4'}]
-        composite:  [{'name': 'pss3072',
-                      'pretty_name': 'RSA PSS 3072',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.6'},
-                     {'name': 'rsa3072',
-                      'pretty_name': 'RSA 3072',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.7'},
-                     {'name': 'p256',
-                      'pretty_name': 'ECDSA p256',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.8'},
-                     {'name': 'bp256',
-                      'pretty_name': 'ECDSA brainpoolP256r1',
-                      'security': '256',
-                      'oid': '2.16.840.1.114027.80.8.1.9'},
-                     {'name': 'ed25519',
-                      'pretty_name': 'ED25519',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.10'}]
       -
         name: 'dilithium5'
         pretty_name: 'Dilithium5'
@@ -531,18 +491,6 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.2.7.4',
                     'code_point': '0xfea6'}]
-        composite:  [{'name': 'p384',
-                      'pretty_name': 'ECDSA p384',
-                      'security': '192',
-                      'oid': '2.16.840.1.114027.80.8.1.11'},
-                     {'name': 'bp384',
-                      'pretty_name': 'ECDSA brainpoolP384r1',
-                      'security': '384',
-                      'oid': '2.16.840.1.114027.80.8.1.12'},
-                     {'name': 'ed448',
-                      'pretty_name': 'ED448',
-                      'security': '192',
-                      'oid': '2.16.840.1.114027.80.8.1.13'}]
       -
         name: 'dilithium2_aes'
         pretty_name: 'Dilithium2_AES'
@@ -610,6 +558,26 @@ sigs:
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.7.2',
                     'code_point': '0xfed4'}]
+        composite:  [{'name': 'pss2048',
+                      'pretty_name': 'RSA PSS 2048',
+                      'security': '112',
+                      'oid': '2.16.840.1.114027.80.8.1.1'},
+                     {'name': 'rsa2048',
+                      'pretty_name': 'RSA2028',
+                      'security': '112',
+                      'oid': '2.16.840.1.114027.80.8.1.2'},
+                     {'name': 'ed25519',
+                      'pretty_name': 'ED25519',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.3'},
+                     {'name': 'p256',
+                      'pretty_name': 'ECDSA p256',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.4'},
+                     {'name': 'bp256',
+                      'pretty_name': 'ECDSA brainpoolP256r1',
+                      'security': '256',
+                      'oid': '2.16.840.1.114027.80.8.1.5'}]
       -
         name: 'mldsa65'
         pretty_name: 'ML-DSA-65'
@@ -621,6 +589,26 @@ sigs:
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.7.3',
                     'code_point': '0xfed5'}]
+        composite:  [{'name': 'pss3072',
+                      'pretty_name': 'RSA PSS 3072',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.6'},
+                     {'name': 'rsa3072',
+                      'pretty_name': 'RSA 3072',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.7'},
+                     {'name': 'p256',
+                      'pretty_name': 'ECDSA p256',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.8'},
+                     {'name': 'bp256',
+                      'pretty_name': 'ECDSA brainpoolP256r1',
+                      'security': '256',
+                      'oid': '2.16.840.1.114027.80.8.1.9'},
+                     {'name': 'ed25519',
+                      'pretty_name': 'ED25519',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.10'}]
       -
         name: 'mldsa87'
         pretty_name: 'ML-DSA-87'
@@ -632,6 +620,18 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.7.4',
                     'code_point': '0xfed6'}]
+        composite:  [{'name': 'p384',
+                      'pretty_name': 'ECDSA p384',
+                      'security': '192',
+                      'oid': '2.16.840.1.114027.80.8.1.11'},
+                     {'name': 'bp384',
+                      'pretty_name': 'ECDSA brainpoolP384r1',
+                      'security': '384',
+                      'oid': '2.16.840.1.114027.80.8.1.12'},
+                     {'name': 'ed448',
+                      'pretty_name': 'ED448',
+                      'security': '192',
+                      'oid': '2.16.840.1.114027.80.8.1.13'}]
   -
     # iso (1)
     # identified-organization (3)

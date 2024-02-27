@@ -1153,12 +1153,13 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
 
                 // Checking OPTIONAL params on EC
                 if (keytype == EVP_PKEY_EC) {
+                    int j;
                     nid = OBJ_obj2nid(palg_internal->parameter->value.object);
-                    for (int j = 0; j < OSSL_NELEM(nids_sig); j++) {
+                    for (j = 0; j < OSSL_NELEM(nids_sig); j++) {
                         if ((nids_sig[j].nid == nid)
                             && (nids_sig[j].length_private_key > buflen)) {
                             EVP_PKEY *ec_pkey;
-                            OSSL_PARAM params[2];
+                            OSSL_PARAM params[3];
                             int include_pub = 1;
                             const unsigned char *buf3
                                 = aType->value.sequence->data;
@@ -1182,7 +1183,10 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                             params[0] = OSSL_PARAM_construct_int(
                                 OSSL_PKEY_PARAM_EC_INCLUDE_PUBLIC,
                                 &include_pub);
-                            params[1] = OSSL_PARAM_construct_end();
+                            params[1] = OSSL_PARAM_construct_utf8_string(
+                                OSSL_PKEY_PARAM_EC_ENCODING,
+                                OSSL_PKEY_EC_ENCODING_GROUP, 0);
+                            params[2] = OSSL_PARAM_construct_end();
                             EVP_PKEY_set_params(ec_pkey, params);
 
                             buf4 = OPENSSL_malloc(
@@ -1198,6 +1202,9 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                             break;
                         }
                     }
+                    if (j == OSSL_NELEM(nids_sig))
+                        nid = 0; // buflen is already with the correct size,
+                                 // changing nid to memcpy at the end
                 }
 
                 // if is a RSA key the actual encoding size might be different

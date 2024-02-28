@@ -70,6 +70,8 @@ jobs:
         working-directory: _build
       # Try brew install of head: If error message below appears, build and test passed successfully
       - name: brew install test
+        # try this only if brew'd liboqs knows about ML-KEM:
+        if: ! grep -r KEM_ML_KEM `brew info liboqs | grep files | awk '{print $1}'`
         run: brew install --HEAD --formula -s oqsprovider.rb 2>&1 | grep "Empty installation"
         working-directory: scripts
       - name: Retain oqsprovider.dylib

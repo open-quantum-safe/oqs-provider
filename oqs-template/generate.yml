@@ -481,6 +481,12 @@ sigs:
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.2.7.3',
                     'code_point': '0xfea4'}]
+# Used to interop with dilithium3 implementations
+#        composite: [
+#                     {'name': 'p256',
+#                      'pretty_name': 'ECDSA p256',
+#                      'security': '128',
+#                      'oid': '2.16.840.1.114027.80.8.1.8'},]
       -
         name: 'dilithium5'
         pretty_name: 'Dilithium5'

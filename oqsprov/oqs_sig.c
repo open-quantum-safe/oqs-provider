@@ -400,8 +400,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             upcase_name = get_oqsname_fromtls(name);
 
             if ((upcase_name != 0)
-                    && ((!strcmp(upcase_name, OQS_SIG_alg_dilithium_3))
-                        || (!strcmp(upcase_name, OQS_SIG_alg_dilithium_5)))
+                    && ((!strcmp(upcase_name, OQS_SIG_alg_ml_dsa_65))
+                        || (!strcmp(upcase_name, OQS_SIG_alg_ml_dsa_87)))
                 || (name[0] == 'e')) {
                 aux = 1;
                 OPENSSL_free(name);

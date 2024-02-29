@@ -8,7 +8,7 @@ on:
     
 jobs:
 
-  macos_intel:
+  standalone_macos_intel:
     runs-on: macos-13
     strategy:
       fail-fast: false
@@ -27,7 +27,7 @@ jobs:
                echo "ML-KEM not present in liboqs. Skipping test."
             fi'
 
-  linux_intel:
+  standalone_linux_intel:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

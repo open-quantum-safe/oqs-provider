@@ -19,8 +19,13 @@ jobs:
         uses: actions/checkout@v2
       - name: Build and test oqsprovider
         # try this only if brew'd liboqs knows about ML-KEM:
-        if: ! grep -r KEM_ML_KEM `brew info liboqs | grep files | awk '{print $1}'`
-        run: cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@3 -S . -B _build && cmake --build _build && ctest --parallel 5 --test-dir _build
+        run: |
+          bash -c 'FIND_KEM=`brew info liboqs | grep files | awk "{print $1}"`
+            if [[ `echo $FIND_MLKEM | grep ML_KEM` ]]; then
+               cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@3 -S . -B _build && cmake --build _build && ctest --parallel 5 --test-dir _build
+            else
+               echo "ML-KEM not present in liboqs. Skipping test."
+            fi'
 
   linux_intel:
     runs-on: ubuntu-latest

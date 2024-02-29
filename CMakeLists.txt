@@ -69,7 +69,9 @@ endif()
 
 # Add required include for liboqs
 find_package(liboqs REQUIRED)
-get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
+if (NOT LIBOQS_INCLUDE_DIR)
+  get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
+endif()
 message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")
 include_directories(${LIBOQS_INCLUDE_DIR})
 

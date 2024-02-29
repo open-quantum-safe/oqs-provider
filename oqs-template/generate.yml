@@ -422,6 +422,8 @@ sigs:
     #                'security': '128',
     #                'oid': '2.16.840.1.114027.80.1.8'}]
   -
+    # The Composite OIDs are kept up to date by @feventura (Entrust)
+    # These are prototype OIDs and are in line with draft-ounsworth-pq-composite-sigs-12 
     # OID scheme for composite variants:
     # joint-iso-itu-t (2)
     # country (16)

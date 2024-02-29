@@ -16,3 +16,4 @@
             '{{ variant['name'] }}_{{ composite_alg['name'] }}',
             {%- endfor -%}
     {%- endfor %} {%- endfor %}
+

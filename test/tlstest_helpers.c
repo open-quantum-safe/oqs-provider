@@ -148,7 +148,8 @@ int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
         }
 
         if (!clienterr && retc <= 0 && err != SSL_ERROR_WANT_READ) {
-            fprintf(stderr, "SSL_connect() failed %d, %d", retc, err);
+            fprintf(stderr, "SSL_connect() failed returning %d, SSL error %d.\n", retc, err);
+            ERR_print_errors_fp(stderr);
             if (want != SSL_ERROR_SSL)
                 ERR_clear_error();
             clienterr = 1;
@@ -165,7 +166,8 @@ int create_bare_tls_connection(SSL *serverssl, SSL *clientssl, int want,
 
         if (!servererr && rets <= 0 && err != SSL_ERROR_WANT_READ
             && err != SSL_ERROR_WANT_X509_LOOKUP) {
-            fprintf(stderr, "SSL_accept() failed %d, %d", rets, err);
+            fprintf(stderr, "SSL_accept() failed returning %d, SSL error %d.\n", rets, err);
+            ERR_print_errors_fp(stderr);
             if (want != SSL_ERROR_SSL)
                 ERR_clear_error();
             servererr = 1;

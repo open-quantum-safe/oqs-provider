@@ -9,6 +9,7 @@
  */
 
 #include <assert.h>
+#include <stdint.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <string.h>

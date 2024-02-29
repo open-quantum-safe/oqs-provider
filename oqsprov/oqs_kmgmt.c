@@ -9,6 +9,7 @@
  */
 
 #include <assert.h>
+#include <stdint.h>
 
 #include "openssl/param_build.h"
 #include "oqs_prov.h"

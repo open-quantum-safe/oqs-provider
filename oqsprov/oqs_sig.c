@@ -424,6 +424,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
             goto endsign;
         }
+        final_tbslen -= 1;
         final_tbs = OPENSSL_malloc(final_tbslen);
         memcpy(final_tbs, oid_prefix, COMPOSITE_OID_PREFIRX_LEN);
         memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN, tbs_hash,
@@ -720,6 +721,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
 
         if ((compsig = d2i_CompositeSignature(NULL, &sig, siglen)) == NULL) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
+            CompositeSignature_free(compsig);
             goto endverify;
         }
 
@@ -730,13 +732,14 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             if ((name = get_cmpname(nid, i)) == NULL) {
                 ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
                 OPENSSL_free(name);
+                CompositeSignature_free(compsig);
                 goto endverify;
             }
             upcase_name = get_oqsname_fromtls(name);
 
             if ((upcase_name != 0)
-                    && ((!strcmp(upcase_name, OQS_SIG_alg_dilithium_3))
-                        || (!strcmp(upcase_name, OQS_SIG_alg_dilithium_5)))
+                    && ((!strcmp(upcase_name, OQS_SIG_alg_ml_dsa_65))
+                        || (!strcmp(upcase_name, OQS_SIG_alg_ml_dsa_87)))
                 || (name[0] == 'e')) {
                 aux = 1;
                 OPENSSL_free(name);
@@ -757,8 +760,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             break;
         default:
             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+            CompositeSignature_free(compsig);
             goto endverify;
         }
+        final_tbslen -= 1;
         final_tbs = OPENSSL_malloc(final_tbslen);
         memcpy(final_tbs, oid_prefix, COMPOSITE_OID_PREFIRX_LEN);
         memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN, tbs_hash,
@@ -779,6 +784,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             if ((name = get_cmpname(nid, i)) == NULL) {
                 OPENSSL_free(name);
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
+                CompositeSignature_free(compsig);
+                OPENSSL_free(final_tbs);
                 goto endverify;
             }
 
@@ -788,6 +795,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                     != OQS_SUCCESS) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                     OPENSSL_free(name);
+                    CompositeSignature_free(compsig);
+                    OPENSSL_free(final_tbs);
                     goto endverify;
                 }
             } else {
@@ -808,6 +817,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                         OPENSSL_free(name);
                         EVP_MD_CTX_free(evp_ctx);
+                        CompositeSignature_free(compsig);
+                        OPENSSL_free(final_tbs);
                         goto endverify;
                     }
                     EVP_MD_CTX_free(evp_ctx);
@@ -818,6 +829,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                         || (EVP_PKEY_verify_init(ctx_verify) <= 0)) {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                         OPENSSL_free(name);
+                        CompositeSignature_free(compsig);
+                        OPENSSL_free(final_tbs);
                         goto endverify;
                     }
                     if (!strncmp(name, "pss", 3)) {
@@ -831,6 +844,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                                 <= 0)) {
                             ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
                             OPENSSL_free(name);
+                            CompositeSignature_free(compsig);
+                            OPENSSL_free(final_tbs);
                             goto endverify;
                         }
                     } else if (oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info
@@ -841,6 +856,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                             <= 0) {
                             ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
                             OPENSSL_free(name);
+                            CompositeSignature_free(compsig);
+                            OPENSSL_free(final_tbs);
                             goto endverify;
                         }
                     }
@@ -874,6 +891,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                         default:
                             ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                             OPENSSL_free(name);
+                            CompositeSignature_free(compsig);
+                            OPENSSL_free(final_tbs);
                             goto endverify;
                         }
                     }
@@ -884,6 +903,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                             <= 0)) {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                         OPENSSL_free(name);
+                        CompositeSignature_free(compsig);
+                        OPENSSL_free(final_tbs);
                         goto endverify;
                     }
                 }

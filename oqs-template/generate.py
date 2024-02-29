@@ -73,7 +73,7 @@ def get_sig_nistlevel(family, alg):
     # hacks to match names
     def matches(name, alg):
         def simplify(s):
-            return s.lower().replace('_', '').replace('-', '').replace('+', '')
+            return s.lower().replace('_', '').replace('-', '').replace('+', '').replace(' ', '').replace('(', '').replace(')', '')
         if simplify(name) == simplify(alg['name']): return True
         return False
     # find the variant that matches

@@ -54,7 +54,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define NID_TABLE_LEN 82
+#    define NID_TABLE_LEN 83
 #else
 #    define NID_TABLE_LEN 30
 #endif
@@ -108,6 +108,7 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "p256_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192},
     {0, "mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_KEM, 256},
     {0, "p521_mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "p384_mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM, 256},
     {0, "bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_KEM, 128},
     {0, "p256_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECP_HYB_KEM, 128},
     {0, "x25519_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECX_HYB_KEM, 128},

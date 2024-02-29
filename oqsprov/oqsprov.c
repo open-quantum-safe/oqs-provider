@@ -49,7 +49,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define OQS_OID_CNT 164
+#    define OQS_OID_CNT 166
 #else
 #    define OQS_OID_CNT 60
 #endif
@@ -129,6 +129,8 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "mlkem1024",
     "1.3.9999.99.35",
     "p521_mlkem1024",
+    "1.3.6.1.4.1.42235.6",
+    "p384_mlkem1024",
     "1.3.9999.99.37",
     "bikel1",
     "1.3.9999.99.36",
@@ -317,46 +319,48 @@ int oqs_patch_oids(void)
 
     if (getenv("OQS_OID_P521_MLKEM1024"))
         oqs_oid_alg_list[70] = getenv("OQS_OID_P521_MLKEM1024");
+    if (getenv("OQS_OID_P384_MLKEM1024"))
+        oqs_oid_alg_list[72] = getenv("OQS_OID_P384_MLKEM1024");
     if (getenv("OQS_OID_BIKEL1"))
-        oqs_oid_alg_list[72] = getenv("OQS_OID_BIKEL1");
+        oqs_oid_alg_list[74] = getenv("OQS_OID_BIKEL1");
 
     if (getenv("OQS_OID_P256_BIKEL1"))
-        oqs_oid_alg_list[74] = getenv("OQS_OID_P256_BIKEL1");
+        oqs_oid_alg_list[76] = getenv("OQS_OID_P256_BIKEL1");
     if (getenv("OQS_OID_X25519_BIKEL1"))
-        oqs_oid_alg_list[76] = getenv("OQS_OID_X25519_BIKEL1");
+        oqs_oid_alg_list[78] = getenv("OQS_OID_X25519_BIKEL1");
     if (getenv("OQS_OID_BIKEL3"))
-        oqs_oid_alg_list[78] = getenv("OQS_OID_BIKEL3");
+        oqs_oid_alg_list[80] = getenv("OQS_OID_BIKEL3");
 
     if (getenv("OQS_OID_P384_BIKEL3"))
-        oqs_oid_alg_list[80] = getenv("OQS_OID_P384_BIKEL3");
+        oqs_oid_alg_list[82] = getenv("OQS_OID_P384_BIKEL3");
     if (getenv("OQS_OID_X448_BIKEL3"))
-        oqs_oid_alg_list[82] = getenv("OQS_OID_X448_BIKEL3");
+        oqs_oid_alg_list[84] = getenv("OQS_OID_X448_BIKEL3");
     if (getenv("OQS_OID_BIKEL5"))
-        oqs_oid_alg_list[84] = getenv("OQS_OID_BIKEL5");
+        oqs_oid_alg_list[86] = getenv("OQS_OID_BIKEL5");
 
     if (getenv("OQS_OID_P521_BIKEL5"))
-        oqs_oid_alg_list[86] = getenv("OQS_OID_P521_BIKEL5");
+        oqs_oid_alg_list[88] = getenv("OQS_OID_P521_BIKEL5");
     if (getenv("OQS_OID_HQC128"))
-        oqs_oid_alg_list[88] = getenv("OQS_OID_HQC128");
+        oqs_oid_alg_list[90] = getenv("OQS_OID_HQC128");
 
     if (getenv("OQS_OID_P256_HQC128"))
-        oqs_oid_alg_list[90] = getenv("OQS_OID_P256_HQC128");
+        oqs_oid_alg_list[92] = getenv("OQS_OID_P256_HQC128");
     if (getenv("OQS_OID_X25519_HQC128"))
-        oqs_oid_alg_list[92] = getenv("OQS_OID_X25519_HQC128");
+        oqs_oid_alg_list[94] = getenv("OQS_OID_X25519_HQC128");
     if (getenv("OQS_OID_HQC192"))
-        oqs_oid_alg_list[94] = getenv("OQS_OID_HQC192");
+        oqs_oid_alg_list[96] = getenv("OQS_OID_HQC192");
 
     if (getenv("OQS_OID_P384_HQC192"))
-        oqs_oid_alg_list[96] = getenv("OQS_OID_P384_HQC192");
+        oqs_oid_alg_list[98] = getenv("OQS_OID_P384_HQC192");
     if (getenv("OQS_OID_X448_HQC192"))
-        oqs_oid_alg_list[98] = getenv("OQS_OID_X448_HQC192");
+        oqs_oid_alg_list[100] = getenv("OQS_OID_X448_HQC192");
     if (getenv("OQS_OID_HQC256"))
-        oqs_oid_alg_list[100] = getenv("OQS_OID_HQC256");
+        oqs_oid_alg_list[102] = getenv("OQS_OID_HQC256");
 
     if (getenv("OQS_OID_P521_HQC256"))
-        oqs_oid_alg_list[102] = getenv("OQS_OID_P521_HQC256");
+        oqs_oid_alg_list[104] = getenv("OQS_OID_P521_HQC256");
 
-#    define OQS_KEMOID_CNT 102 + 2
+#    define OQS_KEMOID_CNT 104 + 2
 #else
 #    define OQS_KEMOID_CNT 0
 #endif /* OQS_KEM_ENCODERS */
@@ -762,6 +766,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
     KEMBASEALG(mlkem1024, 256)
     KEMHYBALG(p521_mlkem1024, 256)
+    KEMHYBALG(p384_mlkem1024, 192)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
     KEMBASEALG(bikel1, 128)
@@ -926,6 +931,7 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[]
     KEMKMALG(mlkem1024, 256)
 
     KEMKMHYBALG(p521_mlkem1024, 256, ecp)
+    KEMKMHYBALG(p384_mlkem1024, 192, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
     KEMKMALG(bikel1, 128)

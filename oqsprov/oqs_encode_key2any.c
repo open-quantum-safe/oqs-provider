@@ -785,6 +785,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define p521_mlkem1024_evp_type   0
 #define p521_mlkem1024_input_type "p521_mlkem1024"
 #define p521_mlkem1024_pem_type   "p521_mlkem1024"
+#define p384_mlkem1024_evp_type   0
+#define p384_mlkem1024_input_type "p384_mlkem1024"
+#define p384_mlkem1024_pem_type   "p384_mlkem1024"
 #define bikel1_evp_type           0
 #define bikel1_input_type         "bikel1"
 #define bikel1_pem_type           "bikel1"
@@ -1770,6 +1773,13 @@ MAKE_ENCODER(_ecp, p521_mlkem1024, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecp, p521_mlkem1024, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecp, p521_mlkem1024, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecp, p521_mlkem1024);
+MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p384_mlkem1024);
 MAKE_ENCODER(, bikel1, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, bikel1, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, bikel1, oqsx, PrivateKeyInfo, der);

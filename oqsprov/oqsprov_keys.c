@@ -741,7 +741,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                 OPENSSL_free(name);
             }
             memcpy(key->privkey, temp_priv, previous_privlen);
-            memcpy(key->privkey, temp_priv, previous_privlen);
+            memcpy(key->pubkey, temp_pub, previous_publen);
             OPENSSL_secure_clear_free(temp_priv, temp_priv_len);
             OPENSSL_secure_clear_free(temp_pub, temp_pub_len);
         } else {

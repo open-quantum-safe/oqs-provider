@@ -647,6 +647,8 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
             size_t publen = 0;
             size_t previous_privlen = 0;
             size_t previous_publen = 0;
+            size_t temp_pub_len, temp_priv_len;
+            char *temp_priv, *temp_pub;
             int pqc_pub_enc = 0;
             int i;
 
@@ -686,6 +688,10 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                 ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
                 goto err_key_op;
             }
+            temp_priv_len = previous_privlen;
+            temp_pub_len = previous_publen;
+            temp_priv = OPENSSL_secure_zalloc(temp_priv_len);
+            temp_pub = OPENSSL_secure_zalloc(temp_pub_len);
             previous_privlen = 0;
             previous_publen = 0;
             for (i = 0; i < key->numkeys; i++) {
@@ -710,6 +716,8 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                         OPENSSL_free(enc_len);
                         if (privlen > key->privkeylen_cmp[i]) {
                             OPENSSL_free(name);
+                            OPENSSL_secure_clear_free(temp_priv, temp_priv_len);
+                            OPENSSL_secure_clear_free(temp_pub, temp_pub_len);
                             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                             goto err_key_op;
                         }
@@ -723,15 +731,19 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                     else
                         publen = 0;
                 }
-                memcpy(key->privkey + previous_privlen,
+                memcpy(temp_priv + previous_privlen,
                        p + previous_privlen + previous_publen, privlen);
-                memcpy(key->pubkey + previous_publen,
+                memcpy(temp_pub + previous_publen,
                        p + privlen + previous_privlen + previous_publen,
                        publen);
                 previous_privlen += privlen;
                 previous_publen += publen;
                 OPENSSL_free(name);
             }
+            memcpy(key->privkey, temp_priv, previous_privlen);
+            memcpy(key->privkey, temp_priv, previous_privlen);
+            OPENSSL_secure_clear_free(temp_priv, temp_priv_len);
+            OPENSSL_secure_clear_free(temp_pub, temp_pub_len);
         } else {
             if (key->numkeys == 2) {
                 DECODE_UINT32(classical_privatekey_len,

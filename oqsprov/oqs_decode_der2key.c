@@ -7,7 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include <stdint.h>
+#include "_prereqs.h"
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/core_dispatch.h>

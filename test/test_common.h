@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 
-#include <stdint.h>
+#include "../oqsprov/_prereqs.h"
 #include <openssl/err.h>
 #include <openssl/provider.h>
 #include <stdio.h>

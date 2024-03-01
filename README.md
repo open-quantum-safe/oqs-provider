@@ -177,6 +177,7 @@ Contributors to the `oqsprovider` include:
 - Alex Zaslavsky
 - Will Childs-Klein
 - Thomas Bailleux
+- Felipe Ventura
 
 History
 -------

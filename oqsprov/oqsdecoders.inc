@@ -173,6 +173,9 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("p521_mlkem1024", der, PrivateKeyInfo, p521_mlkem1024),
     DECODER_w_structure("p521_mlkem1024", der, SubjectPublicKeyInfo,
                         p521_mlkem1024),
+    DECODER_w_structure("p384_mlkem1024", der, PrivateKeyInfo, p384_mlkem1024),
+    DECODER_w_structure("p384_mlkem1024", der, SubjectPublicKeyInfo,
+                        p384_mlkem1024),
 #    endif
 #    ifdef OQS_ENABLE_KEM_bike_l1
     DECODER_w_structure("bikel1", der, PrivateKeyInfo, bikel1),

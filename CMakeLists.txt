@@ -67,8 +67,10 @@ get_filename_component(OPENSSL_LIB_DIR ${OPENSSL_CRYPTO_LIBRARY} DIRECTORY)
 set(OPENSSL_MODULES_PATH ${OPENSSL_LIB_DIR}/ossl-modules)
 endif()
 
-# Add required include for liboqs
-find_package(liboqs REQUIRED)
+# Add required include for liboqs;
+# this fails OOTB for Android builds; see https://stackoverflow.com/a/73886192/1318024.
+# Workaround: use CMAKE_FIND_ROOT_PATH_BOTH
+find_package(liboqs REQUIRED CMAKE_FIND_ROOT_PATH_BOTH)
 if (NOT LIBOQS_INCLUDE_DIR)
   get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
 endif()

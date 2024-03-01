@@ -87,6 +87,7 @@
 | HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x2F46       | secp521_r1                       |
 | ML-KEM         | ML-KEM-ipd               | mlkem1024      | ipd          |                    5 | 0x0249       |                                  |
 | ML-KEM         | ML-KEM-ipd               | mlkem1024      | ipd          |                    5 | 0x2F49       | secp521_r1                       |
+| ML-KEM         | ML-KEM-ipd               | mlkem1024      | ipd          |                    5 | 0x2F4A       | p384                             |
 | ML-KEM         | ML-KEM-ipd               | mlkem512       | ipd          |                    1 | 0x0247       |                                  |
 | ML-KEM         | ML-KEM-ipd               | mlkem512       | ipd          |                    1 | 0x2F47       | secp256_r1                       |
 | ML-KEM         | ML-KEM-ipd               | mlkem512       | ipd          |                    1 | 0x2FB2       | x25519                           |

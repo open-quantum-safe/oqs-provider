@@ -49,7 +49,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define OQS_OID_CNT 166
+#    define OQS_OID_CNT 198
 #else
 #    define OQS_OID_CNT 60
 #endif

@@ -54,7 +54,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define NID_TABLE_LEN 83
+#    define NID_TABLE_LEN 99
 #else
 #    define NID_TABLE_LEN 30
 #endif

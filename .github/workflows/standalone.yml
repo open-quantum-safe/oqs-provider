@@ -8,7 +8,7 @@ on:
     
 jobs:
 
-  macos_intel:
+  standalone_macos_intel:
     runs-on: macos-13
     strategy:
       fail-fast: false
@@ -17,12 +17,17 @@ jobs:
         run: brew install liboqs
       - name: Checkout oqsprovider code
         uses: actions/checkout@v2
-      - name: Build oqsprovider
-        run: cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@3 -S . -B _build && cmake --build _build
-      - name: Test oqsprovider
-        run: ctest --parallel 5 --test-dir _build
+      - name: Build and test oqsprovider
+        # try this only if brew'd liboqs knows about ML-KEM:
+        run: |
+          bash -c 'FIND_MLKEM=`brew info liboqs | grep files | awk "{print $1}"`
+            if [[ `echo $FIND_MLKEM | grep ML_KEM` ]]; then
+               cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@3 -S . -B _build && cmake --build _build && ctest --parallel 5 --test-dir _build
+            else
+               echo "ML-KEM not present in liboqs. Skipping test."
+            fi'
 
-  linux_intel:
+  standalone_linux_intel:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

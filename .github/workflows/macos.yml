@@ -70,7 +70,14 @@ jobs:
         working-directory: _build
       # Try brew install of head: If error message below appears, build and test passed successfully
       - name: brew install test
-        run: brew install --HEAD --formula -s oqsprovider.rb 2>&1 | grep "Empty installation"
+        # try this only if brew'd liboqs knows about ML-KEM:
+        run: |
+          bash -c 'brew install liboqs && FIND_MLKEM=`brew info liboqs | grep files | awk "{print $1}"`
+            if [[ `echo $FIND_MLKEM | grep ML_KEM` ]]; then
+               brew install --HEAD --formula -s oqsprovider.rb 2>&1 | grep "Empty installation"
+            else
+               echo "ML-KEM not present in liboqs. Skipping test."
+            fi'
         working-directory: scripts
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@v3

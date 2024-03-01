@@ -216,32 +216,32 @@ static int oqs_sig_verify_init(void *vpoqs_sigctx, void *voqssig,
 
 // this list need to be in order of the last number on the OID from the
 // composite
-static const char *composite_OID_prefix[] = {
-    "060B6086480186FA6B50080101", // dilithium2_pss2048
+static const unsigned char *composite_OID_prefix[] = {
+    "060B6086480186FA6B50080101", // mldsa44_pss2048
                                   // id-MLDSA44-RSA2048-PSS-SHA256
-    "060B6086480186FA6B50080102", // dilithium2_rsa2048
+    "060B6086480186FA6B50080102", // mldsa44_rsa2048
                                   // id-MLDSA44-RSA2048-PKCS15-SHA256
-    "060B6086480186FA6B50080103", // dilithium2_ed25519
+    "060B6086480186FA6B50080103", // mldsa44_ed25519
                                   // id-MLDSA44-Ed25519-SHA512
-    "060B6086480186FA6B50080104", // dilithium2_p256
+    "060B6086480186FA6B50080104", // mldsa44_p256
                                   // id-MLDSA44-ECDSA-P256-SHA256
-    "060B6086480186FA6B50080105", // dilithium2_bp256
+    "060B6086480186FA6B50080105", // mldsa44_bp256
                                   // id-MLDSA44-ECDSA-brainpoolP256r1-SHA256
-    "060B6086480186FA6B50080106", // dilithium3_pss3072
+    "060B6086480186FA6B50080106", // mldsa65_pss3072
                                   // id-MLDSA65-RSA3072-PSS-SHA512
-    "060B6086480186FA6B50080107", // dilithium3_rsa3072
+    "060B6086480186FA6B50080107", // mldsa65_rsa3072
                                   // id-MLDSA65-RSA3072-PKCS15-SHA512
-    "060B6086480186FA6B50080108", // dilithium3_p256
+    "060B6086480186FA6B50080108", // mldsa65_p256
                                   // id-MLDSA65-ECDSA-P256-SHA512
-    "060B6086480186FA6B50080109", // dilithium3_bp256
+    "060B6086480186FA6B50080109", // mldsa65_bp256
                                   // id-MLDSA65-ECDSA-brainpoolP256r1-SHA512
-    "060B6086480186FA6B5008010A", // dilithium3_ed25519
+    "060B6086480186FA6B5008010A", // mldsa65_ed25519
                                   // id-MLDSA65-Ed25519-SHA512
-    "060B6086480186FA6B5008010B", // dilithium5_p384
+    "060B6086480186FA6B5008010B", // mldsa87_p384
                                   // id-MLDSA87-ECDSA-P384-SHA512
-    "060B6086480186FA6B5008010C", // dilithium5_bp384
+    "060B6086480186FA6B5008010C", // mldsa87_bp384
                                   // id-MLDSA87-ECDSA-brainpoolP384r1-SHA512
-    "060B6086480186FA6B5008010D", // dilithium5_ed448 id-MLDSA87-Ed448-SHA512
+    "060B6086480186FA6B5008010D", // mldsa87_ed448 id-MLDSA87-Ed448-SHA512
     "060B6086480186FA6B5008010E", // falcon512_p256
                                   // id-Falon512-ECDSA-P256-SHA256
     "060B6086480186FA6B5008010F", // falcon512_bp256
@@ -250,6 +250,17 @@ static const char *composite_OID_prefix[] = {
                                   // id-Falcon512-Ed25519-SHA512
 
 };
+
+void Composite_prefix_conversion(char *out, const unsigned char *in)
+{
+    int temp;
+    for (int i = 0; i < COMPOSITE_OID_PREFIRX_LEN / 2; i++) {
+        temp = OPENSSL_hexchar2int(in[2 * i]);
+        temp = temp * 16;
+        temp += OPENSSL_hexchar2int(in[2 * i + 1]);
+        out[i] = (unsigned char)temp;
+    }
+}
 
 /* On entry to this function, data to be signed (tbs) might have been hashed
  * already: this would be the case if poqs_sigctx->mdctx != NULL; if that is
@@ -381,10 +392,10 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         CompositeSignature *compsig = CompositeSignature_new();
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
-        const char *oid_prefix
+        const unsigned char *oid_prefix
             = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
         char *final_tbs;
-        size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN;
+        size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN / 2;
         int aux = 0;
         unsigned char *tbs_hash;
 
@@ -424,11 +435,10 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
             goto endsign;
         }
-        final_tbslen -= 1;
         final_tbs = OPENSSL_malloc(final_tbslen);
-        memcpy(final_tbs, oid_prefix, COMPOSITE_OID_PREFIRX_LEN);
-        memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN, tbs_hash,
-               final_tbslen - COMPOSITE_OID_PREFIRX_LEN);
+        Composite_prefix_conversion(final_tbs, oid_prefix);
+        memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN / 2, tbs_hash,
+               final_tbslen - COMPOSITE_OID_PREFIRX_LEN / 2);
         OPENSSL_free(tbs_hash);
 
         // sign
@@ -712,10 +722,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
         unsigned char *buf;
         size_t buf_len;
-        const char *oid_prefix
+        const unsigned char *oid_prefix
             = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
         char *final_tbs;
-        size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN;
+        size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN / 2;
         int aux = 0;
         unsigned char *tbs_hash;
 
@@ -763,11 +773,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             CompositeSignature_free(compsig);
             goto endverify;
         }
-        final_tbslen -= 1;
         final_tbs = OPENSSL_malloc(final_tbslen);
-        memcpy(final_tbs, oid_prefix, COMPOSITE_OID_PREFIRX_LEN);
-        memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN, tbs_hash,
-               final_tbslen - COMPOSITE_OID_PREFIRX_LEN);
+        Composite_prefix_conversion(final_tbs, oid_prefix);
+        memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN / 2, tbs_hash,
+               final_tbslen - COMPOSITE_OID_PREFIRX_LEN / 2);
         OPENSSL_free(tbs_hash);
 
         // verify

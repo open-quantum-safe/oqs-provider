@@ -323,21 +323,28 @@ function get_oqs_provider_version {
 
 # create a single exported folder
 function create_export_folder {
+  local i_type="$1" ; shift
+  local i_version="$1" ; shift
   local i_lib_dir="$1" ; shift
   local i_include_dir="$1" ; shift
 
+  # top folder to use
+  local l_top_folder="$the_export_dir_path/$i_type/$i_version"
+  mkdir -p "$l_top_folder"
+  cd "$l_top_folder" || return $?
+
   # library first
-  mkdir -p "$the_export_dir_path/$i_lib_dir"
-  [ ! -d "$the_export_dir_path/$i_lib_dir" ] && echo "ERROR: Missing '$the_export_dir_path/$i_lib_dir' (mkdir failure?)" && return 2
-  rm -fR "$the_export_dir_path/$i_lib_dir"/* 
-  cp -R "$the_build_dir_path/$i_lib_dir"/* "$the_export_dir_path/$i_lib_dir/" || return $?
+  mkdir -p "$l_top_folder/$i_lib_dir"
+  [ ! -d "$l_top_folder/$i_lib_dir" ] && echo "ERROR: Missing '$l_top_folder/$i_lib_dir' (mkdir failure?)" && return 2
+  rm -fR "$l_top_folder/$i_lib_dir"/* 
+  cp -R "$the_build_dir_path/$i_type/$i_lib_dir"/* "$l_top_folder/$i_lib_dir/" || return $?
 
   # now each include folder
   while [ x"$i_include_dir" != x ] ; do
-    mkdir -p "$the_export_dir_path/$i_include_dir"
-    [ ! -d "$the_export_dir_path/$i_include_dir" ] && echo "ERROR: Missing '$the_export_dir_path/$i_include_dir' (mkdir failure?)" && return 2
-    rm -fR "$the_export_dir_path/$i_include_dir"/* 
-    cp -R "$the_build_dir_path/$i_include_dir"/* "$the_export_dir_path/$i_include_dir/" || return $?
+    mkdir -p "$l_top_folder/$i_include_dir"
+    [ ! -d "$l_top_folder/$i_include_dir" ] && echo "ERROR: Missing '$l_top_folder/$i_include_dir' (mkdir failure?)" && return 2
+    rm -fR "$l_top_folder/$i_include_dir"/* 
+    cp -R "$the_build_dir_path/$i_type/$i_include_dir"/* "$l_top_folder/$i_include_dir/" || return $?
 
     # next include
     i_include_dir="$1" ; shift
@@ -367,13 +374,15 @@ function do_export {
   cd "$the_export_dir_path" || return $?
 
   # load in from everything...
-  create_export_folder android/arm64-v8a/lib || return $?
-  create_export_folder android/armeabi-v7a/lib || return $?
-  create_export_folder android/x86/lib || return $?
-  create_export_folder android/x86_64/lib || return $?
-  create_export_folder apple/iphoneos/lib || return $?
-  create_export_folder apple/iphonesimulator/lib || return $?
-  create_export_folder apple/macosx/lib || return $?
+  local l_type='android'
+  create_export_folder $l_type "$l_version" arm64-v8a/lib || return $?
+  create_export_folder $l_type "$l_version" armeabi-v7a/lib || return $?
+  create_export_folder $l_type "$l_version" x86/lib || return $?
+  create_export_folder $l_type "$l_version" x86_64/lib || return $?
+
+  l_type='apple'
+  create_export_folder $l_type "$l_version" iphoneos/lib || return $?
+  create_export_folder $l_type "$l_version" iphonesimulator/lib || return $?
 
   # report on what was exported
   echo ''

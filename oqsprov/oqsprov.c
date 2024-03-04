@@ -1136,22 +1136,21 @@ static const OSSL_ALGORITHM oqsprovider_decoder[] = {
 // get the last number on the composite OID
 int get_composite_idx(int idx)
 {
-    char *first_token;
-    char *token;
-    char *s;
-    int i;
-    s = OPENSSL_strdup(oqs_oid_alg_list[idx * 2]);
-    first_token = strtok_r(s, ".", &s);
-    for (i = 0; i <= 7; i++) { // 7 dots in composite OID
-        token = strtok_r(NULL, ".", &s);
+    char *token, *s;
+    int i, len, count = 0;
+
+    s = oqs_oid_alg_list[idx * 2];
+    len = strlen(oqs_oid_alg_list[idx * 2]);
+
+    for (i = 0; i < len; i++) {
+        if (s[i] == '.') {
+            count += 1;
+        }
+        if (count == 8) { // 8 dots in composite OID
+            return atoi(s + i + 1);
+        }
     }
-    if (token != NULL) {
-        i = atoi(token);
-    } else {
-        i = -1;
-    }
-    OPENSSL_free(first_token);
-    return i;
+    return 0;
 }
 
 static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx)

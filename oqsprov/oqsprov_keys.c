@@ -244,23 +244,31 @@ char *get_oqsname(int nid)
 
 char *get_cmpname(int nid, int index)
 {
-    int i, j;
-    char *name;
-    char *first_token;
-    char *token;
-    char *s;
+    int i, len;
+    char *name, *s;
     if ((i = get_oqsalg_idx(nid)) == -1)
         return NULL;
-    s = OPENSSL_strdup(nid_names[i].tlsname);
-    first_token = strtok_r(s, "_", &s);
-    if (index == 0) {
-        name = OPENSSL_strdup(first_token);
-    } else {
-        for (j = 0; j < index; j++)
-            token = strtok_r(s, "_", &s);
-        name = OPENSSL_strdup(token);
+    s = nid_names[i].tlsname;
+    len = strlen(nid_names[i].tlsname);
+    for (i = 0; i < len; i++) {
+        if (s[i] == '_') {
+            break;
+        }
     }
-    OPENSSL_free(first_token);
+    switch (index) {
+    case 0:
+        name = OPENSSL_malloc(i);
+        memcpy(name, s, i);
+        break;
+    case 1:
+        i += 1;
+        name = OPENSSL_malloc(len - i);
+        memcpy(name, s + i, len - i);
+        break;
+    default:
+        name = NULL;
+    }
+
     return name;
 }
 

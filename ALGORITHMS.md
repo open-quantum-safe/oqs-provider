@@ -167,9 +167,6 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | falcon512 | 1.3.9999.3.6 |Yes| OQS_OID_FALCON512
 | p256_falcon512 | 1.3.9999.3.7 |Yes| OQS_OID_P256_FALCON512
 | rsa3072_falcon512 | 1.3.9999.3.8 |Yes| OQS_OID_RSA3072_FALCON512
-| falcon512_p256 | 2.16.840.1.114027.80.8.1.14 |Yes| OQS_OID_FALCON512_p256
-| falcon512_bp256 | 2.16.840.1.114027.80.8.1.15 |Yes| OQS_OID_FALCON512_bp256
-| falcon512_ed25519 | 2.16.840.1.114027.80.8.1.16 |Yes| OQS_OID_FALCON512_ed25519
 | falcon1024 | 1.3.9999.3.9 |Yes| OQS_OID_FALCON1024
 | p521_falcon1024 | 1.3.9999.3.10 |Yes| OQS_OID_P521_FALCON1024
 | sphincssha2128fsimple | 1.3.9999.6.4.13 |Yes| OQS_OID_SPHINCSSHA2128FSIMPLE

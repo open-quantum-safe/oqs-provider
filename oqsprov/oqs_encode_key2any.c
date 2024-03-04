@@ -1180,15 +1180,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define rsa3072_falcon512_evp_type               0
 #define rsa3072_falcon512_input_type             "rsa3072_falcon512"
 #define rsa3072_falcon512_pem_type               "rsa3072_falcon512"
-#define falcon512_p256_evp_type                  0
-#define falcon512_p256_input_type                "falcon512_p256"
-#define falcon512_p256_pem_type                  "falcon512_p256"
-#define falcon512_bp256_evp_type                 0
-#define falcon512_bp256_input_type               "falcon512_bp256"
-#define falcon512_bp256_pem_type                 "falcon512_bp256"
-#define falcon512_ed25519_evp_type               0
-#define falcon512_ed25519_input_type             "falcon512_ed25519"
-#define falcon512_ed25519_pem_type               "falcon512_ed25519"
 #define falcon1024_evp_type                      0
 #define falcon1024_input_type                    "falcon1024"
 #define falcon1024_pem_type                      "falcon1024"
@@ -2478,27 +2469,6 @@ MAKE_ENCODER(, rsa3072_falcon512, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_falcon512, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, rsa3072_falcon512, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, rsa3072_falcon512);
-MAKE_ENCODER(, falcon512_p256, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, falcon512_p256, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, falcon512_p256, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, falcon512_p256, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, falcon512_p256, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, falcon512_p256, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, falcon512_p256);
-MAKE_ENCODER(, falcon512_bp256, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, falcon512_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, falcon512_bp256, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, falcon512_bp256, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, falcon512_bp256, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, falcon512_bp256, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, falcon512_bp256);
-MAKE_ENCODER(, falcon512_ed25519, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, falcon512_ed25519, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, falcon512_ed25519, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, falcon512_ed25519, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, falcon512_ed25519, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, falcon512_ed25519, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, falcon512_ed25519);
 MAKE_ENCODER(, falcon1024, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, falcon1024, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, falcon1024, oqsx, PrivateKeyInfo, der);

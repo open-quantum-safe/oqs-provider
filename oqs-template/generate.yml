@@ -426,7 +426,7 @@ sigs:
     #                'oid': '2.16.840.1.114027.80.1.8'}]
   -
     # The Composite OIDs are kept up to date by @feventura (Entrust)
-    # These are prototype OIDs and are in line with draft-ounsworth-pq-composite-sigs-12 
+    # These are prototype OIDs and are in line with draft-ounsworth-pq-composite-sigs-13
     # OID scheme for composite variants:
     # joint-iso-itu-t (2)
     # country (16)
@@ -666,18 +666,6 @@ sigs:
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.3.8',
                     'code_point': '0xfeb0'}]
-        composite:  [{'name': 'p256',
-                      'pretty_name': 'ECDSA p256',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.14'},
-                     {'name': 'bp256',
-                      'pretty_name': 'ECDSA brainpoolP256r1',
-                      'security': '256',
-                      'oid': '2.16.840.1.114027.80.8.1.15'},
-                     {'name': 'ed25519',
-                      'pretty_name': 'ED25519',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.16'}]
         extra_nids:
           old:
             - implementation_version: NIST Round 3 submission

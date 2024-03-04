@@ -116,7 +116,8 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
         OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
-    if (pkemctx->kem->comp_pubkey[keyslot] == NULL) {
+    if (pkemctx->kem->comp_pubkey == NULL
+        || pkemctx->kem->comp_pubkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: public key is NULL\n");
         return -1;
     }
@@ -168,7 +169,8 @@ static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
         OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
-    if (pkemctx->kem->comp_privkey[keyslot] == NULL) {
+    if (pkemctx->kem->comp_privkey == NULL
+        || pkemctx->kem->comp_privkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");
         return -1;
     }

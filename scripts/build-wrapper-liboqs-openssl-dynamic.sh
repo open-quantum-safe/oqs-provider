@@ -70,10 +70,17 @@ function do_main {
   # report on provider location
   echo 'Dynalib:'
   find "$the_top_dir"/_build -type f -name '*.'$SHLIBEXT -exec ls -la {} \; | sed -e 's/^/  /'
+  local l_oqs_provider_path="$(dirname "`find "$the_top_dir"/_build -type f -name '*.'$SHLIBEXT | head -n 1`")"
+  local l_oqs_provider_name='oqsprovider'
   echo 'Algorithms:'
-  openssl list -kem-algorithms -provider-path "$PWD"/_build/lib -provider oqsprovider | sed -e 's/^//'
+  openssl list -kem-algorithms -provider-path "$l_oqs_provider_path" -provider $l_oqs_provider_name | sed -e 's/^//'
   echo 'Signatures:'
-  openssl list -signature-algorithms -provider-path "$PWD"/_build/lib -provider oqsprovider | sed -e 's/^//'
+  openssl list -signature-algorithms -provider-path "$l_oqs_provider_path" -provider $l_oqs_provider_name | sed -e 's/^//'
+  echo 'Exports:'
+  echo "  export OQS_PROVIDER_NAME='$l_oqs_provider_name'"
+  echo "  export OQS_PROVIDER_PATH='$l_oqs_provider_path'"
+  echo 'Example:'
+  echo '  openssl list -kem-algorithms -provider-path "$OQS_PROVIDER_PATH" -provider $OQS_PROVIDER_NAME'
 
   return 0
 }

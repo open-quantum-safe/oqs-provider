@@ -251,7 +251,7 @@ static const unsigned char *composite_OID_prefix[] = {
 
 };
 
-void Composite_prefix_conversion(char *out, const unsigned char *in)
+void composite_prefix_conversion(char *out, const unsigned char *in)
 {
     int temp;
     for (int i = 0; i < COMPOSITE_OID_PREFIRX_LEN / 2; i++) {
@@ -392,8 +392,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         CompositeSignature *compsig = CompositeSignature_new();
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
-        const unsigned char *oid_prefix
-            = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
+        int comp_idx = get_composite_idx(get_oqsalg_idx(nid));
+        const unsigned char *oid_prefix = composite_OID_prefix[comp_idx - 1];
         char *final_tbs;
         size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN / 2;
         int aux = 0;
@@ -436,7 +436,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             goto endsign;
         }
         final_tbs = OPENSSL_malloc(final_tbslen);
-        Composite_prefix_conversion(final_tbs, oid_prefix);
+        composite_prefix_conversion(final_tbs, oid_prefix);
         memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN / 2, tbs_hash,
                final_tbslen - COMPOSITE_OID_PREFIRX_LEN / 2);
         OPENSSL_free(tbs_hash);
@@ -525,41 +525,16 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                             goto endsign;
                         }
                     }
-
-                    if ((name[0] == 'p') || (name[0] == 'b')
-                        || (name[0] == 'r')) {
-                        int aux;
-                        if (name[0] == 'b') {
-                            aux = 2;
-                        } else {
-                            aux = 1;
-                        }
-                        switch (name[aux]) {
-                        case 's': // pss or rsa
-                        case '2': // p256 or bp256
-                            classical_md = EVP_sha256();
-                            digest_len = SHA256_DIGEST_LENGTH;
-                            SHA256(final_tbs, final_tbslen,
-                                   (unsigned char *)&digest);
-                            break;
-                        case '3': // p384 or bp384
-                            classical_md = EVP_sha384();
-                            digest_len = SHA384_DIGEST_LENGTH;
-                            SHA384(final_tbs, final_tbslen,
-                                   (unsigned char *)&digest);
-                            break;
-                        case '5': // p512
-                            classical_md = EVP_sha512();
-                            digest_len = SHA512_DIGEST_LENGTH;
-                            SHA512(final_tbs, final_tbslen,
-                                   (unsigned char *)&digest);
-                            break;
-                        default:
-                            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                            OPENSSL_free(name);
-                            OPENSSL_free(buf);
-                            goto endsign;
-                        }
+                    if (comp_idx < 6) {
+                        classical_md = EVP_sha256();
+                        digest_len = SHA256_DIGEST_LENGTH;
+                        SHA256(final_tbs, final_tbslen,
+                               (unsigned char *)&digest);
+                    } else {
+                        classical_md = EVP_sha512();
+                        digest_len = SHA512_DIGEST_LENGTH;
+                        SHA512(final_tbs, final_tbslen,
+                               (unsigned char *)&digest);
                     }
 
                     if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign,
@@ -720,10 +695,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         CompositeSignature *compsig;
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
+        int comp_idx = get_composite_idx(get_oqsalg_idx(nid));
         unsigned char *buf;
         size_t buf_len;
-        const unsigned char *oid_prefix
-            = composite_OID_prefix[get_composite_idx(get_oqsalg_idx(nid)) - 1];
+        const unsigned char *oid_prefix = composite_OID_prefix[comp_idx - 1];
         char *final_tbs;
         size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN / 2;
         int aux = 0;
@@ -774,7 +749,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             goto endverify;
         }
         final_tbs = OPENSSL_malloc(final_tbslen);
-        Composite_prefix_conversion(final_tbs, oid_prefix);
+        composite_prefix_conversion(final_tbs, oid_prefix);
         memcpy(final_tbs + COMPOSITE_OID_PREFIRX_LEN / 2, tbs_hash,
                final_tbslen - COMPOSITE_OID_PREFIRX_LEN / 2);
         OPENSSL_free(tbs_hash);
@@ -870,41 +845,18 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                             goto endverify;
                         }
                     }
-                    if ((name[0] == 'p') || (name[0] == 'b')
-                        || (name[0] == 'r')) {
-                        int aux;
-                        if (name[0] == 'b')
-                            aux = 2;
-                        else
-                            aux = 1;
-                        switch (name[aux]) {
-                        case 's': // pss or rsa
-                        case '2': // p256 or bp256
-                            classical_md = EVP_sha256();
-                            digest_len = SHA256_DIGEST_LENGTH;
-                            SHA256(final_tbs, final_tbslen,
-                                   (unsigned char *)&digest);
-                            break;
-                        case '3': // p384 or bp384
-                            classical_md = EVP_sha384();
-                            digest_len = SHA384_DIGEST_LENGTH;
-                            SHA384(final_tbs, final_tbslen,
-                                   (unsigned char *)&digest);
-                            break;
-                        case '5': // p512
-                            classical_md = EVP_sha512();
-                            digest_len = SHA512_DIGEST_LENGTH;
-                            SHA512(final_tbs, final_tbslen,
-                                   (unsigned char *)&digest);
-                            break;
-                        default:
-                            ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-                            OPENSSL_free(name);
-                            CompositeSignature_free(compsig);
-                            OPENSSL_free(final_tbs);
-                            goto endverify;
-                        }
+                    if (comp_idx < 6) {
+                        classical_md = EVP_sha256();
+                        digest_len = SHA256_DIGEST_LENGTH;
+                        SHA256(final_tbs, final_tbslen,
+                               (unsigned char *)&digest);
+                    } else {
+                        classical_md = EVP_sha512();
+                        digest_len = SHA512_DIGEST_LENGTH;
+                        SHA512(final_tbs, final_tbslen,
+                               (unsigned char *)&digest);
                     }
+
                     if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md)
                          <= 0)
                         || (EVP_PKEY_verify(ctx_verify, buf, buf_len, digest,

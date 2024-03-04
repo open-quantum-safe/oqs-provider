@@ -254,13 +254,11 @@ char *get_cmpname(int nid, int index)
     }
     switch (index) {
     case 0:
-        name = OPENSSL_malloc(i);
-        memcpy(name, s, i);
+        name = OPENSSL_strndup(s, i);
         break;
     case 1:
         i += 1;
-        name = OPENSSL_malloc(len - i);
-        memcpy(name, s + i, len - i);
+        name = OPENSSL_strndup(s + i, len - i);
         break;
     default:
         name = NULL;

@@ -33,7 +33,7 @@
 #                 \-> lib - static library output
 #     \-> apple
 #         \-> [version] - version automatically determined from build output
-#             \-> [device] - one of macOS / iphoneos / iphonesimulator
+#             \-> [device] - one of macosx / iphoneos / iphonesimulator
 #                 \-> lib - contains fat lib with all archs
 #
 # Requires the use of liboqs pulled and built using the analogous script:
@@ -383,6 +383,7 @@ function do_export {
   l_type='apple'
   create_export_folder $l_type "$l_version" iphoneos/lib || return $?
   create_export_folder $l_type "$l_version" iphonesimulator/lib || return $?
+  create_export_folder $l_type "$l_version" macosx/lib || return $?
 
   # report on what was exported
   echo ''

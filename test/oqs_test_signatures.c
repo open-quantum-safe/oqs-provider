@@ -122,9 +122,9 @@ int main(int argc, char *argv[])
         }
     }
 
-    OSSL_LIB_CTX_free(libctx);
     if (OPENSSL_VERSION_PREREQ(3, 1))
         OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
+    OSSL_LIB_CTX_free(libctx);
 
     TEST_ASSERT(errcnt == 0)
     return !test;

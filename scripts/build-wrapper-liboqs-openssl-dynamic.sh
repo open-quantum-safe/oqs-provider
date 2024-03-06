@@ -55,7 +55,7 @@ function do_main {
     echo "Build liboqs from '$the_liboqs_dir'..."
     cd "$the_liboqs_dir"
     cmake -GNinja \
-      -DOQS_ALGS_ENABLED=STD \
+      -DOQS_ALGS_ENABLED=ALL \
       -DCMAKE_INSTALL_PREFIX=$the_top_dir/.local \
       -S . -B _build
     l_rc=$? ; [ $l_rc -ne 0 ] && return $l_rc
@@ -65,7 +65,7 @@ function do_main {
 
   # leverage the existing fullbuild.sh
   export liboqs_DIR
-  "$the_top_dir"/scripts/fullbuild.sh || return $?
+  "$the_top_dir"/scripts/fullbuild.sh -f || return $?
 
   # report on provider location
   echo 'Dynalib:'

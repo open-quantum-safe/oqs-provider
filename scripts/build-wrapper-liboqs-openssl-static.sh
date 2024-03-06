@@ -44,6 +44,7 @@ the_openssl_ver="${the_openssl_ver:-3.2.1}"
 the_openssl_dir="${the_openssl_dir:-$HOME/proj/git/src/triplecyber.visualstudio.com/abruce-dev/Tc32/External/openssl}"
 the_liboqs_dir="${the_liboqs_dir:-}"
 the_ios_target="${the_ios_target:-17.0}"
+the_macos_target="${the_macos_target:-14.2}"
 the_android_api_level="${the_android_api_level:-34}"
 
 # enable debug to get explicit compiler command lines
@@ -107,18 +108,26 @@ function build_apple_variant {
   cd "$the_build_dir_path/$l_type/$i_device/$i_arch" || return $?
   rm -fR ./*
 
+  # different deployment target for ios vs. macosx
+  local l_deployment_target=''
+  if [ x"$i_device" = xmacosx ] ; then
+    l_deployment_target="$the_macos_target"
+  else
+    l_deployment_target="$the_ios_target"
+  fi
+
   # the apple.cmake toolchain is managed by the liboqs team - so use it
   set -x
   liboqs_DIR="$the_liboqs_dir/build/$l_type/$i_device/$i_arch/src" \
   cmake \
     -DCMAKE_TOOLCHAIN_FILE="$the_cmake_dir_path"/apple.cmake  \
     -DPLATFORM=$i_platform \
-    -DDEPLOYMENT_TARGET=$the_ios_target \
+    -DDEPLOYMENT_TARGET=$l_deployment_target \
     -DOQS_PROVIDER_BUILD_STATIC=ON \
     -DOPENSSL_USE_STATIC_LIBS=ON \
     -DOPENSSL_ROOT_DIR="$l_openssl_plat_dir" \
     -DLIBOQS_INCLUDE_DIR="$l_liboqs_plat_dir/include" \
-    "$the_top_dir"
+    -B . -S "$the_top_dir"
   l_rc=$? ; set +x ; [ $l_rc -ne 0 ] && return $l_rc
   cmake --build . $the_cmake_build_verbose_option || return $?
   echo ''
@@ -338,6 +347,16 @@ function create_export_folder {
   [ ! -d "$l_top_folder/$i_lib_dir" ] && echo "ERROR: Missing '$l_top_folder/$i_lib_dir' (mkdir failure?)" && return 2
   rm -fR "$l_top_folder/$i_lib_dir"/* 
   cp -R "$the_build_dir_path/$i_type/$i_lib_dir"/* "$l_top_folder/$i_lib_dir/" || return $?
+
+  # ensure that library names start with 'lib' (they don't by default...)
+  cd "$l_top_folder/$i_lib_dir" 
+  ls *.a > /tmp/foo.txt
+  while read -r line; do 
+    if echo "$line" | grep -v '^lib' >/dev/null 2>&1 ; then
+      mv "$line" lib"$line"
+    fi
+  done < /tmp/foo.txt
+  rm -f /tmp/foo.txt
 
   # now each include folder
   while [ x"$i_include_dir" != x ] ; do

@@ -141,18 +141,22 @@ as documented in https://github.com/openssl/openssl/issues/22761.
 
 ## 3.3(-dev)
 
-When https://github.com/openssl/openssl/pull/22779 land, the last config-time limitation
-for provider-based signatures should be gone.
+When https://github.com/openssl/openssl/pull/22779 lands, a last known
+config-time limitation for provider-based signatures should be gone.
 
-A limitation present in all OpenSSL versions is the number of default groups
+## All versions
+
+A limitation present in older OpenSSL versions is the number of default groups
 supported: [At most 44 default groups may be specified](https://github.com/openssl/openssl/issues/23624)
 , e.g., passing to [SSL_CTX_set1_groups](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set1_groups.html).
 Therefore caution is advised activating all KEMs supported by `oqsprovider`:
-This may lead to `openssl` crashing.
+This may lead to `openssl` crashing, depending on the OpenSSL version used:
+The problem is gone in OpenSSL "master" branch and (will be gone) in the
+releases 3.3.0, 3.2.2., 3.1.6 and 3.0.14.
 
 
 For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
-see here](https://wiki.openssl.org/index.php/OpenSSL_3.0#STATUS_of_current_development).
+see here](https://www.openssl.org/docs/man3.0/man7/migration_guide.html).
 
 Governance & Contributions
 --------------------------
@@ -160,10 +164,17 @@ Governance & Contributions
 Project governance is documented in [GOVERNANCE.md](GOVERNANCE.md) and contribution
 policy is documented in [CONTRIBUTING.md](CONTRIBUTING.md).
 
+Discussions
+-----------
+
+The policy of this project is that all discussions pertaining to changes in the
+functional and non-functional aspects of `oqsprovider` shall take place in
+`github`. References to external discussion fora are discouraged to retain the
+free and open flow of thoughts unencumbered by potentially differing or changing
+access or data retention policies by `github`-external chat forums.
+
 Team
 ----
-
-The Open Quantum Safe project is led by [Douglas Stebila](https://www.douglas.stebila.ca/research/) and [Michele Mosca](http://faculty.iqc.uwaterloo.ca/mmosca/) at the University of Waterloo.
 
 Contributors to the `oqsprovider` include:
 
@@ -184,6 +195,13 @@ the separate file [RELEASE.md](RELEASE.md).
 
 Acknowledgments
 ---------------
+
+`oqsprovider` came into existence as a branch of [oqs-openssl](https://github.com/open-quantum-safe/openssl)
+as part of the OQS project initially led by Douglas Stebila and Michele
+Mosca at the University of Waterloo but split off to become a separate
+project catering to the [OpenSSL provider](https://www.openssl.org/docs/manmaster/man7/provider.html)
+concept. With OQS joining [PQCA](https://pqca.org) `oqsprovider` also
+was folded into that organization.
 
 The `oqsprovider` project had been supported through the [NGI Assure Fund](https://nlnet.nl/assure),
 a fund established by [NLnet](https://nlnet.nl) with financial

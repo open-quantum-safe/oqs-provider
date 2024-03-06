@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
 {
     size_t i;
     int errcnt = 0, test = 0;
+    OSSL_PROVIDER *oqsprov = NULL;
 
     T((libctx = OSSL_LIB_CTX_new()) != NULL);
     T(argc == 4);
@@ -142,7 +143,7 @@ int main(int argc, char *argv[])
     T(cert = test_mk_file_path(certsdir, "servercert.pem"));
     T(privkey = test_mk_file_path(certsdir, "serverkey.pem"));
 
-    load_oqs_provider(libctx, modulename, configfile);
+    oqsprov = load_oqs_provider(libctx, modulename, configfile);
 
     T(OSSL_PROVIDER_available(libctx, "default"));
 
@@ -150,6 +151,8 @@ int main(int argc, char *argv[])
 
     OPENSSL_free(cert);
     OPENSSL_free(privkey);
+    if (OPENSSL_VERSION_PREREQ(3, 1))
+        OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
     OSSL_LIB_CTX_free(libctx);
     TEST_ASSERT(errcnt == 0)
     return !test;

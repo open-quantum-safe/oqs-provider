@@ -250,8 +250,7 @@ int main(int argc, char *argv[])
 
     dfltprov = OSSL_PROVIDER_load(keyctx, "default");
 
-    // possible as oqs_provider init (static or dynamic) has already been done:
-    keyprov = OSSL_PROVIDER_load(keyctx, modulename);
+    keyprov = load_oqs_provider(keyctx, modulename, configfile);
 
     algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
                                          &query_nocache);

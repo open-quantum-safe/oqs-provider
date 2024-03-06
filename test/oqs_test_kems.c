@@ -87,9 +87,7 @@ int main(int argc, char *argv[])
     modulename = argv[1];
     configfile = argv[2];
 
-    load_oqs_provider(libctx, modulename, configfile);
-
-    oqsprov = OSSL_PROVIDER_load(libctx, modulename);
+    oqsprov = load_oqs_provider(libctx, modulename, configfile);
 
     kemalgs
         = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
@@ -108,7 +106,8 @@ int main(int argc, char *argv[])
     }
 
     OSSL_LIB_CTX_free(libctx);
-
+    if (OPENSSL_VERSION_PREREQ(3, 1))
+        OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
     TEST_ASSERT(errcnt == 0)
     return !test;
 }

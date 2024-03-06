@@ -37,5 +37,5 @@ void hexdump(const void *ptr, size_t len);
 int alg_is_enabled(const char *algname);
 
 /* Loads the oqs-provider. */
-OSSL_PROVIDER* load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
-                       const char *configfile);
+OSSL_PROVIDER *load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
+                                 const char *configfile);

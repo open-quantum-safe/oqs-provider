@@ -45,7 +45,7 @@ int alg_is_enabled(const char *algname)
 
 /* Loads the oqs-provider from a shared module (.so). */
 OSSL_PROVIDER *load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
-                       const char *configfile)
+                                 const char *configfile)
 {
     T(OSSL_LIB_CTX_load_config(libctx, configfile));
     T(OSSL_PROVIDER_available(libctx, modulename));
@@ -58,7 +58,7 @@ extern OSSL_provider_init_fn OQS_PROVIDER_ENTRYPOINT_NAME;
 
 /* Loads the statically linked oqs-provider. */
 OSSL_PROVIDER *load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
-                       const char *configfile)
+                                 const char *configfile)
 {
     (void)configfile;
     T(OSSL_PROVIDER_add_builtin(libctx, modulename,

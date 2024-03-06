@@ -55,7 +55,7 @@ function do_main {
     echo "Build liboqs from '$the_liboqs_dir'..."
     cd "$the_liboqs_dir"
     cmake -GNinja \
-      -DOQS_ALGS_ENABLED=ALL \
+      -DOQS_ALGS_ENABLED=STD \
       -DCMAKE_INSTALL_PREFIX=$the_top_dir/.local \
       -S . -B _build
     l_rc=$? ; [ $l_rc -ne 0 ] && return $l_rc

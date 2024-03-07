@@ -1182,7 +1182,7 @@ int get_composite_idx(int idx)
     int i, len, count = 0;
 
     s = oqs_oid_alg_list[idx * 2];
-    len = strlen(oqs_oid_alg_list[idx * 2]);
+    len = strlen(s);
 
     for (i = 0; i < len; i++) {
         if (s[i] == '.') {

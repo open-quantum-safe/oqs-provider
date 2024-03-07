@@ -15,6 +15,7 @@
 
 # top-level settings - modify in environment from default listed here
 the_liboqs_dir="${the_liboqs_dir:-}"
+the_oqs_algs_enabled="${the_oqs_algs_enabled:-STD}"
 
 # supported dynalibs
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -55,7 +56,7 @@ function do_main {
     echo "Build liboqs from '$the_liboqs_dir'..."
     cd "$the_liboqs_dir"
     cmake -GNinja \
-      -DOQS_ALGS_ENABLED=STD \
+      -DOQS_ALGS_ENABLED=$the_oqs_algs_enabled \
       -DCMAKE_INSTALL_PREFIX=$the_top_dir/.local \
       -S . -B _build
     l_rc=$? ; [ $l_rc -ne 0 ] && return $l_rc
@@ -81,6 +82,7 @@ function do_main {
   echo "  export OQS_PROVIDER_PATH='$l_oqs_provider_path'"
   echo 'Example:'
   echo '  openssl list -kem-algorithms -provider-path "$OQS_PROVIDER_PATH" -provider $OQS_PROVIDER_NAME'
+  echo '  openssl list -signature-algorithms -provider-path "$OQS_PROVIDER_PATH" -provider $OQS_PROVIDER_NAME'
 
   return 0
 }

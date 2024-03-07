@@ -290,6 +290,20 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("rsa3072_falcon512", der, SubjectPublicKeyInfo,
                         rsa3072_falcon512),
 #endif
+#ifdef OQS_ENABLE_SIG_falcon_padded_512
+    DECODER_w_structure("falconpadded512", der, PrivateKeyInfo,
+                        falconpadded512),
+    DECODER_w_structure("falconpadded512", der, SubjectPublicKeyInfo,
+                        falconpadded512),
+    DECODER_w_structure("p256_falconpadded512", der, PrivateKeyInfo,
+                        p256_falconpadded512),
+    DECODER_w_structure("p256_falconpadded512", der, SubjectPublicKeyInfo,
+                        p256_falconpadded512),
+    DECODER_w_structure("rsa3072_falconpadded512", der, PrivateKeyInfo,
+                        rsa3072_falconpadded512),
+    DECODER_w_structure("rsa3072_falconpadded512", der, SubjectPublicKeyInfo,
+                        rsa3072_falconpadded512),
+#endif
 #ifdef OQS_ENABLE_SIG_falcon_1024
     DECODER_w_structure("falcon1024", der, PrivateKeyInfo, falcon1024),
     DECODER_w_structure("falcon1024", der, SubjectPublicKeyInfo, falcon1024),
@@ -297,6 +311,16 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
                         p521_falcon1024),
     DECODER_w_structure("p521_falcon1024", der, SubjectPublicKeyInfo,
                         p521_falcon1024),
+#endif
+#ifdef OQS_ENABLE_SIG_falcon_padded_1024
+    DECODER_w_structure("falconpadded1024", der, PrivateKeyInfo,
+                        falconpadded1024),
+    DECODER_w_structure("falconpadded1024", der, SubjectPublicKeyInfo,
+                        falconpadded1024),
+    DECODER_w_structure("p521_falconpadded1024", der, PrivateKeyInfo,
+                        p521_falconpadded1024),
+    DECODER_w_structure("p521_falconpadded1024", der, SubjectPublicKeyInfo,
+                        p521_falconpadded1024),
 #endif
 #ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
     DECODER_w_structure("sphincssha2128fsimple", der, PrivateKeyInfo,

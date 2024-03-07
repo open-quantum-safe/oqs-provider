@@ -395,7 +395,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         int comp_idx = get_composite_idx(get_oqsalg_idx(nid));
         const unsigned char *oid_prefix = composite_OID_prefix[comp_idx - 1];
         char *final_tbs;
-        size_t final_tbslen = COMPOSITE_OID_PREFIRX_LEN / 2;
+        size_t final_tbslen = COMPOSITE_OID_PREFIX_LEN / 2;
         int aux = 0;
         unsigned char *tbs_hash;
 

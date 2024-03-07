@@ -438,7 +438,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         final_tbs = OPENSSL_malloc(final_tbslen);
         composite_prefix_conversion(final_tbs, oid_prefix);
         memcpy(final_tbs + COMPOSITE_OID_PREFIX_LEN / 2, tbs_hash,
-               final_tbslen - COMPOSITE_OID_PREFIRX_LEN / 2);
+               final_tbslen - COMPOSITE_OID_PREFIX_LEN / 2);
         OPENSSL_free(tbs_hash);
 
         // sign

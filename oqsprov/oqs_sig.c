@@ -25,8 +25,8 @@
 #include <openssl/types.h>
 
 // TBD: Review what we really need/want: For now go with OSSL settings:
-#define OSSL_MAX_NAME_SIZE        50
-#define OSSL_MAX_PROPQUERY_SIZE   256 /* Property query strings */
+#define OSSL_MAX_NAME_SIZE       50
+#define OSSL_MAX_PROPQUERY_SIZE  256 /* Property query strings */
 #define COMPOSITE_OID_PREFIX_LEN 26
 
 #ifdef NDEBUG
@@ -254,7 +254,7 @@ static const unsigned char *composite_OID_prefix[] = {
 void composite_prefix_conversion(char *out, const unsigned char *in)
 {
     int temp;
-    for (int i = 0; i < COMPOSITE_OID_PREFIRX_LEN / 2; i++) {
+    for (int i = 0; i < COMPOSITE_OID_PREFIX_LEN / 2; i++) {
         temp = OPENSSL_hexchar2int(in[2 * i]);
         temp = temp * 16;
         temp += OPENSSL_hexchar2int(in[2 * i + 1]);

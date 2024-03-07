@@ -69,7 +69,7 @@ this provider also provides different hybrid algorithms, combining classic
 and quantum-safe methods.
 There are two types of combinations:
 The Hybrids are listed above with a prefix denoting a classic algorithm, e.g., for elliptic curve: "p256_".
-The [Composite] (https://datatracker.ietf.org/doc/draft-ounsworth-pq-composite-sigs/) are listed above with a suffix denoting a
+The [Composite](https://datatracker.ietf.org/doc/draft-ounsworth-pq-composite-sigs/) are listed above with a suffix denoting a
 classic algorithm, e.g., for elliptic curve: "_p256".
 
 A full list of algorithms, their interoperability code points and OIDs as well

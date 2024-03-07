@@ -751,7 +751,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         final_tbs = OPENSSL_malloc(final_tbslen);
         composite_prefix_conversion(final_tbs, oid_prefix);
         memcpy(final_tbs + COMPOSITE_OID_PREFIX_LEN / 2, tbs_hash,
-               final_tbslen - COMPOSITE_OID_PREFIRX_LEN / 2);
+               final_tbslen - COMPOSITE_OID_PREFIX_LEN / 2);
         OPENSSL_free(tbs_hash);
 
         // verify

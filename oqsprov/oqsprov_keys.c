@@ -254,7 +254,7 @@ char *get_cmpname(int nid, int index)
     if ((i = get_oqsalg_idx(nid)) == -1)
         return NULL;
     s = nid_names[i].tlsname;
-    len = strlen(nid_names[i].tlsname);
+    len = strlen(s);
     for (i = 0; i < len; i++) {
         if (s[i] == '_') {
             break;

@@ -27,7 +27,7 @@
 // TBD: Review what we really need/want: For now go with OSSL settings:
 #define OSSL_MAX_NAME_SIZE        50
 #define OSSL_MAX_PROPQUERY_SIZE   256 /* Property query strings */
-#define COMPOSITE_OID_PREFIRX_LEN 26
+#define COMPOSITE_OID_PREFIX_LEN 26
 
 #ifdef NDEBUG
 #    define OQS_SIG_PRINTF(a)

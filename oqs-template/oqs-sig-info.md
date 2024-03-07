@@ -14,16 +14,26 @@
 | dilithium3_aes **hybrid with** p384               | NIST Round 3 submission                       | 3            |                    3 | 0xfeab       | 1.3.9999.2.11.3          |
 | dilithium5_aes                                    | NIST Round 3 submission                       | 3            |                    5 | 0xfeac       | 1.3.6.1.4.1.2.267.11.8.7 |
 | dilithium5_aes **hybrid with** p521               | NIST Round 3 submission                       | 3            |                    5 | 0xfead       | 1.3.9999.2.11.4          |
-| falcon512                                         | 20211101                                      | 3            |                    1 | 0xfeae       | 1.3.9999.3.6             |
-| falcon512 **hybrid with** p256                    | 20211101                                      | 3            |                    1 | 0xfeaf       | 1.3.9999.3.7             |
-| falcon512 **hybrid with** rsa3072                 | 20211101                                      | 3            |                    1 | 0xfeb0       | 1.3.9999.3.8             |
+| falcon512                                         | 20211101                                      | 3            |                    1 | 0xfed7       | 1.3.9999.3.11            |
+| falcon512 **hybrid with** p256                    | 20211101                                      | 3            |                    1 | 0xfed8       | 1.3.9999.3.12            |
+| falcon512 **hybrid with** rsa3072                 | 20211101                                      | 3            |                    1 | 0xfed9       | 1.3.9999.3.13            |
+| falcon512                                         | PQClean Round 3 version labelled 20211101     | 3            |                    1 | 0xfeae       | 1.3.9999.3.6             |
+| falcon512 **hybrid with** p256                    | PQClean Round 3 version labelled 20211101     | 3            |                    1 | 0xfeaf       | 1.3.9999.3.7             |
+| falcon512 **hybrid with** rsa3072                 | PQClean Round 3 version labelled 20211101     | 3            |                    1 | 0xfeb0       | 1.3.9999.3.8             |
 | falcon512                                         | NIST Round 3 submission                       | 3            |                    1 | 0xfe0b       | 1.3.9999.3.1             |
 | falcon512 **hybrid with** p256                    | NIST Round 3 submission                       | 3            |                    1 | 0xfe0c       | 1.3.9999.3.2             |
 | falcon512 **hybrid with** rsa3072                 | NIST Round 3 submission                       | 3            |                    1 | 0xfe0d       | 1.3.9999.3.3             |
-| falcon1024                                        | 20211101                                      | 3            |                    5 | 0xfeb1       | 1.3.9999.3.9             |
-| falcon1024 **hybrid with** p521                   | 20211101                                      | 3            |                    5 | 0xfeb2       | 1.3.9999.3.10            |
+| falconpadded512                                   | 20211101                                      | 3            |                    1 | 0xfedc       | 1.3.9999.3.16            |
+| falconpadded512 **hybrid with** p256              | 20211101                                      | 3            |                    1 | 0xfedd       | 1.3.9999.3.17            |
+| falconpadded512 **hybrid with** rsa3072           | 20211101                                      | 3            |                    1 | 0xfede       | 1.3.9999.3.18            |
+| falcon1024                                        | 20211101                                      | 3            |                    5 | 0xfeda       | 1.3.9999.3.14            |
+| falcon1024 **hybrid with** p521                   | 20211101                                      | 3            |                    5 | 0xfedb       | 1.3.9999.3.15            |
+| falcon1024                                        | PQClean Round 3 version labelled 20211101     | 3            |                    5 | 0xfeb1       | 1.3.9999.3.9             |
+| falcon1024 **hybrid with** p521                   | PQClean Round 3 version labelled 20211101     | 3            |                    5 | 0xfeb2       | 1.3.9999.3.10            |
 | falcon1024                                        | NIST Round 3 submission                       | 3            |                    5 | 0xfe0e       | 1.3.9999.3.4             |
 | falcon1024 **hybrid with** p521                   | NIST Round 3 submission                       | 3            |                    5 | 0xfe0f       | 1.3.9999.3.5             |
+| falconpadded1024                                  | 20211101                                      | 3            |                    5 | 0xfedf       | 1.3.9999.3.19            |
+| falconpadded1024 **hybrid with** p521             | 20211101                                      | 3            |                    5 | 0xfee0       | 1.3.9999.3.20            |
 | mldsa44                                           | ML-DSA-ipd                                    | ipd          |                    1 | 0xfed0       | 1.3.6.1.4.1.2.267.12.4.4 |
 | mldsa44 **hybrid with** p256                      | ML-DSA-ipd                                    | ipd          |                    1 | 0xfed3       | 1.3.9999.7.1             |
 | mldsa44 **hybrid with** rsa3072                   | ML-DSA-ipd                                    | ipd          |                    1 | 0xfed4       | 1.3.9999.7.2             |

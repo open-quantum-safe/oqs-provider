@@ -820,7 +820,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 memcpy(buf + oqsxkey->privkeylen_cmp[i],
                        oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
             } else {
-                memcpy(buf, oqsxkey->comp_privkey[i], buflen);
+                memcpy(buf, oqsxkey->comp_privkey[i], oqsxkey->privkeylen_cmp[i]);
             }
 
             if (nid == EVP_PKEY_EC) {

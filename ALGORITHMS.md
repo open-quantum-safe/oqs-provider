@@ -79,11 +79,16 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | p384_mldsa65 | 0xfed5 |Yes| OQS_CODEPOINT_P384_MLDSA65
 | mldsa87 | 0xfed2 |Yes| OQS_CODEPOINT_MLDSA87
 | p521_mldsa87 | 0xfed6 |Yes| OQS_CODEPOINT_P521_MLDSA87
-| falcon512 | 0xfeae |Yes| OQS_CODEPOINT_FALCON512
-| p256_falcon512 | 0xfeaf |Yes| OQS_CODEPOINT_P256_FALCON512
-| rsa3072_falcon512 | 0xfeb0 |Yes| OQS_CODEPOINT_RSA3072_FALCON512
-| falcon1024 | 0xfeb1 |Yes| OQS_CODEPOINT_FALCON1024
-| p521_falcon1024 | 0xfeb2 |Yes| OQS_CODEPOINT_P521_FALCON1024
+| falcon512 | 0xfed7 |Yes| OQS_CODEPOINT_FALCON512
+| p256_falcon512 | 0xfed8 |Yes| OQS_CODEPOINT_P256_FALCON512
+| rsa3072_falcon512 | 0xfed9 |Yes| OQS_CODEPOINT_RSA3072_FALCON512
+| falconpadded512 | 0xfedc |Yes| OQS_CODEPOINT_FALCONPADDED512
+| p256_falconpadded512 | 0xfedd |Yes| OQS_CODEPOINT_P256_FALCONPADDED512
+| rsa3072_falconpadded512 | 0xfede |Yes| OQS_CODEPOINT_RSA3072_FALCONPADDED512
+| falcon1024 | 0xfeda |Yes| OQS_CODEPOINT_FALCON1024
+| p521_falcon1024 | 0xfedb |Yes| OQS_CODEPOINT_P521_FALCON1024
+| falconpadded1024 | 0xfedf |Yes| OQS_CODEPOINT_FALCONPADDED1024
+| p521_falconpadded1024 | 0xfee0 |Yes| OQS_CODEPOINT_P521_FALCONPADDED1024
 | sphincssha2128fsimple | 0xfeb3 |Yes| OQS_CODEPOINT_SPHINCSSHA2128FSIMPLE
 | p256_sphincssha2128fsimple | 0xfeb4 |Yes| OQS_CODEPOINT_P256_SPHINCSSHA2128FSIMPLE
 | rsa3072_sphincssha2128fsimple | 0xfeb5 |Yes| OQS_CODEPOINT_RSA3072_SPHINCSSHA2128FSIMPLE
@@ -161,14 +166,16 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | mldsa65_ed25519 | 2.16.840.1.114027.80.8.1.10 |Yes| OQS_OID_MLDSA65_ed25519
 | mldsa87 | 1.3.6.1.4.1.2.267.12.8.7 |Yes| OQS_OID_MLDSA87
 | p521_mldsa87 | 1.3.9999.7.4 |Yes| OQS_OID_P521_MLDSA87
-| mldsa87_p384 | 2.16.840.1.114027.80.8.1.11 |Yes| OQS_OID_MLDSA87_p384
-| mldsa87_bp384 | 2.16.840.1.114027.80.8.1.12 |Yes| OQS_OID_MLDSA87_bp384
-| mldsa87_ed448 | 2.16.840.1.114027.80.8.1.13 |Yes| OQS_OID_MLDSA87_ed448
-| falcon512 | 1.3.9999.3.6 |Yes| OQS_OID_FALCON512
-| p256_falcon512 | 1.3.9999.3.7 |Yes| OQS_OID_P256_FALCON512
-| rsa3072_falcon512 | 1.3.9999.3.8 |Yes| OQS_OID_RSA3072_FALCON512
-| falcon1024 | 1.3.9999.3.9 |Yes| OQS_OID_FALCON1024
-| p521_falcon1024 | 1.3.9999.3.10 |Yes| OQS_OID_P521_FALCON1024
+| falcon512 | 1.3.9999.3.11 |Yes| OQS_OID_FALCON512
+| p256_falcon512 | 1.3.9999.3.12 |Yes| OQS_OID_P256_FALCON512
+| rsa3072_falcon512 | 1.3.9999.3.13 |Yes| OQS_OID_RSA3072_FALCON512
+| falconpadded512 | 1.3.9999.3.16 |Yes| OQS_OID_FALCONPADDED512
+| p256_falconpadded512 | 1.3.9999.3.17 |Yes| OQS_OID_P256_FALCONPADDED512
+| rsa3072_falconpadded512 | 1.3.9999.3.18 |Yes| OQS_OID_RSA3072_FALCONPADDED512
+| falcon1024 | 1.3.9999.3.14 |Yes| OQS_OID_FALCON1024
+| p521_falcon1024 | 1.3.9999.3.15 |Yes| OQS_OID_P521_FALCON1024
+| falconpadded1024 | 1.3.9999.3.19 |Yes| OQS_OID_FALCONPADDED1024
+| p521_falconpadded1024 | 1.3.9999.3.20 |Yes| OQS_OID_P521_FALCONPADDED1024
 | sphincssha2128fsimple | 1.3.9999.6.4.13 |Yes| OQS_OID_SPHINCSSHA2128FSIMPLE
 | p256_sphincssha2128fsimple | 1.3.9999.6.4.14 |Yes| OQS_OID_P256_SPHINCSSHA2128FSIMPLE
 | rsa3072_sphincssha2128fsimple | 1.3.9999.6.4.15 |Yes| OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE
@@ -272,7 +279,9 @@ By setting environment variables, oqs-provider can be configured to encode keys 
 |`OQS_ENCODING_DILITHIUM3`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_DILITHIUM5`|`draft-uni-qsckeys-dilithium-00/sk-pk`|
 |`OQS_ENCODING_FALCON512`|`draft-uni-qsckeys-falcon-00/sk-pk`|
+|`OQS_ENCODING_FALCONPADDED512`|`draft-uni-qsckeys-falcon-00/sk-pk`|
 |`OQS_ENCODING_FALCON1024`|`draft-uni-qsckeys-falcon-00/sk-pk`|
+|`OQS_ENCODING_FALCONPADDED1024`|`draft-uni-qsckeys-falcon-00/sk-pk`|
 |`OQS_ENCODING_SPHINCSSHA2128FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
 |`OQS_ENCODING_SPHINCSSHA2128SSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|
 |`OQS_ENCODING_SPHINCSSHA2192FSIMPLE`|`draft-uni-qsckeys-sphincsplus-00/sk-pk`|

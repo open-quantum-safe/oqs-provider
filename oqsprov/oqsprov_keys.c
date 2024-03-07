@@ -54,9 +54,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define NID_TABLE_LEN 96
+#    define NID_TABLE_LEN 88
 #else
-#    define NID_TABLE_LEN 43
+#    define NID_TABLE_LEN 35
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -157,8 +157,16 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
     {0, "p256_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},
+    {0, "falconpadded512", OQS_SIG_alg_falcon_padded_512, KEY_TYPE_SIG, 128},
+    {0, "p256_falconpadded512", OQS_SIG_alg_falcon_padded_512, KEY_TYPE_HYB_SIG,
+     128},
+    {0, "rsa3072_falconpadded512", OQS_SIG_alg_falcon_padded_512,
+     KEY_TYPE_HYB_SIG, 128},
     {0, "falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_SIG, 256},
     {0, "p521_falcon1024", OQS_SIG_alg_falcon_1024, KEY_TYPE_HYB_SIG, 256},
+    {0, "falconpadded1024", OQS_SIG_alg_falcon_padded_1024, KEY_TYPE_SIG, 256},
+    {0, "p521_falconpadded1024", OQS_SIG_alg_falcon_padded_1024,
+     KEY_TYPE_HYB_SIG, 256},
     {0, "sphincssha2128fsimple", OQS_SIG_alg_sphincs_sha2_128f_simple,
      KEY_TYPE_SIG, 128},
     {0, "p256_sphincssha2128fsimple", OQS_SIG_alg_sphincs_sha2_128f_simple,

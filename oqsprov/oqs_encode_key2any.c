@@ -766,7 +766,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 OPENSSL_free(temp);
                 OPENSSL_free(templen);
                 PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
-                OPENSSL_free(name);
                 return -1;
             }
 
@@ -813,6 +812,30 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
             }
 
             buf = OPENSSL_secure_malloc(buflen);
+            if (buf == NULL) {
+                for (int j = 0; j <= i; j++) {
+                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
+                    ASN1_OCTET_STRING_free(aString[j]);
+                    OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                    aType[j]->value.sequence->length);
+                    if (j < i)
+                        OPENSSL_clear_free(temp[j], templen[j]);
+                }
+
+                if (sk_ASN1_TYPE_num(sk) != -1)
+                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+                else
+                    ASN1_TYPE_free(aType[i]);
+
+                OPENSSL_free(aType);
+                OPENSSL_free(aString);
+                OPENSSL_free(temp);
+                OPENSSL_free(templen);
+                PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
+                OPENSSL_free(name);
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                return -1;
+            }
             if (get_oqsname_fromtls(name)
                 != 0) { // include pubkey in privkey for PQC
                 memcpy(buf, oqsxkey->comp_privkey[i],
@@ -820,10 +843,12 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 memcpy(buf + oqsxkey->privkeylen_cmp[i],
                        oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
             } else {
-                memcpy(buf, oqsxkey->comp_privkey[i], buflen);
+                memcpy(buf, oqsxkey->comp_privkey[i],
+                       buflen); // buflen for classical (RSA) might be different
+                                // from oqsxkey->privkeylen_cmp[
             }
 
-            if (nid == EVP_PKEY_EC) {
+            if (nid == EVP_PKEY_EC) { // add the curve OID with the ECPubkey OID
                 version = V_ASN1_OBJECT;
                 pval = OBJ_nid2obj(
                     oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->nid);
@@ -847,14 +872,22 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 OPENSSL_free(aString);
                 OPENSSL_free(temp);
                 OPENSSL_free(templen);
-                OPENSSL_cleanse(buf, buflen);
-                PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
+                OPENSSL_cleanse(
+                    buf,
+                    buflen); // buf is part of p8inf_internal so we cant free
+                             // now, we cleanse it to remove pkey from memory
+                PKCS8_PRIV_KEY_INFO_free(p8inf_internal); // this also free buf
                 return -1;
             }
 
-            templen[i] = i2d_PKCS8_PRIV_KEY_INFO(p8inf_internal, &temp[i]);
-            ASN1_STRING_set(aString[i], temp[i], templen[i]);
-            ASN1_TYPE_set1(aType[i], V_ASN1_SEQUENCE, aString[i]);
+            templen[i] = i2d_PKCS8_PRIV_KEY_INFO(
+                p8inf_internal,
+                &temp[i]); // create the privkey info for each individual key
+            ASN1_STRING_set(aString[i], temp[i],
+                            templen[i]); // add privkey info as ASN1_STRING
+            ASN1_TYPE_set1(aType[i], V_ASN1_SEQUENCE,
+                           aString[i]); // add the ASN1_STRING into a ANS1_TYPE
+                                        // so it can be added into the stack
 
             if (!sk_ASN1_TYPE_push(sk, aType[i])) {
                 for (int j = 0; j <= i; j++) {
@@ -871,8 +904,11 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 OPENSSL_free(aString);
                 OPENSSL_free(temp);
                 OPENSSL_free(templen);
-                OPENSSL_cleanse(buf, buflen);
-                PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
+                OPENSSL_cleanse(
+                    buf,
+                    buflen); // buf is part of p8inf_internal so we cant free
+                             // now, we cleanse it to remove pkey from memory
+                PKCS8_PRIV_KEY_INFO_free(p8inf_internal); // this also free buf
                 return -1;
             }
             OPENSSL_free(name);
@@ -1694,7 +1730,6 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 for (i = 0; i < okey->numkeys; i++) {
                     if ((name = get_cmpname(OBJ_sn2nid(okey->tls_name), i))
                         == NULL) {
-                        OPENSSL_free(name);
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
                         return 0;
                     }
@@ -1760,7 +1795,6 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 for (i = 0; i < okey->numkeys; i++) {
                     if ((name = get_cmpname(OBJ_sn2nid(okey->tls_name), i))
                         == NULL) {
-                        OPENSSL_free(name);
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
                         return 0;
                     }

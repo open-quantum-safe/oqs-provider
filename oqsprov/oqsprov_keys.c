@@ -668,7 +668,6 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                 char *name;
                 if ((name = get_cmpname(OBJ_sn2nid(key->tls_name), i))
                     == NULL) {
-                    OPENSSL_free(name);
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto err_key_op;
                 }
@@ -710,8 +709,9 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                 char *name;
                 if ((name = get_cmpname(OBJ_sn2nid(key->tls_name), i))
                     == NULL) {
-                    OPENSSL_free(name);
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    OPENSSL_secure_clear_free(temp_priv, temp_priv_len);
+                    OPENSSL_secure_clear_free(temp_pub, temp_pub_len);
                     goto err_key_op;
                 }
                 if (get_oqsname_fromtls(name) == 0) { // classical key
@@ -876,7 +876,6 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                 char *name;
                 if ((name = get_cmpname(OBJ_sn2nid(key->tls_name), i))
                     == NULL) {
-                    OPENSSL_free(name);
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto rec_err;
                 }
@@ -918,7 +917,6 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
                 char *name;
                 if ((name = get_cmpname(OBJ_sn2nid(key->tls_name), i))
                     == NULL) {
-                    OPENSSL_free(name);
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto rec_err;
                 }
@@ -1081,27 +1079,33 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
             return NULL;
         } else {
             count = sk_ASN1_TYPE_num(sk);
-            concat_key = OPENSSL_zalloc(plen);
+            concat_key
+                = OPENSSL_zalloc(plen); // concat_key is allocated with plen,
+                                        // which is the max value for pubkey
 
             aux = 0;
             for (i = 0; i < count; i++) {
-                aType = sk_ASN1_TYPE_pop(sk);
+                aType
+                    = sk_ASN1_TYPE_pop(sk); // this remove in FILO order, but we
+                                            // need this in the opposite order
                 buf = aType->value.sequence->data;
                 buflen = aType->value.sequence->length;
                 aux += buflen;
-                memcpy(concat_key + plen - 1 - aux, buf, buflen);
+                memcpy(concat_key + plen - 1 - aux, buf,
+                       buflen); // fill concat_key starting at the end
                 ASN1_TYPE_free(aType);
             }
 
-            p = OPENSSL_memdup(concat_key + plen - 1 - aux, aux);
+            p = OPENSSL_memdup(concat_key + plen - 1 - aux,
+                               aux); // copy used memory on concat_key to p
             OPENSSL_clear_free(concat_key, plen);
-            plen = aux;
+            plen = aux; // update plen value
             sk_ASN1_TYPE_free(sk);
         }
     }
     oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PUBLIC, libctx, propq);
     if (get_keytype(OBJ_obj2nid(palg->algorithm)) == KEY_TYPE_CMP_SIG)
-        OPENSSL_clear_free(p, plen);
+        OPENSSL_clear_free((void *)p, plen);
     return oqsx;
 }
 
@@ -1115,7 +1119,8 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     const X509_ALGOR *palg;
     STACK_OF(ASN1_TYPE) *sk = NULL;
     ASN1_TYPE *aType = NULL;
-    unsigned char *concat_key, *buf;
+    unsigned char *concat_key;
+    const unsigned char *buf;
     int count, aux, i, buflen, key_diff = 0;
 
     if (!PKCS8_pkey_get0(NULL, &p, &plen, &palg, p8inf))
@@ -1146,14 +1151,15 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
 
             aux = 0;
             for (i = 0; i < count; i++) {
-                aType = sk_ASN1_TYPE_pop(sk);
+                aType
+                    = sk_ASN1_TYPE_pop(sk); // this remove in FILO order, but we
+                                            // need this in the opposite order
                 p8inf_internal = PKCS8_PRIV_KEY_INFO_new();
                 nid = 0;
                 char *name;
                 if ((name
                      = get_cmpname(OBJ_obj2nid(palg->algorithm), count - 1 - i))
                     == NULL) {
-                    OPENSSL_free(name);
                     ASN1_TYPE_free(aType);
                     OPENSSL_clear_free(concat_key, plen);
                     PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
@@ -1184,7 +1190,10 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                     nid = OBJ_obj2nid(palg_internal->parameter->value.object);
                     for (j = 0; j < OSSL_NELEM(nids_sig); j++) {
                         if ((nids_sig[j].nid == nid)
-                            && (nids_sig[j].length_private_key > buflen)) {
+                            && (nids_sig[j].length_private_key
+                                > buflen)) { // check if the curve is the same
+                                             // and if the key len is smaller
+                                             // than the max key size
                             EVP_PKEY *ec_pkey;
                             OSSL_PARAM params[3];
                             int include_pub = 1;
@@ -1194,8 +1203,8 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
 
                             if (buflen
                                 != nids_sig[j].kex_length_secret
-                                       + 7) { // no ECParameter and no
-                                              // Pubkey
+                                       + 7) { // no OPTIONAL ECParameter and no
+                                              // OPTIONAL Pubkey
                                 OPENSSL_free(name);
                                 ASN1_TYPE_free(aType);
                                 PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
@@ -1204,25 +1213,34 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                                 return NULL;
                             }
                             ec_pkey = EVP_PKEY_new();
-                            d2i_PrivateKey(EVP_PKEY_EC, &ec_pkey, &buf3,
-                                           aType->value.sequence->length);
+                            d2i_PrivateKey(
+                                EVP_PKEY_EC, &ec_pkey, &buf3,
+                                aType->value.sequence
+                                    ->length); // create a new EVP_PKEY using ec
+                                               // priv key
 
+                            // set parameters for the new priv key format
                             params[0] = OSSL_PARAM_construct_int(
                                 OSSL_PKEY_PARAM_EC_INCLUDE_PUBLIC,
-                                &include_pub);
+                                &include_pub); // add pubkey to priv key
                             params[1] = OSSL_PARAM_construct_utf8_string(
                                 OSSL_PKEY_PARAM_EC_ENCODING,
-                                OSSL_PKEY_EC_ENCODING_GROUP, 0);
+                                OSSL_PKEY_EC_ENCODING_GROUP,
+                                0); // add ECParam to the priv key
                             params[2] = OSSL_PARAM_construct_end();
                             EVP_PKEY_set_params(ec_pkey, params);
 
                             buf4 = OPENSSL_malloc(
                                 nids_sig[j].length_private_key);
                             buf5 = buf4;
-                            buflen = i2d_PrivateKey(ec_pkey, &buf5);
+                            buflen = i2d_PrivateKey(
+                                ec_pkey,
+                                &buf5); // encode priv key including parameters
 
                             aux += buflen;
-                            memcpy(concat_key + plen - 1 - aux, buf4, buflen);
+                            memcpy(
+                                concat_key + plen - 1 - aux, buf4,
+                                buflen); // fill concat_key starting at the end
 
                             EVP_PKEY_free(ec_pkey);
                             OPENSSL_clear_free(buf4, buflen);
@@ -1246,7 +1264,8 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
 
                 if (!nid) {
                     aux += buflen;
-                    memcpy(concat_key + plen - 1 - aux, buf, buflen);
+                    memcpy(concat_key + plen - 1 - aux, buf,
+                           buflen); // fill concat_key starting at the end
                 }
 
                 OPENSSL_free(name);
@@ -1265,7 +1284,8 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     if (get_keytype(OBJ_obj2nid(palg->algorithm)) != KEY_TYPE_CMP_SIG) {
         ASN1_OCTET_STRING_free(oct);
     } else {
-        OPENSSL_clear_free(p, plen);
+        OPENSSL_clear_free((void *)p,
+                           plen); // for COMPOSITE p include both privkey
     }
     return oqsx;
 }
@@ -1439,7 +1459,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         for (i = 0; i < ret->numkeys; i++) {
             char *name;
             if ((name = get_cmpname(OBJ_sn2nid(tls_name), i)) == NULL) {
-                OPENSSL_free(name);
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                 goto err;
             }
@@ -1803,7 +1822,6 @@ int oqsx_key_gen(OQSX_KEY *key)
         for (i = 0; i < key->numkeys; i++) {
             char *name;
             if ((name = get_cmpname(OBJ_sn2nid(key->tls_name), i)) == NULL) {
-                OPENSSL_free(name);
                 ON_ERR_GOTO(ret, err_gen);
             }
             if (get_oqsname_fromtls(name) == 0) {

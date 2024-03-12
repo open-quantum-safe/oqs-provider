@@ -215,7 +215,7 @@ static int oqs_sig_verify_init(void *vpoqs_sigctx, void *voqssig,
 }
 
 // this list need to be in order of the last number on the OID from the
-// composite
+// composite, the len of each value is COMPOSITE_OID_PREFIX_LEN
 static const unsigned char *composite_OID_prefix[] = {
     "060B6086480186FA6B50080101", // mldsa44_pss2048
                                   // id-MLDSA44-RSA2048-PSS-SHA256
@@ -251,6 +251,7 @@ static const unsigned char *composite_OID_prefix[] = {
 
 };
 
+/*put the chars on in into memory on out*/
 void composite_prefix_conversion(char *out, const unsigned char *in)
 {
     int temp;
@@ -389,13 +390,19 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 
     if (is_composite) {
         unsigned char *buf;
-        CompositeSignature *compsig = CompositeSignature_new();
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
         int comp_idx = get_composite_idx(get_oqsalg_idx(nid));
+        if (comp_idx == -1)
+            goto endsign;
         const unsigned char *oid_prefix = composite_OID_prefix[comp_idx - 1];
         char *final_tbs;
-        size_t final_tbslen = COMPOSITE_OID_PREFIX_LEN / 2;
+        CompositeSignature *compsig = CompositeSignature_new();
+        size_t final_tbslen
+            = COMPOSITE_OID_PREFIX_LEN
+              / 2; // COMPOSITE_OID_PREFIX_LEN stores the size of the *char, but
+                   // the prefix will be on memory, so each 2 chars will
+                   // translate into one byte
         int aux = 0;
         unsigned char *tbs_hash;
 
@@ -405,7 +412,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             char *upcase_name;
             if ((name = get_cmpname(nid, i)) == NULL) {
                 ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                OPENSSL_free(name);
+                CompositeSignature_free(compsig);
                 goto endsign;
             }
             upcase_name = get_oqsname_fromtls(name);
@@ -433,6 +440,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             break;
         default:
             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+            CompositeSignature_free(compsig);
             goto endsign;
         }
         final_tbs = OPENSSL_malloc(final_tbslen);
@@ -446,7 +454,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             char *name;
             if ((name = get_cmpname(nid, i)) == NULL) {
                 ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                OPENSSL_free(name);
+                CompositeSignature_free(compsig);
+                OPENSSL_free(final_tbs);
                 goto endsign;
             }
 
@@ -458,6 +467,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                                  final_tbslen, oqsxkey->comp_privkey[i])
                     != OQS_SUCCESS) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
+                    CompositeSignature_free(compsig);
+                    OPENSSL_free(final_tbs);
                     OPENSSL_free(name);
                     OPENSSL_free(buf);
                     goto endsign;
@@ -481,6 +492,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                                            final_tbs, final_tbslen)
                             <= 0)) {
                         ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+                        CompositeSignature_free(compsig);
+                        OPENSSL_free(final_tbs);
                         OPENSSL_free(name);
                         EVP_MD_CTX_free(evp_ctx);
                         OPENSSL_free(buf);
@@ -493,6 +506,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                             == NULL
                         || (EVP_PKEY_sign_init(classical_ctx_sign) <= 0)) {
                         ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+                        CompositeSignature_free(compsig);
+                        OPENSSL_free(final_tbs);
                         OPENSSL_free(name);
                         OPENSSL_free(buf);
                         goto endsign;
@@ -509,6 +524,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                                                              EVP_sha256())
                                 <= 0)) {
                             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+                            CompositeSignature_free(compsig);
+                            OPENSSL_free(final_tbs);
                             OPENSSL_free(name);
                             OPENSSL_free(buf);
                             goto endsign;
@@ -520,6 +537,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                                                          RSA_PKCS1_PADDING)
                             <= 0) {
                             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+                            CompositeSignature_free(compsig);
+                            OPENSSL_free(final_tbs);
                             OPENSSL_free(name);
                             OPENSSL_free(buf);
                             goto endsign;
@@ -544,6 +563,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                                           digest, digest_len)
                             <= 0)) {
                         ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+                        CompositeSignature_free(compsig);
+                        OPENSSL_free(final_tbs);
                         OPENSSL_free(name);
                         OPENSSL_free(buf);
                         goto endsign;
@@ -553,6 +574,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                                           ->evp_info->length_signature) {
                         /* sig is bigger than expected */
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
+                        CompositeSignature_free(compsig);
+                        OPENSSL_free(final_tbs);
                         OPENSSL_free(name);
                         OPENSSL_free(buf);
                         goto endsign;
@@ -696,6 +719,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
         int comp_idx = get_composite_idx(get_oqsalg_idx(nid));
+        if (comp_idx == -1)
+            goto endverify;
         unsigned char *buf;
         size_t buf_len;
         const unsigned char *oid_prefix = composite_OID_prefix[comp_idx - 1];
@@ -716,7 +741,6 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             char *upcase_name;
             if ((name = get_cmpname(nid, i)) == NULL) {
                 ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                OPENSSL_free(name);
                 CompositeSignature_free(compsig);
                 goto endverify;
             }
@@ -766,7 +790,6 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
 
             char *name;
             if ((name = get_cmpname(nid, i)) == NULL) {
-                OPENSSL_free(name);
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                 CompositeSignature_free(compsig);
                 OPENSSL_free(final_tbs);

@@ -8,6 +8,7 @@
  */
 
 #include "oqs_prov.h"
+#include <errno.h>
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
@@ -1178,10 +1179,12 @@ static const OSSL_ALGORITHM oqsprovider_decoder[] = {
 // get the last number on the composite OID
 int get_composite_idx(int idx)
 {
-    char *token, *s;
-    int i, len, count = 0;
+    char *s;
+    int i, len, ret = -1, count = 0;
 
-    s = oqs_oid_alg_list[idx * 2];
+    if (2 * idx > OQS_OID_CNT)
+        return 0;
+    s = (char *)oqs_oid_alg_list[idx * 2];
     len = strlen(s);
 
     for (i = 0; i < len; i++) {
@@ -1189,10 +1192,14 @@ int get_composite_idx(int idx)
             count += 1;
         }
         if (count == 8) { // 8 dots in composite OID
-            return atoi(s + i + 1);
+            errno = 0;
+            ret = strtol(s + i + 1, NULL, 10);
+            if (errno == ERANGE)
+                ret = -1;
+            break;
         }
     }
-    return 0;
+    return ret;
 }
 
 static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx)

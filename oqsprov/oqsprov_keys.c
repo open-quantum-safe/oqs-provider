@@ -1105,7 +1105,7 @@ OQSX_KEY *oqsx_key_from_x509pubkey(const X509_PUBKEY *xpk, OSSL_LIB_CTX *libctx,
     }
     oqsx = oqsx_key_op(palg, p, plen, KEY_OP_PUBLIC, libctx, propq);
     if (get_keytype(OBJ_obj2nid(palg->algorithm)) == KEY_TYPE_CMP_SIG)
-        OPENSSL_clear_free((void *)p, plen);
+        OPENSSL_clear_free((unsigned char *)p, plen);
     return oqsx;
 }
 
@@ -1284,7 +1284,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     if (get_keytype(OBJ_obj2nid(palg->algorithm)) != KEY_TYPE_CMP_SIG) {
         ASN1_OCTET_STRING_free(oct);
     } else {
-        OPENSSL_clear_free((void *)p,
+        OPENSSL_clear_free((unsigned char *)p,
                            plen); // for COMPOSITE p include both privkey
     }
     return oqsx;

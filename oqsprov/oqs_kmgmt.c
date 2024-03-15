@@ -314,9 +314,17 @@ err:
     return ok;
 }
 
-#define OQS_KEY_TYPES()                                        \
-    OSSL_PARAM_octet_string(OSSL_PKEY_PARAM_PUB_KEY, NULL, 0), \
-        OSSL_PARAM_octet_string(OSSL_PKEY_PARAM_PRIV_KEY, NULL, 0)
+#define OQS_HYBRID_KEY_TYPES()                                                 \
+    OSSL_PARAM_octet_string(OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, NULL, 0), \
+        OSSL_PARAM_octet_string(OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY,      \
+                                NULL, 0),                                      \
+        OSSL_PARAM_octet_string(OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY, NULL, 0),    \
+        OSSL_PARAM_octet_string(OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY, NULL, 0)
+
+#define OQS_KEY_TYPES()                                             \
+    OSSL_PARAM_octet_string(OSSL_PKEY_PARAM_PUB_KEY, NULL, 0),      \
+        OSSL_PARAM_octet_string(OSSL_PKEY_PARAM_PRIV_KEY, NULL, 0), \
+        OQS_HYBRID_KEY_TYPES()
 
 static const OSSL_PARAM oqsx_key_types[] = {OQS_KEY_TYPES(), OSSL_PARAM_END};
 static const OSSL_PARAM *oqs_imexport_types(int selection)
@@ -325,6 +333,91 @@ static const OSSL_PARAM *oqs_imexport_types(int selection)
     if ((selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0)
         return oqsx_key_types;
     return NULL;
+}
+
+// Tells if a key (SIG, KEM, ECP_HYB_KEM, ECX_HYB_KEM or HYB_SIG) is using
+// hybrid algorithm.
+//
+// Returns 1 if hybrid, else 0.
+static int oqsx_key_is_hybrid(const OQSX_KEY *oqsxk)
+{
+    if ((oqsxk->keytype == KEY_TYPE_ECP_HYB_KEM
+         || oqsxk->keytype == KEY_TYPE_ECX_HYB_KEM
+         || oqsxk->keytype == KEY_TYPE_HYB_SIG)
+        && oqsxk->numkeys == 2 && oqsxk->classical_pkey != NULL) {
+        OQS_KM_PRINTF("OQSKEYMGMT: key is hybrid\n");
+        return 1;
+    }
+    return 0;
+}
+
+// Gets the classical params of an hybrid key.
+
+// Gets hybrid params.
+//
+// Returns 0 on success.
+static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[])
+{
+    OSSL_PARAM *p;
+    const void *classical_pubkey = NULL;
+    const void *classical_privkey = NULL;
+    const void *pq_pubkey = NULL;
+    const void *pq_privkey = NULL;
+    int classical_pubkey_len = 0;
+    int classical_privkey_len = 0;
+    int pq_pubkey_len = 0;
+    int pq_privkey_len = 0;
+
+    if (oqsx_key_is_hybrid(key) != 1)
+        return 0;
+
+    if (key->numkeys != 2) {
+        OQS_KM_PRINTF2("OQSKEYMGMT: key is hybrid but key->numkeys = %zu\n",
+                       key->numkeys);
+        ERR_raise(ERR_LIB_PROV, OQSPROV_R_INTERNAL_ERROR);
+        return -1;
+    }
+
+    if (key->comp_pubkey != NULL && key->pubkey != NULL) {
+        classical_pubkey = key->comp_pubkey[0];
+        DECODE_UINT32(classical_pubkey_len, key->pubkey);
+    }
+    if (key->comp_privkey != NULL && key->privkey != NULL) {
+        classical_privkey = key->comp_privkey[0];
+        DECODE_UINT32(classical_privkey_len, key->privkey);
+    }
+
+    if (key->comp_pubkey[1] != NULL) {
+        pq_pubkey = key->comp_pubkey[1];
+        pq_pubkey_len = key->pubkeylen - classical_pubkey_len - SIZE_OF_UINT32;
+    }
+    if (key->comp_privkey != NULL) {
+        pq_privkey = key->comp_privkey[1];
+        pq_privkey_len
+            = key->privkeylen - classical_privkey_len - SIZE_OF_UINT32;
+    }
+
+    if ((p = OSSL_PARAM_locate(params, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY))
+            != NULL
+        && !OSSL_PARAM_set_octet_string(p, classical_pubkey,
+                                        classical_pubkey_len))
+        return -1;
+    if ((p
+         = OSSL_PARAM_locate(params, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY))
+            != NULL
+        && !OSSL_PARAM_set_octet_string(p, classical_privkey,
+                                        classical_privkey_len))
+        return -1;
+    if ((p = OSSL_PARAM_locate(params, OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY))
+            != NULL
+        && !OSSL_PARAM_set_octet_string(p, pq_pubkey, pq_pubkey_len))
+        return -1;
+    if ((p = OSSL_PARAM_locate(params, OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY))
+            != NULL
+        && !OSSL_PARAM_set_octet_string(p, pq_privkey, pq_privkey_len))
+        return -1;
+
+    return 0;
 }
 
 // must handle param requests for KEM and SIG keys...
@@ -383,6 +476,9 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
         if (!OSSL_PARAM_set_octet_string(p, oqsxk->privkey, oqsxk->privkeylen))
             return 0;
     }
+
+    if (oqsx_get_hybrid_params(oqsxk, params))
+        return 0;
 
     // not passing in params to respond to is no error
     return 1;

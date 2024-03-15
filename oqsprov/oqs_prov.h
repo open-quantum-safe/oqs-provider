@@ -16,10 +16,10 @@
 #endif
 
 #include <openssl/bio.h>
-#include <openssl/opensslconf.h>
-
 #include <openssl/core.h>
+#include <openssl/core_names.h>
 #include <openssl/e_os2.h>
+#include <openssl/opensslconf.h>
 
 #define OQS_PROVIDER_VERSION_STR OQSPROVIDER_VERSION_TEXT
 
@@ -47,6 +47,15 @@
 #define OQSPROV_R_WRONG_PARAMETERS    13
 #define OQSPROV_R_VERIFY_ERROR        14
 #define OQSPROV_R_EVPINFO_MISSING     15
+#define OQSPROV_R_INTERNAL_ERROR      16
+
+/* Extra OpenSSL parameters for hybrid EVP_PKEY. */
+#define OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY \
+    "hybrid_classical_" OSSL_PKEY_PARAM_PUB_KEY
+#define OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY \
+    "hybrid_classical_" OSSL_PKEY_PARAM_PRIV_KEY
+#define OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY  "hybrid_pq_" OSSL_PKEY_PARAM_PUB_KEY
+#define OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY "hybrid_pq_" OSSL_PKEY_PARAM_PRIV_KEY
 
 /* Extras for OQS extension */
 

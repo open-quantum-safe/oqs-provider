@@ -45,6 +45,7 @@ set_target_properties(oqsprovider
     PROPERTIES
     PREFIX ""
     OUTPUT_NAME "oqsprovider"
+    PUBLIC_HEADER "oqs_prov.h"
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     VERSION ${OQSPROVIDER_VERSION_TEXT}

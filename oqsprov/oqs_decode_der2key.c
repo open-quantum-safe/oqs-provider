@@ -492,11 +492,9 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx)
  * It takes the following arguments:
  *
  * oqskemhyb    Possible prefix for OQS KEM hybrids; typically empty
- * oqskemhyb    Possible prefix for OQS KEM hybrids; typically empty
  * keytype_name The implementation key type as a string.
  * keytype      The implementation key type.  This must correspond exactly
  *              to our existing keymgmt keytype names...  in other words,
- *              there must exist an oqs_##keytype##_keymgmt_functions.
  *              there must exist an oqs_##keytype##_keymgmt_functions.
  * type         The type name for the set of functions that implement the
  *              decoder for the key type.  This isn't necessarily the same
@@ -508,34 +506,6 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx)
  *              structure.
  */
 // reverted const to be able to change NID/evp_type after assignment
-#define MAKE_DECODER(oqskemhyb, keytype_name, keytype, type, kind)           \
-    static struct keytype_desc_st kind##_##keytype##_desc                    \
-        = {keytype_name, oqs##oqskemhyb##_##keytype##_keymgmt_functions,     \
-           DO_##kind(keytype)};                                              \
-                                                                             \
-    static OSSL_FUNC_decoder_newctx_fn kind##_der2##keytype##_newctx;        \
-                                                                             \
-    static void *kind##_der2##keytype##_newctx(void *provctx)                \
-    {                                                                        \
-        OQS_DEC_PRINTF("OQS DEC provider: _newctx called.\n");               \
-        return der2key_newctx(provctx, &kind##_##keytype##_desc,             \
-                              keytype_name);                                 \
-    }                                                                        \
-    static int kind##_der2##keytype##_does_selection(void *provctx,          \
-                                                     int selection)          \
-    {                                                                        \
-        OQS_DEC_PRINTF("OQS DEC provider: _does_selection called.\n");       \
-        return der2key_check_selection(selection, &kind##_##keytype##_desc); \
-    }                                                                        \
-    const OSSL_DISPATCH oqs_##kind##_der_to_##keytype##_decoder_functions[]  \
-        = {{OSSL_FUNC_DECODER_NEWCTX,                                        \
-            (void (*)(void))kind##_der2##keytype##_newctx},                  \
-           {OSSL_FUNC_DECODER_FREECTX, (void (*)(void))der2key_freectx},     \
-           {OSSL_FUNC_DECODER_DOES_SELECTION,                                \
-            (void (*)(void))kind##_der2##keytype##_does_selection},          \
-           {OSSL_FUNC_DECODER_DECODE, (void (*)(void))oqs_der2key_decode},   \
-           {OSSL_FUNC_DECODER_EXPORT_OBJECT,                                 \
-            (void (*)(void))der2key_export_object},                          \
 #define MAKE_DECODER(oqskemhyb, keytype_name, keytype, type, kind)           \
     static struct keytype_desc_st kind##_##keytype##_desc                    \
         = {keytype_name, oqs##oqskemhyb##_##keytype##_keymgmt_functions,     \
@@ -801,74 +771,49 @@ MAKE_DECODER(, "falconpadded1024", falconpadded1024, oqsx,
 MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
-MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
 MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
-MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
 MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
-MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
 MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
              oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
 MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
              oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
-MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
              PrivateKeyInfo);
-MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
 MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
              SubjectPublicKeyInfo);
 MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
-MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
-MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
 MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
              oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
 MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
              oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
-MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
-MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
 MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
-MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
 MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
-MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
 MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
-MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
 MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
              oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
 MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
              oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

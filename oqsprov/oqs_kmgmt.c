@@ -139,11 +139,6 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
         return 0;
     }
 
-    if (key1 == NULL || key2 == NULL) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
-        return 0;
-    }
-
 #ifdef NOPUBKEY_IN_PRIVKEY
     /* Now this is a "leap of faith" logic: If a public-only PKEY and a
      * private-only PKEY are tested for equality we cannot do anything other
@@ -170,9 +165,7 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
             || (key1->privkey != NULL && key2->privkey == NULL)
             || ((key1->tls_name != NULL && key2->tls_name != NULL)
                 && strcmp(key1->tls_name, key2->tls_name))) {
-                && strcmp(key1->tls_name, key2->tls_name))) {
             ok = 0;
-        } else {
         } else {
             ok = ((key1->privkey == NULL && key2->privkey == NULL)
                   || ((key1->privkey != NULL)
@@ -180,14 +173,12 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
                                        key1->privkeylen)
                              == 0));
         }
-        }
     }
 
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
         if ((key1->pubkey == NULL && key2->pubkey != NULL)
             || (key1->pubkey != NULL && key2->pubkey == NULL)
             || ((key1->tls_name != NULL && key2->tls_name != NULL)
-                && strcmp(key1->tls_name, key2->tls_name))) {
                 && strcmp(key1->tls_name, key2->tls_name))) {
             // special case now: If domain parameter matching requested,
             // consider private key match sufficient:
@@ -197,14 +188,12 @@ static int oqsx_match(const void *keydata1, const void *keydata2, int selection)
                                    key1->privkeylen)
                      == 0);
         } else {
-        } else {
             ok = ok
                  && ((key1->pubkey == NULL && key2->pubkey == NULL)
                      || ((key1->pubkey != NULL)
                          && CRYPTO_memcmp(key1->pubkey, key2->pubkey,
                                           key1->pubkeylen)
                                 == 0));
-        }
         }
     }
     if (!ok)
@@ -275,7 +264,6 @@ int oqsx_key_to_params(const OQSX_KEY *key, OSSL_PARAM_BLD *tmpl,
         }
     }
     // not passing in params to respond to is no error; the response is empty
-    // not passing in params to respond to is no error; the response is empty
     ret = 1;
 err:
     return ret;
@@ -296,8 +284,6 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
      * In this implementation, only public and private keys can be exported,
      * nothing else
      */
-    if (key == NULL || param_cb == NULL) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
     if (key == NULL || param_cb == NULL) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
         return 0;
@@ -353,11 +339,6 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
         return 0;
     }
 
-    if (oqsxk == NULL || params == NULL) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
-        return 0;
-    }
-
     OQS_KM_PRINTF2("OQSKEYMGMT: get_params called for %s\n", params[0].key);
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_BITS)) != NULL
         && !OSSL_PARAM_set_int(p, oqsx_key_secbits(oqsxk)))
@@ -405,7 +386,6 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
     }
 
     // not passing in params to respond to is no error
-    // not passing in params to respond to is no error
     return 1;
 }
 
@@ -448,10 +428,6 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[])
         ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
         return 0;
     }
-    if (oqsxkey == NULL) {
-        ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
-        return 0;
-    }
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY);
     if (p != NULL) {
         size_t used_len;
@@ -484,7 +460,6 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[])
         }
     }
 
-    // not passing in params to set is no error, just a no-op
     // not passing in params to set is no error, just a no-op
     return 1;
 }
@@ -528,8 +503,6 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx)
 
     if (gctx == NULL)
         return NULL;
-    OQS_KM_PRINTF3("OQSKEYMGMT: gen called for %s (%s)\n", gctx->oqs_name,
-                   gctx->tls_name);
     OQS_KM_PRINTF3("OQSKEYMGMT: gen called for %s (%s)\n", gctx->oqs_name,
                    gctx->tls_name);
     if ((key = oqsx_key_new(gctx->libctx, gctx->oqs_name, gctx->tls_name,
@@ -617,7 +590,6 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[])
         if (gctx->propq == NULL)
             return 0;
     }
-    // not passing in params is no error; subsequent operations may fail, though
     // not passing in params is no error; subsequent operations may fail, though
     return 1;
 }
@@ -1368,13 +1340,8 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_falcon512)
 MAKE_SIG_KEYMGMT_FUNCTIONS(falconpadded512)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_falconpadded512)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_falconpadded512)
-MAKE_SIG_KEYMGMT_FUNCTIONS(falconpadded512)
-MAKE_SIG_KEYMGMT_FUNCTIONS(p256_falconpadded512)
-MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_falconpadded512)
 MAKE_SIG_KEYMGMT_FUNCTIONS(falcon1024)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_falcon1024)
-MAKE_SIG_KEYMGMT_FUNCTIONS(falconpadded1024)
-MAKE_SIG_KEYMGMT_FUNCTIONS(p521_falconpadded1024)
 MAKE_SIG_KEYMGMT_FUNCTIONS(falconpadded1024)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_falconpadded1024)
 MAKE_SIG_KEYMGMT_FUNCTIONS(sphincssha2128fsimple)
@@ -1441,23 +1408,6 @@ MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_kyber768, OQS_KEM_alg_kyber_768, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(kyber1024, OQS_KEM_alg_kyber_1024, 256)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_kyber1024, OQS_KEM_alg_kyber_1024, 256)
-MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem512, OQS_KEM_alg_ml_kem_512, 128)
-
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_mlkem512, OQS_KEM_alg_ml_kem_512, 128)
-
-MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_mlkem512, OQS_KEM_alg_ml_kem_512, 128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem768, OQS_KEM_alg_ml_kem_768, 192)
-
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_mlkem768, OQS_KEM_alg_ml_kem_768, 192)
-
-MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_mlkem768, OQS_KEM_alg_ml_kem_768, 192)
-
-MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_mlkem768, OQS_KEM_alg_ml_kem_768, 128)
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_mlkem768, OQS_KEM_alg_ml_kem_768, 128)
-MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem1024, OQS_KEM_alg_ml_kem_1024, 256)
-
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_mlkem1024, OQS_KEM_alg_ml_kem_1024, 256)
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_mlkem1024, OQS_KEM_alg_ml_kem_1024, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem512, OQS_KEM_alg_ml_kem_512, 128)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_mlkem512, OQS_KEM_alg_ml_kem_512, 128)

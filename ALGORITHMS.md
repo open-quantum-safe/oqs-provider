@@ -166,6 +166,9 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | mldsa65_ed25519 | 2.16.840.1.114027.80.8.1.10 |Yes| OQS_OID_MLDSA65_ed25519
 | mldsa87 | 1.3.6.1.4.1.2.267.12.8.7 |Yes| OQS_OID_MLDSA87
 | p521_mldsa87 | 1.3.9999.7.4 |Yes| OQS_OID_P521_MLDSA87
+| mldsa87_p384 | 2.16.840.1.114027.80.8.1.11 |Yes| OQS_OID_MLDSA87_p384
+| mldsa87_bp384 | 2.16.840.1.114027.80.8.1.12 |Yes| OQS_OID_MLDSA87_bp384
+| mldsa87_ed448 | 2.16.840.1.114027.80.8.1.13 |Yes| OQS_OID_MLDSA87_ed448
 | falcon512 | 1.3.9999.3.11 |Yes| OQS_OID_FALCON512
 | p256_falcon512 | 1.3.9999.3.12 |Yes| OQS_OID_P256_FALCON512
 | rsa3072_falcon512 | 1.3.9999.3.13 |Yes| OQS_OID_RSA3072_FALCON512

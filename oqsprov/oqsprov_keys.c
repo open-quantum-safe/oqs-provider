@@ -1330,6 +1330,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(sizeof(void *));
         ON_ERR_GOTO(!ret->comp_privkey || !ret->comp_pubkey, err);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx = NULL;
         ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = OQS_SIG_new(oqs_name);
         if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.sig) {
             fprintf(
@@ -1369,6 +1370,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
         ret->comp_pubkey = OPENSSL_malloc(sizeof(void *));
         ON_ERR_GOTO(!ret->comp_privkey || !ret->comp_pubkey, err);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx = NULL;
         ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = OQS_KEM_new(oqs_name);
         if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.kem) {
             fprintf(
@@ -1610,7 +1612,7 @@ int oqsx_key_allocate_keymaterial(OQSX_KEY *key, int include_private)
         aux = SIZE_OF_UINT32;
 
     if (!key->privkey && include_private) {
-        key->privkey = OPENSSL_secure_zalloc(key->privkeylen);
+        key->privkey = OPENSSL_secure_zalloc(key->privkeylen + aux);
         ON_ERR_SET_GOTO(!key->privkey, ret, 1, err_alloc);
     }
     if (!key->pubkey && !include_private) {
@@ -1807,7 +1809,7 @@ int oqsx_key_gen(OQSX_KEY *key)
                || key->keytype == KEY_TYPE_ECX_HYB_KEM
                || key->keytype == KEY_TYPE_HYB_SIG) {
         pkey = oqsx_key_gen_evp_key(key->oqsx_provider_ctx.oqsx_evp_ctx,
-                                    key->pubkey, key->privkey);
+                                    key->pubkey, key->privkey, 1);
         ON_ERR_GOTO(pkey == NULL, err_gen);
         ret = !oqsx_key_set_composites(key);
         ON_ERR_GOTO(ret, err_gen);

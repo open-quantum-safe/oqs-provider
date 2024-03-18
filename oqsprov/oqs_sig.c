@@ -19,6 +19,7 @@
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/params.h>
+#include <openssl/rsa.h>
 #include <openssl/x509.h>
 
 // TBD: Review what we really need/want: For now go with OSSL settings:

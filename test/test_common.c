@@ -35,6 +35,13 @@ int alg_is_enabled(const char *algname)
     return strstr(algname, alglist) == NULL;
 }
 
+OSSL_PROVIDER *load_default_provider(OSSL_LIB_CTX *libctx)
+{
+    OSSL_PROVIDER *provider;
+    T((provider = OSSL_PROVIDER_load(libctx, "default")));
+    return provider;
+}
+
 #ifdef OQS_PROVIDER_STATIC
 #    define OQS_PROVIDER_ENTRYPOINT_NAME oqs_provider_init
 #else

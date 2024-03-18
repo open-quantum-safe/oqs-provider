@@ -89,7 +89,7 @@ def nist_to_bits(nistlevel):
       return 192
    elif nistlevel==5:
       return 256
-   else: 
+   else:
       return None
 
 def get_tmp_kem_oid():
@@ -100,7 +100,7 @@ def get_tmp_kem_oid():
 def complete_config(config):
    for kem in config['kems']:
       bits_level = nist_to_bits(get_kem_nistlevel(kem))
-      if bits_level == None: 
+      if bits_level == None:
           print("Cannot find security level for {:s} {:s}".format(kem['family'], kem['name_group']))
           exit(1)
       kem['bit_security'] = bits_level
@@ -127,7 +127,7 @@ def complete_config(config):
    for famsig in config['sigs']:
       for sig in famsig['variants']:
          bits_level = nist_to_bits(get_sig_nistlevel(famsig, sig))
-         if bits_level == None: 
+         if bits_level == None:
              print("Cannot find security level for {:s} {:s}. Setting to 0.".format(famsig['family'], sig['name']))
              bits_level = 0
          sig['security'] = bits_level
@@ -230,7 +230,7 @@ def load_config(include_disabled_sigs=False):
 # extend config with "hybrid_groups" array:
 config = load_config() # extend config with "hybrid_groups" array
 
-# complete config with "bit_security" and "hybrid_group from 
+# complete config with "bit_security" and "hybrid_group from
 # nid_hybrid information
 config = complete_config(config)
 
@@ -245,6 +245,7 @@ populate('oqsprov/oqs_encode_key2any.c', config, '/////')
 populate('oqsprov/oqs_decode_der2key.c', config, '/////')
 populate('oqsprov/oqsprov_keys.c', config, '/////')
 populate('scripts/common.py', config, '#####')
+populate('test/oqs_test_evp_pkey_params.c', config, '/////')
 
 config2 = load_config(include_disabled_sigs=True)
 config2 = complete_config(config2)

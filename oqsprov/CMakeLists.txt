@@ -87,8 +87,23 @@ if (USE_ENCODING_LIB)
   target_include_directories(oqsprovider PRIVATE ${encoder_LIBRARY_INCLUDE})
 endif()
 install(TARGETS oqsprovider
+        CONFIGURATIONS Debug Release
         LIBRARY DESTINATION "${OPENSSL_MODULES_PATH}"
         RUNTIME DESTINATION "${OPENSSL_MODULES_PATH}")
+
+if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
+  set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE arm64)
+elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
+  set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
+endif()
+
+install(TARGETS oqsprovider
+        CONFIGURATIONS DebPack
+        DESTINATION .
+        LIBRARY DESTINATION lib/ossl-modules
+        ARCHIVE DESTINATION lib/
+        PUBLIC_HEADER DESTINATION include/oqs-provider/
+        )
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_VENDOR "www.openquantumsafe.org")
 set(CPACK_PACKAGE_VERSION ${OQSPROVIDER_VERSION_TEXT})

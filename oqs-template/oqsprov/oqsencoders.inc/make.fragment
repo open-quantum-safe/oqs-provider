@@ -43,6 +43,15 @@ ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ clas
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}),
 {% endfor -%}
+{% for composite_alg in variant['composite'] -%}
+ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, der, PrivateKeyInfo),
+ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, pem, PrivateKeyInfo),
+ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}),
+{% endfor -%}
 #endif
    {%- endfor %}
 {%- endfor %}

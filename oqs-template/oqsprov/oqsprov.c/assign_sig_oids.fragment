@@ -13,6 +13,9 @@
         {%- for classical_alg in variant['mix_with'] %}
 {%- set count.val = count.val + 1 -%}
         {%- endfor %}
+        {%- for composite_alg in variant['composite'] %}
+{%- set count.val = count.val + 1 -%}
+        {%- endfor %}
     {%- endfor %}
 {%- endfor %}
 
@@ -39,6 +42,9 @@ const char* oqs_oid_alg_list[OQS_OID_CNT] =
 "{{ variant['oid'] }}", "{{ variant['name'] }}",
         {%- for classical_alg in variant['mix_with'] %}
 "{{ classical_alg['oid'] }}" , "{{ classical_alg['name'] }}_{{ variant['name'] }}",
+        {%- endfor %}
+        {%- for composite_alg in variant['composite'] %}
+"{{ composite_alg['oid'] }}" , "{{ variant['name'] }}_{{ composite_alg['name'] }}",
         {%- endfor %}
     {%- endfor %}
 {%- endfor %}

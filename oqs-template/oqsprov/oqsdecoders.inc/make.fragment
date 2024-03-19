@@ -22,6 +22,10 @@ DECODER_w_structure("{{ variant['name'] }}", der, SubjectPublicKeyInfo, {{ varia
 DECODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", der, PrivateKeyInfo, {{ classical_alg['name'] }}_{{ variant['name'] }}),
 DECODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", der, SubjectPublicKeyInfo, {{ classical_alg['name'] }}_{{ variant['name'] }}),
      {%- endfor %}
+     {%- for composite_alg in variant['composite'] -%}
+DECODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", der, PrivateKeyInfo, {{ variant['name'] }}_{{ composite_alg['name'] }}),
+DECODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", der, SubjectPublicKeyInfo, {{ variant['name'] }}_{{ composite_alg['name'] }}),
+     {%- endfor %}
 #endif
    {%- endfor %}
 {%- endfor %}

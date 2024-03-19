@@ -423,7 +423,23 @@ sigs:
     #                'pretty_name': 'RSA3072',
     #                'oid': '1.3.9999.1.3',
     #                'code_point': '0xfe02'}]
+    #    composite:[{'name': 'p256',
+    #                'pretty_name': 'ECDSA p256',
+    #                'security': '128',
+    #                'oid': '2.16.840.1.114027.80.1.8'}]
   -
+    # The Composite OIDs are kept up to date by @feventura (Entrust)
+    # These are prototype OIDs and are in line with draft-ounsworth-pq-composite-sigs-13
+    # OID scheme for composite variants:
+    # joint-iso-itu-t (2)
+    # country (16)
+    # us (840)
+    # organization (1)
+    # entrust (114027)
+    # algorithm (80)
+    # composite (8)
+    # signature (1)
+  # -
     # OID scheme for hybrid variants of Dilithium:
     # iso (1)
     # identified-organization (3)
@@ -439,6 +455,8 @@ sigs:
     # IBM (2)
     # qsc (267)
     # Dilithium-r3 (7)
+
+
     family: 'CRYSTALS-Dilithium'
     variants:
       -
@@ -548,6 +566,26 @@ sigs:
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.7.2',
                     'code_point': '0xfed4'}]
+        composite:  [{'name': 'pss2048',
+                      'pretty_name': 'RSA PSS 2048',
+                      'security': '112',
+                      'oid': '2.16.840.1.114027.80.8.1.1'},
+                     {'name': 'rsa2048',
+                      'pretty_name': 'RSA2028',
+                      'security': '112',
+                      'oid': '2.16.840.1.114027.80.8.1.2'},
+                     {'name': 'ed25519',
+                      'pretty_name': 'ED25519',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.3'},
+                     {'name': 'p256',
+                      'pretty_name': 'ECDSA p256',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.4'},
+                     {'name': 'bp256',
+                      'pretty_name': 'ECDSA brainpoolP256r1',
+                      'security': '256',
+                      'oid': '2.16.840.1.114027.80.8.1.5'}]
       -
         name: 'mldsa65'
         pretty_name: 'ML-DSA-65'
@@ -559,6 +597,26 @@ sigs:
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.7.3',
                     'code_point': '0xfed5'}]
+        composite:  [{'name': 'pss3072',
+                      'pretty_name': 'RSA PSS 3072',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.6'},
+                     {'name': 'rsa3072',
+                      'pretty_name': 'RSA 3072',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.7'},
+                     {'name': 'p256',
+                      'pretty_name': 'ECDSA p256',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.8'},
+                     {'name': 'bp256',
+                      'pretty_name': 'ECDSA brainpoolP256r1',
+                      'security': '256',
+                      'oid': '2.16.840.1.114027.80.8.1.9'},
+                     {'name': 'ed25519',
+                      'pretty_name': 'ED25519',
+                      'security': '128',
+                      'oid': '2.16.840.1.114027.80.8.1.10'}]
       -
         name: 'mldsa87'
         pretty_name: 'ML-DSA-87'
@@ -570,6 +628,18 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.7.4',
                     'code_point': '0xfed6'}]
+        composite:  [{'name': 'p384',
+                      'pretty_name': 'ECDSA p384',
+                      'security': '192',
+                      'oid': '2.16.840.1.114027.80.8.1.11'},
+                     {'name': 'bp384',
+                      'pretty_name': 'ECDSA brainpoolP384r1',
+                      'security': '384',
+                      'oid': '2.16.840.1.114027.80.8.1.12'},
+                     {'name': 'ed448',
+                      'pretty_name': 'ED448',
+                      'security': '192',
+                      'oid': '2.16.840.1.114027.80.8.1.13'}]
   -
     # iso (1)
     # identified-organization (3)

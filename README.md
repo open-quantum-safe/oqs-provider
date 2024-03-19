@@ -45,7 +45,7 @@ This implementation makes available the following quantum safe algorithms:
 ### Signature algorithms
 
 - **CRYSTALS-Dilithium**:`dilithium2`\*, `p256_dilithium2`\*, `rsa3072_dilithium2`\*, `dilithium3`\*, `p384_dilithium3`\*, `dilithium5`\*, `p521_dilithium5`\*
-- **ML-DSA**:`mldsa44`\*, `p256_mldsa44`\*, `rsa3072_mldsa44`\*, `mldsa65`\*, `p384_mldsa65`\*, `mldsa87`\*, `p521_mldsa87`\*
+- **ML-DSA**:`mldsa44`\*, `p256_mldsa44`\*, `rsa3072_mldsa44`\*, `mldsa44_pss2048`\*, `mldsa44_rsa2048`\*, `mldsa44_ed25519`\*, `mldsa44_p256`\*, `mldsa44_bp256`\*, `mldsa65`\*, `p384_mldsa65`\*, `mldsa65_pss3072`\*, `mldsa65_rsa3072`\*, `mldsa65_p256`\*, `mldsa65_bp256`\*, `mldsa65_ed25519`\*, `mldsa87`\*, `p521_mldsa87`\*, `mldsa87_p384`\*, `mldsa87_bp384`\*, `mldsa87_ed448`\*
 - **Falcon**:`falcon512`\*, `p256_falcon512`\*, `rsa3072_falcon512`\*, `falconpadded512`\*, `p256_falconpadded512`\*, `rsa3072_falconpadded512`\*, `falcon1024`\*, `p521_falcon1024`\*, `falconpadded1024`\*, `p521_falconpadded1024`\*
 
 - **SPHINCS-SHA2**:`sphincssha2128fsimple`\*, `p256_sphincssha2128fsimple`\*, `rsa3072_sphincssha2128fsimple`\*, `sphincssha2128ssimple`\*, `p256_sphincssha2128ssimple`\*, `rsa3072_sphincssha2128ssimple`\*, `sphincssha2192fsimple`\*, `p384_sphincssha2192fsimple`\*, `sphincssha2192ssimple`, `p384_sphincssha2192ssimple`, `sphincssha2256fsimple`, `p521_sphincssha2256fsimple`, `sphincssha2256ssimple`, `p521_sphincssha2256ssimple`
@@ -66,8 +66,11 @@ TLS operations. This designation [can be changed by modifying the
 
 In order to support parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic
-and quantum-safe methods: These are listed above with a prefix denoting a
-classic algorithm, e.g., for elliptic curve: "p256_".
+and quantum-safe methods.
+There are two types of combinations:
+The Hybrids are listed above with a prefix denoting a classic algorithm, e.g., for elliptic curve: "p256_".
+The [Composite](https://datatracker.ietf.org/doc/draft-ounsworth-pq-composite-sigs/) are listed above with a suffix denoting a
+classic algorithm, e.g., for elliptic curve: "_p256".
 
 A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are
@@ -186,6 +189,7 @@ Contributors to the `oqsprovider` include:
 - Alex Zaslavsky
 - Will Childs-Klein
 - Thomas Bailleux
+- Felipe Ventura
 
 History
 -------

@@ -41,7 +41,7 @@
 
 # top-level settings - modify in environment from defaults listed here
 the_openssl_ver="${the_openssl_ver:-3.2.1}"
-the_openssl_dir="${the_openssl_dir:-$HOME/proj/git/src/triplecyber.visualstudio.com/abruce-dev/Tc32/External/openssl}"
+the_libs_dir="${the_libs_dir:-$HOME/proj/git/src/triplecyber.visualstudio.com/abruce-dev/Tc32/publish/libs}"
 the_liboqs_dir="${the_liboqs_dir:-}"
 the_ios_target="${the_ios_target:-17.0}"
 the_macos_target="${the_macos_target:-14.2}"
@@ -112,7 +112,7 @@ function build_apple_variant {
   # locals
   local l_rc=0
   local l_type='apple'
-  local l_openssl_plat_dir="$the_openssl_dir/$l_type/$the_openssl_ver/$i_device"
+  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_device"
   local l_liboqs_plat_dir="$the_liboqs_dir/build/export/$l_type/$the_liboqs_ver/$i_device/$i_arch"
 
   echo "BUILD: $l_type ($i_device / $i_arch)..."
@@ -245,7 +245,7 @@ function build_android_variant {
   # locals
   local l_rc=0
   local l_type='android'
-  local l_openssl_plat_dir=$the_openssl_dir/$l_type/$the_openssl_ver/$i_arch
+  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_device"
   local l_liboqs_plat_dir="$the_liboqs_dir/build/export/$l_type/$the_liboqs_ver/$i_arch"
 
   echo "BUILD: $l_type ($i_arch)..."
@@ -302,7 +302,7 @@ function build_linux_variant {
   # locals
   local l_rc=0
   local l_type='linux'
-  local l_openssl_plat_dir=$the_openssl_dir/$l_type/$the_openssl_ver/$i_arch
+  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_device"
   local l_liboqs_plat_dir="$the_liboqs_dir/build/export/$l_type/$the_liboqs_ver/$i_arch"
 
   echo "BUILD: $l_type ($i_arch)..."

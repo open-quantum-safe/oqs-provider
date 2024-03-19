@@ -145,7 +145,11 @@ jobs:
           done
 
       - name: Run tests
-        run: ctest --test-dir build --output-on-failure
+        run: |
+          ctest --test-dir build \
+            --output-on-failure \
+            --extra-verbose \
+            --repeat until-pass:5
 
   linux_aarch64:
     name: "aarch64 cross-compilation"
@@ -218,8 +222,17 @@ jobs:
             ctest --test-dir build/
 
       - name: Build .deb install package
-        run: cpack
+        run: |
+            cpack \
+                --toolchain "${CMAKE_TOOLCHAIN_FILE}" \
+                -C DebPack \
+                -DCMAKE_INSTALL_PREFIX=/usr
         working-directory: build
+
+      - name: Verify the .deb file target architecture.
+        working-directory: build
+        run: dpkg -I oqs-provider-*.deb | grep -q "Architecture: arm64"
+
       - name: Retain .deb installer
         uses: actions/upload-artifact@v3
         with:

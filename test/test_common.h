@@ -37,6 +37,13 @@
 void hexdump(const void *ptr, size_t len);
 int alg_is_enabled(const char *algname);
 
+/** \brief Loads the default provider.
+ *
+ * \param libctx Top-level OpenSSL context.
+ *
+ * \returns The default provider. */
+OSSL_PROVIDER *load_default_provider(OSSL_LIB_CTX *libctx);
+
 /* Loads the oqs-provider. */
 void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
                        const char *configfile);

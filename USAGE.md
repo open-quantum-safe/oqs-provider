@@ -79,7 +79,7 @@ can be registered for testing.
 
 If this configuration variable is not set, the global environment variable
 "OPENSSL_MODULES" must point to a directory where the `oqsprovider` binary
-is to be found. 
+is to be found.
 
 If the `oqsprovider` binary cannot be found, it simply (and silently) will
 not be available for use.
@@ -160,15 +160,15 @@ The following section provides example commands for certain standard OpenSSL ope
 
 ### Checking provider version information
 
-    openssl list -providers -verbose 
+    openssl list -providers -verbose
 
 ### Checking quantum safe signature algorithms available for use
 
-    openssl list -signature-algorithms -provider oqsprovider 
+    openssl list -signature-algorithms -provider oqsprovider
 
 ### Checking quantum safe KEM algorithms available for use
 
-    openssl list -kem-algorithms -provider oqsprovider 
+    openssl list -kem-algorithms -provider oqsprovider
 
 ### Creating keys and certificates
 
@@ -222,7 +222,7 @@ Step 1: Create quantum-safe key pair and self-signed certificate:
 
     openssl req -x509 -new -newkey dilithium3 -keyout qsc.key -out qsc.crt -nodes -subj "/CN=oqstest" -days 365 -config openssl/apps/openssl.cnf
 
-By changing the `-newkey` parameter algorithm name [any of the 
+By changing the `-newkey` parameter algorithm name [any of the
 supported quantum-safe or hybrid algorithms](README.md#signature-algorithms)
 can be utilized instead of the sample algorithm `dilithium3`.
 
@@ -247,7 +247,7 @@ Continuing the example above, the following command verifies the CMS file
 `signedfile` and outputs the `outputfile`. Its contents should be identical
 to the original data in `inputfile` above.
 
-    openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile 
+    openssl cms -verify -CAfile qsc.crt -inform pem -in signedfile -crlfeol -out outputfile
 
 Note that it is also possible to build proper QSC certificate chains
 using the standard OpenSSL calls. For sample code see
@@ -276,3 +276,27 @@ The `dgst` command is not tested for interoperability with [oqs-openssl111](http
 
 The OpenSSL [`EVP_PKEY_decapsulate` API](https://www.openssl.org/docs/manmaster/man3/EVP_PKEY_decapsulate.html) specifies an explicit return value for failure. For security reasons, most KEM algorithms available from liboqs do not return an error code if decapsulation failed. Successful decapsulation can instead be implicitly verified by comparing the original and the decapsulated message.
 
+## Supported OpenSSL parameters (`OSSL_PARAM`)
+
+OpenSSL 3 comes with the [`OSSL_PARAM`](https://www.openssl.org/docs/man3.2/man3/OSSL_PARAM.html) API.
+Through these [`OSSL_PARAM`] structures, oqs-provider can expose some useful information
+about a specific object.
+
+### `EVP_PKEY`
+
+Using the [`EVP_PKEY_get_params`](https://www.openssl.org/docs/man3.2/man3/EVP_PKEY_get_params.html)
+API, the following custom parameters are gettable:
+
+  - `OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY`: points to the public key of the
+    classical part of an hybrid key.
+  - `OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY`: points to the private key of the
+    classical part of an hybrid key.
+  - `OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY`: points to the public key of the
+    quantum-resistant part of an hybrid key.
+  - `OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY`: points to the private key of the
+    quantum-resistant part of an hybrid key.
+
+In case of non hybrid keys, these parameters return `NULL`.
+
+See the [corresponding test](tests/oqs_test_evp_pkey_params.c) for an example of
+how to use [`EVP_PKEY_get_params`] with custom oqs-provider parameters.

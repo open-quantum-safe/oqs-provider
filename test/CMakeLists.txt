@@ -110,11 +110,33 @@ set_tests_properties(oqs_endecode
 )
 endif()
 
+add_executable(oqs_test_evp_pkey_params oqs_test_evp_pkey_params.c test_common.c)
+target_include_directories(oqs_test_evp_pkey_params PRIVATE "../oqsprov")
+target_link_libraries(oqs_test_evp_pkey_params PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+add_test(
+  NAME oqs_evp_pkey_params
+  COMMAND oqs_test_evp_pkey_params
+          "oqsprovider"
+          "${CMAKE_CURRENT_SOURCE_DIR}/openssl-ca.cnf"
+)
+# openssl under MSVC seems to have a bug registering NIDs:
+# It only works when setting OPENSSL_CONF, not when loading the same cnf file:
+if (MSVC)
+set_tests_properties(oqs_evp_pkey_params
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR};OPENSSL_CONF=${CMAKE_CURRENT_SOURCE_DIR}/openssl-ca.cnf"
+)
+else()
+set_tests_properties(oqs_evp_pkey_params
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
+)
+endif()
+
 if (OQS_PROVIDER_BUILD_STATIC)
   targets_set_static_provider(oqs_test_signatures
     oqs_test_kems
     oqs_test_groups
     oqs_test_tlssig
     oqs_test_endecode
+    oqs_test_evp_pkey_params
   )
 endif()

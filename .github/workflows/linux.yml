@@ -7,9 +7,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-
+  coding_style_tests:
+    uses: ./.github/workflows/coding_style.yml
   linux_baseline:
     runs-on: ubuntu-latest
+    needs: [coding_style_tests]
     strategy:
       fail-fast: false
       matrix:
@@ -30,6 +32,7 @@ jobs:
 
   linux_intel:
     runs-on: ubuntu-latest
+    needs: [coding_style_tests]
     strategy:
       fail-fast: false
       matrix:
@@ -79,6 +82,7 @@ jobs:
   asan_linux_intel:
     name: "Security checks"
     runs-on: ubuntu-latest
+    needs: [coding_style_tests]
     strategy:
       fail-fast: false
     container:
@@ -154,6 +158,7 @@ jobs:
   linux_aarch64:
     name: "aarch64 cross-compilation"
     runs-on: ubuntu-latest
+    needs: [coding_style_tests]
     strategy:
       fail-fast: false
     container:
@@ -231,10 +236,12 @@ jobs:
 
       - name: Verify the .deb file target architecture.
         working-directory: build
-        run: dpkg -I oqs-provider-*.deb | grep -q "Architecture: arm64"
+        run: |
+            dpkg -I oqs-provider-*.deb | grep -q "Architecture: arm64"
 
       - name: Retain .deb installer
         uses: actions/upload-artifact@v3
         with:
           name: oqsprovider-aarch64
           path: build/*.deb
+

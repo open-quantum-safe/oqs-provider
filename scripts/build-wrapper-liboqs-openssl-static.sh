@@ -368,12 +368,7 @@ function build_linux_variant {
 
 # build all known linux variants
 function build_linux {
-  # user can pass in the variant desired
-  local l_variants='x86_64'
-  [ x"$1" != x ] && l_variants="$@"
-  for i in `echo "$l_variants"` ; do
-    build_linux_variant $i || return $?
-  done
+  build_linux_variant 'x86_64' || return $?
   return 0
 }
 

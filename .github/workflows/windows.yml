@@ -6,6 +6,8 @@ permissions:
   contents: read
 
 jobs:
+  coding_style_tests:
+    uses: ./.github/workflows/coding_style.yml
   cygwin:
 # Run a job for each of the specified target architectures:
     strategy:
@@ -19,6 +21,7 @@ jobs:
 #          - arch: win32
 #            config: --strict-warnings no-fips enable-quic
     runs-on: ${{matrix.os}}
+    needs: [coding_style_tests]
     env:
       CYGWIN_NOWINPATH: 1
       SHELLOPTS: igncr
@@ -107,6 +110,7 @@ jobs:
 #            oqsconfig: -DOQS_ALGS_ENABLED=STD
 #            osslconfig: --strict-warnings no-fips enable-quic
     runs-on: ${{matrix.os}}
+    needs: [coding_style_tests]
     steps:
       - name: Restore OpenSSL32 cache
         id: cache-openssl32
@@ -212,7 +216,7 @@ jobs:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
             osslconfig: no-shared no-fips VC-WIN64A
-        toolchain: 
+        toolchain:
         - .CMake/toolchain_windows_amd64.cmake
         msarch:
           - x64
@@ -220,6 +224,7 @@ jobs:
           - Debug
           - Release
     runs-on: ${{matrix.os}}
+    needs: [coding_style_tests]
     steps:
         - name: Restore native OpenSSL32 cache
           id: cache-openssl32n
@@ -261,7 +266,7 @@ jobs:
           run: |
             cmake --version
             cmake -B build --toolchain ${{ matrix.toolchain }} .
-            cmake --build build 
+            cmake --build build
             cmake --build build --target INSTALL
           working-directory: liboqs
         - name: prepare the OpenSSL build directory
@@ -305,4 +310,4 @@ jobs:
           with:
             name: oqs-provider-msvc
             path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
-          
+

@@ -5,10 +5,12 @@ on:
     branches: [ '*' ]
   pull_request:
     branches: [ "main" ]
-    
-jobs:
 
+jobs:
+  coding_style_tests:
+    uses: ./.github/workflows/coding_style.yml
   standalone_macos_intel:
+    needs: [coding_style_tests]
     runs-on: macos-13
     strategy:
       fail-fast: false
@@ -28,6 +30,7 @@ jobs:
             fi'
 
   standalone_linux_intel:
+    needs: [coding_style_tests]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

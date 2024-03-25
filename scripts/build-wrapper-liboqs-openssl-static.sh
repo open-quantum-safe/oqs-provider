@@ -47,13 +47,6 @@ the_macos_target="${the_macos_target}"
 the_android_api_level="${the_android_api_level}"
 the_oqs_algs_enabled="${the_oqs_algs_enabled}"
 
-[ x"$the_openssl_ver" = x ] && echo 'Missing the_openssl_ver' && exit 1
-[ x"$the_libs_dir" = x ] && echo 'Missing the_libs_dir' && exit 1
-[ x"$the_ios_target" = x ] && echo 'Missing the_ios_target' && exit 1
-[ x"$the_macos_target" = x ] && echo 'Missing the_macos_target' && exit 1
-[ x"$the_android_api_level" = x ] && echo 'Missing the_android_api_level' && exit 1
-[ x"$the_oqs_algs_enabled" = x ] && echo 'Missing the_oqs_algs_enabled' && exit 1
-
 # enable debug to get explicit compiler command lines
 the_cmake_build_verbose_flag="${the_cmake_build_verbose_flag:-0}"
 the_cmake_build_verbose_option=''
@@ -62,19 +55,6 @@ the_cmake_build_verbose_option=''
 the_cmake_build_trace_flag="${the_cmake_build_trace_flag:-0}"
 the_cmake_build_trace_option=''
 [ x"$the_cmake_build_trace_flag" = x1 ] && the_cmake_build_trace_option='--trace'
-
-cat << EOS
-OPTIONS:
-the_openssl_ver="${the_openssl_ver}"
-the_libs_dir="${the_libs_dir}"
-the_ios_target="${the_ios_target}"
-the_macos_target="${the_macos_target}"
-the_android_api_level="${the_android_api_level}"
-the_oqs_algs_enabled="${the_oqs_algs_enabled}"
-the_cmake_build_verbose_flag="${the_cmake_build_verbose_flag}"
-the_cmake_build_trace_flag="${the_cmake_build_trace_flag}"
-
-EOS
 
 # locate script source directory
 SOURCE="${BASH_SOURCE[0]}"
@@ -108,10 +88,6 @@ wants_windows=0 ; [ $os_is_windows -eq 1 ] && wants_windows=1
 # retrieve the liboqs version from the liboqs folder
 the_liboqs_ver="`"$the_liboqs_dir"/scripts/build-wrapper-openssl-static.sh get_oqs_version`"
 the_rc=$? ; [ $the_rc -ne 0 ] && echo "$the_liboqs_ver" && exit $the_rc
-
-echo "the_liboqs_dir='$the_liboqs_dir'"
-echo "the_liboqs_ver='$the_liboqs_ver'"
-echo ''
 
 # assume the build directory
 the_build_dir_name='build'
@@ -640,6 +616,28 @@ function do_export {
 ##############################################################
 # PEP
 function do_main {
+  [ x"$the_openssl_ver" = x ] && echo 'Missing the_openssl_ver' && return 1
+  [ x"$the_libs_dir" = x ] && echo 'Missing the_libs_dir' && return 1
+  [ x"$the_ios_target" = x ] && echo 'Missing the_ios_target' && return 1
+  [ x"$the_macos_target" = x ] && echo 'Missing the_macos_target' && return 1
+  [ x"$the_android_api_level" = x ] && echo 'Missing the_android_api_level' && return 1
+  [ x"$the_oqs_algs_enabled" = x ] && echo 'Missing the_oqs_algs_enabled' && return 1
+
+cat << EOS
+OPTIONS:
+the_openssl_ver="${the_openssl_ver}"
+the_libs_dir="${the_libs_dir}"
+the_ios_target="${the_ios_target}"
+the_macos_target="${the_macos_target}"
+the_android_api_level="${the_android_api_level}"
+the_oqs_algs_enabled="${the_oqs_algs_enabled}"
+the_cmake_build_verbose_flag="${the_cmake_build_verbose_flag}"
+the_cmake_build_trace_flag="${the_cmake_build_trace_flag}"
+the_liboqs_dir="$the_liboqs_dir"
+the_liboqs_ver="$the_liboqs_ver"
+
+EOS
+
   if [ $wants_android -eq 1 ] ; then build_android || return $? ; fi
   if [ $wants_apple -eq 1 ] ; then build_apple || return $? ; fi
   if [ $wants_linux -eq 1 ] ; then build_linux || return $? ; fi

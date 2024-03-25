@@ -624,7 +624,7 @@ function do_main {
   [ x"$the_oqs_algs_enabled" = x ] && echo 'Missing the_oqs_algs_enabled' && return 1
 
 cat << EOS
-OPTIONS:
+OPTIONS (do_main):
 the_openssl_ver="${the_openssl_ver}"
 the_libs_dir="${the_libs_dir}"
 the_ios_target="${the_ios_target}"

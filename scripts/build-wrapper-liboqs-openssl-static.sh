@@ -1,7 +1,7 @@
 #!/bin/bash
 # build-wrapper-liboqs-openssl-static.sh, ABr
 #
-# Build support for static oqs-provider library for macOS / iOS / android.
+# Build support for static oqs-provider library for macOS / iOS / android / linux / windows.
 # Specifically created for projects which want static library in order to build
 # their own platform-specific dynalib containing a known specific version of
 # openssl / liboqs / oqs-provider.
@@ -68,18 +68,19 @@ done
 g_SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 the_top_dir="`realpath $g_SCRIPT_DIR/..`"
 
-# what is our OS?
 os_is_macos=0 ; os_is_linux=0 ; os_is_windows=0
 case "`uname -s | xargs`" in
   Darwin) os_is_macos=1;;
   Linux) os_is_linux=1;;
-  *) os_is_windows=1;;
+  CYGWIN*) os_is_windows=1;;
 esac
+[ $os_is_macos -eq 0 -a $os_is_linux -eq 0 -a $os_is_windows -eq 0 ] && echo 'CANNOT IDENTIFY OS' && exit 1
 
 # determine our preferred targets
 wants_android=0 ; [ $os_is_macos -eq 1 ] && wants_android=1
 wants_apple=0 ; [ $os_is_macos -eq 1 ] && wants_apple=1
 wants_linux=0 ; [ $os_is_linux -eq 1 ] && wants_linux=1
+wants_windows=0 ; [ $os_is_windows -eq 1 ] && wants_windows=1
 
 # set the liboqs directory if unset
 [ x"$the_liboqs_dir" = x ] && the_liboqs_dir="`realpath "$the_top_dir"/../liboqs`"
@@ -245,7 +246,7 @@ function build_android_variant {
   # locals
   local l_rc=0
   local l_type='android'
-  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_arch"
+  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_device"
   local l_liboqs_plat_dir="$the_liboqs_dir/build/export/$l_type/$the_liboqs_ver/$i_arch"
 
   echo "BUILD: $l_type ($i_arch)..."
@@ -317,7 +318,7 @@ function build_linux_variant {
   rm -fR ./*
 
   set -x
-  liboqs_DIR="$the_liboqs_dir/build/$l_type/$i_arch/src" \
+  liboqs_DIR="$the_liboqs_dir/build/$l_type/$i_device/$i_arch/src" \
   cmake \
     $the_cmake_build_trace_option \
     -DOQS_PROVIDER_BUILD_STATIC=ON \
@@ -347,6 +348,87 @@ function build_linux {
   [ x"$1" != x ] && l_variants="$@"
   for i in `echo "$l_variants"` ; do
     build_linux_variant $i || return $?
+  done
+  return 0
+}
+
+##############################################################
+# WINDOWS build support
+function build_windows_variant {
+  local i_arch="$1" ; shift
+
+  # locals
+  local l_rc=0
+  local l_type='win'
+  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_arch"
+  local l_liboqs_plat_dir="$the_liboqs_dir/build/export/$l_type/$the_liboqs_ver/$i_arch"
+
+  echo "BUILD: $l_type ($i_arch)..."
+
+  # locate msbuild
+  local l_msbuild_name='MSBuild.exe'
+  if ! which $l_msbuild_name >/dev/null 2>&1 ; then
+    set -x
+    local l_cygpath_VSINSTALLDIR="`cygpath -au "$VSINSTALLDIR" | xargs | dos2unix`"
+    if [ x"$l_cygpath_VSINSTALLDIR" != x ] ; then
+      export PATH="${l_cygpath_VSINSTALLDIR}MSBuild/Current/Bin:$PATH"
+    fi
+  fi
+  ! which $l_msbuild_name >/dev/null 2>&1 && echo 'UNABLE_TO_LOCATE_MSBUILD' && return 2
+  set +x
+
+  # locate back to script home
+  cd "$the_top_dir" || return $?
+
+  # create directory and clear - on errors we are done
+  local l_build_dir_path="$the_build_dir_path"/$l_type/$i_arch
+  mkdir -p "$l_build_dir_path"
+  cd "$l_build_dir_path" || return $?
+  rm -fR ./*
+
+  # windows path versions
+  local l_top_dir_windows="`cygpath -am "$the_top_dir" | xargs`"
+  local l_openssl_root_dir_windows="`cygpath -am "$l_openssl_plat_dir" | xargs`"
+  local l_openssl_include_dir_windows="`cygpath -am "$l_openssl_plat_dir/include" | xargs`"
+  local l_openssl_ssl_library_windows="`cygpath -am "$l_openssl_plat_dir/lib/libssl.lib" | xargs`"
+  local l_openssl_crypto_library_windows="`cygpath -am "$l_openssl_plat_dir/lib/libcrypto.lib" | xargs`"
+
+  local l_liboqs_plat_include_dir_windows="`cygpath -am "$l_liboqs_plat_dir/include" | xargs`"
+  local l_liboqs_DIR="$the_liboqs_dir/build/$l_type/$i_device/$i_arch/src"
+  local l_liboqs_DIR_windows="`cygpath -am "$l_liboqs_DIR" | xargs`"
+
+  echo 'CONFIGURE...'
+  set -x
+  liboqs_DIR="$l_liboqs_DIR_windows" \
+  cmake \
+    $the_cmake_build_trace_option \
+    -DOQS_PROVIDER_BUILD_STATIC=ON \
+    -DOPENSSL_USE_STATIC_LIBS=ON \
+    -DOPENSSL_ROOT_DIR="$l_openssl_root_dir_windows" \
+    -DOPENSSL_INCLUDE_DIR="$l_openssl_include_dir_windows" \
+    -DOPENSSL_SSL_LIBRARY="$l_openssl_ssl_library_windows" \
+    -DOPENSSL_CRYPTO_LIBRARY="$l_openssl_crypto_library_windows" \
+    -DLIBOQS_INCLUDE_DIR="$l_liboqs_plat_include_dir_windows" \
+    "$l_top_dir_windows"
+  l_rc=$? ; set +x ; [ $l_rc -ne 0 ] && return $l_rc
+  echo ''
+
+  echo 'BUILD...'
+  set -x
+  $l_msbuild_name ALL_BUILD.vcxproj /property:Configuration=Release
+  l_rc=$? ; set +x ; [ $l_rc -ne 0 ] && return $l_rc
+  echo ''
+
+  return 0
+}
+
+# build all known windows variants
+function build_windows {
+  # user can pass in the variant desired
+  local l_variants='x64'
+  [ x"$1" != x ] && l_variants="$@"
+  for i in `echo "$l_variants"` ; do
+    build_windows_variant $i || return $?
   done
   return 0
 }
@@ -405,6 +487,16 @@ function verify_folders {
     done
   fi
 
+  if [ $wants_windows -eq 1 ] ; then
+    l_type='win'
+    verify_folder "$the_build_dir_path"/$l_type
+    for l_arch in x64 ; do
+      verify_folder "$the_build_dir_path"/$l_type/$l_arch
+      #verify_folder "$the_build_dir_path"/$l_type/$l_arch/include
+      verify_folder "$the_build_dir_path"/$l_type/$l_arch/lib
+    done
+  fi
+
   return 0
 }
 
@@ -441,14 +533,16 @@ function create_export_folder {
   cp -R "$the_build_dir_path/$i_type/$i_lib_dir"/* "$l_top_folder/$i_lib_dir/" || return $?
 
   # ensure that library names start with 'lib' (they don't by default...)
-  cd "$l_top_folder/$i_lib_dir" 
-  ls *.a > /tmp/foo.txt
-  while read -r line; do 
-    if echo "$line" | grep -v '^lib' >/dev/null 2>&1 ; then
-      mv "$line" lib"$line"
-    fi
-  done < /tmp/foo.txt
-  rm -f /tmp/foo.txt
+  if [ x"$i_type" != xwin ] ; then
+    cd "$l_top_folder/$i_lib_dir" 
+    ls *.a > /tmp/foo.txt
+    while read -r line; do 
+      if echo "$line" | grep -v '^lib' >/dev/null 2>&1 ; then
+        mv "$line" lib"$line"
+      fi
+    done < /tmp/foo.txt
+    rm -f /tmp/foo.txt
+  fi
 
   # now each include folder
   while [ x"$i_include_dir" != x ] ; do
@@ -508,6 +602,11 @@ function do_export {
     create_export_folder $l_type "$l_version" x86_64/lib || return $?
   fi
 
+  if [ $wants_windows -eq 1 ] ; then
+    l_type='win'
+    create_export_folder $l_type "$l_version" x64/lib || return $?
+  fi
+
   # report on what was exported
   echo ''
   echo "VERSION: $l_version"
@@ -524,6 +623,7 @@ function do_main {
   if [ $wants_android -eq 1 ] ; then build_android || return $? ; fi
   if [ $wants_apple -eq 1 ] ; then build_apple || return $? ; fi
   if [ $wants_linux -eq 1 ] ; then build_linux || return $? ; fi
+  if [ $wants_windows -eq 1 ] ; then build_windows || return $? ; fi
   do_export || return $?
   return 0
 }

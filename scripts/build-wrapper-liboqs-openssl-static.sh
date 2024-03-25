@@ -109,6 +109,10 @@ wants_windows=0 ; [ $os_is_windows -eq 1 ] && wants_windows=1
 the_liboqs_ver="`"$the_liboqs_dir"/scripts/build-wrapper-openssl-static.sh get_oqs_version`"
 the_rc=$? ; [ $the_rc -ne 0 ] && echo "$the_liboqs_ver" && exit $the_rc
 
+echo "the_liboqs_dir='$the_liboqs_dir'"
+echo "the_liboqs_ver='$the_liboqs_ver'"
+echo ''
+
 # assume the build directory
 the_build_dir_name='build'
 the_build_dir_path="$the_top_dir/$the_build_dir_name"

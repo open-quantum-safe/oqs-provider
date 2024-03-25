@@ -323,10 +323,11 @@ function build_linux_variant {
   # locals
   local l_rc=0
   local l_type='linux'
-  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_arch"
+  local l_libc_ver="`ldd --version | grep libc | awk '{print $4}' | xargs`"
+  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_arch-glibc-$l_libc_ver"
   local l_liboqs_plat_dir="$the_liboqs_dir/build/export/$l_type/$the_liboqs_ver/$i_arch"
 
-  echo "BUILD: $l_type ($i_arch)..."
+  echo "BUILD: $l_type ($i_arch, libc $l_libc_ver)..."
 
   # locate back to script home
   cd "$the_top_dir" || return $?

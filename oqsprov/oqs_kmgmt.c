@@ -8,6 +8,7 @@
  * ToDo: More testing in non-KEM cases
  */
 
+#include "_prereqs.h"
 #include <assert.h>
 
 #include "openssl/param_build.h"

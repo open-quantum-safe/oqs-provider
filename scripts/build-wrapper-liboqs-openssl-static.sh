@@ -302,7 +302,7 @@ function build_linux_variant {
   # locals
   local l_rc=0
   local l_type='linux'
-  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_device"
+  local l_openssl_plat_dir="$the_libs_dir/openssl-$the_openssl_ver-$l_type-$i_arch"
   local l_liboqs_plat_dir="$the_liboqs_dir/build/export/$l_type/$the_liboqs_ver/$i_arch"
 
   echo "BUILD: $l_type ($i_arch)..."
@@ -317,7 +317,7 @@ function build_linux_variant {
   rm -fR ./*
 
   set -x
-  liboqs_DIR="$the_liboqs_dir/build/$l_type/$i_device/$i_arch/src" \
+  liboqs_DIR="$the_liboqs_dir/build/$l_type/$i_arch/src" \
   cmake \
     $the_cmake_build_trace_option \
     -DOQS_PROVIDER_BUILD_STATIC=ON \

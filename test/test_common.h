@@ -44,5 +44,5 @@ int alg_is_enabled(const char *algname);
 OSSL_PROVIDER *load_default_provider(OSSL_LIB_CTX *libctx);
 
 /* Loads the oqs-provider. */
-void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
-                       const char *configfile);
+OSSL_PROVIDER *load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
+                                 const char *configfile);

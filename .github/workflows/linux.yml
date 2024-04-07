@@ -152,8 +152,7 @@ jobs:
         run: |
           ctest --test-dir build \
             --output-on-failure \
-            --extra-verbose \
-            --repeat until-pass:5
+            --extra-verbose
 
   linux_aarch64:
     name: "aarch64 cross-compilation"

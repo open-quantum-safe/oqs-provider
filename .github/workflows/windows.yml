@@ -53,20 +53,6 @@ jobs:
         with:
           path: c:\cygwin\opt\openssl32
           key: ${{ runner.os }}-cygwinopenssl32
-      - name: Set installpath
-        run: |
-           echo "IP=$(cygpath -u $PWD)/.local" >> "$env:GITHUB_ENV"
-      - name: build liboqs
-        run: |
-           which cmake
-           cmake --version
-           gcc --version
-           mkdir _build
-           cd _build
-           cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX="${{ env.IP }}" ${{ matrix.platform.oqsconfig }} -DCMAKE_C_COMPILER=gcc ..
-           ninja
-           ninja install
-        working-directory: liboqs
       - name: Build openssl3 if not cached
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         run: bash -c "./config --prefix=/opt/openssl32 ${{ matrix.platform.config }} && perl configdata.pm --dump && make $MAKE_PARAMS && make install_sw"
@@ -81,6 +67,20 @@ jobs:
           path: |
             c:\cygwin\opt\openssl32
           key: ${{ runner.os }}-cygwinopenssl32
+      - name: Set installpath
+        run: |
+           echo "IP=$(cygpath -u $PWD)/.local" >> "$env:GITHUB_ENV"
+      - name: build liboqs
+        run: |
+           which cmake
+           cmake --version
+           gcc --version
+           mkdir _build
+           cd _build
+           cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX="${{ env.IP }}" ${{ matrix.platform.oqsconfig }} -DCMAKE_C_COMPILER=gcc ..
+           ninja
+           ninja install
+        working-directory: liboqs
       - name: build oqs-provider
         run: bash -c "git config --global --add safe.directory $(cygpath -u $PWD) && liboqs_DIR='${{ env.IP }}' cmake -GNinja -DCMAKE_C_COMPILER=gcc -DOPENSSL_ROOT_DIR=/opt/openssl32 -S . -B _build && cd _build && ninja && cd .."
       - name: Check Openssl providers

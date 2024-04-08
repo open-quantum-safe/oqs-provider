@@ -134,18 +134,13 @@ has not been not getting back-ported to OpenSSL3.0.
 Also not supported in this version are provider-based signature algorithms
 used during TLS1.3 operations as documented in https://github.com/openssl/openssl/issues/10512.
 
-## 3.2
+Also not fully supported in 3.0.2 is performance testing as per the openssl
+`speed` command as documented in #385.
 
-This version has full support for all TLS1.3 operations using PQ algorithms
+## 3.2 and greater
+
+These versions have full support for all TLS1.3 operations using PQ algorithms
 when deploying `oqsprovider`.
-
-A final configuration limitation for provider-based signature algorithms exists
-as documented in https://github.com/openssl/openssl/issues/22761.
-
-## 3.3(-dev)
-
-When https://github.com/openssl/openssl/pull/22779 lands, a last known
-config-time limitation for provider-based signatures should be gone.
 
 ## All versions
 

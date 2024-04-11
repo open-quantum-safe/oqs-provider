@@ -1,4 +1,4 @@
-# oqs-provider 0.6.0-rc1
+# oqs-provider 0.6.0
 
 ## About
 
@@ -14,7 +14,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is version 0.6.0-rc1 of oqs-provider.
+This is version 0.6.0 of oqs-provider.
 
 ### Security considerations
 
@@ -85,7 +85,7 @@ This release also makes available ready-to-run binaries for Windows (.dll) and M
 * @bencemali made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/361
 * @feventura made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/317
 
-**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.5.3...0.6.0-rc1
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.5.3...0.6.0
 
 Previous Release Notes
 ======================

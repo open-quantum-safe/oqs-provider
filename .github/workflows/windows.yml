@@ -80,7 +80,7 @@ jobs:
            cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX="${{ env.IP }}" ${{ matrix.platform.oqsconfig }} -DCMAKE_C_COMPILER=gcc ..
            ninja
            ninja install
-           pip install pytest pytest-xdist pyyaml
+           pip install pytest psutil pytest-xdist pyyaml
            ninja run_tests
         working-directory: liboqs
       - name: build oqs-provider

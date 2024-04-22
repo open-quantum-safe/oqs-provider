@@ -46,7 +46,7 @@ jobs:
       - name: Install cygwin
         uses: cygwin/cygwin-install-action@master
         with:
-          packages: perl git ninja gcc-core cmake make
+          packages: perl git ninja gcc-core cmake make python3 python3-devel python3-setuptools
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32
         uses: actions/cache@v3
@@ -80,6 +80,7 @@ jobs:
            cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX="${{ env.IP }}" ${{ matrix.platform.oqsconfig }} -DCMAKE_C_COMPILER=gcc ..
            ninja
            ninja install
+           pip3 install pytest pytest-xdist pyyaml
            ninja run_tests
         working-directory: liboqs
       - name: build oqs-provider

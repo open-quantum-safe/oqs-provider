@@ -71,7 +71,7 @@ jobs:
           git diff && \
           ! git status | grep modified
       - name: Build .deb install package
-        run: cpack
+        run: cpack -C DebPack
         working-directory: _build
       - name: Retain .deb installer
         uses: actions/upload-artifact@v3

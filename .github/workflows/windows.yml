@@ -36,17 +36,18 @@ jobs:
           set-safe-directory: true
           repository: openssl/openssl
           path: openssl
+          # TODO: Revert ref tag once openssl master doesn't crash any more
+          ref: openssl-3.3.0
       - name: checkout liboqs
         uses: actions/checkout@v3
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: 0.10.0
           path: liboqs
       - name: Install cygwin
         uses: cygwin/cygwin-install-action@master
         with:
-          packages: perl git ninja gcc-core cmake make
+          packages: perl git ninja gcc-core cmake make python3 python3-devel python3-setuptools python3-exceptiongroup
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32
         uses: actions/cache@v3
@@ -80,11 +81,17 @@ jobs:
            cmake -GNinja -DOPENSSL_ROOT_DIR=/opt/openssl32 -DCMAKE_INSTALL_PREFIX="${{ env.IP }}" ${{ matrix.platform.oqsconfig }} -DCMAKE_C_COMPILER=gcc ..
            ninja
            ninja install
+           pip install pytest psutil pytest-xdist pyyaml
+           # TODO: as "autoprocesses" not recognized, don't run ninja run_tests
         working-directory: liboqs
       - name: build oqs-provider
         run: bash -c "git config --global --add safe.directory $(cygpath -u $PWD) && liboqs_DIR='${{ env.IP }}' cmake -GNinja -DCMAKE_C_COMPILER=gcc -DOPENSSL_ROOT_DIR=/opt/openssl32 -S . -B _build && cd _build && ninja && cd .."
       - name: Check Openssl providers
         run: bash -c "OPENSSL_MODULES=_build/lib /opt/openssl32/bin/openssl list -providers -provider oqsprovider -provider default"
+      - name: Check Openssl provider signature algorithms
+        run: bash -c "OPENSSL_MODULES=_build/lib /opt/openssl32/bin/openssl list -signature-algorithms -provider oqsprovider -provider default"
+      - name: Check Openssl provider KEM algorithms
+        run: bash -c "OPENSSL_MODULES=_build/lib /opt/openssl32/bin/openssl list -kem-algorithms -provider oqsprovider -provider default"
       - name: Run tests
         run: bash -c "echo $PATH && PATH=/opt/openssl32/bin:/usr/bin ctest -V"
         working-directory: _build
@@ -130,7 +137,6 @@ jobs:
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: 0.10.0
           path: liboqs
       - uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -244,7 +250,6 @@ jobs:
           with:
             set-safe-directory: true
             repository: open-quantum-safe/liboqs
-            ref: 0.10.0
             path: liboqs
         - uses: ilammy/msvc-dev-cmd@v1
           with:

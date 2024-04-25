@@ -53,7 +53,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=main ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=0.10.0 ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -71,7 +71,7 @@ jobs:
           git diff && \
           ! git status | grep modified
       - name: Build .deb install package
-        run: cpack
+        run: cpack -C DebPack
         working-directory: _build
       - name: Retain .deb installer
         uses: actions/upload-artifact@v3
@@ -152,8 +152,7 @@ jobs:
         run: |
           ctest --test-dir build \
             --output-on-failure \
-            --extra-verbose \
-            --repeat until-pass:5
+            --extra-verbose
 
   linux_aarch64:
     name: "aarch64 cross-compilation"
@@ -199,7 +198,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch 0.10.0 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

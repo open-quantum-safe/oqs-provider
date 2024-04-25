@@ -46,6 +46,7 @@ the_ios_target="${the_ios_target}"
 the_macos_target="${the_macos_target}"
 the_android_api_level="${the_android_api_level}"
 the_oqs_algs_enabled="${the_oqs_algs_enabled}"
+export the_openssl_ver the_libs_dir the_ios_target the_macos_target the_android_api_level the_oqs_algs_enabled
 
 # enable debug to get explicit compiler command lines
 the_cmake_build_verbose_flag="${the_cmake_build_verbose_flag:-0}"

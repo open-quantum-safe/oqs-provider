@@ -46,6 +46,9 @@ if [ $? -ne 0 ] || [ ! -f tmp/$1_srv_1.p12 ]; then
     exit 1
 fi
 
+# Generate config file with oqsprovider disabled
+sed -e 's/^oqsprovider/# oqsprovider/' "$(pwd)/scripts/openssl-ca.cnf" > "$(pwd)/scripts/openssl-ca-no-oqsprovider.cnf"
+
 # This print an error but OpenSSL returns 0 and .p12 file is generated correctly
 OPENSSL_CONF="$(pwd)/scripts/openssl-ca-no-oqsprovider.cnf" $OPENSSL_APP pkcs12 -provider default -provider oqsprovider -export -in tmp/$1_srv.crt -inkey tmp/$1_srv.key -passout pass: -out tmp/$1_srv_2.p12
 

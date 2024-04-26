@@ -14,7 +14,6 @@ test/oqs_test_groups
 # test artifacts
 tmp
 interop.log
-scripts/openssl-ca-no-oqsprovider.cnf
 # pycache
 oqs-template/__pycache__
 scripts/__pycache__

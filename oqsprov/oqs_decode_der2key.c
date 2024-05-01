@@ -689,21 +689,6 @@ MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, SubjectPublicKeyInfo);
 #endif /* OQS_KEM_ENCODERS */
 
-MAKE_DECODER(, "dilithium2", dilithium2, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "dilithium2", dilithium2, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_dilithium2", p256_dilithium2, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "p256_dilithium2", p256_dilithium2, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_dilithium2", rsa3072_dilithium2, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_dilithium2", rsa3072_dilithium2, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "dilithium3", dilithium3, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "dilithium3", dilithium3, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p384_dilithium3", p384_dilithium3, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "p384_dilithium3", p384_dilithium3, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "dilithium5", dilithium5, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "dilithium5", dilithium5, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p521_dilithium5", p521_dilithium5, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "p521_dilithium5", p521_dilithium5, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "mldsa44", mldsa44, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa44", mldsa44, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "p256_mldsa44", p256_mldsa44, oqsx, PrivateKeyInfo);
@@ -772,48 +757,4 @@ MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
-             oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
-             oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
-             oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
-             oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
-             oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
-             oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

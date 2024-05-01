@@ -1126,151 +1126,96 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define p521_hqc256_input_type "p521_hqc256"
 #define p521_hqc256_pem_type   "p521_hqc256"
 
-#define dilithium2_evp_type                      0
-#define dilithium2_input_type                    "dilithium2"
-#define dilithium2_pem_type                      "dilithium2"
-#define p256_dilithium2_evp_type                 0
-#define p256_dilithium2_input_type               "p256_dilithium2"
-#define p256_dilithium2_pem_type                 "p256_dilithium2"
-#define rsa3072_dilithium2_evp_type              0
-#define rsa3072_dilithium2_input_type            "rsa3072_dilithium2"
-#define rsa3072_dilithium2_pem_type              "rsa3072_dilithium2"
-#define dilithium3_evp_type                      0
-#define dilithium3_input_type                    "dilithium3"
-#define dilithium3_pem_type                      "dilithium3"
-#define p384_dilithium3_evp_type                 0
-#define p384_dilithium3_input_type               "p384_dilithium3"
-#define p384_dilithium3_pem_type                 "p384_dilithium3"
-#define dilithium5_evp_type                      0
-#define dilithium5_input_type                    "dilithium5"
-#define dilithium5_pem_type                      "dilithium5"
-#define p521_dilithium5_evp_type                 0
-#define p521_dilithium5_input_type               "p521_dilithium5"
-#define p521_dilithium5_pem_type                 "p521_dilithium5"
-#define mldsa44_evp_type                         0
-#define mldsa44_input_type                       "mldsa44"
-#define mldsa44_pem_type                         "mldsa44"
-#define p256_mldsa44_evp_type                    0
-#define p256_mldsa44_input_type                  "p256_mldsa44"
-#define p256_mldsa44_pem_type                    "p256_mldsa44"
-#define rsa3072_mldsa44_evp_type                 0
-#define rsa3072_mldsa44_input_type               "rsa3072_mldsa44"
-#define rsa3072_mldsa44_pem_type                 "rsa3072_mldsa44"
-#define mldsa44_pss2048_evp_type                 0
-#define mldsa44_pss2048_input_type               "mldsa44_pss2048"
-#define mldsa44_pss2048_pem_type                 "mldsa44_pss2048"
-#define mldsa44_rsa2048_evp_type                 0
-#define mldsa44_rsa2048_input_type               "mldsa44_rsa2048"
-#define mldsa44_rsa2048_pem_type                 "mldsa44_rsa2048"
-#define mldsa44_ed25519_evp_type                 0
-#define mldsa44_ed25519_input_type               "mldsa44_ed25519"
-#define mldsa44_ed25519_pem_type                 "mldsa44_ed25519"
-#define mldsa44_p256_evp_type                    0
-#define mldsa44_p256_input_type                  "mldsa44_p256"
-#define mldsa44_p256_pem_type                    "mldsa44_p256"
-#define mldsa44_bp256_evp_type                   0
-#define mldsa44_bp256_input_type                 "mldsa44_bp256"
-#define mldsa44_bp256_pem_type                   "mldsa44_bp256"
-#define mldsa65_evp_type                         0
-#define mldsa65_input_type                       "mldsa65"
-#define mldsa65_pem_type                         "mldsa65"
-#define p384_mldsa65_evp_type                    0
-#define p384_mldsa65_input_type                  "p384_mldsa65"
-#define p384_mldsa65_pem_type                    "p384_mldsa65"
-#define mldsa65_pss3072_evp_type                 0
-#define mldsa65_pss3072_input_type               "mldsa65_pss3072"
-#define mldsa65_pss3072_pem_type                 "mldsa65_pss3072"
-#define mldsa65_rsa3072_evp_type                 0
-#define mldsa65_rsa3072_input_type               "mldsa65_rsa3072"
-#define mldsa65_rsa3072_pem_type                 "mldsa65_rsa3072"
-#define mldsa65_p256_evp_type                    0
-#define mldsa65_p256_input_type                  "mldsa65_p256"
-#define mldsa65_p256_pem_type                    "mldsa65_p256"
-#define mldsa65_bp256_evp_type                   0
-#define mldsa65_bp256_input_type                 "mldsa65_bp256"
-#define mldsa65_bp256_pem_type                   "mldsa65_bp256"
-#define mldsa65_ed25519_evp_type                 0
-#define mldsa65_ed25519_input_type               "mldsa65_ed25519"
-#define mldsa65_ed25519_pem_type                 "mldsa65_ed25519"
-#define mldsa87_evp_type                         0
-#define mldsa87_input_type                       "mldsa87"
-#define mldsa87_pem_type                         "mldsa87"
-#define p521_mldsa87_evp_type                    0
-#define p521_mldsa87_input_type                  "p521_mldsa87"
-#define p521_mldsa87_pem_type                    "p521_mldsa87"
-#define mldsa87_p384_evp_type                    0
-#define mldsa87_p384_input_type                  "mldsa87_p384"
-#define mldsa87_p384_pem_type                    "mldsa87_p384"
-#define mldsa87_bp384_evp_type                   0
-#define mldsa87_bp384_input_type                 "mldsa87_bp384"
-#define mldsa87_bp384_pem_type                   "mldsa87_bp384"
-#define mldsa87_ed448_evp_type                   0
-#define mldsa87_ed448_input_type                 "mldsa87_ed448"
-#define mldsa87_ed448_pem_type                   "mldsa87_ed448"
-#define falcon512_evp_type                       0
-#define falcon512_input_type                     "falcon512"
-#define falcon512_pem_type                       "falcon512"
-#define p256_falcon512_evp_type                  0
-#define p256_falcon512_input_type                "p256_falcon512"
-#define p256_falcon512_pem_type                  "p256_falcon512"
-#define rsa3072_falcon512_evp_type               0
-#define rsa3072_falcon512_input_type             "rsa3072_falcon512"
-#define rsa3072_falcon512_pem_type               "rsa3072_falcon512"
-#define falconpadded512_evp_type                 0
-#define falconpadded512_input_type               "falconpadded512"
-#define falconpadded512_pem_type                 "falconpadded512"
-#define p256_falconpadded512_evp_type            0
-#define p256_falconpadded512_input_type          "p256_falconpadded512"
-#define p256_falconpadded512_pem_type            "p256_falconpadded512"
-#define rsa3072_falconpadded512_evp_type         0
-#define rsa3072_falconpadded512_input_type       "rsa3072_falconpadded512"
-#define rsa3072_falconpadded512_pem_type         "rsa3072_falconpadded512"
-#define falcon1024_evp_type                      0
-#define falcon1024_input_type                    "falcon1024"
-#define falcon1024_pem_type                      "falcon1024"
-#define p521_falcon1024_evp_type                 0
-#define p521_falcon1024_input_type               "p521_falcon1024"
-#define p521_falcon1024_pem_type                 "p521_falcon1024"
-#define falconpadded1024_evp_type                0
-#define falconpadded1024_input_type              "falconpadded1024"
-#define falconpadded1024_pem_type                "falconpadded1024"
-#define p521_falconpadded1024_evp_type           0
-#define p521_falconpadded1024_input_type         "p521_falconpadded1024"
-#define p521_falconpadded1024_pem_type           "p521_falconpadded1024"
-#define sphincssha2128fsimple_evp_type           0
-#define sphincssha2128fsimple_input_type         "sphincssha2128fsimple"
-#define sphincssha2128fsimple_pem_type           "sphincssha2128fsimple"
-#define p256_sphincssha2128fsimple_evp_type      0
-#define p256_sphincssha2128fsimple_input_type    "p256_sphincssha2128fsimple"
-#define p256_sphincssha2128fsimple_pem_type      "p256_sphincssha2128fsimple"
-#define rsa3072_sphincssha2128fsimple_evp_type   0
-#define rsa3072_sphincssha2128fsimple_input_type "rsa3072_sphincssha2128fsimple"
-#define rsa3072_sphincssha2128fsimple_pem_type   "rsa3072_sphincssha2128fsimple"
-#define sphincssha2128ssimple_evp_type           0
-#define sphincssha2128ssimple_input_type         "sphincssha2128ssimple"
-#define sphincssha2128ssimple_pem_type           "sphincssha2128ssimple"
-#define p256_sphincssha2128ssimple_evp_type      0
-#define p256_sphincssha2128ssimple_input_type    "p256_sphincssha2128ssimple"
-#define p256_sphincssha2128ssimple_pem_type      "p256_sphincssha2128ssimple"
-#define rsa3072_sphincssha2128ssimple_evp_type   0
-#define rsa3072_sphincssha2128ssimple_input_type "rsa3072_sphincssha2128ssimple"
-#define rsa3072_sphincssha2128ssimple_pem_type   "rsa3072_sphincssha2128ssimple"
-#define sphincssha2192fsimple_evp_type           0
-#define sphincssha2192fsimple_input_type         "sphincssha2192fsimple"
-#define sphincssha2192fsimple_pem_type           "sphincssha2192fsimple"
-#define p384_sphincssha2192fsimple_evp_type      0
-#define p384_sphincssha2192fsimple_input_type    "p384_sphincssha2192fsimple"
-#define p384_sphincssha2192fsimple_pem_type      "p384_sphincssha2192fsimple"
-#define sphincsshake128fsimple_evp_type          0
-#define sphincsshake128fsimple_input_type        "sphincsshake128fsimple"
-#define sphincsshake128fsimple_pem_type          "sphincsshake128fsimple"
-#define p256_sphincsshake128fsimple_evp_type     0
-#define p256_sphincsshake128fsimple_input_type   "p256_sphincsshake128fsimple"
-#define p256_sphincsshake128fsimple_pem_type     "p256_sphincsshake128fsimple"
-#define rsa3072_sphincsshake128fsimple_evp_type  0
-#define rsa3072_sphincsshake128fsimple_input_type \
-    "rsa3072_sphincsshake128fsimple"
-#define rsa3072_sphincsshake128fsimple_pem_type "rsa3072_sphincsshake128fsimple"
+#define mldsa44_evp_type                   0
+#define mldsa44_input_type                 "mldsa44"
+#define mldsa44_pem_type                   "mldsa44"
+#define p256_mldsa44_evp_type              0
+#define p256_mldsa44_input_type            "p256_mldsa44"
+#define p256_mldsa44_pem_type              "p256_mldsa44"
+#define rsa3072_mldsa44_evp_type           0
+#define rsa3072_mldsa44_input_type         "rsa3072_mldsa44"
+#define rsa3072_mldsa44_pem_type           "rsa3072_mldsa44"
+#define mldsa44_pss2048_evp_type           0
+#define mldsa44_pss2048_input_type         "mldsa44_pss2048"
+#define mldsa44_pss2048_pem_type           "mldsa44_pss2048"
+#define mldsa44_rsa2048_evp_type           0
+#define mldsa44_rsa2048_input_type         "mldsa44_rsa2048"
+#define mldsa44_rsa2048_pem_type           "mldsa44_rsa2048"
+#define mldsa44_ed25519_evp_type           0
+#define mldsa44_ed25519_input_type         "mldsa44_ed25519"
+#define mldsa44_ed25519_pem_type           "mldsa44_ed25519"
+#define mldsa44_p256_evp_type              0
+#define mldsa44_p256_input_type            "mldsa44_p256"
+#define mldsa44_p256_pem_type              "mldsa44_p256"
+#define mldsa44_bp256_evp_type             0
+#define mldsa44_bp256_input_type           "mldsa44_bp256"
+#define mldsa44_bp256_pem_type             "mldsa44_bp256"
+#define mldsa65_evp_type                   0
+#define mldsa65_input_type                 "mldsa65"
+#define mldsa65_pem_type                   "mldsa65"
+#define p384_mldsa65_evp_type              0
+#define p384_mldsa65_input_type            "p384_mldsa65"
+#define p384_mldsa65_pem_type              "p384_mldsa65"
+#define mldsa65_pss3072_evp_type           0
+#define mldsa65_pss3072_input_type         "mldsa65_pss3072"
+#define mldsa65_pss3072_pem_type           "mldsa65_pss3072"
+#define mldsa65_rsa3072_evp_type           0
+#define mldsa65_rsa3072_input_type         "mldsa65_rsa3072"
+#define mldsa65_rsa3072_pem_type           "mldsa65_rsa3072"
+#define mldsa65_p256_evp_type              0
+#define mldsa65_p256_input_type            "mldsa65_p256"
+#define mldsa65_p256_pem_type              "mldsa65_p256"
+#define mldsa65_bp256_evp_type             0
+#define mldsa65_bp256_input_type           "mldsa65_bp256"
+#define mldsa65_bp256_pem_type             "mldsa65_bp256"
+#define mldsa65_ed25519_evp_type           0
+#define mldsa65_ed25519_input_type         "mldsa65_ed25519"
+#define mldsa65_ed25519_pem_type           "mldsa65_ed25519"
+#define mldsa87_evp_type                   0
+#define mldsa87_input_type                 "mldsa87"
+#define mldsa87_pem_type                   "mldsa87"
+#define p521_mldsa87_evp_type              0
+#define p521_mldsa87_input_type            "p521_mldsa87"
+#define p521_mldsa87_pem_type              "p521_mldsa87"
+#define mldsa87_p384_evp_type              0
+#define mldsa87_p384_input_type            "mldsa87_p384"
+#define mldsa87_p384_pem_type              "mldsa87_p384"
+#define mldsa87_bp384_evp_type             0
+#define mldsa87_bp384_input_type           "mldsa87_bp384"
+#define mldsa87_bp384_pem_type             "mldsa87_bp384"
+#define mldsa87_ed448_evp_type             0
+#define mldsa87_ed448_input_type           "mldsa87_ed448"
+#define mldsa87_ed448_pem_type             "mldsa87_ed448"
+#define falcon512_evp_type                 0
+#define falcon512_input_type               "falcon512"
+#define falcon512_pem_type                 "falcon512"
+#define p256_falcon512_evp_type            0
+#define p256_falcon512_input_type          "p256_falcon512"
+#define p256_falcon512_pem_type            "p256_falcon512"
+#define rsa3072_falcon512_evp_type         0
+#define rsa3072_falcon512_input_type       "rsa3072_falcon512"
+#define rsa3072_falcon512_pem_type         "rsa3072_falcon512"
+#define falconpadded512_evp_type           0
+#define falconpadded512_input_type         "falconpadded512"
+#define falconpadded512_pem_type           "falconpadded512"
+#define p256_falconpadded512_evp_type      0
+#define p256_falconpadded512_input_type    "p256_falconpadded512"
+#define p256_falconpadded512_pem_type      "p256_falconpadded512"
+#define rsa3072_falconpadded512_evp_type   0
+#define rsa3072_falconpadded512_input_type "rsa3072_falconpadded512"
+#define rsa3072_falconpadded512_pem_type   "rsa3072_falconpadded512"
+#define falcon1024_evp_type                0
+#define falcon1024_input_type              "falcon1024"
+#define falcon1024_pem_type                "falcon1024"
+#define p521_falcon1024_evp_type           0
+#define p521_falcon1024_input_type         "p521_falcon1024"
+#define p521_falcon1024_pem_type           "p521_falcon1024"
+#define falconpadded1024_evp_type          0
+#define falconpadded1024_input_type        "falconpadded1024"
+#define falconpadded1024_pem_type          "falconpadded1024"
+#define p521_falconpadded1024_evp_type     0
+#define p521_falconpadded1024_input_type   "p521_falconpadded1024"
+#define p521_falconpadded1024_pem_type     "p521_falconpadded1024"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2308,55 +2253,6 @@ MAKE_ENCODER(_ecp, p521_hqc256, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecp, p521_hqc256);
 #endif /* OQS_KEM_ENCODERS */
 
-MAKE_ENCODER(, dilithium2, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, dilithium2, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, dilithium2, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, dilithium2, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, dilithium2, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, dilithium2, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, dilithium2);
-MAKE_ENCODER(, p256_dilithium2, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_dilithium2, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_dilithium2, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_dilithium2, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_dilithium2, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_dilithium2, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_dilithium2);
-MAKE_ENCODER(, rsa3072_dilithium2, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_dilithium2, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, rsa3072_dilithium2, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_dilithium2, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, rsa3072_dilithium2, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, rsa3072_dilithium2, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, rsa3072_dilithium2);
-MAKE_ENCODER(, dilithium3, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, dilithium3, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, dilithium3, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, dilithium3, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, dilithium3, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, dilithium3, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, dilithium3);
-MAKE_ENCODER(, p384_dilithium3, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p384_dilithium3, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p384_dilithium3, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p384_dilithium3, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p384_dilithium3, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p384_dilithium3, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p384_dilithium3);
-MAKE_ENCODER(, dilithium5, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, dilithium5, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, dilithium5, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, dilithium5, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, dilithium5, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, dilithium5, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, dilithium5);
-MAKE_ENCODER(, p521_dilithium5, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p521_dilithium5, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p521_dilithium5, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p521_dilithium5, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p521_dilithium5, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p521_dilithium5, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p521_dilithium5);
 MAKE_ENCODER(, mldsa44, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, mldsa44, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, mldsa44, oqsx, PrivateKeyInfo, der);
@@ -2567,87 +2463,4 @@ MAKE_ENCODER(, p521_falconpadded1024, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p521_falconpadded1024, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p521_falconpadded1024, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p521_falconpadded1024);
-MAKE_ENCODER(, sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, sphincssha2128fsimple);
-MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_sphincssha2128fsimple);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             der);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             pem);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, rsa3072_sphincssha2128fsimple);
-MAKE_ENCODER(, sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, sphincssha2128ssimple);
-MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_sphincssha2128ssimple);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo,
-             der);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo,
-             pem);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, rsa3072_sphincssha2128ssimple);
-MAKE_ENCODER(, sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincssha2192fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, sphincssha2192fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, sphincssha2192fsimple);
-MAKE_ENCODER(, p384_sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p384_sphincssha2192fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p384_sphincssha2192fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p384_sphincssha2192fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p384_sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p384_sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p384_sphincssha2192fsimple);
-MAKE_ENCODER(, sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, sphincsshake128fsimple);
-MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_sphincsshake128fsimple);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             der);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             pem);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, rsa3072_sphincsshake128fsimple);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

@@ -19,10 +19,6 @@
 
 /** \brief List of hybrid signature algorithms. */
 const char *kHybridSignatureAlgorithms[] = {
-    "p256_dilithium2",
-    "rsa3072_dilithium2",
-    "p384_dilithium3",
-    "p521_dilithium5",
     "p256_mldsa44",
     "rsa3072_mldsa44",
     "p384_mldsa65",
@@ -33,13 +29,6 @@ const char *kHybridSignatureAlgorithms[] = {
     "rsa3072_falconpadded512",
     "p521_falcon1024",
     "p521_falconpadded1024",
-    "p256_sphincssha2128fsimple",
-    "rsa3072_sphincssha2128fsimple",
-    "p256_sphincssha2128ssimple",
-    "rsa3072_sphincssha2128ssimple",
-    "p384_sphincssha2192fsimple",
-    "p256_sphincsshake128fsimple",
-    "rsa3072_sphincsshake128fsimple",
     NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END

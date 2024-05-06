@@ -11,7 +11,7 @@
 # Usage:
 #   ./scripts/build-wrapper-liboqs-openssl-static.sh [target]
 #     [target] - do_main: Build all, create export
-#              - [function]: Any function such as build_apple_macosx
+#              - [function]: Any function such as build_apple_macos
 #
 # On success, the generated [build/export] folder below can be used as
 # input to the oqs-provider build.
@@ -33,7 +33,7 @@
 #                 \-> lib - static library output
 #     \-> apple
 #         \-> [version] - version automatically determined from build output
-#             \-> [device] - one of macosx / iphoneos / iphonesimulator
+#             \-> [device] - one of macos / iphoneos / iphonesimulator
 #                 \-> lib - contains fat lib with all archs
 #
 # Requires the use of liboqs pulled and built using the analogous script:
@@ -127,9 +127,9 @@ function build_apple_variant {
   cd "$the_build_dir_path/$l_type/$i_device/$i_arch" || return $?
   rm -fR ./*
 
-  # different deployment target for ios vs. macosx
+  # different deployment target for ios vs. macos
   local l_deployment_target=''
-  if [ x"$i_device" = xmacosx ] ; then
+  if [ x"$i_device" = xmacos ] ; then
     l_deployment_target="$the_macos_target"
   else
     l_deployment_target="$the_ios_target"
@@ -207,8 +207,8 @@ function build_apple_fatlibs_std {
 }
 
 # build macox
-function build_apple_macosx {
-  local l_device='macosx'
+function build_apple_macos {
+  local l_device='macos'
   build_apple_variant $l_device x86_64 MAC || return $?
   build_apple_variant $l_device arm64 MAC_ARM64 || return $?
   build_apple_fatlibs_std $l_device 'x86_64 arm64' || return $?
@@ -234,7 +234,7 @@ function build_apple_iphoneos {
 
 # build all known apple variants
 function build_apple {
-  build_apple_macosx || return $?
+  build_apple_macos || return $?
   build_apple_iphonesimulator || return $?
   build_apple_iphoneos || return $?
   return 0
@@ -458,7 +458,7 @@ function verify_folders {
   if [ $wants_apple -eq 1 ] ; then
     l_type='apple'
     verify_folder "$the_build_dir_path"/$l_type
-    for l_device in iphoneos iphonesimulator macosx ; do
+    for l_device in iphoneos iphonesimulator macos ; do
       verify_folder "$the_build_dir_path"/$l_type/$l_device
       verify_folder "$the_build_dir_path"/$l_type/$l_device/lib
       for l_arch in arm64 ; do
@@ -595,7 +595,7 @@ function do_export {
     l_type='apple'
     create_export_folder $l_type "$l_version" iphoneos/lib || return $?
     create_export_folder $l_type "$l_version" iphonesimulator/lib || return $?
-    create_export_folder $l_type "$l_version" macosx/lib || return $?
+    create_export_folder $l_type "$l_version" macos/lib || return $?
   fi
 
   if [ $wants_linux -eq 1 ] ; then

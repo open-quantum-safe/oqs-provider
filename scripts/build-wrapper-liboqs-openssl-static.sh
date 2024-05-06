@@ -273,6 +273,7 @@ function build_android_variant {
     -DANDROID_ABI=$i_arch \
     -DANDROID_PLATFORM=android-$the_android_api_level \
     -DOQS_PROVIDER_BUILD_STATIC=ON \
+    -DOQS_KEM_ENCODERS=ON \
     -DOPENSSL_USE_STATIC_LIBS=ON \
     -DOPENSSL_ROOT_DIR="$l_openssl_plat_dir" \
     -DOPENSSL_INCLUDE_DIR="$l_openssl_plat_dir/include" \

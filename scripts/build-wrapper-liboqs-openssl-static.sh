@@ -325,6 +325,7 @@ function build_linux_variant {
   cmake \
     $the_cmake_build_trace_option \
     -DOQS_PROVIDER_BUILD_STATIC=ON \
+    -DOQS_KEM_ENCODERS=ON \
     -DOPENSSL_USE_STATIC_LIBS=ON \
     -DOPENSSL_ROOT_DIR="$l_openssl_plat_dir" \
     -DOPENSSL_INCLUDE_DIR="$l_openssl_plat_dir/include" \
@@ -401,6 +402,7 @@ function build_windows_variant {
   cmake \
     $the_cmake_build_trace_option \
     -DOQS_PROVIDER_BUILD_STATIC=ON \
+    -DOQS_KEM_ENCODERS=ON \
     -DOPENSSL_USE_STATIC_LIBS=ON \
     -DOPENSSL_ROOT_DIR="$l_openssl_root_dir_windows" \
     -DOPENSSL_INCLUDE_DIR="$l_openssl_include_dir_windows" \

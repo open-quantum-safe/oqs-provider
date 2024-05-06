@@ -17,7 +17,7 @@ openssl2provider() {
 }
 
 localalgtest() {
-    if ! ( "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-certgen.sh" "$1" >> interop.log 2>&1 && "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-certverify.sh" "$1" >> interop.log 2>&1 && "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-cmssign.sh" "$1" >> interop.log 2>&1 &&  "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-ca.sh" "$1" >> interop.log 2>&1 ); then
+    if ! ( "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-certgen.sh" "$1" >> interop.log 2>&1 && "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-certverify.sh" "$1" >> interop.log 2>&1 && "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-cmssign.sh" "$1" >> interop.log 2>&1 && "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-ca.sh" "$1" >> interop.log 2>&1 && "${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-pkcs12gen.sh" "$1" >> interop.log 2>&1 ); then
         echo "localalgtest $1 failed. Exiting.".
         cat interop.log
         exit 1

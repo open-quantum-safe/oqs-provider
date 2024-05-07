@@ -21,8 +21,9 @@ Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
 OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
 signatures including CMS and CMP functionality are available via the OpenSSL
-EVP interface. Key persistence is provided via the encode/decode
-mechanism and X.509 data structures. Starting with OpenSSL 3.2 support for 
+EVP interface. Key persistence is provided via the encode/decode mechanism,
+X.509 data structures, and PKCS#12 for bundling a private key with its
+corresponding X.509 certificate. Starting with OpenSSL 3.2 support for
 TLS1.3 signature functionality is available and final glitches for CMS
 have been resolved.
 
@@ -185,6 +186,7 @@ Contributors to the `oqsprovider` include:
 - Will Childs-Klein
 - Thomas Bailleux
 - Felipe Ventura
+- Iyán Méndez Veiga
 
 History
 -------

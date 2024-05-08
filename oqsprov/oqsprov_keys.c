@@ -969,7 +969,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op)
             }
         }
     } else {
-        if ((key->numkeys == 2)) { // hybrid key
+        if (key->numkeys == 2) { // hybrid key
             int classical_pubkey_len, classical_privkey_len;
             if (!key->evp_info) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_EVPINFO_MISSING);

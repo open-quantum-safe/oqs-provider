@@ -1313,8 +1313,10 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
          * At least one core version hangs up; so don't do this there:
          */
         if (strcmp("3.1.0", ossl_versionp)) {
+            ERR_set_mark();
             OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
                        oqs_oid_alg_list[i + 1]);
+            ERR_pop_to_mark();
         }
 
         if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],

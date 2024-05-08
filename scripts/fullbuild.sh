@@ -100,7 +100,8 @@ if [ -z $liboqs_DIR ]; then
   if [ ! -z $OPENSSL_INSTALL ]; then
     export CMAKE_OPENSSL_LOCATION="-DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL"
   else
-    export CMAKE_OPENSSL_LOCATION=""
+    # work around for cmake 3.23.3 regression not finding OpenSSL:
+    export CMAKE_OPENSSL_LOCATION="-DOPENSSL_ROOT_DIR="
   fi
   # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
   # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
@@ -124,7 +125,7 @@ if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
    BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
+       cmake $CMAKE_OPENSSL_LOCATION $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    else
        cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    fi

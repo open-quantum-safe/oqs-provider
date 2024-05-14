@@ -40,6 +40,9 @@ const char *kHybridSignatureAlgorithms[] = {
     "p384_sphincssha2192fsimple",
     "p256_sphincsshake128fsimple",
     "rsa3072_sphincsshake128fsimple",
+    "p256_mayo_1",
+    "p256_mayo_2",
+    "p384_mayo_3",
     NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END

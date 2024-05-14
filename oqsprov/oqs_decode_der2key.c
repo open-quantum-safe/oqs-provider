@@ -816,4 +816,16 @@ MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
              oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
              oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo_1", mayo_1, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "mayo_1", mayo_1, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_mayo_1", p256_mayo_1, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_mayo_1", p256_mayo_1, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo_2", mayo_2, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "mayo_2", mayo_2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_mayo_2", p256_mayo_2, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_mayo_2", p256_mayo_2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo_3", mayo_3, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "mayo_3", mayo_3, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p384_mayo_3", p384_mayo_3, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p384_mayo_3", p384_mayo_3, oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

@@ -289,6 +289,9 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     {0xfeb8, 128, TLS1_3_VERSION, 0}, {0xfeb9, 192, TLS1_3_VERSION, 0},
     {0xfeba, 192, TLS1_3_VERSION, 0}, {0xfec2, 128, TLS1_3_VERSION, 0},
     {0xfec3, 128, TLS1_3_VERSION, 0}, {0xfec4, 128, TLS1_3_VERSION, 0},
+    {0xfeee, 128, TLS1_3_VERSION, 0}, {0xfef1, 128, TLS1_3_VERSION, 0},
+    {0xfeef, 128, TLS1_3_VERSION, 0}, {0xfef2, 128, TLS1_3_VERSION, 0},
+    {0xfef0, 192, TLS1_3_VERSION, 0}, {0xfef3, 192, TLS1_3_VERSION, 0},
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 
@@ -575,6 +578,21 @@ int oqs_patch_codepoints()
     if (getenv("OQS_CODEPOINT_RSA3072_SPHINCSSHAKE128FSIMPLE"))
         oqs_sigalg_list[47].code_point
             = atoi(getenv("OQS_CODEPOINT_RSA3072_SPHINCSSHAKE128FSIMPLE"));
+    if (getenv("OQS_CODEPOINT_MAYO_1"))
+        oqs_sigalg_list[48].code_point = atoi(getenv("OQS_CODEPOINT_MAYO_1"));
+    if (getenv("OQS_CODEPOINT_P256_MAYO_1"))
+        oqs_sigalg_list[49].code_point
+            = atoi(getenv("OQS_CODEPOINT_P256_MAYO_1"));
+    if (getenv("OQS_CODEPOINT_MAYO_2"))
+        oqs_sigalg_list[50].code_point = atoi(getenv("OQS_CODEPOINT_MAYO_2"));
+    if (getenv("OQS_CODEPOINT_P256_MAYO_2"))
+        oqs_sigalg_list[51].code_point
+            = atoi(getenv("OQS_CODEPOINT_P256_MAYO_2"));
+    if (getenv("OQS_CODEPOINT_MAYO_3"))
+        oqs_sigalg_list[52].code_point = atoi(getenv("OQS_CODEPOINT_MAYO_3"));
+    if (getenv("OQS_CODEPOINT_P384_MAYO_3"))
+        oqs_sigalg_list[53].code_point
+            = atoi(getenv("OQS_CODEPOINT_P384_MAYO_3"));
     ///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
     return 1;
 }
@@ -736,6 +754,21 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(rsa3072_sphincsshake128fsimple,
                      rsa3072_sphincsshake128fsimple,
                      rsa3072_sphincsshake128fsimple, "1.3.9999.6.7.15", 47),
+#    endif
+#    ifdef OQS_ENABLE_SIG_mayo_1
+    OQS_SIGALG_ENTRY(mayo_1, mayo_1, mayo_1, "1.3.9999.8.1.1", 48),
+    OQS_SIGALG_ENTRY(p256_mayo_1, p256_mayo_1, p256_mayo_1, "1.3.9999.8.1.2",
+                     49),
+#    endif
+#    ifdef OQS_ENABLE_SIG_mayo_2
+    OQS_SIGALG_ENTRY(mayo_2, mayo_2, mayo_2, "1.3.9999.8.2.1", 50),
+    OQS_SIGALG_ENTRY(p256_mayo_2, p256_mayo_2, p256_mayo_2, "1.3.9999.8.2.2",
+                     51),
+#    endif
+#    ifdef OQS_ENABLE_SIG_mayo_3
+    OQS_SIGALG_ENTRY(mayo_3, mayo_3, mayo_3, "1.3.9999.8.3.1", 52),
+    OQS_SIGALG_ENTRY(p384_mayo_3, p384_mayo_3, p384_mayo_3, "1.3.9999.8.3.2",
+                     53),
 #    endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

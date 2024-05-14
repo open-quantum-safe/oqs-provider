@@ -50,9 +50,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define OQS_OID_CNT 202
+#    define OQS_OID_CNT 214
 #else
-#    define OQS_OID_CNT 96
+#    define OQS_OID_CNT 108
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -263,6 +263,18 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p256_sphincsshake128fsimple",
     "1.3.9999.6.7.15",
     "rsa3072_sphincsshake128fsimple",
+    "1.3.9999.8.1.1",
+    "mayo_1",
+    "1.3.9999.8.1.2",
+    "p256_mayo_1",
+    "1.3.9999.8.2.1",
+    "mayo_2",
+    "1.3.9999.8.2.2",
+    "p256_mayo_2",
+    "1.3.9999.8.3.1",
+    "mayo_3",
+    "1.3.9999.8.3.2",
+    "p384_mayo_3",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -498,7 +510,7 @@ int oqs_patch_oids(void)
         if ((envval = getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE")))
             oqs_oid_alg_list[92 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[94 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[68 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -723,6 +735,30 @@ int oqs_patch_encodings(void)
         if ((envval
              = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME")))
             oqs_alg_encoding_list[95] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO_1")))
+            oqs_alg_encoding_list[96] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO_1_ALGNAME")))
+            oqs_alg_encoding_list[97] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO_1")))
+            oqs_alg_encoding_list[98] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO_1_ALGNAME")))
+            oqs_alg_encoding_list[99] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO_2")))
+            oqs_alg_encoding_list[100] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO_2_ALGNAME")))
+            oqs_alg_encoding_list[101] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO_2")))
+            oqs_alg_encoding_list[102] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO_2_ALGNAME")))
+            oqs_alg_encoding_list[103] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO_3")))
+            oqs_alg_encoding_list[104] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO_3_ALGNAME")))
+            oqs_alg_encoding_list[105] = envval;
+        if ((envval = getenv("OQS_ENCODING_P384_MAYO_3")))
+            oqs_alg_encoding_list[106] = envval;
+        if ((envval = getenv("OQS_ENCODING_P384_MAYO_3_ALGNAME")))
+            oqs_alg_encoding_list[107] = envval;
     }
     ///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_END
     return 1;
@@ -843,6 +879,18 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("sphincsshake128fsimple", 128, oqs_signature_functions),
     SIGALG("p256_sphincsshake128fsimple", 128, oqs_signature_functions),
     SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_1
+    SIGALG("mayo_1", 128, oqs_signature_functions),
+    SIGALG("p256_mayo_1", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_2
+    SIGALG("mayo_2", 128, oqs_signature_functions),
+    SIGALG("p256_mayo_2", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_3
+    SIGALG("mayo_3", 192, oqs_signature_functions),
+    SIGALG("p384_mayo_3", 192, oqs_signature_functions),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
@@ -1023,6 +1071,18 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[]
     SIGALG("sphincsshake128fsimple", 128, oqs_sphincsshake128fsimple_keymgmt_functions),
     SIGALG("p256_sphincsshake128fsimple", 128, oqs_p256_sphincsshake128fsimple_keymgmt_functions),
     SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_rsa3072_sphincsshake128fsimple_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_1
+    SIGALG("mayo_1", 128, oqs_mayo_1_keymgmt_functions),
+    SIGALG("p256_mayo_1", 128, oqs_p256_mayo_1_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_2
+    SIGALG("mayo_2", 128, oqs_mayo_2_keymgmt_functions),
+    SIGALG("p256_mayo_2", 128, oqs_p256_mayo_2_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_3
+    SIGALG("mayo_3", 192, oqs_mayo_3_keymgmt_functions),
+    SIGALG("p384_mayo_3", 192, oqs_p384_mayo_3_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes

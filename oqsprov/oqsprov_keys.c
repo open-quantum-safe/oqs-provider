@@ -55,9 +55,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define NID_TABLE_LEN 101
+#    define NID_TABLE_LEN 107
 #else
-#    define NID_TABLE_LEN 48
+#    define NID_TABLE_LEN 54
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -190,6 +190,12 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple,
      KEY_TYPE_HYB_SIG, 128},
+    {0, "mayo_1", OQS_SIG_alg_mayo_1, KEY_TYPE_SIG, 128},
+    {0, "p256_mayo_1", OQS_SIG_alg_mayo_1, KEY_TYPE_HYB_SIG, 128},
+    {0, "mayo_2", OQS_SIG_alg_mayo_2, KEY_TYPE_SIG, 128},
+    {0, "p256_mayo_2", OQS_SIG_alg_mayo_2, KEY_TYPE_HYB_SIG, 128},
+    {0, "mayo_3", OQS_SIG_alg_mayo_3, KEY_TYPE_SIG, 192},
+    {0, "p384_mayo_3", OQS_SIG_alg_mayo_3, KEY_TYPE_HYB_SIG, 192},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };
 

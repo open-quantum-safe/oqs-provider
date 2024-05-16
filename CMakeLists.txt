@@ -15,11 +15,15 @@ else()
 endif()
 
 if(MSVC)
-  set(CMAKE_EXE_LINKER_FLAGS
-      "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
+  # ABr: do not suppress warnings on library mismatch; instead, fix them :)
+  #set(CMAKE_EXE_LINKER_FLAGS
+  #    "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
   add_definitions(-DOQS_PROVIDER_NOATOMIC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   set(OQS_ADDL_SOCKET_LIBS ws2_32.lib gdi32.lib crypt32.lib)
+  # ABr: using /MT needs to depend on Debug vs Release and must match liboqs / openssl
+  set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+  set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
 else()
   add_compile_options(-Wunused-function)
   set(OQS_ADDL_SOCKET_LIBS "")

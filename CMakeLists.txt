@@ -21,9 +21,8 @@ if(MSVC)
   add_definitions(-DOQS_PROVIDER_NOATOMIC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   set(OQS_ADDL_SOCKET_LIBS ws2_32.lib gdi32.lib crypt32.lib)
-  # ABr: using /MT needs to depend on Debug vs Release and must match liboqs / openssl
-  set(CMAKE_CXX_FLAGS_RELEASE "/MT")
-  set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+  # bring compile options in line with openssl options; link otherwise fails
+  add_compile_options(/MT)
 else()
   add_compile_options(-Wunused-function)
   set(OQS_ADDL_SOCKET_LIBS "")

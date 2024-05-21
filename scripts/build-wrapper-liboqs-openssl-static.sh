@@ -78,10 +78,10 @@ esac
 [ $os_is_macos -eq 0 -a $os_is_linux -eq 0 -a $os_is_windows -eq 0 ] && echo 'CANNOT IDENTIFY OS' && exit 1
 
 # determine our preferred targets
-wants_android=0 ; #[ $os_is_macos -eq 1 ] && wants_android=1
-wants_apple=0 ; #[ $os_is_macos -eq 1 ] && wants_apple=1
+wants_android=0 ; [ $os_is_macos -eq 1 ] && wants_android=1
+wants_apple=0 ; [ $os_is_macos -eq 1 ] && wants_apple=1
 wants_linux=0 ; [ $os_is_linux -eq 1 ] && wants_linux=1
-wants_windows=0 ; #[ $os_is_windows -eq 1 ] && wants_windows=1
+wants_windows=0 ; [ $os_is_windows -eq 1 ] && wants_windows=1
 
 # set the liboqs directory if unset
 [ x"$the_liboqs_dir" = x ] && the_liboqs_dir="`realpath "$the_top_dir"/../liboqs`"

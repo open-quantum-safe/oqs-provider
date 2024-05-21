@@ -78,10 +78,10 @@ esac
 [ $os_is_macos -eq 0 -a $os_is_linux -eq 0 -a $os_is_windows -eq 0 ] && echo 'CANNOT IDENTIFY OS' && exit 1
 
 # determine our preferred targets
-wants_android=0 ; [ $os_is_macos -eq 1 ] && wants_android=1
-wants_apple=0 ; [ $os_is_macos -eq 1 ] && wants_apple=1
+wants_android=0 ; #[ $os_is_macos -eq 1 ] && wants_android=1
+wants_apple=0 ; #[ $os_is_macos -eq 1 ] && wants_apple=1
 wants_linux=0 ; [ $os_is_linux -eq 1 ] && wants_linux=1
-wants_windows=0 ; [ $os_is_windows -eq 1 ] && wants_windows=1
+wants_windows=0 ; #[ $os_is_windows -eq 1 ] && wants_windows=1
 
 # set the liboqs directory if unset
 [ x"$the_liboqs_dir" = x ] && the_liboqs_dir="`realpath "$the_top_dir"/../liboqs`"
@@ -328,6 +328,7 @@ function build_linux_variant {
     -DOQS_PROVIDER_BUILD_STATIC=ON \
     -DOQS_KEM_ENCODERS=ON \
     -DOPENSSL_USE_STATIC_LIBS=ON \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     -DOPENSSL_ROOT_DIR="$l_openssl_plat_dir" \
     -DOPENSSL_INCLUDE_DIR="$l_openssl_plat_dir/include" \
     -DOPENSSL_SSL_LIBRARY="$l_openssl_plat_dir/lib64/libssl.a" \

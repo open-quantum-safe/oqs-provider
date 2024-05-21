@@ -651,9 +651,13 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
 
     if (is_hybrid) {
         const EVP_MD *classical_md;
-        size_t actual_classical_sig_len = 0;
+        uint32_t actual_classical_sig_len = 0;
         int digest_len;
         unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
+        size_t max_pq_sig_len
+            = oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature;
+        size_t max_classical_sig_len = oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx
+                                           ->evp_info->length_signature;
 
         if ((ctx_verify = EVP_PKEY_CTX_new(oqsxkey->classical_pkey, NULL))
                 == NULL
@@ -668,7 +672,21 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                 goto endverify;
             }
         }
-        DECODE_UINT32(actual_classical_sig_len, sig);
+        if (siglen > SIZE_OF_UINT32) {
+            size_t actual_pq_sig_len = 0;
+            DECODE_UINT32(actual_classical_sig_len, sig);
+            actual_pq_sig_len
+                = siglen - SIZE_OF_UINT32 - actual_classical_sig_len;
+            if (siglen <= (SIZE_OF_UINT32 + actual_classical_sig_len)
+                || actual_classical_sig_len > max_classical_sig_len
+                || actual_pq_sig_len > max_pq_sig_len) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto endverify;
+            }
+        } else {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            goto endverify;
+        }
 
         /* same as with sign: activate if pre-existing hashing to be used:
          *  if (poqs_sigctx->mdctx == NULL) { // hashing not yet done

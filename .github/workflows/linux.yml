@@ -98,7 +98,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: apt-get update && apt-get install -y clang llvm ninja-build git cmake libclang-rt-14-dev libclang-common-14-dev
+        run: apt-get update && apt-get install -y clang llvm ninja-build git cmake libclang-14-dev libclang-common-14-dev
 
       - name: Clone and build OpenSSL(3) with ASan
         run: |

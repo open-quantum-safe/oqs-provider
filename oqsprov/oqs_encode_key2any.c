@@ -1276,6 +1276,24 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define rsa3072_sphincsshake128fsimple_input_type \
     "rsa3072_sphincsshake128fsimple"
 #define rsa3072_sphincsshake128fsimple_pem_type "rsa3072_sphincsshake128fsimple"
+#define mayo_1_evp_type                         0
+#define mayo_1_input_type                       "mayo_1"
+#define mayo_1_pem_type                         "mayo_1"
+#define p256_mayo_1_evp_type                    0
+#define p256_mayo_1_input_type                  "p256_mayo_1"
+#define p256_mayo_1_pem_type                    "p256_mayo_1"
+#define mayo_2_evp_type                         0
+#define mayo_2_input_type                       "mayo_2"
+#define mayo_2_pem_type                         "mayo_2"
+#define p256_mayo_2_evp_type                    0
+#define p256_mayo_2_input_type                  "p256_mayo_2"
+#define p256_mayo_2_pem_type                    "p256_mayo_2"
+#define mayo_3_evp_type                         0
+#define mayo_3_input_type                       "mayo_3"
+#define mayo_3_pem_type                         "mayo_3"
+#define p384_mayo_3_evp_type                    0
+#define p384_mayo_3_input_type                  "p384_mayo_3"
+#define p384_mayo_3_pem_type                    "p384_mayo_3"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2676,4 +2694,46 @@ MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, rsa3072_sphincsshake128fsimple);
+MAKE_ENCODER(, mayo_1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo_1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo_1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo_1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo_1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo_1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo_1);
+MAKE_ENCODER(, p256_mayo_1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo_1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo_1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo_1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo_1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_mayo_1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_mayo_1);
+MAKE_ENCODER(, mayo_2, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo_2, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo_2, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo_2, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo_2, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo_2, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo_2);
+MAKE_ENCODER(, p256_mayo_2, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo_2, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo_2, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo_2, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo_2, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_mayo_2, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_mayo_2);
+MAKE_ENCODER(, mayo_3, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo_3, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo_3, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo_3, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo_3, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo_3, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo_3);
+MAKE_ENCODER(, p384_mayo_3, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p384_mayo_3, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_mayo_3, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p384_mayo_3, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_mayo_3, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p384_mayo_3, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p384_mayo_3);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

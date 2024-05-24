@@ -34,6 +34,12 @@
 | falcon1024 **hybrid with** p521                   | NIST Round 3 submission                       | 3            |                    5 | 0xfe0f       | 1.3.9999.3.5             |
 | falconpadded1024                                  | 20211101                                      | 3            |                    5 | 0xfedf       | 1.3.9999.3.19            |
 | falconpadded1024 **hybrid with** p521             | 20211101                                      | 3            |                    5 | 0xfee0       | 1.3.9999.3.20            |
+| mayo_1                                            | https://eprint.iacr.org/2023/1683             | 1            |                    1 | 0xfeee       | 1.3.9999.8.1.1           |
+| mayo_1 **hybrid with** p256                       | https://eprint.iacr.org/2023/1683             | 1            |                    1 | 0xfef1       | 1.3.9999.8.1.2           |
+| mayo_2                                            | https://eprint.iacr.org/2023/1683             | 1            |                    1 | 0xfeef       | 1.3.9999.8.2.1           |
+| mayo_2 **hybrid with** p256                       | https://eprint.iacr.org/2023/1683             | 1            |                    1 | 0xfef2       | 1.3.9999.8.2.2           |
+| mayo_3                                            | https://eprint.iacr.org/2023/1683             | 1            |                    3 | 0xfef0       | 1.3.9999.8.3.1           |
+| mayo_3 **hybrid with** p384                       | https://eprint.iacr.org/2023/1683             | 1            |                    3 | 0xfef3       | 1.3.9999.8.3.2           |
 | mldsa44                                           | ML-DSA-ipd                                    | ipd          |                    1 | 0xfed0       | 1.3.6.1.4.1.2.267.12.4.4 |
 | mldsa44 **hybrid with** p256                      | ML-DSA-ipd                                    | ipd          |                    1 | 0xfed3       | 1.3.9999.7.1             |
 | mldsa44 **hybrid with** rsa3072                   | ML-DSA-ipd                                    | ipd          |                    1 | 0xfed4       | 1.3.9999.7.2             |

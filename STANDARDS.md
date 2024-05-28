@@ -26,5 +26,7 @@ components, this provider implements the following standards:
   - Hybrid post-quantum / traditional private keys:
     - Simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
 
+- For composite signatures, the implementation follows [this IETF draft](https://datatracker.ietf.org/doc/draft-ounsworth-pq-composite-sigs/) (version 13). Note that only those PQ algorithms denoted with the marker "composite" in [oqs-template/generate.yml] are provided with composite variants and not all.
+
 Additionally worthwhile noting is that only quantum-safe [signature algorithms](README.md#signature-algorithms) are persisted via PKCS#8 and X.509. No corresponding encoder/decoder logic exists for quantum safe [KEM algorithms](README.md#kem-algorithms) -- See also [#194](https://github.com/open-quantum-safe/oqs-provider/issues/194).
 

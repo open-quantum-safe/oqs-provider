@@ -52,7 +52,7 @@ jobs:
             - run:
                 name: Clone and build OpenSSL(3)
                 command: |
-                   git clone --branch master git://git.openssl.org/openssl.git openssl &&
+                   git clone --branch master https://github.com/openssl/openssl.git openssl &&
                    cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
             - run:
                 name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
@@ -171,7 +171,7 @@ jobs:
             - run:
                 name: Clone and build OpenSSL(3) master
                 command: |
-                   git clone --branch master git://git.openssl.org/openssl.git openssl &&
+                   git clone --branch master https://github.com/openssl/openssl.git openssl &&
                    cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
             - run:
                name: Build OQS-OpenSSL provider

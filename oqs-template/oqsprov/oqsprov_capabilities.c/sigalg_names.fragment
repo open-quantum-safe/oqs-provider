@@ -8,10 +8,6 @@
     {%- set cnt.val = cnt.val + 1 %}
     OQS_SIGALG_ENTRY({{ classical_alg['name'] }}_{{variant['name']}}, {{ classical_alg['name'] }}_{{variant['name']}}, {{ classical_alg['name'] }}_{{variant['name']}}, "{{ classical_alg['oid'] }}", {{ cnt.val }}),
         {%- endfor %}
-        {%- for classical_alg in variant['composite'] %}
-    {%- set cnt.val = cnt.val + 1 %}
-    OQS_SIGALG_ENTRY({{variant['name']}}_{{ classical_alg['name'] }}, {{variant['name']}}_{{ classical_alg['name'] }}, {{variant['name']}}_{{ classical_alg['name'] }}, "{{ classical_alg['oid'] }}", {{ cnt.val }}),
-        {%- endfor %}
 #endif
     {%- endfor %}
 {%- endfor %}

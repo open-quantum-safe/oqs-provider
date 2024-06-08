@@ -364,8 +364,8 @@ static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[])
     const void *classical_privkey = NULL;
     const void *pq_pubkey = NULL;
     const void *pq_privkey = NULL;
-    uint32_t classical_pubkey_len = 0;
-    uint32_t classical_privkey_len = 0;
+    int classical_pubkey_len = 0;
+    int classical_privkey_len = 0;
     int pq_pubkey_len = 0;
     int pq_privkey_len = 0;
 

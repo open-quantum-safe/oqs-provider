@@ -17,18 +17,6 @@ this, e.g., as follows:
 OpenSSL 3.2.0-dev  (Library: OpenSSL 3.2.0-dev )
 ```
 
-### Note on OpenSSL installation
-
-If one does not have an OpenSSL version installed in a suitable version, care
-is advised installing such version such as not to damage a pre-installed/system-wide
-`openssl` installation.
-
-In order to experiment with a local `openssl` version, we have made available
-[a shell script](scripts/fullbuild.sh) creating a local, non-system wide installed
-`openssl` binary. By default, the current "master" branch is built by this script
-but it can be configured to build any release/tag by setting the [OPENSSL_BRANCH](CONFIGURE.md#openssl_branch)
-environment variable.
-
 ## Activation
 
 Every OpenSSL provider needs to be activated for use. There are three main ways

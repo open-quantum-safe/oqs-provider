@@ -617,7 +617,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 {
     OQSX_KEY *oqsxkey = (OQSX_KEY *)vxkey;
     unsigned char *buf = NULL;
-    uint32_t buflen = 0, privkeylen = 0;
+    int buflen = 0, privkeylen;
     ASN1_OCTET_STRING oct;
     int keybloblen, nid;
     STACK_OF(ASN1_TYPE) *sk = NULL;
@@ -643,14 +643,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
     if (oqsxkey->keytype != KEY_TYPE_CMP_SIG) {
         privkeylen = oqsxkey->privkeylen;
         if (oqsxkey->numkeys > 1) { // hybrid
-            uint32_t actualprivkeylen = 0;
-            size_t fixed_pq_privkeylen
-                = oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
-            size_t space_for_classical_privkey
-                = privkeylen - SIZE_OF_UINT32 - fixed_pq_privkeylen;
+            int actualprivkeylen;
             DECODE_UINT32(actualprivkeylen, oqsxkey->privkey);
-            if ((actualprivkeylen > oqsxkey->evp_info->length_private_key)
-                || (actualprivkeylen > space_for_classical_privkey)) {
+            if (actualprivkeylen > oqsxkey->evp_info->length_private_key) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                 return 0;
             }
@@ -695,7 +690,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
                 ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
                 return -1;
             }
-            OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %zu\n",
+            OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %d\n",
                             buflen);
             memcpy(buf, oqsxkey->privkey, privkeylen);
 #else
@@ -1731,8 +1726,7 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
             if (okey->keytype == KEY_TYPE_CMP_SIG) {
                 char *name;
                 char label[200];
-                int i;
-                uint32_t privlen = 0;
+                int i, privlen;
                 for (i = 0; i < okey->numkeys; i++) {
                     if ((name = get_cmpname(OBJ_sn2nid(okey->tls_name), i))
                         == NULL) {
@@ -1767,20 +1761,10 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
             } else {
                 if (okey->numkeys > 1) { // hybrid key
                     char classic_label[200];
-                    uint32_t classic_key_len = 0;
-                    size_t fixed_pq_privkey_len
-                        = okey->oqsx_provider_ctx.oqsx_qs_ctx.kem
-                              ->length_secret_key;
-                    size_t space_for_classical_privkey = okey->privkeylen
-                                                         - SIZE_OF_UINT32
-                                                         - fixed_pq_privkey_len;
+                    int classic_key_len = 0;
                     sprintf(classic_label, "%s key material:",
                             OBJ_nid2sn(okey->evp_info->nid));
                     DECODE_UINT32(classic_key_len, okey->privkey);
-                    if (classic_key_len > space_for_classical_privkey) {
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                        return 0;
-                    }
                     if (!print_labeled_buf(out, classic_label,
                                            okey->comp_privkey[0],
                                            classic_key_len))
@@ -1825,18 +1809,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
             } else {
                 if (okey->numkeys > 1) { // hybrid key
                     char classic_label[200];
-                    uint32_t classic_key_len = 0;
-                    size_t fixed_pq_pubkey_len
-                        = okey->oqsx_provider_ctx.oqsx_qs_ctx.kem
-                              ->length_public_key;
-                    size_t space_for_classical_pubkey = okey->pubkeylen
-                                                        - SIZE_OF_UINT32
-                                                        - fixed_pq_pubkey_len;
+                    int classic_key_len = 0;
                     DECODE_UINT32(classic_key_len, okey->pubkey);
-                    if (classic_key_len > space_for_classical_pubkey) {
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                        return 0;
-                    }
                     sprintf(classic_label, "%s key material:",
                             OBJ_nid2sn(okey->evp_info->nid));
                     if (!print_labeled_buf(out, classic_label,

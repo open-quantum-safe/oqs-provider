@@ -51,7 +51,7 @@ if [ -z "$OPENSSL_INSTALL" ]; then
    if [ ! -d "openssl" ]; then
       echo "openssl not specified and doesn't reside where expected: Cloning and building..."
       # for full debug build add: enable-trace enable-fips --debug
-      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH https://github.com/openssl/openssl.git && cd openssl && LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
+      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH git://git.openssl.org/openssl.git && cd openssl && LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
       if [ $? -ne 0 ]; then
         echo "openssl build failed. Exiting."
         exit -1
@@ -100,8 +100,7 @@ if [ -z $liboqs_DIR ]; then
   if [ ! -z $OPENSSL_INSTALL ]; then
     export CMAKE_OPENSSL_LOCATION="-DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL"
   else
-    # work around for cmake 3.23.3 regression not finding OpenSSL:
-    export CMAKE_OPENSSL_LOCATION="-DOPENSSL_ROOT_DIR="
+    export CMAKE_OPENSSL_LOCATION=""
   fi
   # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
   # to optimize for size add -DOQS_ALGS_ENABLED= suitably to one of these values:
@@ -125,7 +124,7 @@ if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
    BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       cmake $CMAKE_OPENSSL_LOCATION $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
+       cmake -DOPENSSL_ROOT_DIR=$(pwd)/.local $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    else
        cmake -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
    fi

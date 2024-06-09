@@ -20,11 +20,12 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
       MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH="0.10.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} LIBOQS_BRANCH=0.10.1 ../scripts/fullbuild.sh
+        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} ../scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -49,11 +50,12 @@ jobs:
       image: ${{ matrix.container }}
     env:
       MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH="0.10.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=0.10.1 ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test

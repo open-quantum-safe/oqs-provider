@@ -2,7 +2,7 @@
 
 ## About
 
-The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on our website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.
+The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on the website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.
 
 **oqs-provider** is a standalone [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and [hybrid key exchange](https://datatracker.ietf.org/doc/draft-ietf-pquip-pqt-hybrid-terminology) for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS, CMP and `dgst` (signature) operations.
 
@@ -32,7 +32,7 @@ This fixes potential buffer overrun problems in hybrid key decoding. Use of prio
 * Extra parentheses removed by @bencemali in https://github.com/open-quantum-safe/oqs-provider/pull/405
 * No unwanted error left in queue from OBJ_create by @bencemali in https://github.com/open-quantum-safe/oqs-provider/pull/404
 * update security issue reporting [skip ci] by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/414
-* DECODE_UINT32 without lengths checked fixed by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/416
+* DECODE_UINT32 without lengths checked fixed by @bencemali in https://github.com/open-quantum-safe/oqs-provider/pull/416
 * add composite OIDs to getenv logic by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/419
 * Switch to https for git access by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/423
 * STANDARDS.md update by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/420

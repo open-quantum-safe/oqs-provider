@@ -50,7 +50,7 @@ jobs:
       image: ${{ matrix.container }}
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH="0.10.1"
+      LIBOQS_BRANCH: "0.10.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

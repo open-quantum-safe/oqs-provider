@@ -20,7 +20,7 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH="0.10.1"
+      LIBOQS_BRANCH: "0.10.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -118,7 +118,7 @@ jobs:
 
       - name: Clone and build liboqs with ASan
         run: |
-          git clone --depth=1 --branch 0.10.0 https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch 0.10.1 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake -GNinja -B build \

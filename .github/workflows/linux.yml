@@ -20,6 +20,7 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
       MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH: "0.10.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -49,11 +50,12 @@ jobs:
       image: ${{ matrix.container }}
     env:
       MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH: "0.10.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=0.10.0 ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -116,7 +118,7 @@ jobs:
 
       - name: Clone and build liboqs with ASan
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch 0.10.1 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake -GNinja -B build \
@@ -198,7 +200,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch 0.10.0 https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch 0.10.1 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

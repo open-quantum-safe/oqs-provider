@@ -40,7 +40,7 @@ jobs:
       - run:
           name: Clone and build liboqs (<< parameters.CMAKE_ARGS >>)
           command: |
-             git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
+             git clone --depth 1 --branch 0.10.1 https://github.com/open-quantum-safe/liboqs.git &&
              cd liboqs && mkdir _build && cd _build &&
              cmake -GNinja << parameters.CMAKE_ARGS >> -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
              cd .. && cd .. && pwd
@@ -158,7 +158,7 @@ jobs:
       - run:
           name: Clone and build liboqs
           command: |
-             git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
+             git clone --depth 1 --branch 0.10.1 https://github.com/open-quantum-safe/liboqs.git &&
              export LIBOQS_INSTALLPATH=$(pwd)/.local && cd liboqs && mkdir _build && cd _build &&
              export OPENSSL_INSTALL="$(brew --prefix << parameters.OPENSSL_PREINSTALL >> || echo "")"
              cmake -GNinja -DOPENSSL_ROOT_DIR="${OPENSSL_INSTALL}" -DCMAKE_INSTALL_PREFIX=$LIBOQS_INSTALLPATH << parameters.CMAKE_ARGS >> .. && ninja install &&

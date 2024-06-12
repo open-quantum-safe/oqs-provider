@@ -6,7 +6,8 @@ We only support the most recent release.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.6.0   | :white_check_mark: |
+| 0.6.1   | :white_check_mark: |
+| 0.6.0   | :x:                |
 | 0.5.3   | :x:                |
 | 0.5.2   | :x:                |
 | 0.5.1   | :x:                |

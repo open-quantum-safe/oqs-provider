@@ -49,11 +49,12 @@ jobs:
       image: ${{ matrix.container }}
     env:
       MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH: "0.10.1"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=0.10.1 ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test

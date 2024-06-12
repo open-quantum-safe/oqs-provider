@@ -20,6 +20,7 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
       MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

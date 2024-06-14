@@ -1,4 +1,4 @@
-UNIX-specific build/install instructions
+Windows-specific build/install instructions
 ========================================
 
 `oqsprovider` can also be build on/for Windows using Microsoft Visual

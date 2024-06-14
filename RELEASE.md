@@ -14,7 +14,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is version 0.6.1 of oqs-provider.
+This is version 0.6.1 of oqs-provider. This version is closely in sync with `liboqs` v.0.10.1.
 
 Most important updates are fixed references to a security update to `liboqs`, fixes of potential buffer overrun errors in hybrid key decoding, adding of composite OID setting logic and several documentation updates.
 
@@ -40,7 +40,7 @@ This fixes potential buffer overrun problems in hybrid key decoding. Use of prio
 ## New Contributors
 * @iyanmv made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/400
 
-**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.6.0...0.6.1-rc1
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.6.0...0.6.1
 
 Previous Release Notes
 ======================

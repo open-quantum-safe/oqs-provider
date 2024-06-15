@@ -613,29 +613,47 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg)
                 OSSL_PARAM_END                                                \
         }
 
+#    if defined(OQS_ENABLE_SIG_dilithium_2)                 \
+        || defined(OQS_ENABLE_SIG_dilithium_3)              \
+        || defined(OQS_ENABLE_SIG_dilithium_5)              \
+        || defined(OQS_ENABLE_SIG_ml_dsa_44)                \
+        || defined(OQS_ENABLE_SIG_ml_dsa_65)                \
+        || defined(OQS_ENABLE_SIG_ml_dsa_87)                \
+        || defined(OQS_ENABLE_SIG_falcon_512)               \
+        || defined(OQS_ENABLE_SIG_falcon_padded_512)        \
+        || defined(OQS_ENABLE_SIG_falcon_1024)              \
+        || defined(OQS_ENABLE_SIG_falcon_padded_1024)       \
+        || defined(OQS_ENABLE_SIG_sphincs_sha2_128f_simple) \
+        || defined(OQS_ENABLE_SIG_sphincs_sha2_128s_simple) \
+        || defined(OQS_ENABLE_SIG_sphincs_sha2_192f_simple) \
+        || defined(OQS_ENABLE_SIG_sphincs_shake_128f_simple)
+#        define OQS_SIGNATURES_USED
+#    endif
+
+#    ifdef OQS_SIGNATURES_USED
 static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_START
-#    ifdef OQS_ENABLE_SIG_dilithium_2
+#        ifdef OQS_ENABLE_SIG_dilithium_2
     OQS_SIGALG_ENTRY(dilithium2, dilithium2, dilithium2,
                      "1.3.6.1.4.1.2.267.7.4.4", 0),
     OQS_SIGALG_ENTRY(p256_dilithium2, p256_dilithium2, p256_dilithium2,
                      "1.3.9999.2.7.1", 1),
     OQS_SIGALG_ENTRY(rsa3072_dilithium2, rsa3072_dilithium2, rsa3072_dilithium2,
                      "1.3.9999.2.7.2", 2),
-#    endif
-#    ifdef OQS_ENABLE_SIG_dilithium_3
+#        endif
+#        ifdef OQS_ENABLE_SIG_dilithium_3
     OQS_SIGALG_ENTRY(dilithium3, dilithium3, dilithium3,
                      "1.3.6.1.4.1.2.267.7.6.5", 3),
     OQS_SIGALG_ENTRY(p384_dilithium3, p384_dilithium3, p384_dilithium3,
                      "1.3.9999.2.7.3", 4),
-#    endif
-#    ifdef OQS_ENABLE_SIG_dilithium_5
+#        endif
+#        ifdef OQS_ENABLE_SIG_dilithium_5
     OQS_SIGALG_ENTRY(dilithium5, dilithium5, dilithium5,
                      "1.3.6.1.4.1.2.267.7.8.7", 5),
     OQS_SIGALG_ENTRY(p521_dilithium5, p521_dilithium5, p521_dilithium5,
                      "1.3.9999.2.7.4", 6),
-#    endif
-#    ifdef OQS_ENABLE_SIG_ml_dsa_44
+#        endif
+#        ifdef OQS_ENABLE_SIG_ml_dsa_44
     OQS_SIGALG_ENTRY(mldsa44, mldsa44, mldsa44, "1.3.6.1.4.1.2.267.12.4.4", 7),
     OQS_SIGALG_ENTRY(p256_mldsa44, p256_mldsa44, p256_mldsa44, "1.3.9999.7.1",
                      8),
@@ -651,8 +669,8 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
                      "2.16.840.1.114027.80.8.1.4", 13),
     OQS_SIGALG_ENTRY(mldsa44_bp256, mldsa44_bp256, mldsa44_bp256,
                      "2.16.840.1.114027.80.8.1.5", 14),
-#    endif
-#    ifdef OQS_ENABLE_SIG_ml_dsa_65
+#        endif
+#        ifdef OQS_ENABLE_SIG_ml_dsa_65
     OQS_SIGALG_ENTRY(mldsa65, mldsa65, mldsa65, "1.3.6.1.4.1.2.267.12.6.5", 15),
     OQS_SIGALG_ENTRY(p384_mldsa65, p384_mldsa65, p384_mldsa65, "1.3.9999.7.3",
                      16),
@@ -666,8 +684,8 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
                      "2.16.840.1.114027.80.8.1.9", 20),
     OQS_SIGALG_ENTRY(mldsa65_ed25519, mldsa65_ed25519, mldsa65_ed25519,
                      "2.16.840.1.114027.80.8.1.10", 21),
-#    endif
-#    ifdef OQS_ENABLE_SIG_ml_dsa_87
+#        endif
+#        ifdef OQS_ENABLE_SIG_ml_dsa_87
     OQS_SIGALG_ENTRY(mldsa87, mldsa87, mldsa87, "1.3.6.1.4.1.2.267.12.8.7", 22),
     OQS_SIGALG_ENTRY(p521_mldsa87, p521_mldsa87, p521_mldsa87, "1.3.9999.7.4",
                      23),
@@ -677,34 +695,34 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
                      "2.16.840.1.114027.80.8.1.12", 25),
     OQS_SIGALG_ENTRY(mldsa87_ed448, mldsa87_ed448, mldsa87_ed448,
                      "2.16.840.1.114027.80.8.1.13", 26),
-#    endif
-#    ifdef OQS_ENABLE_SIG_falcon_512
+#        endif
+#        ifdef OQS_ENABLE_SIG_falcon_512
     OQS_SIGALG_ENTRY(falcon512, falcon512, falcon512, "1.3.9999.3.11", 27),
     OQS_SIGALG_ENTRY(p256_falcon512, p256_falcon512, p256_falcon512,
                      "1.3.9999.3.12", 28),
     OQS_SIGALG_ENTRY(rsa3072_falcon512, rsa3072_falcon512, rsa3072_falcon512,
                      "1.3.9999.3.13", 29),
-#    endif
-#    ifdef OQS_ENABLE_SIG_falcon_padded_512
+#        endif
+#        ifdef OQS_ENABLE_SIG_falcon_padded_512
     OQS_SIGALG_ENTRY(falconpadded512, falconpadded512, falconpadded512,
                      "1.3.9999.3.16", 30),
     OQS_SIGALG_ENTRY(p256_falconpadded512, p256_falconpadded512,
                      p256_falconpadded512, "1.3.9999.3.17", 31),
     OQS_SIGALG_ENTRY(rsa3072_falconpadded512, rsa3072_falconpadded512,
                      rsa3072_falconpadded512, "1.3.9999.3.18", 32),
-#    endif
-#    ifdef OQS_ENABLE_SIG_falcon_1024
+#        endif
+#        ifdef OQS_ENABLE_SIG_falcon_1024
     OQS_SIGALG_ENTRY(falcon1024, falcon1024, falcon1024, "1.3.9999.3.14", 33),
     OQS_SIGALG_ENTRY(p521_falcon1024, p521_falcon1024, p521_falcon1024,
                      "1.3.9999.3.15", 34),
-#    endif
-#    ifdef OQS_ENABLE_SIG_falcon_padded_1024
+#        endif
+#        ifdef OQS_ENABLE_SIG_falcon_padded_1024
     OQS_SIGALG_ENTRY(falconpadded1024, falconpadded1024, falconpadded1024,
                      "1.3.9999.3.19", 35),
     OQS_SIGALG_ENTRY(p521_falconpadded1024, p521_falconpadded1024,
                      p521_falconpadded1024, "1.3.9999.3.20", 36),
-#    endif
-#    ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
+#        endif
+#        ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
     OQS_SIGALG_ENTRY(sphincssha2128fsimple, sphincssha2128fsimple,
                      sphincssha2128fsimple, "1.3.9999.6.4.13", 37),
     OQS_SIGALG_ENTRY(p256_sphincssha2128fsimple, p256_sphincssha2128fsimple,
@@ -712,8 +730,8 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(rsa3072_sphincssha2128fsimple,
                      rsa3072_sphincssha2128fsimple,
                      rsa3072_sphincssha2128fsimple, "1.3.9999.6.4.15", 39),
-#    endif
-#    ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
+#        endif
+#        ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
     OQS_SIGALG_ENTRY(sphincssha2128ssimple, sphincssha2128ssimple,
                      sphincssha2128ssimple, "1.3.9999.6.4.16", 40),
     OQS_SIGALG_ENTRY(p256_sphincssha2128ssimple, p256_sphincssha2128ssimple,
@@ -721,14 +739,14 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(rsa3072_sphincssha2128ssimple,
                      rsa3072_sphincssha2128ssimple,
                      rsa3072_sphincssha2128ssimple, "1.3.9999.6.4.18", 42),
-#    endif
-#    ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
+#        endif
+#        ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
     OQS_SIGALG_ENTRY(sphincssha2192fsimple, sphincssha2192fsimple,
                      sphincssha2192fsimple, "1.3.9999.6.5.10", 43),
     OQS_SIGALG_ENTRY(p384_sphincssha2192fsimple, p384_sphincssha2192fsimple,
                      p384_sphincssha2192fsimple, "1.3.9999.6.5.11", 44),
-#    endif
-#    ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
+#        endif
+#        ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
     OQS_SIGALG_ENTRY(sphincsshake128fsimple, sphincsshake128fsimple,
                      sphincsshake128fsimple, "1.3.9999.6.7.13", 45),
     OQS_SIGALG_ENTRY(p256_sphincsshake128fsimple, p256_sphincsshake128fsimple,
@@ -736,12 +754,14 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(rsa3072_sphincsshake128fsimple,
                      rsa3072_sphincsshake128fsimple,
                      rsa3072_sphincsshake128fsimple, "1.3.9999.6.7.15", 47),
-#    endif
+#        endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };
+#    endif
 
 static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
 {
+#    ifdef OQS_SIGNATURES_USED
     size_t i;
 
     // relaxed assertion for the case that not all algorithms are enabled in
@@ -751,6 +771,7 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg)
         if (!cb(oqs_param_sigalg_list[i], arg))
             return 0;
     }
+#    endif
 
     return 1;
 }

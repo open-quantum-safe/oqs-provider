@@ -244,15 +244,13 @@ int main(int argc, char *argv[])
     modulename = argv[1];
     configfile = argv[2];
 
-    load_oqs_provider(libctx, modulename, configfile);
+    oqsprov = load_oqs_provider(libctx, modulename, configfile);
 
     keyctx = OSSL_LIB_CTX_new();
 
-    load_oqs_provider(keyctx, modulename, configfile);
-
     dfltprov = OSSL_PROVIDER_load(keyctx, "default");
-    keyprov = OSSL_PROVIDER_load(keyctx, modulename);
-    oqsprov = OSSL_PROVIDER_load(libctx, modulename);
+
+    keyprov = load_oqs_provider(keyctx, modulename, configfile);
 
     algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
                                          &query_nocache);
@@ -277,10 +275,11 @@ int main(int argc, char *argv[])
     }
 #endif /* OQS_KEM_ENCODERS */
 
-    OSSL_PROVIDER_unload(dfltprov);
-    OSSL_PROVIDER_unload(keyprov);
-    if (OPENSSL_VERSION_PREREQ(3, 1))
-        OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
+    if (OPENSSL_VERSION_PREREQ(3, 1)) { // avoid crash in 3.0.x
+        OSSL_PROVIDER_unload(dfltprov);
+        OSSL_PROVIDER_unload(keyprov);
+        OSSL_PROVIDER_unload(oqsprov);
+    }
     OSSL_LIB_CTX_free(libctx);
     OSSL_LIB_CTX_free(keyctx);
 

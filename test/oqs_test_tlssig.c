@@ -149,6 +149,7 @@ int main(int argc, char *argv[])
 {
     size_t i;
     int errcnt = 0, test = 0;
+    OSSL_PROVIDER *oqsprov = NULL;
 
 #ifndef OPENSSL_NO_TRACE
     fprintf(stderr,
@@ -163,9 +164,10 @@ int main(int argc, char *argv[])
     configfile = argv[2];
     certsdir = argv[3];
 
-    load_oqs_provider(libctx, modulename, configfile);
+    oqsprov = load_oqs_provider(libctx, modulename, configfile);
 
     T(OSSL_PROVIDER_available(libctx, "default"));
+    T(OSSL_PROVIDER_available(libctx, modulename));
 
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
     // crashes: EVP_SIGNATURE_do_all_provided(libctx, test_oqs_sigs, &errcnt);
@@ -176,6 +178,8 @@ int main(int argc, char *argv[])
         "TLS-SIG handshake test not enabled. Update OpenSSL to more current version.\n");
 #endif
 
+    if (OPENSSL_VERSION_PREREQ(3, 1))
+        OSSL_PROVIDER_unload(oqsprov); // avoid crash in 3.0.x
     OSSL_LIB_CTX_free(libctx);
     TEST_ASSERT(errcnt == 0)
     return !test;

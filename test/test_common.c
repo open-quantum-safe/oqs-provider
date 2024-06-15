@@ -51,11 +51,12 @@ OSSL_PROVIDER *load_default_provider(OSSL_LIB_CTX *libctx)
 #ifndef OQS_PROVIDER_STATIC
 
 /* Loads the oqs-provider from a shared module (.so). */
-void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
-                       const char *configfile)
+OSSL_PROVIDER *load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
+                                 const char *configfile)
 {
     T(OSSL_LIB_CTX_load_config(libctx, configfile));
     T(OSSL_PROVIDER_available(libctx, modulename));
+    return OSSL_PROVIDER_load(libctx, modulename);
 }
 
 #else
@@ -63,13 +64,14 @@ void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
 extern OSSL_provider_init_fn OQS_PROVIDER_ENTRYPOINT_NAME;
 
 /* Loads the statically linked oqs-provider. */
-void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
-                       const char *configfile)
+OSSL_PROVIDER *load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
+                                 const char *configfile)
 {
     (void)configfile;
     T(OSSL_PROVIDER_add_builtin(libctx, modulename,
                                 OQS_PROVIDER_ENTRYPOINT_NAME));
     T(OSSL_PROVIDER_load(libctx, "default"));
+    return OSSL_PROVIDER_load(libctx, modulename);
 }
 
 #endif // ifndef OQS_PROVIDER_STATIC

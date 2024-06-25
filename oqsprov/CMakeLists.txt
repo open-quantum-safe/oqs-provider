@@ -79,6 +79,11 @@ if (NOT OQS_PROVIDER_BUILD_STATIC)
       SUFFIX ".dll"
     )
   endif()
+else()
+  set_target_properties(oqsprovider
+      PROPERTIES
+      PREFIX "lib"
+  )
 endif()
 
 target_link_libraries(oqsprovider PUBLIC OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
@@ -86,9 +91,11 @@ if (USE_ENCODING_LIB)
   target_link_libraries(oqsprovider PUBLIC qsc_key_encoder)
   target_include_directories(oqsprovider PRIVATE ${encoder_LIBRARY_INCLUDE})
 endif()
+
 install(TARGETS oqsprovider
-        CONFIGURATIONS Debug Release
         LIBRARY DESTINATION "${OPENSSL_MODULES_PATH}"
+        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/oqs-provider/"
         RUNTIME DESTINATION "${OPENSSL_MODULES_PATH}")
 
 if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
@@ -104,6 +111,7 @@ install(TARGETS oqsprovider
         ARCHIVE DESTINATION lib/
         PUBLIC_HEADER DESTINATION include/oqs-provider/
         )
+
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_VENDOR "www.openquantumsafe.org")
 set(CPACK_PACKAGE_VERSION ${OQSPROVIDER_VERSION_TEXT})

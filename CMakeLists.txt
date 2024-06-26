@@ -87,6 +87,7 @@ endfunction()
 add_subdirectory(oqsprov)
 
 # Testing
+include(CTest)
 enable_testing()
 add_subdirectory(test)
 

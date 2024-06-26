@@ -1,3 +1,7 @@
+if(NOT BUILD_TESTING)
+  return()
+endif()
+
 if (OQS_PROVIDER_BUILD_STATIC)
   add_executable(example_static_oqsprovider static_oqsprovider.c)
   target_link_libraries(example_static_oqsprovider PRIVATE ${OPENSSL_CRYPTO_LIBRARY} oqsprovider)

@@ -97,6 +97,10 @@ void load_oqs_provider(OSSL_LIB_CTX *libctx) {
 See [`examples/static_oqsprovider.c`](examples/static_oqsprovider.c) for a complete
 example of how to load oqsprovider using `OSSL_PROVIDER_add_builtin`.
 
+### BUILD_TESTING
+
+By setting this to "OFF", no tests or examples will be compiled.
+
 ## Convenience build script options
 
 For anyone interested in building the complete software stack

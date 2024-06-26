@@ -15,11 +15,14 @@ else()
 endif()
 
 if(MSVC)
-  set(CMAKE_EXE_LINKER_FLAGS
-      "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
+  # ABr: do not suppress warnings on library mismatch; instead, fix them :)
+  #set(CMAKE_EXE_LINKER_FLAGS
+  #    "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
   add_definitions(-DOQS_PROVIDER_NOATOMIC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   set(OQS_ADDL_SOCKET_LIBS ws2_32.lib gdi32.lib crypt32.lib)
+  # bring compile options in line with openssl options; link otherwise fails
+  add_compile_options(/MT)
 else()
   add_compile_options(-Wunused-function)
   set(OQS_ADDL_SOCKET_LIBS "")
@@ -67,9 +70,13 @@ get_filename_component(OPENSSL_LIB_DIR ${OPENSSL_CRYPTO_LIBRARY} DIRECTORY)
 set(OPENSSL_MODULES_PATH ${OPENSSL_LIB_DIR}/ossl-modules)
 endif()
 
-# Add required include for liboqs
-find_package(liboqs REQUIRED)
-get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
+# Add required include for liboqs;
+# this fails OOTB for Android builds; see https://stackoverflow.com/a/73886192/1318024.
+# Workaround: use CMAKE_FIND_ROOT_PATH_BOTH
+find_package(liboqs REQUIRED CMAKE_FIND_ROOT_PATH_BOTH)
+if (NOT LIBOQS_INCLUDE_DIR)
+  get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
+endif()
 message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")
 include_directories(${LIBOQS_INCLUDE_DIR})
 

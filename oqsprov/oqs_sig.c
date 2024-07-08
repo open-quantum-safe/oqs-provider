@@ -515,11 +515,17 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                     }
 
                     if (!strncmp(name, "pss", 3)) {
+                        int salt;
+                        if (name[3] == '3') { // pss3072
+                            salt = 64;
+                        } else { // pss2048
+                            salt = 32;
+                        }
                         if ((EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign,
                                                           RSA_PKCS1_PSS_PADDING)
                              <= 0)
                             || (EVP_PKEY_CTX_set_rsa_pss_saltlen(
-                                    classical_ctx_sign, 64)
+                                    classical_ctx_sign, salt)
                                 <= 0)
                             || (EVP_PKEY_CTX_set_rsa_mgf1_md(classical_ctx_sign,
                                                              EVP_sha256())
@@ -860,10 +866,17 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                         goto endverify;
                     }
                     if (!strncmp(name, "pss", 3)) {
+                        int salt;
+                        if (name[3] == '3') { // pss3072
+                            salt = 64;
+                        } else { // pss2048
+                            salt = 32;
+                        }
                         if ((EVP_PKEY_CTX_set_rsa_padding(ctx_verify,
                                                           RSA_PKCS1_PSS_PADDING)
                              <= 0)
-                            || (EVP_PKEY_CTX_set_rsa_pss_saltlen(ctx_verify, 64)
+                            || (EVP_PKEY_CTX_set_rsa_pss_saltlen(ctx_verify,
+                                                                 salt)
                                 <= 0)
                             || (EVP_PKEY_CTX_set_rsa_mgf1_md(ctx_verify,
                                                              EVP_sha256())

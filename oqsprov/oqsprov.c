@@ -510,7 +510,19 @@ int oqs_patch_oids(void)
         if ((envval = getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE")))
             oqs_oid_alg_list[92 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[68 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[94 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO_1")))
+            oqs_oid_alg_list[96 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_MAYO_1")))
+            oqs_oid_alg_list[98 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO_2")))
+            oqs_oid_alg_list[100 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_MAYO_2")))
+            oqs_oid_alg_list[102 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO_3")))
+            oqs_oid_alg_list[104 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P384_MAYO_3")))
+            oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }

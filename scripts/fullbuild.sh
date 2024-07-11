@@ -29,7 +29,7 @@ if [ $# -gt 0 ]; then
 fi
 
 if [ -z "$LIBOQS_BRANCH" ]; then
-   export LIBOQS_BRANCH=main
+   export LIBOQS_BRANCH=bhe-nibbling-mayo
 fi
 
 if [ -z "$OQS_ALGS_ENABLED" ]; then

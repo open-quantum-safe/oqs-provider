@@ -420,21 +420,21 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
                         SubjectPublicKeyInfo, rsa3072_sphincsshake128fsimple),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_1
-    DECODER_w_structure("mayo_1", der, PrivateKeyInfo, mayo_1),
-    DECODER_w_structure("mayo_1", der, SubjectPublicKeyInfo, mayo_1),
-    DECODER_w_structure("p256_mayo_1", der, PrivateKeyInfo, p256_mayo_1),
-    DECODER_w_structure("p256_mayo_1", der, SubjectPublicKeyInfo, p256_mayo_1),
+    DECODER_w_structure("mayo1", der, PrivateKeyInfo, mayo1),
+    DECODER_w_structure("mayo1", der, SubjectPublicKeyInfo, mayo1),
+    DECODER_w_structure("p256_mayo1", der, PrivateKeyInfo, p256_mayo1),
+    DECODER_w_structure("p256_mayo1", der, SubjectPublicKeyInfo, p256_mayo1),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_2
-    DECODER_w_structure("mayo_2", der, PrivateKeyInfo, mayo_2),
-    DECODER_w_structure("mayo_2", der, SubjectPublicKeyInfo, mayo_2),
-    DECODER_w_structure("p256_mayo_2", der, PrivateKeyInfo, p256_mayo_2),
-    DECODER_w_structure("p256_mayo_2", der, SubjectPublicKeyInfo, p256_mayo_2),
+    DECODER_w_structure("mayo2", der, PrivateKeyInfo, mayo2),
+    DECODER_w_structure("mayo2", der, SubjectPublicKeyInfo, mayo2),
+    DECODER_w_structure("p256_mayo2", der, PrivateKeyInfo, p256_mayo2),
+    DECODER_w_structure("p256_mayo2", der, SubjectPublicKeyInfo, p256_mayo2),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_3
-    DECODER_w_structure("mayo_3", der, PrivateKeyInfo, mayo_3),
-    DECODER_w_structure("mayo_3", der, SubjectPublicKeyInfo, mayo_3),
-    DECODER_w_structure("p384_mayo_3", der, PrivateKeyInfo, p384_mayo_3),
-    DECODER_w_structure("p384_mayo_3", der, SubjectPublicKeyInfo, p384_mayo_3),
+    DECODER_w_structure("mayo3", der, PrivateKeyInfo, mayo3),
+    DECODER_w_structure("mayo3", der, SubjectPublicKeyInfo, mayo3),
+    DECODER_w_structure("p384_mayo3", der, PrivateKeyInfo, p384_mayo3),
+    DECODER_w_structure("p384_mayo3", der, SubjectPublicKeyInfo, p384_mayo3),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

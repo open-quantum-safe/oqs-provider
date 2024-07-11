@@ -190,12 +190,12 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple,
      KEY_TYPE_HYB_SIG, 128},
-    {0, "mayo_1", OQS_SIG_alg_mayo_1, KEY_TYPE_SIG, 128},
-    {0, "p256_mayo_1", OQS_SIG_alg_mayo_1, KEY_TYPE_HYB_SIG, 128},
-    {0, "mayo_2", OQS_SIG_alg_mayo_2, KEY_TYPE_SIG, 128},
-    {0, "p256_mayo_2", OQS_SIG_alg_mayo_2, KEY_TYPE_HYB_SIG, 128},
-    {0, "mayo_3", OQS_SIG_alg_mayo_3, KEY_TYPE_SIG, 192},
-    {0, "p384_mayo_3", OQS_SIG_alg_mayo_3, KEY_TYPE_HYB_SIG, 192},
+    {0, "mayo1", OQS_SIG_alg_mayo_1, KEY_TYPE_SIG, 128},
+    {0, "p256_mayo1", OQS_SIG_alg_mayo_1, KEY_TYPE_HYB_SIG, 128},
+    {0, "mayo2", OQS_SIG_alg_mayo_2, KEY_TYPE_SIG, 128},
+    {0, "p256_mayo2", OQS_SIG_alg_mayo_2, KEY_TYPE_HYB_SIG, 128},
+    {0, "mayo3", OQS_SIG_alg_mayo_3, KEY_TYPE_SIG, 192},
+    {0, "p384_mayo3", OQS_SIG_alg_mayo_3, KEY_TYPE_HYB_SIG, 192},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };
 

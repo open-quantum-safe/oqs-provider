@@ -1473,8 +1473,8 @@ sigs:
     family: 'MAYO'
     variants:
       -
-        name: 'mayo_1'
-        pretty_name: 'MAYO_1'
+        name: 'mayo1'
+        pretty_name: 'MAYO-1'
         oqs_meth: 'OQS_SIG_alg_mayo_1'
         oid: '1.3.9999.8.1.1'
         code_point: '0xfeee'
@@ -1484,8 +1484,8 @@ sigs:
                     'oid': '1.3.9999.8.1.2',
                     'code_point': '0xfef1'}]
       -
-        name: 'mayo_2'
-        pretty_name: 'MAYO_2'
+        name: 'mayo2'
+        pretty_name: 'MAYO-2'
         oqs_meth: 'OQS_SIG_alg_mayo_2'
         oid: '1.3.9999.8.2.1'
         code_point: '0xfeef'
@@ -1495,8 +1495,8 @@ sigs:
                     'oid': '1.3.9999.8.2.2',
                     'code_point': '0xfef2'}]
       -
-        name: 'mayo_3'
-        pretty_name: 'MAYO_3'
+        name: 'mayo3'
+        pretty_name: 'MAYO-3'
         oqs_meth: 'OQS_SIG_alg_mayo_3'
         oid: '1.3.9999.8.3.1'
         code_point: '0xfef0'

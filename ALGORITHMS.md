@@ -117,12 +117,12 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | p521_sphincsshake256fsimple | 0xfecd |No| OQS_CODEPOINT_P521_SPHINCSSHAKE256FSIMPLE
 | sphincsshake256ssimple | 0xfece |No| OQS_CODEPOINT_SPHINCSSHAKE256SSIMPLE
 | p521_sphincsshake256ssimple | 0xfecf |No| OQS_CODEPOINT_P521_SPHINCSSHAKE256SSIMPLE
-| mayo_1 | 0xfeee |Yes| OQS_CODEPOINT_MAYO_1
-| p256_mayo_1 | 0xfef1 |Yes| OQS_CODEPOINT_P256_MAYO_1
-| mayo_2 | 0xfeef |Yes| OQS_CODEPOINT_MAYO_2
-| p256_mayo_2 | 0xfef2 |Yes| OQS_CODEPOINT_P256_MAYO_2
-| mayo_3 | 0xfef0 |Yes| OQS_CODEPOINT_MAYO_3
-| p384_mayo_3 | 0xfef3 |Yes| OQS_CODEPOINT_P384_MAYO_3
+| mayo1 | 0xfeee |Yes| OQS_CODEPOINT_MAYO1
+| p256_mayo1 | 0xfef1 |Yes| OQS_CODEPOINT_P256_MAYO1
+| mayo2 | 0xfeef |Yes| OQS_CODEPOINT_MAYO2
+| p256_mayo2 | 0xfef2 |Yes| OQS_CODEPOINT_P256_MAYO2
+| mayo3 | 0xfef0 |Yes| OQS_CODEPOINT_MAYO3
+| p384_mayo3 | 0xfef3 |Yes| OQS_CODEPOINT_P384_MAYO3
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_END -->
 
 Changing code points
@@ -213,12 +213,12 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | p521_sphincsshake256fsimple | 1.3.9999.6.9.11 |No| OQS_OID_P521_SPHINCSSHAKE256FSIMPLE
 | sphincsshake256ssimple | 1.3.9999.6.9.12 |No| OQS_OID_SPHINCSSHAKE256SSIMPLE
 | p521_sphincsshake256ssimple | 1.3.9999.6.9.13 |No| OQS_OID_P521_SPHINCSSHAKE256SSIMPLE
-| mayo_1 | 1.3.9999.8.1.1 |Yes| OQS_OID_MAYO_1
-| p256_mayo_1 | 1.3.9999.8.1.2 |Yes| OQS_OID_P256_MAYO_1
-| mayo_2 | 1.3.9999.8.2.1 |Yes| OQS_OID_MAYO_2
-| p256_mayo_2 | 1.3.9999.8.2.2 |Yes| OQS_OID_P256_MAYO_2
-| mayo_3 | 1.3.9999.8.3.1 |Yes| OQS_OID_MAYO_3
-| p384_mayo_3 | 1.3.9999.8.3.2 |Yes| OQS_OID_P384_MAYO_3
+| mayo1 | 1.3.9999.8.1.1 |Yes| OQS_OID_MAYO1
+| p256_mayo1 | 1.3.9999.8.1.2 |Yes| OQS_OID_P256_MAYO1
+| mayo2 | 1.3.9999.8.2.1 |Yes| OQS_OID_MAYO2
+| p256_mayo2 | 1.3.9999.8.2.2 |Yes| OQS_OID_P256_MAYO2
+| mayo3 | 1.3.9999.8.3.1 |Yes| OQS_OID_MAYO3
+| p384_mayo3 | 1.3.9999.8.3.2 |Yes| OQS_OID_P384_MAYO3
 
 If [OQS_KEM_ENCODERS](CONFIGURE.md#OQS_KEM_ENCODERS) is enabled the following list is also available:
 

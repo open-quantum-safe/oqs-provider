@@ -1294,6 +1294,12 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define p384_mayo3_evp_type                     0
 #define p384_mayo3_input_type                   "p384_mayo3"
 #define p384_mayo3_pem_type                     "p384_mayo3"
+#define mayo5_evp_type                          0
+#define mayo5_input_type                        "mayo5"
+#define mayo5_pem_type                          "mayo5"
+#define p521_mayo5_evp_type                     0
+#define p521_mayo5_input_type                   "p521_mayo5"
+#define p521_mayo5_pem_type                     "p521_mayo5"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2736,4 +2742,18 @@ MAKE_ENCODER(, p384_mayo3, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p384_mayo3, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p384_mayo3, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p384_mayo3);
+MAKE_ENCODER(, mayo5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo5);
+MAKE_ENCODER(, p521_mayo5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p521_mayo5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_mayo5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p521_mayo5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p521_mayo5);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

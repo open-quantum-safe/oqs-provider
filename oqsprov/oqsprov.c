@@ -50,9 +50,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define OQS_OID_CNT 214
+#    define OQS_OID_CNT 218
 #else
-#    define OQS_OID_CNT 108
+#    define OQS_OID_CNT 112
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -275,6 +275,10 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "mayo3",
     "1.3.9999.8.3.2",
     "p384_mayo3",
+    "1.3.9999.8.5.1",
+    "mayo5",
+    "1.3.9999.8.5.2",
+    "p521_mayo5",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -523,6 +527,10 @@ int oqs_patch_oids(void)
             oqs_oid_alg_list[104 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P384_MAYO3")))
             oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO5")))
+            oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P521_MAYO5")))
+            oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -771,6 +779,14 @@ int oqs_patch_encodings(void)
             oqs_alg_encoding_list[106] = envval;
         if ((envval = getenv("OQS_ENCODING_P384_MAYO3_ALGNAME")))
             oqs_alg_encoding_list[107] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO5")))
+            oqs_alg_encoding_list[108] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO5_ALGNAME")))
+            oqs_alg_encoding_list[109] = envval;
+        if ((envval = getenv("OQS_ENCODING_P521_MAYO5")))
+            oqs_alg_encoding_list[110] = envval;
+        if ((envval = getenv("OQS_ENCODING_P521_MAYO5_ALGNAME")))
+            oqs_alg_encoding_list[111] = envval;
     }
     ///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_END
     return 1;
@@ -903,6 +919,10 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #ifdef OQS_ENABLE_SIG_mayo_3
     SIGALG("mayo3", 192, oqs_signature_functions),
     SIGALG("p384_mayo3", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_5
+    SIGALG("mayo5", 256, oqs_signature_functions),
+    SIGALG("p521_mayo5", 256, oqs_signature_functions),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
@@ -1095,6 +1115,10 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[]
 #ifdef OQS_ENABLE_SIG_mayo_3
     SIGALG("mayo3", 192, oqs_mayo3_keymgmt_functions),
     SIGALG("p384_mayo3", 192, oqs_p384_mayo3_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_5
+    SIGALG("mayo5", 256, oqs_mayo5_keymgmt_functions),
+    SIGALG("p521_mayo5", 256, oqs_p521_mayo5_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes

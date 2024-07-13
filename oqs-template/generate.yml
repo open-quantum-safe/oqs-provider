@@ -399,7 +399,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xfef4
+# Next free signature ID: 0xfef6
 sigs:
   # -
     # iso (1)
@@ -1482,7 +1482,7 @@ sigs:
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.8.1.2',
-                    'code_point': '0xfef1'}]
+                    'code_point': '0xfef2'}]
       -
         name: 'mayo2'
         pretty_name: 'MAYO-2'
@@ -1493,7 +1493,7 @@ sigs:
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.8.2.2',
-                    'code_point': '0xfef2'}]
+                    'code_point': '0xfef3'}]
       -
         name: 'mayo3'
         pretty_name: 'MAYO-3'
@@ -1504,4 +1504,15 @@ sigs:
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.8.3.2',
-                    'code_point': '0xfef3'}]
+                    'code_point': '0xfef4'}]
+      -
+        name: 'mayo5'
+        pretty_name: 'MAYO-5'
+        oqs_meth: 'OQS_SIG_alg_mayo_5'
+        oid: '1.3.9999.8.5.1'
+        code_point: '0xfef1'
+        enable: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.8.5.2',
+                    'code_point': '0xfef5'}]

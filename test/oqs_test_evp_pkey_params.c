@@ -43,6 +43,7 @@ const char *kHybridSignatureAlgorithms[] = {
     "p256_mayo1",
     "p256_mayo2",
     "p384_mayo3",
+    "p521_mayo5",
     NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END

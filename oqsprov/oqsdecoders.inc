@@ -437,4 +437,10 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("p384_mayo3", der, PrivateKeyInfo, p384_mayo3),
     DECODER_w_structure("p384_mayo3", der, SubjectPublicKeyInfo, p384_mayo3),
 #endif
+#ifdef OQS_ENABLE_SIG_mayo_5
+    DECODER_w_structure("mayo5", der, PrivateKeyInfo, mayo5),
+    DECODER_w_structure("mayo5", der, SubjectPublicKeyInfo, mayo5),
+    DECODER_w_structure("p521_mayo5", der, PrivateKeyInfo, p521_mayo5),
+    DECODER_w_structure("p521_mayo5", der, SubjectPublicKeyInfo, p521_mayo5),
+#endif
     ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

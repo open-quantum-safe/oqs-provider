@@ -1320,6 +1320,28 @@ static void *p384_mayo3_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_3, "p384_mayo3",
                          KEY_TYPE_HYB_SIG, 192, 53);
 }
+static void *mayo5_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_5,
+                        "mayo5", KEY_TYPE_SIG, NULL, 256, 54);
+}
+
+static void *mayo5_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_5, "mayo5", 0,
+                         256, 54);
+}
+static void *p521_mayo5_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_5,
+                        "p521_mayo5", KEY_TYPE_HYB_SIG, NULL, 256, 55);
+}
+
+static void *p521_mayo5_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_5, "p521_mayo5",
+                         KEY_TYPE_HYB_SIG, 256, 55);
+}
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
@@ -1524,6 +1546,8 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(mayo2)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_mayo2)
 MAKE_SIG_KEYMGMT_FUNCTIONS(mayo3)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p384_mayo3)
+MAKE_SIG_KEYMGMT_FUNCTIONS(mayo5)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p521_mayo5)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 

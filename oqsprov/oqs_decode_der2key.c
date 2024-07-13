@@ -828,4 +828,8 @@ MAKE_DECODER(, "mayo3", mayo3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mayo3", mayo3, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "p384_mayo3", p384_mayo3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p384_mayo3", p384_mayo3, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo5", mayo5, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "mayo5", mayo5, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

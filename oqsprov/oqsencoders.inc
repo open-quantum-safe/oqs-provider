@@ -1316,4 +1316,20 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("p384_mayo3", p384_mayo3, pem, SubjectPublicKeyInfo),
     ENCODER_TEXT("p384_mayo3", p384_mayo3),
 #endif
+#ifdef OQS_ENABLE_SIG_mayo_5
+    ENCODER_w_structure("mayo5", mayo5, der, PrivateKeyInfo),
+    ENCODER_w_structure("mayo5", mayo5, pem, PrivateKeyInfo),
+    ENCODER_w_structure("mayo5", mayo5, der, EncryptedPrivateKeyInfo),
+    ENCODER_w_structure("mayo5", mayo5, pem, EncryptedPrivateKeyInfo),
+    ENCODER_w_structure("mayo5", mayo5, der, SubjectPublicKeyInfo),
+    ENCODER_w_structure("mayo5", mayo5, pem, SubjectPublicKeyInfo),
+    ENCODER_TEXT("mayo5", mayo5),
+    ENCODER_w_structure("p521_mayo5", p521_mayo5, der, PrivateKeyInfo),
+    ENCODER_w_structure("p521_mayo5", p521_mayo5, pem, PrivateKeyInfo),
+    ENCODER_w_structure("p521_mayo5", p521_mayo5, der, EncryptedPrivateKeyInfo),
+    ENCODER_w_structure("p521_mayo5", p521_mayo5, pem, EncryptedPrivateKeyInfo),
+    ENCODER_w_structure("p521_mayo5", p521_mayo5, der, SubjectPublicKeyInfo),
+    ENCODER_w_structure("p521_mayo5", p521_mayo5, pem, SubjectPublicKeyInfo),
+    ENCODER_TEXT("p521_mayo5", p521_mayo5),
+#endif
     ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

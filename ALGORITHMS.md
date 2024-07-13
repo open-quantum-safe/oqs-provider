@@ -118,11 +118,13 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | sphincsshake256ssimple | 0xfece |No| OQS_CODEPOINT_SPHINCSSHAKE256SSIMPLE
 | p521_sphincsshake256ssimple | 0xfecf |No| OQS_CODEPOINT_P521_SPHINCSSHAKE256SSIMPLE
 | mayo1 | 0xfeee |Yes| OQS_CODEPOINT_MAYO1
-| p256_mayo1 | 0xfef1 |Yes| OQS_CODEPOINT_P256_MAYO1
+| p256_mayo1 | 0xfef2 |Yes| OQS_CODEPOINT_P256_MAYO1
 | mayo2 | 0xfeef |Yes| OQS_CODEPOINT_MAYO2
-| p256_mayo2 | 0xfef2 |Yes| OQS_CODEPOINT_P256_MAYO2
+| p256_mayo2 | 0xfef3 |Yes| OQS_CODEPOINT_P256_MAYO2
 | mayo3 | 0xfef0 |Yes| OQS_CODEPOINT_MAYO3
-| p384_mayo3 | 0xfef3 |Yes| OQS_CODEPOINT_P384_MAYO3
+| p384_mayo3 | 0xfef4 |Yes| OQS_CODEPOINT_P384_MAYO3
+| mayo5 | 0xfef1 |Yes| OQS_CODEPOINT_MAYO5
+| p521_mayo5 | 0xfef5 |Yes| OQS_CODEPOINT_P521_MAYO5
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_END -->
 
 Changing code points
@@ -219,6 +221,8 @@ adapting the OIDs of all supported signature algorithms as per the table below.
 | p256_mayo2 | 1.3.9999.8.2.2 |Yes| OQS_OID_P256_MAYO2
 | mayo3 | 1.3.9999.8.3.1 |Yes| OQS_OID_MAYO3
 | p384_mayo3 | 1.3.9999.8.3.2 |Yes| OQS_OID_P384_MAYO3
+| mayo5 | 1.3.9999.8.5.1 |Yes| OQS_OID_MAYO5
+| p521_mayo5 | 1.3.9999.8.5.2 |Yes| OQS_OID_P521_MAYO5
 
 If [OQS_KEM_ENCODERS](CONFIGURE.md#OQS_KEM_ENCODERS) is enabled the following list is also available:
 

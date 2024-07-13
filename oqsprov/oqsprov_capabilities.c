@@ -289,9 +289,10 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     {0xfeb8, 128, TLS1_3_VERSION, 0}, {0xfeb9, 192, TLS1_3_VERSION, 0},
     {0xfeba, 192, TLS1_3_VERSION, 0}, {0xfec2, 128, TLS1_3_VERSION, 0},
     {0xfec3, 128, TLS1_3_VERSION, 0}, {0xfec4, 128, TLS1_3_VERSION, 0},
-    {0xfeee, 128, TLS1_3_VERSION, 0}, {0xfef1, 128, TLS1_3_VERSION, 0},
-    {0xfeef, 128, TLS1_3_VERSION, 0}, {0xfef2, 128, TLS1_3_VERSION, 0},
-    {0xfef0, 192, TLS1_3_VERSION, 0}, {0xfef3, 192, TLS1_3_VERSION, 0},
+    {0xfeee, 128, TLS1_3_VERSION, 0}, {0xfef2, 128, TLS1_3_VERSION, 0},
+    {0xfeef, 128, TLS1_3_VERSION, 0}, {0xfef3, 128, TLS1_3_VERSION, 0},
+    {0xfef0, 192, TLS1_3_VERSION, 0}, {0xfef4, 192, TLS1_3_VERSION, 0},
+    {0xfef1, 256, TLS1_3_VERSION, 0}, {0xfef5, 256, TLS1_3_VERSION, 0},
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 
@@ -593,6 +594,11 @@ int oqs_patch_codepoints()
     if (getenv("OQS_CODEPOINT_P384_MAYO3"))
         oqs_sigalg_list[53].code_point
             = atoi(getenv("OQS_CODEPOINT_P384_MAYO3"));
+    if (getenv("OQS_CODEPOINT_MAYO5"))
+        oqs_sigalg_list[54].code_point = atoi(getenv("OQS_CODEPOINT_MAYO5"));
+    if (getenv("OQS_CODEPOINT_P521_MAYO5"))
+        oqs_sigalg_list[55].code_point
+            = atoi(getenv("OQS_CODEPOINT_P521_MAYO5"));
     ///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
     return 1;
 }
@@ -766,6 +772,10 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 #    ifdef OQS_ENABLE_SIG_mayo_3
     OQS_SIGALG_ENTRY(mayo3, mayo3, mayo3, "1.3.9999.8.3.1", 52),
     OQS_SIGALG_ENTRY(p384_mayo3, p384_mayo3, p384_mayo3, "1.3.9999.8.3.2", 53),
+#    endif
+#    ifdef OQS_ENABLE_SIG_mayo_5
+    OQS_SIGALG_ENTRY(mayo5, mayo5, mayo5, "1.3.9999.8.5.1", 54),
+    OQS_SIGALG_ENTRY(p521_mayo5, p521_mayo5, p521_mayo5, "1.3.9999.8.5.2", 55),
 #    endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

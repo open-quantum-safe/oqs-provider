@@ -516,10 +516,13 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
 
                     if (!strncmp(name, "pss", 3)) {
                         int salt;
+                        const EVP_MD *pss_mgf1;
                         if (name[3] == '3') { // pss3072
                             salt = 64;
+                            pss_mgf1 = EVP_sha512();
                         } else { // pss2048
                             salt = 32;
+                            pss_mgf1 = EVP_sha256();
                         }
                         if ((EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign,
                                                           RSA_PKCS1_PSS_PADDING)
@@ -528,7 +531,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                                     classical_ctx_sign, salt)
                                 <= 0)
                             || (EVP_PKEY_CTX_set_rsa_mgf1_md(classical_ctx_sign,
-                                                             EVP_sha256())
+                                                             pss_mgf1)
                                 <= 0)) {
                             ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
                             CompositeSignature_free(compsig);
@@ -867,10 +870,13 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                     }
                     if (!strncmp(name, "pss", 3)) {
                         int salt;
+                        const EVP_MD *pss_mgf1;
                         if (name[3] == '3') { // pss3072
                             salt = 64;
+                            pss_mgf1 = EVP_sha512();
                         } else { // pss2048
                             salt = 32;
+                            pss_mgf1 = EVP_sha256();
                         }
                         if ((EVP_PKEY_CTX_set_rsa_padding(ctx_verify,
                                                           RSA_PKCS1_PSS_PADDING)
@@ -879,7 +885,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                                                                  salt)
                                 <= 0)
                             || (EVP_PKEY_CTX_set_rsa_mgf1_md(ctx_verify,
-                                                             EVP_sha256())
+                                                             pss_mgf1)
                                 <= 0)) {
                             ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
                             OPENSSL_free(name);

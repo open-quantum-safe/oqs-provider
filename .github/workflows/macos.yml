@@ -15,7 +15,6 @@ jobs:
         os:
           - macos-13
           - macos-12
-          #- macos-11 // Runner not online
 # eventually build for other alg sets, if CCI use is discontinued
         params:
           - oqsconfig: -DOQS_ALGS_ENABLED=STD

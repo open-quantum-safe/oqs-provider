@@ -50,7 +50,7 @@ jobs:
       image: ${{ matrix.container }}
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH: "0.10.1"
+      LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -206,7 +206,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch 0.10.1 https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

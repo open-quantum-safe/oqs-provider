@@ -1276,6 +1276,30 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define rsa3072_sphincsshake128fsimple_input_type \
     "rsa3072_sphincsshake128fsimple"
 #define rsa3072_sphincsshake128fsimple_pem_type "rsa3072_sphincsshake128fsimple"
+#define mayo1_evp_type                          0
+#define mayo1_input_type                        "mayo1"
+#define mayo1_pem_type                          "mayo1"
+#define p256_mayo1_evp_type                     0
+#define p256_mayo1_input_type                   "p256_mayo1"
+#define p256_mayo1_pem_type                     "p256_mayo1"
+#define mayo2_evp_type                          0
+#define mayo2_input_type                        "mayo2"
+#define mayo2_pem_type                          "mayo2"
+#define p256_mayo2_evp_type                     0
+#define p256_mayo2_input_type                   "p256_mayo2"
+#define p256_mayo2_pem_type                     "p256_mayo2"
+#define mayo3_evp_type                          0
+#define mayo3_input_type                        "mayo3"
+#define mayo3_pem_type                          "mayo3"
+#define p384_mayo3_evp_type                     0
+#define p384_mayo3_input_type                   "p384_mayo3"
+#define p384_mayo3_pem_type                     "p384_mayo3"
+#define mayo5_evp_type                          0
+#define mayo5_input_type                        "mayo5"
+#define mayo5_pem_type                          "mayo5"
+#define p521_mayo5_evp_type                     0
+#define p521_mayo5_input_type                   "p521_mayo5"
+#define p521_mayo5_pem_type                     "p521_mayo5"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2676,4 +2700,60 @@ MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, rsa3072_sphincsshake128fsimple);
+MAKE_ENCODER(, mayo1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo1);
+MAKE_ENCODER(, p256_mayo1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_mayo1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_mayo1);
+MAKE_ENCODER(, mayo2, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo2, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo2, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo2, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo2, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo2, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo2);
+MAKE_ENCODER(, p256_mayo2, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo2, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo2, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mayo2, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mayo2, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_mayo2, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_mayo2);
+MAKE_ENCODER(, mayo3, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo3, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo3, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo3, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo3, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo3, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo3);
+MAKE_ENCODER(, p384_mayo3, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p384_mayo3, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_mayo3, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p384_mayo3, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_mayo3, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p384_mayo3, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p384_mayo3);
+MAKE_ENCODER(, mayo5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mayo5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mayo5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mayo5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mayo5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mayo5);
+MAKE_ENCODER(, p521_mayo5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p521_mayo5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_mayo5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p521_mayo5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p521_mayo5);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

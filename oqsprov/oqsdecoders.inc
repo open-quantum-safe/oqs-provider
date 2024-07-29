@@ -419,4 +419,28 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("rsa3072_sphincsshake128fsimple", der,
                         SubjectPublicKeyInfo, rsa3072_sphincsshake128fsimple),
 #endif
+#ifdef OQS_ENABLE_SIG_mayo_1
+    DECODER_w_structure("mayo1", der, PrivateKeyInfo, mayo1),
+    DECODER_w_structure("mayo1", der, SubjectPublicKeyInfo, mayo1),
+    DECODER_w_structure("p256_mayo1", der, PrivateKeyInfo, p256_mayo1),
+    DECODER_w_structure("p256_mayo1", der, SubjectPublicKeyInfo, p256_mayo1),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_2
+    DECODER_w_structure("mayo2", der, PrivateKeyInfo, mayo2),
+    DECODER_w_structure("mayo2", der, SubjectPublicKeyInfo, mayo2),
+    DECODER_w_structure("p256_mayo2", der, PrivateKeyInfo, p256_mayo2),
+    DECODER_w_structure("p256_mayo2", der, SubjectPublicKeyInfo, p256_mayo2),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_3
+    DECODER_w_structure("mayo3", der, PrivateKeyInfo, mayo3),
+    DECODER_w_structure("mayo3", der, SubjectPublicKeyInfo, mayo3),
+    DECODER_w_structure("p384_mayo3", der, PrivateKeyInfo, p384_mayo3),
+    DECODER_w_structure("p384_mayo3", der, SubjectPublicKeyInfo, p384_mayo3),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_5
+    DECODER_w_structure("mayo5", der, PrivateKeyInfo, mayo5),
+    DECODER_w_structure("mayo5", der, SubjectPublicKeyInfo, mayo5),
+    DECODER_w_structure("p521_mayo5", der, PrivateKeyInfo, p521_mayo5),
+    DECODER_w_structure("p521_mayo5", der, SubjectPublicKeyInfo, p521_mayo5),
+#endif
     ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

@@ -50,9 +50,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define OQS_OID_CNT 202
+#    define OQS_OID_CNT 218
 #else
-#    define OQS_OID_CNT 96
+#    define OQS_OID_CNT 112
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -263,6 +263,22 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p256_sphincsshake128fsimple",
     "1.3.9999.6.7.15",
     "rsa3072_sphincsshake128fsimple",
+    "1.3.9999.8.1.1",
+    "mayo1",
+    "1.3.9999.8.1.2",
+    "p256_mayo1",
+    "1.3.9999.8.2.1",
+    "mayo2",
+    "1.3.9999.8.2.2",
+    "p256_mayo2",
+    "1.3.9999.8.3.1",
+    "mayo3",
+    "1.3.9999.8.3.2",
+    "p384_mayo3",
+    "1.3.9999.8.5.1",
+    "mayo5",
+    "1.3.9999.8.5.2",
+    "p521_mayo5",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -499,6 +515,22 @@ int oqs_patch_oids(void)
             oqs_oid_alg_list[92 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")))
             oqs_oid_alg_list[94 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO1")))
+            oqs_oid_alg_list[96 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_MAYO1")))
+            oqs_oid_alg_list[98 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO2")))
+            oqs_oid_alg_list[100 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_MAYO2")))
+            oqs_oid_alg_list[102 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO3")))
+            oqs_oid_alg_list[104 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P384_MAYO3")))
+            oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MAYO5")))
+            oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P521_MAYO5")))
+            oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -723,6 +755,38 @@ int oqs_patch_encodings(void)
         if ((envval
              = getenv("OQS_ENCODING_RSA3072_SPHINCSSHAKE128FSIMPLE_ALGNAME")))
             oqs_alg_encoding_list[95] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO1")))
+            oqs_alg_encoding_list[96] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO1_ALGNAME")))
+            oqs_alg_encoding_list[97] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO1")))
+            oqs_alg_encoding_list[98] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO1_ALGNAME")))
+            oqs_alg_encoding_list[99] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO2")))
+            oqs_alg_encoding_list[100] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO2_ALGNAME")))
+            oqs_alg_encoding_list[101] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO2")))
+            oqs_alg_encoding_list[102] = envval;
+        if ((envval = getenv("OQS_ENCODING_P256_MAYO2_ALGNAME")))
+            oqs_alg_encoding_list[103] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO3")))
+            oqs_alg_encoding_list[104] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO3_ALGNAME")))
+            oqs_alg_encoding_list[105] = envval;
+        if ((envval = getenv("OQS_ENCODING_P384_MAYO3")))
+            oqs_alg_encoding_list[106] = envval;
+        if ((envval = getenv("OQS_ENCODING_P384_MAYO3_ALGNAME")))
+            oqs_alg_encoding_list[107] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO5")))
+            oqs_alg_encoding_list[108] = envval;
+        if ((envval = getenv("OQS_ENCODING_MAYO5_ALGNAME")))
+            oqs_alg_encoding_list[109] = envval;
+        if ((envval = getenv("OQS_ENCODING_P521_MAYO5")))
+            oqs_alg_encoding_list[110] = envval;
+        if ((envval = getenv("OQS_ENCODING_P521_MAYO5_ALGNAME")))
+            oqs_alg_encoding_list[111] = envval;
     }
     ///// OQS_TEMPLATE_FRAGMENT_ENCODING_PATCHING_END
     return 1;
@@ -843,6 +907,22 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("sphincsshake128fsimple", 128, oqs_signature_functions),
     SIGALG("p256_sphincsshake128fsimple", 128, oqs_signature_functions),
     SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_1
+    SIGALG("mayo1", 128, oqs_signature_functions),
+    SIGALG("p256_mayo1", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_2
+    SIGALG("mayo2", 128, oqs_signature_functions),
+    SIGALG("p256_mayo2", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_3
+    SIGALG("mayo3", 192, oqs_signature_functions),
+    SIGALG("p384_mayo3", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_5
+    SIGALG("mayo5", 256, oqs_signature_functions),
+    SIGALG("p521_mayo5", 256, oqs_signature_functions),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
@@ -1023,6 +1103,22 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[]
     SIGALG("sphincsshake128fsimple", 128, oqs_sphincsshake128fsimple_keymgmt_functions),
     SIGALG("p256_sphincsshake128fsimple", 128, oqs_p256_sphincsshake128fsimple_keymgmt_functions),
     SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_rsa3072_sphincsshake128fsimple_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_1
+    SIGALG("mayo1", 128, oqs_mayo1_keymgmt_functions),
+    SIGALG("p256_mayo1", 128, oqs_p256_mayo1_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_2
+    SIGALG("mayo2", 128, oqs_mayo2_keymgmt_functions),
+    SIGALG("p256_mayo2", 128, oqs_p256_mayo2_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_3
+    SIGALG("mayo3", 192, oqs_mayo3_keymgmt_functions),
+    SIGALG("p384_mayo3", 192, oqs_p384_mayo3_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mayo_5
+    SIGALG("mayo5", 256, oqs_mayo5_keymgmt_functions),
+    SIGALG("p521_mayo5", 256, oqs_p521_mayo5_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes

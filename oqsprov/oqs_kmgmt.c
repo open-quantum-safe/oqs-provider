@@ -1254,6 +1254,95 @@ static void *rsa3072_sphincsshake128fsimple_gen_init(void *provctx,
         "rsa3072_sphincsshake128fsimple", KEY_TYPE_HYB_SIG, 128, 47);
 }
 
+static void *mayo1_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_1,
+                        "mayo1", KEY_TYPE_SIG, NULL, 128, 48);
+}
+
+static void *mayo1_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_1, "mayo1", 0,
+                         128, 48);
+}
+static void *p256_mayo1_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_1,
+                        "p256_mayo1", KEY_TYPE_HYB_SIG, NULL, 128, 49);
+}
+
+static void *p256_mayo1_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_1, "p256_mayo1",
+                         KEY_TYPE_HYB_SIG, 128, 49);
+}
+static void *mayo2_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_2,
+                        "mayo2", KEY_TYPE_SIG, NULL, 128, 50);
+}
+
+static void *mayo2_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_2, "mayo2", 0,
+                         128, 50);
+}
+static void *p256_mayo2_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_2,
+                        "p256_mayo2", KEY_TYPE_HYB_SIG, NULL, 128, 51);
+}
+
+static void *p256_mayo2_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_2, "p256_mayo2",
+                         KEY_TYPE_HYB_SIG, 128, 51);
+}
+static void *mayo3_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_3,
+                        "mayo3", KEY_TYPE_SIG, NULL, 192, 52);
+}
+
+static void *mayo3_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_3, "mayo3", 0,
+                         192, 52);
+}
+static void *p384_mayo3_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_3,
+                        "p384_mayo3", KEY_TYPE_HYB_SIG, NULL, 192, 53);
+}
+
+static void *p384_mayo3_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_3, "p384_mayo3",
+                         KEY_TYPE_HYB_SIG, 192, 53);
+}
+static void *mayo5_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_5,
+                        "mayo5", KEY_TYPE_SIG, NULL, 256, 54);
+}
+
+static void *mayo5_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_5, "mayo5", 0,
+                         256, 54);
+}
+static void *p521_mayo5_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_mayo_5,
+                        "p521_mayo5", KEY_TYPE_HYB_SIG, NULL, 256, 55);
+}
+
+static void *p521_mayo5_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_mayo_5, "p521_mayo5",
+                         KEY_TYPE_HYB_SIG, 256, 55);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                       \
@@ -1451,6 +1540,14 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(p384_sphincssha2192fsimple)
 MAKE_SIG_KEYMGMT_FUNCTIONS(sphincsshake128fsimple)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_sphincsshake128fsimple)
 MAKE_SIG_KEYMGMT_FUNCTIONS(rsa3072_sphincsshake128fsimple)
+MAKE_SIG_KEYMGMT_FUNCTIONS(mayo1)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_mayo1)
+MAKE_SIG_KEYMGMT_FUNCTIONS(mayo2)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_mayo2)
+MAKE_SIG_KEYMGMT_FUNCTIONS(mayo3)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p384_mayo3)
+MAKE_SIG_KEYMGMT_FUNCTIONS(mayo5)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p521_mayo5)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 

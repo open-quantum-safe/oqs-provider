@@ -1,3 +1,9 @@
 # https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
 * @baentsch
+/oqsprov/oqs_hyb_kem.c @bhess
+/oqs-template/generate.yml @baentsch @bhess @feventura
+/CMakeLists.txt @baentsch @thb-sb
+/.circleci/config.yml @baentsch @thb-sb
+/.github/workflows @baentsch @thb-sb
+/oqsprov/oqs_sig.c @baentsch @feventura

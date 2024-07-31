@@ -178,9 +178,9 @@ Team
 
 Contributors to the `oqsprovider` include:
 
-- Michael Baentsch (initial author and maintainer; responsible for all code except as listed per contributor's responsibilities below)
+- Michael Baentsch (initial author and maintainer; responsible for all code except as listed per specific contributions below)
 - Christian Paquin (original OpenSSL111 OQS integrator)
-- Richard Levitte (OpenSSL provider wizard)
+- Richard Levitte (OpenSSL provider wizard and initial `cmake` setup)
 - Basil Hess (hybrid KEM integration & pqcrystals/mayo OID management)
 - Julian Segeth (some memory management improvements)
 - Alex Zaslavsky (improvements on OpenSSL integration)

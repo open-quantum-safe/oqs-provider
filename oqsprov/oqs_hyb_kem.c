@@ -237,4 +237,3 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
 err:
     return ret;
 }
-

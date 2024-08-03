@@ -32,9 +32,14 @@ Thus, any PR should revisit and possibly update this file suitably.
 
 This project has adopted the [OpenSSL coding style](https://www.openssl.org/policies/technical/coding-style.html).
 To check adherence of any new code to this, it therefore is highly recommended to
-run the following command in the project main directory prior to finishing a PR:
+run the following commands in the project main directory prior to finishing a PR:
 
     find oqsprov -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs clang-format --dry-run --Werror
+    find test -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs clang-format --dry-run --Werror
+
+If errors are reported, consider replacing `--dry-run --Werror` with `-i` to
+enable in-place correction of the coding errors, or correct the code manually
+to pass this CI acceptance test.
 
 ### Running CI locally
 

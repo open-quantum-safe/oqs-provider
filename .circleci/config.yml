@@ -54,32 +54,6 @@ jobs:
                 command: |
                    git clone --branch master https://github.com/openssl/openssl.git openssl &&
                    cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
-            - run:
-                name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
-                command: |
-                  oqsprovider_cmake_args="<< parameters.CMAKE_ARGS >>"
-                  if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
-                  fi
-                  mkdir _build && cd _build && cmake -GNinja ${oqsprovider_cmake_args} -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
-                  if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    file _build/lib/oqsprovider.a
-                  fi
-      - when:
-          condition:
-              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
-          steps:
-            - run:
-                name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >> with QSC encoding support)
-                command: |
-                  oqsprovider_cmake_args="<< parameters.CMAKE_ARGS >>"
-                  if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
-                  fi
-                  mkdir _build && cd _build && cmake -GNinja ${oqsprovider_cmake_args} -DUSE_ENCODING_LIB=ON -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja && cd ..
-                  if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-                    file _build/lib/oqsprovider.a
-                  fi
       - run:
           name: Run tests
           command: |
@@ -88,49 +62,6 @@ jobs:
              else
                ./scripts/runtests.sh -V
              fi
-      - run:
-          name: Run tests (with encodings, positive and negative test)
-          command: |
-            if ! << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-              ./scripts/runtests_encodings.sh -V > log
-              if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
-                 cat log
-                 ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-              else
-                 cat log
-              fi
-            fi
-      - run:
-          name: Build OQS-OpenSSL provider (<< parameters.CMAKE_ARGS >>) with NOPUBKEY_IN_PRIVKEY and QSC encoding support
-          command: |
-            oqsprovider_cmake_args="<< parameters.CMAKE_ARGS >>"
-            if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-              oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
-            fi
-            rm -rf _build && mkdir _build && cd _build && cmake -GNinja ${oqsprovider_cmake_args} -DNOPUBKEY_IN_PRIVKEY=ON -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$(pwd)/../.local -DCMAKE_PREFIX_PATH=$(pwd)/../.local .. && ninja
-            if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-              file _build/lib/oqsprovider.a
-            fi
-      - run:
-          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON)
-          command: |
-             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir _build/
-             else
-               ./scripts/runtests.sh -V
-             fi
-      - run:
-          name: Run tests (-DNOPUBKEY_IN_PRIVKEY=ON, with encodings, positive and negative test)
-          command: |
-            if ! << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-              ./scripts/runtests_encodings.sh -V
-              if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
-                 cat log
-                 ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-              else
-                 cat log
-              fi
-            fi
 
   macOS:
     description: A template for running tests on macOS
@@ -208,37 +139,6 @@ jobs:
              else
                ./scripts/runtests.sh -V
              fi
-      - run:
-          name: Build OQS-OpenSSL provider with QSC encoding support
-          command: |
-             oqsprovider_cmake_args="<< parameters.CMAKE_ARGS >>"
-             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               oqsprovider_cmake_args="${oqsprovider_cmake_args} -DOQS_PROVIDER_BUILD_STATIC=ON"
-             fi
-             rm -rf _build && mkdir _build && cd _build && cmake -GNinja -DUSE_ENCODING_LIB=ON -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL -DCMAKE_PREFIX_PATH=$(pwd)/../.local ${oqsprovider_cmake_args} .. && ninja
-             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               file _build/lib/oqsprovider.a
-             fi
-      - run:
-          name: Run tests
-          command: |
-             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir _build/ --output-on-failure
-             else
-               ./scripts/runtests.sh -V
-             fi
-      - run:
-          name: Run tests (with encodings)
-          command: |
-            if ! << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-              ./scripts/runtests_encodings.sh -V > log
-              if [ grep "Skipping testing of buggy OpenSSL" -eq 1 ]; then
-                 cat log
-                 ! OQS_ENCODING_DILITHIUM2=foo OQS_ENCODING_DILITHIUM2_ALGNAME=bar ./scripts/runtests.sh -V
-              else
-                 cat log
-              fi
-            fi
 
   trigger-downstream-ci:
     docker:

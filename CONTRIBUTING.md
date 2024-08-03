@@ -22,6 +22,12 @@ All PRs should move to "Ready for Review" stage only if all CI tests pass (are g
 The OQS core team is happy to provide feedback also to Draft PRs in order to improve
 them before the final "Review" stage.
 
+### CODEOWNERS
+
+This file is used to track which contributors are most well suited for reviewing
+changes to specific sections, typically because they authored part or all of them.
+Thus, any PR should revisit and possibly update this file suitably.
+
 ### Coding style
 
 This project has adopted the [OpenSSL coding style](https://www.openssl.org/policies/technical/coding-style.html).

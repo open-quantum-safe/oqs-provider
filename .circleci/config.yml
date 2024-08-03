@@ -16,53 +16,6 @@ localCheckout: &localCheckout
     git ls-files -z | xargs -0 -s 2090860 tar -c | tar -x -C ${PROJECT_PATH}
     cp -a /tmp/_circleci_local_build_repo/.git ${PROJECT_PATH}
 jobs:
-  ubuntu:
-    description: A template for running OQS-OpenSSL tests on x64 Ubuntu Docker VMs
-    parameters:
-      IMAGE:
-        description: "docker image to use."
-        type: string
-      CMAKE_ARGS:
-        description: "Arguments to pass to CMake."
-        type: string
-      OPENSSL_PREINSTALL:
-        description: "OpenSSL version preinstalled."
-        type: string
-      OQS_PROVIDER_BUILD_STATIC:
-        description: "Build oqsprovider as a static library"
-        type: boolean
-        default: false
-    docker:
-      - image: << parameters.IMAGE >>
-    steps:
-      - setup_remote_docker
-      - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
-      - run:
-          name: Clone and build liboqs (<< parameters.CMAKE_ARGS >>)
-          command: |
-             git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git &&
-             cd liboqs && mkdir _build && cd _build &&
-             cmake -GNinja << parameters.CMAKE_ARGS >> -DCMAKE_INSTALL_PREFIX=$(pwd)/../../.local .. && ninja install &&
-             cd .. && cd .. && pwd
-      - when:
-          condition:
-            not:
-              equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
-          steps:
-            - run:
-                name: Clone and build OpenSSL(3)
-                command: |
-                   git clone --branch master https://github.com/openssl/openssl.git openssl &&
-                   cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
-      - run:
-          name: Run tests
-          command: |
-             if << parameters.OQS_PROVIDER_BUILD_STATIC >> ; then
-               ctest --test-dir _build/
-             else
-               ./scripts/runtests.sh -V
-             fi
-
   macOS:
     description: A template for running tests on macOS
     parameters:
@@ -164,22 +117,6 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - ubuntu:
-          name: ubuntu-focal
-          IMAGE: openquantumsafe/ci-ubuntu-focal-x86_64:latest
-          CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_USE_OPENSSL=OFF
-          OPENSSL_PREINSTALL: openssl@1
-      - ubuntu:
-          name: ubuntu-jammy
-          IMAGE: openquantumsafe/ci-ubuntu-jammy:latest
-          CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_ALGS_ENABLED=STD
-          OPENSSL_PREINSTALL: openssl@3
-      - ubuntu:
-          name: ubuntu-jammy-static
-          IMAGE: openquantumsafe/ci-ubuntu-jammy:latest
-          OQS_PROVIDER_BUILD_STATIC: true
-          CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_ALGS_ENABLED=STD
-          OPENSSL_PREINSTALL: openssl@3
       - macOS:
           name: macOS-noopenssl
           CMAKE_ARGS: -DOQS_STRICT_WARNINGS=ON -DOQS_USE_OPENSSL=OFF

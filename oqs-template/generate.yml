@@ -399,7 +399,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xfef6
+# Next free signature ID: 0xff08
 sigs:
   # -
     # iso (1)
@@ -1516,3 +1516,138 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.8.5.2',
                     'code_point': '0xfef5'}]
+  -
+    family: 'CROSS' # TODO: add real OIDs
+    variants:
+      # RSDP 128
+      -
+        name: 'CROSSrsdp128balanced'
+        pretty_name: 'CROSS-rsdp-128-balanced'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_128_balanced'
+        oid: '0.0.0.0.0.0.0.0.0.1'
+        code_point: '0xfef6'
+        enable: true
+      -
+        name: 'CROSSrsdp128fast'
+        pretty_name: 'CROSS-rsdp-128-fast'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_128_fast'
+        oid: '0.0.0.0.0.0.0.0.0.2'
+        code_point: '0xfef7'
+        enable: true
+      -
+        name: 'CROSSrsdp128small'
+        pretty_name: 'CROSS-rsdp-128-small'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_128_small'
+        oid: '0.0.0.0.0.0.0.0.0.3'
+        code_point: '0xfef8'
+        enable: true
+      # RSDP 192
+      -
+        name: 'CROSSrsdp192balanced'
+        pretty_name: 'CROSS-rsdp-192-balanced'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_192_balanced'
+        oid: '0.0.0.0.0.0.0.0.0.4'
+        code_point: '0xfef9'
+        enable: true
+      -
+        name: 'CROSSrsdp192fast'
+        pretty_name: 'CROSS-rsdp-192-fast'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_192_fast'
+        oid: '0.0.0.0.0.0.0.0.0.5'
+        code_point: '0xfefa'
+        enable: true
+      -
+        name: 'CROSSrsdp192small'
+        pretty_name: 'CROSS-rsdp-192-small'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_192_small'
+        oid: '0.0.0.0.0.0.0.0.0.6'
+        code_point: '0xfefb'
+        enable: true
+      # RSDP 256
+      -
+        name: 'CROSSrsdp256balanced'
+        pretty_name: 'CROSS-rsdp-256-balanced'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_256_balanced'
+        oid: '0.0.0.0.0.0.0.0.0.7'
+        code_point: '0xfefc'
+        enable: true
+      -
+        name: 'CROSSrsdp256fast'
+        pretty_name: 'CROSS-rsdp-256-fast'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_256_fast'
+        oid: '0.0.0.0.0.0.0.0.0.8'
+        code_point: '0xfefd'
+        enable: true
+      -
+        name: 'CROSSrsdp256small'
+        pretty_name: 'CROSS-rsdp-256-small'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdp_256_small'
+        oid: '0.0.0.0.0.0.0.0.0.9'
+        code_point: '0xfefe'
+        enable: true
+      # RSDPG 128
+      -
+        name: 'CROSSrsdpg128balanced'
+        pretty_name: 'CROSS-rsdpg-128-balanced'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_128_balanced'
+        oid: '0.0.0.0.0.0.0.0.0.10'
+        code_point: '0xfeff'
+        enable: true
+      -
+        name: 'CROSSrsdpg128fast'
+        pretty_name: 'CROSS-rsdpg-128-fast'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_128_fast'
+        oid: '0.0.0.0.0.0.0.0.0.11'
+        code_point: '0xff00'
+        enable: true
+      -
+        name: 'CROSSrsdpg128small'
+        pretty_name: 'CROSS-rsdpg-128-small'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_128_small'
+        oid: '0.0.0.0.0.0.0.0.0.12'
+        code_point: '0xff01'
+        enable: true
+      # RSDPG 192
+      -
+        name: 'CROSSrsdpg192balanced'
+        pretty_name: 'CROSS-rsdpg-192-balanced'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_192_balanced'
+        oid: '0.0.0.0.0.0.0.0.0.13'
+        code_point: '0xff02'
+        enable: true
+      -
+        name: 'CROSSrsdpg192fast'
+        pretty_name: 'CROSS-rsdpg-192-fast'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_192_fast'
+        oid: '0.0.0.0.0.0.0.0.0.14'
+        code_point: '0xff03'
+        enable: true
+      -
+        name: 'CROSSrsdpg192small'
+        pretty_name: 'CROSS-rsdpg-192-small'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_192_small'
+        oid: '0.0.0.0.0.0.0.0.0.15'
+        code_point: '0xff04'
+        enable: true
+      # RSDPG 256
+      -
+        name: 'CROSSrsdpg256balanced'
+        pretty_name: 'CROSS-rsdpg-256-balanced'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_256_balanced'
+        oid: '0.0.0.0.0.0.0.0.0.16'
+        code_point: '0xff05'
+        enable: true
+      -
+        name: 'CROSSrsdpg256fast'
+        pretty_name: 'CROSS-rsdpg-256-fast'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_256_fast'
+        oid: '0.0.0.0.0.0.0.0.0.17'
+        code_point: '0xff06'
+        enable: true
+      -
+        name: 'CROSSrsdpg256small'
+        pretty_name: 'CROSS-rsdpg-256-small'
+        oqs_meth: 'OQS_SIG_alg_cross_rsdpg_256_small'
+        oid: '0.0.0.0.0.0.0.0.0.18'
+        code_point: '0xff07'
+        enable: true

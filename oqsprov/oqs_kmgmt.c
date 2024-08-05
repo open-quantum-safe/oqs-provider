@@ -1239,6 +1239,164 @@ static void *p521_mayo5_gen_init(void *provctx, int selection) {
                          KEY_TYPE_HYB_SIG, 256, 55, 0);
 }
 
+static void *CROSSrsdp128balanced_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_128_balanced, "CROSSrsdp128balanced", 0, 128, 56);
+}
+static void *CROSSrsdp128fast_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_128_fast, "CROSSrsdp128fast", KEY_TYPE_SIG, NULL, 128, 57);
+}
+
+static void *CROSSrsdp128fast_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_128_fast, "CROSSrsdp128fast", 0, 128, 57);
+}
+static void *CROSSrsdp128small_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_128_small, "CROSSrsdp128small", KEY_TYPE_SIG, NULL, 128, 58);
+}
+
+static void *CROSSrsdp128small_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_128_small, "CROSSrsdp128small", 0, 128, 58);
+}
+static void *CROSSrsdp192balanced_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_192_balanced, "CROSSrsdp192balanced", KEY_TYPE_SIG, NULL, 192, 59);
+}
+
+static void *CROSSrsdp192balanced_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_192_balanced, "CROSSrsdp192balanced", 0, 192, 59);
+}
+static void *CROSSrsdp192fast_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_192_fast, "CROSSrsdp192fast", KEY_TYPE_SIG, NULL, 192, 60);
+}
+
+static void *CROSSrsdp192fast_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_192_fast, "CROSSrsdp192fast", 0, 192, 60);
+}
+static void *CROSSrsdp192small_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_192_small, "CROSSrsdp192small", KEY_TYPE_SIG, NULL, 192, 61);
+}
+
+static void *CROSSrsdp192small_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_192_small, "CROSSrsdp192small", 0, 192, 61);
+}
+static void *CROSSrsdp256balanced_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_256_balanced, "CROSSrsdp256balanced", KEY_TYPE_SIG, NULL, 256, 62);
+}
+
+static void *CROSSrsdp256balanced_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_256_balanced, "CROSSrsdp256balanced", 0, 256, 62);
+}
+static void *CROSSrsdp256fast_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_256_fast, "CROSSrsdp256fast", KEY_TYPE_SIG, NULL, 256, 63);
+}
+
+static void *CROSSrsdp256fast_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_256_fast, "CROSSrsdp256fast", 0, 256, 63);
+}
+static void *CROSSrsdp256small_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdp_256_small, "CROSSrsdp256small", KEY_TYPE_SIG, NULL, 256, 64);
+}
+
+static void *CROSSrsdp256small_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdp_256_small, "CROSSrsdp256small", 0, 256, 64);
+}
+static void *CROSSrsdpg128balanced_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_128_balanced, "CROSSrsdpg128balanced", KEY_TYPE_SIG, NULL, 128, 65);
+}
+
+static void *CROSSrsdpg128balanced_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_128_balanced, "CROSSrsdpg128balanced", 0, 128, 65);
+}
+static void *CROSSrsdpg128fast_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_128_fast, "CROSSrsdpg128fast", KEY_TYPE_SIG, NULL, 128, 66);
+}
+
+static void *CROSSrsdpg128fast_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_128_fast, "CROSSrsdpg128fast", 0, 128, 66);
+}
+static void *CROSSrsdpg128small_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_128_small, "CROSSrsdpg128small", KEY_TYPE_SIG, NULL, 128, 67);
+}
+
+static void *CROSSrsdpg128small_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_128_small, "CROSSrsdpg128small", 0, 128, 67);
+}
+static void *CROSSrsdpg192balanced_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_192_balanced, "CROSSrsdpg192balanced", KEY_TYPE_SIG, NULL, 192, 68);
+}
+
+static void *CROSSrsdpg192balanced_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_192_balanced, "CROSSrsdpg192balanced", 0, 192, 68);
+}
+static void *CROSSrsdpg192fast_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_192_fast, "CROSSrsdpg192fast", KEY_TYPE_SIG, NULL, 192, 69);
+}
+
+static void *CROSSrsdpg192fast_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_192_fast, "CROSSrsdpg192fast", 0, 192, 69);
+}
+static void *CROSSrsdpg192small_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_192_small, "CROSSrsdpg192small", KEY_TYPE_SIG, NULL, 192, 70);
+}
+
+static void *CROSSrsdpg192small_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_192_small, "CROSSrsdpg192small", 0, 192, 70);
+}
+static void *CROSSrsdpg256balanced_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_256_balanced, "CROSSrsdpg256balanced", KEY_TYPE_SIG, NULL, 256, 71);
+}
+
+static void *CROSSrsdpg256balanced_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_256_balanced, "CROSSrsdpg256balanced", 0, 256, 71);
+}
+static void *CROSSrsdpg256fast_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_256_fast, "CROSSrsdpg256fast", KEY_TYPE_SIG, NULL, 256, 72);
+}
+
+static void *CROSSrsdpg256fast_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_256_fast, "CROSSrsdpg256fast", 0, 256, 72);
+}
+static void *CROSSrsdpg256small_new_key(void *provctx)
+{
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_cross_rsdpg_256_small, "CROSSrsdpg256small", KEY_TYPE_SIG, NULL, 256, 73);
+}
+
+static void *CROSSrsdpg256small_gen_init(void *provctx, int selection)
+{
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_cross_rsdpg_256_small, "CROSSrsdpg256small", 0, 256, 73);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                        \
@@ -1439,43 +1597,55 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(mayo3)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p384_mayo3)
 MAKE_SIG_KEYMGMT_FUNCTIONS(mayo5)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_mayo5)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp128balanced)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp128fast)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp128small)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp192balanced)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp192fast)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp192small)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp256balanced)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp256fast)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp256small)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg128balanced)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg128fast)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg128small)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg192balanced)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg192fast)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg192small)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg256balanced)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg256fast)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdpg256small)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_frodo640aes, OQS_KEM_alg_frodokem_640_aes,
-                               128)
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_frodo640aes, OQS_KEM_alg_frodokem_640_aes,
                                128, 0)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640shake, OQS_KEM_alg_frodokem_640_shake, 128)
 
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_frodo640shake,
-                               OQS_KEM_alg_frodokem_640_shake, 128)
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_frodo640shake, OQS_KEM_alg_frodokem_640_shake, 128)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_frodo640shake,
                                OQS_KEM_alg_frodokem_640_shake, 128, 0)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976aes, OQS_KEM_alg_frodokem_976_aes, 192)
 
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_frodo976aes, OQS_KEM_alg_frodokem_976_aes,
-                               192)
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_frodo976aes, OQS_KEM_alg_frodokem_976_aes, 192)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_frodo976aes, OQS_KEM_alg_frodokem_976_aes,
                                192, 0)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo976shake, OQS_KEM_alg_frodokem_976_shake, 192)
 
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_frodo976shake,
-                               OQS_KEM_alg_frodokem_976_shake, 192)
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_frodo976shake, OQS_KEM_alg_frodokem_976_shake, 192)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_frodo976shake,
                                OQS_KEM_alg_frodokem_976_shake, 192, 0)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344aes, OQS_KEM_alg_frodokem_1344_aes, 256)
 
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_frodo1344aes, OQS_KEM_alg_frodokem_1344_aes,
-                               256)
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_frodo1344aes, OQS_KEM_alg_frodokem_1344_aes, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo1344shake, OQS_KEM_alg_frodokem_1344_shake, 256)
 
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_frodo1344shake,
-                               OQS_KEM_alg_frodokem_1344_shake, 256)
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_frodo1344shake, OQS_KEM_alg_frodokem_1344_shake, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(kyber512, OQS_KEM_alg_kyber_512, 128)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_kyber512, OQS_KEM_alg_kyber_512, 128)

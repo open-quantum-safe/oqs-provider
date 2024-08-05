@@ -1240,6 +1240,60 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define p521_mayo5_evp_type 0
 #define p521_mayo5_input_type "p521_mayo5"
 #define p521_mayo5_pem_type "p521_mayo5"
+# define CROSSrsdp128balanced_evp_type       0
+# define CROSSrsdp128balanced_input_type      "CROSSrsdp128balanced"
+# define CROSSrsdp128balanced_pem_type        "CROSSrsdp128balanced"
+# define CROSSrsdp128fast_evp_type       0
+# define CROSSrsdp128fast_input_type      "CROSSrsdp128fast"
+# define CROSSrsdp128fast_pem_type        "CROSSrsdp128fast"
+# define CROSSrsdp128small_evp_type       0
+# define CROSSrsdp128small_input_type      "CROSSrsdp128small"
+# define CROSSrsdp128small_pem_type        "CROSSrsdp128small"
+# define CROSSrsdp192balanced_evp_type       0
+# define CROSSrsdp192balanced_input_type      "CROSSrsdp192balanced"
+# define CROSSrsdp192balanced_pem_type        "CROSSrsdp192balanced"
+# define CROSSrsdp192fast_evp_type       0
+# define CROSSrsdp192fast_input_type      "CROSSrsdp192fast"
+# define CROSSrsdp192fast_pem_type        "CROSSrsdp192fast"
+# define CROSSrsdp192small_evp_type       0
+# define CROSSrsdp192small_input_type      "CROSSrsdp192small"
+# define CROSSrsdp192small_pem_type        "CROSSrsdp192small"
+# define CROSSrsdp256balanced_evp_type       0
+# define CROSSrsdp256balanced_input_type      "CROSSrsdp256balanced"
+# define CROSSrsdp256balanced_pem_type        "CROSSrsdp256balanced"
+# define CROSSrsdp256fast_evp_type       0
+# define CROSSrsdp256fast_input_type      "CROSSrsdp256fast"
+# define CROSSrsdp256fast_pem_type        "CROSSrsdp256fast"
+# define CROSSrsdp256small_evp_type       0
+# define CROSSrsdp256small_input_type      "CROSSrsdp256small"
+# define CROSSrsdp256small_pem_type        "CROSSrsdp256small"
+# define CROSSrsdpg128balanced_evp_type       0
+# define CROSSrsdpg128balanced_input_type      "CROSSrsdpg128balanced"
+# define CROSSrsdpg128balanced_pem_type        "CROSSrsdpg128balanced"
+# define CROSSrsdpg128fast_evp_type       0
+# define CROSSrsdpg128fast_input_type      "CROSSrsdpg128fast"
+# define CROSSrsdpg128fast_pem_type        "CROSSrsdpg128fast"
+# define CROSSrsdpg128small_evp_type       0
+# define CROSSrsdpg128small_input_type      "CROSSrsdpg128small"
+# define CROSSrsdpg128small_pem_type        "CROSSrsdpg128small"
+# define CROSSrsdpg192balanced_evp_type       0
+# define CROSSrsdpg192balanced_input_type      "CROSSrsdpg192balanced"
+# define CROSSrsdpg192balanced_pem_type        "CROSSrsdpg192balanced"
+# define CROSSrsdpg192fast_evp_type       0
+# define CROSSrsdpg192fast_input_type      "CROSSrsdpg192fast"
+# define CROSSrsdpg192fast_pem_type        "CROSSrsdpg192fast"
+# define CROSSrsdpg192small_evp_type       0
+# define CROSSrsdpg192small_input_type      "CROSSrsdpg192small"
+# define CROSSrsdpg192small_pem_type        "CROSSrsdpg192small"
+# define CROSSrsdpg256balanced_evp_type       0
+# define CROSSrsdpg256balanced_input_type      "CROSSrsdpg256balanced"
+# define CROSSrsdpg256balanced_pem_type        "CROSSrsdpg256balanced"
+# define CROSSrsdpg256fast_evp_type       0
+# define CROSSrsdpg256fast_input_type      "CROSSrsdpg256fast"
+# define CROSSrsdpg256fast_pem_type        "CROSSrsdpg256fast"
+# define CROSSrsdpg256small_evp_type       0
+# define CROSSrsdpg256small_input_type      "CROSSrsdpg256small"
+# define CROSSrsdpg256small_pem_type        "CROSSrsdpg256small"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -1885,6 +1939,7 @@ key2text_encode(void *vctx, const void *key, int selection, OSSL_CORE_BIO *cout,
  */
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_START
 #ifdef OQS_KEM_ENCODERS
+
 
 MAKE_ENCODER(, frodo640aes, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, frodo640aes, oqsx, EncryptedPrivateKeyInfo, pem);
@@ -2550,10 +2605,8 @@ MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p256_sphincssha2128fsimple);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             der);
-MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             pem);
+MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo, der);
@@ -2573,10 +2626,8 @@ MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p256_sphincssha2128ssimple);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo,
-             der);
-MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo,
-             pem);
+MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo, der);
@@ -2610,10 +2661,8 @@ MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p256_sphincsshake128fsimple);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             der);
-MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo,
-             pem);
+MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, der);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo, der);
@@ -2675,4 +2724,130 @@ MAKE_ENCODER(, p521_mayo5, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p521_mayo5);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp128balanced);
+MAKE_ENCODER(, CROSSrsdp128fast, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128fast, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128fast, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128fast, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128fast, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128fast, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp128fast);
+MAKE_ENCODER(, CROSSrsdp128small, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128small, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128small, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128small, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128small, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128small, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp128small);
+MAKE_ENCODER(, CROSSrsdp192balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp192balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp192balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp192balanced);
+MAKE_ENCODER(, CROSSrsdp192fast, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192fast, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp192fast, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192fast, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp192fast, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192fast, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp192fast);
+MAKE_ENCODER(, CROSSrsdp192small, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192small, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp192small, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192small, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp192small, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp192small, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp192small);
+MAKE_ENCODER(, CROSSrsdp256balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp256balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp256balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp256balanced);
+MAKE_ENCODER(, CROSSrsdp256fast, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256fast, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp256fast, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256fast, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp256fast, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256fast, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp256fast);
+MAKE_ENCODER(, CROSSrsdp256small, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256small, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp256small, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256small, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp256small, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp256small, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp256small);
+MAKE_ENCODER(, CROSSrsdpg128balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg128balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg128balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg128balanced);
+MAKE_ENCODER(, CROSSrsdpg128fast, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128fast, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg128fast, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128fast, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg128fast, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128fast, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg128fast);
+MAKE_ENCODER(, CROSSrsdpg128small, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128small, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg128small, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128small, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg128small, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg128small, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg128small);
+MAKE_ENCODER(, CROSSrsdpg192balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg192balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg192balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg192balanced);
+MAKE_ENCODER(, CROSSrsdpg192fast, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192fast, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg192fast, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192fast, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg192fast, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192fast, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg192fast);
+MAKE_ENCODER(, CROSSrsdpg192small, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192small, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg192small, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192small, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg192small, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg192small, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg192small);
+MAKE_ENCODER(, CROSSrsdpg256balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg256balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg256balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg256balanced);
+MAKE_ENCODER(, CROSSrsdpg256fast, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256fast, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg256fast, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256fast, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg256fast, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256fast, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg256fast);
+MAKE_ENCODER(, CROSSrsdpg256small, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256small, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg256small, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256small, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdpg256small, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdpg256small, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdpg256small);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

@@ -35,78 +35,78 @@ typedef struct oqs_group_constants_st {
 static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
     ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_START
-    {0x0200, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x0200, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F00, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F80, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0201, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F00, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F80, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0201, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F01, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F81, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0202, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F01, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F81, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0202, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F02, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F82, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0203, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F02, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F82, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0203, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F03, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F83, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0204, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F03, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F83, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0204, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F04, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0205, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F04, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0205, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F05, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x023A, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F05, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x023A, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F3A, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F39, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x023C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F3A, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F39, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x023C, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F3C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F90, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x6399, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x639A, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x023D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F3C, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F90, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x6399, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x639A, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x023D, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F3D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0247, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F3D, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0247, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F47, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB2, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0248, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F47, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB2, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0248, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F48, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB3, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB4, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB5, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0249, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F48, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB3, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB4, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB5, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0249, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F49, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F4A, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0241, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F49, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2F4A, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0241, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F41, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FAE, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0242, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F41, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FAE, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0242, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F42, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FAF, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0243, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F42, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FAF, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0243, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F43, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0244, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F43, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0244, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F44, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB0, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0245, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F44, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB0, 128, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0245, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F45, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB1, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0246, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+   { 0x2F45, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x2FB1, 192, TLS1_3_VERSION, 0, -1, -1, 1 },
+   { 0x0246, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
 
-    {0x2F46, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
+   { 0x2F46, 256, TLS1_3_VERSION, 0, -1, -1, 1 },
+///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
 };
 
 // Adds entries for tlsname, `ecx`_tlsname and `ecp`_tlsname
@@ -142,16 +142,13 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY(frodo640aes, frodo640aes, frodo640aes, 0),
 
     OQS_GROUP_ENTRY(p256_frodo640aes, p256_frodo640aes, p256_frodo640aes, 1),
-    OQS_GROUP_ENTRY(x25519_frodo640aes, x25519_frodo640aes, x25519_frodo640aes,
-                    2),
+    OQS_GROUP_ENTRY(x25519_frodo640aes, x25519_frodo640aes, x25519_frodo640aes, 2),
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_640_shake
     OQS_GROUP_ENTRY(frodo640shake, frodo640shake, frodo640shake, 3),
 
-    OQS_GROUP_ENTRY(p256_frodo640shake, p256_frodo640shake, p256_frodo640shake,
-                    4),
-    OQS_GROUP_ENTRY(x25519_frodo640shake, x25519_frodo640shake,
-                    x25519_frodo640shake, 5),
+    OQS_GROUP_ENTRY(p256_frodo640shake, p256_frodo640shake, p256_frodo640shake, 4),
+    OQS_GROUP_ENTRY(x25519_frodo640shake, x25519_frodo640shake, x25519_frodo640shake, 5),
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_976_aes
     OQS_GROUP_ENTRY(frodo976aes, frodo976aes, frodo976aes, 6),
@@ -162,22 +159,18 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 #ifdef OQS_ENABLE_KEM_frodokem_976_shake
     OQS_GROUP_ENTRY(frodo976shake, frodo976shake, frodo976shake, 9),
 
-    OQS_GROUP_ENTRY(p384_frodo976shake, p384_frodo976shake, p384_frodo976shake,
-                    10),
-    OQS_GROUP_ENTRY(x448_frodo976shake, x448_frodo976shake, x448_frodo976shake,
-                    11),
+    OQS_GROUP_ENTRY(p384_frodo976shake, p384_frodo976shake, p384_frodo976shake, 10),
+    OQS_GROUP_ENTRY(x448_frodo976shake, x448_frodo976shake, x448_frodo976shake, 11),
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_aes
     OQS_GROUP_ENTRY(frodo1344aes, frodo1344aes, frodo1344aes, 12),
 
-    OQS_GROUP_ENTRY(p521_frodo1344aes, p521_frodo1344aes, p521_frodo1344aes,
-                    13),
+    OQS_GROUP_ENTRY(p521_frodo1344aes, p521_frodo1344aes, p521_frodo1344aes, 13),
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_shake
     OQS_GROUP_ENTRY(frodo1344shake, frodo1344shake, frodo1344shake, 14),
 
-    OQS_GROUP_ENTRY(p521_frodo1344shake, p521_frodo1344shake,
-                    p521_frodo1344shake, 15),
+    OQS_GROUP_ENTRY(p521_frodo1344shake, p521_frodo1344shake, p521_frodo1344shake, 15),
 #endif
 #ifdef OQS_ENABLE_KEM_kyber_512
     OQS_GROUP_ENTRY(kyber512, kyber512, kyber512, 16),
@@ -252,7 +245,7 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 
     OQS_GROUP_ENTRY(p521_hqc256, p521_hqc256, p521_hqc256, 52),
 #endif
-    ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
+///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
 };
 
 typedef struct oqs_sigalg_constants_st {
@@ -265,35 +258,81 @@ typedef struct oqs_sigalg_constants_st {
 static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_START
-    {0xfea0, 128, TLS1_3_VERSION, 0}, {0xfea1, 128, TLS1_3_VERSION, 0},
-    {0xfea2, 128, TLS1_3_VERSION, 0}, {0xfea3, 192, TLS1_3_VERSION, 0},
-    {0xfea4, 192, TLS1_3_VERSION, 0}, {0xfea5, 256, TLS1_3_VERSION, 0},
-    {0xfea6, 256, TLS1_3_VERSION, 0}, {0xfed0, 128, TLS1_3_VERSION, 0},
-    {0xfed3, 128, TLS1_3_VERSION, 0}, {0xfed4, 128, TLS1_3_VERSION, 0},
-    {0xfee1, 128, TLS1_3_VERSION, 0}, {0xfee2, 128, TLS1_3_VERSION, 0},
-    {0xfee3, 128, TLS1_3_VERSION, 0}, {0xfee4, 128, TLS1_3_VERSION, 0},
-    {0xfee5, 128, TLS1_3_VERSION, 0}, {0xfed1, 192, TLS1_3_VERSION, 0},
-    {0xfed5, 192, TLS1_3_VERSION, 0}, {0xfee6, 192, TLS1_3_VERSION, 0},
-    {0xfee7, 192, TLS1_3_VERSION, 0}, {0xfee8, 192, TLS1_3_VERSION, 0},
-    {0xfee9, 192, TLS1_3_VERSION, 0}, {0xfeea, 192, TLS1_3_VERSION, 0},
-    {0xfed2, 256, TLS1_3_VERSION, 0}, {0xfed6, 256, TLS1_3_VERSION, 0},
-    {0xfeeb, 256, TLS1_3_VERSION, 0}, {0xfeec, 256, TLS1_3_VERSION, 0},
-    {0xfeed, 256, TLS1_3_VERSION, 0}, {0xfed7, 128, TLS1_3_VERSION, 0},
-    {0xfed8, 128, TLS1_3_VERSION, 0}, {0xfed9, 128, TLS1_3_VERSION, 0},
-    {0xfedc, 128, TLS1_3_VERSION, 0}, {0xfedd, 128, TLS1_3_VERSION, 0},
-    {0xfede, 128, TLS1_3_VERSION, 0}, {0xfeda, 256, TLS1_3_VERSION, 0},
-    {0xfedb, 256, TLS1_3_VERSION, 0}, {0xfedf, 256, TLS1_3_VERSION, 0},
-    {0xfee0, 256, TLS1_3_VERSION, 0}, {0xfeb3, 128, TLS1_3_VERSION, 0},
-    {0xfeb4, 128, TLS1_3_VERSION, 0}, {0xfeb5, 128, TLS1_3_VERSION, 0},
-    {0xfeb6, 128, TLS1_3_VERSION, 0}, {0xfeb7, 128, TLS1_3_VERSION, 0},
-    {0xfeb8, 128, TLS1_3_VERSION, 0}, {0xfeb9, 192, TLS1_3_VERSION, 0},
-    {0xfeba, 192, TLS1_3_VERSION, 0}, {0xfec2, 128, TLS1_3_VERSION, 0},
-    {0xfec3, 128, TLS1_3_VERSION, 0}, {0xfec4, 128, TLS1_3_VERSION, 0},
-    {0xfeee, 128, TLS1_3_VERSION, 0}, {0xfef2, 128, TLS1_3_VERSION, 0},
-    {0xfeef, 128, TLS1_3_VERSION, 0}, {0xfef3, 128, TLS1_3_VERSION, 0},
-    {0xfef0, 192, TLS1_3_VERSION, 0}, {0xfef4, 192, TLS1_3_VERSION, 0},
-    {0xfef1, 256, TLS1_3_VERSION, 0}, {0xfef5, 256, TLS1_3_VERSION, 0},
-    ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
+    { 0xfea0, 128, TLS1_3_VERSION, 0 },
+    { 0xfea1, 128, TLS1_3_VERSION, 0 },
+    { 0xfea2, 128, TLS1_3_VERSION, 0 },
+    { 0xfea3, 192, TLS1_3_VERSION, 0 },
+    { 0xfea4, 192, TLS1_3_VERSION, 0 },
+    { 0xfea5, 256, TLS1_3_VERSION, 0 },
+    { 0xfea6, 256, TLS1_3_VERSION, 0 },
+    { 0xfed0, 128, TLS1_3_VERSION, 0 },
+    { 0xfed3, 128, TLS1_3_VERSION, 0 },
+    { 0xfed4, 128, TLS1_3_VERSION, 0 },
+    { 0xfee1, 128, TLS1_3_VERSION, 0 },
+    { 0xfee2, 128, TLS1_3_VERSION, 0 },
+    { 0xfee3, 128, TLS1_3_VERSION, 0 },
+    { 0xfee4, 128, TLS1_3_VERSION, 0 },
+    { 0xfee5, 128, TLS1_3_VERSION, 0 },
+    { 0xfed1, 192, TLS1_3_VERSION, 0 },
+    { 0xfed5, 192, TLS1_3_VERSION, 0 },
+    { 0xfee6, 192, TLS1_3_VERSION, 0 },
+    { 0xfee7, 192, TLS1_3_VERSION, 0 },
+    { 0xfee8, 192, TLS1_3_VERSION, 0 },
+    { 0xfee9, 192, TLS1_3_VERSION, 0 },
+    { 0xfeea, 192, TLS1_3_VERSION, 0 },
+    { 0xfed2, 256, TLS1_3_VERSION, 0 },
+    { 0xfed6, 256, TLS1_3_VERSION, 0 },
+    { 0xfeeb, 256, TLS1_3_VERSION, 0 },
+    { 0xfeec, 256, TLS1_3_VERSION, 0 },
+    { 0xfeed, 256, TLS1_3_VERSION, 0 },
+    { 0xfed7, 128, TLS1_3_VERSION, 0 },
+    { 0xfed8, 128, TLS1_3_VERSION, 0 },
+    { 0xfed9, 128, TLS1_3_VERSION, 0 },
+    { 0xfedc, 128, TLS1_3_VERSION, 0 },
+    { 0xfedd, 128, TLS1_3_VERSION, 0 },
+    { 0xfede, 128, TLS1_3_VERSION, 0 },
+    { 0xfeda, 256, TLS1_3_VERSION, 0 },
+    { 0xfedb, 256, TLS1_3_VERSION, 0 },
+    { 0xfedf, 256, TLS1_3_VERSION, 0 },
+    { 0xfee0, 256, TLS1_3_VERSION, 0 },
+    { 0xfeb3, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb4, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb5, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb6, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb7, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb8, 128, TLS1_3_VERSION, 0 },
+    { 0xfeb9, 192, TLS1_3_VERSION, 0 },
+    { 0xfeba, 192, TLS1_3_VERSION, 0 },
+    { 0xfec2, 128, TLS1_3_VERSION, 0 },
+    { 0xfec3, 128, TLS1_3_VERSION, 0 },
+    { 0xfec4, 128, TLS1_3_VERSION, 0 },
+    { 0xfeee, 128, TLS1_3_VERSION, 0 },
+    { 0xfef2, 128, TLS1_3_VERSION, 0 },
+    { 0xfeef, 128, TLS1_3_VERSION, 0 },
+    { 0xfef3, 128, TLS1_3_VERSION, 0 },
+    { 0xfef0, 192, TLS1_3_VERSION, 0 },
+    { 0xfef4, 192, TLS1_3_VERSION, 0 },
+    { 0xfef1, 256, TLS1_3_VERSION, 0 },
+    { 0xfef5, 256, TLS1_3_VERSION, 0 },
+    { 0xfef6, 128, TLS1_3_VERSION, 0 },
+    { 0xfef7, 128, TLS1_3_VERSION, 0 },
+    { 0xfef8, 128, TLS1_3_VERSION, 0 },
+    { 0xfef9, 192, TLS1_3_VERSION, 0 },
+    { 0xfefa, 192, TLS1_3_VERSION, 0 },
+    { 0xfefb, 192, TLS1_3_VERSION, 0 },
+    { 0xfefc, 256, TLS1_3_VERSION, 0 },
+    { 0xfefd, 256, TLS1_3_VERSION, 0 },
+    { 0xfefe, 256, TLS1_3_VERSION, 0 },
+    { 0xfeff, 128, TLS1_3_VERSION, 0 },
+    { 0xff00, 128, TLS1_3_VERSION, 0 },
+    { 0xff01, 128, TLS1_3_VERSION, 0 },
+    { 0xff02, 192, TLS1_3_VERSION, 0 },
+    { 0xff03, 192, TLS1_3_VERSION, 0 },
+    { 0xff04, 192, TLS1_3_VERSION, 0 },
+    { 0xff05, 256, TLS1_3_VERSION, 0 },
+    { 0xff06, 256, TLS1_3_VERSION, 0 },
+    { 0xff07, 256, TLS1_3_VERSION, 0 },
+///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 
 int oqs_patch_codepoints() {
@@ -597,7 +636,25 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_P521_MAYO5"))
         oqs_sigalg_list[55].code_point =
             atoi(getenv("OQS_CODEPOINT_P521_MAYO5"));
-    ///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
+   if (getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED")) oqs_sigalg_list[56].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP128FAST")) oqs_sigalg_list[57].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP128FAST"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP128SMALL")) oqs_sigalg_list[58].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP128SMALL"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP192BALANCED")) oqs_sigalg_list[59].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP192BALANCED"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP192FAST")) oqs_sigalg_list[60].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP192FAST"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP192SMALL")) oqs_sigalg_list[61].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP192SMALL"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP256BALANCED")) oqs_sigalg_list[62].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP256BALANCED"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP256FAST")) oqs_sigalg_list[63].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP256FAST"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDP256SMALL")) oqs_sigalg_list[64].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDP256SMALL"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG128BALANCED")) oqs_sigalg_list[65].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG128BALANCED"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG128FAST")) oqs_sigalg_list[66].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG128FAST"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG128SMALL")) oqs_sigalg_list[67].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG128SMALL"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG192BALANCED")) oqs_sigalg_list[68].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG192BALANCED"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG192FAST")) oqs_sigalg_list[69].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG192FAST"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG192SMALL")) oqs_sigalg_list[70].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG192SMALL"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG256BALANCED")) oqs_sigalg_list[71].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG256BALANCED"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG256FAST")) oqs_sigalg_list[72].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG256FAST"));
+   if (getenv("OQS_CODEPOINT_CROSSRSDPG256SMALL")) oqs_sigalg_list[73].code_point = atoi(getenv("OQS_CODEPOINT_CROSSRSDPG256SMALL"));
+///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
     return 1;
 }
 
@@ -772,7 +829,61 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(mayo5, mayo5, mayo5, "1.3.9999.8.5.1", 54),
     OQS_SIGALG_ENTRY(p521_mayo5, p521_mayo5, p521_mayo5, "1.3.9999.8.5.2", 55),
 #endif
-    ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
+#ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
+    OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced, CROSSrsdp128balanced, "0.0.0.0.0.0.0.0.0.1", 56),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_128_fast
+    OQS_SIGALG_ENTRY(CROSSrsdp128fast, CROSSrsdp128fast, CROSSrsdp128fast, "0.0.0.0.0.0.0.0.0.2", 57),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_128_small
+    OQS_SIGALG_ENTRY(CROSSrsdp128small, CROSSrsdp128small, CROSSrsdp128small, "0.0.0.0.0.0.0.0.0.3", 58),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_192_balanced
+    OQS_SIGALG_ENTRY(CROSSrsdp192balanced, CROSSrsdp192balanced, CROSSrsdp192balanced, "0.0.0.0.0.0.0.0.0.4", 59),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_192_fast
+    OQS_SIGALG_ENTRY(CROSSrsdp192fast, CROSSrsdp192fast, CROSSrsdp192fast, "0.0.0.0.0.0.0.0.0.5", 60),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_192_small
+    OQS_SIGALG_ENTRY(CROSSrsdp192small, CROSSrsdp192small, CROSSrsdp192small, "0.0.0.0.0.0.0.0.0.6", 61),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_256_balanced
+    OQS_SIGALG_ENTRY(CROSSrsdp256balanced, CROSSrsdp256balanced, CROSSrsdp256balanced, "0.0.0.0.0.0.0.0.0.7", 62),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_256_fast
+    OQS_SIGALG_ENTRY(CROSSrsdp256fast, CROSSrsdp256fast, CROSSrsdp256fast, "0.0.0.0.0.0.0.0.0.8", 63),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_256_small
+    OQS_SIGALG_ENTRY(CROSSrsdp256small, CROSSrsdp256small, CROSSrsdp256small, "0.0.0.0.0.0.0.0.0.9", 64),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_128_balanced
+    OQS_SIGALG_ENTRY(CROSSrsdpg128balanced, CROSSrsdpg128balanced, CROSSrsdpg128balanced, "0.0.0.0.0.0.0.0.0.10", 65),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_128_fast
+    OQS_SIGALG_ENTRY(CROSSrsdpg128fast, CROSSrsdpg128fast, CROSSrsdpg128fast, "0.0.0.0.0.0.0.0.0.11", 66),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_128_small
+    OQS_SIGALG_ENTRY(CROSSrsdpg128small, CROSSrsdpg128small, CROSSrsdpg128small, "0.0.0.0.0.0.0.0.0.12", 67),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_192_balanced
+    OQS_SIGALG_ENTRY(CROSSrsdpg192balanced, CROSSrsdpg192balanced, CROSSrsdpg192balanced, "0.0.0.0.0.0.0.0.0.13", 68),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_192_fast
+    OQS_SIGALG_ENTRY(CROSSrsdpg192fast, CROSSrsdpg192fast, CROSSrsdpg192fast, "0.0.0.0.0.0.0.0.0.14", 69),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_192_small
+    OQS_SIGALG_ENTRY(CROSSrsdpg192small, CROSSrsdpg192small, CROSSrsdpg192small, "0.0.0.0.0.0.0.0.0.15", 70),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_256_balanced
+    OQS_SIGALG_ENTRY(CROSSrsdpg256balanced, CROSSrsdpg256balanced, CROSSrsdpg256balanced, "0.0.0.0.0.0.0.0.0.16", 71),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_256_fast
+    OQS_SIGALG_ENTRY(CROSSrsdpg256fast, CROSSrsdpg256fast, CROSSrsdpg256fast, "0.0.0.0.0.0.0.0.0.17", 72),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdpg_256_small
+    OQS_SIGALG_ENTRY(CROSSrsdpg256small, CROSSrsdpg256small, CROSSrsdpg256small, "0.0.0.0.0.0.0.0.0.18", 73),
+#endif
+///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };
 
 static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg) {

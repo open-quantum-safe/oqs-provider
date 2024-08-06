@@ -98,9 +98,6 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
     provctx ? (((PROV_OQS_CTX *)provctx)->libctx) : NULL
 
 #include "oqs/oqs.h"
-#ifdef USE_ENCODING_LIB
-#    include <qsc_encoding.h>
-#endif
 
 /* helper structure for classic key components in hybrid keys.
  * Actual tables in oqsprov_keys.c
@@ -137,15 +134,6 @@ struct oqsx_provider_ctx_st {
 
 typedef struct oqsx_provider_ctx_st OQSX_PROVIDER_CTX;
 
-#ifdef USE_ENCODING_LIB
-struct oqsx_provider_encoding_ctx_st {
-    const qsc_encoding_t *encoding_ctx;
-    const qsc_encoding_impl_t *encoding_impl;
-};
-
-typedef struct oqsx_provider_encoding_ctx_st OQSX_ENCODING_CTX;
-#endif
-
 enum oqsx_key_type_en {
     KEY_TYPE_SIG,
     KEY_TYPE_KEM,
@@ -165,9 +153,6 @@ struct oqsx_key_st {
     char *propq;
     OQSX_KEY_TYPE keytype;
     OQSX_PROVIDER_CTX oqsx_provider_ctx;
-#ifdef USE_ENCODING_LIB
-    OQSX_ENCODING_CTX oqsx_encoding_ctx;
-#endif
     EVP_PKEY *classical_pkey; // for hybrid & composite sigs
     const OQSX_EVP_INFO *evp_info;
     size_t numkeys;

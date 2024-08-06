@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 
-#undef USE_ENCODING_LIB
 #include "oqs_prov.h"
 #include "test_common.h"
 

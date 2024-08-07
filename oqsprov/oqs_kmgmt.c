@@ -1491,6 +1491,45 @@ static void *p521_mayo5_gen_init(void *provctx, int selection)
         {OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load},                   \
         {0, NULL}};
 
+#define MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(tokalg, tokoqsalg, bit_security)        \
+    static void *cmp_##tokalg##_new_key(void *provctx)                         \
+    {                                                                          \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg,            \
+                            "" #tokalg "", KEY_TYPE_CMP_KEM, NULL,             \
+                            bit_security, -1);                                 \
+    }                                                                          \
+                                                                               \
+    static void *cmp_##tokalg##_gen_init(void *provctx, int selection)         \
+    {                                                                          \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, "" #tokalg "",     \
+                             KEY_TYPE_CMP_KEM, bit_security, -1);              \
+    }                                                                          \
+                                                                               \
+    const OSSL_DISPATCH oqs_cmp_##tokalg##_keymgmt_functions[] = {             \
+        {OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))cmp_##tokalg##_new_key},       \
+        {OSSL_FUNC_KEYMGMT_FREE, (void (*)(void))oqsx_key_free},               \
+        {OSSL_FUNC_KEYMGMT_GET_PARAMS, (void (*)(void))oqsx_get_params},       \
+        {OSSL_FUNC_KEYMGMT_SETTABLE_PARAMS,                                    \
+         (void (*)(void))oqsx_settable_params},                                \
+        {OSSL_FUNC_KEYMGMT_GETTABLE_PARAMS,                                    \
+         (void (*)(void))oqs_gettable_params},                                 \
+        {OSSL_FUNC_KEYMGMT_SET_PARAMS, (void (*)(void))oqsx_set_params},       \
+        {OSSL_FUNC_KEYMGMT_HAS, (void (*)(void))oqsx_has},                     \
+        {OSSL_FUNC_KEYMGMT_MATCH, (void (*)(void))oqsx_match},                 \
+        {OSSL_FUNC_KEYMGMT_IMPORT, (void (*)(void))oqsx_import},               \
+        {OSSL_FUNC_KEYMGMT_IMPORT_TYPES, (void (*)(void))oqs_imexport_types},  \
+        {OSSL_FUNC_KEYMGMT_EXPORT, (void (*)(void))oqsx_export},               \
+        {OSSL_FUNC_KEYMGMT_EXPORT_TYPES, (void (*)(void))oqs_imexport_types},  \
+        {OSSL_FUNC_KEYMGMT_GEN_INIT, (void (*)(void))cmp_##tokalg##_gen_init}, \
+        {OSSL_FUNC_KEYMGMT_GEN, (void (*)(void))oqsx_gen},                     \
+        {OSSL_FUNC_KEYMGMT_GEN_CLEANUP, (void (*)(void))oqsx_gen_cleanup},     \
+        {OSSL_FUNC_KEYMGMT_GEN_SET_PARAMS,                                     \
+         (void (*)(void))oqsx_gen_set_params},                                 \
+        {OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS,                                \
+         (void (*)(void))oqsx_gen_settable_params},                            \
+        {OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load},                   \
+        {0, NULL}};
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
 MAKE_SIG_KEYMGMT_FUNCTIONS(dilithium2)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_dilithium2)
@@ -1606,6 +1645,11 @@ MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem512, OQS_KEM_alg_ml_kem_512, 128)
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_mlkem512, OQS_KEM_alg_ml_kem_512, 128)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_mlkem512, OQS_KEM_alg_ml_kem_512, 128)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem512_p256, OQS_KEM_alg_ml_kem_512, 128)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem512_bp256, OQS_KEM_alg_ml_kem_512, 128)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem512_x25519, OQS_KEM_alg_ml_kem_512, 128)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem512_rsa2048, OQS_KEM_alg_ml_kem_512, 112)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem512_rsa3072, OQS_KEM_alg_ml_kem_512, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem768, OQS_KEM_alg_ml_kem_768, 192)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_mlkem768, OQS_KEM_alg_ml_kem_768, 192)
@@ -1614,10 +1658,16 @@ MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_mlkem768, OQS_KEM_alg_ml_kem_768, 192)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_mlkem768, OQS_KEM_alg_ml_kem_768, 128)
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_mlkem768, OQS_KEM_alg_ml_kem_768, 128)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem768_p256, OQS_KEM_alg_ml_kem_768, 128)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem768_bp256, OQS_KEM_alg_ml_kem_768, 192)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem768_x25519, OQS_KEM_alg_ml_kem_768, 128)
 MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem1024, OQS_KEM_alg_ml_kem_1024, 256)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_mlkem1024, OQS_KEM_alg_ml_kem_1024, 256)
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_mlkem1024, OQS_KEM_alg_ml_kem_1024, 192)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem1024_p384, OQS_KEM_alg_ml_kem_1024, 192)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem1024_bp384, OQS_KEM_alg_ml_kem_1024, 256)
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS(mlkem1024_x448, OQS_KEM_alg_ml_kem_1024, 192)
 MAKE_KEM_KEYMGMT_FUNCTIONS(bikel1, OQS_KEM_alg_bike_l1, 128)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_bikel1, OQS_KEM_alg_bike_l1, 128)

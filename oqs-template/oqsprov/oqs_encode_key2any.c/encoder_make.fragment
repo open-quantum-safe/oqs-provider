@@ -18,6 +18,15 @@ MAKE_ENCODER({% if hybrid['hybrid_group'].startswith('x') %}_ecx{% else %}_ecp{%
 MAKE_ENCODER({% if hybrid['hybrid_group'].startswith('x') %}_ecx{% else %}_ecp{% endif %}, {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER({% if hybrid['hybrid_group'].startswith('x') %}_ecx{% else %}_ecp{% endif %}, {{hybrid['hybrid_group']}}_{{ kem['name_group'] }});
 {%- endfor %}
+     {%- for composite_alg in kem['composite'] %}
+MAKE_ENCODER(_cmp, {{kem['name_group']}}_{{ composite_alg['name'] }}, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, {{kem['name_group']}}_{{ composite_alg['name'] }}, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, {{kem['name_group']}}_{{ composite_alg['name'] }}, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, {{kem['name_group']}}_{{ composite_alg['name'] }}, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, {{kem['name_group']}}_{{ composite_alg['name'] }}, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, {{kem['name_group']}}_{{ composite_alg['name'] }}, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, {{kem['name_group']}}_{{ composite_alg['name'] }});
+     {%- endfor -%}
 {%- endfor %}
 #endif /* OQS_KEM_ENCODERS */
 {% for sig in config['sigs'] %}

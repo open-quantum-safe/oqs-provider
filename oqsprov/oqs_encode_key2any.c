@@ -511,7 +511,8 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
-    if ((oqsxkey->keytype != KEY_TYPE_CMP_SIG) && (oqsxkey->keytype != KEY_TYPE_CMP_KEM)) {
+    if ((oqsxkey->keytype != KEY_TYPE_CMP_SIG)
+        && (oqsxkey->keytype != KEY_TYPE_CMP_KEM)) {
 #ifdef USE_ENCODING_LIB
         if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL
             && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
@@ -640,7 +641,8 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 
     // only concatenate private classic key (if any) and OQS private and public
     // key NOT saving public classic key component (if any)
-    if ((oqsxkey->keytype != KEY_TYPE_CMP_SIG) && (oqsxkey->keytype != KEY_TYPE_CMP_KEM)) {
+    if ((oqsxkey->keytype != KEY_TYPE_CMP_SIG)
+        && (oqsxkey->keytype != KEY_TYPE_CMP_KEM)) {
         privkeylen = oqsxkey->privkeylen;
         if (oqsxkey->numkeys > 1) { // hybrid
             uint32_t actualprivkeylen = 0;
@@ -963,9 +965,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x25519_frodo640aes_evp_type   0
 #define x25519_frodo640aes_input_type "x25519_frodo640aes"
 #define x25519_frodo640aes_pem_type   "x25519_frodo640aes"
-#define frodo640shake_evp_type        0
-#define frodo640shake_input_type      "frodo640shake"
-#define frodo640shake_pem_type        "frodo640shake"
+
+#define frodo640shake_evp_type   0
+#define frodo640shake_input_type "frodo640shake"
+#define frodo640shake_pem_type   "frodo640shake"
 
 #define p256_frodo640shake_evp_type     0
 #define p256_frodo640shake_input_type   "p256_frodo640shake"
@@ -973,9 +976,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x25519_frodo640shake_evp_type   0
 #define x25519_frodo640shake_input_type "x25519_frodo640shake"
 #define x25519_frodo640shake_pem_type   "x25519_frodo640shake"
-#define frodo976aes_evp_type            0
-#define frodo976aes_input_type          "frodo976aes"
-#define frodo976aes_pem_type            "frodo976aes"
+
+#define frodo976aes_evp_type   0
+#define frodo976aes_input_type "frodo976aes"
+#define frodo976aes_pem_type   "frodo976aes"
 
 #define p384_frodo976aes_evp_type   0
 #define p384_frodo976aes_input_type "p384_frodo976aes"
@@ -983,9 +987,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x448_frodo976aes_evp_type   0
 #define x448_frodo976aes_input_type "x448_frodo976aes"
 #define x448_frodo976aes_pem_type   "x448_frodo976aes"
-#define frodo976shake_evp_type      0
-#define frodo976shake_input_type    "frodo976shake"
-#define frodo976shake_pem_type      "frodo976shake"
+
+#define frodo976shake_evp_type   0
+#define frodo976shake_input_type "frodo976shake"
+#define frodo976shake_pem_type   "frodo976shake"
 
 #define p384_frodo976shake_evp_type   0
 #define p384_frodo976shake_input_type "p384_frodo976shake"
@@ -993,23 +998,26 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x448_frodo976shake_evp_type   0
 #define x448_frodo976shake_input_type "x448_frodo976shake"
 #define x448_frodo976shake_pem_type   "x448_frodo976shake"
-#define frodo1344aes_evp_type         0
-#define frodo1344aes_input_type       "frodo1344aes"
-#define frodo1344aes_pem_type         "frodo1344aes"
+
+#define frodo1344aes_evp_type   0
+#define frodo1344aes_input_type "frodo1344aes"
+#define frodo1344aes_pem_type   "frodo1344aes"
 
 #define p521_frodo1344aes_evp_type   0
 #define p521_frodo1344aes_input_type "p521_frodo1344aes"
 #define p521_frodo1344aes_pem_type   "p521_frodo1344aes"
-#define frodo1344shake_evp_type      0
-#define frodo1344shake_input_type    "frodo1344shake"
-#define frodo1344shake_pem_type      "frodo1344shake"
+
+#define frodo1344shake_evp_type   0
+#define frodo1344shake_input_type "frodo1344shake"
+#define frodo1344shake_pem_type   "frodo1344shake"
 
 #define p521_frodo1344shake_evp_type   0
 #define p521_frodo1344shake_input_type "p521_frodo1344shake"
 #define p521_frodo1344shake_pem_type   "p521_frodo1344shake"
-#define kyber512_evp_type              0
-#define kyber512_input_type            "kyber512"
-#define kyber512_pem_type              "kyber512"
+
+#define kyber512_evp_type   0
+#define kyber512_input_type "kyber512"
+#define kyber512_pem_type   "kyber512"
 
 #define p256_kyber512_evp_type     0
 #define p256_kyber512_input_type   "p256_kyber512"
@@ -1017,9 +1025,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x25519_kyber512_evp_type   0
 #define x25519_kyber512_input_type "x25519_kyber512"
 #define x25519_kyber512_pem_type   "x25519_kyber512"
-#define kyber768_evp_type          0
-#define kyber768_input_type        "kyber768"
-#define kyber768_pem_type          "kyber768"
+
+#define kyber768_evp_type   0
+#define kyber768_input_type "kyber768"
+#define kyber768_pem_type   "kyber768"
 
 #define p384_kyber768_evp_type     0
 #define p384_kyber768_input_type   "p384_kyber768"
@@ -1033,16 +1042,18 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define p256_kyber768_evp_type     0
 #define p256_kyber768_input_type   "p256_kyber768"
 #define p256_kyber768_pem_type     "p256_kyber768"
-#define kyber1024_evp_type         0
-#define kyber1024_input_type       "kyber1024"
-#define kyber1024_pem_type         "kyber1024"
+
+#define kyber1024_evp_type   0
+#define kyber1024_input_type "kyber1024"
+#define kyber1024_pem_type   "kyber1024"
 
 #define p521_kyber1024_evp_type   0
 #define p521_kyber1024_input_type "p521_kyber1024"
 #define p521_kyber1024_pem_type   "p521_kyber1024"
-#define mlkem512_evp_type         0
-#define mlkem512_input_type       "mlkem512"
-#define mlkem512_pem_type         "mlkem512"
+
+#define mlkem512_evp_type   0
+#define mlkem512_input_type "mlkem512"
+#define mlkem512_pem_type   "mlkem512"
 
 #define p256_mlkem512_evp_type     0
 #define p256_mlkem512_input_type   "p256_mlkem512"
@@ -1050,9 +1061,25 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x25519_mlkem512_evp_type   0
 #define x25519_mlkem512_input_type "x25519_mlkem512"
 #define x25519_mlkem512_pem_type   "x25519_mlkem512"
-#define mlkem768_evp_type          0
-#define mlkem768_input_type        "mlkem768"
-#define mlkem768_pem_type          "mlkem768"
+
+#define mlkem512_p256_evp_type      0
+#define mlkem512_p256_input_type    "mlkem512_p256"
+#define mlkem512_p256_pem_type      "mlkem512_p256"
+#define mlkem512_bp256_evp_type     0
+#define mlkem512_bp256_input_type   "mlkem512_bp256"
+#define mlkem512_bp256_pem_type     "mlkem512_bp256"
+#define mlkem512_x25519_evp_type    0
+#define mlkem512_x25519_input_type  "mlkem512_x25519"
+#define mlkem512_x25519_pem_type    "mlkem512_x25519"
+#define mlkem512_rsa2048_evp_type   0
+#define mlkem512_rsa2048_input_type "mlkem512_rsa2048"
+#define mlkem512_rsa2048_pem_type   "mlkem512_rsa2048"
+#define mlkem512_rsa3072_evp_type   0
+#define mlkem512_rsa3072_input_type "mlkem512_rsa3072"
+#define mlkem512_rsa3072_pem_type   "mlkem512_rsa3072"
+#define mlkem768_evp_type           0
+#define mlkem768_input_type         "mlkem768"
+#define mlkem768_pem_type           "mlkem768"
 
 #define p384_mlkem768_evp_type     0
 #define p384_mlkem768_input_type   "p384_mlkem768"
@@ -1066,6 +1093,16 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define p256_mlkem768_evp_type     0
 #define p256_mlkem768_input_type   "p256_mlkem768"
 #define p256_mlkem768_pem_type     "p256_mlkem768"
+
+#define mlkem768_p256_evp_type     0
+#define mlkem768_p256_input_type   "mlkem768_p256"
+#define mlkem768_p256_pem_type     "mlkem768_p256"
+#define mlkem768_bp256_evp_type    0
+#define mlkem768_bp256_input_type  "mlkem768_bp256"
+#define mlkem768_bp256_pem_type    "mlkem768_bp256"
+#define mlkem768_x25519_evp_type   0
+#define mlkem768_x25519_input_type "mlkem768_x25519"
+#define mlkem768_x25519_pem_type   "mlkem768_x25519"
 #define mlkem1024_evp_type         0
 #define mlkem1024_input_type       "mlkem1024"
 #define mlkem1024_pem_type         "mlkem1024"
@@ -1076,9 +1113,19 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define p384_mlkem1024_evp_type   0
 #define p384_mlkem1024_input_type "p384_mlkem1024"
 #define p384_mlkem1024_pem_type   "p384_mlkem1024"
-#define bikel1_evp_type           0
-#define bikel1_input_type         "bikel1"
-#define bikel1_pem_type           "bikel1"
+
+#define mlkem1024_p384_evp_type    0
+#define mlkem1024_p384_input_type  "mlkem1024_p384"
+#define mlkem1024_p384_pem_type    "mlkem1024_p384"
+#define mlkem1024_bp384_evp_type   0
+#define mlkem1024_bp384_input_type "mlkem1024_bp384"
+#define mlkem1024_bp384_pem_type   "mlkem1024_bp384"
+#define mlkem1024_x448_evp_type    0
+#define mlkem1024_x448_input_type  "mlkem1024_x448"
+#define mlkem1024_x448_pem_type    "mlkem1024_x448"
+#define bikel1_evp_type            0
+#define bikel1_input_type          "bikel1"
+#define bikel1_pem_type            "bikel1"
 
 #define p256_bikel1_evp_type     0
 #define p256_bikel1_input_type   "p256_bikel1"
@@ -1086,9 +1133,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x25519_bikel1_evp_type   0
 #define x25519_bikel1_input_type "x25519_bikel1"
 #define x25519_bikel1_pem_type   "x25519_bikel1"
-#define bikel3_evp_type          0
-#define bikel3_input_type        "bikel3"
-#define bikel3_pem_type          "bikel3"
+
+#define bikel3_evp_type   0
+#define bikel3_input_type "bikel3"
+#define bikel3_pem_type   "bikel3"
 
 #define p384_bikel3_evp_type   0
 #define p384_bikel3_input_type "p384_bikel3"
@@ -1096,16 +1144,18 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x448_bikel3_evp_type   0
 #define x448_bikel3_input_type "x448_bikel3"
 #define x448_bikel3_pem_type   "x448_bikel3"
-#define bikel5_evp_type        0
-#define bikel5_input_type      "bikel5"
-#define bikel5_pem_type        "bikel5"
+
+#define bikel5_evp_type   0
+#define bikel5_input_type "bikel5"
+#define bikel5_pem_type   "bikel5"
 
 #define p521_bikel5_evp_type   0
 #define p521_bikel5_input_type "p521_bikel5"
 #define p521_bikel5_pem_type   "p521_bikel5"
-#define hqc128_evp_type        0
-#define hqc128_input_type      "hqc128"
-#define hqc128_pem_type        "hqc128"
+
+#define hqc128_evp_type   0
+#define hqc128_input_type "hqc128"
+#define hqc128_pem_type   "hqc128"
 
 #define p256_hqc128_evp_type     0
 #define p256_hqc128_input_type   "p256_hqc128"
@@ -1113,9 +1163,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x25519_hqc128_evp_type   0
 #define x25519_hqc128_input_type "x25519_hqc128"
 #define x25519_hqc128_pem_type   "x25519_hqc128"
-#define hqc192_evp_type          0
-#define hqc192_input_type        "hqc192"
-#define hqc192_pem_type          "hqc192"
+
+#define hqc192_evp_type   0
+#define hqc192_input_type "hqc192"
+#define hqc192_pem_type   "hqc192"
 
 #define p384_hqc192_evp_type   0
 #define p384_hqc192_input_type "p384_hqc192"
@@ -1123,9 +1174,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 #define x448_hqc192_evp_type   0
 #define x448_hqc192_input_type "x448_hqc192"
 #define x448_hqc192_pem_type   "x448_hqc192"
-#define hqc256_evp_type        0
-#define hqc256_input_type      "hqc256"
-#define hqc256_pem_type        "hqc256"
+
+#define hqc256_evp_type   0
+#define hqc256_input_type "hqc256"
+#define hqc256_pem_type   "hqc256"
 
 #define p521_hqc256_evp_type   0
 #define p521_hqc256_input_type "p521_hqc256"
@@ -1754,7 +1806,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
 
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
         if (okey->privkey) {
-            if ((okey->keytype == KEY_TYPE_CMP_SIG) || (okey->keytype == KEY_TYPE_CMP_KEM)) {
+            if ((okey->keytype == KEY_TYPE_CMP_SIG)
+                || (okey->keytype == KEY_TYPE_CMP_KEM)) {
                 char *name;
                 char label[200];
                 int i;
@@ -1830,7 +1883,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
     }
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
         if (okey->pubkey) {
-            if ((okey->keytype == KEY_TYPE_CMP_SIG) || (okey->keytype == KEY_TYPE_CMP_KEM)) {
+            if ((okey->keytype == KEY_TYPE_CMP_SIG)
+                || (okey->keytype == KEY_TYPE_CMP_KEM)) {
                 char *name;
                 char label[200];
                 int i;
@@ -2182,6 +2236,41 @@ MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecx, x25519_mlkem512);
+MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem512_p256);
+MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem512_bp256);
+MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem512_x25519);
+MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem512_rsa2048);
+MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem512_rsa3072);
 MAKE_ENCODER(, mlkem768, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, mlkem768, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, mlkem768, oqsx, PrivateKeyInfo, der);
@@ -2218,6 +2307,27 @@ MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecp, p256_mlkem768);
+MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_p256);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_bp256);
+MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_x25519);
 MAKE_ENCODER(, mlkem1024, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, mlkem1024, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, mlkem1024, oqsx, PrivateKeyInfo, der);
@@ -2240,6 +2350,27 @@ MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecp, p384_mlkem1024, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecp, p384_mlkem1024);
+MAKE_ENCODER(_cmp, mlkem1024_p384, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_p384, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem1024_p384, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_p384, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem1024_p384, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_p384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem1024_p384);
+MAKE_ENCODER(_cmp, mlkem1024_bp384, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_bp384, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem1024_bp384, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_bp384, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem1024_bp384, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_bp384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem1024_bp384);
+MAKE_ENCODER(_cmp, mlkem1024_x448, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_x448, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem1024_x448, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_x448, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem1024_x448, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem1024_x448, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem1024_x448);
 MAKE_ENCODER(, bikel1, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, bikel1, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, bikel1, oqsx, PrivateKeyInfo, der);

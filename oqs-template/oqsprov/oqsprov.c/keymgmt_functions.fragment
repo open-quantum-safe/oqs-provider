@@ -19,6 +19,9 @@
 {% for hybrid in kem['hybrids'] %}
 {% if hybrid['hybrid_group'].startswith('x') %}    KEMKMHYBALG({{ hybrid['hybrid_group']}}_{{kem['name_group'] }}, {{ hybrid['bit_security'] }}, ecx){% else %}    KEMKMHYBALG({{ hybrid['hybrid_group']}}_{{ kem['name_group'] }}, {{ hybrid['bit_security'] }}, ecp){% endif %}
 {%- endfor %}
+{% for composite_alg in kem['composite'] %}
+   KEMKMCMPALG({{kem['name_group']}}_{{composite_alg['name']}}, {{ composite_alg['bit_security'] }})
+{%- endfor %}
 #endif
 {%- endfor %}
 // clang-format on

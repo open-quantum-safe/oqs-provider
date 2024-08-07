@@ -7,6 +7,9 @@
 {% for hybrid in kem['hybrids'] %}
 {%- set kemcount.val = kemcount.val + 1 -%}
 {%- endfor -%}
+{% for composite_alg in kem['composite'] %}
+{%- set kemcount.val = kemcount.val + 1 -%}
+{%- endfor -%}
 {%- endfor -%}
 
 {%- for sig in config['sigs'] %}
@@ -33,6 +36,9 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
   { 0, "{{ kem['name_group'] }}", {{ kem['oqs_alg'] }}, KEY_TYPE_KEM, {{ kem['bit_security'] }} },
 {%- for hybrid in kem['hybrids'] %}
   { 0, "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}", {{ kem['oqs_alg'] }}, {% if hybrid['hybrid_group'].startswith('p') -%} KEY_TYPE_ECP_HYB_KEM {% else %} KEY_TYPE_ECX_HYB_KEM {% endif %}, {{ kem['bit_security'] }} },
+{%- endfor -%}
+{%- for composite_alg in kem['composite'] %}
+  { 0, "{{kem['name_group']}}_{{composite_alg['name']}}", {{ kem['oqs_alg'] }}, KEY_TYPE_CMP_KEM, {{ composite_alg['bit_security'] }} },
 {%- endfor -%}
 {%- endfor %}
 

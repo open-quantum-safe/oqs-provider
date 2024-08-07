@@ -11,16 +11,16 @@
 #include "oqs_prov.h"
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
-#include <openssl/kdf.h>
-#include <openssl/rand.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/crypto.h>
 #include <openssl/ec.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
-#include <openssl/rsa.h>
+#include <openssl/kdf.h>
 #include <openssl/params.h>
+#include <openssl/rand.h>
+#include <openssl/rsa.h>
 #include <string.h>
 
 #ifdef NDEBUG
@@ -65,63 +65,51 @@ typedef struct oqsx_cmp_kem_info_st OQSX_CMP_KEM_INFO;
 
 #define NUM_CMP_KEM_ALGS 11
 
-const OQSX_CMP_KEM_INFO CMP_KEM_INFO[NUM_CMP_KEM_ALGS] = {
-    {
-        "mlkem512-p256",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x01},
-        KDF_SHA3_256
-    },
-    {
-        "mlkem512-bp256",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x02},
-        KDF_SHA3_256
-    },
-    {
-        "mlkem512-x25519",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x03},
-        KDF_SHA3_256
-    },
-    {
-        "mlkem512-rsa2048",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x0D},
-        KDF_SHA3_256
-    },
-    {
-        "mlkem512-rsa3072",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x04},
-        KDF_SHA3_256
-    },
-    {
-        "mlkem768-p256",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x05},
-        KDF_SHA3_384
-    },
-    {
-        "mlkem768-bp256",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x06},
-        KDF_SHA3_384
-    },
-    {
-        "mlkem768-x25519",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x07},
-        KDF_SHA3_384
-    },
-    {
-        "mlkem1024-p384",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x08},
-        KDF_SHA3_512
-    },
-    {
-        "mlkem1024-bp384",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x09},
-        KDF_SHA3_512
-    },
-    {
-        "mlekm1024-x448",
-        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02, 0x0A},
-        KDF_SHA3_512
-    }
-};
+const OQSX_CMP_KEM_INFO CMP_KEM_INFO[NUM_CMP_KEM_ALGS]
+    = {{"mlkem512-p256",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x01},
+        KDF_SHA3_256},
+       {"mlkem512-bp256",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x02},
+        KDF_SHA3_256},
+       {"mlkem512-x25519",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x03},
+        KDF_SHA3_256},
+       {"mlkem512-rsa2048",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x0D},
+        KDF_SHA3_256},
+       {"mlkem512-rsa3072",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x04},
+        KDF_SHA3_256},
+       {"mlkem768-p256",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x05},
+        KDF_SHA3_384},
+       {"mlkem768-bp256",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x06},
+        KDF_SHA3_384},
+       {"mlkem768-x25519",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x07},
+        KDF_SHA3_384},
+       {"mlkem1024-p384",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x08},
+        KDF_SHA3_512},
+       {"mlkem1024-bp384",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x09},
+        KDF_SHA3_512},
+       {"mlekm1024-x448",
+        {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+         0x0A},
+        KDF_SHA3_512}};
 
 DECLARE_ASN1_FUNCTIONS(CompositeCiphertext)
 
@@ -193,11 +181,11 @@ static int oqs_kem_decaps_init(void *vpkemctx, void *vkem,
 }
 
 static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
-                        const unsigned char *tradSS, size_t tradSSLen,
-                        const unsigned char *mlkemSS, size_t mlkemSSLen,
-                        const unsigned char *tradCT, size_t tradCTLen,
-                        const unsigned char *tradPK, size_t tradPKLen,
-                        unsigned char *output, size_t *outputLen)
+                            const unsigned char *tradSS, size_t tradSSLen,
+                            const unsigned char *mlkemSS, size_t mlkemSSLen,
+                            const unsigned char *tradCT, size_t tradCTLen,
+                            const unsigned char *tradPK, size_t tradPKLen,
+                            unsigned char *output, size_t *outputLen)
 {
     EVP_MD_CTX *mdctx = NULL;
     const EVP_MD *md = NULL;
@@ -237,7 +225,8 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
         ON_ERR_SET_GOTO(1, ret, 0, err);
     }
 
-    bufferLen = 4 + tradSSLen + mlkemSSLen + tradCTLen + tradPKLen + sizeof(info->domSep);
+    bufferLen = 4 + tradSSLen + mlkemSSLen + tradCTLen + tradPKLen
+                + sizeof(info->domSep);
     buffer = OPENSSL_malloc(bufferLen);
     ON_ERR_SET_GOTO(buffer == NULL, ret, 0, err);
 
@@ -465,7 +454,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
         ret2 = EVP_PKEY_copy_parameters(peerpk, evp_ctx->keyParam);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, err);
 
-        ret2 = EVP_PKEY_set1_encoded_public_key(peerpk, pubkey_kex, pubkey_kexlen);
+        ret2 = EVP_PKEY_set1_encoded_public_key(peerpk, pubkey_kex,
+                                                pubkey_kexlen);
         ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, err);
 
         kgctx = EVP_PKEY_CTX_new(evp_ctx->keyParam, NULL);
@@ -490,7 +480,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
         ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
 
         pkeylen = EVP_PKEY_get1_encoded_public_key(pkey, &ctkex_encoded);
-        ON_ERR_SET_GOTO(pkeylen <= 0 || !ctkex_encoded || pkeylen != pubkey_kexlen,
+        ON_ERR_SET_GOTO(pkeylen <= 0 || !ctkex_encoded
+                            || pkeylen != pubkey_kexlen,
                         ret, -1, err);
 
         memcpy(ct, ctkex_encoded, pkeylen);
@@ -531,7 +522,9 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
         return 1;
 
     if (keytype == EVP_PKEY_RSA) {
-        pkey = d2i_PrivateKey(keytype, NULL, (const unsigned char **)&privkey_kex, privkey_kexlen);
+        pkey = d2i_PrivateKey(keytype, NULL,
+                              (const unsigned char **)&privkey_kex,
+                              privkey_kexlen);
         ON_ERR_SET_GOTO(!pkey, ret, -1, err);
 
         ctx = EVP_PKEY_CTX_new(pkey, NULL);
@@ -554,19 +547,19 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
         ret = EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, empty_string, 0);
         ON_ERR_SET_GOTO(ret <= 0, ret, -7, err);
 
-        size_t outlen = 32;  // expected secret length (256 bits)
+        size_t outlen = 32; // expected secret length (256 bits)
         ret = EVP_PKEY_decrypt(ctx, secret, &outlen, ct, ctlen);
         ON_ERR_SET_GOTO(ret <= 0, ret, -8, err);
 
         *secretlen = outlen;
     } else {
         if (evp_ctx->evp_info->raw_key_support) {
-            pkey = EVP_PKEY_new_raw_private_key(evp_ctx->evp_info->keytype, NULL,
-                                                privkey_kex, privkey_kexlen);
+            pkey = EVP_PKEY_new_raw_private_key(
+                evp_ctx->evp_info->keytype, NULL, privkey_kex, privkey_kexlen);
             ON_ERR_SET_GOTO(!pkey, ret, -10, err);
         } else {
-            pkey = d2i_AutoPrivateKey(&pkey, (const unsigned char **)&privkey_kex,
-                                    privkey_kexlen);
+            pkey = d2i_AutoPrivateKey(
+                &pkey, (const unsigned char **)&privkey_kex, privkey_kexlen);
             ON_ERR_SET_GOTO(!pkey, ret, -2, err);
         }
 
@@ -695,7 +688,8 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t ctlen,
     int ret = OQS_SUCCESS, ret2 = 0;
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQS_KEM *qs_kem = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
-    const OQSX_EVP_INFO *evp_info = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx->evp_info;
+    const OQSX_EVP_INFO *evp_info
+        = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx->evp_info;
 
     size_t secretLen0 = 0, secretLen1 = 0;
     size_t ctLen0 = 0, ctLen1 = 0;
@@ -705,24 +699,28 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t ctlen,
     CompositeCiphertext *cmpCT;
     unsigned char *p = ct; // temp ptr because i2d_* may move input ct ptr
 
-    ret2 = oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLen0, NULL, &secretLen0, 0);
+    ret2 = oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLen0, NULL, &secretLen0,
+                                     0);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, OQS_ERROR, err);
     secret0 = OPENSSL_malloc(secretLen0);
     ON_ERR_SET_GOTO(!secret0, ret, OQS_ERROR, err);
     ct0 = OPENSSL_malloc(ctLen0);
     ON_ERR_SET_GOTO(!ct0, ret, OQS_ERROR, err_alloc0);
 
-    ret2 = oqs_evp_kem_encaps_keyslot(vpkemctx, NULL, &ctLen1, NULL, &secretLen1, 1);
+    ret2 = oqs_evp_kem_encaps_keyslot(vpkemctx, NULL, &ctLen1, NULL,
+                                      &secretLen1, 1);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, OQS_ERROR, err_alloc1);
     secret1 = OPENSSL_malloc(secretLen1);
     ON_ERR_SET_GOTO(!secret1, ret, OQS_ERROR, err_alloc1);
     ct1 = OPENSSL_malloc(ctLen1);
     ON_ERR_SET_GOTO(!ct1, ret, OQS_ERROR, err_alloc2);
-    
-    ret2 = oqs_qs_kem_encaps_keyslot(vpkemctx, ct0, &ctLen0, secret0, &secretLen0, 0);
+
+    ret2 = oqs_qs_kem_encaps_keyslot(vpkemctx, ct0, &ctLen0, secret0,
+                                     &secretLen0, 0);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, OQS_ERROR, err_alloc3);
 
-    ret2 = oqs_evp_kem_encaps_keyslot(vpkemctx, ct1, &ctLen1, secret1, &secretLen1, 1);
+    ret2 = oqs_evp_kem_encaps_keyslot(vpkemctx, ct1, &ctLen1, secret1,
+                                      &secretLen1, 1);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, OQS_ERROR, err_alloc3);
 
     cmpCT = CompositeCiphertext_new();
@@ -730,20 +728,18 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t ctlen,
 
     cmpCT->ct1->data = ct0;
     cmpCT->ct1->length = ctLen0;
-    cmpCT->ct1->flags = 8;  // do not check for unused bits
+    cmpCT->ct1->flags = 8; // do not check for unused bits
 
     cmpCT->ct2->data = ct1;
     cmpCT->ct2->length = ctLen1;
-    cmpCT->ct2->flags = 8;  // do not check for unused bits
-    
+    cmpCT->ct2->flags = 8; // do not check for unused bits
+
     ctlen = i2d_CompositeCiphertext(cmpCT, &p);
     ON_ERR_SET_GOTO(!ctlen, ret, OQS_ERROR, err_cmpct);
 
-    ret2 = oqs_kem_combiner(pkemctx, 
-                            secret1, secretLen1, 
-                            secret0, secretLen0,
-                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1], pkemctx->kem->pubkeylen_cmp[1],
-                            secret, secretlen);
+    ret2 = oqs_kem_combiner(pkemctx, secret1, secretLen1, secret0, secretLen0,
+                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1],
+                            pkemctx->kem->pubkeylen_cmp[1], secret, secretlen);
     ON_ERR_SET_GOTO(!ret2, ret, OQS_ERROR, err_cmpct);
 
 err_cmpct:
@@ -767,7 +763,8 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
     int ret = OQS_SUCCESS, ret2 = 0;
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQS_KEM *qs_kem = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
-    const OQSX_EVP_INFO *evp_info = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx->evp_info;
+    const OQSX_EVP_INFO *evp_info
+        = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx->evp_info;
 
     size_t secretLen0 = 0, secretLen1 = 0;
     size_t ctLen0 = 0, ctLen1 = 0;
@@ -775,9 +772,9 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
     unsigned char *secret0 = NULL, *secret1 = NULL;
 
     CompositeCiphertext *cmpCT;
-    unsigned char *p = ct; // temp ptr because d2i_* may move input ct ptr
+    const unsigned char *p = ct; // temp ptr because d2i_* may move input ct ptr
 
-    cmpCT = d2i_CompositeCiphertext(NULL, &p, ctlen);
+    cmpCT = d2i_CompositeCiphertext(NULL, (const unsigned char **)&p, ctlen);
     ON_ERR_SET_GOTO(!cmpCT, ret, OQS_ERROR, err);
 
     ct0 = cmpCT->ct1->data;
@@ -796,15 +793,17 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
     secret1 = OPENSSL_malloc(secretLen1);
     ON_ERR_SET_GOTO(!secret1, ret, OQS_ERROR, err_alloc0);
 
-    ret2 = oqs_qs_kem_decaps_keyslot(vpkemctx, secret0, &secretLen0, ct0, ctLen0, 0);
+    ret2 = oqs_qs_kem_decaps_keyslot(vpkemctx, secret0, &secretLen0, ct0,
+                                     ctLen0, 0);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, OQS_ERROR, err_alloc1);
 
-    ret2 = oqs_evp_kem_decaps_keyslot(vpkemctx, secret1, &secretLen1, ct1, ctLen1, 1);
+    ret2 = oqs_evp_kem_decaps_keyslot(vpkemctx, secret1, &secretLen1, ct1,
+                                      ctLen1, 1);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, OQS_ERROR, err_alloc1);
 
-    ret2 = oqsx_kem_combiner(pkemctx, secret1, secretLen1, secret0, secretLen0,
-                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1], pkemctx->kem->pubkeylen_cmp[1],
-                            secret, secretlen);
+    ret2 = oqs_kem_combiner(pkemctx, secret1, secretLen1, secret0, secretLen0,
+                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1],
+                            pkemctx->kem->pubkeylen_cmp[1], secret, secretlen);
     ON_ERR_SET_GOTO(!ret2, ret, OQS_ERROR, err_alloc1);
 
 err_alloc1:
@@ -837,6 +836,17 @@ err:
         {OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx},              \
         {0, NULL}};
 
+#define MAKE_CMP_KEM_FUNCTIONS(alg)                                            \
+    const OSSL_DISPATCH oqs_##alg##_kem_functions[] = {                        \
+        {OSSL_FUNC_KEM_NEWCTX, (void (*)(void))oqs_kem_newctx},                \
+        {OSSL_FUNC_KEM_ENCAPSULATE_INIT, (void (*)(void))oqs_kem_encaps_init}, \
+        {OSSL_FUNC_KEM_ENCAPSULATE, (void (*)(void))oqs_cmp_kem_encaps},       \
+        {OSSL_FUNC_KEM_DECAPSULATE_INIT, (void (*)(void))oqs_kem_decaps_init}, \
+        {OSSL_FUNC_KEM_DECAPSULATE, (void (*)(void))oqs_cmp_kem_decaps},       \
+        {OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx},              \
+        {0, NULL}};
+
 // keep this just in case we need to become ALG-specific at some point in time
 MAKE_KEM_FUNCTIONS(generic)
 MAKE_HYB_KEM_FUNCTIONS(hybrid)
+MAKE_CMP_KEM_FUNCTIONS(composite)

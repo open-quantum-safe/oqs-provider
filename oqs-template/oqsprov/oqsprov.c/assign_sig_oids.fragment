@@ -4,6 +4,9 @@
 {% for hybrid in kem['hybrids'] %}
 {%- set kemcount.val = kemcount.val + 1 -%}
 {%- endfor -%}
+{% for composite_alg in kem['composite'] %}
+{%- set kemcount.val = kemcount.val + 1 -%}
+{%- endfor -%}
 {%- endfor -%}
 
 {% set count = namespace(val=0) %}
@@ -32,6 +35,9 @@ const char* oqs_oid_alg_list[OQS_OID_CNT] =
 "{{ kem['oid'] }}", "{{ kem['name_group'] }}",
 {%- for hybrid in kem['hybrids'] %}
 "{{hybrid['hybrid_oid']}}", "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}",
+{%- endfor -%}
+{%- for composite_alg in kem['composite'] %}
+"{{composite_alg['oid']}}", "{{kem['name_group']}}_{{composite_alg['name']}}",
 {%- endfor -%}
 {%- endfor %}
 

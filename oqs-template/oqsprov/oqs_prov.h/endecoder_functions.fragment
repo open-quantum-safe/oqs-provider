@@ -22,6 +22,17 @@ extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_decoder_functions[];
      {%- endfor -%}
+     {%- for composite_alg in kem['composite'] -%}
+extern const OSSL_DISPATCH oqs_{{kem['name_group']}}_{{composite_alg['name']}}_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{kem['name_group']}}_{{composite_alg['name']}}_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{kem['name_group']}}_{{composite_alg['name']}}_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{kem['name_group']}}_{{composite_alg['name']}}_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{kem['name_group']}}_{{composite_alg['name']}}_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{kem['name_group']}}_{{composite_alg['name']}}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{{kem['name_group']}}_{{composite_alg['name']}}_to_text_encoder_functions[];
+extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{kem['name_group']}}_{{composite_alg['name']}}_decoder_functions[];
+extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{kem['name_group']}}_{{composite_alg['name']}}_decoder_functions[];
+     {%- endfor -%}
 {%- endfor %}
 
 #endif /* OQS_KEM_ENCODERS */

@@ -7,6 +7,11 @@
 # define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_input_type    "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"
 # define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_pem_type      "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"
 {%- endfor %}
+     {% for composite_alg in kem['composite'] %}
+# define {{kem['name_group']}}_{{composite_alg['name']}}_evp_type     0
+# define {{kem['name_group']}}_{{composite_alg['name']}}_input_type    "{{kem['name_group']}}_{{composite_alg['name']}}"
+# define {{kem['name_group']}}_{{composite_alg['name']}}_pem_type      "{{kem['name_group']}}_{{composite_alg['name']}}"
+     {%- endfor %}
 {%- endfor %}
 
 {% for sig in config['sigs'] %}

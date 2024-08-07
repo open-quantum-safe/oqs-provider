@@ -160,23 +160,28 @@ kems:
     composite: [{'name': 'p256',
                  'pretty_name': 'ECDH p256',
                  'oid': '2.16.840.1.114027.80.8.1.1',
-                 'code_point': '0x0300'},
+                 'code_point': '0x0300',
+                 'bit_security': 128},
                 {'name': 'bp256',
                  'pretty_name': 'ECDH brainpoolP256r1',
                  'oid': '2.16.840.1.114027.80.8.1.2',
-                 'code_point': '0x0301'},
+                 'code_point': '0x0301',
+                 'bit_security': 128},
                 {'name': 'x25519',
                  'pretty_name': 'X25519',
                  'oid': '2.16.840.1.114027.80.8.1.3',
-                 'code_point': '0x0302'},
+                 'code_point': '0x0302',
+                 'bit_security': 128},
                 {'name': 'rsa2048',
                  'pretty_name': 'RSA2048 OAEP',
                  'oid': '2.16.840.1.114027.80.8.1.13',
-                 'code_point': '0x0303'},
+                 'code_point': '0x0303',
+                 'bit_security': 112},
                 {'name': 'rsa3072',
                  'pretty_name': 'RSA3072 OAEP',
                  'oid': '2.16.840.1.114027.80.8.1.4',
-                 'code_point': '0x0304'}]
+                 'code_point': '0x0304',
+                 'bit_security': 128}]
   -
     family: 'ML-KEM'
     name_group: 'mlkem768'
@@ -195,15 +200,18 @@ kems:
     composite: [{'name': 'p256',
                  'pretty_name': 'ECDH p256',
                  'oid': '2.16.840.1.114027.80.8.1.5',
-                 'code_point': '0x0305'},
+                 'code_point': '0x0305',
+                 'bit_security': 128},
                 {'name': 'bp256',
                  'pretty_name': 'ECDH brainpoolP256r1',
                  'oid': '2.16.840.1.114027.80.8.1.6',
-                 'code_point': '0x0306'},
+                 'code_point': '0x0306',
+                 'bit_security': 192},
                 {'name': 'x25519',
                  'pretty_name': 'X25519',
                  'oid': '2.16.840.1.114027.80.8.1.7',
-                 'code_point': '0x0307'}]
+                 'code_point': '0x0307',
+                 'bit_security': 128}]
   -
     family: 'ML-KEM'
     name_group: 'mlkem1024'
@@ -222,15 +230,18 @@ kems:
     composite: [{'name': 'p384',
                  'pretty_name': 'ECDH p384',
                  'oid': '2.16.840.1.114027.80.8.1.8',
-                 'code_point': '0x0308'},
+                 'code_point': '0x0308',
+                 'bit_security': 192},
                 {'name': 'bp384',
                  'pretty_name': 'ECDH brainpoolP384r1',
                  'oid': '2.16.840.1.114027.80.8.1.9',
-                 'code_point': '0x0309'},
+                 'code_point': '0x0309',
+                 'bit_security': 256},
                 {'name': 'x448',
                  'pretty_name': 'X448',
                  'oid': '2.16.840.1.114027.80.8.1.10',
-                 'code_point': '0x030A'}]
+                 'code_point': '0x030A',
+                 'bit_security': 192}]
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'

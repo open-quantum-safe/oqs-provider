@@ -170,11 +170,11 @@ kems:
                  'oid': '2.16.840.1.114027.80.8.1.3',
                  'code_point': '0x0302'},
                 {'name': 'rsa2048',
-                 'pretty_name': 'RSA2048',
+                 'pretty_name': 'RSA2048 OAEP',
                  'oid': '2.16.840.1.114027.80.8.1.13',
                  'code_point': '0x0303'},
                 {'name': 'rsa3072',
-                 'pretty_name': 'RSA3072',
+                 'pretty_name': 'RSA3072 OAEP',
                  'oid': '2.16.840.1.114027.80.8.1.4',
                  'code_point': '0x0304'}]
   -

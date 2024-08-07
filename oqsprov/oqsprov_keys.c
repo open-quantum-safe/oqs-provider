@@ -622,6 +622,7 @@ static int oqsx_cmpkem_init(char *tls_name, OQSX_EVP_CTX *evp_ctx)
 {
     int ret = 1;
     int idx = 0;
+    char *classical_name;
 
     if (tls_name == NULL || evp_ctx == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
@@ -640,7 +641,7 @@ static int oqsx_cmpkem_init(char *tls_name, OQSX_EVP_CTX *evp_ctx)
             break;
         idx++;
     }
-    ON_ERR_SET_GOTO(idx < 0 || idx >= OSSL_NELEM(OQSX_KEM_NAMES), ret, 0, free_name);
+    ON_ERR_SET_GOTO(idx < 0 || idx >= OSSL_NELEM(OQSX_KEM_NAMES), ret, 0, err_init);
 
     evp_ctx->evp_info = &nids_kem[idx];
 
@@ -1646,7 +1647,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
                 ON_ERR_GOTO(!evp_ctx, err);
 
                 if (primitive == KEY_TYPE_CMP_KEM)
-                    ret2 = oqsx_cmpkem_init(name, evp_ctx)
+                    ret2 = oqsx_cmpkem_init(name, evp_ctx);
                 else
                     ret2 = oqsx_hybsig_init(bit_security, evp_ctx, name);
                 ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->ctx, err);

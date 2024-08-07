@@ -212,6 +212,14 @@ struct SignatureModel {
 
 typedef struct SignatureModel CompositeSignature;
 
+// composite ciphertext
+struct CiphertextModel {
+    ASN1_OCTET_STRING *ct1;
+    ASN1_OCTET_STRING *ct2;
+};
+
+typedef struct CiphertextModel CompositeCiphertext;
+
 char *get_oqsname_fromtls(char *tlsname);
 char *get_oqsname(int nid);
 char *get_cmpname(int nid, int index);

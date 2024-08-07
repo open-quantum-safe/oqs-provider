@@ -19,6 +19,7 @@
 #include <openssl/ec.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
+#include <openssl/rsa.h>
 #include <openssl/params.h>
 #include <string.h>
 
@@ -121,14 +122,6 @@ const OQSX_CMP_KEM_INFO CMP_KEM_INFO[NUM_CMP_KEM_ALGS] = {
         KDF_SHA3_512
     }
 };
-
-// composite ciphertext
-struct CiphertextModel {
-    ASN1_OCTET_STRING *ct1;
-    ASN1_OCTET_STRING *ct2;
-};
-
-typedef struct CiphertextModel CompositeCiphertext;
 
 DECLARE_ASN1_FUNCTIONS(CompositeCiphertext)
 
@@ -701,12 +694,12 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t ctlen,
 {
     int ret = OQS_SUCCESS, ret2 = 0;
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
-    const OQS_KEM *qs_kem = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.qs_kem;
+    const OQS_KEM *qs_kem = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
     const OQSX_EVP_INFO *evp_info = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx->evp_info;
 
     size_t secretLen0 = 0, secretLen1 = 0;
     size_t ctLen0 = 0, ctLen1 = 0;
-    const unsigned char *ct0 = NULL, *ct1 = NULL;
+    unsigned char *ct0 = NULL, *ct1 = NULL;
     unsigned char *secret0 = NULL, *secret1 = NULL;
 
     CompositeCiphertext *cmpCT;
@@ -744,12 +737,12 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t ctlen,
     cmpCT->ct2->flags = 8;  // do not check for unused bits
     
     ctlen = i2d_CompositeCiphertext(cmpCT, &p);
-    ON_ERR_SET_GOTO(*ctlen <= 0, ret, OQS_ERROR, err_cmpct);
+    ON_ERR_SET_GOTO(!ctlen, ret, OQS_ERROR, err_cmpct);
 
     ret2 = oqs_kem_combiner(pkemctx, 
                             secret1, secretLen1, 
                             secret0, secretLen0,
-                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1], pkemctx->kem->comp_pubkey_len[1],
+                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1], pkemctx->kem->pubkeylen_cmp[1],
                             secret, secretlen);
     ON_ERR_SET_GOTO(!ret2, ret, OQS_ERROR, err_cmpct);
 
@@ -773,7 +766,7 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
 {
     int ret = OQS_SUCCESS, ret2 = 0;
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
-    const OQS_KEM *qs_kem = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.qs_kem;
+    const OQS_KEM *qs_kem = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
     const OQSX_EVP_INFO *evp_info = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx->evp_info;
 
     size_t secretLen0 = 0, secretLen1 = 0;
@@ -810,7 +803,7 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
     ON_ERR_SET_GOTO(ret2 <= 0, ret, OQS_ERROR, err_alloc1);
 
     ret2 = oqsx_kem_combiner(pkemctx, secret1, secretLen1, secret0, secretLen0,
-                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1], pkemctx->kem->comp_pubkey_len[1],
+                            ct1, ctLen1, pkemctx->kem->comp_pubkey[1], pkemctx->kem->pubkeylen_cmp[1],
                             secret, secretlen);
     ON_ERR_SET_GOTO(!ret2, ret, OQS_ERROR, err_alloc1);
 

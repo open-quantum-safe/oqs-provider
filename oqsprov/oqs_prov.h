@@ -152,7 +152,8 @@ enum oqsx_key_type_en {
     KEY_TYPE_ECP_HYB_KEM,
     KEY_TYPE_ECX_HYB_KEM,
     KEY_TYPE_HYB_SIG,
-    KEY_TYPE_CMP_SIG
+    KEY_TYPE_CMP_SIG, // KEY_TYPE_CMP_SIG and KEY_TYPE_CMP_KEM must
+    KEY_TYPE_CMP_KEM, // remain consecutive
 };
 
 typedef enum oqsx_key_type_en OQSX_KEY_TYPE;

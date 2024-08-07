@@ -511,7 +511,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
-    if (oqsxkey->keytype != KEY_TYPE_CMP_SIG) {
+    if ((oqsxkey->keytype != KEY_TYPE_CMP_SIG) && (oqsxkey->keytype != KEY_TYPE_CMP_KEM)) {
 #ifdef USE_ENCODING_LIB
         if (oqsxkey->oqsx_encoding_ctx.encoding_ctx != NULL
             && oqsxkey->oqsx_encoding_ctx.encoding_impl != NULL) {
@@ -640,7 +640,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 
     // only concatenate private classic key (if any) and OQS private and public
     // key NOT saving public classic key component (if any)
-    if (oqsxkey->keytype != KEY_TYPE_CMP_SIG) {
+    if ((oqsxkey->keytype != KEY_TYPE_CMP_SIG) && (oqsxkey->keytype != KEY_TYPE_CMP_KEM)) {
         privkeylen = oqsxkey->privkeylen;
         if (oqsxkey->numkeys > 1) { // hybrid
             uint32_t actualprivkeylen = 0;
@@ -1713,6 +1713,7 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 return 0;
             break;
         case KEY_TYPE_CMP_SIG:
+        case KEY_TYPE_CMP_KEM:
             if (BIO_printf(out, "%s composite private key:\n", okey->tls_name)
                 <= 0)
                 return 0;
@@ -1740,6 +1741,7 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 return 0;
             break;
         case KEY_TYPE_CMP_SIG:
+        case KEY_TYPE_CMP_KEM:
             if (BIO_printf(out, "%s composite public key:\n", okey->tls_name)
                 <= 0)
                 return 0;
@@ -1752,7 +1754,7 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
 
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
         if (okey->privkey) {
-            if (okey->keytype == KEY_TYPE_CMP_SIG) {
+            if ((okey->keytype == KEY_TYPE_CMP_SIG) || (okey->keytype == KEY_TYPE_CMP_KEM)) {
                 char *name;
                 char label[200];
                 int i;
@@ -1828,7 +1830,7 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
     }
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
         if (okey->pubkey) {
-            if (okey->keytype == KEY_TYPE_CMP_SIG) {
+            if ((okey->keytype == KEY_TYPE_CMP_SIG) || (okey->keytype == KEY_TYPE_CMP_KEM)) {
                 char *name;
                 char label[200];
                 int i;

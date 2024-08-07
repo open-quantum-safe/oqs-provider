@@ -6,6 +6,10 @@
    {%- set cnt.val = cnt.val + 1 %}
    if (getenv("OQS_CODEPOINT_{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CODEPOINT_{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}"));
 {%- endfor %}
+{%- for composite_alg in kem['composite'] %}
+   {%- set cnt.val = cnt.val + 1 %}
+   if (getenv("OQS_CODEPOINT_{{ kem['name_group']|upper }}_{{ composite_alg['name']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CODEPOINT_{{ kem['name_group']|upper }}_{{ composite_alg['name']|upper }}"));
+{%- endfor %}
 {%- endfor %}
 {% set cnt = namespace(val=-1) %}
 {%- for sig in config['sigs'] %}

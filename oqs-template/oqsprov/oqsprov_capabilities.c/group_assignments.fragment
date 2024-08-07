@@ -1,7 +1,10 @@
 {% for kem in config['kems'] %}
    { {{ kem['nid'] }}, {{ kem['bit_security'] }}, TLS1_3_VERSION, 0, -1, -1, 1 },
-{% for hybrid in kem['hybrids'] %}
+{%- for hybrid in kem['hybrids'] %}
    { {{ hybrid['nid'] }}, {{ kem['bit_security'] }}, TLS1_3_VERSION, 0, -1, -1, 1 },
+{%- endfor %}
+{%- for composite_alg in kem['composite'] %}
+   { {{ composite_alg['nid'] }}, {{ composite_alg['bit_security'] }}, TLS1_3_VERSION, 0, -1, -1, 1 },
 {%- endfor %}
 {%- endfor %}
 

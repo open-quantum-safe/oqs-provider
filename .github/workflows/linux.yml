@@ -69,7 +69,7 @@ jobs:
           export LIBOQS_SRC_DIR=`pwd`/liboqs && \
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
           python3 oqs-template/generate.py && \
-          find . -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs clang-format -i && \
+          ./scripts/do_code_format.sh --no-dry-run && \
           git diff && \
           ! git status | grep modified
       - name: Build .deb install package

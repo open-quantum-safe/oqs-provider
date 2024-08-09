@@ -12,7 +12,7 @@
 #define OQSX_H
 
 #ifndef OQS_PROVIDER_NOATOMIC
-#    include <stdatomic.h>
+#include <stdatomic.h>
 #endif
 
 #include <openssl/bio.h>
@@ -27,34 +27,34 @@
 #define OSSL_NELEM(x) (sizeof(x) / sizeof((x)[0]))
 
 #ifdef _MSC_VER
-#    define strncasecmp _strnicmp
-#    define strcasecmp  _stricmp
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
 #endif
 
 /* oqsprovider error codes */
-#define OQSPROV_R_INVALID_DIGEST      1
-#define OQSPROV_R_INVALID_SIZE        2
-#define OQSPROV_R_INVALID_KEY         3
-#define OQSPROV_R_UNSUPPORTED         4
-#define OQSPROV_R_MISSING_OID         5
-#define OQSPROV_R_OBJ_CREATE_ERR      6
-#define OQSPROV_R_INVALID_ENCODING    7
-#define OQSPROV_R_SIGN_ERROR          8
-#define OQSPROV_R_LIB_CREATE_ERR      9
-#define OQSPROV_R_NO_PRIVATE_KEY      10
+#define OQSPROV_R_INVALID_DIGEST 1
+#define OQSPROV_R_INVALID_SIZE 2
+#define OQSPROV_R_INVALID_KEY 3
+#define OQSPROV_R_UNSUPPORTED 4
+#define OQSPROV_R_MISSING_OID 5
+#define OQSPROV_R_OBJ_CREATE_ERR 6
+#define OQSPROV_R_INVALID_ENCODING 7
+#define OQSPROV_R_SIGN_ERROR 8
+#define OQSPROV_R_LIB_CREATE_ERR 9
+#define OQSPROV_R_NO_PRIVATE_KEY 10
 #define OQSPROV_R_BUFFER_LENGTH_WRONG 11
-#define OQSPROV_R_SIGNING_FAILED      12
-#define OQSPROV_R_WRONG_PARAMETERS    13
-#define OQSPROV_R_VERIFY_ERROR        14
-#define OQSPROV_R_EVPINFO_MISSING     15
-#define OQSPROV_R_INTERNAL_ERROR      16
+#define OQSPROV_R_SIGNING_FAILED 12
+#define OQSPROV_R_WRONG_PARAMETERS 13
+#define OQSPROV_R_VERIFY_ERROR 14
+#define OQSPROV_R_EVPINFO_MISSING 15
+#define OQSPROV_R_INTERNAL_ERROR 16
 
 /* Extra OpenSSL parameters for hybrid EVP_PKEY. */
-#define OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY \
+#define OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY                                \
     "hybrid_classical_" OSSL_PKEY_PARAM_PUB_KEY
-#define OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY \
+#define OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY                               \
     "hybrid_classical_" OSSL_PKEY_PARAM_PRIV_KEY
-#define OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY  "hybrid_pq_" OSSL_PKEY_PARAM_PUB_KEY
+#define OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY "hybrid_pq_" OSSL_PKEY_PARAM_PUB_KEY
 #define OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY "hybrid_pq_" OSSL_PKEY_PARAM_PRIV_KEY
 
 /* Extras for OQS extension */
@@ -74,15 +74,15 @@
     i |= ((uint32_t)((unsigned char *)pbuf)[3])
 // clang-format on
 
-#define ON_ERR_SET_GOTO(condition, ret, code, gt) \
-    if ((condition)) {                            \
-        (ret) = (code);                           \
-        goto gt;                                  \
+#define ON_ERR_SET_GOTO(condition, ret, code, gt)                              \
+    if ((condition)) {                                                         \
+        (ret) = (code);                                                        \
+        goto gt;                                                               \
     }
 
-#define ON_ERR_GOTO(condition, gt) \
-    if ((condition)) {             \
-        goto gt;                   \
+#define ON_ERR_GOTO(condition, gt)                                             \
+    if ((condition)) {                                                         \
+        goto gt;                                                               \
     }
 
 typedef struct prov_oqs_ctx_st {
@@ -94,7 +94,7 @@ typedef struct prov_oqs_ctx_st {
 PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx,
                               const OSSL_CORE_HANDLE *handle, BIO_METHOD *bm);
 void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
-#define PROV_OQS_LIBCTX_OF(provctx) \
+#define PROV_OQS_LIBCTX_OF(provctx)                                            \
     provctx ? (((PROV_OQS_CTX *)provctx)->libctx) : NULL
 
 #include "oqs/oqs.h"
@@ -171,10 +171,10 @@ struct oqsx_key_st {
 #endif
         int references;
 
-    /* point to actual priv key material -- if is a hydrid, the classic key will
-     * be present first, i.e., OQS key always at comp_*key[numkeys-1] - if is a
-     * composite, the classic key will be presented second, i.e., OQS key always
-     * at comp_*key[0]
+    /* point to actual priv key material -- if is a hydrid, the classic key
+     * will be present first, i.e., OQS key always at comp_*key[numkeys-1] - if
+     * is a composite, the classic key will be presented second, i.e., OQS key
+     * always at comp_*key[0]
      */
     void **comp_privkey;
     void **comp_pubkey;

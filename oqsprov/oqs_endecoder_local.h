@@ -7,10 +7,11 @@
  *
  */
 
-#include "oqs_prov.h"
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/types.h>
+
+#include "oqs_prov.h"
 
 OSSL_FUNC_keymgmt_new_fn *oqs_prov_get_keymgmt_new(const OSSL_DISPATCH *fns);
 OSSL_FUNC_keymgmt_free_fn *oqs_prov_get_keymgmt_free(const OSSL_DISPATCH *fns);

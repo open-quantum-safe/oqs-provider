@@ -20,7 +20,7 @@ fi
 find oqsprov test -name '*.[chS]' -exec file "{}" ";" | grep CRLF
 if [ $? -ne 1 ]; then
    echo "Error: Files found with non-UNIX line endings."
-   echo "To fix, consider running \"find oqsprov tests -name '*.[chS]' | xargs sed -i 's/\r//' \"."
+   echo "To fix, consider running \"find oqsprov test -name '*.[chS]' | xargs sed -i 's/\r//' \"."
    rv=-1
 fi
 

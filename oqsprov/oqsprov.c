@@ -7,7 +7,6 @@
  *
  */
 
-#include "oqs_prov.h"
 #include <errno.h>
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
@@ -19,20 +18,22 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "oqs_prov.h"
+
 #ifdef NDEBUG
-#    define OQS_PROV_PRINTF(a)
-#    define OQS_PROV_PRINTF2(a, b)
-#    define OQS_PROV_PRINTF3(a, b, c)
+#define OQS_PROV_PRINTF(a)
+#define OQS_PROV_PRINTF2(a, b)
+#define OQS_PROV_PRINTF3(a, b, c)
 #else
-#    define OQS_PROV_PRINTF(a) \
-        if (getenv("OQSPROV")) \
-        printf(a)
-#    define OQS_PROV_PRINTF2(a, b) \
-        if (getenv("OQSPROV"))     \
-        printf(a, b)
-#    define OQS_PROV_PRINTF3(a, b, c) \
-        if (getenv("OQSPROV"))        \
-        printf(a, b, c)
+#define OQS_PROV_PRINTF(a)                                                     \
+    if (getenv("OQSPROV"))                                                     \
+    printf(a)
+#define OQS_PROV_PRINTF2(a, b)                                                 \
+    if (getenv("OQSPROV"))                                                     \
+    printf(a, b)
+#define OQS_PROV_PRINTF3(a, b, c)                                              \
+    if (getenv("OQSPROV"))                                                     \
+    printf(a, b, c)
 #endif // NDEBUG
 
 /*
@@ -50,9 +51,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#    define OQS_OID_CNT 218
+#define OQS_OID_CNT 218
 #else
-#    define OQS_OID_CNT 112
+#define OQS_OID_CNT 112
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -282,8 +283,7 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
-int oqs_patch_oids(void)
-{
+int oqs_patch_oids(void) {
     ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_START
     {
         const char *envval = NULL;
@@ -415,9 +415,9 @@ int oqs_patch_oids(void)
         if ((envval = getenv("OQS_OID_P521_HQC256")))
             oqs_oid_alg_list[104] = envval;
 
-#    define OQS_KEMOID_CNT 104 + 2
+#define OQS_KEMOID_CNT 104 + 2
 #else
-#    define OQS_KEMOID_CNT 0
+#define OQS_KEMOID_CNT 0
 #endif /* OQS_KEM_ENCODERS */
         if ((envval = getenv("OQS_OID_DILITHIUM2")))
             oqs_oid_alg_list[0 + OQS_KEMOID_CNT] = envval;
@@ -535,29 +535,29 @@ int oqs_patch_oids(void)
     return 1;
 }
 
-#define SIGALG(NAMES, SECBITS, FUNC)                                          \
-    {                                                                         \
-        NAMES, "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", \
-            FUNC                                                              \
+#define SIGALG(NAMES, SECBITS, FUNC)                                           \
+    {                                                                          \
+        NAMES, "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",  \
+            FUNC                                                               \
     }
-#define KEMBASEALG(NAMES, SECBITS)                                  \
-    {"" #NAMES "",                                                  \
-     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", \
+#define KEMBASEALG(NAMES, SECBITS)                                             \
+    {"" #NAMES "",                                                             \
+     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
      oqs_generic_kem_functions},
 
-#define KEMHYBALG(NAMES, SECBITS)                                   \
-    {"" #NAMES "",                                                  \
-     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", \
+#define KEMHYBALG(NAMES, SECBITS)                                              \
+    {"" #NAMES "",                                                             \
+     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
      oqs_hybrid_kem_functions},
 
-#define KEMKMALG(NAMES, SECBITS)                                    \
-    {"" #NAMES "",                                                  \
-     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", \
+#define KEMKMALG(NAMES, SECBITS)                                               \
+    {"" #NAMES "",                                                             \
+     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
      oqs_##NAMES##_keymgmt_functions},
 
-#define KEMKMHYBALG(NAMES, SECBITS, HYBTYPE)                        \
-    {"" #NAMES "",                                                  \
-     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", \
+#define KEMKMHYBALG(NAMES, SECBITS, HYBTYPE)                                   \
+    {"" #NAMES "",                                                             \
+     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
      oqs_##HYBTYPE##_##NAMES##_keymgmt_functions},
 
 /* Functions provided by the core */
@@ -565,12 +565,12 @@ static OSSL_FUNC_core_gettable_params_fn *c_gettable_params = NULL;
 static OSSL_FUNC_core_get_params_fn *c_get_params = NULL;
 
 /* Parameters we provide to the core */
-static const OSSL_PARAM oqsprovider_param_types[]
-    = {OSSL_PARAM_DEFN(OSSL_PROV_PARAM_NAME, OSSL_PARAM_UTF8_PTR, NULL, 0),
-       OSSL_PARAM_DEFN(OSSL_PROV_PARAM_VERSION, OSSL_PARAM_UTF8_PTR, NULL, 0),
-       OSSL_PARAM_DEFN(OSSL_PROV_PARAM_BUILDINFO, OSSL_PARAM_UTF8_PTR, NULL, 0),
-       OSSL_PARAM_DEFN(OSSL_PROV_PARAM_STATUS, OSSL_PARAM_INTEGER, NULL, 0),
-       OSSL_PARAM_END};
+static const OSSL_PARAM oqsprovider_param_types[] = {
+    OSSL_PARAM_DEFN(OSSL_PROV_PARAM_NAME, OSSL_PARAM_UTF8_PTR, NULL, 0),
+    OSSL_PARAM_DEFN(OSSL_PROV_PARAM_VERSION, OSSL_PARAM_UTF8_PTR, NULL, 0),
+    OSSL_PARAM_DEFN(OSSL_PROV_PARAM_BUILDINFO, OSSL_PARAM_UTF8_PTR, NULL, 0),
+    OSSL_PARAM_DEFN(OSSL_PROV_PARAM_STATUS, OSSL_PARAM_INTEGER, NULL, 0),
+    OSSL_PARAM_END};
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
@@ -765,8 +765,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     {NULL, NULL, NULL}};
 
-static const OSSL_ALGORITHM oqsprovider_keymgmt[]
-    = {
+static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
 // clang-format off
 
@@ -970,9 +969,9 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[]
 
     KEMKMHYBALG(p521_hqc256, 256, ecp)
 #endif
-        // clang-format on
-        ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
-        {NULL, NULL, NULL}};
+    // clang-format on
+    ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+    {NULL, NULL, NULL}};
 
 static const OSSL_ALGORITHM oqsprovider_encoder[] = {
 #define ENCODER_PROVIDER "oqsprovider"
@@ -989,8 +988,7 @@ static const OSSL_ALGORITHM oqsprovider_decoder[] = {
 };
 
 // get the last number on the composite OID
-int get_composite_idx(int idx)
-{
+int get_composite_idx(int idx) {
     char *s;
     int i, len, ret = -1, count = 0;
 
@@ -1014,25 +1012,23 @@ int get_composite_idx(int idx)
     return ret;
 }
 
-static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx)
-{
+static const OSSL_PARAM *oqsprovider_gettable_params(void *provctx) {
     return oqsprovider_param_types;
 }
 
-#define OQS_PROVIDER_BASE_BUILD_INFO_STR                           \
-    "OQS Provider v." OQS_PROVIDER_VERSION_STR OQS_PROVIDER_COMMIT \
+#define OQS_PROVIDER_BASE_BUILD_INFO_STR                                       \
+    "OQS Provider v." OQS_PROVIDER_VERSION_STR OQS_PROVIDER_COMMIT             \
     " based on liboqs v." OQS_VERSION_TEXT
 
 #ifdef QSC_ENCODING_VERSION_STRING
-#    define OQS_PROVIDER_BUILD_INFO_STR  \
-        OQS_PROVIDER_BASE_BUILD_INFO_STR \
-        " using qsc-key-encoder v." QSC_ENCODING_VERSION_STRING
+#define OQS_PROVIDER_BUILD_INFO_STR                                            \
+    OQS_PROVIDER_BASE_BUILD_INFO_STR                                           \
+    " using qsc-key-encoder v." QSC_ENCODING_VERSION_STRING
 #else
-#    define OQS_PROVIDER_BUILD_INFO_STR OQS_PROVIDER_BASE_BUILD_INFO_STR
+#define OQS_PROVIDER_BUILD_INFO_STR OQS_PROVIDER_BASE_BUILD_INFO_STR
 #endif
 
-static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
-{
+static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[]) {
     OSSL_PARAM *p;
 
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_NAME);
@@ -1052,8 +1048,7 @@ static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
 }
 
 static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
-                                               int *no_cache)
-{
+                                               int *no_cache) {
     *no_cache = 0;
 
     switch (operation_id) {
@@ -1075,33 +1070,31 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
     return NULL;
 }
 
-static void oqsprovider_teardown(void *provctx)
-{
+static void oqsprovider_teardown(void *provctx) {
     oqsx_freeprovctx((PROV_OQS_CTX *)provctx);
     OQS_destroy();
 }
 
 /* Functions we provide to the core */
-static const OSSL_DISPATCH oqsprovider_dispatch_table[]
-    = {{OSSL_FUNC_PROVIDER_TEARDOWN, (void (*)(void))oqsprovider_teardown},
-       {OSSL_FUNC_PROVIDER_GETTABLE_PARAMS,
-        (void (*)(void))oqsprovider_gettable_params},
-       {OSSL_FUNC_PROVIDER_GET_PARAMS, (void (*)(void))oqsprovider_get_params},
-       {OSSL_FUNC_PROVIDER_QUERY_OPERATION, (void (*)(void))oqsprovider_query},
-       {OSSL_FUNC_PROVIDER_GET_CAPABILITIES,
-        (void (*)(void))oqs_provider_get_capabilities},
-       {0, NULL}};
+static const OSSL_DISPATCH oqsprovider_dispatch_table[] = {
+    {OSSL_FUNC_PROVIDER_TEARDOWN, (void (*)(void))oqsprovider_teardown},
+    {OSSL_FUNC_PROVIDER_GETTABLE_PARAMS,
+     (void (*)(void))oqsprovider_gettable_params},
+    {OSSL_FUNC_PROVIDER_GET_PARAMS, (void (*)(void))oqsprovider_get_params},
+    {OSSL_FUNC_PROVIDER_QUERY_OPERATION, (void (*)(void))oqsprovider_query},
+    {OSSL_FUNC_PROVIDER_GET_CAPABILITIES,
+     (void (*)(void))oqs_provider_get_capabilities},
+    {0, NULL}};
 
 #ifdef OQS_PROVIDER_STATIC
-#    define OQS_PROVIDER_ENTRYPOINT_NAME oqs_provider_init
+#define OQS_PROVIDER_ENTRYPOINT_NAME oqs_provider_init
 #else
-#    define OQS_PROVIDER_ENTRYPOINT_NAME OSSL_provider_init
+#define OQS_PROVIDER_ENTRYPOINT_NAME OSSL_provider_init
 #endif // ifdef OQS_PROVIDER_STATIC
 
 int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                  const OSSL_DISPATCH *in,
-                                 const OSSL_DISPATCH **out, void **provctx)
-{
+                                 const OSSL_DISPATCH **out, void **provctx) {
     const OSSL_DISPATCH *orig_in = in;
     OSSL_FUNC_core_obj_create_fn *c_obj_create = NULL;
 
@@ -1198,7 +1191,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 oqs_oid_alg_list[i + 1], OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
         } else {
             fprintf(stderr,
-                    "OQS PROV: Impossible error: NID unregistered for %s.\n",
+                    "OQS PROV: Impossible error: NID unregistered "
+                    "for %s.\n",
                     oqs_oid_alg_list[i + 1]);
             ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
             goto end_init;
@@ -1206,10 +1200,9 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     }
 
     // if libctx not yet existing, create a new one
-    if (((corebiometh = oqs_bio_prov_init_bio_method()) == NULL)
-        || ((libctx = OSSL_LIB_CTX_new_child(handle, orig_in)) == NULL)
-        || ((*provctx = oqsx_newprovctx(libctx, handle, corebiometh))
-            == NULL)) {
+    if (((corebiometh = oqs_bio_prov_init_bio_method()) == NULL) ||
+        ((libctx = OSSL_LIB_CTX_new_child(handle, orig_in)) == NULL) ||
+        ((*provctx = oqsx_newprovctx(libctx, handle, corebiometh)) == NULL)) {
         OQS_PROV_PRINTF("OQS PROV: error creating new provider context\n");
         ERR_raise(ERR_LIB_USER, OQSPROV_R_LIB_CREATE_ERR);
         goto end_init;
@@ -1218,10 +1211,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     *out = oqsprovider_dispatch_table;
 
     // finally, warn if neither default nor fips provider are present:
-    if (!OSSL_PROVIDER_available(libctx, "default")
-        && !OSSL_PROVIDER_available(libctx, "fips")) {
+    if (!OSSL_PROVIDER_available(libctx, "default") &&
+        !OSSL_PROVIDER_available(libctx, "fips")) {
         OQS_PROV_PRINTF(
-            "OQS PROV: Default and FIPS provider not available. Errors may result.\n");
+            "OQS PROV: Default and FIPS provider not available. Errors "
+            "may result.\n");
     } else {
         OQS_PROV_PRINTF("OQS PROV: Default or FIPS provider available.\n");
     }

@@ -14,8 +14,7 @@ static OSSL_FUNC_kem_decapsulate_fn oqs_hyb_kem_decaps;
 
 static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
                                       size_t *ctlen, unsigned char *secret,
-                                      size_t *secretlen, int keyslot)
-{
+                                      size_t *secretlen, int keyslot) {
     int ret = OQS_SUCCESS, ret2 = 0;
 
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
@@ -91,8 +90,7 @@ err:
 static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
                                       size_t *secretlen,
                                       const unsigned char *ct, size_t ctlen,
-                                      int keyslot)
-{
+                                      int keyslot) {
     OQS_KEM_PRINTF("OQS KEM provider called: oqs_hyb_kem_decaps\n");
 
     int ret = OQS_SUCCESS, ret2 = 0;
@@ -152,8 +150,7 @@ err:
 /// Hybrid KEM functions
 
 static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
-                              unsigned char *secret, size_t *secretlen)
-{
+                              unsigned char *secret, size_t *secretlen) {
     int ret = OQS_SUCCESS;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     size_t secretLen0 = 0, secretLen1 = 0;
@@ -195,8 +192,7 @@ err:
 
 static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
                               size_t *secretlen, const unsigned char *ct,
-                              size_t ctlen)
-{
+                              size_t ctlen) {
     int ret = OQS_SUCCESS;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQSX_EVP_CTX *evp_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx;

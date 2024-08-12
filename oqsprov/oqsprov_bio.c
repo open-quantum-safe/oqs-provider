@@ -2,9 +2,10 @@
 
 // Code strongly inspired by OpenSSL common provider bio code
 
-#include "oqs_prov.h"
 #include <assert.h>
 #include <openssl/core_dispatch.h>
+
+#include "oqs_prov.h"
 
 static OSSL_FUNC_BIO_new_file_fn *c_bio_new_file = NULL;
 static OSSL_FUNC_BIO_new_membuf_fn *c_bio_new_membuf = NULL;
@@ -17,8 +18,7 @@ static OSSL_FUNC_BIO_up_ref_fn *c_bio_up_ref = NULL;
 static OSSL_FUNC_BIO_free_fn *c_bio_free = NULL;
 static OSSL_FUNC_BIO_vprintf_fn *c_bio_vprintf = NULL;
 
-int oqs_prov_bio_from_dispatch(const OSSL_DISPATCH *fns)
-{
+int oqs_prov_bio_from_dispatch(const OSSL_DISPATCH *fns) {
     for (; fns->function_id != 0; fns++) {
         switch (fns->function_id) {
         case OSSL_FUNC_BIO_NEW_FILE:
@@ -67,80 +67,69 @@ int oqs_prov_bio_from_dispatch(const OSSL_DISPATCH *fns)
     return 1;
 }
 
-OSSL_CORE_BIO *oqs_prov_bio_new_file(const char *filename, const char *mode)
-{
+OSSL_CORE_BIO *oqs_prov_bio_new_file(const char *filename, const char *mode) {
     if (c_bio_new_file == NULL)
         return NULL;
     return c_bio_new_file(filename, mode);
 }
 
-OSSL_CORE_BIO *oqs_prov_bio_new_membuf(const char *filename, int len)
-{
+OSSL_CORE_BIO *oqs_prov_bio_new_membuf(const char *filename, int len) {
     if (c_bio_new_membuf == NULL)
         return NULL;
     return c_bio_new_membuf(filename, len);
 }
 
 int oqs_prov_bio_read_ex(OSSL_CORE_BIO *bio, void *data, size_t data_len,
-                         size_t *bytes_read)
-{
+                         size_t *bytes_read) {
     if (c_bio_read_ex == NULL)
         return 0;
     return c_bio_read_ex(bio, data, data_len, bytes_read);
 }
 
 int oqs_prov_bio_write_ex(OSSL_CORE_BIO *bio, const void *data, size_t data_len,
-                          size_t *written)
-{
+                          size_t *written) {
     if (c_bio_write_ex == NULL)
         return 0;
     return c_bio_write_ex(bio, data, data_len, written);
 }
 
-int oqs_prov_bio_gets(OSSL_CORE_BIO *bio, char *buf, int size)
-{
+int oqs_prov_bio_gets(OSSL_CORE_BIO *bio, char *buf, int size) {
     if (c_bio_gets == NULL)
         return -1;
     return c_bio_gets(bio, buf, size);
 }
 
-int oqs_prov_bio_puts(OSSL_CORE_BIO *bio, const char *str)
-{
+int oqs_prov_bio_puts(OSSL_CORE_BIO *bio, const char *str) {
     if (c_bio_puts == NULL)
         return -1;
     return c_bio_puts(bio, str);
 }
 
-int oqs_prov_bio_ctrl(OSSL_CORE_BIO *bio, int cmd, long num, void *ptr)
-{
+int oqs_prov_bio_ctrl(OSSL_CORE_BIO *bio, int cmd, long num, void *ptr) {
     if (c_bio_ctrl == NULL)
         return -1;
     return c_bio_ctrl(bio, cmd, num, ptr);
 }
 
-int oqs_prov_bio_up_ref(OSSL_CORE_BIO *bio)
-{
+int oqs_prov_bio_up_ref(OSSL_CORE_BIO *bio) {
     if (c_bio_up_ref == NULL)
         return 0;
     return c_bio_up_ref(bio);
 }
 
-int oqs_prov_bio_free(OSSL_CORE_BIO *bio)
-{
+int oqs_prov_bio_free(OSSL_CORE_BIO *bio) {
     if (c_bio_free == NULL)
         return 0;
     return c_bio_free(bio);
 }
 
-int oqs_prov_bio_vprintf(OSSL_CORE_BIO *bio, const char *format, va_list ap)
-{
+int oqs_prov_bio_vprintf(OSSL_CORE_BIO *bio, const char *format, va_list ap) {
     if (c_bio_vprintf == NULL)
         return -1;
     return c_bio_vprintf(bio, format, ap);
 }
 
-int oqs_prov_bio_printf(OSSL_CORE_BIO *bio, const char *format, ...)
-{
+int oqs_prov_bio_printf(OSSL_CORE_BIO *bio, const char *format, ...) {
     va_list ap;
     int ret;
 
@@ -156,60 +145,52 @@ int oqs_prov_bio_printf(OSSL_CORE_BIO *bio, const char *format, ...)
 /* No direct BIO support in the FIPS module */
 
 static int bio_core_read_ex(BIO *bio, char *data, size_t data_len,
-                            size_t *bytes_read)
-{
+                            size_t *bytes_read) {
     return oqs_prov_bio_read_ex(BIO_get_data(bio), data, data_len, bytes_read);
 }
 
 static int bio_core_write_ex(BIO *bio, const char *data, size_t data_len,
-                             size_t *written)
-{
+                             size_t *written) {
     return oqs_prov_bio_write_ex(BIO_get_data(bio), data, data_len, written);
 }
 
-static long bio_core_ctrl(BIO *bio, int cmd, long num, void *ptr)
-{
+static long bio_core_ctrl(BIO *bio, int cmd, long num, void *ptr) {
     return oqs_prov_bio_ctrl(BIO_get_data(bio), cmd, num, ptr);
 }
 
-static int bio_core_gets(BIO *bio, char *buf, int size)
-{
+static int bio_core_gets(BIO *bio, char *buf, int size) {
     return oqs_prov_bio_gets(BIO_get_data(bio), buf, size);
 }
 
-static int bio_core_puts(BIO *bio, const char *str)
-{
+static int bio_core_puts(BIO *bio, const char *str) {
     return oqs_prov_bio_puts(BIO_get_data(bio), str);
 }
 
-static int bio_core_new(BIO *bio)
-{
+static int bio_core_new(BIO *bio) {
     BIO_set_init(bio, 1);
 
     return 1;
 }
 
-static int bio_core_free(BIO *bio)
-{
+static int bio_core_free(BIO *bio) {
     BIO_set_init(bio, 0);
     oqs_prov_bio_free(BIO_get_data(bio));
 
     return 1;
 }
 
-BIO_METHOD *oqs_bio_prov_init_bio_method(void)
-{
+BIO_METHOD *oqs_bio_prov_init_bio_method(void) {
     BIO_METHOD *corebiometh = NULL;
 
     corebiometh = BIO_meth_new(BIO_TYPE_CORE_TO_PROV, "BIO to Core filter");
-    if (corebiometh == NULL
-        || !BIO_meth_set_write_ex(corebiometh, bio_core_write_ex)
-        || !BIO_meth_set_read_ex(corebiometh, bio_core_read_ex)
-        || !BIO_meth_set_puts(corebiometh, bio_core_puts)
-        || !BIO_meth_set_gets(corebiometh, bio_core_gets)
-        || !BIO_meth_set_ctrl(corebiometh, bio_core_ctrl)
-        || !BIO_meth_set_create(corebiometh, bio_core_new)
-        || !BIO_meth_set_destroy(corebiometh, bio_core_free)) {
+    if (corebiometh == NULL ||
+        !BIO_meth_set_write_ex(corebiometh, bio_core_write_ex) ||
+        !BIO_meth_set_read_ex(corebiometh, bio_core_read_ex) ||
+        !BIO_meth_set_puts(corebiometh, bio_core_puts) ||
+        !BIO_meth_set_gets(corebiometh, bio_core_gets) ||
+        !BIO_meth_set_ctrl(corebiometh, bio_core_ctrl) ||
+        !BIO_meth_set_create(corebiometh, bio_core_new) ||
+        !BIO_meth_set_destroy(corebiometh, bio_core_free)) {
         BIO_meth_free(corebiometh);
         return NULL;
     }
@@ -217,8 +198,7 @@ BIO_METHOD *oqs_bio_prov_init_bio_method(void)
     return corebiometh;
 }
 
-BIO *oqs_bio_new_from_core_bio(PROV_OQS_CTX *provctx, OSSL_CORE_BIO *corebio)
-{
+BIO *oqs_bio_new_from_core_bio(PROV_OQS_CTX *provctx, OSSL_CORE_BIO *corebio) {
     BIO *outbio;
     BIO_METHOD *corebiometh = provctx->corebiometh;
 

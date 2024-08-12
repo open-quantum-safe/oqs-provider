@@ -8,13 +8,13 @@
  * ToDo: Adding hybrid alg support
  */
 
-#include "oqs_endecoder_local.h"
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
 #include <openssl/core.h>
 
-OSSL_FUNC_keymgmt_new_fn *oqs_prov_get_keymgmt_new(const OSSL_DISPATCH *fns)
-{
+#include "oqs_endecoder_local.h"
+
+OSSL_FUNC_keymgmt_new_fn *oqs_prov_get_keymgmt_new(const OSSL_DISPATCH *fns) {
     /* Pilfer the keymgmt dispatch table */
     for (; fns->function_id != 0; fns++)
         if (fns->function_id == OSSL_FUNC_KEYMGMT_NEW)
@@ -23,8 +23,7 @@ OSSL_FUNC_keymgmt_new_fn *oqs_prov_get_keymgmt_new(const OSSL_DISPATCH *fns)
     return NULL;
 }
 
-OSSL_FUNC_keymgmt_free_fn *oqs_prov_get_keymgmt_free(const OSSL_DISPATCH *fns)
-{
+OSSL_FUNC_keymgmt_free_fn *oqs_prov_get_keymgmt_free(const OSSL_DISPATCH *fns) {
     /* Pilfer the keymgmt dispatch table */
     for (; fns->function_id != 0; fns++)
         if (fns->function_id == OSSL_FUNC_KEYMGMT_FREE)
@@ -34,8 +33,7 @@ OSSL_FUNC_keymgmt_free_fn *oqs_prov_get_keymgmt_free(const OSSL_DISPATCH *fns)
 }
 
 OSSL_FUNC_keymgmt_import_fn *
-oqs_prov_get_keymgmt_import(const OSSL_DISPATCH *fns)
-{
+oqs_prov_get_keymgmt_import(const OSSL_DISPATCH *fns) {
     /* Pilfer the keymgmt dispatch table */
     for (; fns->function_id != 0; fns++)
         if (fns->function_id == OSSL_FUNC_KEYMGMT_IMPORT)
@@ -45,8 +43,7 @@ oqs_prov_get_keymgmt_import(const OSSL_DISPATCH *fns)
 }
 
 OSSL_FUNC_keymgmt_export_fn *
-oqs_prov_get_keymgmt_export(const OSSL_DISPATCH *fns)
-{
+oqs_prov_get_keymgmt_export(const OSSL_DISPATCH *fns) {
     /* Pilfer the keymgmt dispatch table */
     for (; fns->function_id != 0; fns++)
         if (fns->function_id == OSSL_FUNC_KEYMGMT_EXPORT)
@@ -56,17 +53,16 @@ oqs_prov_get_keymgmt_export(const OSSL_DISPATCH *fns)
 }
 
 void *oqs_prov_import_key(const OSSL_DISPATCH *fns, void *provctx,
-                          int selection, const OSSL_PARAM params[])
-{
+                          int selection, const OSSL_PARAM params[]) {
     OSSL_FUNC_keymgmt_new_fn *kmgmt_new = oqs_prov_get_keymgmt_new(fns);
     OSSL_FUNC_keymgmt_free_fn *kmgmt_free = oqs_prov_get_keymgmt_free(fns);
-    OSSL_FUNC_keymgmt_import_fn *kmgmt_import
-        = oqs_prov_get_keymgmt_import(fns);
+    OSSL_FUNC_keymgmt_import_fn *kmgmt_import =
+        oqs_prov_get_keymgmt_import(fns);
     void *key = NULL;
 
     if (kmgmt_new != NULL && kmgmt_import != NULL && kmgmt_free != NULL) {
-        if ((key = kmgmt_new(provctx)) == NULL
-            || !kmgmt_import(key, selection, params)) {
+        if ((key = kmgmt_new(provctx)) == NULL ||
+            !kmgmt_import(key, selection, params)) {
             kmgmt_free(key);
             key = NULL;
         }
@@ -74,8 +70,7 @@ void *oqs_prov_import_key(const OSSL_DISPATCH *fns, void *provctx,
     return key;
 }
 
-void oqs_prov_free_key(const OSSL_DISPATCH *fns, void *key)
-{
+void oqs_prov_free_key(const OSSL_DISPATCH *fns, void *key) {
     OSSL_FUNC_keymgmt_free_fn *kmgmt_free = oqs_prov_get_keymgmt_free(fns);
 
     if (kmgmt_free != NULL)

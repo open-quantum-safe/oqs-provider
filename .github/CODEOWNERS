@@ -2,7 +2,7 @@
 
 * @baentsch
 /oqsprov/oqs_hyb_kem.c @bhess
-/oqs-template/generate.yml @baentsch @bhess @feventura
+/oqs-template/generate.yml @baentsch @bhess @feventura @rtjk
 /CMakeLists.txt @baentsch @thb-sb
 /.circleci/config.yml @baentsch @thb-sb
 /.github/workflows @baentsch @thb-sb

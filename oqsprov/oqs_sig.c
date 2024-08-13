@@ -517,8 +517,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                 oqs_sig_len = oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig
                                   ->length_signature;
                 buf = OPENSSL_malloc(oqs_sig_len);
-                if (OQS_SIG_sign(oqs_key, buf, &oqs_sig_len, (const unsigned char *)final_tbs,
-                                 final_tbslen,
+                if (OQS_SIG_sign(oqs_key, buf, &oqs_sig_len,
+                                 (const unsigned char *)final_tbs, final_tbslen,
                                  oqsxkey->comp_privkey[i]) != OQS_SUCCESS) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
                     CompositeSignature_free(compsig);
@@ -541,7 +541,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
                     EVP_MD_CTX *evp_ctx = EVP_MD_CTX_new();
                     if ((EVP_DigestSignInit(evp_ctx, NULL, NULL, NULL,
                                             oqs_key_classic) <= 0) ||
-                        (EVP_DigestSign(evp_ctx, buf, &oqs_sig_len, (const unsigned char *)final_tbs,
+                        (EVP_DigestSign(evp_ctx, buf, &oqs_sig_len,
+                                        (const unsigned char *)final_tbs,
                                         final_tbslen) <= 0)) {
                         ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
                         CompositeSignature_free(compsig);
@@ -877,8 +878,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             }
 
             if (get_oqsname_fromtls(name)) {
-                if (OQS_SIG_verify(oqs_key, (const unsigned char *)final_tbs, final_tbslen, buf,
-                                   buf_len,
+                if (OQS_SIG_verify(oqs_key, (const unsigned char *)final_tbs,
+                                   final_tbslen, buf, buf_len,
                                    oqsxkey->comp_pubkey[i]) != OQS_SUCCESS) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                     OPENSSL_free(name);
@@ -897,7 +898,8 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
                     EVP_MD_CTX *evp_ctx = EVP_MD_CTX_new();
                     if ((EVP_DigestVerifyInit(evp_ctx, NULL, NULL, NULL,
                                               oqsxkey->classical_pkey) <= 0) ||
-                        (EVP_DigestVerify(evp_ctx, buf, buf_len, (const unsigned char *)final_tbs,
+                        (EVP_DigestVerify(evp_ctx, buf, buf_len,
+                                          (const unsigned char *)final_tbs,
                                           final_tbslen) <= 0)) {
                         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                         OPENSSL_free(name);

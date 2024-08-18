@@ -397,10 +397,10 @@ EVP_PKEY *setECParams(EVP_PKEY *eck, int nid) {
                                         0x04, 0x00, 0x22};
     const unsigned char p521params[] = {0x06, 0x05, 0x2b, 0x81,
                                         0x04, 0x00, 0x23};
-    const char bp256params[] = {0x06, 0x09, 0x2b, 0x24, 0x03, 0x03,
-                                0x02, 0x08, 0x01, 0x01, 0x07};
-    const char bp384params[] = {0x06, 0x09, 0x2b, 0x24, 0x03, 0x03,
-                                0x02, 0x08, 0x01, 0x01, 0x0b};
+    const unsigned char bp256params[] = {0x06, 0x09, 0x2b, 0x24, 0x03, 0x03,
+                                         0x02, 0x08, 0x01, 0x01, 0x07};
+    const unsigned char bp384params[] = {0x06, 0x09, 0x2b, 0x24, 0x03, 0x03,
+                                         0x02, 0x08, 0x01, 0x01, 0x0b};
 
     const unsigned char *params;
     switch (nid) {
@@ -702,8 +702,11 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
                             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                             goto err_key_op;
                         }
-                        unsigned char *enc_len = OPENSSL_strndup(
-                            p + previous_privlen + previous_publen, 4);
+                        unsigned char *enc_len =
+                            (unsigned char *)OPENSSL_strndup(
+                                (const char *)(p + previous_privlen +
+                                               previous_publen),
+                                4);
                         OPENSSL_cleanse(enc_len, 2);
                         DECODE_UINT32(privlen, enc_len);
                         privlen += 4;

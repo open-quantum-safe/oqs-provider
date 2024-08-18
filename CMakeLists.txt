@@ -1,7 +1,7 @@
 if (WIN32)
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 else()
-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 endif()
 project(oqs-provider LANGUAGES C)
 set(OQSPROVIDER_VERSION_TEXT "0.6.2-dev")

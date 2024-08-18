@@ -703,8 +703,8 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
                 nid =
                     oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->keytype;
                 if (nid == EVP_PKEY_RSA) { // get the RSA real key size
-                    unsigned char *enc_len =
-                        OPENSSL_strndup(oqsxkey->comp_privkey[i], 4);
+                    unsigned char *enc_len = (unsigned char *)OPENSSL_strndup(
+                        oqsxkey->comp_privkey[i], 4);
                     OPENSSL_cleanse(enc_len, 2);
                     DECODE_UINT32(buflen, enc_len);
                     buflen += 4;
@@ -1684,7 +1684,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection) {
                                    ->keytype ==
                                EVP_PKEY_RSA) { // get the RSA real key size
                         unsigned char *enc_len =
-                            OPENSSL_strndup(okey->comp_privkey[i], 4);
+                            (unsigned char *)OPENSSL_strndup(
+                                okey->comp_privkey[i], 4);
                         OPENSSL_cleanse(enc_len, 2);
                         DECODE_UINT32(privlen, enc_len);
                         privlen += 4;

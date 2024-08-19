@@ -1,23 +1,23 @@
 | Algorithm                                         | Implementation Version                          | NIST round   |   Claimed NIST Level | Code Point   | OID                      |
 |:--------------------------------------------------|:------------------------------------------------|:-------------|---------------------:|:-------------|:-------------------------|
-| CROSSrsdp128balanced                              | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfef6       | 1.3.9999.9.1             |
-| CROSSrsdp128fast                                  | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfef7       | 1.3.9999.9.2             |
-| CROSSrsdp128small                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfef8       | 1.3.9999.9.3             |
-| CROSSrsdp192balanced                              | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xfef9       | 1.3.9999.9.4             |
-| CROSSrsdp192fast                                  | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xfefa       | 1.3.9999.9.5             |
-| CROSSrsdp192small                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xfefb       | 1.3.9999.9.6             |
-| CROSSrsdp256balanced                              | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xfefc       | 1.3.9999.9.7             |
-| CROSSrsdp256fast                                  | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xfefd       | 1.3.9999.9.8             |
-| CROSSrsdp256small                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xfefe       | 1.3.9999.9.9             |
-| CROSSrsdpg128balanced                             | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfeff       | 1.3.9999.9.10            |
-| CROSSrsdpg128fast                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xff00       | 1.3.9999.9.11            |
-| CROSSrsdpg128small                                | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xff01       | 1.3.9999.9.12            |
-| CROSSrsdpg192balanced                             | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xff02       | 1.3.9999.9.13            |
-| CROSSrsdpg192fast                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xff03       | 1.3.9999.9.14            |
-| CROSSrsdpg192small                                | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xff04       | 1.3.9999.9.15            |
-| CROSSrsdpg256balanced                             | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xff05       | 1.3.9999.9.16            |
-| CROSSrsdpg256fast                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xff06       | 1.3.9999.9.17            |
-| CROSSrsdpg256small                                | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xff07       | 1.3.9999.9.18            |
+| CROSSrsdp128balanced                              | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfef6       | 1.3.6.1.4.1.62245.2.1.1  |
+| CROSSrsdp128fast                                  | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfef7       | 1.3.6.1.4.1.62245.2.1.2  |
+| CROSSrsdp128small                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfef8       | 1.3.6.1.4.1.62245.2.1.3  |
+| CROSSrsdp192balanced                              | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xfef9       | 1.3.6.1.4.1.62245.2.1.4  |
+| CROSSrsdp192fast                                  | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xfefa       | 1.3.6.1.4.1.62245.2.1.5  |
+| CROSSrsdp192small                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xfefb       | 1.3.6.1.4.1.62245.2.1.6  |
+| CROSSrsdp256balanced                              | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xfefc       | 1.3.6.1.4.1.62245.2.1.7  |
+| CROSSrsdp256fast                                  | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xfefd       | 1.3.6.1.4.1.62245.2.1.8  |
+| CROSSrsdp256small                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xfefe       | 1.3.6.1.4.1.62245.2.1.9  |
+| CROSSrsdpg128balanced                             | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xfeff       | 1.3.6.1.4.1.62245.2.1.10 |
+| CROSSrsdpg128fast                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xff00       | 1.3.6.1.4.1.62245.2.1.11 |
+| CROSSrsdpg128small                                | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    1 | 0xff01       | 1.3.6.1.4.1.62245.2.1.12 |
+| CROSSrsdpg192balanced                             | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xff02       | 1.3.6.1.4.1.62245.2.1.13 |
+| CROSSrsdpg192fast                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xff03       | 1.3.6.1.4.1.62245.2.1.14 |
+| CROSSrsdpg192small                                | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    3 | 0xff04       | 1.3.6.1.4.1.62245.2.1.15 |
+| CROSSrsdpg256balanced                             | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xff05       | 1.3.6.1.4.1.62245.2.1.16 |
+| CROSSrsdpg256fast                                 | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xff06       | 1.3.6.1.4.1.62245.2.1.17 |
+| CROSSrsdpg256small                                | 1.2 + Keccak_x4 + PQClean fixes                 | 1            |                    5 | 0xff07       | 1.3.6.1.4.1.62245.2.1.18 |
 | dilithium2                                        | 3.1                                             | 3            |                    2 | 0xfea0       | 1.3.6.1.4.1.2.267.7.4.4  |
 | dilithium2 **hybrid with** p256                   | 3.1                                             | 3            |                    2 | 0xfea1       | 1.3.9999.2.7.1           |
 | dilithium2 **hybrid with** rsa3072                | 3.1                                             | 3            |                    2 | 0xfea2       | 1.3.9999.2.7.2           |

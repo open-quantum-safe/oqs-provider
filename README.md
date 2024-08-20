@@ -144,6 +144,13 @@ Also not fully supported in 3.0.2 is performance testing as per the openssl
 These versions have full support for all TLS1.3 operations using PQ algorithms
 when deploying `oqsprovider`.
 
+## 3.4 and greater
+
+These version are expected to support the `openssl pkeyutl -encap/-decap`
+syntax for testing key encapsulation and decapsulation for test purposes. To
+use this option, OQS provider should be built with KEM encoding/decoding
+support.
+
 ## All versions
 
 A limitation present in older OpenSSL versions is the number of default groups
@@ -178,16 +185,16 @@ Team
 
 Contributors to the `oqsprovider` include:
 
-- Michael Baentsch
-- Christian Paquin
-- Richard Levitte
-- Basil Hess
-- Julian Segeth
-- Alex Zaslavsky
-- Will Childs-Klein
-- Thomas Bailleux
-- Felipe Ventura
-- Iyán Méndez Veiga
+- Michael Baentsch (initial author and maintainer; responsible for all code except as listed per specific contributions below)
+- Christian Paquin (original OpenSSL111 OQS integrator)
+- Richard Levitte (OpenSSL provider wizard and initial `cmake` setup)
+- Basil Hess (hybrid KEM integration & pqcrystals/mayo OID management)
+- Julian Segeth (some memory management improvements)
+- Alex Zaslavsky (improvements on OpenSSL integration)
+- Will Childs-Klein (improvements on Kyber hybrid OIDs)
+- Thomas Bailleux (many build, CI and usage improvements for different platforms)
+- Felipe Ventura (composite sig integration and OID management)
+- Iyán Méndez Veiga (PKCS#12 testing)
 
 History
 -------

@@ -5,20 +5,6 @@ execute_process(
   OUTPUT_VARIABLE GIT_COMMIT_HASH
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-if (USE_ENCODING_LIB)
-  include(ExternalProject)
-  set(encoder_LIBRARY ${CMAKE_BINARY_DIR}/install/lib/${CMAKE_STATIC_LIBRARY_PREFIX}qsc_key_encoder${CMAKE_STATIC_LIBRARY_SUFFIX})
-  set(encoder_LIBRARY_INCLUDE ${CMAKE_BINARY_DIR}/install/include)
-  ExternalProject_Add(encoder
-      GIT_REPOSITORY https://github.com/Quantum-Safe-Collaboration/qsc-key-encoder.git
-      GIT_TAG main
-      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/install -DCMAKE_BUILD_TYPE=Release
-      UPDATE_DISCONNECTED 1
-      BUILD_BYPRODUCTS ${encoder_LIBRARY}
-  )
-  add_library(qsc_key_encoder STATIC IMPORTED)
-  set_target_properties(qsc_key_encoder PROPERTIES IMPORTED_LOCATION ${encoder_LIBRARY})
-endif()
 add_definitions(-DOQSPROVIDER_VERSION_TEXT="${OQSPROVIDER_VERSION_TEXT}")
 message(STATUS "Building commit ${GIT_COMMIT_HASH} in ${CMAKE_SOURCE_DIR}")
 add_definitions(-DOQS_PROVIDER_COMMIT=" \(${GIT_COMMIT_HASH}\)")
@@ -38,9 +24,6 @@ if(OQS_PROVIDER_BUILD_STATIC)
 endif()
 
 add_library(oqsprovider ${OQS_LIBRARY_TYPE} ${PROVIDER_SOURCE_FILES})
-if (USE_ENCODING_LIB)
-  add_dependencies(oqsprovider encoder)
-endif()
 set_target_properties(oqsprovider
     PROPERTIES
     PREFIX ""
@@ -87,10 +70,6 @@ else()
 endif()
 
 target_link_libraries(oqsprovider PUBLIC OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
-if (USE_ENCODING_LIB)
-  target_link_libraries(oqsprovider PUBLIC qsc_key_encoder)
-  target_include_directories(oqsprovider PRIVATE ${encoder_LIBRARY_INCLUDE})
-endif()
 
 install(TARGETS oqsprovider
         LIBRARY DESTINATION "${OPENSSL_MODULES_PATH}"

@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 
-#include "oqs/oqs.h"
-#include "test_common.h"
 #include <openssl/evp.h>
 #include <openssl/provider.h>
+
+#include "oqs/oqs.h"
+#include "test_common.h"
 
 static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
@@ -15,8 +16,7 @@ static char *srpvfile = NULL;
 static char *tmpfilename = NULL;
 
 // sign-and-hash must work with and without providing a digest algorithm
-static int test_oqs_signatures(const char *sigalg_name)
-{
+static int test_oqs_signatures(const char *sigalg_name) {
     EVP_MD_CTX *mdctx = NULL;
     EVP_PKEY_CTX *ctx = NULL;
     EVP_PKEY *key = NULL;
@@ -31,28 +31,29 @@ static int test_oqs_signatures(const char *sigalg_name)
         return 1;
     }
     // test with built-in digest only if default provider is active:
-    // TBD revisit when hybrids are activated: They always need default provider
+    // TBD revisit when hybrids are activated: They always need default
+    // provider
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult
-            &= (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL))
-                   != NULL
-               && EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key)
-               && (mdctx = EVP_MD_CTX_new()) != NULL
-               && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL,
-                                        key, NULL)
-               && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
-               && EVP_DigestSignFinal(mdctx, NULL, &siglen)
-               && (sig = OPENSSL_malloc(siglen)) != NULL
-               && EVP_DigestSignFinal(mdctx, sig, &siglen)
-               && EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL,
-                                          key, NULL)
-               && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
-               && EVP_DigestVerifyFinal(mdctx, sig, siglen);
+        testresult &=
+            (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) !=
+                NULL &&
+            EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
+            (mdctx = EVP_MD_CTX_new()) != NULL &&
+            EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key,
+                                  NULL) &&
+            EVP_DigestSignUpdate(mdctx, msg, sizeof(msg)) &&
+            EVP_DigestSignFinal(mdctx, NULL, &siglen) &&
+            (sig = OPENSSL_malloc(siglen)) != NULL &&
+            EVP_DigestSignFinal(mdctx, sig, &siglen) &&
+            EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key,
+                                    NULL) &&
+            EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg)) &&
+            EVP_DigestVerifyFinal(mdctx, sig, siglen);
         sig[0] = ~sig[0];
         testresult &= EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx,
-                                              NULL, key, NULL)
-                      && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
-                      && !EVP_DigestVerifyFinal(mdctx, sig, siglen);
+                                              NULL, key, NULL) &&
+                      EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg)) &&
+                      !EVP_DigestVerifyFinal(mdctx, sig, siglen);
     }
 
     EVP_MD_CTX_free(mdctx);
@@ -63,24 +64,23 @@ static int test_oqs_signatures(const char *sigalg_name)
     key = NULL;
 
     // this test must work also with default provider inactive:
-    testresult
-        &= (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL
-           && EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key)
-           && (mdctx = EVP_MD_CTX_new()) != NULL
-           && EVP_DigestSignInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL)
-           && EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))
-           && EVP_DigestSignFinal(mdctx, NULL, &siglen)
-           && (sig = OPENSSL_malloc(siglen)) != NULL
-           && EVP_DigestSignFinal(mdctx, sig, &siglen)
-           && EVP_DigestVerifyInit_ex(mdctx, NULL, NULL, libctx, NULL, key,
-                                      NULL)
-           && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
-           && EVP_DigestVerifyFinal(mdctx, sig, siglen);
+    testresult &=
+        (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL &&
+        EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
+        (mdctx = EVP_MD_CTX_new()) != NULL &&
+        EVP_DigestSignInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL) &&
+        EVP_DigestSignUpdate(mdctx, msg, sizeof(msg)) &&
+        EVP_DigestSignFinal(mdctx, NULL, &siglen) &&
+        (sig = OPENSSL_malloc(siglen)) != NULL &&
+        EVP_DigestSignFinal(mdctx, sig, &siglen) &&
+        EVP_DigestVerifyInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL) &&
+        EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg)) &&
+        EVP_DigestVerifyFinal(mdctx, sig, siglen);
     sig[0] = ~sig[0];
-    testresult
-        &= EVP_DigestVerifyInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL)
-           && EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))
-           && !EVP_DigestVerifyFinal(mdctx, sig, siglen);
+    testresult &=
+        EVP_DigestVerifyInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL) &&
+        EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg)) &&
+        !EVP_DigestVerifyFinal(mdctx, sig, siglen);
 
     EVP_MD_CTX_free(mdctx);
     EVP_PKEY_free(key);
@@ -91,8 +91,7 @@ static int test_oqs_signatures(const char *sigalg_name)
 
 #define nelem(a) (sizeof(a) / sizeof((a)[0]))
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     size_t i;
     int errcnt = 0, test = 0, query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;

@@ -1,19 +1,17 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 
-#undef USE_ENCODING_LIB
-#include "oqs_prov.h"
-#include "test_common.h"
-
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include <openssl/core_names.h>
 #include <openssl/crypto.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/provider.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "oqs_prov.h"
+#include "test_common.h"
 
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_START
 
@@ -72,8 +70,7 @@ const char *kHybridKEMAlgorithms[] = {
  * \param s String to test.
  *
  * \return 1 if `s` is in `list`, else 0. */
-static int is_string_in_list(const char **list, const char *s)
-{
+static int is_string_in_list(const char **list, const char *s) {
     for (; *list != NULL && strcmp(*list, s) != 0; ++list)
         ;
     if (*list != NULL) {
@@ -87,7 +84,7 @@ static int is_string_in_list(const char **list, const char *s)
  * \param alg Algorithm name.
  *
  * \returns 1 if hybrid, else 0. */
-#define is_signature_algorithm_hybrid(_alg_) \
+#define is_signature_algorithm_hybrid(_alg_)                                   \
     is_string_in_list(kHybridSignatureAlgorithms, (_alg_))
 
 /** \brief Indicates if an kem algorithm is hybrid or not.
@@ -95,7 +92,7 @@ static int is_string_in_list(const char **list, const char *s)
  * \param alg Algorithm name.
  *
  * \returns 1 if hybrid, else 0. */
-#define is_kem_algorithm_hybrid(_alg_) \
+#define is_kem_algorithm_hybrid(_alg_)                                         \
     is_string_in_list(kHybridKEMAlgorithms, (_alg_))
 
 /** \brief A pair of keys. */
@@ -120,8 +117,7 @@ struct KeyPair {
 /** \brief Frees the memory occupied by a KeyPair.
  *
  * \param kp Keypair to free. */
-static void keypair_free(struct KeyPair *kp)
-{
+static void keypair_free(struct KeyPair *kp) {
     free(kp->pubkey);
     free(kp->privkey);
 }
@@ -129,8 +125,7 @@ static void keypair_free(struct KeyPair *kp)
 /** \brief Initializes an OpenSSL top-level context.
  *
  * \returns The top-level context, or `NULL` if an error occurred. */
-static OSSL_LIB_CTX *init_openssl(void)
-{
+static OSSL_LIB_CTX *init_openssl(void) {
     OSSL_LIB_CTX *ctx;
 
     if (!(ctx = OSSL_LIB_CTX_new())) {
@@ -147,8 +142,7 @@ static OSSL_LIB_CTX *init_openssl(void)
  * \paran alg The algorithm to use.
  *
  * \returns The EVP_PKEY context, or `NULL` if an error occurred. */
-static EVP_PKEY_CTX *init_EVP_PKEY_CTX(OSSL_LIB_CTX *libctx, const char *alg)
-{
+static EVP_PKEY_CTX *init_EVP_PKEY_CTX(OSSL_LIB_CTX *libctx, const char *alg) {
     EVP_PKEY_CTX *ctx;
 
     if (!(ctx = EVP_PKEY_CTX_new_from_name(libctx, alg, NULL))) {
@@ -167,14 +161,13 @@ static EVP_PKEY_CTX *init_EVP_PKEY_CTX(OSSL_LIB_CTX *libctx, const char *alg)
  * \param ctx EVP_PKEY context.
  *
  * \returns 0 on success. */
-static int init_keygen(EVP_PKEY_CTX *ctx)
-{
+static int init_keygen(EVP_PKEY_CTX *ctx) {
     int err;
 
     if ((err = EVP_PKEY_keygen_init(ctx)) == -2) {
-        fputs(cRED
-              "`EVP_PKEY_keygen_init` failed, couldn't initialize keygen: not "
-              "supported" cNORM "\n",
+        fputs(cRED "`EVP_PKEY_keygen_init` failed, couldn't initialize "
+                   "keygen: not "
+                   "supported" cNORM "\n",
               stderr);
     } else if (err <= 0) {
         fputs(cRED
@@ -192,17 +185,14 @@ static int init_keygen(EVP_PKEY_CTX *ctx)
  * \param ctx EVP_PKEY context.
  *
  * \returns The private key, or `NULL` if an error occurred. */
-static EVP_PKEY *generate_private_key(EVP_PKEY_CTX *ctx)
-{
+static EVP_PKEY *generate_private_key(EVP_PKEY_CTX *ctx) {
     EVP_PKEY *private_key = NULL;
     int err;
 
     if ((err = EVP_PKEY_generate(ctx, &private_key)) == -2) {
-        fputs(
-            cRED
-            "`EVP_PKEY_generate` failed, couldn't generate: not supported" cNORM
-            "\n",
-            stderr);
+        fputs(cRED "`EVP_PKEY_generate` failed, couldn't generate: not "
+                   "supported" cNORM "\n",
+              stderr);
     } else if (err <= 0) {
         fputs(cRED "`EVP_PKEY_generate` failed, couldn't generate: ", stderr);
         ERR_print_errors_fp(stderr);
@@ -221,14 +211,13 @@ static EVP_PKEY *generate_private_key(EVP_PKEY_CTX *ctx)
  *
  * \returns 0 on success. */
 static int get_param_octet_string(const EVP_PKEY *key, const char *param_name,
-                                  uint8_t **buf, size_t *buf_len)
-{
+                                  uint8_t **buf, size_t *buf_len) {
     *buf = NULL;
     *buf_len = 0;
     int ret = -1;
 
-    if (EVP_PKEY_get_octet_string_param(key, param_name, NULL, 0, buf_len)
-        != 1) {
+    if (EVP_PKEY_get_octet_string_param(key, param_name, NULL, 0, buf_len) !=
+        1) {
         fprintf(stderr,
                 cRED
                 "`EVP_PKEY_get_octet_string_param` failed with param `%s`: ",
@@ -242,8 +231,7 @@ static int get_param_octet_string(const EVP_PKEY *key, const char *param_name,
         goto out;
     }
     if (EVP_PKEY_get_octet_string_param(key, param_name, *buf, *buf_len,
-                                        buf_len)
-        != 1) {
+                                        buf_len) != 1) {
         fprintf(stderr,
                 cRED
                 "`EVP_PKEY_get_octet_string_param` failed with param `%s`: ",
@@ -267,8 +255,7 @@ out:
  *
  * \returns 0 on success. */
 static int private_key_params_get_classical_keys(const EVP_PKEY *private_key,
-                                                 struct KeyPair *out)
-{
+                                                 struct KeyPair *out) {
     int ret = -1;
 
     if (get_param_octet_string(private_key,
@@ -298,8 +285,7 @@ out:
  *
  * \returns 0 on success. */
 static int private_key_params_get_pq_keys(const EVP_PKEY *private_key,
-                                          struct KeyPair *out)
-{
+                                          struct KeyPair *out) {
     int ret = -1;
 
     if (get_param_octet_string(private_key, OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY,
@@ -320,15 +306,15 @@ out:
     return ret;
 }
 
-/** \brief Extracts the combination of classical+hybrid keys from an hybrid key.
+/** \brief Extracts the combination of classical+hybrid keys from an hybrid
+ * key.
  *
  * \param private_key The private key.
  * \param[out] out Key pair where to write the keys.
  *
  * \returns 0 on success. */
 static int private_key_params_get_full_keys(const EVP_PKEY *private_key,
-                                            struct KeyPair *out)
-{
+                                            struct KeyPair *out) {
     int ret = -1;
 
     if (get_param_octet_string(private_key, OSSL_PKEY_PARAM_PUB_KEY,
@@ -362,8 +348,7 @@ out:
  * \returns 0 on success. */
 static int reconstitute_keys(const uint8_t *classical, const size_t classical_n,
                              const uint8_t *pq, const size_t pq_n,
-                             uint8_t **buf, size_t *buf_len)
-{
+                             uint8_t **buf, size_t *buf_len) {
     uint32_t header;
     int ret = -1;
 
@@ -395,8 +380,7 @@ out:
  * \returns 0 on success. */
 static int keypairs_verify_consistency(const struct KeyPair *classical,
                                        const struct KeyPair *pq,
-                                       const struct KeyPair *comb)
-{
+                                       const struct KeyPair *comb) {
     uint8_t *reconstitution;
     size_t n;
     int ret = -1;
@@ -406,12 +390,10 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
         goto out;
     }
     if (n != comb->pubkey_len) {
-        fprintf(
-            stderr,
-            cRED
-            "expected %#zx byte(s) for reconstitution of pubkey, got %#zx" cNORM
-            "\n",
-            comb->pubkey_len, n);
+        fprintf(stderr,
+                cRED "expected %#zx byte(s) for reconstitution of "
+                     "pubkey, got %#zx" cNORM "\n",
+                comb->pubkey_len, n);
         goto free_reconstitute;
     }
     if (memcmp(reconstitution, comb->pubkey, n)) {
@@ -430,10 +412,10 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
         goto out;
     }
     if (n != comb->privkey_len) {
-        fprintf(
-            stderr,
-            "expected %#zx byte(s) for reconstitution of privkey, got %#zx\n",
-            comb->privkey_len, n);
+        fprintf(stderr,
+                "expected %#zx byte(s) for reconstitution of privkey, "
+                "got %#zx\n",
+                comb->privkey_len, n);
         goto free_reconstitute;
     }
     if (memcmp(reconstitution, comb->privkey, n)) {
@@ -460,8 +442,7 @@ out:
  * \param algname Algorithm name.
  *
  * \returns 0 on success. */
-static int test_algorithm(OSSL_LIB_CTX *libctx, const char *algname)
-{
+static int test_algorithm(OSSL_LIB_CTX *libctx, const char *algname) {
     EVP_PKEY_CTX *evp_pkey_ctx;
     EVP_PKEY *private_key;
     struct KeyPair classical_keypair;
@@ -517,8 +498,7 @@ out:
     return ret;
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     OSSL_LIB_CTX *libctx;
     OSSL_PROVIDER *default_provider;
     OSSL_PROVIDER *oqs_provider;

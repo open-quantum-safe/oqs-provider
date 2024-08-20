@@ -39,13 +39,6 @@ location for the OS.
 This uses the [`find_package`](https://cmake.org/cmake/help/latest/command/find_package.html)
 command in `cmake`, which checks for local builds of a package at `<PackageName>_DIR`
 
-### USE_ENCODING_LIB
-
-By setting `-DUSE_ENCODING_LIB=<ON/OFF>` at compile-time, oqs-provider can be
-compiled with with an an external encoding library `qsc-key-encoder`.
-Configuring the encodings is done via environment as described in [ALGORITHMS.md](ALGORITHMS.md).
-The default value is `OFF`.
-
 ### NOPUBKEY_IN_PRIVKEY
 
 By setting this to "ON", it can be specified to omit explicitly serializing

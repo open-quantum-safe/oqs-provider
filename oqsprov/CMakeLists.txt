@@ -94,7 +94,11 @@ install(TARGETS oqsprovider
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_VENDOR "www.openquantumsafe.org")
 set(CPACK_PACKAGE_VERSION ${OQSPROVIDER_VERSION_TEXT})
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, openssl (>= 3.0.0), liboqs (>= 0.8.0)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, openssl (>= 3.0.0)")
+if (NOT "${LIBOQS_LIBRARY_TYPE}" STREQUAL "STATIC_LIBRARY")
+  message("Adding liboqs as dynamic dependency for the debian package")
+  string(APPEND CPACK_DEBIAN_PACKAGE_DEPENDS ", liboqs (>= 0.8.0)")
+endif ()
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "www.openquantumsafe.org")
 include(CPack)
 

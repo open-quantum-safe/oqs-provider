@@ -63,7 +63,8 @@ endif()
 # Add required include for liboqs
 find_package(liboqs REQUIRED)
 get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
-message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")
+get_target_property(LIBOQS_LIBRARY_TYPE OQS::oqs TYPE)
+message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR} (${LIBOQS_LIBRARY_TYPE})")
 include_directories(${LIBOQS_INCLUDE_DIR})
 
 # Hints the compiler on the fact that the provider is being compiled into a static library.

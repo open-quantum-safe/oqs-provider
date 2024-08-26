@@ -142,28 +142,37 @@ Also not fully supported in 3.0.2 is performance testing as per the openssl
 ## 3.2 and greater
 
 These versions have full support for all TLS1.3 operations using PQ algorithms
-when deploying `oqsprovider`.
+when deploying `oqsprovider`, particularly with regard to the use of signature
+algorithms.
 
 ## 3.4 and greater
 
-These version are expected to support the `openssl pkeyutl -encap/-decap`
+These versions are expected to support the `openssl pkeyutl -encap/-decap`
 syntax for testing key encapsulation and decapsulation for test purposes. To
-use this option, OQS provider should be built with KEM encoding/decoding
-support.
+use this option, OQS provider should be built with
+[KEM encoding/decoding support](CONFIGURE.md#oqs_kem_encoders).
+Also new in this version is the possibility to retrieve all currently
+active TLS signature algorithms via a new `openssl list` option:
+`openssl list -tls-signature-algorithms`.
 
 ## All versions
 
 A limitation present in older OpenSSL versions is the number of default groups
 supported: [At most 44 default groups may be specified](https://github.com/openssl/openssl/issues/23624)
 , e.g., passing to [SSL_CTX_set1_groups](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set1_groups.html).
-Therefore caution is advised activating all KEMs supported by `oqsprovider`:
+Therefore caution is advised activating all KEMs supported by `oqsprovider`
+via [the pre-build configuration facility](CONFIGURE.md#pre-build-configuration):
 This may lead to `openssl` crashing, depending on the OpenSSL version used:
-The problem is gone in OpenSSL "master" branch and (will be gone) in the
-releases 3.3.0, 3.2.2., 3.1.6 and 3.0.14.
-
+The problem is gone in OpenSSL "master" branch and in the respective branches
+since the releases 3.3.0, 3.2.2., 3.1.6 and 3.0.14.
 
 For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
 see here](https://www.openssl.org/docs/man3.0/man7/migration_guide.html).
+
+A problem basically related to any TLS server installation is the observed
+[limitation to 64 TLS signature algorithms](https://github.com/open-quantum-safe/oqs-provider/issues/399)
+by some TLS server implementations. Therefore, again caution is advised
+[activating more than 64 PQ signature algorithms via the pre-build configuration facility](CONFIGURE.md#pre-build-configuration).
 
 Governance & Contributions
 --------------------------

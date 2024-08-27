@@ -205,6 +205,7 @@ Contributors to the `oqsprovider` include:
 - Thomas Bailleux (many build, CI and usage improvements for different platforms)
 - Felipe Ventura (composite sig integration and OID management)
 - Iyán Méndez Veiga (PKCS#12 testing)
+- Alessandro Barenghi (CROSS OIDs)
 
 History
 -------

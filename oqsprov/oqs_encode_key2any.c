@@ -836,12 +836,10 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
                     OPENSSL_free(aString);
                     OPENSSL_free(temp);
                     OPENSSL_free(templen);
-                    OPENSSL_cleanse(buf,
-                                    buflen); // buf is part of p8inf_internal so
-                                             // we cant free now, we cleanse it
-                                             // to remove pkey from memory
+                    OPENSSL_secure_clear_free(buf, buflen);
+                    OPENSSL_cleanse(ed_internal, ed_internallen);
                     PKCS8_PRIV_KEY_INFO_free(
-                        p8inf_internal); // this also free buf
+                        p8inf_internal); // this also free ed_internal
                     return -1;
                 }
 
@@ -900,12 +898,26 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
                                 buflen); // buf is part of p8inf_internal so we
                                          // cant free now, we cleanse it to
                                          // remove pkey from memory
-                PKCS8_PRIV_KEY_INFO_free(p8inf_internal); // this also free buf
+                if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
+                    OPENSSL_cleanse(ed_internal, ed_internallen);
+                    OPENSSL_secure_free(
+                        buf); // in this case the ed_internal is
+                              // freed from the pkcs8_free instead
+                              // of buf, so we need to free buf here
+                }
+                PKCS8_PRIV_KEY_INFO_free(
+                    p8inf_internal); // this also free buf or ed_internal
                 return -1;
             }
             OPENSSL_free(name);
 
             OPENSSL_cleanse(buf, buflen);
+            if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
+                OPENSSL_cleanse(ed_internal, ed_internallen);
+                OPENSSL_secure_free(buf); // in this case the ed_internal is
+                                          // freed from the pkcs8_free instead
+                                          // of buf, so we need to free buf here
+            }
             PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);

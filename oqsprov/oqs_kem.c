@@ -115,18 +115,6 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
         OQS_KEM_PRINTF("OQS Warning: public key is NULL\n");
         return -1;
     }
-    if (out == NULL || secret == NULL) {
-        if (outlen != NULL) {
-            *outlen = kem_ctx->length_ciphertext;
-        }
-        if (secretlen != NULL) {
-            *secretlen = kem_ctx->length_shared_secret;
-        }
-        OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n",
-                        kem_ctx->length_ciphertext,
-                        kem_ctx->length_shared_secret);
-        return 1;
-    }
     if (outlen == NULL) {
         OQS_KEM_PRINTF("OQS Warning: outlen is NULL\n");
         return -1;
@@ -135,6 +123,15 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
         OQS_KEM_PRINTF("OQS Warning: secretlen is NULL\n");
         return -1;
     }
+    if (out == NULL || secret == NULL) {
+        *outlen = kem_ctx->length_ciphertext;
+        *secretlen = kem_ctx->length_shared_secret;
+        OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n",
+                        kem_ctx->length_ciphertext,
+                        kem_ctx->length_shared_secret);
+        return 1;
+    }
+
     if (*outlen < kem_ctx->length_ciphertext) {
         OQS_KEM_PRINTF("OQS Warning: out buffer too small\n");
         return -1;

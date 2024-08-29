@@ -376,7 +376,7 @@ static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[]) {
         DECODE_UINT32(classical_privkey_len, key->privkey);
     }
 
-    if (key->comp_pubkey[1] != NULL) {
+    if (key->comp_pubkey && key->comp_pubkey[1] != NULL) {
         pq_pubkey = key->comp_pubkey[1];
         pq_pubkey_len = key->pubkeylen - classical_pubkey_len - SIZE_OF_UINT32;
     }

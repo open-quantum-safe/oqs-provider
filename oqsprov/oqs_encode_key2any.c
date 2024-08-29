@@ -662,10 +662,19 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
             OPENSSL_malloc(oqsxkey->numkeys * sizeof(unsigned char *));
         size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t));
         PKCS8_PRIV_KEY_INFO *p8inf_internal = NULL;
+        sk = sk_ASN1_TYPE_new_null();
         int i;
 
-        if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
+        if (!sk || !templen || !aType || !aString || !temp) {
+            OPENSSL_free(aType);
+            OPENSSL_free(aString);
+            OPENSSL_free(temp);
+            OPENSSL_free(templen);
+            if (sk) {
+                sk_ASN1_TYPE_pop_free(sk, ASN1_TYPE_free);
+            }
             return -1;
+        }
 
         for (i = 0; i < oqsxkey->numkeys; i++) {
             aType[i] = ASN1_TYPE_new();

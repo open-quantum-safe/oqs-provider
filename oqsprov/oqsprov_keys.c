@@ -1497,10 +1497,12 @@ err:
     if (ret->lock)
         CRYPTO_THREAD_lock_free(ret->lock);
 #endif
-    OPENSSL_free(ret->tls_name);
-    OPENSSL_free(ret->propq);
-    OPENSSL_free(ret->comp_privkey);
-    OPENSSL_free(ret->comp_pubkey);
+    if (ret) {
+        OPENSSL_free(ret->tls_name);
+        OPENSSL_free(ret->propq);
+        OPENSSL_free(ret->comp_privkey);
+        OPENSSL_free(ret->comp_pubkey);
+    }
     OPENSSL_free(ret);
     return NULL;
 }

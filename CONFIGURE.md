@@ -30,14 +30,14 @@ activate further warning messages. In particular, when "Debug" has been set, dis
 [debugging capabilities](https://github.com/open-quantum-safe/oqs-provider/wiki/Debugging)
 are activated and additional setup warnings are output.
 
-### CMAKE_FLAGS
+### CMAKE_PARAMS
 
 This environment variable lets you specify additional flags to pass to `cmake` explicitly when using the `fullbuild.sh` script.
 
 For example, in order to point `cmake` to a specific library, you might run:
 
 ```
-$ env CMAKE_FLAGS="-DOPENSSL_CRYPTO_LIBRARY=/opt/lib64/libcrypto.so" bash scripts/fullbuild.sh
+$ env CMAKE_PARAMS="-DOPENSSL_CRYPTO_LIBRARY=/opt/lib64/libcrypto.so" bash scripts/fullbuild.sh
 ```
 
 ### liboqs_DIR

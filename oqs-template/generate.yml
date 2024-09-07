@@ -168,7 +168,7 @@ kems:
         - hybrid_group: "x448"
           nid: '0x2FB3'
         - hybrid_group: "x25519"
-          nid: '0x2FB4'
+          nid: '4588'
         - hybrid_group: "p256"
           nid: '0x2FB5'
   -

@@ -1,5 +1,5 @@
 # This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
-# Next free plain KEM ID: 0x024A, p-hybrid: 0x2F4B, X-hybrid: 0x2FB6
+# Next free plain KEM ID: 0x024D, p-hybrid: 0x2F50, X-hybrid: 0x2FB8
 kems:
   -
     family: 'FrodoKEM'
@@ -143,40 +143,60 @@ kems:
           hybrid_group: secp521_r1
           nid: '0x2F11'
     oqs_alg: 'OQS_KEM_alg_kyber_1024'
+# end of IBM support section
+# NIST OIDs see https://csrc.nist.gov/projects/computer-security-objects-register/algorithm-registration
+# KEM prefix 2.16.840.1.101.3.4.4.
   -
     family: 'ML-KEM'
     name_group: 'mlkem512'
-    nid: '0x0247'
-    oid: '1.3.6.1.4.1.22554.5.6.1'
-    nid_hybrid: '0x2F47'
+# code point not standardized: Why? XXX
+    nid: '0x024A'
+# NIST kem 1
+    oid: '2.16.840.1.101.3.4.4.1'
+# code point not standardized: Why? XXX
+    nid_hybrid: '0x2F4B'
+# retain OIDs of the Legion of the BouncyCastle: XXX check if OK
     hybrid_oid: '1.3.6.1.4.1.22554.5.7.1'
     oqs_alg: 'OQS_KEM_alg_ml_kem_512'
     extra_nids:
       current:
         - hybrid_group: "x25519"
+# retain OIDs of the Legion of the BouncyCastle: XXX check if OK
           hybrid_oid: '1.3.6.1.4.1.22554.5.8.1'
-          nid: '0x2FB2'
+# code point not standardized: Why? XXX
+          nid: '0x2FB6'
   -
     family: 'ML-KEM'
     name_group: 'mlkem768'
-    nid: '0x0248'
-    oid: '1.3.6.1.4.1.22554.5.6.2'
-    nid_hybrid: '0x2F48'
+# https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
+    nid: '0x0768'
+# NIST kem 2
+    oid: '2.16.840.1.101.3.4.4.2'
+# code point not standardized: Why? XXX
+    nid_hybrid: '0x2F4C'
     oqs_alg: 'OQS_KEM_alg_ml_kem_768'
     extra_nids:
       current:
         - hybrid_group: "x448"
-          nid: '0x2FB3'
+# code point not standardized: Why? XXX
+          nid: '0x2FB7'
+# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-01.html#name-iana-considerations
         - hybrid_group: "x25519"
           nid: '4588'
+# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-01.html#name-iana-considerations
+# To change when hybrid order change implemented, see https://github.com/open-quantum-safe/oqs-provider/issues/503
         - hybrid_group: "p256"
-          nid: '0x2FB5'
+# code point not standardized: Why? XXX
+          nid: '0x2F4E'
   -
     family: 'ML-KEM'
     name_group: 'mlkem1024'
-    nid: '0x0249'
-    oid: '1.3.6.1.4.1.22554.5.6.3'
-    nid_hybrid: '0x2F49'
+# https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
+    nid: '0x1024'
+# NIST kem 3
+    oid: '2.16.840.1.101.3.4.4.3'
+# code point not standardized: Why? XXX
+    nid_hybrid: '0x2F4D'
     oqs_alg: 'OQS_KEM_alg_ml_kem_1024'
     extra_nids:
       current:
@@ -184,8 +204,10 @@ kems:
         # this oid is proposed by Tresorit
         # if the hybrid combination is standardized, feel free to change it
         - hybrid_group: "p384"
+# does Tresorit want to update?
           hybrid_oid: '1.3.6.1.4.1.42235.6'
-          nid: '0x2F4A'
+# code point not standardized: Why? XXX
+          nid: '0x2F4F'
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'

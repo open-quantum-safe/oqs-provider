@@ -70,20 +70,20 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {0x023D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F3D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0247, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x024A, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F47, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB2, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0248, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4B, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB6, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x0768, 192, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F48, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB3, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB7, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {4588, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB5, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0249, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4E, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x1024, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F49, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F4A, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4F, 256, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x0241, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F41, 128, TLS1_3_VERSION, 0, -1, -1, 1},

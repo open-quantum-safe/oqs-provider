@@ -85,14 +85,14 @@
 | HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x2FB1       | x448                             |
 | HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x0246       |                                  |
 | HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x2F46       | secp521_r1                       |
-| ML-KEM         | ML-KEM-ipd               | mlkem1024      | ipd          |                    5 | 0x0249       |                                  |
-| ML-KEM         | ML-KEM-ipd               | mlkem1024      | ipd          |                    5 | 0x2F49       | secp521_r1                       |
-| ML-KEM         | ML-KEM-ipd               | mlkem1024      | ipd          |                    5 | 0x2F4A       | p384                             |
-| ML-KEM         | ML-KEM-ipd               | mlkem512       | ipd          |                    1 | 0x0247       |                                  |
-| ML-KEM         | ML-KEM-ipd               | mlkem512       | ipd          |                    1 | 0x2F47       | secp256_r1                       |
-| ML-KEM         | ML-KEM-ipd               | mlkem512       | ipd          |                    1 | 0x2FB2       | x25519                           |
-| ML-KEM         | ML-KEM-ipd               | mlkem768       | ipd          |                    3 | 0x0248       |                                  |
-| ML-KEM         | ML-KEM-ipd               | mlkem768       | ipd          |                    3 | 0x2F48       | secp384_r1                       |
-| ML-KEM         | ML-KEM-ipd               | mlkem768       | ipd          |                    3 | 0x2FB3       | x448                             |
-| ML-KEM         | ML-KEM-ipd               | mlkem768       | ipd          |                    3 | 0x2FB4       | x25519                           |
-| ML-KEM         | ML-KEM-ipd               | mlkem768       | ipd          |                    3 | 0x2FB5       | p256                             |
+| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x1024       |                                  |
+| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4D       | secp521_r1                       |
+| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4E       | p384                             |
+| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x024A       |                                  |
+| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2F4B       | secp256_r1                       |
+| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2FB6       | x25519                           |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x0768       |                                  |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2F4C       | secp384_r1                       |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2FB7       | x448                             |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2FB8       | x25519                           |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 4587         | p256                             |

@@ -1,17 +1,13 @@
 name: Linux tests
 
-on:
-  push:
-    branches: [ '*' ]
-  pull_request:
-    branches: [ "main" ]
+permissions:
+  contents: read
+
+on: [workflow_call, workflow_dispatch]
 
 jobs:
-  coding_style_tests:
-    uses: ./.github/workflows/coding_style.yml
   linux_baseline:
     runs-on: ubuntu-latest
-    needs: [coding_style_tests]
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +29,6 @@ jobs:
 
   linux_intel:
     runs-on: ubuntu-latest
-    needs: [coding_style_tests]
     strategy:
       fail-fast: false
       matrix:
@@ -90,7 +85,6 @@ jobs:
   asan_linux_intel:
     name: "Security checks"
     runs-on: ubuntu-latest
-    needs: [coding_style_tests]
     strategy:
       fail-fast: false
     container:
@@ -165,7 +159,6 @@ jobs:
   linux_aarch64:
     name: "aarch64 cross-compilation"
     runs-on: ubuntu-latest
-    needs: [coding_style_tests]
     strategy:
       fail-fast: false
     container:
@@ -252,3 +245,24 @@ jobs:
           name: oqsprovider-aarch64
           path: build/*.deb
 
+  standalone_linux_intel:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ubuntu-latest
+            container: ubuntu:latest
+    container:
+      image: ${{ matrix.container }}
+    env:
+      MAKE_PARAMS: "-j 18"
+    steps:
+      - name: Update container
+        run: apt update && apt install -y cmake ninja-build gcc libssl-dev git
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Full build
+        run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
+      - name: Test
+        run: ./scripts/runtests.sh -V

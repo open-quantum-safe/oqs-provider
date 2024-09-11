@@ -1,5 +1,9 @@
-name: Coding style tests
-on: [workflow_call]
+name: Basic checks
+
+permissions:
+  contents: read
+
+on: [workflow_call, workflow_dispatch]
 
 jobs:
   check_clang_format:
@@ -10,9 +14,6 @@ jobs:
     container:
       image: openquantumsafe/ci-ubuntu-latest:latest
     steps:
-      - name: Install dependencies
-        run: apt-get update && apt-get install -y clang-format
-
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
 

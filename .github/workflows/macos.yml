@@ -1,13 +1,11 @@
 name: MacOS tests
 
-on: [pull_request, push]
-
 permissions:
   contents: read
 
+on: [workflow_call, workflow_dispatch]
+
 jobs:
-  coding_style_tests:
-    uses: ./.github/workflows/coding_style.yml
   macos:
 # Run a job for each of the specified os configs:
     strategy:
@@ -19,7 +17,6 @@ jobs:
         params:
           - oqsconfig: -DOQS_ALGS_ENABLED=STD
     runs-on: ${{matrix.os}}
-    needs: [coding_style_tests]
     env:
 # Don't overwhelm github CI VMs:
       MAKE_PARAMS: -j 4
@@ -86,3 +83,22 @@ jobs:
         with:
           name: oqs-provider-${{matrix.os}}-x64
           path: _build/lib/oqsprovider.dylib
+
+  standalone_macos_intel:
+    runs-on: macos-13
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Install prerequisites
+        run: brew install liboqs
+      - name: Checkout oqsprovider code
+        uses: actions/checkout@v2
+      - name: Build and test oqsprovider
+        # try this only if brew'd liboqs knows about ML-KEM:
+        run: |
+          bash -c 'FIND_MLKEM=`brew info liboqs | grep files | awk "{print $1}"`
+            if [[ `echo $FIND_MLKEM | grep ML_KEM` ]]; then
+               cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@3 -S . -B _build && cmake --build _build && ctest --parallel 5 --test-dir _build
+            else
+               echo "ML-KEM not present in liboqs. Skipping test."
+            fi'

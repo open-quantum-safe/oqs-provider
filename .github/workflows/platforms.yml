@@ -1,0 +1,17 @@
+name: Tests for all supported platforms
+
+permissions:
+  contents: read
+
+on: [workflow_call, workflow_dispatch]
+
+jobs:
+
+  linux-tests:
+    uses: ./.github/workflows/linux.yml
+
+  macos-tests:
+    uses: ./.github/workflows/macos.yml
+
+  windows-tests:
+    uses: ./.github/workflows/windows.yml

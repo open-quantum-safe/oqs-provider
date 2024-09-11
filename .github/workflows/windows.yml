@@ -1,13 +1,11 @@
 name: Windows tests
 
-on: [pull_request, push]
-
 permissions:
   contents: read
 
+on: [workflow_call, workflow_dispatch]
+
 jobs:
-  coding_style_tests:
-    uses: ./.github/workflows/coding_style.yml
   cygwin:
 # Run a job for each of the specified target architectures:
     strategy:
@@ -23,7 +21,6 @@ jobs:
 #          - arch: win32
 #            config: --strict-warnings no-fips enable-quic
     runs-on: ${{matrix.os}}
-    needs: [coding_style_tests]
     env:
       CYGWIN_NOWINPATH: 1
       SHELLOPTS: igncr
@@ -120,7 +117,6 @@ jobs:
 #            oqsconfig: -DOQS_ALGS_ENABLED=STD
 #            osslconfig: --strict-warnings no-fips enable-quic
     runs-on: ${{matrix.os}}
-    needs: [coding_style_tests]
     steps:
       - name: Restore OpenSSL32 cache
         id: cache-openssl32
@@ -234,7 +230,6 @@ jobs:
           - Debug
           - Release
     runs-on: ${{matrix.os}}
-    needs: [coding_style_tests]
     steps:
         - name: Restore native OpenSSL32 cache
           id: cache-openssl32n

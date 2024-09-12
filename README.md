@@ -265,7 +265,7 @@ contributions to achieve this state.
 ## Component disclaimer
 
 `oqsprovider` for the implementation of all pure PQC functionality
-is completely dependent on the following package and accordingly
+is completely dependent on [liboqs](https://github.com/open-quantum-safe/liboqs) and accordingly
 cannot recommend any use beyond experimentation purposes:
 
 WE DO NOT CURRENTLY RECOMMEND RELYING ON THIS SOFTWARE IN A PRODUCTION ENVIRONMENT OR TO PROTECT ANY SENSITIVE DATA. This software is meant to help with research and prototyping. While we make a best-effort approach to avoid security bugs, this library has not received the level of auditing and analysis that would be necessary to rely on it for high security use.

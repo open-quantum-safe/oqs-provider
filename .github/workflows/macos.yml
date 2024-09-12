@@ -25,15 +25,15 @@ jobs:
       MAKE_PARAMS: -j 4
     steps:
       - name: Checkout provider
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Checkout openssl
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           set-safe-directory: true
           repository: openssl/openssl
           path: openssl
       - name: checkout liboqs
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs

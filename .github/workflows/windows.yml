@@ -18,6 +18,8 @@ jobs:
         platform:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD
+            # empty `config` property here to prevent actionlint error (property "config" is not defined in object type) on line 62 below
+            config:
 #          - arch: win32
 #            config: --strict-warnings no-fips enable-quic
     runs-on: ${{matrix.os}}
@@ -29,9 +31,9 @@ jobs:
       MAKE_PARAMS: -j 4
     steps:
       - name: Checkout provider
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Checkout openssl
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           set-safe-directory: true
           repository: openssl/openssl
@@ -39,7 +41,7 @@ jobs:
           # TODO: Revert ref tag once openssl master doesn't crash any more
           ref: openssl-3.3.0
       - name: checkout liboqs
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
@@ -126,15 +128,15 @@ jobs:
         with:
           path: c:\openssl32
           key: ${{ runner.os }}-msvcopenssl32
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Checkout OpenSSL master
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           set-safe-directory: true
           repository: openssl/openssl
           path: openssl
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
@@ -240,15 +242,15 @@ jobs:
           with:
             path: c:\openssl32n
             key: ${{ runner.os }}-msvcopenssl32n
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         - name: Checkout OpenSSL master
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
-          uses: actions/checkout@v3
+          uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
           with:
             set-safe-directory: true
             repository: openssl/openssl
             path: openssl
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
           with:
             set-safe-directory: true
             repository: open-quantum-safe/liboqs

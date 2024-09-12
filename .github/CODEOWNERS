@@ -5,6 +5,6 @@
 /oqs-template/generate.yml @baentsch @bhess @feventura
 /CMakeLists.txt @baentsch @thb-sb
 /.circleci/config.yml @baentsch @thb-sb
-/.github/workflows @baentsch @thb-sb
+/.github/workflows @baentsch @thb-sb @jplomas
 /oqsprov/oqs_sig.c @baentsch @feventura
 /scripts/oqsprovider-pkcs12gen.sh @iyanmv

@@ -6,8 +6,19 @@ permissions:
 on: [workflow_call, workflow_dispatch]
 
 jobs:
+  workflowcheck:
+    name: Check validity of GitHub workflows
+    runs-on: ubuntu-latest
+    container: openquantumsafe/ci-ubuntu-latest:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+      - name: Ensure GitHub actions are valid
+        run: actionlint -shellcheck "" # run *without* shellcheck
+
   check_clang_format:
     name: "Coding style"
+    needs: [workflowcheck]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

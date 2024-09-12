@@ -71,11 +71,11 @@ jobs:
             && echo "liboqs_ref=$liboqs_ref" >> "$GITHUB_ENV" \
             || echo "liboqs_ref=main" >> "$GITHUB_ENV"
       - name: Checkout oqs-provider on requested ref if it exists; otherwise, fall back to main
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           ref: ${{ env.provider_ref }}
       - name: Checkout liboqs at requested ref if it exists; otherwise, fall back to main
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:
           repository: open-quantum-safe/liboqs
           path: liboqs

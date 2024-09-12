@@ -8,11 +8,6 @@ on:
         required: true
         default: 'main'
         type: string
-      provider_ref:
-        description: 'oqs-provider branch or tag'
-        required: true
-        default: 'main'
-        type: string
 
 # This workflow can be triggered from either the GitHub Actions web UI or a shell.
 # To use a shell, generate a GitHub personal access token and run the following command:
@@ -22,9 +17,8 @@ on:
 #      --header "Authorization: Bearer YOUR_TOKEN_HERE" \
 #      --header "X-GitHub-Api-Version: 2022-11-28" \
 #      --data '{
-#                "event_type": "liboqs-release",
+#                "ref": "PROVIDER_BRANCH_OR_TAG_HERE",
 #                "inputs": {
-#                            "provider_ref": "PROVIDER_BRANCH_OR_TAG_HERE",
 #                            "liboqs_ref": "LIBOQS_BRANCH_OR_TAG_HERE"
 #                          }
 #              }' \
@@ -35,4 +29,3 @@ jobs:
     uses: ./.github/workflows/release-test.yml
     with:
       liboqs_ref: ${{ inputs.liboqs_ref }}
-      provider_ref: ${{ inputs.provider_ref }}

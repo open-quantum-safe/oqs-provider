@@ -28,6 +28,11 @@ fi
 
 # Ascertain algorithms are available:
 
+# skipping these tests for now as per https://mailarchive.ietf.org/arch/msg/tls/hli5ogDbUudAA4tZXskVbOqeor4
+# TBD replace with suitable ML-KEM hybrid tests as and when available XXX 
+
+exit 0
+
 echo " Cloudflare:"
 
 if ! ($OPENSSL_APP list -kem-algorithms | grep x25519_kyber768); then

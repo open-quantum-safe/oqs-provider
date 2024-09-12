@@ -249,6 +249,27 @@ THIS SOFTWARE IS PROVIDED WITH NO WARRANTIES, EXPRESS OR IMPLIED, AND
 ALL IMPLIED WARRANTIES ARE DISCLAIMED, INCLUDING ANY WARRANTY OF
 MERCHANTABILITY AND WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.
 
+## Standards compliance
+
+This project follows the [NIST PQC standardization process](https://csrc.nist.gov/projects/post-quantum-cryptography)
+and aims to support experimentation with the various PQC algorithms
+under evaluation and in different stages of standardization by NIST.
+`oqsprovider` at this time cannot claim or prove adherence to any
+standards documents published. For more details, review the file
+[STANDARDS.md](STANDARDS.md) carefully. Most notably, hybrid and
+composite implementations exclusively implemented in `oqsprovider`
+are at a pre-standard/draft stage only. Over time the project aims
+to provide standards compliance and solicits input by way of
+contributions to achieve this state.
+
 ## Component disclaimer
+
+`oqsprovider` for the implementation of all pure PQC functionality
+is completely dependent on [liboqs](https://github.com/open-quantum-safe/liboqs) and accordingly
+cannot recommend any use beyond experimentation purposes:
+
+WE DO NOT CURRENTLY RECOMMEND RELYING ON THIS SOFTWARE IN A PRODUCTION ENVIRONMENT OR TO PROTECT ANY SENSITIVE DATA. This software is meant to help with research and prototyping. While we make a best-effort approach to avoid security bugs, this library has not received the level of auditing and analysis that would be necessary to rely on it for high security use.
+
+Further details and background available at:
 
 [liboqs disclaimer](https://github.com/open-quantum-safe/liboqs#limitations-and-security)

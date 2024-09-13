@@ -8,14 +8,12 @@ on:
     inputs:
       liboqs_ref:
         description: 'liboqs branch or tag'
-        required: true
         default: 'main'
         type: string
   workflow_dispatch:
     inputs:
       liboqs_ref:
         description: 'liboqs branch or tag'
-        required: true
         default: 'main'
         type: string
 

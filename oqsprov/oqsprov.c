@@ -1153,53 +1153,55 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         if (oqs_oid_alg_list[i] == NULL) {
             OQS_PROV_PRINTF2("OQS PROV: Warning: No OID registered for %s\n",
                              oqs_oid_alg_list[i + 1]);
-            break;
-        }
-        if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
-                          oqs_oid_alg_list[i + 1])) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            fprintf(stderr, "error registering NID for %s\n",
-                    oqs_oid_alg_list[i + 1]);
-            goto end_init;
-        }
-
-        /* create object (NID) again to avoid setup corner case problems
-         * see https://github.com/openssl/openssl/discussions/21903
-         * Not testing for errors is intentional.
-         * At least one core version hangs up; so don't do this there:
-         */
-        if (ossl_versionp && strcmp("3.1.0", ossl_versionp)) {
-            ERR_set_mark();
-            OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
-                       oqs_oid_alg_list[i + 1]);
-            ERR_pop_to_mark();
-        }
-
-        if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
-                         OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            goto end_init;
-        }
-
-        if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
-                             oqs_oid_alg_list[i + 1])) {
-            fprintf(stderr, "error registering %s with no hash\n",
-                    oqs_oid_alg_list[i + 1]);
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            goto end_init;
-        }
-
-        if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
-            OQS_PROV_PRINTF3(
-                "OQS PROV: successfully registered %s with NID %d\n",
-                oqs_oid_alg_list[i + 1], OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
         } else {
-            fprintf(stderr,
-                    "OQS PROV: Impossible error: NID unregistered "
-                    "for %s.\n",
-                    oqs_oid_alg_list[i + 1]);
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            goto end_init;
+            if (!c_obj_create(handle, oqs_oid_alg_list[i],
+                              oqs_oid_alg_list[i + 1],
+                              oqs_oid_alg_list[i + 1])) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                fprintf(stderr, "error registering NID for %s\n",
+                        oqs_oid_alg_list[i + 1]);
+                goto end_init;
+            }
+
+            /* create object (NID) again to avoid setup corner case problems
+             * see https://github.com/openssl/openssl/discussions/21903
+             * Not testing for errors is intentional.
+             * At least one core version hangs up; so don't do this there:
+             */
+            if (strcmp("3.1.0", ossl_versionp)) {
+                ERR_set_mark();
+                OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
+                           oqs_oid_alg_list[i + 1]);
+                ERR_pop_to_mark();
+            }
+
+            if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
+                             OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
+
+            if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
+                                 oqs_oid_alg_list[i + 1])) {
+                fprintf(stderr, "error registering %s with no hash\n",
+                        oqs_oid_alg_list[i + 1]);
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
+
+            if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
+                OQS_PROV_PRINTF3(
+                    "OQS PROV: successfully registered %s with NID %d\n",
+                    oqs_oid_alg_list[i + 1],
+                    OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
+            } else {
+                fprintf(stderr,
+                        "OQS PROV: Impossible error: NID unregistered "
+                        "for %s.\n",
+                        oqs_oid_alg_list[i + 1]);
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
         }
     }
 

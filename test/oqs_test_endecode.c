@@ -175,6 +175,11 @@ static int test_oqs_encdec(const char *alg_name) {
         if (pkey == NULL)
             goto end;
 
+        if (!OBJ_sn2nid(alg_name)) {
+            printf("No OID registered for %s", alg_name);
+            ok = 1;
+            goto end;
+        }
         if (!encode_EVP_PKEY_prov(pkey, test_params_list[i].format,
                                   test_params_list[i].structure,
                                   test_params_list[i].pass,

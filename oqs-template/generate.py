@@ -93,9 +93,11 @@ def nist_to_bits(nistlevel):
       return None
 
 def get_tmp_kem_oid():
-   global kemoidcnt
-   kemoidcnt = kemoidcnt+1
-   return "1.3.9999.99."+str(kemoidcnt)
+   # doesn't work for runs on different files:
+   # global kemoidcnt
+   # kemoidcnt = kemoidcnt+1
+   # return "1.3.9999.99."+str(kemoidcnt)
+   return "NULL"
 
 def complete_config(config):
    for kem in config['kems']:

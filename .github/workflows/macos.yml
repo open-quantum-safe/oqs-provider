@@ -59,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-openssl32
       - name: build liboqs
         run: |
-           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs ${{ matrix.params.oqsconfig }} -S . -B _build
+           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs -DOQS_LIBJADE_BUILD=ON ${{ matrix.params.oqsconfig }} -S . -B _build
            cmake --build _build
            cmake --install _build
         working-directory: liboqs

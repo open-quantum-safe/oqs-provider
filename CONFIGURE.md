@@ -186,6 +186,18 @@ facilitated by setting the `liboqs` build option `-DOQS_ALGS_ENABLED=STD` when b
 `liboqs`. The list of algorithms supported by `oqs-provider` is defined by
 the contents of the file `generate.yml` documented in the [pre-build configuration](#pre-build-configuration).
 
+### OQS_LIBJADE_BUILD
+
+This environment variable lets you specify the build option `-DOQS_LIBJADE_BUILD` for building liboqs when using the `fullbuild.sh` script. If this environment variable is not set `fullbuild.sh` defaults to building liboqs with `-DOQS_LIBJADE_BUILD=ON`.
+
+When building liboqs with `-DOQS_LIBJADE_BUILD=ON`, default implementations of post-quantum algorithms are replaced with formally verified implementations sourced from libjade[https://github.com/formosa-crypto/libjade] (if liboqs provied such an implementation.) Please refer to [liboqs documentation](https://github.com/open-quantum-safe/liboqs/blob/main/CONFIGURE.md#oqs_libjade_build) to see which algorithms have formally verified implementations and learn more about the `-DOQS_LIBJADE_BUILD` build option.
+
+For example, in order to build liboqs with `-DOQS_LIBJADE_BUILD=OFF`, you might run:
+
+```
+$ env OQS_LIBJADE_BUILD="OFF" bash scripts/fullbuild.sh
+```
+
 ## Runtime options
 
 The `openssl` [property selection mechanism](https://www.openssl.org/docs/manmaster/man7/property.html)

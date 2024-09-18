@@ -534,6 +534,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, cRED "  No signature algorithms found" cNORM "\n");
         ERR_print_errors_fp(stderr);
         ++errcnt;
+        goto next_alg;
     }
 
     for (; algs->algorithm_names != NULL; ++algs) {
@@ -550,6 +551,7 @@ int main(int argc, char **argv) {
         }
     }
 
+next_alg:
     algs = OSSL_PROVIDER_query_operation(oqs_provider, OSSL_OP_KEM,
                                          &query_nocache);
     if (!algs) {

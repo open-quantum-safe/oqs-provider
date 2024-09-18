@@ -103,29 +103,19 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
                                      size_t *outlen, unsigned char *secret,
                                      size_t *secretlen, int keyslot) {
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
-    const OQS_KEM *kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
+    const OQS_KEM *kem_ctx = NULL;
 
     OQS_KEM_PRINTF("OQS KEM provider called: encaps\n");
     if (pkemctx->kem == NULL) {
         OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
+
+    kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
     if (pkemctx->kem->comp_pubkey == NULL ||
         pkemctx->kem->comp_pubkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: public key is NULL\n");
         return -1;
-    }
-    if (out == NULL || secret == NULL) {
-        if (outlen != NULL) {
-            *outlen = kem_ctx->length_ciphertext;
-        }
-        if (secretlen != NULL) {
-            *secretlen = kem_ctx->length_shared_secret;
-        }
-        OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n",
-                        kem_ctx->length_ciphertext,
-                        kem_ctx->length_shared_secret);
-        return 1;
     }
     if (outlen == NULL) {
         OQS_KEM_PRINTF("OQS Warning: outlen is NULL\n");
@@ -135,6 +125,15 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
         OQS_KEM_PRINTF("OQS Warning: secretlen is NULL\n");
         return -1;
     }
+    if (out == NULL || secret == NULL) {
+        *outlen = kem_ctx->length_ciphertext;
+        *secretlen = kem_ctx->length_shared_secret;
+        OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n",
+                        kem_ctx->length_ciphertext,
+                        kem_ctx->length_shared_secret);
+        return 1;
+    }
+
     if (*outlen < kem_ctx->length_ciphertext) {
         OQS_KEM_PRINTF("OQS Warning: out buffer too small\n");
         return -1;
@@ -154,13 +153,14 @@ static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
                                      size_t *outlen, const unsigned char *in,
                                      size_t inlen, int keyslot) {
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
-    const OQS_KEM *kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
+    const OQS_KEM *kem_ctx = NULL;
 
     OQS_KEM_PRINTF("OQS KEM provider called: decaps\n");
     if (pkemctx->kem == NULL) {
         OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
+    kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
     if (pkemctx->kem->comp_privkey == NULL ||
         pkemctx->kem->comp_privkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");

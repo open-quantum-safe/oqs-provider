@@ -44,7 +44,7 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | mlkem768 | 0x0768 | Yes | OQS_CODEPOINT_MLKEM768 |
 | p384_mlkem768 | 0x2F4C | Yes | OQS_CODEPOINT_P384_MLKEM768 |
 | x448_mlkem768 | 0x2FB7 | Yes | OQS_CODEPOINT_X448_MLKEM768 |
-| x25519_mlkem768 | 0x2FB8 | Yes | OQS_CODEPOINT_X25519_MLKEM768 |
+| x25519_mlkem768 | 0x11ec | Yes | OQS_CODEPOINT_X25519_MLKEM768 |
 | p256_mlkem768 | 4587 | Yes | OQS_CODEPOINT_P256_MLKEM768 |
 | mlkem1024 | 0x1024 | Yes | OQS_CODEPOINT_MLKEM1024 |
 | p521_mlkem1024 | 0x2F4D | Yes | OQS_CODEPOINT_P521_MLKEM1024 |

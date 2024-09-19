@@ -78,7 +78,7 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
 
     {0x2F4C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2FB7, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB8, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x11ec, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {4587, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x1024, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 

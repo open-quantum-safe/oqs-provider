@@ -182,9 +182,8 @@ kems:
         - hybrid_group: "x448"
 # code point not standardized: Why? XXX
           nid: '0x2FB7'
-# To change when hybrid order change implemented, see https://github.com/open-quantum-safe/oqs-provider/issues/503
         - hybrid_group: "x25519"
-          nid: '0x2FB8'
+          nid: '0x11ec'
         - hybrid_group: "p256"
 # https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-01.html#name-iana-considerations
           nid: '4587'

@@ -157,6 +157,9 @@ struct oqsx_key_st {
     const OQSX_EVP_INFO *evp_info;
     size_t numkeys;
 
+    /* Indicates if the share of a hybrid scheme should be reversed */
+    int reverse_share;
+
     /* key lengths including size fields for classic key length information:
      * (numkeys-1)*SIZE_OF_UINT32
      */
@@ -214,7 +217,7 @@ int oqs_set_nid(char *tlsname, int nid);
  * separately */
 OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
                        int is_kem, const char *propq, int bit_security,
-                       int alg_idx);
+                       int alg_idx, int reverse_share);
 
 /* allocate key material; component pointers need to be set separately */
 int oqsx_key_allocate_keymaterial(OQSX_KEY *key, int include_private);

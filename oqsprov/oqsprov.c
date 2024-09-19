@@ -1223,11 +1223,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
 end_init:
     if (!rc) {
-        if (ossl_versionp)
+        if (ossl_versionp) {
             OQS_PROV_PRINTF2(
                 "oqsprovider init failed for OpenSSL core version %s\n",
                 ossl_versionp);
-        else
+        } else
             OQS_PROV_PRINTF("oqsprovider init failed for OpenSSL\n");
         if (libctx)
             OSSL_LIB_CTX_free(libctx);

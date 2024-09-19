@@ -148,6 +148,7 @@ kems:
 # KEM prefix 2.16.840.1.101.3.4.4.
   -
     family: 'ML-KEM'
+    fips_standard: 1
     name_group: 'mlkem512'
 # code point not standardized: Why? XXX
     nid: '0x024A'
@@ -167,6 +168,7 @@ kems:
           nid: '0x2FB6'
   -
     family: 'ML-KEM'
+    fips_standard: 1
     name_group: 'mlkem768'
 # https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
     nid: '0x0768'
@@ -188,6 +190,7 @@ kems:
           nid: '4587'
   -
     family: 'ML-KEM'
+    fips_standard: 1
     name_group: 'mlkem1024'
 # https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
     nid: '0x1024'

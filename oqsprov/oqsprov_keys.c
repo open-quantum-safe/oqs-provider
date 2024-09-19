@@ -428,7 +428,6 @@ static int oqsx_key_set_composites(OQSX_KEY *key, int classic_lengths_fixed) {
                 key->comp_pubkey[0] = NULL;
                 key->comp_pubkey[1] = NULL;
             }
-
         }
     }
 err:

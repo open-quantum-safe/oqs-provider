@@ -79,7 +79,7 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {0x2F4C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2FB7, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x11ec, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {4587, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x11eb, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x1024, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F4D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
@@ -210,7 +210,8 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY(p384_mlkem768, p384_mlkem768, p384_mlkem768, 30),
     OQS_GROUP_ENTRY(x448_mlkem768, x448_mlkem768, x448_mlkem768, 31),
     OQS_GROUP_ENTRY(X25519MLKEM768, X25519MLKEM768, X25519MLKEM768, 32),
-    OQS_GROUP_ENTRY(p256_mlkem768, p256_mlkem768, p256_mlkem768, 33),
+    OQS_GROUP_ENTRY(SecP256r1MLKEM768, SecP256r1MLKEM768, SecP256r1MLKEM768,
+                    33),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
     OQS_GROUP_ENTRY(mlkem1024, mlkem1024, mlkem1024, 34),
@@ -390,9 +391,9 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_X25519MLKEM768"))
         oqs_group_list[32].group_id =
             atoi(getenv("OQS_CODEPOINT_X25519MLKEM768"));
-    if (getenv("OQS_CODEPOINT_P256_MLKEM768"))
+    if (getenv("OQS_CODEPOINT_SECP256R1MLKEM768"))
         oqs_group_list[33].group_id =
-            atoi(getenv("OQS_CODEPOINT_P256_MLKEM768"));
+            atoi(getenv("OQS_CODEPOINT_SECP256R1MLKEM768"));
     if (getenv("OQS_CODEPOINT_MLKEM1024"))
         oqs_group_list[34].group_id = atoi(getenv("OQS_CODEPOINT_MLKEM1024"));
     if (getenv("OQS_CODEPOINT_P521_MLKEM1024"))

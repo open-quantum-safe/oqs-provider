@@ -126,7 +126,7 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "1.3.9999.99.10",
     "X25519MLKEM768",
     "1.3.9999.99.11",
-    "p256_mlkem768",
+    "SecP256r1MLKEM768",
     "2.16.840.1.101.3.4.4.3",
     "mlkem1024",
     "1.3.9999.99.32",
@@ -367,7 +367,7 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[62] = envval;
         if ((envval = getenv("OQS_OID_X25519MLKEM768")))
             oqs_oid_alg_list[64] = envval;
-        if ((envval = getenv("OQS_OID_P256_MLKEM768")))
+        if ((envval = getenv("OQS_OID_SECP256R1MLKEM768")))
             oqs_oid_alg_list[66] = envval;
         if ((envval = getenv("OQS_OID_MLKEM1024")))
             oqs_oid_alg_list[68] = envval;
@@ -726,7 +726,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMHYBALG(p384_mlkem768, 192)
     KEMHYBALG(x448_mlkem768, 192)
     KEMHYBALG(X25519MLKEM768, 128)
-    KEMHYBALG(p256_mlkem768, 128)
+    KEMHYBALG(SecP256r1MLKEM768, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
     KEMBASEALG(mlkem1024, 256)
@@ -765,8 +765,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     {NULL, NULL, NULL}};
 
-static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
-    {
+static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
 // clang-format off
 
@@ -928,7 +927,7 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
     KEMKMHYBALG(p384_mlkem768, 192, ecp)
     KEMKMHYBALG(x448_mlkem768, 192, ecx)
     KEMKMHYBALG(X25519MLKEM768, 128, ecx)
-    KEMKMHYBALG(p256_mlkem768, 128, ecp)
+    KEMKMHYBALG(SecP256r1MLKEM768, 128, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
     KEMKMALG(mlkem1024, 256)
@@ -970,9 +969,9 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
 
     KEMKMHYBALG(p521_hqc256, 256, ecp)
 #endif
-        // clang-format on
-        ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
-        {NULL, NULL, NULL}};
+    // clang-format on
+    ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+    {NULL, NULL, NULL}};
 
 static const OSSL_ALGORITHM oqsprovider_encoder[] = {
 #define ENCODER_PROVIDER "oqsprovider"

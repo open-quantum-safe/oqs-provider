@@ -162,9 +162,10 @@ DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("X25519MLKEM768", der, PrivateKeyInfo, X25519MLKEM768),
     DECODER_w_structure("X25519MLKEM768", der, SubjectPublicKeyInfo,
                         X25519MLKEM768),
-    DECODER_w_structure("p256_mlkem768", der, PrivateKeyInfo, p256_mlkem768),
-    DECODER_w_structure("p256_mlkem768", der, SubjectPublicKeyInfo,
-                        p256_mlkem768),
+    DECODER_w_structure("SecP256r1MLKEM768", der, PrivateKeyInfo,
+                        SecP256r1MLKEM768),
+    DECODER_w_structure("SecP256r1MLKEM768", der, SubjectPublicKeyInfo,
+                        SecP256r1MLKEM768),
 #    endif
 #    ifdef OQS_ENABLE_KEM_ml_kem_1024
     DECODER_w_structure("mlkem1024", der, PrivateKeyInfo, mlkem1024),

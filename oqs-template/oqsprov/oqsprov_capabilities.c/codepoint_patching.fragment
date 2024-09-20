@@ -4,7 +4,7 @@
    if (getenv("OQS_CODEPOINT_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CODEPOINT_{{ kem['name_group']|upper }}"));
 {%- for hybrid in kem['hybrids'] %}
    {%- set cnt.val = cnt.val + 1 %}
-   if (getenv("OQS_CODEPOINT_{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CODEPOINT_{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}"));
+   if (getenv("OQS_CODEPOINT_{% if 'standard_name' in hybrid %}{{ hybrid['standard_name']|upper }}{% else %}{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}{% endif %}")) oqs_group_list[{{ cnt.val }}].group_id = atoi(getenv("OQS_CODEPOINT_{% if 'standard_name' in hybrid %}{{ hybrid['standard_name']|upper }}{% else %}{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}{% endif %}"));
 {%- endfor %}
 {%- endfor %}
 {% set cnt = namespace(val=-1) %}

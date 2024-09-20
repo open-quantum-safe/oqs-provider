@@ -31,7 +31,7 @@ const char* oqs_oid_alg_list[OQS_OID_CNT] =
 {% for kem in config['kems'] %}
 "{{ kem['oid'] }}", "{{ kem['name_group'] }}",
 {%- for hybrid in kem['hybrids'] %}
-"{{hybrid['hybrid_oid']}}", "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}",
+"{{hybrid['hybrid_oid']}}", "{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}",
 {%- endfor -%}
 {%- endfor %}
 

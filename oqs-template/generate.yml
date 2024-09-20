@@ -184,6 +184,7 @@ kems:
           nid: '0x2FB7'
         - hybrid_group: "x25519"
           nid: '0x11ec'
+          standard_name: "X25519MLKEM768"
         - hybrid_group: "p256"
 # https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-01.html#name-iana-considerations
           nid: '4587'

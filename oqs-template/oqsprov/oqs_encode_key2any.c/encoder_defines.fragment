@@ -3,9 +3,9 @@
 # define {{ kem['name_group'] }}_input_type    "{{ kem['name_group'] }}"
 # define {{ kem['name_group'] }}_pem_type      "{{ kem['name_group'] }}"
 {% for hybrid in kem['hybrids'] %}
-# define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_evp_type     0
-# define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_input_type    "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"
-# define {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_pem_type      "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"
+# define {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_evp_type     0
+# define {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_input_type    {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}
+# define {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_pem_type      {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}
 {%- endfor %}
 {%- endfor %}
 

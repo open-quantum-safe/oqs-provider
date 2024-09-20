@@ -313,6 +313,8 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
     int ret = 1;
     uint32_t classic_pubkey_len = 0;
     uint32_t classic_privkey_len = 0;
+    char *privkey = (char *)key->privkey;
+    char *pubkey = (char *)key->pubkey;
 
     // The only special case with reversed keys (so far)
     // is: x25519_mlkem*
@@ -321,10 +323,10 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
                         key->reverse_share;
 
     if (set_privkey_offsets) {
-        key->comp_privkey[0] = key->privkey + SIZE_OF_UINT32;
+        key->comp_privkey[0] = privkey + SIZE_OF_UINT32;
 
         if (!classic_lengths_fixed) {
-            DECODE_UINT32(classic_privkey_len, key->privkey);
+            DECODE_UINT32(classic_privkey_len, privkey);
             if (classic_privkey_len > key->evp_info->length_private_key) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                 ret = 0;
@@ -338,22 +340,22 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
             // structure is:
             // UINT32 (encoding classic key size) | PQ_KEY | CLASSIC_KEY
             key->comp_privkey[1] =
-                key->privkey +
+                privkey +
                 key->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key +
                 SIZE_OF_UINT32;
         } else {
             // structure is:
             // UINT32 (encoding classic key size) | CLASSIC_KEY | PQ_KEY
             key->comp_privkey[1] =
-                key->privkey + classic_privkey_len + SIZE_OF_UINT32;
+                privkey + classic_privkey_len + SIZE_OF_UINT32;
         }
     }
 
     if (set_pubkey_offsets) {
-        key->comp_pubkey[0] = key->pubkey + SIZE_OF_UINT32;
+        key->comp_pubkey[0] = pubkey + SIZE_OF_UINT32;
 
         if (!classic_lengths_fixed) {
-            DECODE_UINT32(classic_pubkey_len, key->pubkey);
+            DECODE_UINT32(classic_pubkey_len, pubkey);
             if (classic_pubkey_len > key->evp_info->length_public_key) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                 ret = 0;
@@ -367,14 +369,13 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
             // structure is:
             // UINT32 (encoding classic key size) | PQ_KEY | CLASSIC_KEY
             key->comp_pubkey[1] =
-                key->pubkey +
+                pubkey +
                 key->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key +
                 SIZE_OF_UINT32;
         } else {
             // structure is:
             // UINT32 (encoding classic key size) | CLASSIC_KEY | PQ_KEY
-            key->comp_pubkey[1] =
-                key->pubkey + classic_pubkey_len + SIZE_OF_UINT32;
+            key->comp_pubkey[1] = pubkey + classic_pubkey_len + SIZE_OF_UINT32;
         }
     }
 

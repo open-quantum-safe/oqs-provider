@@ -534,8 +534,10 @@ static const OQSX_EVP_INFO nids_ecp[] = {
 
 // These two array need to stay synced:
 // note only leading 4 chars of alg name are checked
-static const char *OQSX_ECX_NAMES[] = {"x25519", "x448", 0};
+static const char *OQSX_ECX_NAMES[] = {"x25519", "x448", "X25519", "X448", 0};
 static const OQSX_EVP_INFO nids_ecx[] = {
+    {EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
+    {EVP_PKEY_X448, 0, 1, 56, 56, 56, 0},   // 192 bit
     {EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
     {EVP_PKEY_X448, 0, 1, 56, 56, 56, 0},   // 192 bit
     {0, 0, 0, 0, 0, 0, 0}                   // 256 bit

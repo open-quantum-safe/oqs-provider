@@ -183,11 +183,13 @@ kems:
 # code point not standardized: Why? XXX
           nid: '0x2FB7'
         - hybrid_group: "x25519"
+# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-x25519mlkem768
           nid: '0x11ec'
           standard_name: "X25519MLKEM768"
         - hybrid_group: "p256"
-# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-01.html#name-iana-considerations
-          nid: '4587'
+# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-secp256r1mlkem768
+          nid: '0x11eb'
+          standard_name: "SecP256r1MLKEM768"
   -
     family: 'ML-KEM'
     fips_standard: 1

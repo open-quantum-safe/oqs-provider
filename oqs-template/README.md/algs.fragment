@@ -1,7 +1,7 @@
 
 ### KEM algorithms
 {% for family, kems in config['kems'] | groupby('family') %}
-- **{{ family }}**: {% for kem in kems -%} `{{ kem['name_group'] }}` {%- for hybrid in kem['hybrids'] -%}, `{{ hybrid['hybrid_group']}}_{{ kem['name_group'] }}`{%- endfor -%}{%- if not loop.last %}, {% endif -%}{%- if loop.last and family == 'HQC' -%}†{%- endif -%}{%- endfor -%}
+- **{{ family }}**: {% for kem in kems -%} `{{ kem['name_group'] }}` {%- for hybrid in kem['hybrids'] -%}, `{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{hybrid['hybrid_group']}}_{{kem['name_group']}}{% endif %}`{%- endfor -%}{%- if not loop.last %}, {% endif -%}{%- if loop.last and family == 'HQC' -%}†{%- endif -%}{%- endfor -%}
 {%- endfor %}
 
 ### Signature algorithms

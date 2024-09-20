@@ -102,7 +102,7 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_KEM, 192},
     {0, "p384_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192},
     {0, "x448_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192},
-    {0, "x25519_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "X25519MLKEM768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192},
     {0, "p256_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192},
     {0, "mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_KEM, 256},
     {0, "p521_mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM, 256},

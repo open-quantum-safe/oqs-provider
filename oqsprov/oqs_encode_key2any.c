@@ -995,9 +995,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define x448_mlkem768_evp_type 0
 #define x448_mlkem768_input_type "x448_mlkem768"
 #define x448_mlkem768_pem_type "x448_mlkem768"
-#define x25519_mlkem768_evp_type 0
-#define x25519_mlkem768_input_type "x25519_mlkem768"
-#define x25519_mlkem768_pem_type "x25519_mlkem768"
+#define X25519MLKEM768_evp_type 0
+#define X25519MLKEM768_input_type "X25519MLKEM768"
+#define X25519MLKEM768_pem_type "X25519MLKEM768"
 #define p256_mlkem768_evp_type 0
 #define p256_mlkem768_input_type "p256_mlkem768"
 #define p256_mlkem768_pem_type "p256_mlkem768"
@@ -2116,13 +2116,13 @@ MAKE_ENCODER(_ecx, x448_mlkem768, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecx, x448_mlkem768, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecx, x448_mlkem768, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecx, x448_mlkem768);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_ecx, x25519_mlkem768);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecx, X25519MLKEM768);
 MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, PrivateKeyInfo, der);

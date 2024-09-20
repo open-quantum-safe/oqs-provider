@@ -57,7 +57,7 @@ const char *kHybridKEMAlgorithms[] = {
     "p384_kyber768",        "x448_kyber768",      "x25519_kyber768",
     "p256_kyber768",        "p521_kyber1024",     "p256_mlkem512",
     "x25519_mlkem512",      "p384_mlkem768",      "x448_mlkem768",
-    "x25519_mlkem768",      "p256_mlkem768",      "p521_mlkem1024",
+    "X25519MLKEM768",       "p256_mlkem768",      "p521_mlkem1024",
     "p384_mlkem1024",       "p256_bikel1",        "x25519_bikel1",
     "p384_bikel3",          "x448_bikel3",        "p521_bikel5",
     "p256_hqc128",          "x25519_hqc128",      "p384_hqc192",

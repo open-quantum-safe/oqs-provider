@@ -622,8 +622,8 @@ MAKE_DECODER(_ecp, "p384_mlkem768", p384_mlkem768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p384_mlkem768", p384_mlkem768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "x448_mlkem768", x448_mlkem768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x448_mlkem768", x448_mlkem768, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(_ecx, "x25519_mlkem768", x25519_mlkem768, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_mlkem768", x25519_mlkem768, oqsx,
+MAKE_DECODER(_ecx, "X25519MLKEM768", X25519MLKEM768, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, "X25519MLKEM768", X25519MLKEM768, oqsx,
              SubjectPublicKeyInfo);
 MAKE_DECODER(_ecp, "p256_mlkem768", p256_mlkem768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p256_mlkem768", p256_mlkem768, oqsx, SubjectPublicKeyInfo);

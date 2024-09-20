@@ -209,7 +209,7 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 
     OQS_GROUP_ENTRY(p384_mlkem768, p384_mlkem768, p384_mlkem768, 30),
     OQS_GROUP_ENTRY(x448_mlkem768, x448_mlkem768, x448_mlkem768, 31),
-    OQS_GROUP_ENTRY(x25519_mlkem768, x25519_mlkem768, x25519_mlkem768, 32),
+    OQS_GROUP_ENTRY(X25519MLKEM768, X25519MLKEM768, X25519MLKEM768, 32),
     OQS_GROUP_ENTRY(p256_mlkem768, p256_mlkem768, p256_mlkem768, 33),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
@@ -387,9 +387,9 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_X448_MLKEM768"))
         oqs_group_list[31].group_id =
             atoi(getenv("OQS_CODEPOINT_X448_MLKEM768"));
-    if (getenv("OQS_CODEPOINT_X25519_MLKEM768"))
+    if (getenv("OQS_CODEPOINT_X25519MLKEM768"))
         oqs_group_list[32].group_id =
-            atoi(getenv("OQS_CODEPOINT_X25519_MLKEM768"));
+            atoi(getenv("OQS_CODEPOINT_X25519MLKEM768"));
     if (getenv("OQS_CODEPOINT_P256_MLKEM768"))
         oqs_group_list[33].group_id =
             atoi(getenv("OQS_CODEPOINT_P256_MLKEM768"));

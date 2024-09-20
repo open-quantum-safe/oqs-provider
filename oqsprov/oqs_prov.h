@@ -807,22 +807,22 @@ extern const OSSL_DISPATCH
 extern const OSSL_DISPATCH
     oqs_SubjectPublicKeyInfo_der_to_x448_mlkem768_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_x25519_mlkem768_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_X25519MLKEM768_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_x25519_mlkem768_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_X25519MLKEM768_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_x25519_mlkem768_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_X25519MLKEM768_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_x25519_mlkem768_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_X25519MLKEM768_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_x25519_mlkem768_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_X25519MLKEM768_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_x25519_mlkem768_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_x25519_mlkem768_to_text_encoder_functions[];
+    oqs_X25519MLKEM768_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_X25519MLKEM768_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_x25519_mlkem768_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_X25519MLKEM768_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_x25519_mlkem768_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_X25519MLKEM768_decoder_functions[];
 extern const OSSL_DISPATCH
     oqs_p256_mlkem768_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
@@ -2257,7 +2257,7 @@ extern const OSSL_DISPATCH oqs_mlkem768_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecp_p384_mlkem768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_x448_mlkem768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ecx_x25519_mlkem768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_X25519MLKEM768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecp_p256_mlkem768_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_mlkem1024_keymgmt_functions[];
 

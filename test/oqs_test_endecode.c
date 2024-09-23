@@ -176,7 +176,7 @@ static int test_oqs_encdec(const char *alg_name) {
             goto end;
 
         if (!OBJ_sn2nid(alg_name)) {
-            printf("No OID registered for %s", alg_name);
+            printf("No OID registered for %s\n", alg_name);
             ok = 1;
             goto end;
         }

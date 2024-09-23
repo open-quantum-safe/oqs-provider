@@ -559,7 +559,6 @@ int main(int argc, char **argv) {
     }
 
     for (; algs->algorithm_names != NULL; ++algs) {
-        // if (strcmp(algs->algorithm_names, "x25519_mlkem768")) continue;
         if (!is_signature_algorithm_hybrid(algs->algorithm_names)) {
             continue;
         }
@@ -583,7 +582,6 @@ next_alg:
         goto unload_oqs_provider;
     }
     for (; algs->algorithm_names != NULL; ++algs) {
-        // if (strcmp(algs->algorithm_names, "x25519_mlkem768")) continue;
         if (!is_kem_algorithm_hybrid(algs->algorithm_names)) {
             continue;
         }

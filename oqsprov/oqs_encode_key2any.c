@@ -636,8 +636,13 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n",
                         buflen);
         memcpy(buf, oqsxkey->privkey, privkeylen);
-        memcpy(buf + privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys - 1],
-               oqsx_key_get_oqs_public_key_len(oqsxkey));
+        if (oqsxkey->reverse_share) {
+            memcpy(buf + privkeylen, oqsxkey->comp_pubkey[0],
+                   oqsx_key_get_oqs_public_key_len(oqsxkey));
+        } else {
+            memcpy(buf + privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys - 1],
+                   oqsx_key_get_oqs_public_key_len(oqsxkey));
+        }
 #endif
 
         oct.data = buf;

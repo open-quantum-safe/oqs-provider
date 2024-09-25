@@ -67,8 +67,10 @@ static void oqs_kem_freectx(void *vpkemctx) {
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
     OQS_KEM_PRINTF("OQS KEM provider called: freectx\n");
-    oqsx_key_free(pkemctx->kem);
-    OPENSSL_free(pkemctx);
+    if (pkemctx != NULL) {
+        oqsx_key_free(pkemctx->kem);
+        OPENSSL_free(pkemctx);
+    }
 }
 
 static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem,
@@ -76,10 +78,12 @@ static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem,
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
     OQS_KEM_PRINTF3("OQS KEM provider called: _init : New: %p; old: %p \n",
-                    vkem, pkemctx->kem);
+                    vkem, pkemctx ? pkemctx->kem : NULL);
     if (pkemctx == NULL || vkem == NULL || !oqsx_key_up_ref(vkem))
         return 0;
-    oqsx_key_free(pkemctx->kem);
+    if (pkemctx->kem != NULL) {
+        oqsx_key_free(pkemctx->kem);
+    }
     pkemctx->kem = vkem;
 
     return 1;
@@ -106,13 +110,13 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
     const OQS_KEM *kem_ctx = NULL;
 
     OQS_KEM_PRINTF("OQS KEM provider called: encaps\n");
-    if (pkemctx->kem == NULL) {
+    if (pkemctx == NULL || pkemctx->kem == NULL) {
         OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
 
     kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
-    if (pkemctx->kem->comp_pubkey == NULL ||
+    if (kem_ctx == NULL || pkemctx->kem->comp_pubkey == NULL ||
         pkemctx->kem->comp_pubkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: public key is NULL\n");
         return -1;
@@ -156,12 +160,12 @@ static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
     const OQS_KEM *kem_ctx = NULL;
 
     OQS_KEM_PRINTF("OQS KEM provider called: decaps\n");
-    if (pkemctx->kem == NULL) {
+    if (pkemctx == NULL || pkemctx->kem == NULL) {
         OQS_KEM_PRINTF("OQS Warning: OQS_KEM not initialized\n");
         return -1;
     }
     kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
-    if (pkemctx->kem->comp_privkey == NULL ||
+    if (kem_ctx == NULL || pkemctx->kem->comp_privkey == NULL ||
         pkemctx->kem->comp_privkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");
         return -1;

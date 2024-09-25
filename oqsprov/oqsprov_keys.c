@@ -1690,8 +1690,13 @@ err:
             OQS_SIG_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.sig);
         if (ret->oqsx_provider_ctx.oqsx_qs_ctx.kem)
             OQS_KEM_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.kem);
-        if (ret->oqsx_provider_ctx.oqsx_evp_ctx)
+        if (ret->oqsx_provider_ctx.oqsx_evp_ctx) {
+            if (ret->oqsx_provider_ctx.oqsx_evp_ctx->ctx)
+                EVP_PKEY_CTX_free(ret->oqsx_provider_ctx.oqsx_evp_ctx->ctx);
+            if (ret->oqsx_provider_ctx.oqsx_evp_ctx->keyParam)
+                EVP_PKEY_free(ret->oqsx_provider_ctx.oqsx_evp_ctx->keyParam);
             OPENSSL_free(ret->oqsx_provider_ctx.oqsx_evp_ctx);
+        }
 #ifdef OQS_PROVIDER_NOATOMIC
         if (ret->lock)
             CRYPTO_THREAD_lock_free(ret->lock);

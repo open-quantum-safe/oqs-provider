@@ -27,12 +27,16 @@ int oqsx_param_build_set_octet_string(OSSL_PARAM_BLD *bld, OSSL_PARAM *p,
                                       const char *key,
                                       const unsigned char *data,
                                       size_t data_len) {
-    if (bld != NULL)
+    if (bld != NULL && key != NULL && data != NULL) {
         return OSSL_PARAM_BLD_push_octet_string(bld, key, data, data_len);
+    }
 
-    p = OSSL_PARAM_locate(p, key);
-    if (p != NULL)
-        return OSSL_PARAM_set_octet_string(p, data, data_len);
+    if (p != NULL && key != NULL) {
+        p = OSSL_PARAM_locate(p, key);
+        if (p != NULL && data != NULL) {
+            return OSSL_PARAM_set_octet_string(p, data, data_len);
+        }
+    }
     return 1;
 }
 
@@ -93,17 +97,16 @@ static int oqsx_has(const void *keydata, int selection) {
         ok = 1;
 
         if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0)
-            ok = ok && key->pubkey != NULL;
+            ok = ok && (key->pubkey != NULL);
 
         if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0)
-            ok = ok && key->privkey != NULL;
+            ok = ok && (key->privkey != NULL);
     }
     if (!ok)
         OQS_KM_PRINTF2("OQSKM: has returning FALSE on selection %2x\n",
                        selection);
     return ok;
 }
-
 /*
  * Key matching has a problem in OQS world: OpenSSL assumes all keys to (also)
  * contain public key material
@@ -139,13 +142,6 @@ static int oqsx_match(const void *keydata1, const void *keydata2,
     }
 
 #ifdef NOPUBKEY_IN_PRIVKEY
-    /* Now this is a "leap of faith" logic: If a public-only PKEY and a
-     * private-only PKEY are tested for equality we cannot do anything other
-     * than saying OK (as per
-     * https://github.com/PQClean/PQClean/issues/415#issuecomment-910377682) if
-     * at least the key type name matches. Potential actual key mismatches will
-     * only be discovered later.
-     */
     if (((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) &&
         ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0)) {
         if ((key1->privkey == NULL && key2->pubkey == NULL) ||
@@ -167,7 +163,7 @@ static int oqsx_match(const void *keydata1, const void *keydata2,
             ok = 0;
         } else {
             ok = ((key1->privkey == NULL && key2->privkey == NULL) ||
-                  ((key1->privkey != NULL) &&
+                  ((key1->privkey != NULL && key2->privkey != NULL) &&
                    CRYPTO_memcmp(key1->privkey, key2->privkey,
                                  key1->privkeylen) == 0));
         }
@@ -178,15 +174,13 @@ static int oqsx_match(const void *keydata1, const void *keydata2,
             (key1->pubkey != NULL && key2->pubkey == NULL) ||
             ((key1->tls_name != NULL && key2->tls_name != NULL) &&
              strcmp(key1->tls_name, key2->tls_name))) {
-            // special case now: If domain parameter matching
-            // requested, consider private key match sufficient:
             ok = ((selection & OSSL_KEYMGMT_SELECT_DOMAIN_PARAMETERS) != 0) &&
                  (key1->privkey != NULL && key2->privkey != NULL) &&
                  (CRYPTO_memcmp(key1->privkey, key2->privkey,
                                 key1->privkeylen) == 0);
         } else {
             ok = ok && ((key1->pubkey == NULL && key2->pubkey == NULL) ||
-                        ((key1->pubkey != NULL) &&
+                        ((key1->pubkey != NULL && key2->pubkey != NULL) &&
                          CRYPTO_memcmp(key1->pubkey, key2->pubkey,
                                        key1->pubkeylen) == 0));
         }
@@ -202,7 +196,7 @@ static int oqsx_import(void *keydata, int selection,
     int ok = 0;
 
     OQS_KM_PRINTF("OQSKEYMGMT: import called \n");
-    if (key == NULL) {
+    if (key == NULL || params == NULL) {
         ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
         return ok;
     }
@@ -223,11 +217,11 @@ int oqsx_key_to_params(const OQSX_KEY *key, OSSL_PARAM_BLD *tmpl,
     if (key->pubkey != NULL) {
         OSSL_PARAM *p = NULL;
 
-        if (tmpl == NULL) {
+        if (params != NULL) {
             p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PUB_KEY);
         }
 
-        if (p != NULL || tmpl != NULL) {
+        if ((p != NULL && params != NULL) || tmpl != NULL) {
             if (key->pubkeylen == 0 || !oqsx_param_build_set_octet_string(
                                            tmpl, p, OSSL_PKEY_PARAM_PUB_KEY,
                                            key->pubkey, key->pubkeylen))
@@ -244,11 +238,11 @@ int oqsx_key_to_params(const OQSX_KEY *key, OSSL_PARAM_BLD *tmpl,
          *
          */
 
-        if (tmpl == NULL) {
+        if (params != NULL) {
             p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PRIV_KEY);
         }
 
-        if (p != NULL || tmpl != NULL) {
+        if ((p != NULL && params != NULL) || tmpl != NULL) {
             if (key->privkeylen == 0 || !oqsx_param_build_set_octet_string(
                                             tmpl, p, OSSL_PKEY_PARAM_PRIV_KEY,
                                             key->privkey, key->privkeylen))
@@ -264,17 +258,12 @@ err:
 static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
                        void *cbarg) {
     OQSX_KEY *key = keydata;
-    OSSL_PARAM_BLD *tmpl;
+    OSSL_PARAM_BLD *tmpl = NULL;
     OSSL_PARAM *params = NULL;
-    OSSL_PARAM *p;
     int ok = 1;
 
     OQS_KM_PRINTF("OQSKEYMGMT: export called\n");
 
-    /*
-     * In this implementation, only public and private keys can be exported,
-     * nothing else
-     */
     if (key == NULL || param_cb == NULL) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
         return 0;
@@ -293,15 +282,18 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
         ok = ok && oqsx_key_to_params(key, tmpl, NULL, include_private);
     }
 
-    params = OSSL_PARAM_BLD_to_param(tmpl);
-    if (params == NULL) {
-        ok = 0;
-        goto err;
+    if (ok) {
+        params = OSSL_PARAM_BLD_to_param(tmpl);
+        if (params == NULL) {
+            ok = 0;
+        }
     }
 
-    ok = ok & param_cb(params, cbarg);
+    if (ok && params != NULL) {
+        ok = param_cb(params, cbarg);
+    }
+
     OSSL_PARAM_free(params);
-err:
     OSSL_PARAM_BLD_free(tmpl);
     return ok;
 }
@@ -321,7 +313,7 @@ err:
 static const OSSL_PARAM oqsx_key_types[] = {OQS_KEY_TYPES(), OSSL_PARAM_END};
 static const OSSL_PARAM *oqs_imexport_types(int selection) {
     OQS_KM_PRINTF("OQSKEYMGMT: imexport called\n");
-    if ((selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0)
+    if (selection != 0 && (selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0)
         return oqsx_key_types;
     return NULL;
 }
@@ -331,6 +323,11 @@ static const OSSL_PARAM *oqs_imexport_types(int selection) {
 //
 // Returns 1 if hybrid, else 0.
 static int oqsx_key_is_hybrid(const OQSX_KEY *oqsxk) {
+    if (oqsxk == NULL) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
+        return 0;
+    }
+
     if ((oqsxk->keytype == KEY_TYPE_ECP_HYB_KEM ||
          oqsxk->keytype == KEY_TYPE_ECX_HYB_KEM ||
          oqsxk->keytype == KEY_TYPE_HYB_SIG) &&
@@ -356,6 +353,9 @@ static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[]) {
     uint32_t classical_privkey_len = 0;
     int pq_pubkey_len = 0;
     int pq_privkey_len = 0;
+
+    if (key == NULL || params == NULL)
+        return -1;
 
     if (oqsx_key_is_hybrid(key) != 1)
         return 0;
@@ -387,26 +387,34 @@ static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[]) {
     }
 
     if ((p = OSSL_PARAM_locate(
-             params, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY)) != NULL &&
-        !OSSL_PARAM_set_octet_string(p, classical_pubkey, classical_pubkey_len))
-        return -1;
+             params, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY)) != NULL) {
+        if (!OSSL_PARAM_set_octet_string(p, classical_pubkey,
+                                         classical_pubkey_len)) {
+            return -1;
+        }
+    }
     if ((p = OSSL_PARAM_locate(
-             params, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY)) != NULL &&
-        !OSSL_PARAM_set_octet_string(p, classical_privkey,
-                                     classical_privkey_len))
-        return -1;
+             params, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY)) != NULL) {
+        if (!OSSL_PARAM_set_octet_string(p, classical_privkey,
+                                         classical_privkey_len)) {
+            return -1;
+        }
+    }
     if ((p = OSSL_PARAM_locate(params, OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY)) !=
-            NULL &&
-        !OSSL_PARAM_set_octet_string(p, pq_pubkey, pq_pubkey_len))
-        return -1;
+        NULL) {
+        if (!OSSL_PARAM_set_octet_string(p, pq_pubkey, pq_pubkey_len)) {
+            return -1;
+        }
+    }
     if ((p = OSSL_PARAM_locate(params, OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY)) !=
-            NULL &&
-        !OSSL_PARAM_set_octet_string(p, pq_privkey, pq_privkey_len))
-        return -1;
+        NULL) {
+        if (!OSSL_PARAM_set_octet_string(p, pq_privkey, pq_privkey_len)) {
+            return -1;
+        }
+    }
 
     return 0;
 }
-
 // must handle param requests for KEM and SIG keys...
 static int oqsx_get_params(void *key, OSSL_PARAM params[]) {
     OQSX_KEY *oqsxk = key;
@@ -446,23 +454,41 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[]) {
         // shall not be passed out:
         if (oqsxk->keytype == KEY_TYPE_ECP_HYB_KEM ||
             oqsxk->keytype == KEY_TYPE_ECX_HYB_KEM) {
-            if (!OSSL_PARAM_set_octet_string(
-                    p, (char *)oqsxk->pubkey + SIZE_OF_UINT32,
-                    oqsxk->pubkeylen - SIZE_OF_UINT32))
+            if (oqsxk->pubkey != NULL && oqsxk->pubkeylen > SIZE_OF_UINT32) {
+                if (!OSSL_PARAM_set_octet_string(
+                        p, (char *)oqsxk->pubkey + SIZE_OF_UINT32,
+                        oqsxk->pubkeylen - SIZE_OF_UINT32))
+                    return 0;
+            } else {
                 return 0;
+            }
         } else {
-            if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey,
-                                             oqsxk->pubkeylen))
+            if (oqsxk->pubkey != NULL && oqsxk->pubkeylen > 0) {
+                if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey,
+                                                 oqsxk->pubkeylen))
+                    return 0;
+            } else {
                 return 0;
+            }
         }
     }
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PUB_KEY)) != NULL) {
-        if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey, oqsxk->pubkeylen))
+        if (oqsxk->pubkey != NULL && oqsxk->pubkeylen > 0) {
+            if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey,
+                                             oqsxk->pubkeylen))
+                return 0;
+        } else {
             return 0;
+        }
     }
     if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PRIV_KEY)) != NULL) {
-        if (!OSSL_PARAM_set_octet_string(p, oqsxk->privkey, oqsxk->privkeylen))
+        if (oqsxk->privkey != NULL && oqsxk->privkeylen > 0) {
+            if (!OSSL_PARAM_set_octet_string(p, oqsxk->privkey,
+                                             oqsxk->privkeylen))
+                return 0;
+        } else {
             return 0;
+        }
     }
 
     if (oqsx_get_hybrid_params(oqsxk, params))
@@ -486,16 +512,24 @@ static const OSSL_PARAM *oqs_gettable_params(void *provctx) {
 }
 
 static int set_property_query(OQSX_KEY *oqsxkey, const char *propq) {
-    OPENSSL_free(oqsxkey->propq);
-    oqsxkey->propq = NULL;
+    if (oqsxkey == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
+        return 0;
+    }
+
+    char *new_propq = NULL;
     OQS_KM_PRINTF("OQSKEYMGMT: property_query called\n");
     if (propq != NULL) {
-        oqsxkey->propq = OPENSSL_strdup(propq);
-        if (oqsxkey->propq == NULL) {
+        new_propq = OPENSSL_strdup(propq);
+        if (new_propq == NULL) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             return 0;
         }
     }
+
+    OPENSSL_free(oqsxkey->propq);
+    oqsxkey->propq = new_propq;
+
     return 1;
 }
 
@@ -504,7 +538,7 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[]) {
     const OSSL_PARAM *p;
 
     OQS_KM_PRINTF("OQSKEYMGMT: set_params called\n");
-    if (oqsxkey == NULL) {
+    if (oqsxkey == NULL || params == NULL) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
         return 0;
     }
@@ -529,8 +563,11 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[]) {
                 return 0;
             }
         }
-        OPENSSL_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
-        oqsxkey->privkey = NULL;
+        if (oqsxkey->privkey != NULL) {
+            OPENSSL_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
+            oqsxkey->privkey = NULL;
+            oqsxkey->privkeylen = 0;
+        }
     }
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PROPERTIES);
     if (p != NULL) {
@@ -565,18 +602,23 @@ static void *oqsx_gen_init(void *provctx, int selection, char *oqs_name,
     if ((gctx = OPENSSL_zalloc(sizeof(*gctx))) != NULL) {
         gctx->libctx = libctx;
         gctx->cmp_name = NULL;
-        gctx->oqs_name = OPENSSL_strdup(oqs_name);
-        gctx->tls_name = OPENSSL_strdup(tls_name);
+        gctx->oqs_name = oqs_name ? OPENSSL_strdup(oqs_name) : NULL;
+        gctx->tls_name = tls_name ? OPENSSL_strdup(tls_name) : NULL;
         gctx->primitive = primitive;
         gctx->selection = selection;
         gctx->bit_security = bit_security;
         gctx->alg_idx = alg_idx;
+
+        if ((oqs_name && !gctx->oqs_name) || (tls_name && !gctx->tls_name)) {
+            oqsx_gen_cleanup(gctx);
+            return NULL;
+        }
     }
     return gctx;
 }
 
 static void *oqsx_genkey(struct oqsx_gen_ctx *gctx) {
-    OQSX_KEY *key;
+    OQSX_KEY *key = NULL;
 
     if (gctx == NULL)
         return NULL;
@@ -592,6 +634,7 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx) {
 
     if (oqsx_key_gen(key)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
+        oqsx_key_free(key);
         return NULL;
     }
     return key;
@@ -602,11 +645,19 @@ static void *oqsx_gen(void *genctx, OSSL_CALLBACK *osslcb, void *cbarg) {
 
     OQS_KM_PRINTF("OQSKEYMGMT: gen called\n");
 
+    if (gctx == NULL) {
+        return NULL;
+    }
+
     return oqsx_genkey(gctx);
 }
 
 static void oqsx_gen_cleanup(void *genctx) {
     struct oqsx_gen_ctx *gctx = genctx;
+
+    if (gctx == NULL) {
+        return;
+    }
 
     OQS_KM_PRINTF("OQSKEYMGMT: gen_cleanup called\n");
     OPENSSL_free(gctx->oqs_name);
@@ -619,11 +670,18 @@ void *oqsx_load(const void *reference, size_t reference_sz) {
     OQSX_KEY *key = NULL;
 
     OQS_KM_PRINTF("OQSKEYMGMT: load called\n");
+
+    if (reference == NULL) {
+        return NULL;
+    }
+
     if (reference_sz == sizeof(key)) {
         /* The contents of the reference is the address to our object */
         key = *(OQSX_KEY **)reference;
-        /* We grabbed, so we detach it */
-        *(OQSX_KEY **)reference = NULL;
+        if (key != NULL) {
+            /* We grabbed, so we detach it */
+            *(OQSX_KEY **)reference = NULL;
+        }
         return key;
     }
     return NULL;
@@ -642,27 +700,30 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[]) {
     const OSSL_PARAM *p;
 
     OQS_KM_PRINTF("OQSKEYMGMT: gen_set_params called\n");
-    if (gctx == NULL)
+    if (gctx == NULL || params == NULL)
         return 0;
 
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_GROUP_NAME);
-    if (p != NULL) {
+    if (p != NULL && p->data != NULL) {
         const char *algname = (char *)p->data;
-
+        char *new_tls_name = OPENSSL_strdup(algname);
+        if (new_tls_name == NULL)
+            return 0;
         OPENSSL_free(gctx->tls_name);
-        gctx->tls_name = OPENSSL_strdup(algname);
+        gctx->tls_name = new_tls_name;
     }
+
     p = OSSL_PARAM_locate_const(params, OSSL_KDF_PARAM_PROPERTIES);
-    if (p != NULL) {
+    if (p != NULL && p->data != NULL) {
         if (p->data_type != OSSL_PARAM_UTF8_STRING)
             return 0;
-        OPENSSL_free(gctx->propq);
-        gctx->propq = OPENSSL_strdup(p->data);
-        if (gctx->propq == NULL)
+        char *new_propq = OPENSSL_strdup(p->data);
+        if (new_propq == NULL)
             return 0;
+        OPENSSL_free(gctx->propq);
+        gctx->propq = new_propq;
     }
-    // not passing in params is no error; subsequent operations may fail,
-    // though
+
     return 1;
 }
 

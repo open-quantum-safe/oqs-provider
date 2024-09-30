@@ -198,6 +198,8 @@ For example, in order to build liboqs with `-DOQS_LIBJADE_BUILD=OFF`, you might 
 $ env OQS_LIBJADE_BUILD="OFF" bash scripts/fullbuild.sh
 ```
 
+Alternatively, the string `-DOQS_LIBJADE_BUILD=` along with its value may be passed to the `fullbuild.sh` script via the [`CMAKE_PARAMS`](#cmake_params) environment variable.
+
 ## Runtime options
 
 The `openssl` [property selection mechanism](https://www.openssl.org/docs/manmaster/man7/property.html)

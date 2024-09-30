@@ -16,6 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         cmake-params: [ "", "-DOQS_KEM_ENCODERS=ON" ]
+        libjade-build: ["ON", "OFF"]
     container:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
@@ -25,7 +26,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
-        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} ./scripts/fullbuild.sh
+        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -38,9 +39,9 @@ jobs:
       fail-fast: false
       matrix:
         ossl-branch: [openssl-3.1.0, master]
-        cmake-params:
-          - -DOQS_LIBJADE_BUILD=ON -DOQS_MINIMAL_BUILD="${{ vars.LIBJADE_ALG_LIST }}"
-          - -DOQS_LIBJADE_BUILD=OFF
+        libjade-build:
+          - "ON" 
+          - "OFF"
         include:
           - name: alpine
             container: openquantumsafe/ci-alpine-amd64:latest
@@ -58,7 +59,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} CMAKE_PARAMS="${{ matrix.cmake-params }}" ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test

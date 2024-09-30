@@ -37,7 +37,7 @@ This environment variable lets you specify additional flags to pass to `cmake` e
 For example, in order to point `cmake` to a specific library, you might run:
 
 ```
-$ env CMAKE_PARAMS="-DOPENSSL_CRYPTO_LIBRARY=/opt/lib64/libcrypto.so" bash scripts/fullbuild.sh
+env CMAKE_PARAMS="-DOPENSSL_CRYPTO_LIBRARY=/opt/lib64/libcrypto.so" bash scripts/fullbuild.sh
 ```
 
 ### liboqs_DIR
@@ -195,7 +195,7 @@ When building liboqs with `-DOQS_LIBJADE_BUILD=ON`, default implementations of p
 For example, in order to build liboqs with `-DOQS_LIBJADE_BUILD=OFF`, you might run:
 
 ```
-$ env OQS_LIBJADE_BUILD="OFF" bash scripts/fullbuild.sh
+env OQS_LIBJADE_BUILD="OFF" bash scripts/fullbuild.sh
 ```
 
 Alternatively, the string `-DOQS_LIBJADE_BUILD=` along with its value may be passed to the `fullbuild.sh` script via the [`CMAKE_PARAMS`](#cmake_params) environment variable.

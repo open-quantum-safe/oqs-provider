@@ -15,6 +15,9 @@ jobs:
         os:
           - macos-13
           - macos-12
+        libjade-build:
+# build with -DOQS_LIBJADE_BUILD=ON when building for algorithms with libjade implementations
+          - "OFF"
 # eventually build for other alg sets, if CCI use is discontinued
         params:
           - oqsconfig: -DOQS_ALGS_ENABLED=STD
@@ -59,7 +62,7 @@ jobs:
           key: ${{ runner.os }}-openssl32
       - name: build liboqs
         run: |
-           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs -DOQS_LIBJADE_BUILD=ON ${{ matrix.params.oqsconfig }} -S . -B _build
+           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs -DOQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ${{ matrix.params.oqsconfig }} -S . -B _build
            cmake --build _build
            cmake --install _build
         working-directory: liboqs

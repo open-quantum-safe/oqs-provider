@@ -39,6 +39,12 @@ else
    export DOQS_ALGS_ENABLED="-DOQS_ALGS_ENABLED=$OQS_ALGS_ENABLED"
 fi
 
+if [ -z "$OQS_LIBJADE_BUILD"]; then
+   export DOQS_LIBJADE_BUILD="-DOQS_LIBJADE_BUILD=ON"
+else
+   export DOQS_LIBJADE_BUILD="-DOQS_LIBJADE_BUILD=$OQS_LIBJADE_BUILD"
+fi
+
 if [ -z "$OPENSSL_INSTALL" ]; then
  openssl version | grep "OpenSSL 3" > /dev/null 2>&1
  #if [ \($? -ne 0 \) -o \( ! -z "$OPENSSL_BRANCH" \) ]; then
@@ -109,7 +115,7 @@ if [ -z $liboqs_DIR ]; then
   #    STD: only include NIST standardized algorithms
   #    NIST_R4: only include algorithms in round 4 of the NIST competition
   #    All: include all algorithms supported by liboqs (default)
-  cd liboqs && cmake -GNinja $CMAKE_PARAMS $DOQS_ALGS_ENABLED $CMAKE_OPENSSL_LOCATION -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
+  cd liboqs && cmake -GNinja $CMAKE_PARAMS $DOQS_ALGS_ENABLED $CMAKE_OPENSSL_LOCATION $DOQS_LIBJADE_BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/../.local -S . -B _build && cd _build && ninja && ninja install && cd ../..
   if [ $? -ne 0 ]; then
       echo "liboqs build failed. Exiting."
       exit -1

@@ -9,7 +9,7 @@ key_exchanges = [
     # post-quantum key exchanges
     'frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','kyber512','kyber768','kyber1024','mlkem512','mlkem768','mlkem1024','bikel1','bikel3','bikel5','hqc128','hqc192','hqc256',
     # post-quantum + classical key exchanges
-    'p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p256_kyber512','x25519_kyber512','p384_kyber768','x448_kyber768','x25519_kyber768','p256_kyber768','p521_kyber1024','p256_mlkem512','x25519_mlkem512','p384_mlkem768','x448_mlkem768','x25519_mlkem768','p256_mlkem768','p521_mlkem1024','p384_mlkem1024','p256_bikel1','x25519_bikel1','p384_bikel3','x448_bikel3','p521_bikel5','p256_hqc128','x25519_hqc128','p384_hqc192','x448_hqc192','p521_hqc256',
+    'p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p256_kyber512','x25519_kyber512','p384_kyber768','x448_kyber768','x25519_kyber768','p256_kyber768','p521_kyber1024','p256_mlkem512','x25519_mlkem512','p384_mlkem768','x448_mlkem768','X25519MLKEM768','SecP256r1MLKEM768','p521_mlkem1024','p384_mlkem1024','p256_bikel1','x25519_bikel1','p384_bikel3','x448_bikel3','p521_bikel5','p256_hqc128','x25519_hqc128','p384_hqc192','x448_hqc192','p521_hqc256',
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_END
 ]
 signatures = [

@@ -92,7 +92,7 @@
 | ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2F4B       | secp256_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2FB6       | x25519                           |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x0768       |                                  |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x11eb       | p256                             |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x11ec       | x25519                           |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2F4C       | secp384_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2FB7       | x448                             |
-| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2FB8       | x25519                           |
-| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 4587         | p256                             |

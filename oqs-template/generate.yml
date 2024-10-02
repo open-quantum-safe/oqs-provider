@@ -148,6 +148,7 @@ kems:
 # KEM prefix 2.16.840.1.101.3.4.4.
   -
     family: 'ML-KEM'
+    fips_standard: 1
     name_group: 'mlkem512'
 # code point not standardized: Why? XXX
     nid: '0x024A'
@@ -167,6 +168,7 @@ kems:
           nid: '0x2FB6'
   -
     family: 'ML-KEM'
+    fips_standard: 1
     name_group: 'mlkem768'
 # https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
     nid: '0x0768'
@@ -180,14 +182,17 @@ kems:
         - hybrid_group: "x448"
 # code point not standardized: Why? XXX
           nid: '0x2FB7'
-# To change when hybrid order change implemented, see https://github.com/open-quantum-safe/oqs-provider/issues/503
         - hybrid_group: "x25519"
-          nid: '0x2FB8'
+# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-x25519mlkem768
+          nid: '0x11ec'
+          standard_name: "X25519MLKEM768"
         - hybrid_group: "p256"
-# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-01.html#name-iana-considerations
-          nid: '4587'
+# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-secp256r1mlkem768
+          nid: '0x11eb'
+          standard_name: "SecP256r1MLKEM768"
   -
     family: 'ML-KEM'
+    fips_standard: 1
     name_group: 'mlkem1024'
 # https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
     nid: '0x1024'

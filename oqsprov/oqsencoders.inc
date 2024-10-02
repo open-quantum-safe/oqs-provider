@@ -921,4 +921,13 @@ ENCODER_w_structure("p521_mayo5", p521_mayo5, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("p521_mayo5", p521_mayo5, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT("p521_mayo5", p521_mayo5),
 #endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
+ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, der, PrivateKeyInfo),
+ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, pem, PrivateKeyInfo),
+ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("CROSSrsdp128balanced", CROSSrsdp128balanced),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

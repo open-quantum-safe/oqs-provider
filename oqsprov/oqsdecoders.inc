@@ -275,4 +275,8 @@ DECODER_w_structure("mayo5", der, PrivateKeyInfo, mayo5),
 DECODER_w_structure("mayo5", der, SubjectPublicKeyInfo, mayo5),DECODER_w_structure("p521_mayo5", der, PrivateKeyInfo, p521_mayo5),
 DECODER_w_structure("p521_mayo5", der, SubjectPublicKeyInfo, p521_mayo5),
 #endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
+DECODER_w_structure("CROSSrsdp128balanced", der, PrivateKeyInfo, CROSSrsdp128balanced),
+DECODER_w_structure("CROSSrsdp128balanced", der, SubjectPublicKeyInfo, CROSSrsdp128balanced),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

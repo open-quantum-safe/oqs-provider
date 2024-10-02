@@ -821,4 +821,8 @@ MAKE_DECODER(, "mayo5", mayo5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mayo5", mayo5, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx,
+             SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

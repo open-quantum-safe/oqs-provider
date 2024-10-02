@@ -1239,6 +1239,18 @@ static void *p521_mayo5_gen_init(void *provctx, int selection) {
                          KEY_TYPE_HYB_SIG, 256, 55, 0);
 }
 
+static void *CROSSrsdp128balanced_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_cross_rsdp_128_balanced,
+                        "CROSSrsdp128balanced", KEY_TYPE_SIG, NULL, 128, 56, 0);
+}
+
+static void *CROSSrsdp128balanced_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection,
+                         OQS_SIG_alg_cross_rsdp_128_balanced,
+                         "CROSSrsdp128balanced", 0, 128, 56, 0);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                        \
@@ -1439,6 +1451,7 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(mayo3)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p384_mayo3)
 MAKE_SIG_KEYMGMT_FUNCTIONS(mayo5)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_mayo5)
+MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp128balanced)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 

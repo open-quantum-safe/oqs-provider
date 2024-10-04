@@ -1,4 +1,4 @@
-# oqs-provider 0.7.1
+# oqs-provider 0.7.1 release candidate 1
 
 ## About
 

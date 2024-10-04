@@ -58,58 +58,57 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
 #ifdef OQS_KEM_ENCODERS
-
-    "1.3.9999.99.17",
+    NULL,
     "frodo640aes",
-    "1.3.9999.99.16",
+    NULL,
     "p256_frodo640aes",
-    "1.3.9999.99.1",
+    NULL,
     "x25519_frodo640aes",
-    "1.3.9999.99.19",
+    NULL,
     "frodo640shake",
-    "1.3.9999.99.18",
+    NULL,
     "p256_frodo640shake",
-    "1.3.9999.99.2",
+    NULL,
     "x25519_frodo640shake",
-    "1.3.9999.99.21",
+    NULL,
     "frodo976aes",
-    "1.3.9999.99.20",
+    NULL,
     "p384_frodo976aes",
-    "1.3.9999.99.3",
+    NULL,
     "x448_frodo976aes",
-    "1.3.9999.99.23",
+    NULL,
     "frodo976shake",
-    "1.3.9999.99.22",
+    NULL,
     "p384_frodo976shake",
-    "1.3.9999.99.4",
+    NULL,
     "x448_frodo976shake",
-    "1.3.9999.99.25",
+    NULL,
     "frodo1344aes",
-    "1.3.9999.99.24",
+    NULL,
     "p521_frodo1344aes",
-    "1.3.9999.99.27",
+    NULL,
     "frodo1344shake",
-    "1.3.9999.99.26",
+    NULL,
     "p521_frodo1344shake",
     "1.3.6.1.4.1.2.267.8.2.2",
     "kyber512",
-    "1.3.9999.99.28",
+    NULL,
     "p256_kyber512",
-    "1.3.9999.99.5",
+    NULL,
     "x25519_kyber512",
     "1.3.6.1.4.1.2.267.8.3.3",
     "kyber768",
-    "1.3.9999.99.29",
+    NULL,
     "p384_kyber768",
-    "1.3.9999.99.6",
+    NULL,
     "x448_kyber768",
-    "1.3.9999.99.7",
+    NULL,
     "x25519_kyber768",
-    "1.3.9999.99.8",
+    NULL,
     "p256_kyber768",
     "1.3.6.1.4.1.2.267.8.4.4",
     "kyber1024",
-    "1.3.9999.99.30",
+    NULL,
     "p521_kyber1024",
     "2.16.840.1.101.3.4.4.1",
     "mlkem512",
@@ -119,51 +118,51 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "x25519_mlkem512",
     "2.16.840.1.101.3.4.4.2",
     "mlkem768",
-    "1.3.9999.99.31",
+    NULL,
     "p384_mlkem768",
-    "1.3.9999.99.9",
+    NULL,
     "x448_mlkem768",
-    "1.3.9999.99.10",
+    NULL,
     "X25519MLKEM768",
-    "1.3.9999.99.11",
+    NULL,
     "SecP256r1MLKEM768",
     "2.16.840.1.101.3.4.4.3",
     "mlkem1024",
-    "1.3.9999.99.32",
+    NULL,
     "p521_mlkem1024",
     "1.3.6.1.4.1.42235.6",
     "p384_mlkem1024",
-    "1.3.9999.99.34",
+    NULL,
     "bikel1",
-    "1.3.9999.99.33",
+    NULL,
     "p256_bikel1",
-    "1.3.9999.99.12",
+    NULL,
     "x25519_bikel1",
-    "1.3.9999.99.36",
+    NULL,
     "bikel3",
-    "1.3.9999.99.35",
+    NULL,
     "p384_bikel3",
-    "1.3.9999.99.13",
+    NULL,
     "x448_bikel3",
-    "1.3.9999.99.38",
+    NULL,
     "bikel5",
-    "1.3.9999.99.37",
+    NULL,
     "p521_bikel5",
-    "1.3.9999.99.40",
+    NULL,
     "hqc128",
-    "1.3.9999.99.39",
+    NULL,
     "p256_hqc128",
-    "1.3.9999.99.14",
+    NULL,
     "x25519_hqc128",
-    "1.3.9999.99.42",
+    NULL,
     "hqc192",
-    "1.3.9999.99.41",
+    NULL,
     "p384_hqc192",
-    "1.3.9999.99.15",
+    NULL,
     "x448_hqc192",
-    "1.3.9999.99.44",
+    NULL,
     "hqc256",
-    "1.3.9999.99.43",
+    NULL,
     "p521_hqc256",
 
 #endif /* OQS_KEM_ENCODERS */
@@ -1161,51 +1160,58 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     // insert all OIDs to the global objects list
     for (i = 0; i < OQS_OID_CNT; i += 2) {
-        if (!c_obj_create(handle, oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
-                          oqs_oid_alg_list[i + 1])) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            fprintf(stderr, "error registering NID for %s\n",
-                    oqs_oid_alg_list[i + 1]);
-            goto end_init;
-        }
-
-        /* create object (NID) again to avoid setup corner case problems
-         * see https://github.com/openssl/openssl/discussions/21903
-         * Not testing for errors is intentional.
-         * At least one core version hangs up; so don't do this there:
-         */
-        if (ossl_versionp && strcmp("3.1.0", ossl_versionp)) {
-            ERR_set_mark();
-            OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
-                       oqs_oid_alg_list[i + 1]);
-            ERR_pop_to_mark();
-        }
-
-        if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
-                         OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            goto end_init;
-        }
-
-        if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
-                             oqs_oid_alg_list[i + 1])) {
-            fprintf(stderr, "error registering %s with no hash\n",
-                    oqs_oid_alg_list[i + 1]);
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            goto end_init;
-        }
-
-        if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
-            OQS_PROV_PRINTF3(
-                "OQS PROV: successfully registered %s with NID %d\n",
-                oqs_oid_alg_list[i + 1], OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
+        if (oqs_oid_alg_list[i] == NULL) {
+            OQS_PROV_PRINTF2("OQS PROV: Warning: No OID registered for %s\n",
+                             oqs_oid_alg_list[i + 1]);
         } else {
-            fprintf(stderr,
-                    "OQS PROV: Impossible error: NID unregistered "
-                    "for %s.\n",
-                    oqs_oid_alg_list[i + 1]);
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-            goto end_init;
+            if (!c_obj_create(handle, oqs_oid_alg_list[i],
+                              oqs_oid_alg_list[i + 1],
+                              oqs_oid_alg_list[i + 1])) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                fprintf(stderr, "error registering NID for %s\n",
+                        oqs_oid_alg_list[i + 1]);
+                goto end_init;
+            }
+
+            /* create object (NID) again to avoid setup corner case problems
+             * see https://github.com/openssl/openssl/discussions/21903
+             * Not testing for errors is intentional.
+             * At least one core version hangs up; so don't do this there:
+             */
+            if (strcmp("3.1.0", ossl_versionp)) {
+                ERR_set_mark();
+                OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
+                           oqs_oid_alg_list[i + 1]);
+                ERR_pop_to_mark();
+            }
+
+            if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
+                             OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
+
+            if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
+                                 oqs_oid_alg_list[i + 1])) {
+                fprintf(stderr, "error registering %s with no hash\n",
+                        oqs_oid_alg_list[i + 1]);
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
+
+            if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
+                OQS_PROV_PRINTF3(
+                    "OQS PROV: successfully registered %s with NID %d\n",
+                    oqs_oid_alg_list[i + 1],
+                    OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
+            } else {
+                fprintf(stderr,
+                        "OQS PROV: Impossible error: NID unregistered "
+                        "for %s.\n",
+                        oqs_oid_alg_list[i + 1]);
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
         }
     }
 

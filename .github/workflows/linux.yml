@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.2.0, master]
+        ossl-branch: [openssl-3.3.2, master]
         libjade-build:
           - "ON" 
           - "OFF"
@@ -104,7 +104,7 @@ jobs:
       CXX: "clang++"
       ASAN_C_FLAGS: "-fsanitize=address -fno-omit-frame-pointer"
       ASAN_OPTIONS: "detect_stack_use_after_return=1,detect_leaks=1"
-      OPENSSL_BRANCH: "openssl-3.2.0"
+      OPENSSL_BRANCH: "openssl-3.3.2"
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4

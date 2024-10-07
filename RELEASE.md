@@ -28,7 +28,7 @@ In addition to updating documentation, improving the CI, and fixing issues uncov
 * Adds support for CROSS from Round 1 of [NIST’s Post-Quantum Signature On-Ramp process](https://csrc.nist.gov/projects/pqc-dig-sig/round-1-additional-signatures).
 * Updates ML-KEM's code points in line with internet draft [draft-kwiatkowski-tls-ecdhe-mlkem-02](https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html).
 * Updates the `fullbuild.sh` build script to build against liboqs with formally verified Kyber-512 and Kyber-768 from [libjade](https://github.com/formosa-crypto/libjade) turned on by default; see `OQS_LIBJADE_BUILD` under `CONFIGURE.md` for more information.
-* Reverses keyshares for X25519MLKEM768, SecP256r1MLKEM768, and X448-ML-KEM-768 TLS hybrids in line with [draft-kwiatkowski-tls-ecdhe-mlkem-02](https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html).
+* Reverses keyshares for X25519MLKEM768 and X448-ML-KEM-768 TLS hybrids in line with [draft-kwiatkowski-tls-ecdhe-mlkem-02](https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html).
 
 ## What's Changed
 * Point CI back to liboqs main by @SWilson4 in https://github.com/open-quantum-safe/oqs-provider/pull/431

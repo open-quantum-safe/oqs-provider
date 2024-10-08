@@ -2,8 +2,7 @@
 
 * @baentsch
 /oqsprov/oqs_hyb_kem.c @bhess
-# TODO: @alexrow owns OIDs for CROSS; add them below when possible
-/oqs-template/generate.yml @baentsch @bhess @feventura
+/oqs-template/generate.yml @baentsch @bhess @feventura @alexrow
 /CMakeLists.txt @baentsch @zadlg
 /.circleci/config.yml @baentsch @zadlg
 /.github/workflows @baentsch @zadlg @jplomas

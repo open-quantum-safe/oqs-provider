@@ -1,3 +1,71 @@
+# oqs-provider 0.7.1
+
+## About
+
+The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on the website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.
+
+**oqs-provider** is a standalone [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and [hybrid key exchange](https://datatracker.ietf.org/doc/draft-ietf-pquip-pqt-hybrid-terminology) for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS, CMP and `dgst` (signature) operations.
+
+When deployed, the `oqs-provider` binary (shared library) thus adds support for quantum-safe cryptographic operations to any standard OpenSSL(v3) installation. The ultimate goal is that all `openssl` functionality shall be [PQC-enabled](https://csrc.nist.gov/projects/post-quantum-cryptography).
+
+In general, the oqs-provider `main` branch is meant to be usable in conjunction with the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and the `master` branch of [OpenSSL](https://github.com/openssl/openssl).
+
+Further details on building, testing and use can be found in [README.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/README.md). See in particular limitations on intended use.
+
+## Release notes
+
+This is version 0.7.0 of oqs-provider which continues from the earlier 0.6.1 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.11.0 of `liboqs`.
+
+### Security considerations
+
+None.
+
+### What's New
+
+In addition to updating documentation, improving the CI, and fixing issues uncovered by compiler warnings and static analysis, this release of oqs-provider:
+
+* Adds support for MAYO from Round 1 of [NIST’s Post-Quantum Signature On-Ramp process](https://csrc.nist.gov/projects/pqc-dig-sig/round-1-additional-signatures).
+* Adds support for CROSS from Round 1 of [NIST’s Post-Quantum Signature On-Ramp process](https://csrc.nist.gov/projects/pqc-dig-sig/round-1-additional-signatures).
+* Updates ML-KEM's code points in line with internet draft [draft-kwiatkowski-tls-ecdhe-mlkem-02](https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html).
+* Updates the `fullbuild.sh` build script to build against liboqs with formally verified Kyber-512 and Kyber-768 from [libjade](https://github.com/formosa-crypto/libjade) turned on by default; see `OQS_LIBJADE_BUILD` under `CONFIGURE.md` for more information.
+* Reverses keyshares for X25519MLKEM768 and X448-ML-KEM-768 TLS hybrids in line with [draft-kwiatkowski-tls-ecdhe-mlkem-02](https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html).
+
+## What's Changed
+* Point CI back to liboqs main by @SWilson4 in https://github.com/open-quantum-safe/oqs-provider/pull/431
+* Fix a typo in NOTES-Windows.md by @qnfm in https://github.com/open-quantum-safe/oqs-provider/pull/436
+* Fix #439: install the static library under `$PREFIX/lib`. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/441
+* Fix #440: disable tests and examples using `BUILD_TESTING`. by @thb-sb in https://github.com/open-quantum-safe/oqs-provider/pull/442
+* Add MAYO by @bhess in https://github.com/open-quantum-safe/oqs-provider/pull/413
+* update the composite to draft-ietf-lamps-pq-composite-sigs-02 by @feventura in https://github.com/open-quantum-safe/oqs-provider/pull/454
+* Update codeowners by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/458
+* Remove external encoding lib by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/460
+* update coding style and test facilities by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/477
+* Fix various warnings. by @ashman-p in https://github.com/open-quantum-safe/oqs-provider/pull/480
+* A note about key encapsulation/decapsulation support in OpenSSL by @beldmit in https://github.com/open-quantum-safe/oqs-provider/pull/486
+* Force liboqs as a debian package dependency requirement only if it is not a static linked library. by @fwh-dc in https://github.com/open-quantum-safe/oqs-provider/pull/493
+* openssl and contribution documentation updates [skip ci] by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/499
+* Adds note on supported openssl versions for tls certificates. by @fwh-dc in https://github.com/open-quantum-safe/oqs-provider/pull/498
+* add support for the CMAKE_PARAMS environment variable by @jschauma in https://github.com/open-quantum-safe/oqs-provider/pull/510
+* update MLKEM code points by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/511
+* Actionlint workflow checking by @jplomas in https://github.com/open-quantum-safe/oqs-provider/pull/516
+* add explicit usage warning [skip ci] by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/515
+* Address some Static Analysis Issues #519 by @ashman-p in https://github.com/open-quantum-safe/oqs-provider/pull/521
+* Only overwrite default library prefix for module library type build. by @fwh-dc in https://github.com/open-quantum-safe/oqs-provider/pull/525
+* Add build option to toggle libjade implementations in liboqs by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/529
+* Reverse TLS hybrid keyshares for x25519/x448-mlkem hybrids by @bhess in https://github.com/open-quantum-safe/oqs-provider/pull/524
+* Rebase and add CROSS by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/530
+* Remove unmanaged KEM OIDs by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/522
+* Use more future-proof hash for signature by @beldmit in https://github.com/open-quantum-safe/oqs-provider/pull/532
+
+## New Contributors
+* @ashman-p made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/480
+* @fwh-dc made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/493
+* @jschauma made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/510
+* @jplomas made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/516
+* @praveksharma made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/529
+
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.6.1...0.7.0
+
 # oqs-provider 0.6.1
 
 ## About

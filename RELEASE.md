@@ -1,4 +1,4 @@
-# oqs-provider 0.7.1
+# oqs-provider 0.7.0
 
 ## About
 
@@ -15,6 +15,10 @@ Further details on building, testing and use can be found in [README.md](https:/
 ## Release notes
 
 This is version 0.7.0 of oqs-provider which continues from the earlier 0.6.1 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.11.0 of `liboqs`.
+
+### Errata
+
+This release was updated on October 10, 2024 after being first published on October 08, 2024. Prior to being updated the release notes heading incorrectly reported the release version number to be 0.7.1; this error was limited to oqs-provider 0.7.0 release notes and did not affect any oqs-provider functionality.
 
 ### Security considerations
 

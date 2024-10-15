@@ -24,7 +24,8 @@ if [ -z "$OPENSSL_MODULES" ]; then
 fi
 
 if [ -z "$OPENSSL_CONF" ]; then
-    echo "Warning: OPENSSL_CONF env var not set."
+    echo "OPENSSL_CONF env var not set. Exiting."
+    exit 1
 fi
 
 # Set OSX DYLD_LIBRARY_PATH if not already externally set

@@ -5,8 +5,8 @@
 DECODER_w_structure("{{ kem['name_group'] }}", der, PrivateKeyInfo, {{ kem['name_group'] }}),
 DECODER_w_structure("{{ kem['name_group'] }}", der, SubjectPublicKeyInfo, {{ kem['name_group'] }}),
 {% for hybrid in kem['hybrids'] -%}
-DECODER_w_structure("{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}", der, PrivateKeyInfo, {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}),
-DECODER_w_structure("{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}", der, SubjectPublicKeyInfo, {{hybrid['hybrid_group']}}_{{ kem['name_group'] }}),
+DECODER_w_structure({% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, der, PrivateKeyInfo, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}),
+DECODER_w_structure({% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, der, SubjectPublicKeyInfo, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}),
 {%- endfor %}
 #endif
 {%- endfor %}

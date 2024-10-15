@@ -84,5 +84,9 @@ add a tag to one or more of our [most active contributors](https://github.com/op
 If you feel like contributing but don't know what specific topic to work on,
 please check the [open issues tagged "good first issue" or "help wanted"](https://github.com/open-quantum-safe/oqs-provider/issues).
 
+## Resource-efficiency
 
+This project aims to be efficient and responsible with regard to resources consumed
+also during CI. Therefore, all commits changing only documentation should contain the
+commit message tag "[skip ci]" to avoid unnecessary test runs.
 

@@ -70,20 +70,20 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {0x023D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F3D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0247, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x024A, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F47, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB2, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0248, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4B, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB6, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x0768, 192, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F48, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB3, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB4, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2FB5, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0249, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2FB7, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x11ec, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x11eb, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x1024, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
-    {0x2F49, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x2F4A, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {0x2F4E, 256, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x0241, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F41, 128, TLS1_3_VERSION, 0, -1, -1, 1},
@@ -209,8 +209,9 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 
     OQS_GROUP_ENTRY(p384_mlkem768, p384_mlkem768, p384_mlkem768, 30),
     OQS_GROUP_ENTRY(x448_mlkem768, x448_mlkem768, x448_mlkem768, 31),
-    OQS_GROUP_ENTRY(x25519_mlkem768, x25519_mlkem768, x25519_mlkem768, 32),
-    OQS_GROUP_ENTRY(p256_mlkem768, p256_mlkem768, p256_mlkem768, 33),
+    OQS_GROUP_ENTRY(X25519MLKEM768, X25519MLKEM768, X25519MLKEM768, 32),
+    OQS_GROUP_ENTRY(SecP256r1MLKEM768, SecP256r1MLKEM768, SecP256r1MLKEM768,
+                    33),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
     OQS_GROUP_ENTRY(mlkem1024, mlkem1024, mlkem1024, 34),
@@ -293,6 +294,7 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     {0xfeef, 128, TLS1_3_VERSION, 0}, {0xfef3, 128, TLS1_3_VERSION, 0},
     {0xfef0, 192, TLS1_3_VERSION, 0}, {0xfef4, 192, TLS1_3_VERSION, 0},
     {0xfef1, 256, TLS1_3_VERSION, 0}, {0xfef5, 256, TLS1_3_VERSION, 0},
+    {0xfef6, 128, TLS1_3_VERSION, 0},
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 
@@ -387,12 +389,12 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_X448_MLKEM768"))
         oqs_group_list[31].group_id =
             atoi(getenv("OQS_CODEPOINT_X448_MLKEM768"));
-    if (getenv("OQS_CODEPOINT_X25519_MLKEM768"))
+    if (getenv("OQS_CODEPOINT_X25519MLKEM768"))
         oqs_group_list[32].group_id =
-            atoi(getenv("OQS_CODEPOINT_X25519_MLKEM768"));
-    if (getenv("OQS_CODEPOINT_P256_MLKEM768"))
+            atoi(getenv("OQS_CODEPOINT_X25519MLKEM768"));
+    if (getenv("OQS_CODEPOINT_SECP256R1MLKEM768"))
         oqs_group_list[33].group_id =
-            atoi(getenv("OQS_CODEPOINT_P256_MLKEM768"));
+            atoi(getenv("OQS_CODEPOINT_SECP256R1MLKEM768"));
     if (getenv("OQS_CODEPOINT_MLKEM1024"))
         oqs_group_list[34].group_id = atoi(getenv("OQS_CODEPOINT_MLKEM1024"));
     if (getenv("OQS_CODEPOINT_P521_MLKEM1024"))
@@ -597,6 +599,9 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_P521_MAYO5"))
         oqs_sigalg_list[55].code_point =
             atoi(getenv("OQS_CODEPOINT_P521_MAYO5"));
+    if (getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED"))
+        oqs_sigalg_list[56].code_point =
+            atoi(getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED"));
     ///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
     return 1;
 }
@@ -771,6 +776,10 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 #ifdef OQS_ENABLE_SIG_mayo_5
     OQS_SIGALG_ENTRY(mayo5, mayo5, mayo5, "1.3.9999.8.5.1", 54),
     OQS_SIGALG_ENTRY(p521_mayo5, p521_mayo5, p521_mayo5, "1.3.9999.8.5.2", 55),
+#endif
+#ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
+    OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
+                     CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1", 56),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

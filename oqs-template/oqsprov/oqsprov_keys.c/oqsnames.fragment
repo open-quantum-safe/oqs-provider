@@ -30,9 +30,9 @@
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
 #ifdef OQS_KEM_ENCODERS
 {% for kem in config['kems'] %}
-  { 0, "{{ kem['name_group'] }}", {{ kem['oqs_alg'] }}, KEY_TYPE_KEM, {{ kem['bit_security'] }} },
+  { 0, "{{ kem['name_group'] }}", {{ kem['oqs_alg'] }}, KEY_TYPE_KEM, {{ kem['bit_security'] }}, 0 },
 {%- for hybrid in kem['hybrids'] %}
-  { 0, "{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}", {{ kem['oqs_alg'] }}, {% if hybrid['hybrid_group'].startswith('p') -%} KEY_TYPE_ECP_HYB_KEM {% else %} KEY_TYPE_ECX_HYB_KEM {% endif %}, {{ kem['bit_security'] }} },
+  { 0, "{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}", {{ kem['oqs_alg'] }}, {% if hybrid['hybrid_group'].startswith('p') -%} KEY_TYPE_ECP_HYB_KEM {% else %} KEY_TYPE_ECX_HYB_KEM {% endif %}, {{ kem['bit_security'] }}, {% if 'fips_standard' in kem and hybrid['hybrid_group'] in ["x25519", "x448"] %}1{% else %}0{% endif %} },
 {%- endfor -%}
 {%- endfor %}
 

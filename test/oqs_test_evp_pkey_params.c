@@ -71,7 +71,7 @@ const char *kHybridKEMAlgorithms[] = {
     "p384_kyber768",        "x448_kyber768",      "x25519_kyber768",
     "p256_kyber768",        "p521_kyber1024",     "p256_mlkem512",
     "x25519_mlkem512",      "p384_mlkem768",      "x448_mlkem768",
-    "x25519_mlkem768",      "p256_mlkem768",      "p521_mlkem1024",
+    "X25519MLKEM768",       "SecP256r1MLKEM768",  "p521_mlkem1024",
     "p384_mlkem1024",       "p256_bikel1",        "x25519_bikel1",
     "p384_bikel3",          "x448_bikel3",        "p521_bikel5",
     "p256_hqc128",          "x25519_hqc128",      "p384_hqc192",
@@ -356,12 +356,13 @@ out:
  * \param classical_n Length in bytes of `classical`.
  * \param pq Quantum-resistant key.
  * \param pq_n Length in bytes of `pq`.
+ * \param reverse Reverses the order of shares
  * \param[out] buf Out buffer.
  * \param[out] buf_n Length in bytes of `buf`.
  *
  * \returns 0 on success. */
 static int reconstitute_keys(const uint8_t *classical, const size_t classical_n,
-                             const uint8_t *pq, const size_t pq_n,
+                             const uint8_t *pq, const size_t pq_n, int reverse,
                              uint8_t **buf, size_t *buf_len) {
     uint32_t header;
     int ret = -1;
@@ -377,8 +378,14 @@ static int reconstitute_keys(const uint8_t *classical, const size_t classical_n,
     (*buf)[1] = header >> 0x10;
     (*buf)[2] = header >> 0x8;
     (*buf)[3] = header;
-    memcpy(*buf + sizeof(header), classical, classical_n);
-    memcpy(*buf + sizeof(header) + classical_n, pq, pq_n);
+
+    if (!reverse) {
+        memcpy(*buf + sizeof(header), classical, classical_n);
+        memcpy(*buf + sizeof(header) + classical_n, pq, pq_n);
+    } else {
+        memcpy(*buf + sizeof(header), pq, pq_n);
+        memcpy(*buf + sizeof(header) + pq_n, classical, classical_n);
+    }
     ret = 0;
 
 out:
@@ -395,12 +402,16 @@ out:
 static int keypairs_verify_consistency(const struct KeyPair *classical,
                                        const struct KeyPair *pq,
                                        const struct KeyPair *comb) {
-    uint8_t *reconstitution;
+    uint8_t *reconstitution, *reconstitution_rev;
     size_t n;
     int ret = -1;
 
     if (reconstitute_keys(classical->pubkey, classical->pubkey_len, pq->pubkey,
-                          pq->pubkey_len, &reconstitution, &n)) {
+                          pq->pubkey_len, 1, &reconstitution, &n)) {
+        goto out;
+    }
+    if (reconstitute_keys(classical->pubkey, classical->pubkey_len, pq->pubkey,
+                          pq->pubkey_len, 0, &reconstitution_rev, &n)) {
         goto out;
     }
     if (n != comb->pubkey_len) {
@@ -410,7 +421,8 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
                 comb->pubkey_len, n);
         goto free_reconstitute;
     }
-    if (memcmp(reconstitution, comb->pubkey, n)) {
+    if (memcmp(reconstitution, comb->pubkey, n) &&
+        memcmp(reconstitution_rev, comb->pubkey, n)) {
         fputs(cRED "pubkey and comb->pubkey differ " cNORM "\n", stderr);
         fputs(cRED "pubkey: ", stderr);
         hexdump(reconstitution, n);
@@ -420,9 +432,16 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
         goto free_reconstitute;
     }
     free(reconstitution);
+    free(reconstitution_rev);
 
     if (reconstitute_keys(classical->privkey, classical->privkey_len,
-                          pq->privkey, pq->privkey_len, &reconstitution, &n)) {
+                          pq->privkey, pq->privkey_len, 0, &reconstitution,
+                          &n)) {
+        goto out;
+    }
+    if (reconstitute_keys(classical->privkey, classical->privkey_len,
+                          pq->privkey, pq->privkey_len, 1, &reconstitution_rev,
+                          &n)) {
         goto out;
     }
     if (n != comb->privkey_len) {
@@ -432,7 +451,8 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
                 comb->privkey_len, n);
         goto free_reconstitute;
     }
-    if (memcmp(reconstitution, comb->privkey, n)) {
+    if (memcmp(reconstitution, comb->privkey, n) &&
+        memcmp(reconstitution_rev, comb->privkey, n)) {
         fputs(cRED "privkey and comb->privkey differ" cNORM "\n", stderr);
         fputs(cRED "privkey: ", stderr);
         hexdump(reconstitution, n);
@@ -445,6 +465,7 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
 
 free_reconstitute:
     free(reconstitution);
+    free(reconstitution_rev);
 
 out:
     return ret;
@@ -548,6 +569,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, cRED "  No signature algorithms found" cNORM "\n");
         ERR_print_errors_fp(stderr);
         ++errcnt;
+        goto next_alg;
     }
 
     for (; algs->algorithm_names != NULL; ++algs) {
@@ -564,6 +586,7 @@ int main(int argc, char **argv) {
         }
     }
 
+next_alg:
     algs = OSSL_PROVIDER_query_operation(oqs_provider, OSSL_OP_KEM,
                                          &query_nocache);
     if (!algs) {

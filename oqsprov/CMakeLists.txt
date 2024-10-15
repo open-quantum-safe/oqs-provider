@@ -24,9 +24,9 @@ if(OQS_PROVIDER_BUILD_STATIC)
 endif()
 
 add_library(oqsprovider ${OQS_LIBRARY_TYPE} ${PROVIDER_SOURCE_FILES})
+
 set_target_properties(oqsprovider
     PROPERTIES
-    PREFIX ""
     OUTPUT_NAME "oqsprovider"
     PUBLIC_HEADER "oqs_prov.h"
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -42,7 +42,14 @@ set_target_properties(oqsprovider
     # For Windows DLLs
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-if (NOT OQS_PROVIDER_BUILD_STATIC)
+if (OQS_LIBRARY_TYPE STREQUAL "MODULE")
+  # When openssl looks for provider modules it does not prepend "lib" to the
+  # provider name.
+  set_target_properties(oqsprovider
+    PROPERTIES
+    PREFIX ""
+  )
+
   if (APPLE)
     # OpenSSL looks for `.dylib` files on XNU-based platforms.
     # Because `MODULE` writes to a `.so` file by default, we must explicitely
@@ -62,11 +69,6 @@ if (NOT OQS_PROVIDER_BUILD_STATIC)
       SUFFIX ".dll"
     )
   endif()
-else()
-  set_target_properties(oqsprovider
-      PROPERTIES
-      PREFIX "lib"
-  )
 endif()
 
 target_link_libraries(oqsprovider PUBLIC OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
@@ -94,7 +96,11 @@ install(TARGETS oqsprovider
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_VENDOR "www.openquantumsafe.org")
 set(CPACK_PACKAGE_VERSION ${OQSPROVIDER_VERSION_TEXT})
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, openssl (>= 3.0.0), liboqs (>= 0.8.0)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, openssl (>= 3.0.0)")
+if (NOT "${LIBOQS_LIBRARY_TYPE}" STREQUAL "STATIC_LIBRARY")
+  message("Adding liboqs as dynamic dependency for the debian package")
+  string(APPEND CPACK_DEBIAN_PACKAGE_DEPENDS ", liboqs (>= 0.8.0)")
+endif ()
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "www.openquantumsafe.org")
 include(CPack)
 

@@ -33,12 +33,20 @@ echo " Cloudflare:"
 if ! ($OPENSSL_APP list -kem-algorithms | grep x25519_kyber768); then
    echo "Skipping unconfigured x25519_kyber768 interop test"
 else
-   export OQS_CODEPOINT_X25519_KYBER512=65072
    (echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect pq.cloudflareresearch.com:443 -groups x25519_kyber768 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber768Draft00
 fi
 
-if ! ($OPENSSL_APP list -kem-algorithms | grep x25519_kyber512); then
-   echo "Skipping unconfigured x25519_kyber512 interop test"
+echo " Google:"
+
+if ! ($OPENSSL_APP list -kem-algorithms | grep x25519_kyber768); then
+   echo "Skipping unconfigured x25519_kyber768 interop test"
 else
-   (echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect pq.cloudflareresearch.com:443 -groups x25519_kyber512 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber512Draft00
+   echo -e "GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n" | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect google.com:443 -groups x25519_kyber768 -servername google.com >/dev/null 2>/dev/null 
+fi
+
+
+if ! ($OPENSSL_APP list -kem-algorithms | grep X25519MLKEM768); then
+   echo "Skipping unconfigured X25519MLKEM768 interop test"
+else
+   echo -e "GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n" | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect google.com:443 -groups X25519MLKEM768 -servername google.com >/dev/null 2>/dev/null 
 fi

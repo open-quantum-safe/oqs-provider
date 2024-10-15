@@ -4,7 +4,7 @@ else()
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 endif()
 project(oqs-provider LANGUAGES C)
-set(OQSPROVIDER_VERSION_TEXT "0.6.2-dev")
+set(OQSPROVIDER_VERSION_TEXT "0.7.1-dev")
 set(CMAKE_C_STANDARD 11)
 set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -63,7 +63,8 @@ endif()
 # Add required include for liboqs
 find_package(liboqs REQUIRED)
 get_target_property(LIBOQS_INCLUDE_DIR OQS::oqs INTERFACE_INCLUDE_DIRECTORIES)
-message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR}")
+get_target_property(LIBOQS_LIBRARY_TYPE OQS::oqs TYPE)
+message(STATUS "liboqs found: Include dir at ${LIBOQS_INCLUDE_DIR} (${LIBOQS_LIBRARY_TYPE})")
 include_directories(${LIBOQS_INCLUDE_DIR})
 
 # Hints the compiler on the fact that the provider is being compiled into a static library.

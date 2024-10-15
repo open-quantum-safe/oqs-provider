@@ -16,6 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         cmake-params: [ "", "-DOQS_KEM_ENCODERS=ON" ]
+        libjade-build: ["ON", "OFF"]
     container:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
@@ -23,9 +24,9 @@ jobs:
       LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
-        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} ./scripts/fullbuild.sh
+        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -37,7 +38,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.1.0, master]
+        ossl-branch: [openssl-3.3.2, master]
+        libjade-build:
+          - "ON" 
+          - "OFF"
         include:
           - name: alpine
             container: openquantumsafe/ci-alpine-amd64:latest
@@ -53,9 +57,9 @@ jobs:
       LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=main OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -100,10 +104,10 @@ jobs:
       CXX: "clang++"
       ASAN_C_FLAGS: "-fsanitize=address -fno-omit-frame-pointer"
       ASAN_OPTIONS: "detect_stack_use_after_return=1,detect_leaks=1"
-      OPENSSL_BRANCH: "openssl-3.1"
+      OPENSSL_BRANCH: "openssl-3.3.2"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
 
       - name: Install dependencies
         run: apt-get update && apt-get install -y clang llvm ninja-build git cmake libclang-14-dev libclang-common-14-dev
@@ -177,7 +181,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
 
       - name: Install dependencies
         run: apt-get update && apt-get install -y ninja-build git cmake nodejs gcc-aarch64-linux-gnu libc6-dev-arm64-cross qemu-user

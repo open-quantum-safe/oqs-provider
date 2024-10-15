@@ -636,8 +636,13 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n",
                         buflen);
         memcpy(buf, oqsxkey->privkey, privkeylen);
-        memcpy(buf + privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys - 1],
-               oqsx_key_get_oqs_public_key_len(oqsxkey));
+        if (oqsxkey->reverse_share) {
+            memcpy(buf + privkeylen, oqsxkey->comp_pubkey[0],
+                   oqsx_key_get_oqs_public_key_len(oqsxkey));
+        } else {
+            memcpy(buf + privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys - 1],
+                   oqsx_key_get_oqs_public_key_len(oqsxkey));
+        }
 #endif
 
         oct.data = buf;
@@ -664,10 +669,19 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t)),
                ed_internallen;
         PKCS8_PRIV_KEY_INFO *p8inf_internal = NULL;
+        sk = sk_ASN1_TYPE_new_null();
         int i;
 
-        if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
+        if (!sk || !templen || !aType || !aString || !temp) {
+            OPENSSL_free(aType);
+            OPENSSL_free(aString);
+            OPENSSL_free(temp);
+            OPENSSL_free(templen);
+            if (sk) {
+                sk_ASN1_TYPE_pop_free(sk, ASN1_TYPE_free);
+            }
             return -1;
+        }
 
         for (i = 0; i < oqsxkey->numkeys; i++) {
             aType[i] = ASN1_TYPE_new();
@@ -1059,12 +1073,12 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define x448_mlkem768_evp_type 0
 #define x448_mlkem768_input_type "x448_mlkem768"
 #define x448_mlkem768_pem_type "x448_mlkem768"
-#define x25519_mlkem768_evp_type 0
-#define x25519_mlkem768_input_type "x25519_mlkem768"
-#define x25519_mlkem768_pem_type "x25519_mlkem768"
-#define p256_mlkem768_evp_type 0
-#define p256_mlkem768_input_type "p256_mlkem768"
-#define p256_mlkem768_pem_type "p256_mlkem768"
+#define X25519MLKEM768_evp_type 0
+#define X25519MLKEM768_input_type "X25519MLKEM768"
+#define X25519MLKEM768_pem_type "X25519MLKEM768"
+#define SecP256r1MLKEM768_evp_type 0
+#define SecP256r1MLKEM768_input_type "SecP256r1MLKEM768"
+#define SecP256r1MLKEM768_pem_type "SecP256r1MLKEM768"
 #define mlkem1024_evp_type 0
 #define mlkem1024_input_type "mlkem1024"
 #define mlkem1024_pem_type "mlkem1024"
@@ -1299,6 +1313,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define p521_mayo5_evp_type 0
 #define p521_mayo5_input_type "p521_mayo5"
 #define p521_mayo5_pem_type "p521_mayo5"
+#define CROSSrsdp128balanced_evp_type 0
+#define CROSSrsdp128balanced_input_type "CROSSrsdp128balanced"
+#define CROSSrsdp128balanced_pem_type "CROSSrsdp128balanced"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2180,20 +2197,20 @@ MAKE_ENCODER(_ecx, x448_mlkem768, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecx, x448_mlkem768, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecx, x448_mlkem768, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecx, x448_mlkem768);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_ecx, x25519_mlkem768, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_ecx, x25519_mlkem768);
-MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_ecp, p256_mlkem768, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_ecp, p256_mlkem768);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecx, X25519MLKEM768, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecx, X25519MLKEM768);
+MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, SecP256r1MLKEM768);
 MAKE_ENCODER(, mlkem1024, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, mlkem1024, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, mlkem1024, oqsx, PrivateKeyInfo, der);
@@ -2734,4 +2751,11 @@ MAKE_ENCODER(, p521_mayo5, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p521_mayo5);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, CROSSrsdp128balanced);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

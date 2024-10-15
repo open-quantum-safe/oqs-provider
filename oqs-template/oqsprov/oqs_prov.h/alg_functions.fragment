@@ -13,9 +13,9 @@ extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}
 extern const OSSL_DISPATCH oqs_{{ kem['name_group'] }}_keymgmt_functions[];
 {% for hybrid in kem['hybrids'] %}
 {% if hybrid['hybrid_group'].startswith('p') -%}
-extern const OSSL_DISPATCH oqs_ecp_{{ hybrid['hybrid_group']}}_{{ kem['name_group'] }}_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecp_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_keymgmt_functions[];
 {%- else -%}
-extern const OSSL_DISPATCH oqs_ecx_{{ hybrid['hybrid_group']}}_{{ kem['name_group'] }}_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecx_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_keymgmt_functions[];
 {%- endif %}
 {%- endfor %}
 {%- endfor %}

@@ -18,7 +18,7 @@ jobs:
       - name: Install prerequisites
         run: brew install liboqs
       - name: Checkout oqsprovider code
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Build and test oqsprovider
         # try this only if brew'd liboqs knows about ML-KEM:
         run: |
@@ -46,7 +46,7 @@ jobs:
       - name: Update container
         run: apt update && apt install -y cmake ninja-build gcc libssl-dev git
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
         run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
       - name: Test

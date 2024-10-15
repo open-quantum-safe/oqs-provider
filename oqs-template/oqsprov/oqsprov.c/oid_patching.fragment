@@ -10,7 +10,7 @@
    if ((envval = getenv("OQS_OID_{{kem['name_group']|upper}}"))) oqs_oid_alg_list[{{ kemcount.val }}] = envval;
 {% for hybrid in kem['hybrids'] %}
 {% set kemcount.val = kemcount.val + 2 -%}
-   if ((envval = getenv("OQS_OID_{{ hybrid['hybrid_group']|upper }}_{{kem['name_group']|upper}}"))) oqs_oid_alg_list[{{ kemcount.val }}] = envval;
+   if ((envval = getenv("OQS_OID_{% if 'standard_name' in hybrid %}{{ hybrid['standard_name']|upper }}{% else %}{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}{% endif %}"))) oqs_oid_alg_list[{{ kemcount.val }}] = envval;
 {%- endfor -%}
 {%- endfor %}
 

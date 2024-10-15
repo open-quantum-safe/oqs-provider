@@ -41,7 +41,7 @@ This implementation makes available the following quantum safe algorithms:
 - **CRYSTALS-Kyber**: `kyber512`, `p256_kyber512`, `x25519_kyber512`, `kyber768`, `p384_kyber768`, `x448_kyber768`, `x25519_kyber768`, `p256_kyber768`, `kyber1024`, `p521_kyber1024`
 - **FrodoKEM**: `frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
 - **HQC**: `hqc128`, `p256_hqc128`, `x25519_hqc128`, `hqc192`, `p384_hqc192`, `x448_hqc192`, `hqc256`, `p521_hqc256`†
-- **ML-KEM**: `mlkem512`, `p256_mlkem512`, `x25519_mlkem512`, `mlkem768`, `p384_mlkem768`, `x448_mlkem768`, `x25519_mlkem768`, `p256_mlkem768`, `mlkem1024`, `p521_mlkem1024`, `p384_mlkem1024`
+- **ML-KEM**: `mlkem512`, `p256_mlkem512`, `x25519_mlkem512`, `mlkem768`, `p384_mlkem768`, `x448_mlkem768`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `mlkem1024`, `p521_mlkem1024`, `p384_mlkem1024`
 
 ### Signature algorithms
 
@@ -52,6 +52,7 @@ This implementation makes available the following quantum safe algorithms:
 - **SPHINCS-SHA2**:`sphincssha2128fsimple`\*, `p256_sphincssha2128fsimple`\*, `rsa3072_sphincssha2128fsimple`\*, `sphincssha2128ssimple`\*, `p256_sphincssha2128ssimple`\*, `rsa3072_sphincssha2128ssimple`\*, `sphincssha2192fsimple`\*, `p384_sphincssha2192fsimple`\*, `sphincssha2192ssimple`, `p384_sphincssha2192ssimple`, `sphincssha2256fsimple`, `p521_sphincssha2256fsimple`, `sphincssha2256ssimple`, `p521_sphincssha2256ssimple`
 - **SPHINCS-SHAKE**:`sphincsshake128fsimple`\*, `p256_sphincsshake128fsimple`\*, `rsa3072_sphincsshake128fsimple`\*, `sphincsshake128ssimple`, `p256_sphincsshake128ssimple`, `rsa3072_sphincsshake128ssimple`, `sphincsshake192fsimple`, `p384_sphincsshake192fsimple`, `sphincsshake192ssimple`, `p384_sphincsshake192ssimple`, `sphincsshake256fsimple`, `p521_sphincsshake256fsimple`, `sphincsshake256ssimple`, `p521_sphincsshake256ssimple`
 - **MAYO**:`mayo1`\*, `p256_mayo1`\*, `mayo2`\*, `p256_mayo2`\*, `mayo3`\*, `p384_mayo3`\*, `mayo5`\*, `p521_mayo5`\*
+- **CROSS**:`CROSSrsdp128balanced`\*, `CROSSrsdp128fast`, `CROSSrsdp128small`, `CROSSrsdp192balanced`, `CROSSrsdp192fast`, `CROSSrsdp192small`, `CROSSrsdp256small`, `CROSSrsdpg128balanced`, `CROSSrsdpg128fast`, `CROSSrsdpg128small`, `CROSSrsdpg192balanced`, `CROSSrsdpg192fast`, `CROSSrsdpg192small`, `CROSSrsdpg256balanced`, `CROSSrsdpg256fast`, `CROSSrsdpg256small`
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 
@@ -142,28 +143,37 @@ Also not fully supported in 3.0.2 is performance testing as per the openssl
 ## 3.2 and greater
 
 These versions have full support for all TLS1.3 operations using PQ algorithms
-when deploying `oqsprovider`.
+when deploying `oqsprovider`, particularly with regard to the use of signature
+algorithms.
 
 ## 3.4 and greater
 
-These version are expected to support the `openssl pkeyutl -encap/-decap`
+These versions are expected to support the `openssl pkeyutl -encap/-decap`
 syntax for testing key encapsulation and decapsulation for test purposes. To
-use this option, OQS provider should be built with KEM encoding/decoding
-support.
+use this option, OQS provider should be built with
+[KEM encoding/decoding support](CONFIGURE.md#oqs_kem_encoders).
+Also new in this version is the possibility to retrieve all currently
+active TLS signature algorithms via a new `openssl list` option:
+`openssl list -tls-signature-algorithms`.
 
 ## All versions
 
 A limitation present in older OpenSSL versions is the number of default groups
 supported: [At most 44 default groups may be specified](https://github.com/openssl/openssl/issues/23624)
 , e.g., passing to [SSL_CTX_set1_groups](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set1_groups.html).
-Therefore caution is advised activating all KEMs supported by `oqsprovider`:
+Therefore caution is advised activating all KEMs supported by `oqsprovider`
+via [the pre-build configuration facility](CONFIGURE.md#pre-build-configuration):
 This may lead to `openssl` crashing, depending on the OpenSSL version used:
-The problem is gone in OpenSSL "master" branch and (will be gone) in the
-releases 3.3.0, 3.2.2., 3.1.6 and 3.0.14.
-
+The problem is gone in OpenSSL "master" branch and in the respective branches
+since the releases 3.3.0, 3.2.2., 3.1.6 and 3.0.14.
 
 For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
 see here](https://www.openssl.org/docs/man3.0/man7/migration_guide.html).
+
+A problem basically related to any TLS server installation is the observed
+[limitation to 64 TLS signature algorithms](https://github.com/open-quantum-safe/oqs-provider/issues/399)
+by some TLS server implementations. Therefore, again caution is advised
+[activating more than 64 PQ signature algorithms via the pre-build configuration facility](CONFIGURE.md#pre-build-configuration).
 
 Governance & Contributions
 --------------------------
@@ -195,6 +205,7 @@ Contributors to the `oqsprovider` include:
 - Thomas Bailleux (many build, CI and usage improvements for different platforms)
 - Felipe Ventura (composite sig integration and OID management)
 - Iyán Méndez Veiga (PKCS#12 testing)
+- Alessandro Barenghi (CROSS OIDs)
 
 History
 -------
@@ -240,6 +251,27 @@ THIS SOFTWARE IS PROVIDED WITH NO WARRANTIES, EXPRESS OR IMPLIED, AND
 ALL IMPLIED WARRANTIES ARE DISCLAIMED, INCLUDING ANY WARRANTY OF
 MERCHANTABILITY AND WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.
 
+## Standards compliance
+
+This project follows the [NIST PQC standardization process](https://csrc.nist.gov/projects/post-quantum-cryptography)
+and aims to support experimentation with the various PQC algorithms
+under evaluation and in different stages of standardization by NIST.
+`oqsprovider` at this time cannot claim or prove adherence to any
+standards documents published. For more details, review the file
+[STANDARDS.md](STANDARDS.md) carefully. Most notably, hybrid and
+composite implementations exclusively implemented in `oqsprovider`
+are at a pre-standard/draft stage only. Over time the project aims
+to provide standards compliance and solicits input by way of
+contributions to achieve this state.
+
 ## Component disclaimer
+
+`oqsprovider` for the implementation of all pure PQC functionality
+is completely dependent on [liboqs](https://github.com/open-quantum-safe/liboqs) and accordingly
+cannot recommend any use beyond experimentation purposes:
+
+WE DO NOT CURRENTLY RECOMMEND RELYING ON THIS SOFTWARE IN A PRODUCTION ENVIRONMENT OR TO PROTECT ANY SENSITIVE DATA. This software is meant to help with research and prototyping. While we make a best-effort approach to avoid security bugs, this library has not received the level of auditing and analysis that would be necessary to rely on it for high security use.
+
+Further details and background available at:
 
 [liboqs disclaimer](https://github.com/open-quantum-safe/liboqs#limitations-and-security)

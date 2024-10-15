@@ -13,9 +13,9 @@ MAKE_SIG_KEYMGMT_FUNCTIONS({{variant['name']}}_{{ composite_alg['name'] }})
 MAKE_KEM_KEYMGMT_FUNCTIONS({{kem['name_group']}}, {{kem['oqs_alg']}}, {{kem['bit_security']}})
 {% for hybrid in kem['hybrids'] %}
 {% if hybrid['hybrid_group'].startswith('p') -%}
-MAKE_KEM_ECP_KEYMGMT_FUNCTIONS({{hybrid['hybrid_group']}}_{{kem['name_group']}}, {{kem['oqs_alg']}}, {{hybrid['bit_security']}})
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS({% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{hybrid['hybrid_group']}}_{{kem['name_group']}}{% endif %}, {{kem['oqs_alg']}}, {{hybrid['bit_security']}})
 {%- else %}
-MAKE_KEM_ECX_KEYMGMT_FUNCTIONS({{hybrid['hybrid_group']}}_{{kem['name_group']}}, {{kem['oqs_alg']}}, {{hybrid['bit_security']}})
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS({% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{hybrid['hybrid_group']}}_{{kem['name_group']}}{% endif %}, {{kem['oqs_alg']}}, {{hybrid['bit_security']}}, {% if 'fips_standard' in kem %}{{kem['fips_standard']}}{% else %}0{% endif %})
 {%- endif %}
 {%- endfor %}
 {%- endfor %}

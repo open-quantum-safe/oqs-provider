@@ -12,15 +12,15 @@ extern const OSSL_DISPATCH oqs_{{ kem['name_group'] }}_to_text_encoder_functions
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{ kem['name_group'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{ kem['name_group'] }}_decoder_functions[];
      {%- for hybrid in kem['hybrids'] -%}
-extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_to_PrivateKeyInfo_der_encoder_functions[];
-extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_to_PrivateKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
-extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_to_SubjectPublicKeyInfo_der_encoder_functions[];
-extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_to_text_encoder_functions[];
-extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_decoder_functions[];
-extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}_decoder_functions[];
+extern const OSSL_DISPATCH oqs_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_to_text_encoder_functions[];
+extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_decoder_functions[];
+extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_decoder_functions[];
      {%- endfor -%}
 {%- endfor %}
 

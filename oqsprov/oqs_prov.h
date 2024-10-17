@@ -139,8 +139,8 @@ enum oqsx_key_type_en {
     KEY_TYPE_KEM,
     KEY_TYPE_ECP_HYB_KEM,
     KEY_TYPE_ECX_HYB_KEM,
-    KEY_TYPE_HYB_SIG,
-    KEY_TYPE_CMP_SIG
+    KEY_TYPE_CMP_SIG, // KEY_TYPE_CMP_SIG and KEY_TYPE_CMP_KEM must
+    KEY_TYPE_CMP_KEM, // remain consecutive
 };
 
 typedef enum oqsx_key_type_en OQSX_KEY_TYPE;
@@ -198,6 +198,14 @@ struct SignatureModel {
 };
 
 typedef struct SignatureModel CompositeSignature;
+
+// composite ciphertext
+struct CiphertextModel {
+    ASN1_OCTET_STRING *ct1;
+    ASN1_OCTET_STRING *ct2;
+};
+
+typedef struct CiphertextModel CompositeCiphertext;
 
 char *get_oqsname_fromtls(char *tlsname);
 char *get_oqsname(int nid);
@@ -257,6 +265,7 @@ int oqs_patch_codepoints(void);
 
 extern const OSSL_DISPATCH oqs_generic_kem_functions[];
 extern const OSSL_DISPATCH oqs_hybrid_kem_functions[];
+extern const OSSL_DISPATCH oqs_composite_kem_functions[];
 extern const OSSL_DISPATCH oqs_signature_functions[];
 
 ///// OQS_TEMPLATE_FRAGMENT_ENDECODER_FUNCTIONS_START

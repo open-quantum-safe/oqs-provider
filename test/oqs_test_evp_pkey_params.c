@@ -46,6 +46,20 @@ const char *kHybridSignatureAlgorithms[] = {
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END
 
+///// OQS_TEMPLATE_FRAGMENT_COMPOSITE_SIG_ALGS_START
+
+/** \brief List of composite signature algorithms. */
+const char *kCompositeSignatureAlgorithms[] = {
+    "mldsa44_pss2048", "mldsa44_rsa2048",
+    "mldsa44_ed25519", "mldsa44_p256",
+    "mldsa44_bp256",   "mldsa65_pss3072",
+    "mldsa65_rsa3072", "mldsa65_p256",
+    "mldsa65_bp256",   "mldsa65_ed25519",
+    "mldsa87_p384",    "mldsa87_bp384",
+    "mldsa87_ed448",   NULL,
+};
+///// OQS_TEMPLATE_FRAGMENT_COMPOSITE_SIG_ALGS_END
+
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_START
 
 /** \brief List of hybrid KEMs. */

@@ -1377,6 +1377,19 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
                         key_diff = nids_sig[6].length_private_key - buflen;
                 }
 
+                // removing extra OTECT STRING from ED25519 and ED448 keys
+                if ((keytype == EVP_PKEY_ED25519) ||
+                    (keytype == EVP_PKEY_ED448)) {
+                    ASN1_OCTET_STRING *ed_octet = NULL;
+                    ed_octet = d2i_ASN1_OCTET_STRING(&ed_octet, &buf, buflen);
+                    aux += ed_octet->length;
+                    memcpy(concat_key + plen - 1 - aux, ed_octet->data,
+                           ed_octet->length);
+                    nid = 1; // setting to non zero value so the key is not
+                             // copied again
+                    ASN1_OCTET_STRING_free(ed_octet);
+                }
+
                 if (!nid) {
                     aux += buflen;
                     memcpy(concat_key + plen - 1 - aux, buf,

@@ -23,6 +23,11 @@ if [ -z "$OPENSSL_MODULES" ]; then
     echo "Warning: OPENSSL_MODULES env var not set."
 fi
 
+if [ -z "$OPENSSL_CONF" ]; then
+    echo "OPENSSL_CONF env var not set. Exiting."
+    exit 1
+fi
+
 # Set OSX DYLD_LIBRARY_PATH if not already externally set
 if [ -z "$DYLD_LIBRARY_PATH" ]; then
     export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
@@ -47,7 +52,7 @@ if [ $? -ne 0 ] || [ ! -f tmp/$1_srv_1.p12 ]; then
 fi
 
 # Generate config file with oqsprovider disabled
-sed -e 's/^oqsprovider/# oqsprovider/' "$(pwd)/scripts/openssl-ca.cnf" > tmp/openssl-ca-no-oqsprovider.cnf
+sed -e 's/^oqsprovider/# oqsprovider/' "$OPENSSL_CONF" > tmp/openssl-ca-no-oqsprovider.cnf
 
 # This print an error but OpenSSL returns 0 and .p12 file is generated correctly
 OPENSSL_CONF=tmp/openssl-ca-no-oqsprovider.cnf $OPENSSL_APP pkcs12 -provider default -provider oqsprovider -export -in tmp/$1_srv.crt -inkey tmp/$1_srv.key -passout pass: -out tmp/$1_srv_2.p12

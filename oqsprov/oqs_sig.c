@@ -447,7 +447,7 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
         unsigned char *buf;
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
-        int comp_idx = get_composite_idx(get_oqsalg_idx(nid));
+        int comp_idx = get_composite_idx(oqsxkey->tls_name);
         if (comp_idx == -1)
             goto endsign;
         const unsigned char *oid_prefix = composite_OID_prefix[comp_idx - 1];
@@ -799,7 +799,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
         CompositeSignature *compsig;
         int i;
         int nid = OBJ_sn2nid(oqsxkey->tls_name);
-        int comp_idx = get_composite_idx(get_oqsalg_idx(nid));
+        int comp_idx = get_composite_idx(oqsxkey->tls_name);
         if (comp_idx == -1)
             goto endverify;
         unsigned char *buf;

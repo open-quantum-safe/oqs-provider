@@ -1,5 +1,6 @@
 # This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
-# Next free plain KEM ID: 0x024D, p-hybrid: 0x2F4F, X-hybrid: 0x2FB9
+# Next free plain KEM ID: 0x024D, p-hybrid: 0x2F4F, X-hybrid: 0x2FB9, composite: 0x030B
+# Composite KEM IDs arbitrarily chosen to start from 0x0300 arbitrarily; to be changed if non-conformant with existing conventions.
 kems:
   -
     family: 'FrodoKEM'
@@ -166,6 +167,31 @@ kems:
           hybrid_oid: '1.3.6.1.4.1.22554.5.8.1'
 # code point not standardized: Why? XXX
           nid: '0x2FB6'
+    composite: [{'name': 'p256',
+                 'pretty_name': 'ECDH p256',
+                 'oid': '2.16.840.1.114027.80.8.1.1',
+                 'nid': '0x0300',
+                 'bit_security': 128},
+                {'name': 'bp256',
+                 'pretty_name': 'ECDH brainpoolP256r1',
+                 'oid': '2.16.840.1.114027.80.8.1.2',
+                 'nid': '0x0301',
+                 'bit_security': 128},
+                {'name': 'x25519',
+                 'pretty_name': 'X25519',
+                 'oid': '2.16.840.1.114027.80.8.1.3',
+                 'nid': '0x0302',
+                 'bit_security': 128},
+                {'name': 'rsa2048',
+                 'pretty_name': 'RSA2048 OAEP',
+                 'oid': '2.16.840.1.114027.80.8.1.13',
+                 'nid': '0x0303',
+                 'bit_security': 112},
+                {'name': 'rsa3072',
+                 'pretty_name': 'RSA3072 OAEP',
+                 'oid': '2.16.840.1.114027.80.8.1.4',
+                 'nid': '0x0304',
+                 'bit_security': 128}]
   -
     family: 'ML-KEM'
     fips_standard: 1
@@ -190,6 +216,21 @@ kems:
 # https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-secp256r1mlkem768
           nid: '0x11eb'
           standard_name: "SecP256r1MLKEM768"
+    composite: [{'name': 'p256',
+                 'pretty_name': 'ECDH p256',
+                 'oid': '2.16.840.1.114027.80.8.1.5',
+                 'nid': '0x0305',
+                 'bit_security': 128},
+                {'name': 'bp256',
+                 'pretty_name': 'ECDH brainpoolP256r1',
+                 'oid': '2.16.840.1.114027.80.8.1.6',
+                 'nid': '0x0306',
+                 'bit_security': 192},
+                {'name': 'x25519',
+                 'pretty_name': 'X25519',
+                 'oid': '2.16.840.1.114027.80.8.1.7',
+                 'nid': '0x0307',
+                 'bit_security': 128}]
   -
     family: 'ML-KEM'
     fips_standard: 1
@@ -211,6 +252,21 @@ kems:
           hybrid_oid: '1.3.6.1.4.1.42235.6'
 # code point not standardized: Why? XXX
           nid: '0x2F4E'
+    composite: [{'name': 'p384',
+                 'pretty_name': 'ECDH p384',
+                 'oid': '2.16.840.1.114027.80.8.1.8',
+                 'nid': '0x0308',
+                 'bit_security': 192},
+                {'name': 'bp384',
+                 'pretty_name': 'ECDH brainpoolP384r1',
+                 'oid': '2.16.840.1.114027.80.8.1.9',
+                 'nid': '0x0309',
+                 'bit_security': 256},
+                {'name': 'x448',
+                 'pretty_name': 'X448',
+                 'oid': '2.16.840.1.114027.80.8.1.10',
+                 'nid': '0x030A',
+                 'bit_security': 192}]
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'

@@ -1398,12 +1398,12 @@ static void *CROSSrsdp128balanced_gen_init(void *provctx, int selection) {
     static void *cmp_##tokalg##_new_key(void *provctx) {                       \
         return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg,            \
                             "" #tokalg "", KEY_TYPE_CMP_KEM, NULL,             \
-                            bit_security, -1);                                 \
+                            bit_security, -1, 0);                              \
     }                                                                          \
                                                                                \
     static void *cmp_##tokalg##_gen_init(void *provctx, int selection) {       \
         return oqsx_gen_init(provctx, selection, tokoqsalg, "" #tokalg "",     \
-                             KEY_TYPE_CMP_KEM, bit_security, -1);              \
+                             KEY_TYPE_CMP_KEM, bit_security, -1, 0);           \
     }                                                                          \
                                                                                \
     const OSSL_DISPATCH oqs_cmp_##tokalg##_keymgmt_functions[] = {             \

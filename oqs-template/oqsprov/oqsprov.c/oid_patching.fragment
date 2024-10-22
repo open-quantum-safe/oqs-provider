@@ -12,6 +12,10 @@
 {% set kemcount.val = kemcount.val + 2 -%}
    if ((envval = getenv("OQS_OID_{% if 'standard_name' in hybrid %}{{ hybrid['standard_name']|upper }}{% else %}{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}{% endif %}"))) oqs_oid_alg_list[{{ kemcount.val }}] = envval;
 {%- endfor -%}
+{% for composite_alg in kem['composite'] %}
+{% set kemcount.val = kemcount.val + 2 -%}
+   if ((envval = getenv("OQS_OID_{{kem['name_group']}}_{{composite_alg['name']}}"))) oqs_oid_alg_list[{{ kemcount.val }}] = envval;
+{%- endfor -%}
 {%- endfor %}
 
 #define OQS_KEMOID_CNT {{ kemcount.val }}+2

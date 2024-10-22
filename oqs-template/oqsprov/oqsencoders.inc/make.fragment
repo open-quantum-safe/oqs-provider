@@ -19,6 +19,15 @@ ENCODER_w_structure({% if 'standard_name' in hybrid %}"{{hybrid['standard_name']
 ENCODER_w_structure({% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT({% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}),
 {% endfor -%}
+{% for composite_alg in kem['composite'] -%}
+ENCODER_w_structure("{{kem['name_group']}}_{{composite_alg['name']}}", {{kem['name_group']}}_{{composite_alg['name']}}, der, PrivateKeyInfo),
+ENCODER_w_structure("{{kem['name_group']}}_{{composite_alg['name']}}", {{kem['name_group']}}_{{composite_alg['name']}}, pem, PrivateKeyInfo),
+ENCODER_w_structure("{{kem['name_group']}}_{{composite_alg['name']}}", {{kem['name_group']}}_{{composite_alg['name']}}, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("{{kem['name_group']}}_{{composite_alg['name']}}", {{kem['name_group']}}_{{composite_alg['name']}}, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("{{kem['name_group']}}_{{composite_alg['name']}}", {{kem['name_group']}}_{{composite_alg['name']}}, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("{{kem['name_group']}}_{{composite_alg['name']}}", {{kem['name_group']}}_{{composite_alg['name']}}, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("{{kem['name_group']}}_{{composite_alg['name']}}", {{kem['name_group']}}_{{composite_alg['name']}}),
+{% endfor -%}
 #endif
 {%- endfor %}
 

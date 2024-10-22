@@ -6,5 +6,8 @@
        {%- for hybrid in kem['hybrids'] -%}
           '{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}', 
        {%- endfor -%}
+       {%- for composite_alg in kem['composite'] -%}
+          '{{kem['name_group']}}_{{composite_alg['name']}}', 
+       {%- endfor -%}
     {% endfor %}
 

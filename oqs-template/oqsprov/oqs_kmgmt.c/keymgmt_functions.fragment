@@ -18,5 +18,8 @@ MAKE_KEM_ECP_KEYMGMT_FUNCTIONS({% if 'standard_name' in hybrid %}{{hybrid['stand
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS({% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{hybrid['hybrid_group']}}_{{kem['name_group']}}{% endif %}, {{kem['oqs_alg']}}, {{hybrid['bit_security']}}, {% if 'fips_standard' in kem %}{{kem['fips_standard']}}{% else %}0{% endif %})
 {%- endif %}
 {%- endfor %}
+     {%- for composite_alg in kem['composite'] %}
+MAKE_KEM_CMP_KEYMGMT_FUNCTIONS({{kem['name_group']}}_{{composite_alg['name']}}, {{kem['oqs_alg']}}, {{composite_alg['bit_security']}})
+     {%- endfor -%}
 {%- endfor %}
 

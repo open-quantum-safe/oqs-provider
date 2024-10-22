@@ -7,6 +7,11 @@
 # define {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_input_type    {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}
 # define {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}_pem_type      {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}
 {%- endfor %}
+     {% for composite_alg in kem['composite'] %}
+# define {{kem['name_group']}}_{{composite_alg['name']}}_evp_type     0
+# define {{kem['name_group']}}_{{composite_alg['name']}}_input_type    "{{kem['name_group']}}_{{composite_alg['name']}}"
+# define {{kem['name_group']}}_{{composite_alg['name']}}_pem_type      "{{kem['name_group']}}_{{composite_alg['name']}}"
+     {%- endfor %}
 {%- endfor %}
 
 {% for sig in config['sigs'] %}

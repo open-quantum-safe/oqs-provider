@@ -553,6 +553,11 @@ int oqs_patch_oids(void) {
      "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
      oqs_hybrid_kem_functions},
 
+#define KEMCMPALG(NAMES, SECBITS)                                   \
+    {"" #NAMES "",                                                  \
+     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", \
+     oqs_composite_kem_functions},
+
 #define KEMKMALG(NAMES, SECBITS)                                               \
     {"" #NAMES "",                                                             \
      "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
@@ -562,6 +567,11 @@ int oqs_patch_oids(void) {
     {"" #NAMES "",                                                             \
      "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
      oqs_##HYBTYPE##_##NAMES##_keymgmt_functions},
+
+#define KEMKMCMPALG(NAMES, SECBITS)                                 \
+    {"" #NAMES "",                                                  \
+     "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", \
+     oqs_cmp_##NAMES##_keymgmt_functions},
 
 /* Functions provided by the core */
 static OSSL_FUNC_core_gettable_params_fn *c_gettable_params = NULL;

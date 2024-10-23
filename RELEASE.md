@@ -18,7 +18,7 @@ This is version 0.7.0 of oqs-provider which continues from the earlier 0.6.1 rel
 
 ### Errata
 
-This release was updated on October 11, 2024 after being first published on October 08, 2024. Prior to being updated the release notes heading incorrectly reported the release version number to be 0.7.1; this error was limited to oqs-provider 0.7.0 release notes and did not affect any oqs-provider functionality.
+This release was updated on October 24, 2024 after being first published on October 08, 2024. Prior to being updated the release notes heading incorrectly reported the release version number to be 0.7.1; this error was limited to oqs-provider 0.7.0 release notes and did not affect any oqs-provider functionality.
 
 ### Security considerations
 

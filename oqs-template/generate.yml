@@ -150,8 +150,8 @@ kems:
     family: 'ML-KEM'
     fips_standard: 1
     name_group: 'mlkem512'
-# code point not standardized: Why? XXX
-    nid: '0x024A'
+# https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8
+    nid: '261'
 # NIST kem 1
     oid: '2.16.840.1.101.3.4.4.1'
 # code point not standardized: Why? XXX
@@ -170,8 +170,8 @@ kems:
     family: 'ML-KEM'
     fips_standard: 1
     name_group: 'mlkem768'
-# https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
-    nid: '0x0768'
+# https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8
+    nid: '262'
 # NIST kem 2
     oid: '2.16.840.1.101.3.4.4.2'
 # code point not standardized: Why? XXX
@@ -194,8 +194,8 @@ kems:
     family: 'ML-KEM'
     fips_standard: 1
     name_group: 'mlkem1024'
-# https://www.ietf.org/archive/id/draft-connolly-tls-mlkem-key-agreement-01.html
-    nid: '0x1024'
+# https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8
+    nid: '263'
 # NIST kem 3
     oid: '2.16.840.1.101.3.4.4.3'
 # code point not standardized: Why? XXX

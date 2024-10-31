@@ -997,13 +997,20 @@ static const OSSL_ALGORITHM oqsprovider_decoder[] = {
 };
 
 // get the last number on the composite OID
-int get_composite_idx(int idx) {
-    char *s;
+int get_composite_idx(char *name) {
+    char *s = NULL;
     int i, len, ret = -1, count = 0;
 
-    if (2 * idx > OQS_OID_CNT)
-        return 0;
-    s = (char *)oqs_oid_alg_list[idx * 2];
+    for (i = 1; i <= OQS_OID_CNT; i += 2) {
+        if (!strcmp((char *)oqs_oid_alg_list[i], name)) {
+            s = (char *)oqs_oid_alg_list[i - 1];
+            break;
+        }
+    }
+    if (s == NULL) {
+        return ret;
+    }
+
     len = strlen(s);
 
     for (i = 0; i < len; i++) {

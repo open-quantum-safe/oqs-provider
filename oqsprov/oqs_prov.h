@@ -203,7 +203,7 @@ char *get_oqsname_fromtls(char *tlsname);
 char *get_oqsname(int nid);
 char *get_cmpname(int nid, int index);
 int get_oqsalg_idx(int nid);
-int get_composite_idx(int idx);
+int get_composite_idx(char *name);
 
 /* Workaround for not functioning EC PARAM initialization
  * TBD, check https://github.com/openssl/openssl/issues/16989

@@ -665,7 +665,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
             OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_OCTET_STRING *));
         unsigned char **temp =
             OPENSSL_malloc(oqsxkey->numkeys * sizeof(unsigned char *));
-        size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t));
+        unsigned char *ed_internal;
+        size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t)),
+               ed_internallen;
         PKCS8_PRIV_KEY_INFO *p8inf_internal = NULL;
         sk = sk_ASN1_TYPE_new_null();
         int i;
@@ -789,7 +791,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
                 memcpy(buf, oqsxkey->comp_privkey[i],
                        buflen); // buflen for classical (RSA)
                                 // might be different from
-                                // oqsxkey->privkeylen_cmp[
+                                // oqsxkey->privkeylen_cmp
             }
 
             if (nid == EVP_PKEY_EC) { // add the curve OID with the ECPubkey OID
@@ -800,30 +802,87 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
                 version = V_ASN1_UNDEF;
                 pval = NULL;
             }
-            if (!PKCS8_pkey_set0(p8inf_internal, OBJ_nid2obj(nid), 0, version,
-                                 pval, buf, buflen)) {
-                for (int j = 0; j <= i; j++) {
-                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                    ASN1_OCTET_STRING_free(aString[j]);
-                    OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                    aType[j]->value.sequence->length);
-                    OPENSSL_clear_free(temp[j], templen[j]);
+            if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
+                oct.data = buf;
+                oct.length = buflen;
+                oct.flags = 0;
+                ed_internal = NULL;
+
+                ed_internallen = i2d_ASN1_OCTET_STRING(&oct, &ed_internal);
+                if (ed_internallen < 0) {
+                    for (int j = 0; j <= i; j++) {
+                        OPENSSL_cleanse(aString[j]->data, aString[j]->length);
+                        ASN1_OCTET_STRING_free(aString[j]);
+                        OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                        aType[j]->value.sequence->length);
+                        OPENSSL_clear_free(temp[j], templen[j]);
+                    }
+
+                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+                    OPENSSL_free(name);
+                    OPENSSL_free(aType);
+                    OPENSSL_free(aString);
+                    OPENSSL_free(temp);
+                    OPENSSL_free(templen);
+                    OPENSSL_cleanse(buf,
+                                    buflen); // buf is part of p8inf_internal so
+                                             // we cant free now, we cleanse it
+                                             // to remove pkey from memory
+                    PKCS8_PRIV_KEY_INFO_free(
+                        p8inf_internal); // this also free buf
+                    return -1;
                 }
 
-                sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                OPENSSL_free(name);
-                OPENSSL_free(aType);
-                OPENSSL_free(aString);
-                OPENSSL_free(temp);
-                OPENSSL_free(templen);
-                OPENSSL_cleanse(buf,
-                                buflen); // buf is part of p8inf_internal so we
-                                         // cant free now, we cleanse it to
-                                         // remove pkey from memory
-                PKCS8_PRIV_KEY_INFO_free(p8inf_internal); // this also free buf
-                return -1;
-            }
+                if (!PKCS8_pkey_set0(p8inf_internal, OBJ_nid2obj(nid), 0,
+                                     version, pval, ed_internal,
+                                     ed_internallen)) {
+                    for (int j = 0; j <= i; j++) {
+                        OPENSSL_cleanse(aString[j]->data, aString[j]->length);
+                        ASN1_OCTET_STRING_free(aString[j]);
+                        OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                        aType[j]->value.sequence->length);
+                        OPENSSL_clear_free(temp[j], templen[j]);
+                    }
 
+                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+                    OPENSSL_free(name);
+                    OPENSSL_free(aType);
+                    OPENSSL_free(aString);
+                    OPENSSL_free(temp);
+                    OPENSSL_free(templen);
+                    OPENSSL_secure_clear_free(buf, buflen);
+                    OPENSSL_cleanse(ed_internal, ed_internallen);
+                    PKCS8_PRIV_KEY_INFO_free(
+                        p8inf_internal); // this also free ed_internal
+                    return -1;
+                }
+
+            } else {
+                if (!PKCS8_pkey_set0(p8inf_internal, OBJ_nid2obj(nid), 0,
+                                     version, pval, buf, buflen)) {
+                    for (int j = 0; j <= i; j++) {
+                        OPENSSL_cleanse(aString[j]->data, aString[j]->length);
+                        ASN1_OCTET_STRING_free(aString[j]);
+                        OPENSSL_cleanse(aType[j]->value.sequence->data,
+                                        aType[j]->value.sequence->length);
+                        OPENSSL_clear_free(temp[j], templen[j]);
+                    }
+
+                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
+                    OPENSSL_free(name);
+                    OPENSSL_free(aType);
+                    OPENSSL_free(aString);
+                    OPENSSL_free(temp);
+                    OPENSSL_free(templen);
+                    OPENSSL_cleanse(buf,
+                                    buflen); // buf is part of p8inf_internal so
+                                             // we cant free now, we cleanse it
+                                             // to remove pkey from memory
+                    PKCS8_PRIV_KEY_INFO_free(
+                        p8inf_internal); // this also free buf
+                    return -1;
+                }
+            }
             templen[i] =
                 i2d_PKCS8_PRIV_KEY_INFO(p8inf_internal,
                                         &temp[i]); // create the privkey info
@@ -853,12 +912,26 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
                                 buflen); // buf is part of p8inf_internal so we
                                          // cant free now, we cleanse it to
                                          // remove pkey from memory
-                PKCS8_PRIV_KEY_INFO_free(p8inf_internal); // this also free buf
+                if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
+                    OPENSSL_cleanse(ed_internal, ed_internallen);
+                    OPENSSL_secure_free(
+                        buf); // in this case the ed_internal is
+                              // freed from the pkcs8_free instead
+                              // of buf, so we need to free buf here
+                }
+                PKCS8_PRIV_KEY_INFO_free(
+                    p8inf_internal); // this also free buf or ed_internal
                 return -1;
             }
             OPENSSL_free(name);
 
             OPENSSL_cleanse(buf, buflen);
+            if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
+                OPENSSL_cleanse(ed_internal, ed_internallen);
+                OPENSSL_secure_free(buf); // in this case the ed_internal is
+                                          // freed from the pkcs8_free instead
+                                          // of buf, so we need to free buf here
+            }
             PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
         }
         keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);

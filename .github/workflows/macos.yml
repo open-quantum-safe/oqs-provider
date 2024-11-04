@@ -14,7 +14,6 @@ jobs:
       matrix:
         os:
           - macos-13
-          - macos-12
         libjade-build:
 # build with -DOQS_LIBJADE_BUILD=ON when building for algorithms with libjade implementations
           - "OFF"

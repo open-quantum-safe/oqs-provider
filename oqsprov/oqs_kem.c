@@ -61,47 +61,47 @@ typedef struct oqsx_cmp_kem_info_st OQSX_CMP_KEM_INFO;
 #define NUM_CMP_KEM_ALGS 11
 
 const OQSX_CMP_KEM_INFO CMP_KEM_INFO[NUM_CMP_KEM_ALGS] = {
-    {"mlkem512-p256",
+    {"mlkem512_p256",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x01},
      KDF_SHA3_256},
-    {"mlkem512-bp256",
+    {"mlkem512_bp256",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x02},
      KDF_SHA3_256},
-    {"mlkem512-x25519",
+    {"mlkem512_x25519",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x03},
      KDF_SHA3_256},
-    {"mlkem512-rsa2048",
+    {"mlkem512_rsa2048",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x0D},
      KDF_SHA3_256},
-    {"mlkem512-rsa3072",
+    {"mlkem512_rsa3072",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x04},
      KDF_SHA3_256},
-    {"mlkem768-p256",
+    {"mlkem768_p256",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x05},
      KDF_SHA3_384},
-    {"mlkem768-bp256",
+    {"mlkem768_bp256",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x06},
      KDF_SHA3_384},
-    {"mlkem768-x25519",
+    {"mlkem768_x25519",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x07},
      KDF_SHA3_384},
-    {"mlkem1024-p384",
+    {"mlkem1024_p384",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x08},
      KDF_SHA3_512},
-    {"mlkem1024-bp384",
+    {"mlkem1024_bp384",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x09},
      KDF_SHA3_512},
-    {"mlekm1024-x448",
+    {"mlkem1024_x448",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
       0x0A},
      KDF_SHA3_512}};
@@ -180,7 +180,7 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
                             unsigned char *output, size_t *outputLen) {
     EVP_MD_CTX *mdctx = NULL;
     const EVP_MD *md = NULL;
-    unsigned char *buffer = NULL;
+    unsigned char *buffer = NULL, *p = NULL;
     size_t bufferLen;
     int ret = 1, ret2 = 0;
     const OQSX_CMP_KEM_INFO *info = NULL;
@@ -213,7 +213,7 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
 
     if (tradSS == NULL || mlkemSS == NULL || tradCT == NULL || tradPK == NULL) {
         *outputLen = md_size;
-        ON_ERR_SET_GOTO(1, ret, 0, err);
+        ON_ERR_SET_GOTO(1, ret, 1, err);
     }
 
     bufferLen = 4 + tradSSLen + mlkemSSLen + tradCTLen + tradPKLen +
@@ -221,7 +221,7 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
     buffer = OPENSSL_malloc(bufferLen);
     ON_ERR_SET_GOTO(buffer == NULL, ret, 0, err);
 
-    unsigned char *p = buffer;
+    p = buffer;
     memcpy(p, counter, 4);
     p += 4;
     memcpy(p, tradSS, tradSSLen);
@@ -234,22 +234,9 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
     p += tradPKLen;
     memcpy(p, info->domSep, sizeof(info->domSep));
 
-    mdctx = EVP_MD_CTX_new();
-    ON_ERR_SET_GOTO(mdctx == NULL, ret, 0, err_buffer);
+    ret2 = EVP_Digest(buffer, bufferLen, output, (unsigned int*)outputLen, md, NULL);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
 
-    ret2 = EVP_DigestInit_ex(mdctx, md, NULL);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_mdctx);
-
-    ret2 = EVP_DigestUpdate(mdctx, buffer, bufferLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_mdctx);
-
-    ret2 = EVP_DigestFinal_ex(mdctx, output, &md_size);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_mdctx);
-
-    *outputLen = md_size;
-
-err_mdctx:
-    EVP_MD_CTX_free(mdctx);
 err_buffer:
     OPENSSL_clear_free(buffer, bufferLen);
 err:

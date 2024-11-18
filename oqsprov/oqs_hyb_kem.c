@@ -44,9 +44,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
             return 1;
         }
 
-        pkey =
-            d2i_PublicKey(keytype, NULL, (const unsigned char **)&pubkey_kex,
-                           pubkey_kexlen);
+        pkey = d2i_PublicKey(keytype, NULL, (const unsigned char **)&pubkey_kex,
+                             pubkey_kexlen);
         ON_ERR_SET_GOTO(!pkey, ret, -1, err);
 
         ctx = EVP_PKEY_CTX_new(pkey, NULL);
@@ -399,14 +398,14 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
         unsigned char *temp = NULL;
 
         ret2 = ASN1_STRING_set(cmpCT->ct1, ct0, ctLen0);
-        if (!ret2){
+        if (!ret2) {
             OPENSSL_free(temp);
             ON_ERR_SET_GOTO(1, ret, 0, err_cmpct);
         }
         cmpCT->ct1->flags = 8; // do not check for unused bits
 
         ret2 = ASN1_STRING_set(cmpCT->ct2, ct1, ctLen1);
-        if (!ret2){
+        if (!ret2) {
             OPENSSL_free(temp);
             ON_ERR_SET_GOTO(1, ret, 0, err_cmpct);
         }
@@ -418,8 +417,10 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
             ON_ERR_SET_GOTO(1, ret, 0, err_cmpct);
         }
 
-        ret2 = oqs_kem_combiner(pkemctx, NULL, secretLen1, NULL, secretLen0, NULL, ctLen1, NULL, pkemctx->kem->pubkeylen_cmp[1], NULL, secretlen);
-        if (!ret2){
+        ret2 = oqs_kem_combiner(
+            pkemctx, NULL, secretLen1, NULL, secretLen0, NULL, ctLen1, NULL,
+            pkemctx->kem->pubkeylen_cmp[1], NULL, secretlen);
+        if (!ret2) {
             OPENSSL_free(temp);
             ON_ERR_SET_GOTO(1, ret, 0, err_cmpct);
         }

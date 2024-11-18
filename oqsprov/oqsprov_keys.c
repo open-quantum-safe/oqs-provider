@@ -330,7 +330,7 @@ char *get_cmpname_fromtls(char *tlsname, int index) {
         name = NULL;
     }
 
-    err:
+err:
     return name;
 }
 
@@ -1771,17 +1771,17 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
             ret->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
         ret->pubkeylen_cmp[0] =
             ret->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
-        
+
         evp_ctx = OPENSSL_zalloc(sizeof(OQSX_EVP_CTX));
         ON_ERR_GOTO(!evp_ctx, err);
 
         ret2 = oqsx_cmpkem_init(get_cmpname_fromtls(tls_name, 1), evp_ctx);
         ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->ctx, err);
         ret->oqsx_provider_ctx.oqsx_evp_ctx = evp_ctx;
-        ret->privkeylen_cmp[1] = ret->oqsx_provider_ctx.oqsx_evp_ctx
-                                        ->evp_info->length_private_key;
-        ret->pubkeylen_cmp[1] = ret->oqsx_provider_ctx.oqsx_evp_ctx
-                                    ->evp_info->length_public_key;
+        ret->privkeylen_cmp[1] =
+            ret->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_private_key;
+        ret->pubkeylen_cmp[1] =
+            ret->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_public_key;
 
         ret->privkeylen = ret->privkeylen_cmp[0] + ret->privkeylen_cmp[1];
         ret->pubkeylen = ret->pubkeylen_cmp[0] + ret->pubkeylen_cmp[1];
@@ -2116,7 +2116,7 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
     if (ctx->evp_info->keytype == EVP_PKEY_RSA) {
         if (ctx->evp_info->kex_length_secret == 256) { // rsa2048
             ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 2048);
-        } else if (ctx->evp_info->kex_length_secret == 384) { //rsa3072
+        } else if (ctx->evp_info->kex_length_secret == 384) { // rsa3072
             ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
         } else {
             ON_ERR_SET_GOTO(1, ret, -1, errhyb);
@@ -2244,12 +2244,10 @@ int oqsx_key_gen(OQSX_KEY *key) {
     } else if (key->keytype == KEY_TYPE_CMP_KEM) {
         ret = oqsx_key_set_composites(key, 0);
         ret = OQS_KEM_keypair(key->oqsx_provider_ctx.oqsx_qs_ctx.kem,
-                                    key->comp_pubkey[0], key->comp_privkey[0]);
+                              key->comp_pubkey[0], key->comp_privkey[0]);
         ON_ERR_GOTO(ret, err_gen);
-        pkey = oqsx_key_gen_evp_key_kem(
-                    key,
-                    key->comp_pubkey[1],
-                    key->comp_privkey[1], 0);
+        pkey = oqsx_key_gen_evp_key_kem(key, key->comp_pubkey[1],
+                                        key->comp_privkey[1], 0);
         ON_ERR_GOTO(ret = (pkey == NULL), err_gen);
         key->classical_pkey = pkey;
     } else if (key->keytype == KEY_TYPE_SIG) {

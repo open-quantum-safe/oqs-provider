@@ -234,7 +234,8 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
     p += tradPKLen;
     memcpy(p, info->domSep, sizeof(info->domSep));
 
-    ret2 = EVP_Digest(buffer, bufferLen, output, (unsigned int*)outputLen, md, NULL);
+    ret2 = EVP_Digest(buffer, bufferLen, output, (unsigned int *)outputLen, md,
+                      NULL);
     ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
 
 err_buffer:

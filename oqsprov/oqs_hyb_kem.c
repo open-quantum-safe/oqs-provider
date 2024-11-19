@@ -7,7 +7,9 @@
  *
  */
 
+#include "oqs_prov.h"
 #include <openssl/asn1.h>
+#include <openssl/crypto.h>
 static OSSL_FUNC_kem_encapsulate_fn oqs_hyb_kem_encaps;
 static OSSL_FUNC_kem_decapsulate_fn oqs_hyb_kem_decaps;
 
@@ -485,6 +487,25 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
     const unsigned char *ct0 = NULL, *ct1 = NULL;
     unsigned char *secret0 = NULL, *secret1 = NULL;
 
+    ret2 = oqs_qs_kem_decaps_keyslot(vpkemctx, NULL, &secretLen0, NULL, 0, 0);
+    ON_ERR_SET_GOTO(ret2 <= 0, ret, 0, err);
+    secret0 = OPENSSL_malloc(secretLen0);
+    ON_ERR_SET_GOTO(!secret0, ret, 0, err_secret0);
+
+    ret2 = oqs_evp_kem_decaps_keyslot(vpkemctx, NULL, &secretLen1, NULL, 0, 1);
+    ON_ERR_SET_GOTO(ret2 <= 0, ret, 0, err_secret0);
+    secret1 = OPENSSL_malloc(secretLen1);
+    ON_ERR_SET_GOTO(!secret1, ret, 0, err_secret1);
+
+    if (secret == NULL) {
+        ret2 = oqs_kem_combiner(
+            pkemctx, NULL, secretLen1, NULL, secretLen0, NULL, ctLen1, NULL,
+            pkemctx->kem->pubkeylen_cmp[1], NULL, secretlen);
+        ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err);
+
+        ON_ERR_SET_GOTO(1, ret, 1, err);
+    }
+
     CompositeCiphertext *cmpCT;
     const unsigned char *p = ct; // temp ptr because d2i_* may move input ct ptr
 
@@ -496,16 +517,6 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
     ct1 = ASN1_STRING_get0_data(cmpCT->ct2);
     ctLen1 = ASN1_STRING_length(cmpCT->ct2);
     ON_ERR_SET_GOTO(!ct0 || !ct1, ret, 0, err_cmpct);
-
-    ret2 = oqs_qs_kem_decaps_keyslot(vpkemctx, NULL, &secretLen0, NULL, 0, 0);
-    ON_ERR_SET_GOTO(ret2 <= 0, ret, 0, err_cmpct);
-    secret0 = OPENSSL_malloc(secretLen0);
-    ON_ERR_SET_GOTO(!secret0, ret, 0, err_secret0);
-
-    ret2 = oqs_evp_kem_decaps_keyslot(vpkemctx, NULL, &secretLen1, NULL, 0, 1);
-    ON_ERR_SET_GOTO(ret2 <= 0, ret, 0, err_secret0);
-    secret1 = OPENSSL_malloc(secretLen1);
-    ON_ERR_SET_GOTO(!secret1, ret, 0, err_secret1);
 
     ret2 = oqs_qs_kem_decaps_keyslot(vpkemctx, secret0, &secretLen0, ct0,
                                      ctLen0, 0);
@@ -520,12 +531,12 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
                             pkemctx->kem->pubkeylen_cmp[1], secret, secretlen);
     ON_ERR_SET_GOTO(!ret2, ret, 0, err_secret1);
 
+err_cmpct:
+    CompositeCiphertext_free(cmpCT);
 err_secret1:
     OPENSSL_clear_free(secret1, secretLen1);
 err_secret0:
     OPENSSL_clear_free(secret0, secretLen0);
-err_cmpct:
-    CompositeCiphertext_free(cmpCT);
 err:
     return ret;
 }

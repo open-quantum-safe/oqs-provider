@@ -211,7 +211,8 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
 
     md_size = EVP_MD_size(md);
 
-    if (tradSS == NULL || mlkemSS == NULL || tradCT == NULL || tradPK == NULL) {
+    if (tradSS == NULL || mlkemSS == NULL || tradCT == NULL || tradPK == NULL ||
+        output == NULL) {
         *outputLen = md_size;
         ON_ERR_SET_GOTO(1, ret, 1, err);
     }

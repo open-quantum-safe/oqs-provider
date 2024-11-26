@@ -1,10 +1,12 @@
 # This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
 # Next free plain KEM ID: 0x024D, p-hybrid: 0x2F4F, X-hybrid: 0x2FB9
+# Switch to using unassigned code points as per https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8:
+# Next free: 65027 (see https://github.com/open-quantum-safe/oqs-provider/issues/561)
 kems:
   -
     family: 'FrodoKEM'
     name_group: 'frodo640aes'
-    nid: '0x0200'
+    nid: '65024'
     nid_hybrid: '0x2F00'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_aes'
     extra_nids:
@@ -14,7 +16,7 @@ kems:
   -
     family: 'FrodoKEM'
     name_group: 'frodo640shake'
-    nid: '0x0201'
+    nid: '65025'
     nid_hybrid: '0x2F01'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_shake'
     extra_nids:
@@ -24,7 +26,7 @@ kems:
   -
     family: 'FrodoKEM'
     name_group: 'frodo976aes'
-    nid: '0x0202'
+    nid: '65026'
     nid_hybrid: '0x2F02'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_aes'
     extra_nids:
@@ -151,7 +153,7 @@ kems:
     fips_standard: 1
     name_group: 'mlkem512'
 # https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8
-    nid: '261'
+    nid: '512'
 # NIST kem 1
     oid: '2.16.840.1.101.3.4.4.1'
 # code point not standardized: Why? XXX
@@ -171,7 +173,7 @@ kems:
     fips_standard: 1
     name_group: 'mlkem768'
 # https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8
-    nid: '262'
+    nid: '513'
 # NIST kem 2
     oid: '2.16.840.1.101.3.4.4.2'
 # code point not standardized: Why? XXX
@@ -195,7 +197,7 @@ kems:
     fips_standard: 1
     name_group: 'mlkem1024'
 # https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8
-    nid: '263'
+    nid: '514'
 # NIST kem 3
     oid: '2.16.840.1.101.3.4.4.3'
 # code point not standardized: Why? XXX

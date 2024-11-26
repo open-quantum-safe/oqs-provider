@@ -12,13 +12,13 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_START -->
 |Algorithm name | default ID | enabled | environment variable |
 |---------------|:----------:|:-------:|----------------------|
-| frodo640aes | 0x0200 | Yes | OQS_CODEPOINT_FRODO640AES |
+| frodo640aes | 65024 | Yes | OQS_CODEPOINT_FRODO640AES |
 | p256_frodo640aes | 0x2F00 | Yes | OQS_CODEPOINT_P256_FRODO640AES |
 | x25519_frodo640aes | 0x2F80 | Yes | OQS_CODEPOINT_X25519_FRODO640AES |
-| frodo640shake | 0x0201 | Yes | OQS_CODEPOINT_FRODO640SHAKE |
+| frodo640shake | 65025 | Yes | OQS_CODEPOINT_FRODO640SHAKE |
 | p256_frodo640shake | 0x2F01 | Yes | OQS_CODEPOINT_P256_FRODO640SHAKE |
 | x25519_frodo640shake | 0x2F81 | Yes | OQS_CODEPOINT_X25519_FRODO640SHAKE |
-| frodo976aes | 0x0202 | Yes | OQS_CODEPOINT_FRODO976AES |
+| frodo976aes | 65026 | Yes | OQS_CODEPOINT_FRODO976AES |
 | p384_frodo976aes | 0x2F02 | Yes | OQS_CODEPOINT_P384_FRODO976AES |
 | x448_frodo976aes | 0x2F82 | Yes | OQS_CODEPOINT_X448_FRODO976AES |
 | frodo976shake | 0x0203 | Yes | OQS_CODEPOINT_FRODO976SHAKE |
@@ -38,15 +38,15 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | p256_kyber768 | 0x639A | Yes | OQS_CODEPOINT_P256_KYBER768 |
 | kyber1024 | 0x023D | Yes | OQS_CODEPOINT_KYBER1024 |
 | p521_kyber1024 | 0x2F3D | Yes | OQS_CODEPOINT_P521_KYBER1024 |
-| mlkem512 | 261 | Yes | OQS_CODEPOINT_MLKEM512 |
+| mlkem512 | 512 | Yes | OQS_CODEPOINT_MLKEM512 |
 | p256_mlkem512 | 0x2F4B | Yes | OQS_CODEPOINT_P256_MLKEM512 |
 | x25519_mlkem512 | 0x2FB6 | Yes | OQS_CODEPOINT_X25519_MLKEM512 |
-| mlkem768 | 262 | Yes | OQS_CODEPOINT_MLKEM768 |
+| mlkem768 | 513 | Yes | OQS_CODEPOINT_MLKEM768 |
 | p384_mlkem768 | 0x2F4C | Yes | OQS_CODEPOINT_P384_MLKEM768 |
 | x448_mlkem768 | 0x2FB7 | Yes | OQS_CODEPOINT_X448_MLKEM768 |
 | X25519MLKEM768 | 0x11ec | Yes | OQS_CODEPOINT_X25519MLKEM768 |
 | SecP256r1MLKEM768 | 0x11eb | Yes | OQS_CODEPOINT_SECP256R1MLKEM768 |
-| mlkem1024 | 263 | Yes | OQS_CODEPOINT_MLKEM1024 |
+| mlkem1024 | 514 | Yes | OQS_CODEPOINT_MLKEM1024 |
 | p521_mlkem1024 | 0x2F4D | Yes | OQS_CODEPOINT_P521_MLKEM1024 |
 | p384_mlkem1024 | 0x2F4E | Yes | OQS_CODEPOINT_P384_MLKEM1024 |
 | bikel1 | 0x0241 | Yes | OQS_CODEPOINT_BIKEL1 |

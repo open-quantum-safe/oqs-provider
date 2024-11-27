@@ -994,10 +994,9 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
             goto endverify;
         }
-        if (OQS_SIG_verify(oqs_key, tbs, tbslen, sig + index,
-                           siglen - classical_sig_len,
-                           oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) !=
-            OQS_SUCCESS) {
+        if (OQS_SIG_verify(
+                oqs_key, tbs, tbslen, sig + index, siglen - classical_sig_len,
+                oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) != OQS_SUCCESS) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
             goto endverify;
         }

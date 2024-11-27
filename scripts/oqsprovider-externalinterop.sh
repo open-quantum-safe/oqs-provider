@@ -28,13 +28,14 @@ fi
 
 # Ascertain algorithms are available:
 
-echo " Cloudflare:"
-
-if ! ($OPENSSL_APP list -kem-algorithms | grep x25519_kyber768); then
-   echo "Skipping unconfigured x25519_kyber768 interop test"
-else
-   (echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect pq.cloudflareresearch.com:443 -groups x25519_kyber768 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber768Draft00
-fi
+# Cloudflare seems to have disabled this algorithm: Remove for good?
+# echo " Cloudflare:"
+# 
+# if ! ($OPENSSL_APP list -kem-algorithms | grep x25519_kyber768); then
+#    echo "Skipping unconfigured x25519_kyber768 interop test"
+# else
+#    (echo -e "GET /cdn-cgi/trace HTTP/1.1\nHost: cloudflare.com\n\n"; sleep 1; echo $'\cc') | "${OPENSSL_APP}" s_client ${USE_PROXY} -connect pq.cloudflareresearch.com:443 -groups x25519_kyber768 -servername cloudflare.com -ign_eof 2>/dev/null | grep kex=X25519Kyber768Draft00
+# fi
 
 echo " Google:"
 

@@ -35,15 +35,15 @@ typedef struct oqs_group_constants_st {
 static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
     ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_START
-    {0x0200, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {65024, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F00, 128, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2F80, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0201, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {65025, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F01, 128, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2F81, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {0x0202, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {65026, 192, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F02, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2F82, 192, TLS1_3_VERSION, 0, -1, -1, 1},
@@ -70,17 +70,17 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {0x023D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F3D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
-    {261, 128, TLS1_3_VERSION, 0, -1, -1, 1},
+    {512, 128, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F4B, 128, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2FB6, 128, TLS1_3_VERSION, 0, -1, -1, 1},
-    {262, 192, TLS1_3_VERSION, 0, -1, -1, 1},
+    {513, 192, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F4C, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2FB7, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x11ec, 192, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x11eb, 192, TLS1_3_VERSION, 0, -1, -1, 1},
-    {263, 256, TLS1_3_VERSION, 0, -1, -1, 1},
+    {514, 256, TLS1_3_VERSION, 0, -1, -1, 1},
 
     {0x2F4D, 256, TLS1_3_VERSION, 0, -1, -1, 1},
     {0x2F4E, 256, TLS1_3_VERSION, 0, -1, -1, 1},

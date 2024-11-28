@@ -57,15 +57,15 @@
 | FrodoKEM       | NIST Round 3 submission  | frodo1344aes   | 3            |                    5 | 0x2F04       | secp521_r1                       |
 | FrodoKEM       | NIST Round 3 submission  | frodo1344shake | 3            |                    5 | 0x0205       |                                  |
 | FrodoKEM       | NIST Round 3 submission  | frodo1344shake | 3            |                    5 | 0x2F05       | secp521_r1                       |
-| FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 0x0200       |                                  |
 | FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 0x2F00       | secp256_r1                       |
 | FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 0x2F80       | x25519                           |
-| FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 0x0201       |                                  |
+| FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 65024        |                                  |
 | FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 0x2F01       | secp256_r1                       |
 | FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 0x2F81       | x25519                           |
-| FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 0x0202       |                                  |
+| FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 65025        |                                  |
 | FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 0x2F02       | secp384_r1                       |
 | FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 0x2F82       | x448                             |
+| FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 65026        |                                  |
 | FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 0x0203       |                                  |
 | FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 0x2F03       | secp384_r1                       |
 | FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 0x2F83       | x448                             |
@@ -87,12 +87,12 @@
 | HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x2F46       | secp521_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4D       | secp521_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4E       | p384                             |
-| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 263          |                                  |
+| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 514          |                                  |
 | ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2F4B       | secp256_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2FB6       | x25519                           |
-| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 261          |                                  |
+| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 512          |                                  |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x11eb       | p256                             |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x11ec       | x25519                           |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2F4C       | secp384_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2FB7       | x448                             |
-| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 262          |                                  |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 513          |                                  |

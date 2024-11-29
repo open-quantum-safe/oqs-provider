@@ -426,7 +426,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xff19
+# Next free signature ID: 0xff0a
 sigs:
   # -
     # iso (1)
@@ -583,36 +583,36 @@ sigs:
         pretty_name: 'ML-DSA-44'
         oqs_meth: 'OQS_SIG_alg_ml_dsa_44'
         oid: '2.16.840.1.101.3.4.3.17'
-        code_point: '0xff06'
+        code_point: '0x0904'
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.7.5',
-                    'code_point': '0xff09'},
+                    'code_point': '0xff06'},
                    {'name': 'rsa3072',
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.7.6',
-                    'code_point': '0xff0a'}]
+                    'code_point': '0xff07'}]
         composite:  [{'name': 'pss2048',
                       'pretty_name': 'RSA PSS 2048',
                       'security': '112',
                       'oid': '2.16.840.1.114027.80.8.1.1',
-                      'code_point': '0xfee1'},
+                      'code_point': '0x090f'},
                      {'name': 'rsa2048',
-                      'pretty_name': 'RSA2028',
+                      'pretty_name': 'RSA2048',
                       'security': '112',
                       'oid': '2.16.840.1.114027.80.8.1.2',
-                      'code_point': '0xfee2'},
+                      'code_point': '0x090c'},
                      {'name': 'ed25519',
                       'pretty_name': 'ED25519',
                       'security': '128',
                       'oid': '2.16.840.1.114027.80.8.1.3',
-                      'code_point': '0xfee3'},
+                      'code_point': '0x090a'},
                      {'name': 'p256',
                       'pretty_name': 'ECDSA p256',
                       'security': '128',
                       'oid': '2.16.840.1.114027.80.8.1.4',
-                      'code_point': '0xfee4'},
+                      'code_point': '0x0907'},
                      {'name': 'bp256',
                       'pretty_name': 'ECDSA brainpoolP256r1',
                       'security': '256',
@@ -623,27 +623,27 @@ sigs:
         pretty_name: 'ML-DSA-65'
         oqs_meth: 'OQS_SIG_alg_ml_dsa_65'
         oid: '2.16.840.1.101.3.4.3.18'
-        code_point: '0xff07'
+        code_point: '0x0905'
         enable: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.7.7',
-                    'code_point': '0xff0b'}]
+                    'code_point': '0xff08'}]
         composite:  [{'name': 'pss3072',
                       'pretty_name': 'RSA PSS 3072',
                       'security': '128',
                       'oid': '2.16.840.1.114027.80.8.1.6',
-                      'code_point': '0xfee6'},
+                      'code_point': '0x0910'},
                      {'name': 'rsa3072',
                       'pretty_name': 'RSA 3072',
                       'security': '128',
                       'oid': '2.16.840.1.114027.80.8.1.7',
-                      'code_point': '0xfee7'},
+                      'code_point': '0x090d'},
                      {'name': 'p256',
                       'pretty_name': 'ECDSA p256',
                       'security': '128',
                       'oid': '2.16.840.1.114027.80.8.1.8',
-                      'code_point': '0xfee8'},
+                      'code_point': '0x0908'},
                      {'name': 'bp256',
                       'pretty_name': 'ECDSA brainpoolP256r1',
                       'security': '256',
@@ -653,23 +653,23 @@ sigs:
                       'pretty_name': 'ED25519',
                       'security': '128',
                       'oid': '2.16.840.1.114027.80.8.1.10',
-                      'code_point': '0xfeea'}]
+                      'code_point': '0x090b'}]
       -
         name: 'mldsa87'
         pretty_name: 'ML-DSA-87'
         oqs_meth: 'OQS_SIG_alg_ml_dsa_87'
         oid: '2.16.840.1.101.3.4.3.19'
-        code_point: '0xff08'
+        code_point: '0x0906'
         enable: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.7.8',
-                    'code_point': '0xff0c'}]
+                    'code_point': '0xff09'}]
         composite:  [{'name': 'p384',
                       'pretty_name': 'ECDSA p384',
                       'security': '192',
                       'oid': '2.16.840.1.114027.80.8.1.11',
-                      'code_point': '0xfeeb'},
+                      'code_point': '0x0909'},
                      {'name': 'bp384',
                       'pretty_name': 'ECDSA brainpoolP384r1',
                       'security': '384',
@@ -679,7 +679,7 @@ sigs:
                       'pretty_name': 'ED448',
                       'security': '192',
                       'oid': '2.16.840.1.114027.80.8.1.13',
-                      'code_point': '0xfeed'}]
+                      'code_point': '0x0912'}]
   -
     # iso (1)
     # identified-organization (3)

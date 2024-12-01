@@ -21,6 +21,7 @@
 #include <openssl/rand.h>
 #include <openssl/rsa.h>
 #include <string.h>
+#include <time.h>
 
 #include "oqs_prov.h"
 
@@ -217,26 +218,31 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
         ON_ERR_SET_GOTO(1, ret, 1, err);
     }
 
-    bufferLen = 4 + tradSSLen + mlkemSSLen + tradCTLen + tradPKLen +
-                sizeof(info->domSep);
-    buffer = OPENSSL_malloc(bufferLen);
-    ON_ERR_SET_GOTO(buffer == NULL, ret, 0, err);
+    mdctx = EVP_MD_CTX_new();
+    ON_ERR_SET_GOTO(!mdctx, ret, 0, err_buffer);
 
-    p = buffer;
-    memcpy(p, counter, 4);
-    p += 4;
-    memcpy(p, tradSS, tradSSLen);
-    p += tradSSLen;
-    memcpy(p, mlkemSS, mlkemSSLen);
-    p += mlkemSSLen;
-    memcpy(p, tradCT, tradCTLen);
-    p += tradCTLen;
-    memcpy(p, tradPK, tradPKLen);
-    p += tradPKLen;
-    memcpy(p, info->domSep, sizeof(info->domSep));
+    ret2 = EVP_DigestInit_ex(mdctx, md, NULL);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
 
-    ret2 = EVP_Digest(buffer, bufferLen, output, (unsigned int *)outputLen, md,
-                      NULL);
+    ret2 = EVP_DigestUpdate(mdctx, counter, 4);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+
+    ret2 = EVP_DigestUpdate(mdctx, tradSS, tradSSLen);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+
+    ret2 = EVP_DigestUpdate(mdctx, mlkemSS, mlkemSSLen);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+
+    ret2 = EVP_DigestUpdate(mdctx, tradCT, tradCTLen);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+
+    ret2 = EVP_DigestUpdate(mdctx, tradPK, tradPKLen);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+
+    ret2 = EVP_DigestUpdate(mdctx, tradPK, tradPKLen);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+
+    ret2 = EVP_DigestFinal_ex(mdctx, output, (unsigned int *)outputLen);
     ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
 
 err_buffer:

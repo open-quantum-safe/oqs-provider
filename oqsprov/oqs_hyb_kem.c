@@ -506,9 +506,9 @@ static int oqs_cmp_kem_decaps(void *vpkemctx, unsigned char *secret,
             oqs_kem_combiner(pkemctx, NULL, secretLen1, NULL, secretLen0, NULL,
                              cmpCT->ct2->length, NULL,
                              pkemctx->kem->pubkeylen_cmp[1], NULL, secretlen);
-        ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_secret1);
+        ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_cmpct);
 
-        ON_ERR_SET_GOTO(1, ret, 1, err_secret1);
+        ON_ERR_SET_GOTO(1, ret, 1, err_cmpct);
     }
 
     ret2 = oqs_qs_kem_decaps_keyslot(vpkemctx, secret0, &secretLen0,

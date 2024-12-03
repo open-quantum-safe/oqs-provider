@@ -58,13 +58,13 @@
 | mayo3 **hybrid with** p384                        | https://doi.org/10.46586/tches.v2024.i2.252-275  | 1            |                    3 | 0xfef4       | 1.3.9999.8.3.2           |
 | mayo5                                             | https://doi.org/10.46586/tches.v2024.i2.252-275  | 1            |                    5 | 0xfef1       | 1.3.9999.8.5.1           |
 | mayo5 **hybrid with** p521                        | https://doi.org/10.46586/tches.v2024.i2.252-275  | 1            |                    5 | 0xfef5       | 1.3.9999.8.5.2           |
-| mldsa44                                           | ML-DSA-ipd                                       | ipd          |                    1 | 0xfed0       | 1.3.6.1.4.1.2.267.12.4.4 |
-| mldsa44 **hybrid with** p256                      | ML-DSA-ipd                                       | ipd          |                    1 | 0xfed3       | 1.3.9999.7.1             |
-| mldsa44 **hybrid with** rsa3072                   | ML-DSA-ipd                                       | ipd          |                    1 | 0xfed4       | 1.3.9999.7.2             |
-| mldsa65                                           | ML-DSA-ipd                                       | ipd          |                    3 | 0xfed1       | 1.3.6.1.4.1.2.267.12.6.5 |
-| mldsa65 **hybrid with** p384                      | ML-DSA-ipd                                       | ipd          |                    3 | 0xfed5       | 1.3.9999.7.3             |
-| mldsa87                                           | ML-DSA-ipd                                       | ipd          |                    5 | 0xfed2       | 1.3.6.1.4.1.2.267.12.8.7 |
-| mldsa87 **hybrid with** p521                      | ML-DSA-ipd                                       | ipd          |                    5 | 0xfed6       | 1.3.9999.7.4             |
+| mldsa44                                           | ML-DSA                                           | FIPS204      |                    1 | 0xfed0       | 1.3.6.1.4.1.2.267.12.4.4 |
+| mldsa44 **hybrid with** p256                      | ML-DSA                                           | FIPS204      |                    1 | 0xfed3       | 1.3.9999.7.1             |
+| mldsa44 **hybrid with** rsa3072                   | ML-DSA                                           | FIPS204      |                    1 | 0xfed4       | 1.3.9999.7.2             |
+| mldsa65                                           | ML-DSA                                           | FIPS204      |                    3 | 0xfed1       | 1.3.6.1.4.1.2.267.12.6.5 |
+| mldsa65 **hybrid with** p384                      | ML-DSA                                           | FIPS204      |                    3 | 0xfed5       | 1.3.9999.7.3             |
+| mldsa87                                           | ML-DSA                                           | FIPS204      |                    5 | 0xfed2       | 1.3.6.1.4.1.2.267.12.8.7 |
+| mldsa87 **hybrid with** p521                      | ML-DSA                                           | FIPS204      |                    5 | 0xfed6       | 1.3.9999.7.4             |
 | sphincsharaka128frobust                           | NIST Round 3 submission                          | 3            |                    1 | 0xfe42       | 1.3.9999.6.1.1           |
 | sphincsharaka128frobust **hybrid with** p256      | NIST Round 3 submission                          | 3            |                    1 | 0xfe43       | 1.3.9999.6.1.2           |
 | sphincsharaka128frobust **hybrid with** rsa3072   | NIST Round 3 submission                          | 3            |                    1 | 0xfe44       | 1.3.9999.6.1.3           |

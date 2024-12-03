@@ -39,13 +39,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
     kexDeriveLen = evp_ctx->evp_info->kex_length_secret;
 
     if (keytype == EVP_PKEY_RSA) {
-        *ctlen = evp_ctx->evp_info->kex_length_secret;
-        *secretlen = 32;
-        if (ct == NULL || secret == NULL) {
-            OQS_KEM_PRINTF3("EVP KEM returning lengths %ld and %ld\n", *ctlen,
-                            *secretlen);
-            return 1;
-        }
+        // *ctlen = evp_ctx->evp_info->kex_length_secret;
+        *secretlen = (size_t)32;
 
         pkey = d2i_PublicKey(keytype, NULL, (const unsigned char **)&pubkey_kex,
                              pubkey_kexlen);
@@ -70,14 +65,23 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
         ret = EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, NULL, 0);
         ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
 
+        ret = EVP_PKEY_encrypt(ctx, NULL, ctlen, NULL, *secretlen);
+        ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
+
+        if (ct == NULL || secret == NULL) {
+            OQS_KEM_PRINTF3("EVP KEM returning lengths %ld and %ld\n", *ctlen,
+                            *secretlen);
+            return 1;
+        }
+
         // generate random secret, 256 bits = 32 bytes
-        if (RAND_priv_bytes(secret, 32) <= 0) {
+        if (RAND_priv_bytes(secret, *secretlen) <= 0) {
             ret = -1;
             goto err;
         }
 
-        outlen = kexDeriveLen;
-        ret = EVP_PKEY_encrypt(ctx, ct, &outlen, secret, 32);
+        // outlen = kexDeriveLen;
+        ret = EVP_PKEY_encrypt(ctx, ct, ctlen, secret, *secretlen);
         ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
 
     } else {
@@ -159,11 +163,7 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
 
     if (keytype == EVP_PKEY_RSA) {
         *secretlen = 32;
-        size_t outlen = 32; // expected secret length (256 bits)
-        if (secret == NULL) {
-            OQS_KEM_PRINTF2("EVP KEM returning lengths %ld\n", *secretlen);
-            return 1;
-        }
+        // size_t outlen = 32; // expected secret length (256 bits)
 
         pkey =
             d2i_PrivateKey(keytype, NULL, (const unsigned char **)&privkey_kex,
@@ -189,8 +189,15 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
         ret = EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, NULL, 0);
         ON_ERR_SET_GOTO(ret <= 0, ret, -7, err);
 
-        ret = EVP_PKEY_decrypt(ctx, NULL, &outlen, ct, ctlen);
-        ret = EVP_PKEY_decrypt(ctx, secret, &outlen, ct, ctlen);
+        ret = EVP_PKEY_decrypt(ctx, NULL, secretlen, NULL, ctlen);
+        ON_ERR_SET_GOTO(ret <= 0, ret, -8, err);
+
+        if (secret == NULL) {
+            OQS_KEM_PRINTF2("EVP KEM returning lengths %ld\n", *secretlen);
+            return 1;
+        }
+
+        ret = EVP_PKEY_decrypt(ctx, secret, secretlen, ct, ctlen);
         ON_ERR_SET_GOTO(ret <= 0, ret, -8, err);
 
     } else {

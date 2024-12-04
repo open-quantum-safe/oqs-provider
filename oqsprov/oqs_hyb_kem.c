@@ -11,6 +11,7 @@
 #include <openssl/asn1.h>
 #include <openssl/crypto.h>
 #include <openssl/types.h>
+#include <string.h>
 static OSSL_FUNC_kem_encapsulate_fn oqs_hyb_kem_encaps;
 static OSSL_FUNC_kem_decapsulate_fn oqs_hyb_kem_decaps;
 
@@ -62,7 +63,11 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
         ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
 
         // set pSourceFunc to empty string for pSpecifiedEmptyIdentifier
-        ret = EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, NULL, 0);
+        // passing NULL as label breaks on OpenSSL 3.0.0 pass "" instead
+        const char *empty = "";
+        char *label = OPENSSL_malloc(1);
+        strcpy(label, empty);
+        ret = EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, (void *)label, 0);
         ON_ERR_SET_GOTO(ret <= 0, ret, -1, err);
 
         ret = EVP_PKEY_encrypt(ctx, NULL, ctlen, NULL, *secretlen);
@@ -187,7 +192,11 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
         ON_ERR_SET_GOTO(ret <= 0, ret, -6, err);
 
         // expect pSourceFunc to be pSpecifiedEmptyIdentifier
-        ret = EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, NULL, 0);
+        // passing NULL as label breaks on OpenSSL 3.0.0 pass "" instead
+        const char *empty = "";
+        char *label = OPENSSL_malloc(1);
+        strcpy(label, empty);
+        ret = EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, (void *)label, 0);
         ON_ERR_SET_GOTO(ret <= 0, ret, -7, err);
 
         ret = EVP_PKEY_decrypt(ctx, NULL, secretlen, NULL, ctlen);

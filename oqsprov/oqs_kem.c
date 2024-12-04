@@ -181,8 +181,7 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
                             unsigned char *output, size_t *outputLen) {
     EVP_MD_CTX *mdctx = NULL;
     const EVP_MD *md = NULL;
-    unsigned char *buffer = NULL, *p = NULL;
-    size_t bufferLen;
+    unsigned char *p = NULL;
     int ret = 1, ret2 = 0;
     const OQSX_CMP_KEM_INFO *info = NULL;
     unsigned int md_size;
@@ -219,34 +218,34 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
     }
 
     mdctx = EVP_MD_CTX_new();
-    ON_ERR_SET_GOTO(!mdctx, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(!mdctx, ret, 0, err_ctx);
 
     ret2 = EVP_DigestInit_ex(mdctx, md, NULL);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
     ret2 = EVP_DigestUpdate(mdctx, counter, 4);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
     ret2 = EVP_DigestUpdate(mdctx, tradSS, tradSSLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
     ret2 = EVP_DigestUpdate(mdctx, mlkemSS, mlkemSSLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
     ret2 = EVP_DigestUpdate(mdctx, tradCT, tradCTLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
     ret2 = EVP_DigestUpdate(mdctx, tradPK, tradPKLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
     ret2 = EVP_DigestUpdate(mdctx, tradPK, tradPKLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
     ret2 = EVP_DigestFinal_ex(mdctx, output, (unsigned int *)outputLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_buffer);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
 
-err_buffer:
-    OPENSSL_clear_free(buffer, bufferLen);
+err_ctx:
+    EVP_MD_CTX_free(mdctx);
 err:
     return ret;
 }

@@ -71,7 +71,8 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
         if (ct == NULL || secret == NULL) {
             OQS_KEM_PRINTF3("EVP KEM returning lengths %ld and %ld\n", *ctlen,
                             *secretlen);
-            return 1;
+            ret = 1;
+            goto err;
         }
 
         // generate random secret, 256 bits = 32 bytes
@@ -194,7 +195,8 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
 
         if (secret == NULL) {
             OQS_KEM_PRINTF2("EVP KEM returning lengths %ld\n", *secretlen);
-            return 1;
+            ret = 1;
+            goto err;
         }
 
         ret = EVP_PKEY_decrypt(ctx, secret, secretlen, ct, ctlen);
@@ -386,7 +388,7 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     ON_ERR_SET_GOTO(ret2 <= 0, ret, 0, err);
     secret0 = OPENSSL_zalloc(secretLen0);
     ON_ERR_SET_GOTO(!secret0, ret, 0, err_secret0);
-    ct0 = OPENSSL_zalloc(ctLen0); // do not free ct0, freed later with cmpCT
+    ct0 = OPENSSL_zalloc(ctLen0);
     ON_ERR_SET_GOTO(!ct0, ret, 0, err_ct0);
 
     ret2 = oqs_evp_kem_encaps_keyslot(vpkemctx, NULL, &ctLen1, NULL,
@@ -394,15 +396,11 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     ON_ERR_SET_GOTO(ret2 <= 0, ret, 0, err_ct0);
     secret1 = OPENSSL_zalloc(secretLen1);
     ON_ERR_SET_GOTO(!secret1, ret, 0, err_secret1);
-    ct1 = OPENSSL_zalloc(ctLen1); // do not free ct1, freed later with cmpCT
+    ct1 = OPENSSL_zalloc(ctLen1);
     ON_ERR_SET_GOTO(!ct1, ret, 0, err_ct1);
 
     cmpCT = CompositeCiphertext_new();
     ON_ERR_SET_GOTO(!cmpCT, ret, OQS_ERROR, err_cmpct);
-    cmpCT->ct1 = ASN1_OCTET_STRING_new();
-    ON_ERR_SET_GOTO(!(cmpCT->ct1), ret, OQS_ERROR, err_cmpct);
-    cmpCT->ct2 = ASN1_OCTET_STRING_new();
-    ON_ERR_SET_GOTO(!(cmpCT->ct2), ret, OQS_ERROR, err_cmpct);
 
     if (ct == NULL || secret == NULL) {
         unsigned char *temp = NULL;
@@ -460,11 +458,7 @@ static int oqs_cmp_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     ON_ERR_SET_GOTO(!ret2, ret, 0, err_cmpct);
 
 err_cmpct:
-    CompositeCiphertext_free(cmpCT); // ct0 and ct1 also freed here
-    OPENSSL_clear_free(secret1, secretLen1);
-    OPENSSL_clear_free(secret0, secretLen0);
-    return ret;
-
+    CompositeCiphertext_free(cmpCT);
 err_ct1:
     OPENSSL_free(ct1);
 err_secret1:

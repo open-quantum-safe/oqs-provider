@@ -898,9 +898,18 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             }
 
             if (get_oqsname_fromtls(name)) {
+#if !defined OQS_VERSION_MINOR ||                                              \
+    (OQS_VERSION_MAJOR == 0 && OQS_VERSION_MINOR < 12)
                 if (OQS_SIG_verify(oqs_key, (const unsigned char *)final_tbs,
                                    final_tbslen, buf, buf_len,
                                    oqsxkey->comp_pubkey[i]) != OQS_SUCCESS) {
+#else
+                if (OQS_SIG_verify_with_ctx_str(
+                        oqs_key, (const unsigned char *)final_tbs, final_tbslen,
+                        buf, buf_len, poqs_sigctx->context_string,
+                        poqs_sigctx->context_string_length,
+                        oqsxkey->comp_pubkey[i]) != OQS_SUCCESS) {
+#endif
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
                     OPENSSL_free(name);
                     CompositeSignature_free(compsig);
@@ -1014,9 +1023,17 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
             goto endverify;
         }
+#if !defined OQS_VERSION_MINOR ||                                              \
+    (OQS_VERSION_MAJOR == 0 && OQS_VERSION_MINOR < 12)
         if (OQS_SIG_verify(
                 oqs_key, tbs, tbslen, sig + index, siglen - classical_sig_len,
                 oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) != OQS_SUCCESS) {
+#else
+        if (OQS_SIG_verify_with_ctx_str(
+                oqs_key, tbs, tbslen, sig + index, siglen - classical_sig_len,
+                poqs_sigctx->context_string, poqs_sigctx->context_string_length,
+                oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) != OQS_SUCCESS) {
+#endif
             ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
             goto endverify;
         }
@@ -1197,6 +1214,8 @@ static void oqs_sig_freectx(void *vpoqs_sigctx) {
     ctx->aid = NULL;
     ctx->aid_len = 0;
     OPENSSL_free(ctx->context_string);
+    ctx->context_string = NULL;
+    ctx->context_string_length = 0;
     OPENSSL_free(ctx);
 }
 
@@ -1323,9 +1342,8 @@ static int oqs_sig_set_ctx_params(void *vpoqs_sigctx,
 #if (OPENSSL_VERSION_PREREQ(3, 2))
     p = OSSL_PARAM_locate_const(params, OSSL_SIGNATURE_PARAM_CONTEXT_STRING);
     if (p != NULL) {
-        if (!OSSL_PARAM_get_octet_string(
-                p, &poqs_sigctx->context_string, 0,
-                &(poqs_sigctx->context_string_length))) {
+        if (!OSSL_PARAM_get_octet_string(p, &poqs_sigctx->context_string, 0,
+                                         &poqs_sigctx->context_string_length)) {
             poqs_sigctx->context_string_length = 0;
             return 0;
         }

@@ -1329,8 +1329,8 @@ static int oqs_sig_set_ctx_params(void *vpoqs_sigctx,
             poqs_sigctx->context_string_length = 0;
             return 0;
         }
-#endif
     }
+#endif
 
     // not passing in parameters we can act on is no error
     return 1;

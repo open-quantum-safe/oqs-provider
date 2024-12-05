@@ -144,7 +144,9 @@ Also not fully supported in 3.0.2 is performance testing as per the openssl
 
 These versions have full support for all TLS1.3 operations using PQ algorithms
 when deploying `oqsprovider`, particularly with regard to the use of signature
-algorithms.
+algorithms. This also includes support for the "OSSL_SIGNATURE_PARAM_CONTEXT_STRING"
+parameter that had not been supported before and for which limited support in
+single PQ algorithms is available since `liboqs` version 0.12.
 
 ## 3.4 and greater
 

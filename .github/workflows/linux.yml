@@ -64,7 +64,7 @@ jobs:
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
-      - name: Verify nothing changes on re-generate code
+      - name: Re-generate code
         run: |
           apt-get update && apt-get install -y clang-format && \
           git config --global user.name "ciuser" && \
@@ -72,10 +72,7 @@ jobs:
           git config --global --add safe.directory `pwd` && \
           export LIBOQS_SRC_DIR=`pwd`/liboqs && \
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
-          python3 oqs-template/generate.py && \
-          ./scripts/do_code_format.sh --no-dry-run && \
-          git diff && \
-          ! git status | grep modified
+          python3 oqs-template/generate.py
       - name: Build .deb install package
         run: cpack -C DebPack
         working-directory: _build

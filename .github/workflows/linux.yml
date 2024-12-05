@@ -73,6 +73,8 @@ jobs:
           export LIBOQS_SRC_DIR=`pwd`/liboqs && \
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
           python3 oqs-template/generate.py
+      - name: Full re-build
+        run: rm -rf _build && ./scripts/fullbuild.sh
       - name: Build .deb install package
         run: cpack -C DebPack
         working-directory: _build

@@ -17,6 +17,7 @@
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/kdf.h>
+#include <openssl/obj_mac.h>
 #include <openssl/params.h>
 #include <openssl/rand.h>
 #include <openssl/rsa.h>
@@ -47,7 +48,7 @@ static OSSL_FUNC_kem_encapsulate_fn oqs_qs_kem_encaps;
 static OSSL_FUNC_kem_decapsulate_fn oqs_qs_kem_decaps;
 static OSSL_FUNC_kem_freectx_fn oqs_kem_freectx;
 
-enum oqsx_kdf_type_en { KDF_SHA3_256, KDF_SHA3_384, KDF_SHA3_512 };
+enum oqsx_kdf_type_en { KDF_SHA3_256, KDF_SHA256 };
 
 typedef enum oqsx_kdf_type_en OQSX_KDF_TYPE;
 
@@ -59,53 +60,46 @@ struct oqsx_cmp_kem_info_st {
 
 typedef struct oqsx_cmp_kem_info_st OQSX_CMP_KEM_INFO;
 
-#define NUM_CMP_KEM_ALGS 11
+#define NUM_CMP_KEM_ALGS 9
 
 const OQSX_CMP_KEM_INFO CMP_KEM_INFO[NUM_CMP_KEM_ALGS] = {
-    {"mlkem512_p256",
+    {"mlkem768_rsa2048",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x01},
-     KDF_SHA3_256},
-    {"mlkem512_bp256",
+      0x15},
+     KDF_SHA256},
+    {"mlkem768_rsa3072",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x02},
-     KDF_SHA3_256},
-    {"mlkem512_x25519",
+      0x16},
+     KDF_SHA256},
+    {"mlkem768_rsa4096",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x03},
-     KDF_SHA3_256},
-    {"mlkem512_rsa2048",
-     {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x0D},
-     KDF_SHA3_256},
-    {"mlkem512_rsa3072",
-     {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x04},
-     KDF_SHA3_256},
-    {"mlkem768_p256",
-     {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x05},
-     KDF_SHA3_384},
-    {"mlkem768_bp256",
-     {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x06},
-     KDF_SHA3_384},
+      0x17},
+     KDF_SHA256},
     {"mlkem768_x25519",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x07},
-     KDF_SHA3_384},
+      0x1A},
+     KDF_SHA3_256},
+    {"mlkem768_p384",
+     {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+      0x18},
+     KDF_SHA256},
+    {"mlkem768_bp256",
+     {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
+      0x19},
+     KDF_SHA256},
     {"mlkem1024_p384",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x08},
-     KDF_SHA3_512},
+      0x1B},
+     KDF_SHA3_256},
     {"mlkem1024_bp384",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x09},
-     KDF_SHA3_512},
+      0x1C},
+     KDF_SHA3_256},
     {"mlkem1024_x448",
      {0x06, 0x0B, 0x60, 0x86, 0x48, 0x01, 0x86, 0xFA, 0x6B, 0x50, 0x05, 0x02,
-      0x0A},
-     KDF_SHA3_512}};
+      0x1D},
+     KDF_SHA3_256},
+};
 
 DECLARE_ASN1_FUNCTIONS(CompositeCiphertext)
 
@@ -179,13 +173,26 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
                             const unsigned char *tradCT, size_t tradCTLen,
                             const unsigned char *tradPK, size_t tradPKLen,
                             unsigned char *output, size_t *outputLen) {
-    EVP_MD_CTX *mdctx = NULL;
-    const EVP_MD *md = NULL;
-    unsigned char *p = NULL;
     int ret = 1, ret2 = 0;
+
+    EVP_KDF *kdf = NULL;
+    EVP_KDF_CTX *kctx = NULL;
+    OSSL_PARAM params[4], *p = params;
+
+    unsigned char *buf = NULL, *b = NULL;
+    const size_t bufLen = mlkemSSLen + tradSSLen + tradCTLen + tradPKLen;
+
     const OQSX_CMP_KEM_INFO *info = NULL;
-    unsigned int md_size;
     const unsigned char counter[4] = {0x00, 0x00, 0x00, 0x01};
+    const size_t hashLen = 256;
+    const unsigned char salt[256] = {0};
+
+    *outputLen = hashLen;
+
+    if (tradSS == NULL || mlkemSS == NULL || tradCT == NULL || tradPK == NULL ||
+        output == NULL) {
+        ON_ERR_SET_GOTO(1, ret, 1, err);
+    }
 
     for (int i = 0; i < NUM_CMP_KEM_ALGS; i++) {
         if (strcmp(CMP_KEM_INFO[i].name, pkemctx->kem->tls_name) == 0) {
@@ -197,55 +204,57 @@ static int oqs_kem_combiner(const PROV_OQSKEM_CTX *pkemctx,
 
     switch (info->kdf) {
     case KDF_SHA3_256:
-        md = EVP_sha3_256();
+        kdf = EVP_KDF_fetch(NULL, "SSKDF", NULL);
+        ON_ERR_SET_GOTO(!kdf, ret, 0, err_kdf);
+        kctx = EVP_KDF_CTX_new(kdf);
+        ON_ERR_SET_GOTO(!kctx, ret, 0, err_kctx);
+
+        *p++ = OSSL_PARAM_construct_utf8_string(
+            OSSL_KDF_PARAM_DIGEST, SN_sha3_256, strlen(SN_sha3_256));
+
         break;
-    case KDF_SHA3_384:
-        md = EVP_sha3_384();
-        break;
-    case KDF_SHA3_512:
-        md = EVP_sha3_512();
+    case KDF_SHA256:
+        kdf = EVP_KDF_fetch(NULL, "HKDF", NULL);
+        ON_ERR_SET_GOTO(!kdf, ret, 0, err_kdf);
+        kctx = EVP_KDF_CTX_new(kdf);
+        ON_ERR_SET_GOTO(!kctx, ret, 0, err_kctx);
+
+        *p++ = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_DIGEST,
+                                                SN_sha256, strlen(SN_sha256));
+        *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SALT,
+                                                 (void *)salt, hashLen);
+
         break;
     default:
         ON_ERR_SET_GOTO(1, ret, 0, err);
     }
 
-    md_size = EVP_MD_size(md);
+    buf = OPENSSL_malloc(bufLen);
+    ON_ERR_SET_GOTO(!buf, ret, 0, err_buf);
+    b = buf;
 
-    if (tradSS == NULL || mlkemSS == NULL || tradCT == NULL || tradPK == NULL ||
-        output == NULL) {
-        *outputLen = md_size;
-        ON_ERR_SET_GOTO(1, ret, 1, err);
-    }
+    memcpy(b, mlkemSS, mlkemSSLen);
+    b += mlkemSSLen;
+    memcpy(b, tradSS, tradSSLen);
+    b += tradSSLen;
+    memcpy(b, tradCT, tradCTLen);
+    b += tradCTLen;
+    memcpy(b, tradPK, tradPKLen);
+    b += tradPKLen;
 
-    mdctx = EVP_MD_CTX_new();
-    ON_ERR_SET_GOTO(!mdctx, ret, 0, err_ctx);
+    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_KEY, (void *)buf,
+                                             bufLen);
+    *p = OSSL_PARAM_construct_end();
 
-    ret2 = EVP_DigestInit_ex(mdctx, md, NULL);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
+    ret2 = EVP_KDF_derive(kctx, output, *outputLen, params);
+    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_kctx);
 
-    ret2 = EVP_DigestUpdate(mdctx, counter, 4);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
-
-    ret2 = EVP_DigestUpdate(mdctx, tradSS, tradSSLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
-
-    ret2 = EVP_DigestUpdate(mdctx, mlkemSS, mlkemSSLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
-
-    ret2 = EVP_DigestUpdate(mdctx, tradCT, tradCTLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
-
-    ret2 = EVP_DigestUpdate(mdctx, tradPK, tradPKLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
-
-    ret2 = EVP_DigestUpdate(mdctx, tradPK, tradPKLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
-
-    ret2 = EVP_DigestFinal_ex(mdctx, output, (unsigned int *)outputLen);
-    ON_ERR_SET_GOTO(ret2 != 1, ret, 0, err_ctx);
-
-err_ctx:
-    EVP_MD_CTX_free(mdctx);
+err_kctx:
+    EVP_KDF_CTX_free(kctx);
+err_kdf:
+    EVP_KDF_free(kdf);
+err_buf:
+    OPENSSL_clear_free(buf, bufLen);
 err:
     return ret;
 }

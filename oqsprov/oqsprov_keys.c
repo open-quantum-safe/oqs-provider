@@ -12,6 +12,7 @@
 #include <openssl/core_names.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
+#include <openssl/obj_mac.h>
 #include <openssl/params.h>
 #include <openssl/rsa.h>
 #include <openssl/x509.h>
@@ -587,17 +588,19 @@ static const OQSX_EVP_INFO nids_sig[] = {
 };
 
 // These two array need to stay synced:
-static const char *OQSX_KEM_NAMES[] = {"p256",   "p384", "bp256",   "bp384",
-                                       "x25519", "x448", "rsa3072", "rsa2048"};
+static const char *OQSX_KEM_NAMES[] = {"p256",    "p384",    "bp256",
+                                       "bp384",   "x25519",  "x448",
+                                       "rsa2048", "rsa3072", "rsa4096"};
 static const OQSX_EVP_INFO nids_kem[] = {
-    {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 72}, // 128 bit
-    {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 104},       // 192 bit
-    {EVP_PKEY_EC, NID_brainpoolP256r1, 0, 65, 122, 32, 72},  // 256 bit
-    {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 104}, // 384 bit
-    {EVP_PKEY_X25519, NID_X25519, 1, 32, 32, 32, 0},         // 128 bit
-    {EVP_PKEY_X448, NID_X448, 1, 56, 56, 56, 0},             // 192 bit
-    {EVP_PKEY_RSA, NID_rsaesOaep, 0, 398, 1770, 384, 384},   // 128 bit
-    {EVP_PKEY_RSA, NID_rsaesOaep, 0, 270, 1193, 256, 256},   // 112 bit
+    {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 72},   // 128 bit
+    {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 104},         // 192 bit
+    {EVP_PKEY_EC, NID_brainpoolP256r1, 0, 65, 122, 32, 72},    // 256 bit
+    {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 104},   // 384 bit
+    {EVP_PKEY_X25519, NID_X25519, 1, 32, 32, 32, 0},           // 128 bit
+    {EVP_PKEY_X448, NID_X448, 1, 56, 56, 56, 0},               // 192 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 270, 1192, 256, 256}, // 112 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1769, 384, 384}, // 128 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 526, 2349, 512, 512}, // 140 bit
 };
 
 static const OQSX_EVP_INFO *nids_cmp[] = {nids_sig, nids_kem};
@@ -755,19 +758,11 @@ err_init_ecx:
 static int oqsx_cmpkem_init(char *classical_name, OQSX_EVP_CTX *evp_ctx) {
     int ret = 1;
     int idx = 0;
-    // char *classical_name;
 
     if (classical_name == NULL || evp_ctx == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
-
-    // // Extract the classical part of the composite name
-    // classical_name = get_cmpname(OBJ_sn2nid(tls_name), 1);
-    // if (classical_name == NULL) {
-    //     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-    //     return 0;
-    // }
 
     while (idx < OSSL_NELEM(OQSX_KEM_NAMES)) {
         if (strcmp(classical_name, OQSX_KEM_NAMES[idx]) == 0)
@@ -2118,6 +2113,8 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
             ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 2048);
         } else if (ctx->evp_info->kex_length_secret == 384) { // rsa3072
             ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 3072);
+        } else if (ctx->evp_info->kex_length_secret == 512) { // rsa4096
+            ret2 = EVP_PKEY_CTX_set_rsa_keygen_bits(kgctx, 4096);
         } else {
             ON_ERR_SET_GOTO(1, ret, -1, errhyb);
         }

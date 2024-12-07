@@ -54,7 +54,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 121
+#define NID_TABLE_LEN 119
 #else
 #define NID_TABLE_LEN 57
 #endif
@@ -103,20 +103,18 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "p256_mlkem512", OQS_KEM_alg_ml_kem_512, KEY_TYPE_ECP_HYB_KEM, 128, 0},
     {0, "x25519_mlkem512", OQS_KEM_alg_ml_kem_512, KEY_TYPE_ECX_HYB_KEM, 128,
      1},
-    {0, "mlkem512_p256", OQS_KEM_alg_ml_kem_512, KEY_TYPE_CMP_KEM, 128},
-    {0, "mlkem512_bp256", OQS_KEM_alg_ml_kem_512, KEY_TYPE_CMP_KEM, 128},
-    {0, "mlkem512_x25519", OQS_KEM_alg_ml_kem_512, KEY_TYPE_CMP_KEM, 128},
-    {0, "mlkem512_rsa2048", OQS_KEM_alg_ml_kem_512, KEY_TYPE_CMP_KEM, 112},
-    {0, "mlkem512_rsa3072", OQS_KEM_alg_ml_kem_512, KEY_TYPE_CMP_KEM, 128},
     {0, "mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_KEM, 192, 0},
     {0, "p384_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192, 0},
     {0, "x448_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192, 1},
     {0, "X25519MLKEM768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192, 1},
     {0, "SecP256r1MLKEM768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192,
      0},
-    {0, "mlkem768_p256", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 128},
-    {0, "mlkem768_bp256", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 192},
+    {0, "mlkem768_rsa2048", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 112},
+    {0, "mlkem768_rsa3072", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 128},
+    {0, "mlkem768_rsa4096", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 140},
     {0, "mlkem768_x25519", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 128},
+    {0, "mlkem768_p384", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 192},
+    {0, "mlkem768_bp256", OQS_KEM_alg_ml_kem_768, KEY_TYPE_CMP_KEM, 128},
     {0, "mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_KEM, 256, 0},
     {0, "p521_mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM, 256,
      0},

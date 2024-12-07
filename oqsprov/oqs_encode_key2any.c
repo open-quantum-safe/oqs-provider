@@ -1002,21 +1002,6 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define x25519_mlkem512_input_type "x25519_mlkem512"
 #define x25519_mlkem512_pem_type "x25519_mlkem512"
 
-#define mlkem512_p256_evp_type 0
-#define mlkem512_p256_input_type "mlkem512_p256"
-#define mlkem512_p256_pem_type "mlkem512_p256"
-#define mlkem512_bp256_evp_type 0
-#define mlkem512_bp256_input_type "mlkem512_bp256"
-#define mlkem512_bp256_pem_type "mlkem512_bp256"
-#define mlkem512_x25519_evp_type 0
-#define mlkem512_x25519_input_type "mlkem512_x25519"
-#define mlkem512_x25519_pem_type "mlkem512_x25519"
-#define mlkem512_rsa2048_evp_type 0
-#define mlkem512_rsa2048_input_type "mlkem512_rsa2048"
-#define mlkem512_rsa2048_pem_type "mlkem512_rsa2048"
-#define mlkem512_rsa3072_evp_type 0
-#define mlkem512_rsa3072_input_type "mlkem512_rsa3072"
-#define mlkem512_rsa3072_pem_type "mlkem512_rsa3072"
 #define mlkem768_evp_type 0
 #define mlkem768_input_type "mlkem768"
 #define mlkem768_pem_type "mlkem768"
@@ -1034,15 +1019,24 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define SecP256r1MLKEM768_input_type "SecP256r1MLKEM768"
 #define SecP256r1MLKEM768_pem_type "SecP256r1MLKEM768"
 
-#define mlkem768_p256_evp_type 0
-#define mlkem768_p256_input_type "mlkem768_p256"
-#define mlkem768_p256_pem_type "mlkem768_p256"
-#define mlkem768_bp256_evp_type 0
-#define mlkem768_bp256_input_type "mlkem768_bp256"
-#define mlkem768_bp256_pem_type "mlkem768_bp256"
+#define mlkem768_rsa2048_evp_type 0
+#define mlkem768_rsa2048_input_type "mlkem768_rsa2048"
+#define mlkem768_rsa2048_pem_type "mlkem768_rsa2048"
+#define mlkem768_rsa3072_evp_type 0
+#define mlkem768_rsa3072_input_type "mlkem768_rsa3072"
+#define mlkem768_rsa3072_pem_type "mlkem768_rsa3072"
+#define mlkem768_rsa4096_evp_type 0
+#define mlkem768_rsa4096_input_type "mlkem768_rsa4096"
+#define mlkem768_rsa4096_pem_type "mlkem768_rsa4096"
 #define mlkem768_x25519_evp_type 0
 #define mlkem768_x25519_input_type "mlkem768_x25519"
 #define mlkem768_x25519_pem_type "mlkem768_x25519"
+#define mlkem768_p384_evp_type 0
+#define mlkem768_p384_input_type "mlkem768_p384"
+#define mlkem768_p384_pem_type "mlkem768_p384"
+#define mlkem768_bp256_evp_type 0
+#define mlkem768_bp256_input_type "mlkem768_bp256"
+#define mlkem768_bp256_pem_type "mlkem768_bp256"
 #define mlkem1024_evp_type 0
 #define mlkem1024_input_type "mlkem1024"
 #define mlkem1024_pem_type "mlkem1024"
@@ -2158,41 +2152,6 @@ MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecx, x25519_mlkem512);
-MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_p256, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_cmp, mlkem512_p256);
-MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_bp256, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_cmp, mlkem512_bp256);
-MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_x25519, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_cmp, mlkem512_x25519);
-MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_rsa2048, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_cmp, mlkem512_rsa2048);
-MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem512_rsa3072, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_cmp, mlkem512_rsa3072);
 MAKE_ENCODER(, mlkem768, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, mlkem768, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, mlkem768, oqsx, PrivateKeyInfo, der);
@@ -2229,20 +2188,27 @@ MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecp, SecP256r1MLKEM768, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecp, SecP256r1MLKEM768);
-MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem768_p256, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_cmp, mlkem768_p256);
-MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(_cmp, mlkem768_bp256);
+MAKE_ENCODER(_cmp, mlkem768_rsa2048, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa2048, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_rsa2048, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa2048, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_rsa2048, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa2048, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_rsa2048);
+MAKE_ENCODER(_cmp, mlkem768_rsa3072, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa3072, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_rsa3072, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa3072, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_rsa3072, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa3072, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_rsa3072);
+MAKE_ENCODER(_cmp, mlkem768_rsa4096, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa4096, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_rsa4096, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa4096, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_rsa4096, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_rsa4096, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_rsa4096);
 MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, PrivateKeyInfo, der);
@@ -2250,6 +2216,20 @@ MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_cmp, mlkem768_x25519, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_cmp, mlkem768_x25519);
+MAKE_ENCODER(_cmp, mlkem768_p384, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_p384, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_p384, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_p384, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_p384, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_p384, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_p384);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_cmp, mlkem768_bp256, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_cmp, mlkem768_bp256);
 MAKE_ENCODER(, mlkem1024, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, mlkem1024, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, mlkem1024, oqsx, PrivateKeyInfo, der);

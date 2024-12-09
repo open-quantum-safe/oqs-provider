@@ -596,9 +596,9 @@ static const OQSX_EVP_INFO nids_kem[] = {
     {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 104},   // 384 bit
     {EVP_PKEY_X25519, NID_X25519, 1, 32, 32, 32, 0},           // 128 bit
     {EVP_PKEY_X448, NID_X448, 1, 56, 56, 56, 0},               // 192 bit
-    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 270, 1192, 256, 256}, // 112 bit
-    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1769, 384, 384}, // 128 bit
-    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 526, 2349, 512, 512}, // 140 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 270, 1193, 256, 256}, // 112 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 398, 1770, 384, 384}, // 128 bit
+    {EVP_PKEY_RSA, NID_rsaEncryption, 0, 526, 2350, 512, 512}, // 140 bit
 };
 
 static const OQSX_EVP_INFO *nids_cmp[] = {nids_sig, nids_kem};

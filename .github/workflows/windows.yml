@@ -39,7 +39,7 @@ jobs:
           repository: openssl/openssl
           path: openssl
           # TODO: Revert ref tag once openssl master doesn't crash any more
-          ref: openssl-3.3.0
+          ref: feature/dtls-1.3
       - name: checkout liboqs
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
         with:

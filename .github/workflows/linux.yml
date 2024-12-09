@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.3.2, master]
+        ossl-branch: [feature/dtls-1.3]
         libjade-build:
           - "ON" 
           - "OFF"

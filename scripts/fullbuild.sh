@@ -12,6 +12,9 @@
 # EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL3
 # EnvVar liboqs_DIR: If set, needs to point to a directory where liboqs has been installed to
 
+# Track openssl dtls-1.3 feature branch
+OPENSSL_BRANCH="feature/dtls-1.3"
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
    SHLIBEXT="dylib"
    STATLIBEXT="dylib"

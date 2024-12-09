@@ -53,8 +53,8 @@ static int test_oqs_tlssig(const char *sig_name, int dtls_flag) {
         goto err;
     }
 
-    testresult =
-        create_tls1_3_ctx_pair(libctx, &sctx, &cctx, certpath, privkeypath, dtls_flag);
+    testresult = create_tls1_3_ctx_pair(libctx, &sctx, &cctx, certpath,
+                                        privkeypath, dtls_flag);
 
     if (!testresult) {
         ret = -1;

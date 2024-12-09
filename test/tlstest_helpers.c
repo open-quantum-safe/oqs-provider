@@ -52,8 +52,7 @@ int create_tls1_3_ctx_pair(OSSL_LIB_CTX *libctx, SSL_CTX **sctx, SSL_CTX **cctx,
     if (dtls_flag) {
         serverctx = SSL_CTX_new_ex(libctx, NULL, DTLS_server_method());
         clientctx = SSL_CTX_new_ex(libctx, NULL, DTLS_client_method());
-    }
-    else {
+    } else {
         serverctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
         clientctx = SSL_CTX_new_ex(libctx, NULL, TLS_client_method());
     }
@@ -63,17 +62,16 @@ int create_tls1_3_ctx_pair(OSSL_LIB_CTX *libctx, SSL_CTX **sctx, SSL_CTX **cctx,
 
     SSL_CTX_set_options(serverctx, SSL_OP_ALLOW_CLIENT_RENEGOTIATION);
     if (dtls_flag) {
-        if (!SSL_CTX_set_min_proto_version(serverctx, DTLS1_3_VERSION)
-            || !SSL_CTX_set_max_proto_version(serverctx, DTLS1_3_VERSION)
-            || !SSL_CTX_set_min_proto_version(clientctx, DTLS1_3_VERSION)
-            || !SSL_CTX_set_max_proto_version(clientctx, DTLS1_3_VERSION))
+        if (!SSL_CTX_set_min_proto_version(serverctx, DTLS1_3_VERSION) ||
+            !SSL_CTX_set_max_proto_version(serverctx, DTLS1_3_VERSION) ||
+            !SSL_CTX_set_min_proto_version(clientctx, DTLS1_3_VERSION) ||
+            !SSL_CTX_set_max_proto_version(clientctx, DTLS1_3_VERSION))
             goto err;
-    }
-    else {
-        if (!SSL_CTX_set_min_proto_version(serverctx, TLS1_3_VERSION)
-            || !SSL_CTX_set_max_proto_version(serverctx, TLS1_3_VERSION)
-            || !SSL_CTX_set_min_proto_version(clientctx, TLS1_3_VERSION)
-            || !SSL_CTX_set_max_proto_version(clientctx, TLS1_3_VERSION))
+    } else {
+        if (!SSL_CTX_set_min_proto_version(serverctx, TLS1_3_VERSION) ||
+            !SSL_CTX_set_max_proto_version(serverctx, TLS1_3_VERSION) ||
+            !SSL_CTX_set_min_proto_version(clientctx, TLS1_3_VERSION) ||
+            !SSL_CTX_set_max_proto_version(clientctx, TLS1_3_VERSION))
             goto err;
     }
 

@@ -42,7 +42,8 @@ static int test_oqs_groups(const char *group_name, int dtls_flag) {
         printf("Not testing disabled algorithm %s.\n", group_name);
         return 1;
     }
-    testresult = create_tls1_3_ctx_pair(libctx, &sctx, &cctx, cert, privkey, dtls_flag);
+    testresult =
+        create_tls1_3_ctx_pair(libctx, &sctx, &cctx, cert, privkey, dtls_flag);
     if (!testresult) {
         ret = -1;
         goto err;

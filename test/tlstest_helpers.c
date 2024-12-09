@@ -43,23 +43,37 @@ int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename,
 }
 /* end steal */
 int create_tls1_3_ctx_pair(OSSL_LIB_CTX *libctx, SSL_CTX **sctx, SSL_CTX **cctx,
-                           char *certfile, char *privkeyfile) {
+                           char *certfile, char *privkeyfile, int dtls_flag) {
     SSL_CTX *serverctx = NULL, *clientctx = NULL;
 
     if (sctx == NULL || cctx == NULL)
         goto err;
 
-    serverctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
-    clientctx = SSL_CTX_new_ex(libctx, NULL, TLS_client_method());
+    if (dtls_flag) {
+        serverctx = SSL_CTX_new_ex(libctx, NULL, DTLS_server_method());
+        clientctx = SSL_CTX_new_ex(libctx, NULL, DTLS_client_method());
+    }
+    else {
+        serverctx = SSL_CTX_new_ex(libctx, NULL, TLS_server_method());
+        clientctx = SSL_CTX_new_ex(libctx, NULL, TLS_client_method());
+    }
 
     if (serverctx == NULL || clientctx == NULL)
         goto err;
 
     SSL_CTX_set_options(serverctx, SSL_OP_ALLOW_CLIENT_RENEGOTIATION);
-    SSL_CTX_set_min_proto_version(serverctx, DTLS1_3_VERSION);
-    SSL_CTX_set_max_proto_version(serverctx, DTLS1_3_VERSION);
-    SSL_CTX_set_min_proto_version(clientctx, DTLS1_3_VERSION);
-    SSL_CTX_set_max_proto_version(clientctx, DTLS1_3_VERSION);
+    if (dtls_flag) {
+        SSL_CTX_set_min_proto_version(serverctx, DTLS1_3_VERSION);
+        SSL_CTX_set_max_proto_version(serverctx, DTLS1_3_VERSION);
+        SSL_CTX_set_min_proto_version(clientctx, DTLS1_3_VERSION);
+        SSL_CTX_set_max_proto_version(clientctx, DTLS1_3_VERSION);
+    }
+    else {
+        SSL_CTX_set_min_proto_version(serverctx, DTLS1_3_VERSION);
+        SSL_CTX_set_max_proto_version(serverctx, DTLS1_3_VERSION);
+        SSL_CTX_set_min_proto_version(clientctx, DTLS1_3_VERSION);
+        SSL_CTX_set_max_proto_version(clientctx, DTLS1_3_VERSION);
+    }
 
     if (!SSL_CTX_use_certificate_file(serverctx, certfile, SSL_FILETYPE_PEM))
         goto err;

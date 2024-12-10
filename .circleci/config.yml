@@ -53,7 +53,7 @@ jobs:
               equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
-                name: Clone and build OpenSSL(3) master feature branch
+                name: Clone and build OpenSSL(3) master
                 command: |
                    git clone --branch master https://github.com/openssl/openssl.git openssl &&
                    cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..

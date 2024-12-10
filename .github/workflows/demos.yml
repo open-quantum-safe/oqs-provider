@@ -1,0 +1,15 @@
+name: Build & Test OQS Demos
+
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+
+jobs:
+  call:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: open-quantum-safe/oqs-demos/.github/workflows/build.yml@f12ff66fb78d00208aa4dac613be71beba2dc5ec
+        with:
+          build_main: true

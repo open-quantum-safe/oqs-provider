@@ -119,8 +119,7 @@ int create_tls_objects(SSL_CTX *serverctx, SSL_CTX *clientctx, SSL **sssl,
         ERR_print_errors_fp(stderr);
         goto err;
 #endif
-    }
-    else {
+    } else {
         s_to_c_bio = BIO_new(BIO_s_mem());
         c_to_s_bio = BIO_new(BIO_s_mem());
     }

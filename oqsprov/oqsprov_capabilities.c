@@ -22,7 +22,7 @@
 
 // enables DTLS1.3 testing even before available in openssl master:
 #if !defined(DTLS1_3_VERSION)
-# define DTLS1_3_VERSION 0xFEFC
+#define DTLS1_3_VERSION 0xFEFC
 #endif
 
 #include "oqs_prov.h"

@@ -53,9 +53,9 @@ jobs:
               equal: [ openssl@3, << parameters.OPENSSL_PREINSTALL >> ]
           steps:
             - run:
-                name: Clone and build OpenSSL(3) dtls-1.3 feature branch
+                name: Clone and build OpenSSL(3) master feature branch
                 command: |
-                   git clone --branch feature/dtls-1.3 https://github.com/openssl/openssl.git openssl &&
+                   git clone --branch master https://github.com/openssl/openssl.git openssl &&
                    cd openssl && ./config --prefix=$(echo $(pwd)/../.local) && make -j 18 && make install_sw && cd ..
             - run:
                name: Build OQS-OpenSSL provider

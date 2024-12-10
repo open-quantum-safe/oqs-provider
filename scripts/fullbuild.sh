@@ -10,7 +10,7 @@
 # EnvVar OQS_ALGS_ENABLED: If set, defines OQS algs to be enabled, e.g., "STD"
 # EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
 # EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL3
-#        Setting this to feature/dtls-1.3 enables build&test of all PQ algs using DTLS1.3
+#        Setting this to feature/dtls-1.3 enables build&test of all PQ algs using DTLS1.3 feature branch
 # EnvVar liboqs_DIR: If set, needs to point to a directory where liboqs has been installed to
 
 if [[ "$OSTYPE" == "darwin"* ]]; then

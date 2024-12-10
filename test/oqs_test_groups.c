@@ -49,7 +49,8 @@ static int test_oqs_groups(const char *group_name, int dtls_flag) {
         goto err;
     }
 
-    testresult = create_tls_objects(sctx, cctx, &serverssl, &clientssl, dtls_flag);
+    testresult =
+        create_tls_objects(sctx, cctx, &serverssl, &clientssl, dtls_flag);
 
     if (!testresult) {
         ret = -2;

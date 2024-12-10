@@ -58,26 +58,26 @@
 | mayo3 **hybrid with** p384                        | https://doi.org/10.46586/tches.v2024.i2.252-275  | 1            |                    3 | 0xfef4       | 1.3.9999.8.3.2              |
 | mayo5                                             | https://doi.org/10.46586/tches.v2024.i2.252-275  | 1            |                    5 | 0xfef1       | 1.3.9999.8.5.1              |
 | mayo5 **hybrid with** p521                        | https://doi.org/10.46586/tches.v2024.i2.252-275  | 1            |                    5 | 0xfef5       | 1.3.9999.8.5.2              |
-| mldsa44                                           | ML-DSA                                           | FIPS204      |                    1 | 0xfed0       | 1.3.6.1.4.1.2.267.12.4.4    |
-| mldsa44 **hybrid with** p256                      | ML-DSA                                           | FIPS204      |                    1 | 0xfed3       | 1.3.9999.7.1                |
-| mldsa44 **hybrid with** rsa3072                   | ML-DSA                                           | FIPS204      |                    1 | 0xfed4       | 1.3.9999.7.2                |
-| mldsa44 **composite with** pss2048                | ML-DSA                                           | FIPS204      |                    1 | 0xfee1       | 2.16.840.1.114027.80.8.1.1  |
-| mldsa44 **composite with** rsa2048                | ML-DSA                                           | FIPS204      |                    1 | 0xfee2       | 2.16.840.1.114027.80.8.1.2  |
-| mldsa44 **composite with** ed25519                | ML-DSA                                           | FIPS204      |                    1 | 0xfee3       | 2.16.840.1.114027.80.8.1.3  |
-| mldsa44 **composite with** p256                   | ML-DSA                                           | FIPS204      |                    1 | 0xfee4       | 2.16.840.1.114027.80.8.1.4  |
+| mldsa44                                           | ML-DSA                                           | FIPS204      |                    1 | 0x0904       | 2.16.840.1.101.3.4.3.17     |
+| mldsa44 **hybrid with** p256                      | ML-DSA                                           | FIPS204      |                    1 | 0xff06       | 1.3.9999.7.5                |
+| mldsa44 **hybrid with** rsa3072                   | ML-DSA                                           | FIPS204      |                    1 | 0xff07       | 1.3.9999.7.6                |
+| mldsa44 **composite with** pss2048                | ML-DSA                                           | FIPS204      |                    1 | 0x090f       | 2.16.840.1.114027.80.8.1.1  |
+| mldsa44 **composite with** rsa2048                | ML-DSA                                           | FIPS204      |                    1 | 0x090c       | 2.16.840.1.114027.80.8.1.2  |
+| mldsa44 **composite with** ed25519                | ML-DSA                                           | FIPS204      |                    1 | 0x090a       | 2.16.840.1.114027.80.8.1.3  |
+| mldsa44 **composite with** p256                   | ML-DSA                                           | FIPS204      |                    1 | 0x0907       | 2.16.840.1.114027.80.8.1.4  |
 | mldsa44 **composite with** bp256                  | ML-DSA                                           | FIPS204      |                    1 | 0xfee5       | 2.16.840.1.114027.80.8.1.5  |
-| mldsa65                                           | ML-DSA                                           | FIPS204      |                    3 | 0xfed1       | 1.3.6.1.4.1.2.267.12.6.5    |
-| mldsa65 **hybrid with** p384                      | ML-DSA                                           | FIPS204      |                    3 | 0xfed5       | 1.3.9999.7.3                |
-| mldsa65 **composite with** pss3072                | ML-DSA                                           | FIPS204      |                    3 | 0xfee6       | 2.16.840.1.114027.80.8.1.6  |
-| mldsa65 **composite with** rsa3072                | ML-DSA                                           | FIPS204      |                    3 | 0xfee7       | 2.16.840.1.114027.80.8.1.7  |
-| mldsa65 **composite with** p256                   | ML-DSA                                           | FIPS204      |                    3 | 0xfee8       | 2.16.840.1.114027.80.8.1.8  |
+| mldsa65                                           | ML-DSA                                           | FIPS204      |                    3 | 0x0905       | 2.16.840.1.101.3.4.3.18     |
+| mldsa65 **hybrid with** p384                      | ML-DSA                                           | FIPS204      |                    3 | 0xff08       | 1.3.9999.7.7                |
+| mldsa65 **composite with** pss3072                | ML-DSA                                           | FIPS204      |                    3 | 0x0910       | 2.16.840.1.114027.80.8.1.6  |
+| mldsa65 **composite with** rsa3072                | ML-DSA                                           | FIPS204      |                    3 | 0x090d       | 2.16.840.1.114027.80.8.1.7  |
+| mldsa65 **composite with** p256                   | ML-DSA                                           | FIPS204      |                    3 | 0x0908       | 2.16.840.1.114027.80.8.1.8  |
 | mldsa65 **composite with** bp256                  | ML-DSA                                           | FIPS204      |                    3 | 0xfee9       | 2.16.840.1.114027.80.8.1.9  |
-| mldsa65 **composite with** ed25519                | ML-DSA                                           | FIPS204      |                    3 | 0xfeea       | 2.16.840.1.114027.80.8.1.10 |
-| mldsa87                                           | ML-DSA                                           | FIPS204      |                    5 | 0xfed2       | 1.3.6.1.4.1.2.267.12.8.7    |
-| mldsa87 **hybrid with** p521                      | ML-DSA                                           | FIPS204      |                    5 | 0xfed6       | 1.3.9999.7.4                |
-| mldsa87 **composite with** p384                   | ML-DSA                                           | FIPS204      |                    5 | 0xfeeb       | 2.16.840.1.114027.80.8.1.11 |
+| mldsa65 **composite with** ed25519                | ML-DSA                                           | FIPS204      |                    3 | 0x090b       | 2.16.840.1.114027.80.8.1.10 |
+| mldsa87                                           | ML-DSA                                           | FIPS204      |                    5 | 0x0906       | 2.16.840.1.101.3.4.3.19     |
+| mldsa87 **hybrid with** p521                      | ML-DSA                                           | FIPS204      |                    5 | 0xff09       | 1.3.9999.7.8                |
+| mldsa87 **composite with** p384                   | ML-DSA                                           | FIPS204      |                    5 | 0x0909       | 2.16.840.1.114027.80.8.1.11 |
 | mldsa87 **composite with** bp384                  | ML-DSA                                           | FIPS204      |                    5 | 0xfeec       | 2.16.840.1.114027.80.8.1.12 |
-| mldsa87 **composite with** ed448                  | ML-DSA                                           | FIPS204      |                    5 | 0xfeed       | 2.16.840.1.114027.80.8.1.13 |
+| mldsa87 **composite with** ed448                  | ML-DSA                                           | FIPS204      |                    5 | 0x0912       | 2.16.840.1.114027.80.8.1.13 |
 | sphincsharaka128frobust                           | NIST Round 3 submission                          | 3            |                    1 | 0xfe42       | 1.3.9999.6.1.1              |
 | sphincsharaka128frobust **hybrid with** p256      | NIST Round 3 submission                          | 3            |                    1 | 0xfe43       | 1.3.9999.6.1.2              |
 | sphincsharaka128frobust **hybrid with** rsa3072   | NIST Round 3 submission                          | 3            |                    1 | 0xfe44       | 1.3.9999.6.1.3              |

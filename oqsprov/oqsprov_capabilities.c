@@ -20,6 +20,11 @@
 // internal, but useful OSSL define:
 #define OSSL_NELEM(x) (sizeof(x) / sizeof((x)[0]))
 
+// enables DTLS1.3 testing even before available in openssl master:
+#if !defined(DTLS1_3_VERSION)
+# define DTLS1_3_VERSION 0xFEFC
+#endif
+
 #include "oqs_prov.h"
 
 typedef struct oqs_group_constants_st {

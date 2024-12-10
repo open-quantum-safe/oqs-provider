@@ -61,7 +61,7 @@ static int test_oqs_tlssig(const char *sig_name, int dtls_flag) {
         goto err;
     }
 
-    testresult = create_tls_objects(sctx, cctx, &serverssl, &clientssl);
+    testresult = create_tls_objects(sctx, cctx, &serverssl, &clientssl, dtls_flag);
 
     if (!testresult) {
         ret = -2;
@@ -125,6 +125,7 @@ static int test_signature(const OSSL_PARAM params[], void *data) {
         (*errcnt)++;
     }
 
+#ifdef DTLS1_3_VERSION
     ret = test_oqs_tlssig(sigalg_name, 1);
 
     if (ret >= 0) {
@@ -140,6 +141,7 @@ static int test_signature(const OSSL_PARAM params[], void *data) {
         ERR_print_errors_fp(stderr);
         (*errcnt)++;
     }
+#endif
 
 err:
     OPENSSL_free(sigalg_name);

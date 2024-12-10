@@ -14,9 +14,6 @@ in a standard OpenSSL (3.x) distribution by way of implementing a single
 shared library, the OQS
 [provider](https://www.openssl.org/docs/manmaster/man7/provider.html).
 
-THIS IS A FEATURE BRANCH TO TRIAL DTLS1.3 OPERATIONS -- DO NOT MERGE!
-(dependent on https://github.com/openssl/openssl/tree/feature/dtls-1.3 merging).
-
 Status
 ------
 

@@ -1,7 +1,6 @@
 name: MacOS tests
 
-# Disable for DTLS1.3 for now (TODO)
-# on: [pull_request, push]
+on: [pull_request, push]
 
 permissions:
   contents: read

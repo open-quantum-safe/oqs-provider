@@ -62,10 +62,12 @@ int create_tls1_3_ctx_pair(OSSL_LIB_CTX *libctx, SSL_CTX **sctx, SSL_CTX **cctx,
 
     SSL_CTX_set_options(serverctx, SSL_OP_ALLOW_CLIENT_RENEGOTIATION);
     if (dtls_flag) {
+#ifdef DTLS1_3_VERSION
         if (!SSL_CTX_set_min_proto_version(serverctx, DTLS1_3_VERSION) ||
             !SSL_CTX_set_max_proto_version(serverctx, DTLS1_3_VERSION) ||
             !SSL_CTX_set_min_proto_version(clientctx, DTLS1_3_VERSION) ||
             !SSL_CTX_set_max_proto_version(clientctx, DTLS1_3_VERSION))
+#endif
             goto err;
     } else {
         if (!SSL_CTX_set_min_proto_version(serverctx, TLS1_3_VERSION) ||
@@ -95,7 +97,7 @@ err:
 }
 
 int create_tls_objects(SSL_CTX *serverctx, SSL_CTX *clientctx, SSL **sssl,
-                       SSL **cssl) {
+                       SSL **cssl, int use_dgram) {
     SSL *serverssl = NULL, *clientssl = NULL;
     BIO *s_to_c_bio = NULL, *c_to_s_bio = NULL;
 
@@ -108,8 +110,20 @@ int create_tls_objects(SSL_CTX *serverctx, SSL_CTX *clientctx, SSL **sssl,
     if (serverssl == NULL || clientssl == NULL)
         goto err;
 
-    s_to_c_bio = BIO_new(BIO_s_mem());
-    c_to_s_bio = BIO_new(BIO_s_mem());
+    if (use_dgram) {
+#if (OPENSSL_VERSION_PREREQ(3, 2))
+        s_to_c_bio = BIO_new(BIO_s_dgram_mem());
+        c_to_s_bio = BIO_new(BIO_s_dgram_mem());
+#else
+        fprintf(stderr, "No DGRAM memory supported in this OpenSSL version.\n");
+        ERR_print_errors_fp(stderr);
+        goto err;
+#endif
+    }
+    else {
+        s_to_c_bio = BIO_new(BIO_s_mem());
+        c_to_s_bio = BIO_new(BIO_s_mem());
+    }
 
     if (s_to_c_bio == NULL || c_to_s_bio == NULL)
         goto err;

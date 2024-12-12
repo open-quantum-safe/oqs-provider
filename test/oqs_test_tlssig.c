@@ -18,7 +18,7 @@ static char *configfile = NULL;
 static char *certsdir = NULL;
 
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
-static int test_oqs_tlssig(const char *sig_name) {
+static int test_oqs_tlssig(const char *sig_name, int dtls_flag) {
     SSL_CTX *cctx = NULL, *sctx = NULL;
     SSL *clientssl = NULL, *serverssl = NULL;
     int ret = 1, testresult = 0;
@@ -53,15 +53,16 @@ static int test_oqs_tlssig(const char *sig_name) {
         goto err;
     }
 
-    testresult =
-        create_tls1_3_ctx_pair(libctx, &sctx, &cctx, certpath, privkeypath);
+    testresult = create_tls1_3_ctx_pair(libctx, &sctx, &cctx, certpath,
+                                        privkeypath, dtls_flag);
 
     if (!testresult) {
         ret = -1;
         goto err;
     }
 
-    testresult = create_tls_objects(sctx, cctx, &serverssl, &clientssl);
+    testresult =
+        create_tls_objects(sctx, cctx, &serverssl, &clientssl, dtls_flag);
 
     if (!testresult) {
         ret = -2;
@@ -109,7 +110,7 @@ static int test_signature(const OSSL_PARAM params[], void *data) {
     if (sigalg_name == NULL)
         return 0;
 
-    ret = test_oqs_tlssig(sigalg_name);
+    ret = test_oqs_tlssig(sigalg_name, 0);
 
     if (ret >= 0) {
         fprintf(stderr,
@@ -124,6 +125,24 @@ static int test_signature(const OSSL_PARAM params[], void *data) {
         ERR_print_errors_fp(stderr);
         (*errcnt)++;
     }
+
+#ifdef DTLS1_3_VERSION
+    ret = test_oqs_tlssig(sigalg_name, 1);
+
+    if (ret >= 0) {
+        fprintf(stderr,
+                cGREEN "  DTLS-SIG handshake test succeeded: %s" cNORM "\n",
+                sigalg_name);
+    } else {
+        fprintf(stderr,
+                cRED
+                "  DTLS-SIG handshake test failed: %s, return code: %d" cNORM
+                "\n",
+                sigalg_name, ret);
+        ERR_print_errors_fp(stderr);
+        (*errcnt)++;
+    }
+#endif
 
 err:
     OPENSSL_free(sigalg_name);

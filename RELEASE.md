@@ -14,11 +14,11 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is version 0.8.0-rc1 of oqs-provider which continues from the earlier 0.7.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.12.0 of `liboqs` as and when released.
+This is version 0.8.0-rc1 of oqs-provider which continues from the earlier 0.7.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.12.0 of `liboqs`.
 
 ### Deprecation notice
 
-The associated liboqs v0.12.0 release will be the last liboqs release to include Kyber (that is, the NIST Round 3 version of Kyber, prior to its standardization by NIST as ML-KEM in FIPS 203). Applications should switch to ML-KEM (FIPS 203).
+This is to notify users of Kyber (Round 3 version) to switch to the ML-KEM (FIPS 203 final version) as support for Kyber will be removed with the next release of liboqs and oqsprovider.
 
 The addition of ML-DSA FIPS 204 final version to liboqs v0.12.0 has introduced a new signature API which includes a context string parameter. The liboqs team is planning to remove the old version of the API without a context string in the next release to streamline the API and bring it in line with NIST specifications. Users who have an opinion on this removal are invited to provide input at [liboqs #2001](https://github.com/open-quantum-safe/liboqs/issues/2001).
 
@@ -31,7 +31,8 @@ The addition of ML-DSA FIPS 204 final version to liboqs v0.12.0 has introduced a
 In addition to improving testing, CI, and fixing platform specific build issues this release of oqs-provider:
 
 * Updates IANA code points for ML-KEM.
-* Adds support for ML-DSA (FIPS 204 final version) along with support for context strings (when built against an OpenSSL verision also supporting that feature).
+* Adds support for ML-DSA (FIPS 204 final version).
+* Adds support for context strings (when built against an OpenSSL version also supporting that feature).
 * Updates the implementation of draft-ietf-lamps-pq-composite-sigs from version 01 to version 02.
 * Adds a SBOM template in the CycloneDX 1.6 format.
 

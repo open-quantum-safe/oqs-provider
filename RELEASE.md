@@ -28,7 +28,6 @@ This is to notify users of Kyber (Round 3 version) to switch to the ML-KEM (FIPS
 
 In addition to improving testing, CI, and fixing platform specific build issues this release of oqs-provider:
 
-* Updates IANA code points for ML-KEM.
 * Updates IANA code points for ML-KEM and changes FrodoKEM code points.
 * Adds support for ML-DSA (FIPS 204 final version).
 * Adds support for context strings in OpenSSL versions >= 3.2.

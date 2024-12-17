@@ -20,8 +20,6 @@ This is version 0.8.0-rc1 of oqs-provider which continues from the earlier 0.7.0
 
 This is to notify users of Kyber (Round 3 version) to switch to the ML-KEM (FIPS 203 final version) as support for Kyber will be removed with the next release of liboqs and oqsprovider.
 
-The addition of ML-DSA FIPS 204 final version to liboqs v0.12.0 has introduced a new signature API which includes a context string parameter. The liboqs team is planning to remove the old version of the API without a context string in the next release to streamline the API and bring it in line with NIST specifications. Users who have an opinion on this removal are invited to provide input at [liboqs #2001](https://github.com/open-quantum-safe/liboqs/issues/2001).
-
 ### Security considerations
 
 * CVE-2024-54137: The associated liboqs v0.12.0 release fixed a bug in HQC decapsulation that leads to incorrect shared secret value during decapsulation when called with an invalid ciphertext. Thank you to Célian Glénaz and Dahmun Goudarzi from Quarkslab for identifying the issue.
@@ -31,10 +29,12 @@ The addition of ML-DSA FIPS 204 final version to liboqs v0.12.0 has introduced a
 In addition to improving testing, CI, and fixing platform specific build issues this release of oqs-provider:
 
 * Updates IANA code points for ML-KEM.
+* Updates IANA code points for ML-KEM and changes FrodoKEM code points.
 * Adds support for ML-DSA (FIPS 204 final version).
-* Adds support for context strings (when built against an OpenSSL version also supporting that feature).
+* Adds support for context strings in OpenSSL versions >= 3.2.
 * Updates the implementation of draft-ietf-lamps-pq-composite-sigs from version 01 to version 02.
 * Adds a SBOM template in the CycloneDX 1.6 format.
+* Adds support for DTLS 1.3 (pending support in OpenSSL).
 
 ## What's Changed
 * Switch to dev mode again by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/535

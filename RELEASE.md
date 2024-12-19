@@ -18,7 +18,7 @@ This is version 0.8.0 of oqs-provider which continues from the earlier 0.7.0 rel
 
 ### Deprecation notice
 
-This is to notify users of Kyber (Round 3 version) to switch to the ML-KEM (FIPS 203 final version) as support for Kyber will be removed with the next release of liboqs and oqsprovider.
+This is to notify users of Kyber and Dilithium (Round 3 version) to switch to the ML-KEM (FIPS 203 final version) and ML-DSA (FIPS 204 final version), respectively, as support for both will be removed with the next release of oqsprovider.
 
 ### Security considerations
 

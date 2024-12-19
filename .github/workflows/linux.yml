@@ -21,7 +21,7 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH: "main"
+      LIBOQS_BRANCH: "0.12.0"
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.3.2, master]
+        ossl-branch: [openssl-3.4.0, master]
         libjade-build:
           - "ON" 
           - "OFF"
@@ -59,7 +59,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
-        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=main OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
+        run: OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=0.12.0 OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
         run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
@@ -103,7 +103,7 @@ jobs:
       CXX: "clang++"
       ASAN_C_FLAGS: "-fsanitize=address -fno-omit-frame-pointer"
       ASAN_OPTIONS: "detect_stack_use_after_return=1,detect_leaks=1"
-      OPENSSL_BRANCH: "openssl-3.3.2"
+      OPENSSL_BRANCH: "openssl-3.4.0"
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
@@ -127,7 +127,7 @@ jobs:
 
       - name: Clone and build liboqs with ASan
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch 0.12.0 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake -GNinja -B build \
@@ -209,7 +209,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch 0.12.0 https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

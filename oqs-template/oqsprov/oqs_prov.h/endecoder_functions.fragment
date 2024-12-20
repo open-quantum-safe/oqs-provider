@@ -28,6 +28,7 @@ extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{% if 'standard_name'
 
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
+extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_type_specific_keypair_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
@@ -35,9 +36,11 @@ extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_EncryptedPrivateKeyInfo_
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_to_text_encoder_functions[];
+extern const OSSL_DISPATCH oqs_type_specific_keypair_der_to_{{ variant['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{ variant['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{ variant['name'] }}_decoder_functions[];
      {%- for classical_alg in variant['mix_with'] -%}
+extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_type_specific_keypair_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
@@ -45,10 +48,12 @@ extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_to_text_encoder_functions[];
+extern const OSSL_DISPATCH oqs_type_specific_keypair_der_to_{{ classical_alg['name'] }}_{{ variant['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{ classical_alg['name'] }}_{{ variant['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{ classical_alg['name'] }}_{{ variant['name'] }}_decoder_functions[];
      {%- endfor -%}
      {%- for composite_alg in variant['composite'] -%}
+extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_to_type_specific_keypair_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
@@ -56,6 +61,7 @@ extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_to_SubjectPublicKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_to_text_encoder_functions[];
+extern const OSSL_DISPATCH oqs_type_specific_keypair_der_to_{{ variant['name'] }}_{{ composite_alg['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_{{ variant['name'] }}_{{ composite_alg['name'] }}_decoder_functions[];
 extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_{{ variant['name'] }}_{{ composite_alg['name'] }}_decoder_functions[];
      {%- endfor -%}

@@ -27,6 +27,7 @@ ENCODER_TEXT({% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% e
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
 #ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
+ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, der, type_specific_keypair),
 ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, der, PrivateKeyInfo),
 ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, pem, PrivateKeyInfo),
 ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, der, EncryptedPrivateKeyInfo),
@@ -35,6 +36,7 @@ ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, der, Subject
 ENCODER_w_structure("{{ variant['name'] }}", {{ variant['name'] }}, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT("{{ variant['name'] }}", {{ variant['name'] }}),
 {% for classical_alg in variant['mix_with'] -%}
+ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, der, type_specific_keypair),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, der, PrivateKeyInfo),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, pem, PrivateKeyInfo),
 ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, der, EncryptedPrivateKeyInfo),
@@ -44,6 +46,7 @@ ENCODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ clas
 ENCODER_TEXT("{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}),
 {% endfor -%}
 {% for composite_alg in variant['composite'] -%}
+ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, der, type_specific_keypair),
 ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, der, PrivateKeyInfo),
 ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, pem, PrivateKeyInfo),
 ENCODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, der, EncryptedPrivateKeyInfo),

@@ -16,13 +16,16 @@ DECODER_w_structure({% if 'standard_name' in hybrid %}"{{hybrid['standard_name']
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
 #ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
+DECODER_w_structure("{{ variant['name'] }}", der, type_specific_keypair, {{ variant['name'] }}),
 DECODER_w_structure("{{ variant['name'] }}", der, PrivateKeyInfo, {{ variant['name'] }}),
 DECODER_w_structure("{{ variant['name'] }}", der, SubjectPublicKeyInfo, {{ variant['name'] }}),
      {%- for classical_alg in variant['mix_with'] -%}
+DECODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", der, type_specific_keypair, {{ classical_alg['name'] }}_{{ variant['name'] }}),
 DECODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", der, PrivateKeyInfo, {{ classical_alg['name'] }}_{{ variant['name'] }}),
 DECODER_w_structure("{{ classical_alg['name'] }}_{{ variant['name'] }}", der, SubjectPublicKeyInfo, {{ classical_alg['name'] }}_{{ variant['name'] }}),
      {%- endfor %}
      {%- for composite_alg in variant['composite'] -%}
+DECODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", der, type_specific_keypair, {{ variant['name'] }}_{{ composite_alg['name'] }}),
 DECODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", der, PrivateKeyInfo, {{ variant['name'] }}_{{ composite_alg['name'] }}),
 DECODER_w_structure("{{ variant['name'] }}_{{ composite_alg['name'] }}", der, SubjectPublicKeyInfo, {{ variant['name'] }}_{{ composite_alg['name'] }}),
      {%- endfor %}

@@ -22,6 +22,7 @@ MAKE_TEXT_ENCODER({% if hybrid['hybrid_group'].startswith('x') %}_ecx{% else %}_
 #endif /* OQS_KEM_ENCODERS */
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
+MAKE_ENCODER(, {{ variant['name'] }}, oqsx, type_specific_keypair, der);
 MAKE_ENCODER(, {{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, {{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, {{ variant['name'] }}, oqsx, PrivateKeyInfo, der);
@@ -30,6 +31,7 @@ MAKE_ENCODER(, {{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, {{ variant['name'] }}, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, {{ variant['name'] }});
      {%- for classical_alg in variant['mix_with'] %}
+MAKE_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, type_specific_keypair, der);
 MAKE_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, PrivateKeyInfo, der);
@@ -39,6 +41,7 @@ MAKE_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, SubjectP
 MAKE_TEXT_ENCODER(, {{ classical_alg['name'] }}_{{ variant['name'] }});
      {%- endfor -%}
      {%- for composite_alg in variant['composite'] %}
+MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, type_specific_keypair, der);
 MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, PrivateKeyInfo, der);

@@ -13,13 +13,16 @@ MAKE_DECODER({% if hybrid['hybrid_group'].startswith('x') %}_ecx{% else %}_ecp{%
 
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
+MAKE_DECODER(, "{{ variant['name'] }}", {{ variant['name'] }}, oqsx, type_specific_keypair);
 MAKE_DECODER(, "{{ variant['name'] }}", {{ variant['name'] }}, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "{{ variant['name'] }}", {{ variant['name'] }}, oqsx, SubjectPublicKeyInfo);
      {%- for classical_alg in variant['mix_with'] %}
+MAKE_DECODER(, "{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, type_specific_keypair);
 MAKE_DECODER(, "{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "{{ classical_alg['name'] }}_{{ variant['name'] }}", {{ classical_alg['name'] }}_{{ variant['name'] }}, oqsx, SubjectPublicKeyInfo);
      {%- endfor -%}
      {%- for composite_alg in variant['composite'] %}
+MAKE_DECODER(, "{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, type_specific_keypair);
 MAKE_DECODER(, "{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "{{ variant['name'] }}_{{ composite_alg['name'] }}", {{ variant['name'] }}_{{ composite_alg['name'] }}, oqsx, SubjectPublicKeyInfo);
      {%- endfor -%}

@@ -1,5 +1,6 @@
 /*
  * Copyright 2020-2021 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright (c) [2024,] 2024, Oracle and/or its affiliates. All rights reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -526,69 +527,52 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx) {
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_START
 #ifdef OQS_KEM_ENCODERS
 
+
 MAKE_DECODER(, "frodo640aes", frodo640aes, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo640aes", frodo640aes, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p256_frodo640aes", p256_frodo640aes, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p256_frodo640aes", p256_frodo640aes, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(_ecx, "x25519_frodo640aes", x25519_frodo640aes, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_frodo640aes", x25519_frodo640aes, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p256_frodo640aes", p256_frodo640aes, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "x25519_frodo640aes", x25519_frodo640aes, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x25519_frodo640aes", x25519_frodo640aes, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "frodo640shake", frodo640shake, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo640shake", frodo640shake, oqsx, SubjectPublicKeyInfo);
 
-MAKE_DECODER(_ecp, "p256_frodo640shake", p256_frodo640shake, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p256_frodo640shake", p256_frodo640shake, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(_ecx, "x25519_frodo640shake", x25519_frodo640shake, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_frodo640shake", x25519_frodo640shake, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p256_frodo640shake", p256_frodo640shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p256_frodo640shake", p256_frodo640shake, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "x25519_frodo640shake", x25519_frodo640shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x25519_frodo640shake", x25519_frodo640shake, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "frodo976aes", frodo976aes, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo976aes", frodo976aes, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p384_frodo976aes", p384_frodo976aes, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p384_frodo976aes", p384_frodo976aes, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p384_frodo976aes", p384_frodo976aes, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "x448_frodo976aes", x448_frodo976aes, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x448_frodo976aes", x448_frodo976aes, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "x448_frodo976aes", x448_frodo976aes, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "frodo976shake", frodo976shake, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo976shake", frodo976shake, oqsx, SubjectPublicKeyInfo);
 
-MAKE_DECODER(_ecp, "p384_frodo976shake", p384_frodo976shake, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p384_frodo976shake", p384_frodo976shake, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(_ecx, "x448_frodo976shake", x448_frodo976shake, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x448_frodo976shake", x448_frodo976shake, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p384_frodo976shake", p384_frodo976shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p384_frodo976shake", p384_frodo976shake, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "x448_frodo976shake", x448_frodo976shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x448_frodo976shake", x448_frodo976shake, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "frodo1344aes", frodo1344aes, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo1344aes", frodo1344aes, oqsx, SubjectPublicKeyInfo);
 
-MAKE_DECODER(_ecp, "p521_frodo1344aes", p521_frodo1344aes, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p521_frodo1344aes", p521_frodo1344aes, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p521_frodo1344aes", p521_frodo1344aes, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p521_frodo1344aes", p521_frodo1344aes, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "frodo1344shake", frodo1344shake, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo1344shake", frodo1344shake, oqsx, SubjectPublicKeyInfo);
 
-MAKE_DECODER(_ecp, "p521_frodo1344shake", p521_frodo1344shake, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p521_frodo1344shake", p521_frodo1344shake, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p521_frodo1344shake", p521_frodo1344shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p521_frodo1344shake", p521_frodo1344shake, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "kyber512", kyber512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "kyber512", kyber512, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p256_kyber512", p256_kyber512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p256_kyber512", p256_kyber512, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "x25519_kyber512", x25519_kyber512, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_kyber512", x25519_kyber512, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "x25519_kyber512", x25519_kyber512, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "kyber768", kyber768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "kyber768", kyber768, oqsx, SubjectPublicKeyInfo);
 
@@ -597,24 +581,21 @@ MAKE_DECODER(_ecp, "p384_kyber768", p384_kyber768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "x448_kyber768", x448_kyber768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x448_kyber768", x448_kyber768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "x25519_kyber768", x25519_kyber768, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_kyber768", x25519_kyber768, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "x25519_kyber768", x25519_kyber768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecp, "p256_kyber768", p256_kyber768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p256_kyber768", p256_kyber768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "kyber1024", kyber1024, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "kyber1024", kyber1024, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p521_kyber1024", p521_kyber1024, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p521_kyber1024", p521_kyber1024, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p521_kyber1024", p521_kyber1024, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "mlkem512", mlkem512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mlkem512", mlkem512, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p256_mlkem512", p256_mlkem512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p256_mlkem512", p256_mlkem512, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "x25519_mlkem512", x25519_mlkem512, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_mlkem512", x25519_mlkem512, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "x25519_mlkem512", x25519_mlkem512, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "mlkem768", mlkem768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mlkem768", mlkem768, oqsx, SubjectPublicKeyInfo);
 
@@ -623,21 +604,16 @@ MAKE_DECODER(_ecp, "p384_mlkem768", p384_mlkem768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "x448_mlkem768", x448_mlkem768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x448_mlkem768", x448_mlkem768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecx, "X25519MLKEM768", X25519MLKEM768, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "X25519MLKEM768", X25519MLKEM768, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(_ecp, "SecP256r1MLKEM768", SecP256r1MLKEM768, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(_ecp, "SecP256r1MLKEM768", SecP256r1MLKEM768, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecx, "X25519MLKEM768", X25519MLKEM768, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "SecP256r1MLKEM768", SecP256r1MLKEM768, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "SecP256r1MLKEM768", SecP256r1MLKEM768, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "mlkem1024", mlkem1024, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mlkem1024", mlkem1024, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p521_mlkem1024", p521_mlkem1024, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p521_mlkem1024", p521_mlkem1024, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p521_mlkem1024", p521_mlkem1024, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecp, "p384_mlkem1024", p384_mlkem1024, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p384_mlkem1024", p384_mlkem1024, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(_ecp, "p384_mlkem1024", p384_mlkem1024, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "bikel1", bikel1, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "bikel1", bikel1, oqsx, SubjectPublicKeyInfo);
 
@@ -678,151 +654,176 @@ MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, SubjectPublicKeyInfo);
 #endif /* OQS_KEM_ENCODERS */
 
+
+MAKE_DECODER(, "dilithium2", dilithium2, oqsx, type_specific_keypair);
 MAKE_DECODER(, "dilithium2", dilithium2, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "dilithium2", dilithium2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_dilithium2", p256_dilithium2, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p256_dilithium2", p256_dilithium2, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p256_dilithium2", p256_dilithium2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_dilithium2", rsa3072_dilithium2, oqsx, type_specific_keypair);
 MAKE_DECODER(, "rsa3072_dilithium2", rsa3072_dilithium2, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_dilithium2", rsa3072_dilithium2, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_dilithium2", rsa3072_dilithium2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "dilithium3", dilithium3, oqsx, type_specific_keypair);
 MAKE_DECODER(, "dilithium3", dilithium3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "dilithium3", dilithium3, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p384_dilithium3", p384_dilithium3, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p384_dilithium3", p384_dilithium3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p384_dilithium3", p384_dilithium3, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "dilithium5", dilithium5, oqsx, type_specific_keypair);
 MAKE_DECODER(, "dilithium5", dilithium5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "dilithium5", dilithium5, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_dilithium5", p521_dilithium5, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p521_dilithium5", p521_dilithium5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p521_dilithium5", p521_dilithium5, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa44", mldsa44, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa44", mldsa44, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa44", mldsa44, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_mldsa44", p256_mldsa44, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p256_mldsa44", p256_mldsa44, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p256_mldsa44", p256_mldsa44, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_mldsa44", rsa3072_mldsa44, oqsx, type_specific_keypair);
 MAKE_DECODER(, "rsa3072_mldsa44", rsa3072_mldsa44, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "rsa3072_mldsa44", rsa3072_mldsa44, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa44_pss2048", mldsa44_pss2048, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa44_pss2048", mldsa44_pss2048, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa44_pss2048", mldsa44_pss2048, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa44_rsa2048", mldsa44_rsa2048, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa44_rsa2048", mldsa44_rsa2048, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa44_rsa2048", mldsa44_rsa2048, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa44_ed25519", mldsa44_ed25519, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa44_ed25519", mldsa44_ed25519, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa44_ed25519", mldsa44_ed25519, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa44_p256", mldsa44_p256, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa44_p256", mldsa44_p256, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa44_p256", mldsa44_p256, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa44_bp256", mldsa44_bp256, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa44_bp256", mldsa44_bp256, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa44_bp256", mldsa44_bp256, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa65", mldsa65, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa65", mldsa65, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa65", mldsa65, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p384_mldsa65", p384_mldsa65, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p384_mldsa65", p384_mldsa65, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p384_mldsa65", p384_mldsa65, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa65_pss3072", mldsa65_pss3072, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa65_pss3072", mldsa65_pss3072, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa65_pss3072", mldsa65_pss3072, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa65_rsa3072", mldsa65_rsa3072, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa65_rsa3072", mldsa65_rsa3072, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa65_rsa3072", mldsa65_rsa3072, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa65_p256", mldsa65_p256, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa65_p256", mldsa65_p256, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa65_p256", mldsa65_p256, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa65_bp256", mldsa65_bp256, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa65_bp256", mldsa65_bp256, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa65_bp256", mldsa65_bp256, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa65_ed25519", mldsa65_ed25519, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa65_ed25519", mldsa65_ed25519, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa65_ed25519", mldsa65_ed25519, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa87", mldsa87, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa87", mldsa87, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa87", mldsa87, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_mldsa87", p521_mldsa87, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p521_mldsa87", p521_mldsa87, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p521_mldsa87", p521_mldsa87, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa87_p384", mldsa87_p384, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa87_p384", mldsa87_p384, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa87_p384", mldsa87_p384, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa87_bp384", mldsa87_bp384, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa87_bp384", mldsa87_bp384, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa87_bp384", mldsa87_bp384, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mldsa87_ed448", mldsa87_ed448, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mldsa87_ed448", mldsa87_ed448, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mldsa87_ed448", mldsa87_ed448, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "falcon512", falcon512, oqsx, type_specific_keypair);
 MAKE_DECODER(, "falcon512", falcon512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "falcon512", falcon512, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_falcon512", p256_falcon512, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p256_falcon512", p256_falcon512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p256_falcon512", p256_falcon512, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_falcon512", rsa3072_falcon512, oqsx, type_specific_keypair);
 MAKE_DECODER(, "rsa3072_falcon512", rsa3072_falcon512, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_falcon512", rsa3072_falcon512, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_falcon512", rsa3072_falcon512, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "falconpadded512", falconpadded512, oqsx, type_specific_keypair);
 MAKE_DECODER(, "falconpadded512", falconpadded512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "falconpadded512", falconpadded512, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_falconpadded512", p256_falconpadded512, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p256_falconpadded512", p256_falconpadded512, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_falconpadded512", rsa3072_falconpadded512, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_falconpadded512", rsa3072_falconpadded512, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_falconpadded512", p256_falconpadded512, oqsx, type_specific_keypair);
+MAKE_DECODER(, "p256_falconpadded512", p256_falconpadded512, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_falconpadded512", p256_falconpadded512, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_falconpadded512", rsa3072_falconpadded512, oqsx, type_specific_keypair);
+MAKE_DECODER(, "rsa3072_falconpadded512", rsa3072_falconpadded512, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "rsa3072_falconpadded512", rsa3072_falconpadded512, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "falcon1024", falcon1024, oqsx, type_specific_keypair);
 MAKE_DECODER(, "falcon1024", falcon1024, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "falcon1024", falcon1024, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_falcon1024", p521_falcon1024, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p521_falcon1024", p521_falcon1024, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p521_falcon1024", p521_falcon1024, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "falconpadded1024", falconpadded1024, oqsx, type_specific_keypair);
 MAKE_DECODER(, "falconpadded1024", falconpadded1024, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "falconpadded1024", falconpadded1024, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
-             oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple,
-             oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
-             oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple,
-             oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx,
-             SubjectPublicKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
-             oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple,
-             oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "falconpadded1024", falconpadded1024, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx, type_specific_keypair);
+MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p521_falconpadded1024", p521_falconpadded1024, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "sphincssha2128fsimple", sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_sphincssha2128fsimple", p256_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "rsa3072_sphincssha2128fsimple", rsa3072_sphincssha2128fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "sphincssha2128ssimple", sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_sphincssha2128ssimple", p256_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "rsa3072_sphincssha2128ssimple", rsa3072_sphincssha2128ssimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "sphincssha2192fsimple", sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p384_sphincssha2192fsimple", p384_sphincssha2192fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "sphincsshake128fsimple", sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_sphincsshake128fsimple", p256_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple, oqsx, type_specific_keypair);
+MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "rsa3072_sphincsshake128fsimple", rsa3072_sphincsshake128fsimple, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo1", mayo1, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mayo1", mayo1, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mayo1", mayo1, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_mayo1", p256_mayo1, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p256_mayo1", p256_mayo1, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p256_mayo1", p256_mayo1, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo2", mayo2, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mayo2", mayo2, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mayo2", mayo2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_mayo2", p256_mayo2, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p256_mayo2", p256_mayo2, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p256_mayo2", p256_mayo2, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo3", mayo3, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mayo3", mayo3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mayo3", mayo3, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p384_mayo3", p384_mayo3, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p384_mayo3", p384_mayo3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p384_mayo3", p384_mayo3, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "mayo5", mayo5, oqsx, type_specific_keypair);
 MAKE_DECODER(, "mayo5", mayo5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mayo5", mayo5, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, type_specific_keypair);
 MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx,
-             PrivateKeyInfo);
-MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx,
-             SubjectPublicKeyInfo);
+MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx, type_specific_keypair);
+MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

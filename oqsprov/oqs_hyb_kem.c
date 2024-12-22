@@ -51,7 +51,7 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
     ret2 = EVP_PKEY_set1_encoded_public_key(peerpk, pubkey_kex, pubkey_kexlen);
     ON_ERR_SET_GOTO(ret2 <= 0, ret, -1, err);
 
-    kgctx = EVP_PKEY_CTX_new(evp_ctx->keyParam, NULL);
+    kgctx = EVP_PKEY_CTX_new_from_pkey(pkemctx->libctx, evp_ctx->keyParam, NULL);
     ON_ERR_SET_GOTO(!kgctx, ret, -1, err);
 
     ret2 = EVP_PKEY_keygen_init(kgctx);
@@ -60,7 +60,7 @@ static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
     ret2 = EVP_PKEY_keygen(kgctx, &pkey);
     ON_ERR_SET_GOTO(ret2 != 1, ret, -1, err);
 
-    ctx = EVP_PKEY_CTX_new(pkey, NULL);
+    ctx = EVP_PKEY_CTX_new_from_pkey(pkemctx->libctx, pkey, NULL);
     ON_ERR_SET_GOTO(!ctx, ret, -1, err);
 
     ret = EVP_PKEY_derive_init(ctx);
@@ -129,7 +129,7 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
     ret2 = EVP_PKEY_set1_encoded_public_key(peerpkey, ct, pubkey_kexlen);
     ON_ERR_SET_GOTO(ret2 <= 0 || !peerpkey, ret, -5, err);
 
-    ctx = EVP_PKEY_CTX_new(pkey, NULL);
+    ctx = EVP_PKEY_CTX_new_from_pkey(pkemctx->libctx, pkey, NULL);
     ON_ERR_SET_GOTO(!ctx, ret, -6, err);
 
     ret = EVP_PKEY_derive_init(ctx);

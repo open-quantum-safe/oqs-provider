@@ -76,28 +76,6 @@ DECODER_w_structure("frodo1344shake", der, SubjectPublicKeyInfo, frodo1344shake)
 DECODER_w_structure("p521_frodo1344shake", der, PrivateKeyInfo, p521_frodo1344shake),
 DECODER_w_structure("p521_frodo1344shake", der, SubjectPublicKeyInfo, p521_frodo1344shake),
 #endif
-#ifdef OQS_ENABLE_KEM_kyber_512
-DECODER_w_structure("kyber512", der, PrivateKeyInfo, kyber512),
-DECODER_w_structure("kyber512", der, SubjectPublicKeyInfo, kyber512),
-DECODER_w_structure("p256_kyber512", der, PrivateKeyInfo, p256_kyber512),
-DECODER_w_structure("p256_kyber512", der, SubjectPublicKeyInfo, p256_kyber512),DECODER_w_structure("x25519_kyber512", der, PrivateKeyInfo, x25519_kyber512),
-DECODER_w_structure("x25519_kyber512", der, SubjectPublicKeyInfo, x25519_kyber512),
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_768
-DECODER_w_structure("kyber768", der, PrivateKeyInfo, kyber768),
-DECODER_w_structure("kyber768", der, SubjectPublicKeyInfo, kyber768),
-DECODER_w_structure("p384_kyber768", der, PrivateKeyInfo, p384_kyber768),
-DECODER_w_structure("p384_kyber768", der, SubjectPublicKeyInfo, p384_kyber768),DECODER_w_structure("x448_kyber768", der, PrivateKeyInfo, x448_kyber768),
-DECODER_w_structure("x448_kyber768", der, SubjectPublicKeyInfo, x448_kyber768),DECODER_w_structure("x25519_kyber768", der, PrivateKeyInfo, x25519_kyber768),
-DECODER_w_structure("x25519_kyber768", der, SubjectPublicKeyInfo, x25519_kyber768),DECODER_w_structure("p256_kyber768", der, PrivateKeyInfo, p256_kyber768),
-DECODER_w_structure("p256_kyber768", der, SubjectPublicKeyInfo, p256_kyber768),
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_1024
-DECODER_w_structure("kyber1024", der, PrivateKeyInfo, kyber1024),
-DECODER_w_structure("kyber1024", der, SubjectPublicKeyInfo, kyber1024),
-DECODER_w_structure("p521_kyber1024", der, PrivateKeyInfo, p521_kyber1024),
-DECODER_w_structure("p521_kyber1024", der, SubjectPublicKeyInfo, p521_kyber1024),
-#endif
 #ifdef OQS_ENABLE_KEM_ml_kem_512
 DECODER_w_structure("mlkem512", der, PrivateKeyInfo, mlkem512),
 DECODER_w_structure("mlkem512", der, SubjectPublicKeyInfo, mlkem512),
@@ -165,22 +143,6 @@ DECODER_w_structure("p521_hqc256", der, SubjectPublicKeyInfo, p521_hqc256),
 #endif /* OQS_KEM_ENCODERS */
 
 
-#ifdef OQS_ENABLE_SIG_dilithium_2
-DECODER_w_structure("dilithium2", der, PrivateKeyInfo, dilithium2),
-DECODER_w_structure("dilithium2", der, SubjectPublicKeyInfo, dilithium2),DECODER_w_structure("p256_dilithium2", der, PrivateKeyInfo, p256_dilithium2),
-DECODER_w_structure("p256_dilithium2", der, SubjectPublicKeyInfo, p256_dilithium2),DECODER_w_structure("rsa3072_dilithium2", der, PrivateKeyInfo, rsa3072_dilithium2),
-DECODER_w_structure("rsa3072_dilithium2", der, SubjectPublicKeyInfo, rsa3072_dilithium2),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_3
-DECODER_w_structure("dilithium3", der, PrivateKeyInfo, dilithium3),
-DECODER_w_structure("dilithium3", der, SubjectPublicKeyInfo, dilithium3),DECODER_w_structure("p384_dilithium3", der, PrivateKeyInfo, p384_dilithium3),
-DECODER_w_structure("p384_dilithium3", der, SubjectPublicKeyInfo, p384_dilithium3),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_5
-DECODER_w_structure("dilithium5", der, PrivateKeyInfo, dilithium5),
-DECODER_w_structure("dilithium5", der, SubjectPublicKeyInfo, dilithium5),DECODER_w_structure("p521_dilithium5", der, PrivateKeyInfo, p521_dilithium5),
-DECODER_w_structure("p521_dilithium5", der, SubjectPublicKeyInfo, p521_dilithium5),
-#endif
 #ifdef OQS_ENABLE_SIG_ml_dsa_44
 DECODER_w_structure("mldsa44", der, PrivateKeyInfo, mldsa44),
 DECODER_w_structure("mldsa44", der, SubjectPublicKeyInfo, mldsa44),DECODER_w_structure("p256_mldsa44", der, PrivateKeyInfo, p256_mldsa44),

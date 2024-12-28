@@ -51,9 +51,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 220
+#define OQS_OID_CNT 186
 #else
-#define OQS_OID_CNT 114
+#define OQS_OID_CNT 100
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -90,26 +90,6 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "frodo1344shake",
     NULL,
     "p521_frodo1344shake",
-    "1.3.6.1.4.1.2.267.8.2.2",
-    "kyber512",
-    NULL,
-    "p256_kyber512",
-    NULL,
-    "x25519_kyber512",
-    "1.3.6.1.4.1.2.267.8.3.3",
-    "kyber768",
-    NULL,
-    "p384_kyber768",
-    NULL,
-    "x448_kyber768",
-    NULL,
-    "x25519_kyber768",
-    NULL,
-    "p256_kyber768",
-    "1.3.6.1.4.1.2.267.8.4.4",
-    "kyber1024",
-    NULL,
-    "p521_kyber1024",
     "2.16.840.1.101.3.4.4.1",
     "mlkem512",
     "1.3.6.1.4.1.22554.5.7.1",
@@ -167,20 +147,6 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
 #endif /* OQS_KEM_ENCODERS */
 
-    "1.3.6.1.4.1.2.267.7.4.4",
-    "dilithium2",
-    "1.3.9999.2.7.1",
-    "p256_dilithium2",
-    "1.3.9999.2.7.2",
-    "rsa3072_dilithium2",
-    "1.3.6.1.4.1.2.267.7.6.5",
-    "dilithium3",
-    "1.3.9999.2.7.3",
-    "p384_dilithium3",
-    "1.3.6.1.4.1.2.267.7.8.7",
-    "dilithium5",
-    "1.3.9999.2.7.4",
-    "p521_dilithium5",
     "2.16.840.1.101.3.4.3.17",
     "mldsa44",
     "1.3.9999.7.5",
@@ -329,211 +295,174 @@ int oqs_patch_oids(void) {
 
         if ((envval = getenv("OQS_OID_P521_FRODO1344SHAKE")))
             oqs_oid_alg_list[30] = envval;
-        if ((envval = getenv("OQS_OID_KYBER512")))
+        if ((envval = getenv("OQS_OID_MLKEM512")))
             oqs_oid_alg_list[32] = envval;
 
-        if ((envval = getenv("OQS_OID_P256_KYBER512")))
+        if ((envval = getenv("OQS_OID_P256_MLKEM512")))
             oqs_oid_alg_list[34] = envval;
-        if ((envval = getenv("OQS_OID_X25519_KYBER512")))
+        if ((envval = getenv("OQS_OID_X25519_MLKEM512")))
             oqs_oid_alg_list[36] = envval;
-        if ((envval = getenv("OQS_OID_KYBER768")))
+        if ((envval = getenv("OQS_OID_MLKEM768")))
             oqs_oid_alg_list[38] = envval;
 
-        if ((envval = getenv("OQS_OID_P384_KYBER768")))
+        if ((envval = getenv("OQS_OID_P384_MLKEM768")))
             oqs_oid_alg_list[40] = envval;
-        if ((envval = getenv("OQS_OID_X448_KYBER768")))
+        if ((envval = getenv("OQS_OID_X448_MLKEM768")))
             oqs_oid_alg_list[42] = envval;
-        if ((envval = getenv("OQS_OID_X25519_KYBER768")))
+        if ((envval = getenv("OQS_OID_X25519MLKEM768")))
             oqs_oid_alg_list[44] = envval;
-        if ((envval = getenv("OQS_OID_P256_KYBER768")))
+        if ((envval = getenv("OQS_OID_SECP256R1MLKEM768")))
             oqs_oid_alg_list[46] = envval;
-        if ((envval = getenv("OQS_OID_KYBER1024")))
+        if ((envval = getenv("OQS_OID_MLKEM1024")))
             oqs_oid_alg_list[48] = envval;
 
-        if ((envval = getenv("OQS_OID_P521_KYBER1024")))
-            oqs_oid_alg_list[50] = envval;
-        if ((envval = getenv("OQS_OID_MLKEM512")))
-            oqs_oid_alg_list[52] = envval;
-
-        if ((envval = getenv("OQS_OID_P256_MLKEM512")))
-            oqs_oid_alg_list[54] = envval;
-        if ((envval = getenv("OQS_OID_X25519_MLKEM512")))
-            oqs_oid_alg_list[56] = envval;
-        if ((envval = getenv("OQS_OID_MLKEM768")))
-            oqs_oid_alg_list[58] = envval;
-
-        if ((envval = getenv("OQS_OID_P384_MLKEM768")))
-            oqs_oid_alg_list[60] = envval;
-        if ((envval = getenv("OQS_OID_X448_MLKEM768")))
-            oqs_oid_alg_list[62] = envval;
-        if ((envval = getenv("OQS_OID_X25519MLKEM768")))
-            oqs_oid_alg_list[64] = envval;
-        if ((envval = getenv("OQS_OID_SECP256R1MLKEM768")))
-            oqs_oid_alg_list[66] = envval;
-        if ((envval = getenv("OQS_OID_MLKEM1024")))
-            oqs_oid_alg_list[68] = envval;
-
         if ((envval = getenv("OQS_OID_P521_MLKEM1024")))
-            oqs_oid_alg_list[70] = envval;
+            oqs_oid_alg_list[50] = envval;
         if ((envval = getenv("OQS_OID_P384_MLKEM1024")))
-            oqs_oid_alg_list[72] = envval;
+            oqs_oid_alg_list[52] = envval;
         if ((envval = getenv("OQS_OID_BIKEL1")))
-            oqs_oid_alg_list[74] = envval;
+            oqs_oid_alg_list[54] = envval;
 
         if ((envval = getenv("OQS_OID_P256_BIKEL1")))
-            oqs_oid_alg_list[76] = envval;
+            oqs_oid_alg_list[56] = envval;
         if ((envval = getenv("OQS_OID_X25519_BIKEL1")))
-            oqs_oid_alg_list[78] = envval;
+            oqs_oid_alg_list[58] = envval;
         if ((envval = getenv("OQS_OID_BIKEL3")))
-            oqs_oid_alg_list[80] = envval;
+            oqs_oid_alg_list[60] = envval;
 
         if ((envval = getenv("OQS_OID_P384_BIKEL3")))
-            oqs_oid_alg_list[82] = envval;
+            oqs_oid_alg_list[62] = envval;
         if ((envval = getenv("OQS_OID_X448_BIKEL3")))
-            oqs_oid_alg_list[84] = envval;
+            oqs_oid_alg_list[64] = envval;
         if ((envval = getenv("OQS_OID_BIKEL5")))
-            oqs_oid_alg_list[86] = envval;
+            oqs_oid_alg_list[66] = envval;
 
         if ((envval = getenv("OQS_OID_P521_BIKEL5")))
-            oqs_oid_alg_list[88] = envval;
+            oqs_oid_alg_list[68] = envval;
         if ((envval = getenv("OQS_OID_HQC128")))
-            oqs_oid_alg_list[90] = envval;
+            oqs_oid_alg_list[70] = envval;
 
         if ((envval = getenv("OQS_OID_P256_HQC128")))
-            oqs_oid_alg_list[92] = envval;
+            oqs_oid_alg_list[72] = envval;
         if ((envval = getenv("OQS_OID_X25519_HQC128")))
-            oqs_oid_alg_list[94] = envval;
+            oqs_oid_alg_list[74] = envval;
         if ((envval = getenv("OQS_OID_HQC192")))
-            oqs_oid_alg_list[96] = envval;
+            oqs_oid_alg_list[76] = envval;
 
         if ((envval = getenv("OQS_OID_P384_HQC192")))
-            oqs_oid_alg_list[98] = envval;
+            oqs_oid_alg_list[78] = envval;
         if ((envval = getenv("OQS_OID_X448_HQC192")))
-            oqs_oid_alg_list[100] = envval;
+            oqs_oid_alg_list[80] = envval;
         if ((envval = getenv("OQS_OID_HQC256")))
-            oqs_oid_alg_list[102] = envval;
+            oqs_oid_alg_list[82] = envval;
 
         if ((envval = getenv("OQS_OID_P521_HQC256")))
-            oqs_oid_alg_list[104] = envval;
+            oqs_oid_alg_list[84] = envval;
 
-#define OQS_KEMOID_CNT 104 + 2
+#define OQS_KEMOID_CNT 84 + 2
 #else
 #define OQS_KEMOID_CNT 0
 #endif /* OQS_KEM_ENCODERS */
-        if ((envval = getenv("OQS_OID_DILITHIUM2")))
-            oqs_oid_alg_list[0 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_P256_DILITHIUM2")))
-            oqs_oid_alg_list[2 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_RSA3072_DILITHIUM2")))
-            oqs_oid_alg_list[4 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_DILITHIUM3")))
-            oqs_oid_alg_list[6 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_P384_DILITHIUM3")))
-            oqs_oid_alg_list[8 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_DILITHIUM5")))
-            oqs_oid_alg_list[10 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_P521_DILITHIUM5")))
-            oqs_oid_alg_list[12 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA44")))
-            oqs_oid_alg_list[14 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[0 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_MLDSA44")))
-            oqs_oid_alg_list[16 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[2 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_MLDSA44")))
-            oqs_oid_alg_list[18 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[4 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA44_PSS2048")))
-            oqs_oid_alg_list[20 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[6 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA44_RSA2048")))
-            oqs_oid_alg_list[22 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[8 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA44_ED25519")))
-            oqs_oid_alg_list[24 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[10 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA44_P256")))
-            oqs_oid_alg_list[26 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[12 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA44_BP256")))
-            oqs_oid_alg_list[28 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[14 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA65")))
-            oqs_oid_alg_list[30 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[16 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P384_MLDSA65")))
-            oqs_oid_alg_list[32 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[18 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA65_PSS3072")))
-            oqs_oid_alg_list[34 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[20 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA65_RSA3072")))
-            oqs_oid_alg_list[36 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[22 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA65_P256")))
-            oqs_oid_alg_list[38 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[24 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA65_BP256")))
-            oqs_oid_alg_list[40 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[26 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA65_ED25519")))
-            oqs_oid_alg_list[42 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[28 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA87")))
-            oqs_oid_alg_list[44 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[30 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_MLDSA87")))
-            oqs_oid_alg_list[46 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[32 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA87_P384")))
-            oqs_oid_alg_list[48 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[34 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA87_BP384")))
-            oqs_oid_alg_list[50 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[36 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MLDSA87_ED448")))
-            oqs_oid_alg_list[52 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[38 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_FALCON512")))
-            oqs_oid_alg_list[54 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[40 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_FALCON512")))
-            oqs_oid_alg_list[56 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[42 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_FALCON512")))
-            oqs_oid_alg_list[58 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[44 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_FALCONPADDED512")))
-            oqs_oid_alg_list[60 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[46 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_FALCONPADDED512")))
-            oqs_oid_alg_list[62 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[48 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_FALCONPADDED512")))
-            oqs_oid_alg_list[64 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[50 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_FALCON1024")))
-            oqs_oid_alg_list[66 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[52 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_FALCON1024")))
-            oqs_oid_alg_list[68 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[54 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_FALCONPADDED1024")))
-            oqs_oid_alg_list[70 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[56 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_FALCONPADDED1024")))
-            oqs_oid_alg_list[72 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[58 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SPHINCSSHA2128FSIMPLE")))
-            oqs_oid_alg_list[74 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[60 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE")))
-            oqs_oid_alg_list[76 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[62 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE")))
-            oqs_oid_alg_list[78 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[64 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SPHINCSSHA2128SSIMPLE")))
-            oqs_oid_alg_list[80 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[66 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE")))
-            oqs_oid_alg_list[82 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[68 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE")))
-            oqs_oid_alg_list[84 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[70 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SPHINCSSHA2192FSIMPLE")))
-            oqs_oid_alg_list[86 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[72 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE")))
-            oqs_oid_alg_list[88 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[74 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[90 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[76 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[92 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[78 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[94 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[80 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO1")))
-            oqs_oid_alg_list[96 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[82 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_MAYO1")))
-            oqs_oid_alg_list[98 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[84 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO2")))
-            oqs_oid_alg_list[100 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[86 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_MAYO2")))
-            oqs_oid_alg_list[102 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[88 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO3")))
-            oqs_oid_alg_list[104 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[90 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P384_MAYO3")))
-            oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[92 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO5")))
-            oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[94 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_MAYO5")))
-            oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[96 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_CROSSRSDP128BALANCED")))
-            oqs_oid_alg_list[112 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[98 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -577,19 +506,6 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
 
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
-#ifdef OQS_ENABLE_SIG_dilithium_2
-    SIGALG("dilithium2", 128, oqs_signature_functions),
-    SIGALG("p256_dilithium2", 128, oqs_signature_functions),
-    SIGALG("rsa3072_dilithium2", 128, oqs_signature_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_3
-    SIGALG("dilithium3", 192, oqs_signature_functions),
-    SIGALG("p384_dilithium3", 192, oqs_signature_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_5
-    SIGALG("dilithium5", 256, oqs_signature_functions),
-    SIGALG("p521_dilithium5", 256, oqs_signature_functions),
-#endif
 #ifdef OQS_ENABLE_SIG_ml_dsa_44
     SIGALG("mldsa44", 128, oqs_signature_functions),
     SIGALG("p256_mldsa44", 128, oqs_signature_functions),
@@ -706,22 +622,6 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMBASEALG(frodo1344shake, 256)
     KEMHYBALG(p521_frodo1344shake, 256)
 #endif
-#ifdef OQS_ENABLE_KEM_kyber_512
-    KEMBASEALG(kyber512, 128)
-    KEMHYBALG(p256_kyber512, 128)
-    KEMHYBALG(x25519_kyber512, 128)
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_768
-    KEMBASEALG(kyber768, 192)
-    KEMHYBALG(p384_kyber768, 192)
-    KEMHYBALG(x448_kyber768, 192)
-    KEMHYBALG(x25519_kyber768, 128)
-    KEMHYBALG(p256_kyber768, 128)
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_1024
-    KEMBASEALG(kyber1024, 256)
-    KEMHYBALG(p521_kyber1024, 256)
-#endif
 #ifdef OQS_ENABLE_KEM_ml_kem_512
     KEMBASEALG(mlkem512, 128)
     KEMHYBALG(p256_mlkem512, 128)
@@ -771,23 +671,12 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     {NULL, NULL, NULL}};
 
-static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
+static const OSSL_ALGORITHM
+    oqsprovider_keymgmt[] =
+        {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
 // clang-format off
 
-#ifdef OQS_ENABLE_SIG_dilithium_2
-    SIGALG("dilithium2", 128, oqs_dilithium2_keymgmt_functions),
-    SIGALG("p256_dilithium2", 128, oqs_p256_dilithium2_keymgmt_functions),
-    SIGALG("rsa3072_dilithium2", 128, oqs_rsa3072_dilithium2_keymgmt_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_3
-    SIGALG("dilithium3", 192, oqs_dilithium3_keymgmt_functions),
-    SIGALG("p384_dilithium3", 192, oqs_p384_dilithium3_keymgmt_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_dilithium_5
-    SIGALG("dilithium5", 256, oqs_dilithium5_keymgmt_functions),
-    SIGALG("p521_dilithium5", 256, oqs_p521_dilithium5_keymgmt_functions),
-#endif
 #ifdef OQS_ENABLE_SIG_ml_dsa_44
     SIGALG("mldsa44", 128, oqs_mldsa44_keymgmt_functions),
     SIGALG("p256_mldsa44", 128, oqs_p256_mldsa44_keymgmt_functions),
@@ -905,25 +794,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 
     KEMKMHYBALG(p521_frodo1344shake, 256, ecp)
 #endif
-#ifdef OQS_ENABLE_KEM_kyber_512
-    KEMKMALG(kyber512, 128)
-
-    KEMKMHYBALG(p256_kyber512, 128, ecp)
-    KEMKMHYBALG(x25519_kyber512, 128, ecx)
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_768
-    KEMKMALG(kyber768, 192)
-
-    KEMKMHYBALG(p384_kyber768, 192, ecp)
-    KEMKMHYBALG(x448_kyber768, 192, ecx)
-    KEMKMHYBALG(x25519_kyber768, 128, ecx)
-    KEMKMHYBALG(p256_kyber768, 128, ecp)
-#endif
-#ifdef OQS_ENABLE_KEM_kyber_1024
-    KEMKMALG(kyber1024, 256)
-
-    KEMKMHYBALG(p521_kyber1024, 256, ecp)
-#endif
 #ifdef OQS_ENABLE_KEM_ml_kem_512
     KEMKMALG(mlkem512, 128)
 
@@ -978,9 +848,9 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 
     KEMKMHYBALG(p521_hqc256, 256, ecp)
 #endif
-    // clang-format on
-    ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
-    {NULL, NULL, NULL}};
+            // clang-format on
+            ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+            {NULL, NULL, NULL}};
 
 static const OSSL_ALGORITHM oqsprovider_encoder[] = {
 #define ENCODER_PROVIDER "oqsprovider"

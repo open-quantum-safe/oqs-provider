@@ -28,16 +28,6 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | p521_frodo1344aes | 0x2F04 | Yes | OQS_CODEPOINT_P521_FRODO1344AES |
 | frodo1344shake | 0x0205 | Yes | OQS_CODEPOINT_FRODO1344SHAKE |
 | p521_frodo1344shake | 0x2F05 | Yes | OQS_CODEPOINT_P521_FRODO1344SHAKE |
-| kyber512 | 0x023A | Yes | OQS_CODEPOINT_KYBER512 |
-| p256_kyber512 | 0x2F3A | Yes | OQS_CODEPOINT_P256_KYBER512 |
-| x25519_kyber512 | 0x2F39 | Yes | OQS_CODEPOINT_X25519_KYBER512 |
-| kyber768 | 0x023C | Yes | OQS_CODEPOINT_KYBER768 |
-| p384_kyber768 | 0x2F3C | Yes | OQS_CODEPOINT_P384_KYBER768 |
-| x448_kyber768 | 0x2F90 | Yes | OQS_CODEPOINT_X448_KYBER768 |
-| x25519_kyber768 | 0x6399 | Yes | OQS_CODEPOINT_X25519_KYBER768 |
-| p256_kyber768 | 0x639A | Yes | OQS_CODEPOINT_P256_KYBER768 |
-| kyber1024 | 0x023D | Yes | OQS_CODEPOINT_KYBER1024 |
-| p521_kyber1024 | 0x2F3D | Yes | OQS_CODEPOINT_P521_KYBER1024 |
 | mlkem512 | 512 | Yes | OQS_CODEPOINT_MLKEM512 |
 | p256_mlkem512 | 0x2F4B | Yes | OQS_CODEPOINT_P256_MLKEM512 |
 | x25519_mlkem512 | 0x2FB6 | Yes | OQS_CODEPOINT_X25519_MLKEM512 |
@@ -65,13 +55,6 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | x448_hqc192 | 0x2FB1 | Yes | OQS_CODEPOINT_X448_HQC192 |
 | hqc256 | 0x0246 | Yes | OQS_CODEPOINT_HQC256 |
 | p521_hqc256 | 0x2F46 | Yes | OQS_CODEPOINT_P521_HQC256 |
-| dilithium2 | 0xfea0 |Yes| OQS_CODEPOINT_DILITHIUM2
-| p256_dilithium2 | 0xfea1 |Yes| OQS_CODEPOINT_P256_DILITHIUM2
-| rsa3072_dilithium2 | 0xfea2 |Yes| OQS_CODEPOINT_RSA3072_DILITHIUM2
-| dilithium3 | 0xfea3 |Yes| OQS_CODEPOINT_DILITHIUM3
-| p384_dilithium3 | 0xfea4 |Yes| OQS_CODEPOINT_P384_DILITHIUM3
-| dilithium5 | 0xfea5 |Yes| OQS_CODEPOINT_DILITHIUM5
-| p521_dilithium5 | 0xfea6 |Yes| OQS_CODEPOINT_P521_DILITHIUM5
 | mldsa44 | 0x0904 |Yes| OQS_CODEPOINT_MLDSA44
 | p256_mldsa44 | 0xff06 |Yes| OQS_CODEPOINT_P256_MLDSA44
 | rsa3072_mldsa44 | 0xff07 |Yes| OQS_CODEPOINT_RSA3072_MLDSA44
@@ -183,13 +166,6 @@ discussed in https://github.com/open-quantum-safe/oqs-provider/issues/351.
 <!--- OQS_TEMPLATE_FRAGMENT_OIDS_START -->
 |Algorithm name |    default OID    | enabled | environment variable |
 |---------------|:-----------------:|:-------:|----------------------|
-| dilithium2 | 1.3.6.1.4.1.2.267.7.4.4 |Yes| OQS_OID_DILITHIUM2
-| p256_dilithium2 | 1.3.9999.2.7.1 |Yes| OQS_OID_P256_DILITHIUM2
-| rsa3072_dilithium2 | 1.3.9999.2.7.2 |Yes| OQS_OID_RSA3072_DILITHIUM2
-| dilithium3 | 1.3.6.1.4.1.2.267.7.6.5 |Yes| OQS_OID_DILITHIUM3
-| p384_dilithium3 | 1.3.9999.2.7.3 |Yes| OQS_OID_P384_DILITHIUM3
-| dilithium5 | 1.3.6.1.4.1.2.267.7.8.7 |Yes| OQS_OID_DILITHIUM5
-| p521_dilithium5 | 1.3.9999.2.7.4 |Yes| OQS_OID_P521_DILITHIUM5
 | mldsa44 | 2.16.840.1.101.3.4.3.17 |Yes| OQS_OID_MLDSA44
 | p256_mldsa44 | 1.3.9999.7.5 |Yes| OQS_OID_P256_MLDSA44
 | rsa3072_mldsa44 | 1.3.9999.7.6 |Yes| OQS_OID_RSA3072_MLDSA44
@@ -293,16 +269,6 @@ If [OQS_KEM_ENCODERS](CONFIGURE.md#OQS_KEM_ENCODERS) is enabled the following li
 | p521_frodo1344aes | NULL | OQS_OID_P521_FRODO1344AES
 | frodo1344shake | NULL | OQS_OID_FRODO1344SHAKE
 | p521_frodo1344shake | NULL | OQS_OID_P521_FRODO1344SHAKE
-| kyber512 | 1.3.6.1.4.1.2.267.8.2.2 | OQS_OID_KYBER512
-| p256_kyber512 | NULL | OQS_OID_P256_KYBER512
-| x25519_kyber512 | NULL | OQS_OID_X25519_KYBER512
-| kyber768 | 1.3.6.1.4.1.2.267.8.3.3 | OQS_OID_KYBER768
-| p384_kyber768 | NULL | OQS_OID_P384_KYBER768
-| x448_kyber768 | NULL | OQS_OID_X448_KYBER768
-| x25519_kyber768 | NULL | OQS_OID_X25519_KYBER768
-| p256_kyber768 | NULL | OQS_OID_P256_KYBER768
-| kyber1024 | 1.3.6.1.4.1.2.267.8.4.4 | OQS_OID_KYBER1024
-| p521_kyber1024 | NULL | OQS_OID_P521_KYBER1024
 | mlkem512 | 2.16.840.1.101.3.4.4.1 | OQS_OID_MLKEM512
 | p256_mlkem512 | 1.3.6.1.4.1.22554.5.7.1 | OQS_OID_P256_MLKEM512
 | x25519_mlkem512 | 1.3.6.1.4.1.22554.5.8.1 | OQS_OID_X25519_MLKEM512

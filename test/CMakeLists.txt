@@ -59,6 +59,7 @@ endif()
 add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
 target_link_libraries(oqs_test_kems PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 
+if (OQS_PROVIDER_BUILD_STATIC OR ${LIBOQS_LIBRARY_TYPE} STREQUAL "SHARED_LIBRARY")
 add_test(
   NAME oqs_libctx
   COMMAND oqs_test_libctx
@@ -77,9 +78,9 @@ set_tests_properties(oqs_libctx
 )
 endif()
 
-get_target_property(LIBOQS_CRYPTO_LIBRARY OQS::oqs IMPORTED_SONAME_NOCONFIG)
 add_executable(oqs_test_libctx oqs_test_libctx.c test_common.c)
-target_link_libraries(oqs_test_libctx PRIVATE ${LIBOQS_CRYPTO_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+target_link_libraries(oqs_test_libctx PRIVATE OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+endif()
 
 add_test(
     NAME oqs_groups
@@ -168,6 +169,7 @@ endif()
 if (OQS_PROVIDER_BUILD_STATIC)
   targets_set_static_provider(oqs_test_signatures
     oqs_test_kems
+    oqs_test_libctx
     oqs_test_groups
     oqs_test_tlssig
     oqs_test_endecode

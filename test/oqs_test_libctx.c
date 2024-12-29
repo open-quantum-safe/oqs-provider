@@ -10,7 +10,7 @@
 #include "oqs/oqs.h"
 #include "test_common.h"
 
-#define MAX_DUMMY_ENTROPY_BUFFERLEN 65536
+#define MAX_DUMMY_ENTROPY_BUFFERLEN 0x100000
 
 static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
@@ -21,11 +21,10 @@ static void oqs_dummy_drbg(unsigned char *buffer, size_t bufferlen) {
     return;
 }
 
-static int oqs_load_deterministic_pseudorandom_generator(OSSL_LIB_CTX *libctx) {
-    int ret = 1;
+static int oqs_load_det_pseudorandom_generator(OSSL_LIB_CTX *libctx) {
     OSSL_PARAM params[2], *p = params;
     unsigned char entropy[MAX_DUMMY_ENTROPY_BUFFERLEN];
-    oqs_dummy_drbg(entropy, sizeof(entropy));
+    RAND_bytes(entropy, sizeof(entropy));
 
     if (!RAND_set_DRBG_type(libctx, "TEST-RAND", NULL, NULL, NULL)) {
         return 0;
@@ -53,7 +52,39 @@ static int oqs_load_deterministic_pseudorandom_generator(OSSL_LIB_CTX *libctx) {
         return 0;
     }
 
-    return ret;
+    return 1;
+}
+
+static int oqs_reset_det_pseudorandom_generator(OSSL_LIB_CTX *libctx) {
+    OSSL_PARAM params[2], *p = params;
+    unsigned int strength = 256;
+
+    // information not needed, but for RAND to reset, it needs at least one
+    // param
+    *p++ = OSSL_PARAM_construct_uint(OSSL_RAND_PARAM_STRENGTH, &strength);
+    *p = OSSL_PARAM_construct_end();
+
+    EVP_RAND_CTX *rctx_public = RAND_get0_public(libctx);
+    if (!rctx_public) {
+        return 0;
+    }
+
+    EVP_RAND_uninstantiate(rctx_public);
+    if (!EVP_RAND_instantiate(rctx_public, strength, 0, NULL, 0, params)) {
+        return 0;
+    }
+
+    EVP_RAND_CTX *rctx_private = RAND_get0_private(libctx);
+    if (!rctx_private) {
+        return 0;
+    }
+
+    EVP_RAND_uninstantiate(rctx_private);
+    if (!EVP_RAND_instantiate(rctx_private, strength, 0, NULL, 0, params)) {
+        return 0;
+    }
+
+    return 1;
 }
 
 static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
@@ -62,6 +93,10 @@ static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
                                   size_t *outlen) {
     int testresult = 1;
     EVP_PKEY_CTX *ctx = NULL;
+
+    if (!oqs_reset_det_pseudorandom_generator(libctx)) {
+        return 0;
+    }
 
     // test with built-in digest only if default provider is active:
     // TBD revisit when hybrids are activated: They always need default
@@ -102,6 +137,10 @@ static int oqs_generate_sig_elems(const char *sigalg_name, const char *msg,
     int testresult = 1;
     EVP_PKEY_CTX *ctx = NULL;
     EVP_MD_CTX *mdctx = NULL;
+
+    if (!oqs_reset_det_pseudorandom_generator(libctx)) {
+        return 0;
+    }
 
     // test with built-in digest only if default provider is active:
     // TBD revisit when hybrids are activated: They always need default
@@ -212,7 +251,7 @@ int main(int argc, char *argv[]) {
     modulename = argv[1];
     configfile = argv[2];
 
-    oqs_load_deterministic_pseudorandom_generator(libctx);
+    oqs_load_det_pseudorandom_generator(libctx);
     load_oqs_provider(libctx, modulename, configfile);
 
     OQS_randombytes_custom_algorithm(&oqs_dummy_drbg);
@@ -258,6 +297,7 @@ int main(int argc, char *argv[]) {
     OQS_randombytes_switch_algorithm(OQS_RAND_alg_system);
 #endif
 
+    OSSL_PROVIDER_unload(oqsprov);
     OSSL_LIB_CTX_free(libctx);
 
     TEST_ASSERT(errcnt == 0)

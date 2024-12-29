@@ -1,4 +1,6 @@
-// SPDX-License-Identifier: Apache-2.0 AND MIT
+/* SPDX-License-Identifier: Apache-2.0 AND MIT
+ * Copyright (c) [2024,] 2024, Oracle and/or its affiliates. All rights reserved.
+ */
 
 #include <openssl/buffer.h>
 #include <openssl/core_names.h>
@@ -35,6 +37,8 @@ typedef struct endecode_params_st {
 } ENDECODE_PARAMS;
 
 static ENDECODE_PARAMS test_params_list[] = {
+    {"DER", "type-specific", NULL, NULL,
+     OSSL_KEYMGMT_SELECT_KEYPAIR | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
     {"PEM", "PrivateKeyInfo", NULL, NULL,
      OSSL_KEYMGMT_SELECT_KEYPAIR | OSSL_KEYMGMT_SELECT_ALL_PARAMETERS},
     {"PEM", "EncryptedPrivateKeyInfo", NULL,

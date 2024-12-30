@@ -46,3 +46,35 @@ OSSL_PROVIDER *load_default_provider(OSSL_LIB_CTX *libctx);
 /* Loads the oqs-provider. */
 void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
                        const char *configfile);
+
+/** \brief Indicates if a signature algorithm is hybrid or not.
+ *
+ * \param alg Algorithm name.
+ *
+ * \returns 1 if hybrid, else 0. */
+int is_signature_algorithm_hybrid(const char *_alg_);
+
+/** \brief Indicates if a signature algorithm is composite or not.
+ *
+ * \param alg Algorithm name.
+ *
+ * \returns 1 if hybrid, else 0. */
+int is_signature_algorithm_composite(const char *_alg_);
+
+/** \brief Indicates if an kem algorithm is hybrid or not.
+ *
+ * \param alg Algorithm name.
+ *
+ * \returns 1 if hybrid, else 0. */
+int is_kem_algorithm_hybrid(const char *_alg_);
+
+/** \brief Extracts an octet string from a parameter of an EVP_PKEY.
+ *
+ * \param key The EVP_PKEY;
+ * \param param_name Name of the parameter.
+ * \param[out] buf Out buffer.
+ * \param[out] buf_len Size of out buffer.
+ *
+ * \returns 0 on success. */
+int get_param_octet_string(const EVP_PKEY *key, const char *param_name,
+                           uint8_t **buf, size_t *buf_len);

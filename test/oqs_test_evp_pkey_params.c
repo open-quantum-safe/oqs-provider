@@ -17,10 +17,6 @@
 
 /** \brief List of hybrid signature algorithms. */
 const char *kHybridSignatureAlgorithms[] = {
-    "p256_dilithium2",
-    "rsa3072_dilithium2",
-    "p384_dilithium3",
-    "p521_dilithium5",
     "p256_mldsa44",
     "rsa3072_mldsa44",
     "p384_mldsa65",
@@ -64,18 +60,35 @@ const char *kCompositeSignatureAlgorithms[] = {
 
 /** \brief List of hybrid KEMs. */
 const char *kHybridKEMAlgorithms[] = {
-    "p256_frodo640aes",     "x25519_frodo640aes", "p256_frodo640shake",
-    "x25519_frodo640shake", "p384_frodo976aes",   "x448_frodo976aes",
-    "p384_frodo976shake",   "x448_frodo976shake", "p521_frodo1344aes",
-    "p521_frodo1344shake",  "p256_kyber512",      "x25519_kyber512",
-    "p384_kyber768",        "x448_kyber768",      "x25519_kyber768",
-    "p256_kyber768",        "p521_kyber1024",     "p256_mlkem512",
-    "x25519_mlkem512",      "p384_mlkem768",      "x448_mlkem768",
-    "X25519MLKEM768",       "SecP256r1MLKEM768",  "p521_mlkem1024",
-    "p384_mlkem1024",       "p256_bikel1",        "x25519_bikel1",
-    "p384_bikel3",          "x448_bikel3",        "p521_bikel5",
-    "p256_hqc128",          "x25519_hqc128",      "p384_hqc192",
-    "x448_hqc192",          "p521_hqc256",        NULL,
+    "p256_frodo640aes",
+    "x25519_frodo640aes",
+    "p256_frodo640shake",
+    "x25519_frodo640shake",
+    "p384_frodo976aes",
+    "x448_frodo976aes",
+    "p384_frodo976shake",
+    "x448_frodo976shake",
+    "p521_frodo1344aes",
+    "p521_frodo1344shake",
+    "p256_mlkem512",
+    "x25519_mlkem512",
+    "p384_mlkem768",
+    "x448_mlkem768",
+    "X25519MLKEM768",
+    "SecP256r1MLKEM768",
+    "p521_mlkem1024",
+    "p384_mlkem1024",
+    "p256_bikel1",
+    "x25519_bikel1",
+    "p384_bikel3",
+    "x448_bikel3",
+    "p521_bikel5",
+    "p256_hqc128",
+    "x25519_hqc128",
+    "p384_hqc192",
+    "x448_hqc192",
+    "p521_hqc256",
+    NULL,
 }; ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_END
 
 /** \brief Indicates if a string is in a given list of strings.

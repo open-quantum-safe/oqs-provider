@@ -59,6 +59,29 @@ endif()
 add_executable(oqs_test_kems oqs_test_kems.c test_common.c)
 target_link_libraries(oqs_test_kems PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 
+if (OQS_PROVIDER_BUILD_STATIC OR ${LIBOQS_LIBRARY_TYPE} STREQUAL "SHARED_LIBRARY")
+add_test(
+  NAME oqs_libctx
+  COMMAND oqs_test_libctx
+          "oqsprovider"
+          "${CMAKE_SOURCE_DIR}/test/oqs.cnf"
+)
+# openssl under MSVC seems to have a bug registering NIDs:
+# It only works when setting OPENSSL_CONF, not when loading the same cnf file:
+if (MSVC)
+set_tests_properties(oqs_libctx
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR};OPENSSL_CONF=${CMAKE_CURRENT_SOURCE_DIR}/openssl-ca.cnf"
+)
+else()
+set_tests_properties(oqs_libctx
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
+)
+endif()
+
+add_executable(oqs_test_libctx oqs_test_libctx.c test_common.c)
+target_link_libraries(oqs_test_libctx PRIVATE OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+endif()
+
 add_test(
     NAME oqs_groups
     COMMAND oqs_test_groups
@@ -146,6 +169,7 @@ endif()
 if (OQS_PROVIDER_BUILD_STATIC)
   targets_set_static_provider(oqs_test_signatures
     oqs_test_kems
+    oqs_test_libctx
     oqs_test_groups
     oqs_test_tlssig
     oqs_test_endecode

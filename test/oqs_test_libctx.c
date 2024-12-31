@@ -36,7 +36,7 @@ static const struct ClassicalInfo info_classical[] = {
     {"bp256", 65, 122, 32, 72},     {"bp384", 97, 171, 48, 104},
     {"rsa3072", 398, 1770, 0, 384}, {"pss3072", 398, 1770, 0, 384},
     {"rsa2048", 270, 1193, 0, 256}, {"pss2048", 270, 1193, 0, 256},
-    {"ed25519", 32, 32, 0, 67},     {"ed448", 57, 57, 0, 117},
+    {"ed25519", 32, 32, 0, 64},     {"ed448", 57, 57, 0, 114},
     {"x25519", 32, 32, 32, 0},      {"X25519", 32, 32, 32, 0},
     {"x448", 56, 56, 56, 0},
 };
@@ -126,9 +126,9 @@ static int oqs_reset_det_pseudorandom_generator(OSSL_LIB_CTX *libctx) {
  *
  * \param kemalg_name algorithm name.
  * \param[out] key The object to hold the key pair.
- * \param[out] secenc Encaps Shared Secret Buffer .
+ * \param[out] secenc Encaps Shared Secret buffer.
  * \param[out] seclen Shared Secret length.
- * \param[out] secdec Decaps Shared Secret Buffer .
+ * \param[out] secdec Decaps Shared Secret buffer.
  * \param[out] out Encapsulation buffer.
  * \param[out] outlen Encapsulation length.
  *
@@ -137,20 +137,17 @@ static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
                                   unsigned char **secenc, size_t *seclen,
                                   unsigned char **secdec, unsigned char **out,
                                   size_t *outlen) {
-    int testresult = 1;
+    int testresult = 0;
     EVP_PKEY_CTX *ctx = NULL;
 
     if (!oqs_reset_det_pseudorandom_generator(libctx)) {
         return 0;
     }
 
-    // test with built-in digest only if default provider is active:
-    // TBD revisit when hybrids are activated: They always need default
-    // provider
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult &= (ctx = EVP_PKEY_CTX_new_from_name(libctx, kemalg_name,
-                                                        NULL)) != NULL &&
-                      EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
+        testresult = (ctx = EVP_PKEY_CTX_new_from_name(libctx, kemalg_name,
+                                                       NULL)) != NULL &&
+                     EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
 
         if (!testresult)
             goto err;
@@ -183,14 +180,14 @@ err:
  * \param msg Message to be signed.
  * \param msglen Message length.
  * \param[out] key The object to hold the key pair.
- * \param[out] sig Signature Buffer .
+ * \param[out] sig Signature buffer.
  * \param[out] siglen Signature length.
  *
  * \return 1 if the operations are successful, else 0. */
 static int oqs_generate_sig_elems(const char *sigalg_name, const char *msg,
                                   size_t msglen, EVP_PKEY **key,
                                   unsigned char **sig, size_t *siglen) {
-    int testresult = 1;
+    int testresult = 0;
     EVP_PKEY_CTX *ctx = NULL;
     EVP_MD_CTX *mdctx = NULL;
 
@@ -198,25 +195,21 @@ static int oqs_generate_sig_elems(const char *sigalg_name, const char *msg,
         return 0;
     }
 
-    // test with built-in digest only if default provider is active:
-    // TBD revisit when hybrids are activated: They always need default
-    // provider
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult &=
-            (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) !=
-                NULL &&
-            EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key) &&
-            (mdctx = EVP_MD_CTX_new()) != NULL &&
-            EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, *key,
-                                  NULL) &&
-            EVP_DigestSignUpdate(mdctx, msg, msglen) &&
-            EVP_DigestSignFinal(mdctx, NULL, siglen) &&
-            (*sig = OPENSSL_malloc(*siglen)) != NULL &&
-            EVP_DigestSignFinal(mdctx, *sig, siglen) &&
-            EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, *key,
-                                    NULL) &&
-            EVP_DigestVerifyUpdate(mdctx, msg, msglen) &&
-            EVP_DigestVerifyFinal(mdctx, *sig, *siglen);
+        testresult = (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
+                                                       NULL)) != NULL &&
+                     EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key) &&
+                     (mdctx = EVP_MD_CTX_new()) != NULL &&
+                     EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL,
+                                           *key, NULL) &&
+                     EVP_DigestSignUpdate(mdctx, msg, msglen) &&
+                     EVP_DigestSignFinal(mdctx, NULL, siglen) &&
+                     (*sig = OPENSSL_malloc(*siglen)) != NULL &&
+                     EVP_DigestSignFinal(mdctx, *sig, siglen) &&
+                     EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx,
+                                             NULL, *key, NULL) &&
+                     EVP_DigestVerifyUpdate(mdctx, msg, msglen) &&
+                     EVP_DigestVerifyFinal(mdctx, *sig, *siglen);
     }
 
 err:
@@ -225,7 +218,7 @@ err:
     return testresult;
 }
 
-/** \brief Compares the classical key pairs of two hybrid key pairs
+/** \brief Compares the classical keys of two hybrid key pairs
  *
  * \param key1 A key pair.
  * \param key2 A key pair.
@@ -269,17 +262,28 @@ out:
     return ret;
 }
 
-/** \brief Returns the index asscoiated to the 'info_classical' struct
+/** \brief Returns the index associated to the 'info_classical' struct
  *
  * \param alg_name algorithm name.
  *
- * \return The associated index, or OOB in case no match is found. */
-static int oqs_get_idx(const char *alg_name) {
+ * \return The associated index, or -1 in case no match is found. */
+static int get_idx_info_classical(const char *alg_name) {
     int idx = 0;
     char *algdup = strdup(alg_name);
     char *name = strtok(algdup, "_");
 
-    if (strncmp(alg_name, "mldsa", 5) == 0) {
+    while (idx < OSSL_NELEM(info_classical)) {
+        if (!strncmp(name, info_classical[idx].name,
+                     strlen(info_classical[idx].name)))
+            goto err;
+        idx++;
+    }
+
+    if (idx ==
+        OSSL_NELEM(info_classical)) { // Might have encountered a 'composite'
+                                      // alg, so try again with the second part
+                                      // of the separator
+        idx = 0;
         name = strtok(NULL, "_");
     }
 
@@ -289,12 +293,16 @@ static int oqs_get_idx(const char *alg_name) {
             break;
         idx++;
     }
-    free(algdup);
 
+    if (idx == OSSL_NELEM(info_classical))
+        idx = -1;
+
+err:
+    free(algdup);
     return idx;
 }
 
-/** \brief Compares the classical key pairs of two composite key pairs
+/** \brief Compares the classical keys of two composite key pairs
  *
  * \param sigalg_name algorithm name.
  * \param key1 A key pair.
@@ -304,7 +312,7 @@ static int oqs_get_idx(const char *alg_name) {
 static int oqs_cmp_composite_sig_keys(const char *sigalg_name,
                                       const EVP_PKEY *key1,
                                       const EVP_PKEY *key2) {
-    int ret = 0, ret_rev = 0, idx;
+    int ret = 0, idx;
     unsigned char *pubkey1 = NULL, *pubkey2 = NULL, *privkey1 = NULL,
                   *privkey2 = NULL;
     size_t pubkey1_len, pubkey2_len, privkey1_len, privkey2_len;
@@ -327,7 +335,7 @@ static int oqs_cmp_composite_sig_keys(const char *sigalg_name,
         goto out;
     }
 
-    if ((idx = oqs_get_idx(sigalg_name)) >= OSSL_NELEM(info_classical)) {
+    if ((idx = get_idx_info_classical(sigalg_name)) < 0) {
         goto out;
     }
 
@@ -338,22 +346,25 @@ static int oqs_cmp_composite_sig_keys(const char *sigalg_name,
     ret = memcmp(pubkey1, pubkey2, info_classical[idx].pubkey_len) == 0 &&
           memcmp(privkey1, privkey2, info_classical[idx].privkey_len) == 0;
 
-    ret_rev = memcmp(pubkey1 + pubkey1_len - info_classical[idx].pubkey_len,
-                     pubkey2 + pubkey2_len - info_classical[idx].pubkey_len,
-                     info_classical[idx].pubkey_len) == 0 &&
-              memcmp(privkey1 + privkey1_len - info_classical[idx].privkey_len,
-                     privkey2 + privkey2_len - info_classical[idx].privkey_len,
-                     info_classical[idx].privkey_len) == 0;
+    if (ret)
+        return ret;
+
+    ret = memcmp(pubkey1 + pubkey1_len - info_classical[idx].pubkey_len,
+                 pubkey2 + pubkey2_len - info_classical[idx].pubkey_len,
+                 info_classical[idx].pubkey_len) == 0 &&
+          memcmp(privkey1 + privkey1_len - info_classical[idx].privkey_len,
+                 privkey2 + privkey2_len - info_classical[idx].privkey_len,
+                 info_classical[idx].privkey_len) == 0;
 
 out:
     free(pubkey1);
     free(pubkey2);
     free(privkey1);
     free(privkey2);
-    return ret || ret_rev;
+    return ret;
 }
 
-/** \brief Compares the classical KEM elemets of two Encaps/Decaps executions
+/** \brief Compares the classical KEM elements of two Encaps/Decaps executions
  *
  * \param kemalg_name algorithm name.
  * \param sec1 A shared secret.
@@ -361,33 +372,37 @@ out:
  * \param seclen Shared secret length.
  * \param ct1 An encapsulation.
  * \param ct1 An encapsulation.
- * \param ctlen Encapsulation lentgh.
+ * \param ctlen Encapsulation length.
  *
  * \return 1 if the compare operation is successful, else 0. */
 static int oqs_cmp_kem_elems(const char *kemalg_name, const unsigned char *sec1,
-                             const unsigned char *sec2, size_t seclen,
-                             const unsigned char *ct1, const unsigned char *ct2,
-                             size_t ctlen) {
-    int ret = 1, ret_rev = 1, idx = 0;
+                             size_t sec1len, const unsigned char *sec2,
+                             size_t sec2len, const unsigned char *ct1,
+                             size_t ct1len, const unsigned char *ct2,
+                             size_t ct2len) {
+    int ret, idx;
 
-    if ((idx = oqs_get_idx(kemalg_name)) >= OSSL_NELEM(info_classical)) {
+    if ((idx = get_idx_info_classical(kemalg_name)) < 0) {
         return 0;
     }
 
-    ret_rev &= memcmp(sec1 + seclen - info_classical[idx].sec_len,
-                      sec2 + seclen - info_classical[idx].sec_len,
-                      info_classical[idx].sec_len) == 0 &&
-               memcmp(ct1 + ctlen - info_classical[idx].pubkey_len,
-                      ct2 + ctlen - info_classical[idx].pubkey_len,
-                      info_classical[idx].pubkey_len) == 0;
+    ret = memcmp(sec1 + sec1len - info_classical[idx].sec_len,
+                 sec2 + sec2len - info_classical[idx].sec_len,
+                 info_classical[idx].sec_len) == 0 &&
+          memcmp(ct1 + ct1len - info_classical[idx].pubkey_len,
+                 ct2 + ct2len - info_classical[idx].pubkey_len,
+                 info_classical[idx].pubkey_len) == 0;
 
-    ret &= memcmp(sec1, sec2, info_classical[idx].sec_len) == 0 &&
-           memcmp(ct1, ct2, info_classical[idx].pubkey_len) == 0;
+    if (ret)
+        return ret;
 
-    return ret || ret_rev;
+    ret = memcmp(sec1, sec2, info_classical[idx].sec_len) == 0 &&
+          memcmp(ct1, ct2, info_classical[idx].pubkey_len) == 0;
+
+    return ret;
 }
 
-/** \brief Compares the classical SIG elemets of two Sign executions
+/** \brief Compares the classical SIG elements of two Sign executions
  *
  * \param sigalg_name algorithm name.
  * \param sig1 A signature.
@@ -399,18 +414,32 @@ static int oqs_cmp_kem_elems(const char *kemalg_name, const unsigned char *sec1,
 static int oqs_cmp_sig_elems(const char *sigalg_name, const unsigned char *sig1,
                              size_t sig1len, const unsigned char *sig2,
                              size_t sig2len) {
-    int ret = 1, ret_rev = 1, idx;
+    int ret, idx;
+    uint32_t classical_sig1_len = 0, classical_sig2_len = 0;
 
-    if ((idx = oqs_get_idx(sigalg_name)) >= OSSL_NELEM(info_classical)) {
+    if ((idx = get_idx_info_classical(sigalg_name)) < 0) {
         return 0;
     }
 
-    ret_rev &= memcmp(sig1 + sig1len - info_classical[idx].sig_len,
-                      sig2 + sig2len - info_classical[idx].sig_len,
-                      info_classical[idx].sig_len) == 0;
-    ret &= memcmp(sig1, sig2, info_classical[idx].sig_len) == 0;
+    ret = memcmp(sig1 + sig1len - info_classical[idx].sig_len,
+                 sig2 + sig2len - info_classical[idx].sig_len,
+                 info_classical[idx].sig_len) == 0;
+    if (ret)
+        return ret;
 
-    return ret || ret_rev;
+    if (is_signature_algorithm_hybrid(sigalg_name)) {
+        DECODE_UINT32(classical_sig1_len, sig1);
+        DECODE_UINT32(classical_sig2_len, sig2);
+    }
+
+    ret = classical_sig1_len == classical_sig2_len != 0;
+    if (!ret)
+        return ret;
+
+    ret &= memcmp(sig1 + SIZE_OF_UINT32, sig2 + SIZE_OF_UINT32,
+                  classical_sig1_len) == 0;
+
+    return ret;
 }
 
 /** \brief Executes the complete comparison of two KEM executions
@@ -423,7 +452,7 @@ static int test_oqs_kems_libctx(const char *kemalg_name) {
     unsigned char *out1 = NULL, *out2 = NULL;
     unsigned char *secenc1 = NULL, *secenc2 = NULL;
     unsigned char *secdec1 = NULL, *secdec2 = NULL;
-    size_t outlen1, outlen2, seclen1, seclen2;
+    size_t out1len, out2len, sec1len, sec2len;
 
     int testresult = 1;
 
@@ -431,18 +460,19 @@ static int test_oqs_kems_libctx(const char *kemalg_name) {
         printf("Not testing disabled algorithm %s.\n", kemalg_name);
         return 1;
     }
-    testresult &= oqs_generate_kem_elems(kemalg_name, &key1, &secenc1, &seclen1,
-                                         &secdec1, &out1, &outlen1) &&
-                  oqs_generate_kem_elems(kemalg_name, &key2, &secenc2, &seclen2,
-                                         &secdec2, &out2, &outlen2);
-
-    testresult &= oqs_cmp_classical_keys(key1, key2) && (seclen1 == seclen2) &&
-                  (outlen1 == outlen2);
+    testresult &= oqs_generate_kem_elems(kemalg_name, &key1, &secenc1, &sec1len,
+                                         &secdec1, &out1, &out1len) &&
+                  oqs_generate_kem_elems(kemalg_name, &key2, &secenc2, &sec2len,
+                                         &secdec2, &out2, &out2len);
     if (!testresult)
         goto err;
 
-    testresult &= oqs_cmp_kem_elems(kemalg_name, secenc1, secenc2, seclen1,
-                                    out1, out2, outlen1);
+    testresult &= oqs_cmp_classical_keys(key1, key2);
+    if (!testresult)
+        goto err;
+
+    testresult &= oqs_cmp_kem_elems(kemalg_name, secenc1, sec1len, secenc2,
+                                    sec2len, out1, out1len, out2, out2len);
 
 err:
     EVP_PKEY_free(key1);
@@ -477,6 +507,9 @@ static int test_oqs_sigs_libctx(const char *sigalg_name) {
                                          &sig1, &sig1len) &&
                   oqs_generate_sig_elems(sigalg_name, msg, sizeof(msg), &key2,
                                          &sig2, &sig2len);
+
+    if (!testresult)
+        goto err;
 
     if (is_signature_algorithm_hybrid(sigalg_name)) {
         testresult &= oqs_cmp_classical_keys(key1, key2);
@@ -523,10 +556,11 @@ int main(int argc, char *argv[]) {
                 continue;
             }
             if (test_oqs_kems_libctx(kemalgs->algorithm_names)) {
-                fprintf(stderr, cGREEN "  KEM test succeeded: %s" cNORM "\n",
+                fprintf(stderr,
+                        cGREEN " libctx KEM test succeeded: %s" cNORM "\n",
                         kemalgs->algorithm_names);
             } else {
-                fprintf(stderr, cRED "  KEM test failed: %s" cNORM "\n",
+                fprintf(stderr, cRED " libctx KEM test failed: %s" cNORM "\n",
                         kemalgs->algorithm_names);
                 ERR_print_errors_fp(stderr);
                 errcnt++;
@@ -544,10 +578,10 @@ int main(int argc, char *argv[]) {
             }
             if (test_oqs_sigs_libctx(sigalgs->algorithm_names)) {
                 fprintf(stderr,
-                        cGREEN "  Signature test succeeded: %s" cNORM "\n",
+                        cGREEN " libctx SIG test succeeded: %s" cNORM "\n",
                         sigalgs->algorithm_names);
             } else {
-                fprintf(stderr, cRED "  Signature test failed: %s" cNORM "\n",
+                fprintf(stderr, cRED " libctx SIG test failed: %s" cNORM "\n",
                         sigalgs->algorithm_names);
                 ERR_print_errors_fp(stderr);
                 errcnt++;

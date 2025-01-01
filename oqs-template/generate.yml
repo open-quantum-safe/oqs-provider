@@ -226,14 +226,15 @@ kems:
     oqs_alg: 'OQS_KEM_alg_ml_kem_1024'
     extra_nids:
       current:
-        # p384_mlkem1024 hybrid doesn't appear in any standardization drafts
+        # p384_mlkem1024 hybrid not fully standardized
         # this oid is proposed by Tresorit
         # if the hybrid combination is standardized, feel free to change it
         - hybrid_group: "p384"
 # does Tresorit want to update?
           hybrid_oid: '1.3.6.1.4.1.42235.6'
-# code point not standardized: Why? XXX
-          nid: '0x2F4E'
+# code point standardization proposal as per https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-03.html
+          nid: '0x11ED'
+          standard_name: "SecP384r1MLKEM1024"
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'

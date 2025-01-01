@@ -111,7 +111,7 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     NULL,
     "p521_mlkem1024",
     "1.3.6.1.4.1.42235.6",
-    "p384_mlkem1024",
+    "SecP384r1MLKEM1024",
     NULL,
     "bikel1",
     NULL,
@@ -318,7 +318,7 @@ int oqs_patch_oids(void) {
 
         if ((envval = getenv("OQS_OID_P521_MLKEM1024")))
             oqs_oid_alg_list[50] = envval;
-        if ((envval = getenv("OQS_OID_P384_MLKEM1024")))
+        if ((envval = getenv("OQS_OID_SECP384R1MLKEM1024")))
             oqs_oid_alg_list[52] = envval;
         if ((envval = getenv("OQS_OID_BIKEL1")))
             oqs_oid_alg_list[54] = envval;
@@ -637,7 +637,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
     KEMBASEALG(mlkem1024, 256)
     KEMHYBALG(p521_mlkem1024, 256)
-    KEMHYBALG(p384_mlkem1024, 192)
+    KEMHYBALG(SecP384r1MLKEM1024, 192)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
     KEMBASEALG(bikel1, 128)
@@ -671,9 +671,8 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     {NULL, NULL, NULL}};
 
-static const OSSL_ALGORITHM
-    oqsprovider_keymgmt[] =
-        {
+static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
+    {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
 // clang-format off
 
@@ -812,7 +811,7 @@ static const OSSL_ALGORITHM
     KEMKMALG(mlkem1024, 256)
 
     KEMKMHYBALG(p521_mlkem1024, 256, ecp)
-    KEMKMHYBALG(p384_mlkem1024, 192, ecp)
+    KEMKMHYBALG(SecP384r1MLKEM1024, 192, ecp)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
     KEMKMALG(bikel1, 128)
@@ -848,9 +847,9 @@ static const OSSL_ALGORITHM
 
     KEMKMHYBALG(p521_hqc256, 256, ecp)
 #endif
-            // clang-format on
-            ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
-            {NULL, NULL, NULL}};
+        // clang-format on
+        ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+        {NULL, NULL, NULL}};
 
 static const OSSL_ALGORITHM oqsprovider_encoder[] = {
 #define ENCODER_PROVIDER "oqsprovider"

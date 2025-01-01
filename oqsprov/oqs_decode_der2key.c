@@ -609,8 +609,9 @@ MAKE_DECODER(, "mlkem1024", mlkem1024, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(_ecp, "p521_mlkem1024", p521_mlkem1024, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p521_mlkem1024", p521_mlkem1024, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(_ecp, "p384_mlkem1024", p384_mlkem1024, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p384_mlkem1024", p384_mlkem1024, oqsx,
+MAKE_DECODER(_ecp, "SecP384r1MLKEM1024", SecP384r1MLKEM1024, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecp, "SecP384r1MLKEM1024", SecP384r1MLKEM1024, oqsx,
              SubjectPublicKeyInfo);
 MAKE_DECODER(, "bikel1", bikel1, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "bikel1", bikel1, oqsx, SubjectPublicKeyInfo);

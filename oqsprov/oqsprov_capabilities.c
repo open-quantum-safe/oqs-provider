@@ -75,7 +75,7 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {514, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
     {0x2F4D, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-    {0x2F4E, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
+    {0x11ED, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {0x0241, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
     {0x2F41, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
@@ -190,7 +190,8 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY(mlkem1024, mlkem1024, mlkem1024, 24),
 
     OQS_GROUP_ENTRY(p521_mlkem1024, p521_mlkem1024, p521_mlkem1024, 25),
-    OQS_GROUP_ENTRY(p384_mlkem1024, p384_mlkem1024, p384_mlkem1024, 26),
+    OQS_GROUP_ENTRY(SecP384r1MLKEM1024, SecP384r1MLKEM1024, SecP384r1MLKEM1024,
+                    26),
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
     OQS_GROUP_ENTRY(bikel1, bikel1, bikel1, 27),
@@ -342,9 +343,9 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_P521_MLKEM1024"))
         oqs_group_list[25].group_id =
             atoi(getenv("OQS_CODEPOINT_P521_MLKEM1024"));
-    if (getenv("OQS_CODEPOINT_P384_MLKEM1024"))
+    if (getenv("OQS_CODEPOINT_SECP384R1MLKEM1024"))
         oqs_group_list[26].group_id =
-            atoi(getenv("OQS_CODEPOINT_P384_MLKEM1024"));
+            atoi(getenv("OQS_CODEPOINT_SECP384R1MLKEM1024"));
     if (getenv("OQS_CODEPOINT_BIKEL1"))
         oqs_group_list[27].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL1"));
     if (getenv("OQS_CODEPOINT_P256_BIKEL1"))

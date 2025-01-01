@@ -85,8 +85,8 @@
 | HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x2FB1       | x448                             |
 | HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x0246       |                                  |
 | HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x2F46       | secp521_r1                       |
+| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x11ED       | p384                             |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4D       | secp521_r1                       |
-| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4E       | p384                             |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 514          |                                  |
 | ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2F4B       | secp256_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2FB6       | x25519                           |

@@ -34,6 +34,9 @@ static int test_oqs_signatures(const char *sigalg_name) {
     // TBD revisit when hybrids are activated: They always need default
     // provider
     if (OSSL_PROVIDER_available(libctx, "default")) {
+        // XXX testing omits passing propq limited to oqsprovider for now
+        // as sig key formats area reasonably stable; revisit as and when
+        // this changes to only test against itself
         testresult &=
             (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) !=
                 NULL &&
@@ -62,6 +65,10 @@ static int test_oqs_signatures(const char *sigalg_name) {
     OPENSSL_free(sig);
     mdctx = NULL;
     key = NULL;
+
+    // XXX testing omits passing propq limited to oqsprovider for now
+    // as sig key formats area reasonably stable; revisit as and when
+    // this changes to only test against itself
 
     // this test must work also with default provider inactive:
     testresult &=

@@ -7,8 +7,8 @@
 /* Stolen from openssl/tests/sslapitest.c: */
 int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename,
                     char *privkeyfilename) {
-    // do test against any provider as handshaking should work with any provider
-    EVP_PKEY_CTX *evpctx = EVP_PKEY_CTX_new_from_name(libctx, algname, NULL);
+    EVP_PKEY_CTX *evpctx =
+        EVP_PKEY_CTX_new_from_name(libctx, algname, "provider=oqsprovider");
     EVP_PKEY *pkey = NULL;
     X509 *x509 = X509_new();
     X509_NAME *name = NULL;

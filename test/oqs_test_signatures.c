@@ -34,12 +34,9 @@ static int test_oqs_signatures(const char *sigalg_name) {
     // TBD revisit when hybrids are activated: They always need default
     // provider
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        // XXX testing omits passing propq limited to oqsprovider for now
-        // as sig key formats area reasonably stable; revisit as and when
-        // this changes to only test against itself
         testresult &=
-            (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) !=
-                NULL &&
+            (ctx = EVP_PKEY_CTX_new_from_name(
+                 libctx, sigalg_name, "provider=oqsprovider")) != NULL &&
             EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
             (mdctx = EVP_MD_CTX_new()) != NULL &&
             EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key,
@@ -66,13 +63,10 @@ static int test_oqs_signatures(const char *sigalg_name) {
     mdctx = NULL;
     key = NULL;
 
-    // XXX testing omits passing propq limited to oqsprovider for now
-    // as sig key formats area reasonably stable; revisit as and when
-    // this changes to only test against itself
-
     // this test must work also with default provider inactive:
     testresult &=
-        (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL)) != NULL &&
+        (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
+                                          "provider=oqsprovider")) != NULL &&
         EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
         (mdctx = EVP_MD_CTX_new()) != NULL &&
         EVP_DigestSignInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL) &&

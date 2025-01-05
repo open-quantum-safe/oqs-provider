@@ -10,6 +10,10 @@
 #include "oqs_prov.h"
 #include "test_common.h"
 
+#ifdef _MSC_VER
+#define strtok_r strtok_s
+#endif
+
 #define MAX_DUMMY_ENTROPY_BUFFERLEN 0x100000
 
 /** \brief The info about classical elements needed. */
@@ -47,51 +51,59 @@ static char *modulename = NULL;
 static char *configfile = NULL;
 
 /** \brief Loads OpenSSL's 'TEST-RAND' deterministic pseudorandom generator for
- * the given library context
- *
- * \param libctx Library context.
+ * the test's library context
  *
  * \return 1 if the configuration is successfully loaded, else 0. */
-static int oqs_load_det_pseudorandom_generator(OSSL_LIB_CTX *libctx) {
+static int oqs_load_det_pseudorandom_generator() {
     OSSL_PARAM params[2], *p = params;
-    unsigned char entropy[MAX_DUMMY_ENTROPY_BUFFERLEN];
-    RAND_bytes(entropy, sizeof(entropy));
+    unsigned int entropy_len = MAX_DUMMY_ENTROPY_BUFFERLEN;
+    int ret = 0;
+    unsigned char *entropy = OPENSSL_malloc(entropy_len);
+
+    if (!entropy) {
+        goto err;
+    }
+
+    if (!RAND_bytes(entropy, entropy_len)) {
+        goto err;
+    }
 
     if (!RAND_set_DRBG_type(libctx, "TEST-RAND", NULL, NULL, NULL)) {
-        return 0;
+        goto err;
     }
 
     *p++ = OSSL_PARAM_construct_octet_string(OSSL_RAND_PARAM_TEST_ENTROPY,
-                                             entropy, sizeof(entropy));
+                                             entropy, entropy_len);
     *p = OSSL_PARAM_construct_end();
 
     EVP_RAND_CTX *rctx_public = RAND_get0_public(libctx);
     if (!rctx_public) {
-        return 0;
+        goto err;
     }
 
     if (!EVP_RAND_CTX_set_params(rctx_public, params)) {
-        return 0;
+        goto err;
     }
 
     EVP_RAND_CTX *rctx_private = RAND_get0_private(libctx);
     if (!rctx_private) {
-        return 0;
+        goto err;
     }
 
     if (!EVP_RAND_CTX_set_params(rctx_private, params)) {
-        return 0;
+        goto err;
     }
+    ret = 1;
 
-    return 1;
+err:
+    OPENSSL_free(entropy);
+    return ret;
 }
 
-/** \brief Resets the given library context's DRBG instances
- *
- * \param libctx Library context.
+/** \brief Resets the test's library context DRBG instances
  *
  * \return 1 if the configuration is successfully restarted, else 0. */
-static int oqs_reset_det_pseudorandom_generator(OSSL_LIB_CTX *libctx) {
+static int oqs_reset_det_pseudorandom_generator() {
     OSSL_PARAM params[2], *p = params;
     unsigned int strength = 256;
 
@@ -141,7 +153,7 @@ static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
     int testresult = 0;
     EVP_PKEY_CTX *ctx = NULL;
 
-    if (!oqs_reset_det_pseudorandom_generator(libctx)) {
+    if (!oqs_reset_det_pseudorandom_generator()) {
         return 0;
     }
 
@@ -192,7 +204,7 @@ static int oqs_generate_sig_elems(const char *sigalg_name, const char *msg,
     EVP_PKEY_CTX *ctx = NULL;
     EVP_MD_CTX *mdctx = NULL;
 
-    if (!oqs_reset_det_pseudorandom_generator(libctx)) {
+    if (!oqs_reset_det_pseudorandom_generator()) {
         return 0;
     }
 
@@ -268,35 +280,49 @@ out:
  * \param alg_name algorithm name.
  *
  * \return The associated index, or -1 in case no match is found. */
-static int get_idx_info_classical(const char *alg_name) {
+int get_idx_info_classical(const char *alg_name) {
+    char *name = NULL, *rest = NULL, *algdup = NULL;
     int idx = 0;
-    char *algdup = strdup(alg_name);
-    char *name = strtok(algdup, "_");
+
+    if (alg_name == NULL || strlen(alg_name) == 0) {
+        return -1;
+    }
+
+    algdup = strdup(alg_name);
+    if (algdup == NULL) {
+        return -1;
+    }
+    rest = algdup;
+
+    name = strtok_r(rest, "_", &rest);
+    if (name == NULL) {
+        idx = -1;
+        goto err;
+    }
 
     while (idx < OSSL_NELEM(info_classical)) {
-        if (!strncmp(name, info_classical[idx].name,
+        if (strlen(name) >= strlen(info_classical[idx].name) &&
+            !strncmp(name, info_classical[idx].name,
                      strlen(info_classical[idx].name)))
             goto err;
         idx++;
     }
 
-    if (idx ==
-        OSSL_NELEM(info_classical)) { // Might have encountered a 'composite'
-                                      // alg, so try again with the second
-                                      // part of the separator
+    if (idx == OSSL_NELEM(info_classical) &&
+        rest) { // Might have encountered a 'composite'
+                // alg, so try again with the second
+                // part of the separator
+        name = rest;
         idx = 0;
-        name = strtok(NULL, "_");
     }
 
     while (idx < OSSL_NELEM(info_classical)) {
-        if (!strncmp(name, info_classical[idx].name,
+        if (strlen(name) >= strlen(info_classical[idx].name) &&
+            !strncmp(name, info_classical[idx].name,
                      strlen(info_classical[idx].name)))
-            break;
+            goto err;
         idx++;
     }
-
-    if (idx == OSSL_NELEM(info_classical))
-        idx = -1;
 
 err:
     free(algdup);
@@ -508,7 +534,6 @@ static int test_oqs_sigs_libctx(const char *sigalg_name) {
                                          &sig1, &sig1len) &&
                   oqs_generate_sig_elems(sigalg_name, msg, sizeof(msg), &key2,
                                          &sig2, &sig2len);
-
     if (!testresult)
         goto err;
 
@@ -531,8 +556,6 @@ err:
     return testresult;
 }
 
-#define nelem(a) (sizeof(a) / sizeof((a)[0]))
-
 int main(int argc, char *argv[]) {
     size_t i;
     int errcnt = 0, test = 0, query_nocache;
@@ -544,7 +567,7 @@ int main(int argc, char *argv[]) {
     modulename = argv[1];
     configfile = argv[2];
 
-    oqs_load_det_pseudorandom_generator(libctx);
+    oqs_load_det_pseudorandom_generator();
     load_oqs_provider(libctx, modulename, configfile);
 
     oqsprov = OSSL_PROVIDER_load(libctx, modulename);

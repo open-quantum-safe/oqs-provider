@@ -16,7 +16,9 @@
 static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
 static char *configfile = NULL;
-static char *testpropq = NULL;
+// as different providers may support different key formats, limit testing to
+// oqsprovider
+static char *testpropq = "provider=oqsprovider";
 static OSSL_LIB_CTX *keyctx = NULL;
 static OSSL_LIB_CTX *testctx = NULL;
 

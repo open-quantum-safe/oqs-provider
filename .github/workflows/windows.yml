@@ -98,7 +98,7 @@ jobs:
         run: bash -c "echo $PATH && PATH=/opt/openssl32/bin:/usr/bin ctest -V"
         working-directory: _build
       - name: Retain oqsprovider.dll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oqs-provider-cygwin
           path: D:/a/oqs-provider/oqs-provider/_build/bin/oqsprovider.dll
@@ -209,7 +209,7 @@ jobs:
         run: |
           ctest -V --test-dir _build
       - name: Retain oqsprovider.dll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oqs-provider-msvc
           path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
@@ -315,7 +315,7 @@ jobs:
           run: |
             ctest --test-dir _build -C ${{ matrix.type }}
         - name: Retain oqsprovider.dll
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: oqs-provider-msvc
             path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll

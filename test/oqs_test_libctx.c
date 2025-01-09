@@ -158,9 +158,10 @@ static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
     }
 
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult = (ctx = EVP_PKEY_CTX_new_from_name(libctx, kemalg_name,
-                                                       "provider=oqsprovider")) != NULL &&
-                     EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
+        testresult =
+            (ctx = EVP_PKEY_CTX_new_from_name(
+                 libctx, kemalg_name, "provider=oqsprovider")) != NULL &&
+            EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
 
         if (!testresult)
             goto err;

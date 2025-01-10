@@ -4,6 +4,9 @@
 #include <openssl/provider.h>
 #include <stdio.h>
 
+/* limit testing to just this guy */
+#define OQSPROV_PROPQ "provider=oqsprovider"
+
 /* For controlled success */
 #define T(e)                                                                   \
     if (!(e)) {                                                                \

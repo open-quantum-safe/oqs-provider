@@ -158,10 +158,9 @@ static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
     }
 
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult =
-            (ctx = EVP_PKEY_CTX_new_from_name(
-                 libctx, kemalg_name, "provider=oqsprovider")) != NULL &&
-            EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
+        testresult = (ctx = EVP_PKEY_CTX_new_from_name(
+                          libctx, kemalg_name, OQSPROV_PROPQ)) != NULL &&
+                     EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
 
         if (!testresult)
             goto err;
@@ -169,7 +168,8 @@ static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
         ctx = NULL;
 
         testresult &=
-            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, *key, NULL)) != NULL &&
+            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, *key, OQSPROV_PROPQ)) !=
+                NULL &&
             EVP_PKEY_encapsulate_init(ctx, NULL) &&
             EVP_PKEY_encapsulate(ctx, NULL, outlen, NULL, seclen) &&
             (*out = OPENSSL_malloc(*outlen)) != NULL &&
@@ -210,8 +210,8 @@ static int oqs_generate_sig_elems(const char *sigalg_name, const char *msg,
     }
 
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult = (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
-                                                       NULL)) != NULL &&
+        testresult = (ctx = EVP_PKEY_CTX_new_from_name(
+                          libctx, sigalg_name, OQSPROV_PROPQ)) != NULL &&
                      EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key) &&
                      (mdctx = EVP_MD_CTX_new()) != NULL &&
                      EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL,

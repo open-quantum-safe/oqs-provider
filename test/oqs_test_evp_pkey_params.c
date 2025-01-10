@@ -63,9 +63,7 @@ static OSSL_LIB_CTX *init_openssl(void) {
 static EVP_PKEY_CTX *init_EVP_PKEY_CTX(OSSL_LIB_CTX *libctx, const char *alg) {
     EVP_PKEY_CTX *ctx;
 
-    // make sure we only test oqsprovider
-    if (!(ctx = EVP_PKEY_CTX_new_from_name(libctx, alg,
-                                           "provider=oqsprovider"))) {
+    if (!(ctx = EVP_PKEY_CTX_new_from_name(libctx, alg, OQSPROV_PROPQ))) {
         fprintf(stderr,
                 cRED "`EVP_PKEY_CTX_new_from_name` failed with algorithm %s: ",
                 alg);

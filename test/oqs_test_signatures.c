@@ -35,8 +35,8 @@ static int test_oqs_signatures(const char *sigalg_name) {
     // provider
     if (OSSL_PROVIDER_available(libctx, "default")) {
         testresult &=
-            (ctx = EVP_PKEY_CTX_new_from_name(
-                 libctx, sigalg_name, "provider=oqsprovider")) != NULL &&
+            (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
+                                              OQSPROV_PROPQ)) != NULL &&
             EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
             (mdctx = EVP_MD_CTX_new()) != NULL &&
             EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key,
@@ -66,7 +66,7 @@ static int test_oqs_signatures(const char *sigalg_name) {
     // this test must work also with default provider inactive:
     testresult &=
         (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
-                                          "provider=oqsprovider")) != NULL &&
+                                          OQSPROV_PROPQ)) != NULL &&
         EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
         (mdctx = EVP_MD_CTX_new()) != NULL &&
         EVP_DigestSignInit_ex(mdctx, NULL, NULL, libctx, NULL, key, NULL) &&

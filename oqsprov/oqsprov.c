@@ -24,6 +24,7 @@
 #define OQS_PROV_PRINTF(a)
 #define OQS_PROV_PRINTF2(a, b)
 #define OQS_PROV_PRINTF3(a, b, c)
+#define OQS_PROV_PRINTF4(a, b, c, d)
 #else
 #define OQS_PROV_PRINTF(a)                                                     \
     if (getenv("OQSPROV"))                                                     \
@@ -34,6 +35,9 @@
 #define OQS_PROV_PRINTF3(a, b, c)                                              \
     if (getenv("OQSPROV"))                                                     \
     printf(a, b, c)
+#define OQS_PROV_PRINTF4(a, b, c, d)                                           \
+    if (getenv("OQSPROV"))                                                     \
+      printf(a, b, c, d)
 #endif // NDEBUG
 
 /*
@@ -1067,24 +1071,24 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 goto end_init;
             }
 
-            if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
-                                 oqs_oid_alg_list[i + 1])) {
-                fprintf(stderr, "error registering %s with no hash\n",
-                        oqs_oid_alg_list[i + 1]);
+            if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i], "",
+                                 oqs_oid_alg_list[i])) {
+                fprintf(stderr, "error registering %s (%s) with no hash\n",
+                        oqs_oid_alg_list[i + 1], oqs_oid_alg_list[i + 1]);
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
                 goto end_init;
             }
 
-            if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
-                OQS_PROV_PRINTF3(
-                    "OQS PROV: successfully registered %s with NID %d\n",
-                    oqs_oid_alg_list[i + 1],
-                    OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
+            if (OBJ_txt2nid(oqs_oid_alg_list[i]) != 0) {
+                OQS_PROV_PRINTF4(
+                    "OQS PROV: successfully registered %s (%s) with NID %d\n",
+                    oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
+                    OBJ_txt2nid(oqs_oid_alg_list[i]));
             } else {
                 fprintf(stderr,
                         "OQS PROV: Impossible error: NID unregistered "
-                        "for %s.\n",
-                        oqs_oid_alg_list[i + 1]);
+                        "for %s (%s).\n",
+                        oqs_oid_alg_list[i]);
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
                 goto end_init;
             }

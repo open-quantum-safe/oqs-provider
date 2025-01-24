@@ -90,6 +90,7 @@ if [ -z $liboqs_DIR ]; then
     if [ "$LIBOQS_BRANCH" != "main" ]; then
       # check for presence of backwards-compatibility generator file
       if [ -f oqs-template/generate.yml-$LIBOQS_BRANCH ]; then
+        pip install -r oqs-template/requirements.txt
         echo "generating code for $LIBOQS_BRANCH"
         mv oqs-template/generate.yml oqs-template/generate.yml-main
         cp oqs-template/generate.yml-$LIBOQS_BRANCH oqs-template/generate.yml

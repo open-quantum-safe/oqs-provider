@@ -59,7 +59,7 @@ if [ -z "$OPENSSL_INSTALL" ]; then
    if [ ! -d "openssl" ]; then
       echo "openssl not specified and doesn't reside where expected: Cloning and building..."
       # for full debug build add: enable-trace enable-fips --debug
-      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH https://github.com/openssl/openssl.git && cd openssl && LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
+      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH https://github.com/openssl/openssl.git && cd openssl && LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config $OSSL_CONFIG --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
       if [ $? -ne 0 ]; then
         echo "openssl build failed. Exiting."
         exit -1

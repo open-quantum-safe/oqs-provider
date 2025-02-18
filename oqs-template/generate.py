@@ -18,9 +18,9 @@ kemoidcnt = 0
 # For files generated, the copyright message can be adapted
 # see https://github.com/open-quantum-safe/oqs-provider/issues/2#issuecomment-920904048
 # SPDX message to be leading, OpenSSL Copyright notice to be deleted
-def fixup_copyright(filename):
-    with open(filename, "r") as origfile:
-        with open(filename + ".new", "w") as newfile:
+def fixup_copyright(filename, encoding=None):
+    with open(filename, "r", encoding=encoding) as origfile:
+        with open(filename + ".new", "w", encoding=encoding) as newfile:
             newfile.write("// SPDX-License-Identifier: Apache-2.0 AND MIT\n\n")
             skipline = False
             checkline = True
@@ -197,6 +197,7 @@ def complete_config(config):
 def run_subprocess(
     command,
     outfilename=None,
+    outfilencoding=None,
     working_dir=".",
     expected_returncode=0,
     input=None,
@@ -205,7 +206,7 @@ def run_subprocess(
     result = subprocess.run(
         command,
         input=input,
-        stdout=(open(outfilename, "w") if outfilename != None else subprocess.PIPE),
+        stdout=(open(outfilename, "w", encoding=outfilencoding) if outfilename != None else subprocess.PIPE),
         stderr=subprocess.PIPE,
         cwd=working_dir,
     )

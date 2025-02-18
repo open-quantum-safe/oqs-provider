@@ -11,7 +11,7 @@ from generate_oid_nid_table import generate_oid_nid_table_main
 Jinja2 = jinja2.Environment(
     loader=jinja2.FileSystemLoader(searchpath="."), extensions=["jinja2.ext.do"]
 )
-kemoidcnt = 0
+#kemoidcnt = 0
 
 
 # For files generated, the copyright message can be adapted
@@ -146,7 +146,7 @@ def get_tmp_kem_oid():
 def complete_config(config):
     for kem in config["kems"]:
         bits_level = nist_to_bits(get_kem_nistlevel(kem))
-        if bits_level == None:
+        if bits_level is None:
             print(
                 "Cannot find security level for {:s} {:s}".format(
                     kem["family"], kem["name_group"]
@@ -182,7 +182,7 @@ def complete_config(config):
     for famsig in config["sigs"]:
         for sig in famsig["variants"]:
             bits_level = nist_to_bits(get_sig_nistlevel(famsig, sig))
-            if bits_level == None:
+            if bits_level is None:
                 print(
                     "Cannot find security level for {:s} {:s}. Setting to 0.".format(
                         famsig["family"], sig["name"]
@@ -213,7 +213,7 @@ def run_subprocess(
         )
 
     if not (ignore_returncode) and (result.returncode != expected_returncode):
-        if outfilename == None:
+        if outfilename is None:
             print(result.stdout.decode("utf-8"))
         assert False, "Got unexpected return code {}".format(result.returncode)
 
@@ -230,7 +230,7 @@ def file_put_contents(filename, s, encoding=None):
 
 def populate(filename, config, delimiter, overwrite=False):
     fragments = glob.glob(os.path.join("oqs-template", filename, "*.fragment"))
-    if overwrite == True:
+    if overwrite:
         source_file = os.path.join(
             "oqs-template", filename, os.path.basename(filename) + ".base"
         )
@@ -252,7 +252,7 @@ def populate(filename, config, delimiter, overwrite=False):
         )
         preamble = contents[: contents.find(identifier_start)]
         postamble = contents[contents.find(identifier_end) :]
-        if overwrite == True:
+        if overwrite:
             contents = (
                 preamble
                 + Jinja2.get_template(fragment).render({"config": config})

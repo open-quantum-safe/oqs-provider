@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import glob
 import subprocess
 import os
@@ -270,38 +269,38 @@ def populate(filename, config, delimiter, overwrite=False):
 
 
 def load_config(include_disabled_sigs=False, include_disabled_kems=False):
-    config = file_get_contents(
+    _config = file_get_contents(
         os.path.join("oqs-template", "generate.yml"), encoding="utf-8"
     )
-    config = yaml.safe_load(config)
+    _config = yaml.safe_load(_config)
     if not include_disabled_sigs:
-        for sig in config["sigs"]:
+        for sig in _config["sigs"]:
             sig["variants"] = [
                 variant
                 for variant in sig["variants"]
                 if ("enable" in variant and variant["enable"])
             ]
     if not include_disabled_kems:
-        config["kems"] = [
-            kem for kem in config["kems"] if ("enable_kem" in kem and kem["enable_kem"])
+        _config["kems"] = [
+            kem for kem in _config["kems"] if ("enable_kem" in kem and kem["enable_kem"])
         ]
 
     # remove KEMs without NID (old stuff)
     newkems = []
-    for kem in config["kems"]:
+    for kem in _config["kems"]:
         if "nid" in kem:
             newkems.append(kem)
-    config["kems"] = newkems
+    _config["kems"] = newkems
 
     # remove SIGs without OID (old stuff)
-    for sig in config["sigs"]:
+    for sig in _config["sigs"]:
         newvars = []
         for variant in sig["variants"]:
             if "oid" in variant:
                 newvars.append(variant)
         sig["variants"] = newvars
 
-    for kem in config["kems"]:
+    for kem in _config["kems"]:
         kem["hybrids"] = []
         if "extra_nids" not in kem or "current" not in kem["extra_nids"]:
             continue
@@ -343,7 +342,7 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
                     )
                     exit(1)
                 hybrid_nids.add(extra_hybrid_nid)
-    return config
+    return _config
 
 
 # Validates that non-standard TLS code points are in the private use range

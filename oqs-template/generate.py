@@ -53,7 +53,7 @@ def get_kem_nistlevel(alg):
         "docs",
         "algorithms",
         "kem",
-        "{:s}.yml".format(datasheetname),
+        f"{datasheetname}.yml",
     )
     algyml = yaml.safe_load(file_get_contents(algymlfilename, encoding="utf-8"))
 
@@ -102,7 +102,7 @@ def get_sig_nistlevel(family, alg):
         "docs",
         "algorithms",
         "sig",
-        "{:s}.yml".format(datasheetname),
+        f"{datasheetname}.yml",
     )
     algyml = yaml.safe_load(file_get_contents(algymlfilename, encoding="utf-8"))
 
@@ -147,11 +147,7 @@ def complete_config(config):
     for kem in config["kems"]:
         bits_level = nist_to_bits(get_kem_nistlevel(kem))
         if bits_level is None:
-            print(
-                "Cannot find security level for {:s} {:s}".format(
-                    kem["family"], kem["name_group"]
-                )
-            )
+            print(f"Cannot find security level for {kem["family"]} {kem["name_group"]}")
             exit(1)
         kem["bit_security"] = bits_level
 
@@ -164,10 +160,7 @@ def complete_config(config):
         elif bits_level == 256:
             phyb["hybrid_group"] = "p521"
         else:
-            print(
-                "Warning: Unknown bit level for %s. Cannot assign hybrid."
-                % (kem["group_name"])
-            )
+            print(f"Warning: Unknown bit level for {kem["group_name"]}. Cannot assign hybrid.")
             exit(1)
         phyb["bit_security"] = bits_level
         phyb["nid"] = kem["nid_hybrid"]
@@ -184,9 +177,8 @@ def complete_config(config):
             bits_level = nist_to_bits(get_sig_nistlevel(famsig, sig))
             if bits_level is None:
                 print(
-                    "Cannot find security level for {:s} {:s}. Setting to 0.".format(
-                        famsig["family"], sig["name"]
-                    )
+                    f"Cannot find security level for {famsig["family"]} {sig["name"]}. "
+                     "Setting to 0."
                 )
                 bits_level = 0
             sig["security"] = bits_level
@@ -219,7 +211,7 @@ def run_subprocess(
     if not (ignore_returncode) and (result.returncode != expected_returncode):
         if outfilename is None:
             print(result.stdout.decode("utf-8"))
-        assert False, "Got unexpected return code {}".format(result.returncode)
+        assert False, f"Got unexpected return code {result.returncode}"
 
 
 def file_get_contents(filename, encoding=None):
@@ -244,16 +236,10 @@ def populate(filename, config, delimiter, overwrite=False):
     for fragment in fragments:
         identifier = os.path.splitext(os.path.basename(fragment))[0]
         if filename.endswith(".md"):
-            identifier_start = "{} OQS_TEMPLATE_FRAGMENT_{}_START -->".format(
-                delimiter, identifier.upper()
-            )
+            identifier_start = f"{delimiter} OQS_TEMPLATE_FRAGMENT_{identifier.upper()}_START -->"
         else:
-            identifier_start = "{} OQS_TEMPLATE_FRAGMENT_{}_START".format(
-                delimiter, identifier.upper()
-            )
-        identifier_end = "{} OQS_TEMPLATE_FRAGMENT_{}_END".format(
-            delimiter, identifier.upper()
-        )
+            identifier_start = f"{delimiter} OQS_TEMPLATE_FRAGMENT_{identifier.upper()}_START"
+        identifier_end = f"{delimiter} OQS_TEMPLATE_FRAGMENT_{identifier.upper()}_END"
         preamble = contents[: contents.find(identifier_start)]
         postamble = contents[contents.find(identifier_end) :]
         if overwrite:

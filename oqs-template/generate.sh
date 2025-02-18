@@ -5,6 +5,5 @@ set -e
 python3 oqs-template/generate.py
 
 # Step 2: Run clang-format.
-echo "Run ${CLANG_FORMAT:-clang-format}"
-find oqsprov/ -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs "${CLANG_FORMAT:-clang-format}" --style="{BasedOnStyle: llvm, IndentWidth: 4}" -i --Werror
-find test/ -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs "${CLANG_FORMAT:-clang-format}" --style="{BasedOnStyle: llvm, IndentWidth: 4}" -i --Werror
+echo "Run do-code-format.sh"
+./scripts/do_code_format.sh --no-dry-run

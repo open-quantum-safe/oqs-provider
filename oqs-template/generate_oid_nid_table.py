@@ -2,9 +2,9 @@
 
 import argparse
 import sys
+import os
 from tabulate import tabulate
 import yaml
-import os
 
 import generatehelpers
 
@@ -82,7 +82,7 @@ def gen_sig_table(oqslibdocdir, config):
                             composite["oid"],
                         ]
                     )
-            except KeyError as ke:
+            except KeyError:
                 # Non-existant NIDs mean this alg is not supported any more
                 pass
 
@@ -157,11 +157,14 @@ def gen_kem_table(oqslibdocdir, config):
         else:
             sys.exit("kem['bit_security'] value malformed.")
 
+        implementation_version = None
         if "implementation_version" in kem:
             implementation_version = kem["implementation_version"]
         else:
             if kem["family"] in liboqs_kems:
                 implementation_version = liboqs_kems[kem["family"]]["spec-version"]
+        if implementation_version is None:
+            raise ValueError(f"Unable to get implementation_version for {kem["family"]}")
 
         if kem["name_group"].startswith("sidhp503") or kem["name_group"].startswith(
             "sikep503"
@@ -191,7 +194,7 @@ def gen_kem_table(oqslibdocdir, config):
                     hybrid_elliptic_curve,
                 ]
             )
-        except KeyError as ke:
+        except KeyError:
             # Non-existant NIDs mean this alg is not supported any more
             pass
 

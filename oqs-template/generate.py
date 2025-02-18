@@ -11,7 +11,7 @@ from generate_oid_nid_table import generate_oid_nid_table_main
 Jinja2 = jinja2.Environment(
     loader=jinja2.FileSystemLoader(searchpath="."), extensions=["jinja2.ext.do"]
 )
-#kemoidcnt = 0
+# kemoidcnt = 0
 
 
 # For files generated, the copyright message can be adapted
@@ -24,7 +24,7 @@ def fixup_copyright(filename, encoding=None):
             skipline = False
             checkline = True
             for line in origfile:
-                if checkline == True and " * Copyright" in line:
+                if checkline and " * Copyright" in line:
                     skipline = True
                 if "*/" in line:
                     skipline = False
@@ -199,13 +199,17 @@ def run_subprocess(
     outfilencoding=None,
     working_dir=".",
     expected_returncode=0,
-    input=None,
+    input_=None,
     ignore_returncode=False,
 ):
-    with open(outfilename, "w", encoding=outfilencoding) if outfilename is not None else subprocess.PIPE as output_file:
+    with (
+        open(outfilename, "w", encoding=outfilencoding)
+        if outfilename is not None
+        else subprocess.PIPE
+    ) as output_file:
         result = subprocess.run(
             command,
-            input=input,
+            input=input_,
             stdout=output_file,
             stderr=subprocess.PIPE,
             cwd=working_dir,
@@ -282,7 +286,9 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
             ]
     if not include_disabled_kems:
         _config["kems"] = [
-            kem for kem in _config["kems"] if ("enable_kem" in kem and kem["enable_kem"])
+            kem
+            for kem in _config["kems"]
+            if ("enable_kem" in kem and kem["enable_kem"])
         ]
 
     # remove KEMs without NID (old stuff)
@@ -380,31 +386,31 @@ def validate_iana_code_points(config):
 if __name__ == "__main__":
 
     # extend config with "hybrid_groups" array:
-    config = load_config()  # extend config with "hybrid_groups" array
+    jinja_config = load_config()  # extend config with "hybrid_groups" array
 
     # complete config with "bit_security" and "hybrid_group from
     # nid_hybrid information
-    config = complete_config(config)
+    jinja_config = complete_config(jinja_config)
 
-    validate_iana_code_points(config)
+    validate_iana_code_points(jinja_config)
 
-    populate("oqsprov/oqsencoders.inc", config, "/////")
-    populate("oqsprov/oqsdecoders.inc", config, "/////")
-    populate("oqsprov/oqs_prov.h", config, "/////")
-    populate("oqsprov/oqsprov.c", config, "/////")
-    populate("oqsprov/oqsprov_capabilities.c", config, "/////")
-    populate("oqsprov/oqs_kmgmt.c", config, "/////")
-    populate("oqsprov/oqs_encode_key2any.c", config, "/////")
-    populate("oqsprov/oqs_decode_der2key.c", config, "/////")
-    populate("oqsprov/oqsprov_keys.c", config, "/////")
-    populate("scripts/common.py", config, "#####")
-    populate("test/test_common.c", config, "/////")
+    populate("oqsprov/oqsencoders.inc", jinja_config, "/////")
+    populate("oqsprov/oqsdecoders.inc", jinja_config, "/////")
+    populate("oqsprov/oqs_prov.h", jinja_config, "/////")
+    populate("oqsprov/oqsprov.c", jinja_config, "/////")
+    populate("oqsprov/oqsprov_capabilities.c", jinja_config, "/////")
+    populate("oqsprov/oqs_kmgmt.c", jinja_config, "/////")
+    populate("oqsprov/oqs_encode_key2any.c", jinja_config, "/////")
+    populate("oqsprov/oqs_decode_der2key.c", jinja_config, "/////")
+    populate("oqsprov/oqsprov_keys.c", jinja_config, "/////")
+    populate("scripts/common.py", jinja_config, "#####")
+    populate("test/test_common.c", jinja_config, "/////")
 
-    config2 = load_config(include_disabled_sigs=True)
-    config2 = complete_config(config2)
+    jinja_config_markdown = load_config(include_disabled_sigs=True)
+    jinja_config_markdown = complete_config(jinja_config_markdown)
 
-    populate("ALGORITHMS.md", config2, "<!---")
-    populate("README.md", config2, "<!---")
+    populate("ALGORITHMS.md", jinja_config_markdown, "<!---")
+    populate("README.md", jinja_config_markdown, "<!---")
     print("All files generated")
     os.environ["LIBOQS_DOCS_DIR"] = os.path.join(os.environ["LIBOQS_SRC_DIR"], "docs")
     generate_oid_nid_table_main()

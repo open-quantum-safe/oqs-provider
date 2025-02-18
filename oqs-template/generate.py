@@ -203,13 +203,15 @@ def run_subprocess(
     input=None,
     ignore_returncode=False,
 ):
-    result = subprocess.run(
-        command,
-        input=input,
-        stdout=(open(outfilename, "w", encoding=outfilencoding) if outfilename != None else subprocess.PIPE),
-        stderr=subprocess.PIPE,
-        cwd=working_dir,
-    )
+    with open(outfilename, "w", encoding=outfilencoding) if outfilename is not None else subprocess.PIPE as output_file:
+        result = subprocess.run(
+            command,
+            input=input,
+            stdout=output_file,
+            stderr=subprocess.PIPE,
+            cwd=working_dir,
+            check=False,
+        )
 
     if not (ignore_returncode) and (result.returncode != expected_returncode):
         if outfilename == None:

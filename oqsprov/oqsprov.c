@@ -1027,7 +1027,7 @@ static const OSSL_DISPATCH oqsprovider_dispatch_table[] = {
 #define OQS_PROVIDER_ENTRYPOINT_NAME OSSL_provider_init
 #endif // ifdef OQS_PROVIDER_STATIC
 
-static int sk_strcmp(const char *const *a, const char *const *b) {
+static int algname_strcmp(const char *const *a, const char *const *b) {
     return strcmp(*a, *b);
 }
 
@@ -1047,7 +1047,7 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                      &opensslv, sizeof(&opensslv), 0},
                                     {NULL, 0, NULL, 0, 0}};
     if (!rt_disabled_algs)
-        rt_disabled_algs = sk_OPENSSL_STRING_new(sk_strcmp);
+        rt_disabled_algs = sk_OPENSSL_STRING_new(algname_strcmp);
 
     OQS_init();
 

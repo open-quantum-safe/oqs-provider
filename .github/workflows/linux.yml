@@ -80,7 +80,7 @@ jobs:
         run: cpack -C DebPack
         working-directory: _build
       - name: Retain .deb installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oqsprovider-x64
           path: _build/*.deb
@@ -251,7 +251,7 @@ jobs:
             dpkg -I oqs-provider-*.deb | grep -q "Architecture: arm64"
 
       - name: Retain .deb installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oqsprovider-aarch64
           path: build/*.deb

@@ -43,7 +43,7 @@ jobs:
           path: liboqs
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .localopenssl32
           key: ${{ runner.os }}-openssl32
@@ -84,7 +84,7 @@ jobs:
             fi'
         working-directory: scripts
       - name: Retain oqsprovider.dylib
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oqs-provider-${{matrix.os}}-x64
           path: _build/lib/oqsprovider.dylib

@@ -56,9 +56,10 @@ This implementation makes available the following quantum safe algorithms:
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 
 As the underlying [liboqs](https://github.com/open-quantum-safe/liboqs)
-at build time may be configured to not enable all algorithms, it is
-advisable to check the possible subset of algorithms actually enabled
-via the standard commands, i.e.,
+at build time may be configured to not enable all algorithms, and the
+underlying `openssl` installation at runtime may deliver some algorithms
+already it is advisable to check the possible subset of algorithms actually
+enabled via the standard commands, i.e.,
 `openssl list -signature-algorithms -provider oqsprovider` and
 `openssl list -kem-algorithms -provider oqsprovider`.
 
@@ -156,6 +157,21 @@ use this option, OQS provider should be built with
 Also new in this version is the possibility to retrieve all currently
 active TLS signature algorithms via a new `openssl list` option:
 `openssl list -tls-signature-algorithms`.
+
+## 3.5 and greater
+
+These versions include support for the standard PQC algorithms ML-KEM, ML-DSA
+and SLH-DSA. Accordingly, `oqsprovider` can no longer succeed registering
+(O)IDs for these algorithms as these already exist. In addition, `oqsprovider`
+functionally (e.g., support for several key formats) and non-functionally
+(e.g., code quality) is not at par with the implementations for these
+algorithms. Therefore, these, as well as their composite and hybrid variants
+are disabled at runtime upon detection of these being available in `openssl`.
+The same algorithms will continue to work even using the same `oqsprovider`
+binary in OpenSSL installations with a version older than 3.5.
+
+This limitation might be resolved by implementing https://github.com/open-quantum-safe/oqs-provider/discussions/625.
+given sufficient interest. Contributions very welcome.
 
 ## All versions
 

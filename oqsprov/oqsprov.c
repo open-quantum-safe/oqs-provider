@@ -36,6 +36,11 @@
     printf(a, b, c)
 #endif // NDEBUG
 
+static STACK_OF(OPENSSL_STRING) *rt_disabled_algs;
+STACK_OF(OPENSSL_STRING) *oqsprov_get_rt_disabled_algs() {
+    return rt_disabled_algs;
+}
+
 /*
  * Forward declarations to ensure that interface functions are correctly
  * defined.
@@ -504,6 +509,8 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
     OSSL_PARAM_DEFN(OSSL_PROV_PARAM_STATUS, OSSL_PARAM_INTEGER, NULL, 0),
     OSSL_PARAM_END};
 
+static OSSL_ALGORITHM *oqsprovider_signatures_rt = NULL;
+
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
 #ifdef OQS_ENABLE_SIG_ml_dsa_44
@@ -591,6 +598,7 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
 
+static OSSL_ALGORITHM *oqsprovider_asym_kems_rt = NULL;
 static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_START
 // clang-format off
@@ -671,6 +679,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     {NULL, NULL, NULL}};
 
+static OSSL_ALGORITHM *oqsprovider_keymgmt_rt = NULL;
 static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
     {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
@@ -851,6 +860,7 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
         ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
         {NULL, NULL, NULL}};
 
+static OSSL_ALGORITHM *oqsprovider_encoder_rt = NULL;
 static const OSSL_ALGORITHM oqsprovider_encoder[] = {
 #define ENCODER_PROVIDER "oqsprovider"
 #include "oqsencoders.inc"
@@ -858,6 +868,7 @@ static const OSSL_ALGORITHM oqsprovider_encoder[] = {
 #undef ENCODER_PROVIDER
 };
 
+static OSSL_ALGORITHM *oqsprovider_decoder_rt = NULL;
 static const OSSL_ALGORITHM oqsprovider_decoder[] = {
 #define DECODER_PROVIDER "oqsprovider"
 #include "oqsdecoders.inc"
@@ -932,21 +943,45 @@ static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[]) {
     return 1;
 }
 
+int cnt_rt_disabled(const OSSL_ALGORITHM orig[], int len) {
+    int dcnt = 0;
+
+    for (int i = 0; i < len-1; i++)
+        if (sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)orig[i].algorithm_names) >= 0)
+           dcnt++;
+    return dcnt;
+}
+
+#define FILTERED_ALGS(algs) \
+        d_algs = cnt_rt_disabled(algs, OSSL_NELEM(algs)); \
+        if (algs##_rt == NULL) { \
+            algs##_rt = OPENSSL_malloc(sizeof(OSSL_ALGORITHM) * OSSL_NELEM(algs)-d_algs); \
+            n_cnt = 0; \
+            for(int i=0; i<OSSL_NELEM(algs); i++) { \
+                if (sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)algs[i].algorithm_names) < 0) { \
+                    *(algs##_rt+n_cnt) = algs[i]; \
+                    n_cnt++; \
+                } \
+            } \
+        } \
+        return algs##_rt
+
 static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
                                                int *no_cache) {
-    *no_cache = 0;
+    int d_algs, n_cnt;
+    *no_cache = 1;
 
     switch (operation_id) {
     case OSSL_OP_SIGNATURE:
-        return oqsprovider_signatures;
+        FILTERED_ALGS(oqsprovider_signatures);
     case OSSL_OP_KEM:
-        return oqsprovider_asym_kems;
+        FILTERED_ALGS(oqsprovider_asym_kems);
     case OSSL_OP_KEYMGMT:
-        return oqsprovider_keymgmt;
+        FILTERED_ALGS(oqsprovider_keymgmt);
     case OSSL_OP_ENCODER:
-        return oqsprovider_encoder;
+        FILTERED_ALGS(oqsprovider_encoder);
     case OSSL_OP_DECODER:
-        return oqsprovider_decoder;
+        FILTERED_ALGS(oqsprovider_decoder);
     default:
         if (getenv("OQSPROV"))
             printf("Unknown operation %d requested from OQS provider\n",
@@ -977,6 +1012,11 @@ static const OSSL_DISPATCH oqsprovider_dispatch_table[] = {
 #define OQS_PROVIDER_ENTRYPOINT_NAME OSSL_provider_init
 #endif // ifdef OQS_PROVIDER_STATIC
 
+static int sk_strcmp(const char * const *a, const char * const *b)
+{
+    return strcmp(*a, *b);
+}
+
 int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                  const OSSL_DISPATCH *in,
                                  const OSSL_DISPATCH **out, void **provctx) {
@@ -992,6 +1032,7 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
                                      &opensslv, sizeof(&opensslv), 0},
                                     {NULL, 0, NULL, 0, 0}};
+    rt_disabled_algs = sk_OPENSSL_STRING_new(sk_strcmp);
 
     OQS_init();
 
@@ -1036,6 +1077,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     // insert all OIDs to the global objects list
     for (i = 0; i < OQS_OID_CNT; i += 2) {
+        int id_ok = 1;
+
         if (oqs_oid_alg_list[i] == NULL) {
             OQS_PROV_PRINTF2("OQS PROV: Warning: No OID registered for %s\n",
                              oqs_oid_alg_list[i + 1]);
@@ -1043,10 +1086,10 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
             if (!c_obj_create(handle, oqs_oid_alg_list[i],
                               oqs_oid_alg_list[i + 1],
                               oqs_oid_alg_list[i + 1])) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-                fprintf(stderr, "error registering NID for %s\n",
-                        oqs_oid_alg_list[i + 1]);
-                goto end_init;
+                OQS_PROV_PRINTF2("error registering NID for %s\n",
+                                 oqs_oid_alg_list[i + 1]);
+                id_ok = 0;
+                goto end_for;
             }
 
             /* create object (NID) again to avoid setup corner case problems
@@ -1069,10 +1112,10 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
             if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
                                  oqs_oid_alg_list[i + 1])) {
-                fprintf(stderr, "error registering %s with no hash\n",
-                        oqs_oid_alg_list[i + 1]);
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-                goto end_init;
+                OQS_PROV_PRINTF2("error registering %s with no hash\n",
+                                 oqs_oid_alg_list[i + 1]);
+                id_ok = 0;
+                goto end_for;
             }
 
             if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
@@ -1088,8 +1131,44 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
                 goto end_init;
             }
+            end_for:
+            if (!id_ok) {
+                sk_OPENSSL_STRING_push(rt_disabled_algs, (char *)(oqs_oid_alg_list[i + 1]));
+            }
         }
     }
+
+    // ML-KEM implementation in OpenSSL 3.5 is _much_ more developed than this code
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem512");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem768");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "X25519MLKEM768");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP256r1MLKEM768");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP384r1MLKEM1024");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem1024");
+        // need to disable these as per https://github.com/open-quantum-safe/oqs-provider/discussions/610#discussioncomment-12246359
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_pss2048");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_rsa2048");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_ed25519");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_p256");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_bp256");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_pss3072");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_rsa3072");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_p256");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_bp256");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_ed25519");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87_p384");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87_bp384");
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87_ed448");
+    }
+
+    /*
+    // output disabled algs:
+    printf("disabled algs: %p (cnt: %d)\n", rt_disabled_algs, sk_OPENSSL_STRING_num(rt_disabled_algs));
+    for (int i = 0; i < sk_OPENSSL_STRING_num(rt_disabled_algs); ++i) {
+        printf("Disabled alg #%d: %s in OpenSSL version %s\n", i, sk_OPENSSL_STRING_value(rt_disabled_algs, i), ossl_versionp);
+    }
+    */
 
     // if libctx not yet existing, create a new one
     if (((corebiometh = oqs_bio_prov_init_bio_method()) == NULL) ||

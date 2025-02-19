@@ -100,7 +100,7 @@ jobs:
       - name: Retain oqsprovider.dll
         uses: actions/upload-artifact@v4
         with:
-          name: oqs-provider-cygwin
+          name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-cygwin
           path: D:/a/oqs-provider/oqs-provider/_build/bin/oqsprovider.dll
 
   msvc:
@@ -211,7 +211,7 @@ jobs:
       - name: Retain oqsprovider.dll
         uses: actions/upload-artifact@v4
         with:
-          name: oqs-provider-msvc
+          name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-msvc
           path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
 
   msvc_native:
@@ -317,6 +317,6 @@ jobs:
         - name: Retain oqsprovider.dll
           uses: actions/upload-artifact@v4
           with:
-            name: oqs-provider-msvc
+            name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-msvc
             path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
 

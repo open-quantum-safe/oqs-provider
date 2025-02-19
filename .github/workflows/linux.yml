@@ -84,7 +84,7 @@ jobs:
       - name: Retain .deb installer
         uses: actions/upload-artifact@v4
         with:
-          name: oqsprovider-x64
+          name: ${{ matrix.ossl-branch }} ${{ matrix.cmake-params }} ${{ matrix.libjade-build }} oqsprovider-x64
           path: _build/*.deb
       - name: Verify that the static library is copied to the install directory.
         run: |
@@ -110,9 +110,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
-
-      - name: Add safe directory exception
-        run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
 
       - name: Install dependencies
         run: apt-get update && apt-get install -y clang llvm ninja-build git cmake libclang-14-dev libclang-common-14-dev
@@ -187,9 +184,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
-
-      - name: Add safe directory exception
-        run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
 
       - name: Install dependencies
         run: apt-get update && apt-get install -y ninja-build git cmake nodejs gcc-aarch64-linux-gnu libc6-dev-arm64-cross qemu-user

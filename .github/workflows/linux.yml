@@ -59,6 +59,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+      - name: Add safe directory exception
+        run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
       - name: Full build
         run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=main OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Enable sibling oqsprovider for testing
@@ -80,9 +82,9 @@ jobs:
         run: cpack -C DebPack
         working-directory: _build
       - name: Retain .deb installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: oqsprovider-x64
+          name: ${{ matrix.ossl-branch }} ${{ matrix.cmake-params }} ${{ matrix.libjade-build }} oqsprovider-x64
           path: _build/*.deb
       - name: Verify that the static library is copied to the install directory.
         run: |
@@ -251,7 +253,7 @@ jobs:
             dpkg -I oqs-provider-*.deb | grep -q "Architecture: arm64"
 
       - name: Retain .deb installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oqsprovider-aarch64
           path: build/*.deb

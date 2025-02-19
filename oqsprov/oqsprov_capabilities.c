@@ -532,8 +532,13 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg) {
     size_t i;
 
     for (i = 0; i < OSSL_NELEM(oqs_param_group_list); i++) {
-        if (!cb(oqs_param_group_list[i], arg))
-            return 0;
+        // do not register algorithms disabled at runtime
+        if (sk_OPENSSL_STRING_find(oqsprov_get_rt_disabled_algs(),
+                                   (char *)oqs_param_group_list[i][2].data) <
+            0) {
+            if (!cb(oqs_param_group_list[i], arg))
+                return 0;
+        }
     }
 
     return 1;
@@ -693,8 +698,13 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg) {
     // liboqs:
     assert(OSSL_NELEM(oqs_param_sigalg_list) <= OSSL_NELEM(oqs_sigalg_list));
     for (i = 0; i < OSSL_NELEM(oqs_param_sigalg_list); i++) {
-        if (!cb(oqs_param_sigalg_list[i], arg))
-            return 0;
+        // do not register algorithms disabled at runtime
+        if (sk_OPENSSL_STRING_find(oqsprov_get_rt_disabled_algs(),
+                                   (char *)oqs_param_sigalg_list[i][1].data) <
+            0) {
+            if (!cb(oqs_param_sigalg_list[i], arg))
+                return 0;
+        }
     }
 
     return 1;

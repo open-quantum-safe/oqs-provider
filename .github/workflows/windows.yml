@@ -52,7 +52,7 @@ jobs:
           packages: perl git ninja gcc-core cmake make python3 python3-devel python3-setuptools python3-exceptiongroup
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: c:\cygwin\opt\openssl32
           key: ${{ runner.os }}-cygwinopenssl32
@@ -98,9 +98,9 @@ jobs:
         run: bash -c "echo $PATH && PATH=/opt/openssl32/bin:/usr/bin ctest -V"
         working-directory: _build
       - name: Retain oqsprovider.dll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: oqs-provider-cygwin
+          name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-cygwin
           path: D:/a/oqs-provider/oqs-provider/_build/bin/oqsprovider.dll
 
   msvc:
@@ -123,7 +123,7 @@ jobs:
     steps:
       - name: Restore OpenSSL32 cache
         id: cache-openssl32
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: c:\openssl32
           key: ${{ runner.os }}-msvcopenssl32
@@ -209,9 +209,9 @@ jobs:
         run: |
           ctest -V --test-dir _build
       - name: Retain oqsprovider.dll
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: oqs-provider-msvc
+          name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-msvc
           path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
 
   msvc_native:
@@ -237,7 +237,7 @@ jobs:
     steps:
         - name: Restore native OpenSSL32 cache
           id: cache-openssl32n
-          uses: actions/cache@v3
+          uses: actions/cache@v4
           with:
             path: c:\openssl32n
             key: ${{ runner.os }}-msvcopenssl32n
@@ -315,8 +315,8 @@ jobs:
           run: |
             ctest --test-dir _build -C ${{ matrix.type }}
         - name: Retain oqsprovider.dll
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
-            name: oqs-provider-msvc
+            name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-msvc
             path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
 

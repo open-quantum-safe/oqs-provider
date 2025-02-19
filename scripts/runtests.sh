@@ -153,6 +153,10 @@ if ! "${OPENSSL_APP}" list -providers -verbose | grep -q oqsprovider; then
    exit 1
 fi
 
+"${OPENSSL_APP}" list -signature-algorithms
+"${OPENSSL_APP}" list -kem-algorithms
+
+
 # Run interop-tests:
 # cleanup log from previous runs:
 rm -f interop.log

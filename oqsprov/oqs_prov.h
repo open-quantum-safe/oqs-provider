@@ -57,7 +57,7 @@
 #define OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY "hybrid_pq_" OSSL_PKEY_PARAM_PUB_KEY
 #define OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY "hybrid_pq_" OSSL_PKEY_PARAM_PRIV_KEY
 
-STACK_OF(OPENSSL_STRING) *oqsprov_get_rt_disabled_algs();
+STACK_OF(OPENSSL_STRING) * oqsprov_get_rt_disabled_algs();
 
 /* Extras for OQS extension */
 

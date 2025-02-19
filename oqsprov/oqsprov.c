@@ -36,8 +36,8 @@
     printf(a, b, c)
 #endif // NDEBUG
 
-static STACK_OF(OPENSSL_STRING) *rt_disabled_algs;
-STACK_OF(OPENSSL_STRING) *oqsprov_get_rt_disabled_algs() {
+static STACK_OF(OPENSSL_STRING) * rt_disabled_algs;
+STACK_OF(OPENSSL_STRING) * oqsprov_get_rt_disabled_algs() {
     return rt_disabled_algs;
 }
 
@@ -946,25 +946,28 @@ static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[]) {
 int cnt_rt_disabled(const OSSL_ALGORITHM orig[], int len) {
     int dcnt = 0;
 
-    for (int i = 0; i < len-1; i++)
-        if (sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)orig[i].algorithm_names) >= 0)
-           dcnt++;
+    for (int i = 0; i < len - 1; i++)
+        if (sk_OPENSSL_STRING_find(rt_disabled_algs,
+                                   (char *)orig[i].algorithm_names) >= 0)
+            dcnt++;
     return dcnt;
 }
 
-#define FILTERED_ALGS(algs) \
-        d_algs = cnt_rt_disabled(algs, OSSL_NELEM(algs)); \
-        if (algs##_rt == NULL) { \
-            algs##_rt = OPENSSL_malloc(sizeof(OSSL_ALGORITHM) * OSSL_NELEM(algs)-d_algs); \
-            n_cnt = 0; \
-            for(int i=0; i<OSSL_NELEM(algs); i++) { \
-                if (sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)algs[i].algorithm_names) < 0) { \
-                    *(algs##_rt+n_cnt) = algs[i]; \
-                    n_cnt++; \
-                } \
-            } \
-        } \
-        return algs##_rt
+#define FILTERED_ALGS(algs)                                                    \
+    d_algs = cnt_rt_disabled(algs, OSSL_NELEM(algs));                          \
+    if (algs##_rt == NULL) {                                                   \
+        algs##_rt = OPENSSL_malloc(sizeof(OSSL_ALGORITHM) * OSSL_NELEM(algs) - \
+                                   d_algs);                                    \
+        n_cnt = 0;                                                             \
+        for (int i = 0; i < OSSL_NELEM(algs); i++) {                           \
+            if (sk_OPENSSL_STRING_find(rt_disabled_algs,                       \
+                                       (char *)algs[i].algorithm_names) < 0) { \
+                *(algs##_rt + n_cnt) = algs[i];                                \
+                n_cnt++;                                                       \
+            }                                                                  \
+        }                                                                      \
+    }                                                                          \
+    return algs##_rt
 
 static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
                                                int *no_cache) {
@@ -1012,8 +1015,7 @@ static const OSSL_DISPATCH oqsprovider_dispatch_table[] = {
 #define OQS_PROVIDER_ENTRYPOINT_NAME OSSL_provider_init
 #endif // ifdef OQS_PROVIDER_STATIC
 
-static int sk_strcmp(const char * const *a, const char * const *b)
-{
+static int sk_strcmp(const char *const *a, const char *const *b) {
     return strcmp(*a, *b);
 }
 
@@ -1131,14 +1133,16 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
                 goto end_init;
             }
-            end_for:
+        end_for:
             if (!id_ok) {
-                sk_OPENSSL_STRING_push(rt_disabled_algs, (char *)(oqs_oid_alg_list[i + 1]));
+                sk_OPENSSL_STRING_push(rt_disabled_algs,
+                                       (char *)(oqs_oid_alg_list[i + 1]));
             }
         }
     }
 
-    // ML-KEM implementation in OpenSSL 3.5 is _much_ more developed than this code
+    // ML-KEM implementation in OpenSSL 3.5 is _much_ more developed than this
+    // code
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem512");
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem768");
@@ -1146,7 +1150,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP256r1MLKEM768");
         sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP384r1MLKEM1024");
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem1024");
-        // need to disable these as per https://github.com/open-quantum-safe/oqs-provider/discussions/610#discussioncomment-12246359
+        // need to disable these as per
+        // https://github.com/open-quantum-safe/oqs-provider/discussions/610#discussioncomment-12246359
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_pss2048");
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_rsa2048");
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_ed25519");
@@ -1164,9 +1169,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     /*
     // output disabled algs:
-    printf("disabled algs: %p (cnt: %d)\n", rt_disabled_algs, sk_OPENSSL_STRING_num(rt_disabled_algs));
-    for (int i = 0; i < sk_OPENSSL_STRING_num(rt_disabled_algs); ++i) {
-        printf("Disabled alg #%d: %s in OpenSSL version %s\n", i, sk_OPENSSL_STRING_value(rt_disabled_algs, i), ossl_versionp);
+    printf("disabled algs: %p (cnt: %d)\n", rt_disabled_algs,
+    sk_OPENSSL_STRING_num(rt_disabled_algs)); for (int i = 0; i <
+    sk_OPENSSL_STRING_num(rt_disabled_algs); ++i) { printf("Disabled alg #%d: %s
+    in OpenSSL version %s\n", i, sk_OPENSSL_STRING_value(rt_disabled_algs, i),
+    ossl_versionp);
     }
     */
 

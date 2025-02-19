@@ -36,7 +36,7 @@
     printf(a, b, c)
 #endif // NDEBUG
 
-static STACK_OF(OPENSSL_STRING) * rt_disabled_algs;
+static STACK_OF(OPENSSL_STRING) *rt_disabled_algs = NULL;
 STACK_OF(OPENSSL_STRING) * oqsprov_get_rt_disabled_algs() {
     return rt_disabled_algs;
 }
@@ -995,6 +995,18 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
 
 static void oqsprovider_teardown(void *provctx) {
     oqsx_freeprovctx((PROV_OQS_CTX *)provctx);
+    OPENSSL_free(oqsprovider_signatures_rt);
+    oqsprovider_signatures_rt = NULL;
+    OPENSSL_free(oqsprovider_asym_kems_rt);
+    oqsprovider_asym_kems_rt = NULL;
+    OPENSSL_free(oqsprovider_keymgmt_rt);
+    oqsprovider_keymgmt_rt = NULL;
+    OPENSSL_free(oqsprovider_encoder_rt);
+    oqsprovider_encoder_rt = NULL;
+    OPENSSL_free(oqsprovider_decoder_rt);
+    oqsprovider_decoder_rt = NULL;
+    sk_OPENSSL_STRING_free(rt_disabled_algs);
+    rt_disabled_algs = NULL;
     OQS_destroy();
 }
 
@@ -1034,7 +1046,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
                                      &opensslv, sizeof(&opensslv), 0},
                                     {NULL, 0, NULL, 0, 0}};
-    rt_disabled_algs = sk_OPENSSL_STRING_new(sk_strcmp);
+    if (!rt_disabled_algs)
+        rt_disabled_algs = sk_OPENSSL_STRING_new(sk_strcmp);
 
     OQS_init();
 
@@ -1167,13 +1180,13 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87_ed448");
     }
 
-    /*
     // output disabled algs:
+    /*
     printf("disabled algs: %p (cnt: %d)\n", rt_disabled_algs,
-    sk_OPENSSL_STRING_num(rt_disabled_algs)); for (int i = 0; i <
-    sk_OPENSSL_STRING_num(rt_disabled_algs); ++i) { printf("Disabled alg #%d: %s
-    in OpenSSL version %s\n", i, sk_OPENSSL_STRING_value(rt_disabled_algs, i),
-    ossl_versionp);
+    sk_OPENSSL_STRING_num(rt_disabled_algs));
+    for (int i = 0; i < sk_OPENSSL_STRING_num(rt_disabled_algs); ++i) {
+      printf("Disabled alg #%d: %s in OpenSSL version %s\n", i,
+    sk_OPENSSL_STRING_value(rt_disabled_algs, i), ossl_versionp);
     }
     */
 

@@ -2,13 +2,15 @@
 #include <openssl/err.h>
 #include <openssl/ssl.h>
 
+#include "test_common.h"
+
 #define MAXLOOPS 1000000
 
 /* Stolen from openssl/tests/sslapitest.c: */
 int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename,
                     char *privkeyfilename) {
     EVP_PKEY_CTX *evpctx =
-        EVP_PKEY_CTX_new_from_name(libctx, algname, "provider=oqsprovider");
+        EVP_PKEY_CTX_new_from_name(libctx, algname, OQSPROV_PROPQ);
     EVP_PKEY *pkey = NULL;
     X509 *x509 = X509_new();
     X509_NAME *name = NULL;

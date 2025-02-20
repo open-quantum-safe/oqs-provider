@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import yaml
+from ruamel.yaml import YAML
 
 kemoidcnt=0
 
@@ -228,6 +229,62 @@ def load_config(include_disabled_sigs=False):
                     exit(1)
                 hybrid_nids.add(extra_hybrid_nid)
     return config
+
+def complete_kem_nids():
+    yaml = YAML()
+    yaml.indent(mapping=2, sequence=4, offset=2)
+    yaml.preserve_quotes = True
+
+    with open(os.path.join('oqs-template', 'generate.yml'), "r") as f:
+        config = yaml.load(f)
+
+    remainder_kem_nids = [str(x) for x in range(65024, 65280)]
+    def assignNid():
+        if len(remainder_kem_nids) == 0:
+            print(f'Surpassed number of available nids. Exiting process now.')
+            exit(1)
+        nid = remainder_kem_nids[0]
+        remainder_kem_nids.pop(0)
+        return nid
+
+    # remove established NIDs for KEMs (nid, hybrid_nid)
+    for kem in config['kems']:
+        # 'nid'
+        if 'nid' in kem:
+            nid = kem['nid']
+            if nid in remainder_kem_nids:
+                remainder_kem_nids.remove(nid)
+        # 'nid_hybrid'
+        if 'nid_hybrid' in kem:
+            nid_hybrid = kem['nid_hybrid']
+            if nid_hybrid in remainder_kem_nids:
+                remainder_kem_nids.remove(nid_hybrid)
+        # 'extra_nids.current.nid'
+        if 'extra_nids' not in kem or 'current' not in kem['extra_nids']:
+            continue
+        for extra_hybrid in kem['extra_nids']['current']:
+            if 'nid' in extra_hybrid:
+                nid = extra_hybrid['nid']
+                if nid in remainder_kem_nids:
+                    remainder_kem_nids.remove(nid)
+
+    for kem in config['kems']:
+        if 'extra_nids' in kem and 'old' in kem['extra_nids'] and 'current' not in kem['extra_nids']:
+            continue
+        if not 'nid' in kem:
+            kem['nid'] = assignNid()
+        if not 'nid_hybrid' in kem:
+            kem['nid_hybrid'] = assignNid()
+        if 'extra_nids' not in kem or 'current' not in kem['extra_nids']:
+            continue
+        for extra_hybrid in kem['extra_nids']['current']:
+            if not 'nid' in extra_hybrid:
+                extra_hybrid['nid'] = assignNid()
+    
+    with open(os.path.join('oqs-template', 'generate.yml'), mode='w', encoding='utf-8') as f:
+        yaml.dump(config, f)
+
+complete_kem_nids()
 
 # extend config with "hybrid_groups" array:
 config = load_config() # extend config with "hybrid_groups" array

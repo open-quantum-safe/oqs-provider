@@ -171,6 +171,10 @@ disables the automation logic built into `runtests.sh`, thus requiring
 knowledge of `openssl` operations when setting it.
 By default this variable is unset.
 
+### OSSL_CONFIG
+
+This environment variable can be used to pass arguments to the `./config` command that precedes the `make` of the OpenSSL, e.g. to build in [debug](https://wiki.openssl.org/index.php/Compilation_and_Installation#Debug_Configuration).
+
 ## LIBOQS configuration options
 
 These are [documented in full here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).

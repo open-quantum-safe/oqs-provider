@@ -11,6 +11,7 @@
 # EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
 # EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL3
 #        Setting this to feature/dtls-1.3 enables build&test of all PQ algs using DTLS1.3 feature branch
+# EnvVar OSSL_CONFIG: If set, passes arguments to the "./config" command that precedes the "make" of the OpenSSL
 # EnvVar liboqs_DIR: If set, needs to point to a directory where liboqs has been installed to
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -59,7 +60,7 @@ if [ -z "$OPENSSL_INSTALL" ]; then
    if [ ! -d "openssl" ]; then
       echo "openssl not specified and doesn't reside where expected: Cloning and building..."
       # for full debug build add: enable-trace enable-fips --debug
-      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH https://github.com/openssl/openssl.git && cd openssl && LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
+      export OSSL_PREFIX=`pwd`/.local && git clone --depth 1 --branch $OPENSSL_BRANCH https://github.com/openssl/openssl.git && cd openssl && LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config $OSSL_CONFIG --prefix=$OSSL_PREFIX && make $MAKE_PARAMS && make install_sw install_ssldirs && cd ..
       if [ $? -ne 0 ]; then
         echo "openssl build failed. Exiting."
         exit -1

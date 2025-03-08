@@ -27,8 +27,6 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
         run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
-      - name: Enable sibling oqsprovider for testing
-        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
 
@@ -63,8 +61,6 @@ jobs:
         run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
       - name: Full build
         run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=main OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
-      - name: Enable sibling oqsprovider for testing
-        run: cd _build/lib && ln -s oqsprovider.so oqsprovider2.so
       - name: Test
         run: ./scripts/runtests.sh -V
       - name: Re-generate code

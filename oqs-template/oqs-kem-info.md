@@ -1,13 +1,13 @@
 | Family         | Implementation Version   | Variant        | NIST round   |   Claimed NIST Level | Code Point   | Hybrid Elliptic Curve (if any)   |
 |:---------------|:-------------------------|:---------------|:-------------|---------------------:|:-------------|:---------------------------------|
-| BIKE           | 5.1                      | bikel1         | 4            |                    1 | 0x0241       |                                  |
-| BIKE           | 5.1                      | bikel1         | 4            |                    1 | 0x2F41       | secp256_r1                       |
-| BIKE           | 5.1                      | bikel1         | 4            |                    1 | 0x2FAE       | x25519                           |
-| BIKE           | 5.1                      | bikel3         | 4            |                    3 | 0x0242       |                                  |
-| BIKE           | 5.1                      | bikel3         | 4            |                    3 | 0x2F42       | secp384_r1                       |
-| BIKE           | 5.1                      | bikel3         | 4            |                    3 | 0x2FAF       | x448                             |
-| BIKE           | 5.1                      | bikel5         | 4            |                    5 | 0x0243       |                                  |
-| BIKE           | 5.1                      | bikel5         | 4            |                    5 | 0x2F43       | secp521_r1                       |
+| BIKE           | 5.1                      | bikel1         | 4            |                    1 | 65045        |                                  |
+| BIKE           | 5.1                      | bikel1         | 4            |                    1 | 65046        | secp256_r1                       |
+| BIKE           | 5.1                      | bikel1         | 4            |                    1 | 65047        | x25519                           |
+| BIKE           | 5.1                      | bikel3         | 4            |                    3 | 65048        |                                  |
+| BIKE           | 5.1                      | bikel3         | 4            |                    3 | 65049        | secp384_r1                       |
+| BIKE           | 5.1                      | bikel3         | 4            |                    3 | 65050        | x448                             |
+| BIKE           | 5.1                      | bikel5         | 4            |                    5 | 65051        |                                  |
+| BIKE           | 5.1                      | bikel5         | 4            |                    5 | 65052        | secp521_r1                       |
 | BIKE           | NIST Round 2 submission  | bike1l1cpa     | 2            |                    1 | 0x0206       |                                  |
 | BIKE           | NIST Round 2 submission  | bike1l1cpa     | 2            |                    1 | 0x2F06       | secp256_r1                       |
 | BIKE           | NIST Round 2 submission  | bike1l1fo      | 2            |                    1 | 0x0223       |                                  |
@@ -53,22 +53,22 @@
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber90s768    | 3            |                    3 | 0x023F       |                                  |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber90s768    | 3            |                    3 | 0x2F3F       | secp384_r1                       |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber90s768    | 3            |                    3 | 0x2FAA       | x448                             |
-| FrodoKEM       | NIST Round 3 submission  | frodo1344aes   | 3            |                    5 | 0x0204       |                                  |
-| FrodoKEM       | NIST Round 3 submission  | frodo1344aes   | 3            |                    5 | 0x2F04       | secp521_r1                       |
-| FrodoKEM       | NIST Round 3 submission  | frodo1344shake | 3            |                    5 | 0x0205       |                                  |
-| FrodoKEM       | NIST Round 3 submission  | frodo1344shake | 3            |                    5 | 0x2F05       | secp521_r1                       |
-| FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 0x2F00       | secp256_r1                       |
-| FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 0x2F80       | x25519                           |
+| FrodoKEM       | NIST Round 3 submission  | frodo1344aes   | 3            |                    5 | 65036        |                                  |
+| FrodoKEM       | NIST Round 3 submission  | frodo1344aes   | 3            |                    5 | 65037        | secp521_r1                       |
+| FrodoKEM       | NIST Round 3 submission  | frodo1344shake | 3            |                    5 | 65038        |                                  |
+| FrodoKEM       | NIST Round 3 submission  | frodo1344shake | 3            |                    5 | 65039        | secp521_r1                       |
 | FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 65024        |                                  |
-| FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 0x2F01       | secp256_r1                       |
-| FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 0x2F81       | x25519                           |
+| FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 65027        | secp256_r1                       |
+| FrodoKEM       | NIST Round 3 submission  | frodo640aes    | 3            |                    1 | 65028        | x25519                           |
 | FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 65025        |                                  |
-| FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 0x2F02       | secp384_r1                       |
-| FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 0x2F82       | x448                             |
+| FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 65029        | secp256_r1                       |
+| FrodoKEM       | NIST Round 3 submission  | frodo640shake  | 3            |                    1 | 65030        | x25519                           |
 | FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 65026        |                                  |
-| FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 0x0203       |                                  |
-| FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 0x2F03       | secp384_r1                       |
-| FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 0x2F83       | x448                             |
+| FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 65031        | secp384_r1                       |
+| FrodoKEM       | NIST Round 3 submission  | frodo976aes    | 3            |                    3 | 65032        | x448                             |
+| FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 65033        |                                  |
+| FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 65034        | secp384_r1                       |
+| FrodoKEM       | NIST Round 3 submission  | frodo976shake  | 3            |                    3 | 65035        | x448                             |
 | HQC            | NIST Round 3 submission  | hqc128         | 3            |                    1 | 0x022C       |                                  |
 | HQC            | NIST Round 3 submission  | hqc128         | 3            |                    1 | 0x2F2C       | secp256_r1                       |
 | HQC            | NIST Round 3 submission  | hqc128         | 3            |                    1 | 0x2FAC       | x25519                           |
@@ -77,22 +77,22 @@
 | HQC            | NIST Round 3 submission  | hqc192         | 3            |                    3 | 0x2FAD       | x448                             |
 | HQC            | NIST Round 3 submission  | hqc256         | 3            |                    5 | 0x022E       |                                  |
 | HQC            | NIST Round 3 submission  | hqc256         | 3            |                    5 | 0x2F2E       | secp521_r1                       |
-| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 0x0244       |                                  |
-| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 0x2F44       | secp256_r1                       |
-| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 0x2FB0       | x25519                           |
-| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x0245       |                                  |
-| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x2F45       | secp384_r1                       |
-| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x2FB1       | x448                             |
-| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x0246       |                                  |
-| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x2F46       | secp521_r1                       |
+| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 65053        |                                  |
+| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 65054        | secp256_r1                       |
+| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 65055        | x25519                           |
+| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 65056        |                                  |
+| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 65057        | secp384_r1                       |
+| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 65058        | x448                             |
+| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 65059        |                                  |
+| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 65060        | secp521_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x11ED       | secp384_r1                       |
-| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4D       | secp521_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 514          |                                  |
-| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2F4B       | secp256_r1                       |
-| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 0x2FB6       | x25519                           |
+| ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 65044        | secp521_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 512          |                                  |
+| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 65040        | secp256_r1                       |
+| ML-KEM         | ML-KEM                   | mlkem512       | FIPS203      |                    1 | 65041        | x25519                           |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x11eb       | secp256_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x11ec       | x25519                           |
-| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2F4C       | secp384_r1                       |
-| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 0x2FB7       | x448                             |
 | ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 513          |                                  |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 65042        | secp384_r1                       |
+| ML-KEM         | ML-KEM                   | mlkem768       | FIPS203      |                    3 | 65043        | x448                             |

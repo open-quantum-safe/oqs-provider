@@ -56,9 +56,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 186
+#define OQS_OID_CNT 202
 #else
-#define OQS_OID_CNT 100
+#define OQS_OID_CNT 116
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -252,6 +252,22 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p521_mayo5",
     "1.3.6.1.4.1.62245.2.1.1",
     "CROSSrsdp128balanced",
+    "1.3.9999.9.5.1",
+    "OV_Is_pkc",
+    "1.3.9999.9.5.2",
+    "p256_OV_Is_pkc",
+    "1.3.9999.9.6.1",
+    "OV_Ip_pkc",
+    "1.3.9999.9.6.2",
+    "p256_OV_Ip_pkc",
+    "1.3.9999.9.9.1",
+    "OV_Is_pkc_skc",
+    "1.3.9999.9.9.2",
+    "p256_OV_Is_pkc_skc",
+    "1.3.9999.9.10.1",
+    "OV_Ip_pkc_skc",
+    "1.3.9999.9.10.2",
+    "p256_OV_Ip_pkc_skc",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -468,6 +484,22 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[96 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_CROSSRSDP128BALANCED")))
             oqs_oid_alg_list[98 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_OV_IS_PKC")))
+            oqs_oid_alg_list[100 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_OV_IS_PKC")))
+            oqs_oid_alg_list[102 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_OV_IP_PKC")))
+            oqs_oid_alg_list[104 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_OV_IP_PKC")))
+            oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_OV_IS_PKC_SKC")))
+            oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_OV_IS_PKC_SKC")))
+            oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_OV_IP_PKC_SKC")))
+            oqs_oid_alg_list[112 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_OV_IP_PKC_SKC")))
+            oqs_oid_alg_list[114 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -595,6 +627,22 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
     SIGALG("CROSSrsdp128balanced", 128, oqs_signature_functions),
 #endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
+    SIGALG("OV_Is_pkc", 128, oqs_signature_functions),
+    SIGALG("p256_OV_Is_pkc", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
+    SIGALG("OV_Ip_pkc", 128, oqs_signature_functions),
+    SIGALG("p256_OV_Ip_pkc", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
+    SIGALG("OV_Is_pkc_skc", 128, oqs_signature_functions),
+    SIGALG("p256_OV_Is_pkc_skc", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
+    SIGALG("OV_Ip_pkc_skc", 128, oqs_signature_functions),
+    SIGALG("p256_OV_Ip_pkc_skc", 128, oqs_signature_functions),
+#endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
 
@@ -680,8 +728,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     {NULL, NULL, NULL}};
 
 static OSSL_ALGORITHM *oqsprovider_keymgmt_rt = NULL;
-static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
-    {
+static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_START
 // clang-format off
 
@@ -766,6 +813,22 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
 #endif
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
     SIGALG("CROSSrsdp128balanced", 128, oqs_CROSSrsdp128balanced_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
+    SIGALG("OV_Is_pkc", 128, oqs_OV_Is_pkc_keymgmt_functions),
+    SIGALG("p256_OV_Is_pkc", 128, oqs_p256_OV_Is_pkc_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
+    SIGALG("OV_Ip_pkc", 128, oqs_OV_Ip_pkc_keymgmt_functions),
+    SIGALG("p256_OV_Ip_pkc", 128, oqs_p256_OV_Ip_pkc_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
+    SIGALG("OV_Is_pkc_skc", 128, oqs_OV_Is_pkc_skc_keymgmt_functions),
+    SIGALG("p256_OV_Is_pkc_skc", 128, oqs_p256_OV_Is_pkc_skc_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
+    SIGALG("OV_Ip_pkc_skc", 128, oqs_OV_Ip_pkc_skc_keymgmt_functions),
+    SIGALG("p256_OV_Ip_pkc_skc", 128, oqs_p256_OV_Ip_pkc_skc_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes
@@ -856,9 +919,9 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] =
 
     KEMKMHYBALG(p521_hqc256, 256, ecp)
 #endif
-        // clang-format on
-        ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
-        {NULL, NULL, NULL}};
+    // clang-format on
+    ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+    {NULL, NULL, NULL}};
 
 static OSSL_ALGORITHM *oqsprovider_encoder_rt = NULL;
 static const OSSL_ALGORITHM oqsprovider_encoder[] = {

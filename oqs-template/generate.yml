@@ -448,7 +448,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xff0a
+# Next free signature ID: 0xff22
 sigs:
   # -
     # iso (1)
@@ -1706,3 +1706,138 @@ sigs:
         oid: '1.3.6.1.4.1.62245.2.1.18'
         code_point: '0xff05'
         enable: false
+  -
+    family: 'UOV'
+    variants:
+      -
+        name: 'OV_Is'
+        pretty_name: 'OV-Is'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_Is'
+        oid: '1.3.9999.9.1.1'
+        code_point: '0xff0a'
+        enable: false
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.9.1.2',
+                    'code_point': '0xff16'}]
+      -
+        name: 'OV_Ip'
+        pretty_name: 'OV-Ip'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_Ip'
+        oid: '1.3.9999.9.2.1'
+        code_point: '0xff0b'
+        enable: false
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.9.2.2',
+                    'code_point': '0xff17'}]
+      -
+        name: 'OV_III'
+        pretty_name: 'OV-III'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_III'
+        oid: '1.3.9999.9.3.1'
+        code_point: '0xff0c'
+        enable: false
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.9.3.2',
+                    'code_point': '0xff18'}]
+      -
+        name: 'OV_V'
+        pretty_name: 'OV-V'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_V'
+        oid: '1.3.9999.9.4.1'
+        code_point: '0xff0d'
+        enable: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.9.4.2',
+                    'code_point': '0xff19'}]
+      -
+        name: 'OV_Is_pkc'
+        pretty_name: 'OV-Is-pkc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_Is_pkc'
+        oid: '1.3.9999.9.5.1'
+        code_point: '0xff0e'
+        enable: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.9.5.2',
+                    'code_point': '0xff1a'}]
+      -
+        name: 'OV_Ip_pkc'
+        pretty_name: 'OV-Ip-pkc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_Ip_pkc'
+        oid: '1.3.9999.9.6.1'
+        code_point: '0xff0f'
+        enable: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.9.6.2',
+                    'code_point': '0xff1b'}]
+      -
+        name: 'OV_III_pkc'
+        pretty_name: 'OV-III-pkc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_III_pkc'
+        oid: '1.3.9999.9.7.1'
+        code_point: '0xff10'
+        enable: false
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.9.7.2',
+                    'code_point': '0xff1c'}]
+      -
+        name: 'OV_V_pkc'
+        pretty_name: 'OV-V-pkc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_V_pkc'
+        oid: '1.3.9999.9.8.1'
+        code_point: '0xff11'
+        enable: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.9.8.2',
+                    'code_point': '0xff1d'}]
+      -
+        name: 'OV_Is_pkc_skc'
+        pretty_name: 'OV-Is-pkc-skc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_Is_pkc_skc'
+        oid: '1.3.9999.9.9.1'
+        code_point: '0xff12'
+        enable: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.9.9.2',
+                    'code_point': '0xff1e'}]
+      -
+        name: 'OV_Ip_pkc_skc'
+        pretty_name: 'OV-Ip-pkc-skc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_Ip_pkc_skc'
+        oid: '1.3.9999.9.10.1'
+        code_point: '0xff13'
+        enable: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.9.10.2',
+                    'code_point': '0xff1f'}]
+      -
+        name: 'OV_III_pkc_skc'
+        pretty_name: 'OV-III-pkc-skc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_III_pkc_skc'
+        oid: '1.3.9999.9.11.1'
+        code_point: '0xff14'
+        enable: false
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.9.11.2',
+                    'code_point': '0xff20'}]
+      -
+        name: 'OV_V_pkc_skc'
+        pretty_name: 'OV-V-pkc-skc'
+        oqs_meth: 'OQS_SIG_alg_uov_ov_V_pkc_skc'
+        oid: '1.3.9999.9.12.1'
+        code_point: '0xff15'
+        enable: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.9.12.2',
+                    'code_point': '0xff21'}]

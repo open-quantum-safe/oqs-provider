@@ -686,7 +686,7 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 #endif
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
     OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
-                     CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1", 49),
+                     CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2", 49),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

@@ -250,7 +250,7 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "mayo5",
     "1.3.9999.8.5.2",
     "p521_mayo5",
-    "1.3.6.1.4.1.62245.2.1.1",
+    "1.3.6.1.4.1.62245.2.1.1.2",
     "CROSSrsdp128balanced",
     "1.3.9999.9.5.1",
     "OV_Is_pkc",

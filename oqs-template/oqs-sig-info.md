@@ -1,21 +1,21 @@
 | Algorithm                                         | Implementation Version                        | NIST round   |   Claimed NIST Level | Code Point   | OID                         |
 |:--------------------------------------------------|:----------------------------------------------|:-------------|---------------------:|:-------------|:----------------------------|
-| CROSSrsdp128balanced                              | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfef6       | 1.3.6.1.4.1.62245.2.1.1     |
-| CROSSrsdp128fast                                  | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfef7       | 1.3.6.1.4.1.62245.2.1.2     |
-| CROSSrsdp128small                                 | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfef8       | 1.3.6.1.4.1.62245.2.1.3     |
-| CROSSrsdp192balanced                              | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xfef9       | 1.3.6.1.4.1.62245.2.1.4     |
-| CROSSrsdp192fast                                  | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xfefa       | 1.3.6.1.4.1.62245.2.1.5     |
-| CROSSrsdp192small                                 | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xfefb       | 1.3.6.1.4.1.62245.2.1.6     |
-| CROSSrsdp256small                                 | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xfefc       | 1.3.6.1.4.1.62245.2.1.9     |
-| CROSSrsdpg128balanced                             | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfefd       | 1.3.6.1.4.1.62245.2.1.10    |
-| CROSSrsdpg128fast                                 | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfefe       | 1.3.6.1.4.1.62245.2.1.11    |
-| CROSSrsdpg128small                                | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfeff       | 1.3.6.1.4.1.62245.2.1.12    |
-| CROSSrsdpg192balanced                             | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xff00       | 1.3.6.1.4.1.62245.2.1.13    |
-| CROSSrsdpg192fast                                 | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xff01       | 1.3.6.1.4.1.62245.2.1.14    |
-| CROSSrsdpg192small                                | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xff02       | 1.3.6.1.4.1.62245.2.1.15    |
-| CROSSrsdpg256balanced                             | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xff03       | 1.3.6.1.4.1.62245.2.1.16    |
-| CROSSrsdpg256fast                                 | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xff04       | 1.3.6.1.4.1.62245.2.1.17    |
-| CROSSrsdpg256small                                | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xff05       | 1.3.6.1.4.1.62245.2.1.18    |
+| CROSSrsdp128balanced                              | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfef6       | 1.3.6.1.4.1.62245.2.1.1.2   |
+| CROSSrsdp128fast                                  | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfef7       | 1.3.6.1.4.1.62245.2.1.2.2   |
+| CROSSrsdp128small                                 | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfef8       | 1.3.6.1.4.1.62245.2.1.3.2   |
+| CROSSrsdp192balanced                              | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xfef9       | 1.3.6.1.4.1.62245.2.1.4.2   |
+| CROSSrsdp192fast                                  | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xfefa       | 1.3.6.1.4.1.62245.2.1.5.2   |
+| CROSSrsdp192small                                 | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xfefb       | 1.3.6.1.4.1.62245.2.1.6.2   |
+| CROSSrsdp256small                                 | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xfefc       | 1.3.6.1.4.1.62245.2.1.9.2   |
+| CROSSrsdpg128balanced                             | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfefd       | 1.3.6.1.4.1.62245.2.1.10.2  |
+| CROSSrsdpg128fast                                 | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfefe       | 1.3.6.1.4.1.62245.2.1.11.2  |
+| CROSSrsdpg128small                                | 2.0 + PQClean and OQS patches                 | 2            |                    1 | 0xfeff       | 1.3.6.1.4.1.62245.2.1.12.2  |
+| CROSSrsdpg192balanced                             | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xff00       | 1.3.6.1.4.1.62245.2.1.13.2  |
+| CROSSrsdpg192fast                                 | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xff01       | 1.3.6.1.4.1.62245.2.1.14.2  |
+| CROSSrsdpg192small                                | 2.0 + PQClean and OQS patches                 | 2            |                    3 | 0xff02       | 1.3.6.1.4.1.62245.2.1.15.2  |
+| CROSSrsdpg256balanced                             | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xff03       | 1.3.6.1.4.1.62245.2.1.16.2  |
+| CROSSrsdpg256fast                                 | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xff04       | 1.3.6.1.4.1.62245.2.1.17.2  |
+| CROSSrsdpg256small                                | 2.0 + PQClean and OQS patches                 | 2            |                    5 | 0xff05       | 1.3.6.1.4.1.62245.2.1.18.2  |
 | dilithium2                                        | 3.1                                           | 3            |                    2 | 0xfea0       | 1.3.6.1.4.1.2.267.7.4.4     |
 | dilithium2 **hybrid with** p256                   | 3.1                                           | 3            |                    2 | 0xfea1       | 1.3.9999.2.7.1              |
 | dilithium2 **hybrid with** rsa3072                | 3.1                                           | 3            |                    2 | 0xfea2       | 1.3.9999.2.7.2              |

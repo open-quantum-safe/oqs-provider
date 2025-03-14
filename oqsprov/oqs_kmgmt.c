@@ -1187,6 +1187,83 @@ static void *CROSSrsdp128balanced_gen_init(void *provctx, int selection) {
                          "CROSSrsdp128balanced", 0, 128, 49, 0);
 }
 
+static void *OV_Is_pkc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_uov_ov_Is_pkc,
+                        "OV_Is_pkc", KEY_TYPE_SIG, NULL, 128, 50, 0);
+}
+
+static void *OV_Is_pkc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Is_pkc,
+                         "OV_Is_pkc", 0, 128, 50, 0);
+}
+static void *p256_OV_Is_pkc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_uov_ov_Is_pkc,
+                        "p256_OV_Is_pkc", KEY_TYPE_HYB_SIG, NULL, 128, 51, 0);
+}
+
+static void *p256_OV_Is_pkc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Is_pkc,
+                         "p256_OV_Is_pkc", KEY_TYPE_HYB_SIG, 128, 51, 0);
+}
+static void *OV_Ip_pkc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_uov_ov_Ip_pkc,
+                        "OV_Ip_pkc", KEY_TYPE_SIG, NULL, 128, 52, 0);
+}
+
+static void *OV_Ip_pkc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Ip_pkc,
+                         "OV_Ip_pkc", 0, 128, 52, 0);
+}
+static void *p256_OV_Ip_pkc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_uov_ov_Ip_pkc,
+                        "p256_OV_Ip_pkc", KEY_TYPE_HYB_SIG, NULL, 128, 53, 0);
+}
+
+static void *p256_OV_Ip_pkc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Ip_pkc,
+                         "p256_OV_Ip_pkc", KEY_TYPE_HYB_SIG, 128, 53, 0);
+}
+static void *OV_Is_pkc_skc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_uov_ov_Is_pkc_skc, "OV_Is_pkc_skc",
+                        KEY_TYPE_SIG, NULL, 128, 54, 0);
+}
+
+static void *OV_Is_pkc_skc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Is_pkc_skc,
+                         "OV_Is_pkc_skc", 0, 128, 54, 0);
+}
+static void *p256_OV_Is_pkc_skc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_uov_ov_Is_pkc_skc, "p256_OV_Is_pkc_skc",
+                        KEY_TYPE_HYB_SIG, NULL, 128, 55, 0);
+}
+
+static void *p256_OV_Is_pkc_skc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Is_pkc_skc,
+                         "p256_OV_Is_pkc_skc", KEY_TYPE_HYB_SIG, 128, 55, 0);
+}
+static void *OV_Ip_pkc_skc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_uov_ov_Ip_pkc_skc, "OV_Ip_pkc_skc",
+                        KEY_TYPE_SIG, NULL, 128, 56, 0);
+}
+
+static void *OV_Ip_pkc_skc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Ip_pkc_skc,
+                         "OV_Ip_pkc_skc", 0, 128, 56, 0);
+}
+static void *p256_OV_Ip_pkc_skc_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_uov_ov_Ip_pkc_skc, "p256_OV_Ip_pkc_skc",
+                        KEY_TYPE_HYB_SIG, NULL, 128, 57, 0);
+}
+
+static void *p256_OV_Ip_pkc_skc_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_uov_ov_Ip_pkc_skc,
+                         "p256_OV_Ip_pkc_skc", KEY_TYPE_HYB_SIG, 128, 57, 0);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                        \
@@ -1381,6 +1458,14 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(p384_mayo3)
 MAKE_SIG_KEYMGMT_FUNCTIONS(mayo5)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_mayo5)
 MAKE_SIG_KEYMGMT_FUNCTIONS(CROSSrsdp128balanced)
+MAKE_SIG_KEYMGMT_FUNCTIONS(OV_Is_pkc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_OV_Is_pkc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(OV_Ip_pkc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_OV_Ip_pkc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(OV_Is_pkc_skc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_OV_Is_pkc_skc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(OV_Ip_pkc_skc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_OV_Ip_pkc_skc)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 

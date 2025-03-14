@@ -52,6 +52,7 @@ This implementation makes available the following quantum safe algorithms:
 - **SPHINCS-SHAKE**:`sphincsshake128fsimple`\*, `p256_sphincsshake128fsimple`\*, `rsa3072_sphincsshake128fsimple`\*, `sphincsshake128ssimple`, `p256_sphincsshake128ssimple`, `rsa3072_sphincsshake128ssimple`, `sphincsshake192fsimple`, `p384_sphincsshake192fsimple`, `sphincsshake192ssimple`, `p384_sphincsshake192ssimple`, `sphincsshake256fsimple`, `p521_sphincsshake256fsimple`, `sphincsshake256ssimple`, `p521_sphincsshake256ssimple`
 - **MAYO**:`mayo1`\*, `p256_mayo1`\*, `mayo2`\*, `p256_mayo2`\*, `mayo3`\*, `p384_mayo3`\*, `mayo5`\*, `p521_mayo5`\*
 - **CROSS**:`CROSSrsdp128balanced`\*, `CROSSrsdp128fast`, `CROSSrsdp128small`, `CROSSrsdp192balanced`, `CROSSrsdp192fast`, `CROSSrsdp192small`, `CROSSrsdp256small`, `CROSSrsdpg128balanced`, `CROSSrsdpg128fast`, `CROSSrsdpg128small`, `CROSSrsdpg192balanced`, `CROSSrsdpg192fast`, `CROSSrsdpg192small`, `CROSSrsdpg256balanced`, `CROSSrsdpg256fast`, `CROSSrsdpg256small`
+- **UOV**:`OV_Is`, `p256_OV_Is`, `OV_Ip`, `p256_OV_Ip`, `OV_III`, `p384_OV_III`, `OV_V`, `p521_OV_V`, `OV_Is_pkc`\*, `p256_OV_Is_pkc`\*, `OV_Ip_pkc`\*, `p256_OV_Ip_pkc`\*, `OV_III_pkc`, `p384_OV_III_pkc`, `OV_V_pkc`, `p521_OV_V_pkc`, `OV_Is_pkc_skc`\*, `p256_OV_Is_pkc_skc`\*, `OV_Ip_pkc_skc`\*, `p256_OV_Ip_pkc_skc`\*, `OV_III_pkc_skc`, `p384_OV_III_pkc_skc`, `OV_V_pkc_skc`, `p521_OV_V_pkc_skc`
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 

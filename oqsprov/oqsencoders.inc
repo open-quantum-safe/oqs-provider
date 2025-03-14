@@ -23,24 +23,18 @@
 #define ENCODER_STRUCTURE_PKCS3                   "pkcs3"
 
 /* Arguments are prefixed with '_' to avoid build breaks on certain platforms */
-#define ENCODER_TEXT(_name, _sym)                           \
-    {                                                       \
-        _name, "provider=" ENCODER_PROVIDER ",output=text", \
-            (oqs_##_sym##_to_text_encoder_functions)        \
-    }
-#define ENCODER(_name, _sym, _fips, _output)                     \
-    {                                                            \
-        _name, "provider=" ENCODER_PROVIDER ",output=" #_output, \
-            (oqs_##_sym##_to_##_output##_encoder_functions)      \
-    }
+#define ENCODER_TEXT(_name, _sym)                        \
+    {_name, "provider=" ENCODER_PROVIDER ",output=text", \
+     (oqs_##_sym##_to_text_encoder_functions)}
+#define ENCODER(_name, _sym, _fips, _output)                  \
+    {_name, "provider=" ENCODER_PROVIDER ",output=" #_output, \
+     (oqs_##_sym##_to_##_output##_encoder_functions)}
 
-#define ENCODER_w_structure(_name, _sym, _output, _structure)              \
-    {                                                                      \
-        _name,                                                             \
-            "provider=" ENCODER_PROVIDER ",output=" #_output               \
-            ",structure=" ENCODER_STRUCTURE_##_structure,                  \
-            (oqs_##_sym##_to_##_structure##_##_output##_encoder_functions) \
-    }
+#define ENCODER_w_structure(_name, _sym, _output, _structure) \
+    {_name,                                                   \
+     "provider=" ENCODER_PROVIDER ",output=" #_output         \
+     ",structure=" ENCODER_STRUCTURE_##_structure,            \
+     (oqs_##_sym##_to_##_structure##_##_output##_encoder_functions)}
 
 /*
  * Entries for human text "encoders"
@@ -798,5 +792,69 @@ ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, pem, Encrypted
 ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("CROSSrsdp128balanced", CROSSrsdp128balanced, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT("CROSSrsdp128balanced", CROSSrsdp128balanced),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
+ENCODER_w_structure("OV_Is_pkc", OV_Is_pkc, der, PrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc", OV_Is_pkc, pem, PrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc", OV_Is_pkc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc", OV_Is_pkc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc", OV_Is_pkc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("OV_Is_pkc", OV_Is_pkc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("OV_Is_pkc", OV_Is_pkc),
+ENCODER_w_structure("p256_OV_Is_pkc", p256_OV_Is_pkc, der, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc", p256_OV_Is_pkc, pem, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc", p256_OV_Is_pkc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc", p256_OV_Is_pkc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc", p256_OV_Is_pkc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc", p256_OV_Is_pkc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("p256_OV_Is_pkc", p256_OV_Is_pkc),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
+ENCODER_w_structure("OV_Ip_pkc", OV_Ip_pkc, der, PrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc", OV_Ip_pkc, pem, PrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc", OV_Ip_pkc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc", OV_Ip_pkc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc", OV_Ip_pkc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc", OV_Ip_pkc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("OV_Ip_pkc", OV_Ip_pkc),
+ENCODER_w_structure("p256_OV_Ip_pkc", p256_OV_Ip_pkc, der, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc", p256_OV_Ip_pkc, pem, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc", p256_OV_Ip_pkc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc", p256_OV_Ip_pkc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc", p256_OV_Ip_pkc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc", p256_OV_Ip_pkc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("p256_OV_Ip_pkc", p256_OV_Ip_pkc),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
+ENCODER_w_structure("OV_Is_pkc_skc", OV_Is_pkc_skc, der, PrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc_skc", OV_Is_pkc_skc, pem, PrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc_skc", OV_Is_pkc_skc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc_skc", OV_Is_pkc_skc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Is_pkc_skc", OV_Is_pkc_skc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("OV_Is_pkc_skc", OV_Is_pkc_skc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("OV_Is_pkc_skc", OV_Is_pkc_skc),
+ENCODER_w_structure("p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, der, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, pem, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
+ENCODER_w_structure("OV_Ip_pkc_skc", OV_Ip_pkc_skc, der, PrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc_skc", OV_Ip_pkc_skc, pem, PrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc_skc", OV_Ip_pkc_skc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc_skc", OV_Ip_pkc_skc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc_skc", OV_Ip_pkc_skc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("OV_Ip_pkc_skc", OV_Ip_pkc_skc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("OV_Ip_pkc_skc", OV_Ip_pkc_skc),
+ENCODER_w_structure("p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, der, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, pem, PrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc),
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

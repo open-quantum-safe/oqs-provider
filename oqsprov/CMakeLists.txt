@@ -18,7 +18,12 @@ set(PROVIDER_HEADER_FILES
   oqs_prov.h oqs_endecoder_local.h
 )
 
-set(OQS_LIBRARY_TYPE MODULE)
+if(BUILD_SHARED_LIBS)
+  set(OQS_LIBRARY_TYPE SHARED)
+else()
+  set(OQS_LIBRARY_TYPE MODULE)
+endif()
+
 if(OQS_PROVIDER_BUILD_STATIC)
   set(OQS_LIBRARY_TYPE STATIC)
 endif()
@@ -42,7 +47,7 @@ set_target_properties(oqsprovider
     # For Windows DLLs
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-if (OQS_LIBRARY_TYPE STREQUAL "MODULE")
+if (NOT OQS_LIBRARY_TYPE STREQUAL "STATIC")
   # When openssl looks for provider modules it does not prepend "lib" to the
   # provider name.
   set_target_properties(oqsprovider

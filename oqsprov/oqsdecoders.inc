@@ -20,18 +20,14 @@
 #define DECODER_STRUCTURE_PrivateKeyInfo        "PrivateKeyInfo"
 
 /* Arguments are prefixed with '_' to avoid build breaks on certain platforms */
-#define DECODER(_name, _input, _output)                        \
-    {                                                          \
-        _name, "provider=" DECODER_PROVIDER ",input=" #_input, \
-            (oqs_##_input##_to_##_output##_decoder_functions)  \
-    }
-#define DECODER_w_structure(_name, _input, _structure, _output)              \
-    {                                                                        \
-        _name,                                                               \
-            "provider=" DECODER_PROVIDER ",input=" #_input                   \
-            ",structure=" DECODER_STRUCTURE_##_structure,                    \
-            (oqs_##_structure##_##_input##_to_##_output##_decoder_functions) \
-    }
+#define DECODER(_name, _input, _output)                     \
+    {_name, "provider=" DECODER_PROVIDER ",input=" #_input, \
+     (oqs_##_input##_to_##_output##_decoder_functions)}
+#define DECODER_w_structure(_name, _input, _structure, _output) \
+    {_name,                                                     \
+     "provider=" DECODER_PROVIDER ",input=" #_input             \
+     ",structure=" DECODER_STRUCTURE_##_structure,              \
+     (oqs_##_structure##_##_input##_to_##_output##_decoder_functions)}
 
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_START
 #ifdef OQS_KEM_ENCODERS
@@ -240,5 +236,25 @@ DECODER_w_structure("p521_mayo5", der, SubjectPublicKeyInfo, p521_mayo5),
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
 DECODER_w_structure("CROSSrsdp128balanced", der, PrivateKeyInfo, CROSSrsdp128balanced),
 DECODER_w_structure("CROSSrsdp128balanced", der, SubjectPublicKeyInfo, CROSSrsdp128balanced),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
+DECODER_w_structure("OV_Is_pkc", der, PrivateKeyInfo, OV_Is_pkc),
+DECODER_w_structure("OV_Is_pkc", der, SubjectPublicKeyInfo, OV_Is_pkc),DECODER_w_structure("p256_OV_Is_pkc", der, PrivateKeyInfo, p256_OV_Is_pkc),
+DECODER_w_structure("p256_OV_Is_pkc", der, SubjectPublicKeyInfo, p256_OV_Is_pkc),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
+DECODER_w_structure("OV_Ip_pkc", der, PrivateKeyInfo, OV_Ip_pkc),
+DECODER_w_structure("OV_Ip_pkc", der, SubjectPublicKeyInfo, OV_Ip_pkc),DECODER_w_structure("p256_OV_Ip_pkc", der, PrivateKeyInfo, p256_OV_Ip_pkc),
+DECODER_w_structure("p256_OV_Ip_pkc", der, SubjectPublicKeyInfo, p256_OV_Ip_pkc),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
+DECODER_w_structure("OV_Is_pkc_skc", der, PrivateKeyInfo, OV_Is_pkc_skc),
+DECODER_w_structure("OV_Is_pkc_skc", der, SubjectPublicKeyInfo, OV_Is_pkc_skc),DECODER_w_structure("p256_OV_Is_pkc_skc", der, PrivateKeyInfo, p256_OV_Is_pkc_skc),
+DECODER_w_structure("p256_OV_Is_pkc_skc", der, SubjectPublicKeyInfo, p256_OV_Is_pkc_skc),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
+DECODER_w_structure("OV_Ip_pkc_skc", der, PrivateKeyInfo, OV_Ip_pkc_skc),
+DECODER_w_structure("OV_Ip_pkc_skc", der, SubjectPublicKeyInfo, OV_Ip_pkc_skc),DECODER_w_structure("p256_OV_Ip_pkc_skc", der, PrivateKeyInfo, p256_OV_Ip_pkc_skc),
+DECODER_w_structure("p256_OV_Ip_pkc_skc", der, SubjectPublicKeyInfo, p256_OV_Ip_pkc_skc),
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

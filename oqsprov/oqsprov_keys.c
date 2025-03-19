@@ -53,9 +53,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 93
+#define NID_TABLE_LEN 101
 #else
-#define NID_TABLE_LEN 50
+#define NID_TABLE_LEN 58
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -186,6 +186,16 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "p521_mayo5", OQS_SIG_alg_mayo_5, KEY_TYPE_HYB_SIG, 256},
     {0, "CROSSrsdp128balanced", OQS_SIG_alg_cross_rsdp_128_balanced,
      KEY_TYPE_SIG, 128},
+    {0, "OV_Is_pkc", OQS_SIG_alg_uov_ov_Is_pkc, KEY_TYPE_SIG, 128},
+    {0, "p256_OV_Is_pkc", OQS_SIG_alg_uov_ov_Is_pkc, KEY_TYPE_HYB_SIG, 128},
+    {0, "OV_Ip_pkc", OQS_SIG_alg_uov_ov_Ip_pkc, KEY_TYPE_SIG, 128},
+    {0, "p256_OV_Ip_pkc", OQS_SIG_alg_uov_ov_Ip_pkc, KEY_TYPE_HYB_SIG, 128},
+    {0, "OV_Is_pkc_skc", OQS_SIG_alg_uov_ov_Is_pkc_skc, KEY_TYPE_SIG, 128},
+    {0, "p256_OV_Is_pkc_skc", OQS_SIG_alg_uov_ov_Is_pkc_skc, KEY_TYPE_HYB_SIG,
+     128},
+    {0, "OV_Ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_SIG, 128},
+    {0, "p256_OV_Ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_HYB_SIG,
+     128},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };
 

@@ -265,6 +265,10 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     {0xfef3, 128, TLS1_3_VERSION, 0}, {0xfef0, 192, TLS1_3_VERSION, 0},
     {0xfef4, 192, TLS1_3_VERSION, 0}, {0xfef1, 256, TLS1_3_VERSION, 0},
     {0xfef5, 256, TLS1_3_VERSION, 0}, {0xfef6, 128, TLS1_3_VERSION, 0},
+    {0xff0e, 128, TLS1_3_VERSION, 0}, {0xff1a, 128, TLS1_3_VERSION, 0},
+    {0xff0f, 128, TLS1_3_VERSION, 0}, {0xff1b, 128, TLS1_3_VERSION, 0},
+    {0xff12, 128, TLS1_3_VERSION, 0}, {0xff1e, 128, TLS1_3_VERSION, 0},
+    {0xff13, 128, TLS1_3_VERSION, 0}, {0xff1f, 128, TLS1_3_VERSION, 0},
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 
@@ -524,6 +528,30 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED"))
         oqs_sigalg_list[49].code_point =
             atoi(getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED"));
+    if (getenv("OQS_CODEPOINT_OV_IS_PKC"))
+        oqs_sigalg_list[50].code_point =
+            atoi(getenv("OQS_CODEPOINT_OV_IS_PKC"));
+    if (getenv("OQS_CODEPOINT_P256_OV_IS_PKC"))
+        oqs_sigalg_list[51].code_point =
+            atoi(getenv("OQS_CODEPOINT_P256_OV_IS_PKC"));
+    if (getenv("OQS_CODEPOINT_OV_IP_PKC"))
+        oqs_sigalg_list[52].code_point =
+            atoi(getenv("OQS_CODEPOINT_OV_IP_PKC"));
+    if (getenv("OQS_CODEPOINT_P256_OV_IP_PKC"))
+        oqs_sigalg_list[53].code_point =
+            atoi(getenv("OQS_CODEPOINT_P256_OV_IP_PKC"));
+    if (getenv("OQS_CODEPOINT_OV_IS_PKC_SKC"))
+        oqs_sigalg_list[54].code_point =
+            atoi(getenv("OQS_CODEPOINT_OV_IS_PKC_SKC"));
+    if (getenv("OQS_CODEPOINT_P256_OV_IS_PKC_SKC"))
+        oqs_sigalg_list[55].code_point =
+            atoi(getenv("OQS_CODEPOINT_P256_OV_IS_PKC_SKC"));
+    if (getenv("OQS_CODEPOINT_OV_IP_PKC_SKC"))
+        oqs_sigalg_list[56].code_point =
+            atoi(getenv("OQS_CODEPOINT_OV_IP_PKC_SKC"));
+    if (getenv("OQS_CODEPOINT_P256_OV_IP_PKC_SKC"))
+        oqs_sigalg_list[57].code_point =
+            atoi(getenv("OQS_CODEPOINT_P256_OV_IP_PKC_SKC"));
     ///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
     return 1;
 }
@@ -687,6 +715,28 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
     OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
                      CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1", 49),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
+    OQS_SIGALG_ENTRY(OV_Is_pkc, OV_Is_pkc, OV_Is_pkc, "1.3.9999.9.5.1", 50),
+    OQS_SIGALG_ENTRY(p256_OV_Is_pkc, p256_OV_Is_pkc, p256_OV_Is_pkc,
+                     "1.3.9999.9.5.2", 51),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
+    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 52),
+    OQS_SIGALG_ENTRY(p256_OV_Ip_pkc, p256_OV_Ip_pkc, p256_OV_Ip_pkc,
+                     "1.3.9999.9.6.2", 53),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
+    OQS_SIGALG_ENTRY(OV_Is_pkc_skc, OV_Is_pkc_skc, OV_Is_pkc_skc,
+                     "1.3.9999.9.9.1", 54),
+    OQS_SIGALG_ENTRY(p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc,
+                     "1.3.9999.9.9.2", 55),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
+    OQS_SIGALG_ENTRY(OV_Ip_pkc_skc, OV_Ip_pkc_skc, OV_Ip_pkc_skc,
+                     "1.3.9999.9.10.1", 56),
+    OQS_SIGALG_ENTRY(p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc,
+                     "1.3.9999.9.10.2", 57),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

@@ -448,7 +448,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xff32
+# Next free signature ID: 0xff3a
 sigs:
   # -
     # iso (1)
@@ -1542,46 +1542,46 @@ sigs:
         name: 'mayo1'
         pretty_name: 'MAYO-1'
         oqs_meth: 'OQS_SIG_alg_mayo_1'
-        oid: '1.3.9999.8.1.1'
-        code_point: '0xfeee'
+        oid: '1.3.9999.8.1.3'
+        code_point: '0xff32'
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.8.1.2',
-                    'code_point': '0xfef2'}]
+                    'oid': '1.3.9999.8.1.4',
+                    'code_point': '0xff36'}]
       -
         name: 'mayo2'
         pretty_name: 'MAYO-2'
         oqs_meth: 'OQS_SIG_alg_mayo_2'
-        oid: '1.3.9999.8.2.1'
-        code_point: '0xfeef'
+        oid: '1.3.9999.8.2.3'
+        code_point: '0xff33'
         enable: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.8.2.2',
-                    'code_point': '0xfef3'}]
+                    'oid': '1.3.9999.8.2.4',
+                    'code_point': '0xff37'}]
       -
         name: 'mayo3'
         pretty_name: 'MAYO-3'
         oqs_meth: 'OQS_SIG_alg_mayo_3'
-        oid: '1.3.9999.8.3.1'
-        code_point: '0xfef0'
+        oid: '1.3.9999.8.3.3'
+        code_point: '0xff34'
         enable: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.8.3.2',
-                    'code_point': '0xfef4'}]
+                    'oid': '1.3.9999.8.3.4',
+                    'code_point': '0xff38'}]
       -
         name: 'mayo5'
         pretty_name: 'MAYO-5'
         oqs_meth: 'OQS_SIG_alg_mayo_5'
-        oid: '1.3.9999.8.5.1'
-        code_point: '0xfef1'
+        oid: '1.3.9999.8.5.3'
+        code_point: '0xff35'
         enable: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.8.5.2',
-                    'code_point': '0xfef5'}]
+                    'oid': '1.3.9999.8.5.4',
+                    'code_point': '0xff39'}]
   -
     family: 'CROSS'
     variants:

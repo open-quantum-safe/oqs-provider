@@ -260,11 +260,11 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     {0xfeb7, 128, TLS1_3_VERSION, 0}, {0xfeb8, 128, TLS1_3_VERSION, 0},
     {0xfeb9, 192, TLS1_3_VERSION, 0}, {0xfeba, 192, TLS1_3_VERSION, 0},
     {0xfec2, 128, TLS1_3_VERSION, 0}, {0xfec3, 128, TLS1_3_VERSION, 0},
-    {0xfec4, 128, TLS1_3_VERSION, 0}, {0xfeee, 128, TLS1_3_VERSION, 0},
-    {0xfef2, 128, TLS1_3_VERSION, 0}, {0xfeef, 128, TLS1_3_VERSION, 0},
-    {0xfef3, 128, TLS1_3_VERSION, 0}, {0xfef0, 192, TLS1_3_VERSION, 0},
-    {0xfef4, 192, TLS1_3_VERSION, 0}, {0xfef1, 256, TLS1_3_VERSION, 0},
-    {0xfef5, 256, TLS1_3_VERSION, 0}, {0xff22, 128, TLS1_3_VERSION, 0},
+    {0xfec4, 128, TLS1_3_VERSION, 0}, {0xff32, 128, TLS1_3_VERSION, 0},
+    {0xff36, 128, TLS1_3_VERSION, 0}, {0xff33, 128, TLS1_3_VERSION, 0},
+    {0xff37, 128, TLS1_3_VERSION, 0}, {0xff34, 192, TLS1_3_VERSION, 0},
+    {0xff38, 192, TLS1_3_VERSION, 0}, {0xff35, 256, TLS1_3_VERSION, 0},
+    {0xff39, 256, TLS1_3_VERSION, 0}, {0xff22, 128, TLS1_3_VERSION, 0},
     {0xff0e, 128, TLS1_3_VERSION, 0}, {0xff1a, 128, TLS1_3_VERSION, 0},
     {0xff0f, 128, TLS1_3_VERSION, 0}, {0xff1b, 128, TLS1_3_VERSION, 0},
     {0xff12, 128, TLS1_3_VERSION, 0}, {0xff1e, 128, TLS1_3_VERSION, 0},
@@ -697,20 +697,20 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
                      rsa3072_sphincsshake128fsimple, "1.3.9999.6.7.15", 40),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_1
-    OQS_SIGALG_ENTRY(mayo1, mayo1, mayo1, "1.3.9999.8.1.1", 41),
-    OQS_SIGALG_ENTRY(p256_mayo1, p256_mayo1, p256_mayo1, "1.3.9999.8.1.2", 42),
+    OQS_SIGALG_ENTRY(mayo1, mayo1, mayo1, "1.3.9999.8.1.3", 41),
+    OQS_SIGALG_ENTRY(p256_mayo1, p256_mayo1, p256_mayo1, "1.3.9999.8.1.4", 42),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_2
-    OQS_SIGALG_ENTRY(mayo2, mayo2, mayo2, "1.3.9999.8.2.1", 43),
-    OQS_SIGALG_ENTRY(p256_mayo2, p256_mayo2, p256_mayo2, "1.3.9999.8.2.2", 44),
+    OQS_SIGALG_ENTRY(mayo2, mayo2, mayo2, "1.3.9999.8.2.3", 43),
+    OQS_SIGALG_ENTRY(p256_mayo2, p256_mayo2, p256_mayo2, "1.3.9999.8.2.4", 44),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_3
-    OQS_SIGALG_ENTRY(mayo3, mayo3, mayo3, "1.3.9999.8.3.1", 45),
-    OQS_SIGALG_ENTRY(p384_mayo3, p384_mayo3, p384_mayo3, "1.3.9999.8.3.2", 46),
+    OQS_SIGALG_ENTRY(mayo3, mayo3, mayo3, "1.3.9999.8.3.3", 45),
+    OQS_SIGALG_ENTRY(p384_mayo3, p384_mayo3, p384_mayo3, "1.3.9999.8.3.4", 46),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_5
-    OQS_SIGALG_ENTRY(mayo5, mayo5, mayo5, "1.3.9999.8.5.1", 47),
-    OQS_SIGALG_ENTRY(p521_mayo5, p521_mayo5, p521_mayo5, "1.3.9999.8.5.2", 48),
+    OQS_SIGALG_ENTRY(mayo5, mayo5, mayo5, "1.3.9999.8.5.3", 47),
+    OQS_SIGALG_ENTRY(p521_mayo5, p521_mayo5, p521_mayo5, "1.3.9999.8.5.4", 48),
 #endif
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
     OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,

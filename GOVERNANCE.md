@@ -97,6 +97,7 @@ Votes are to be executed by way of open GitHub discussions. No quorum is needed 
 ### Maintainers
 
 @baentsch
+@ashman-p
 
 ### Committers
 
@@ -104,6 +105,7 @@ Votes are to be executed by way of open GitHub discussions. No quorum is needed 
 @bhess
 @zadlg
 @christianpaquin
+@ashman-p
 
 ## Afterword
 

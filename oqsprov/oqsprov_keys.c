@@ -53,7 +53,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 101
+#define NID_TABLE_LEN 90
 #else
 #define NID_TABLE_LEN 58
 #endif
@@ -103,22 +103,11 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      0},
     {0, "SecP384r1MLKEM1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM,
      256, 0},
-    {0, "bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_KEM, 128, 0},
-    {0, "p256_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECP_HYB_KEM, 128, 0},
-    {0, "x25519_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECX_HYB_KEM, 128, 0},
     {0, "bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_KEM, 192, 0},
     {0, "p384_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECP_HYB_KEM, 192, 0},
     {0, "x448_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECX_HYB_KEM, 192, 0},
     {0, "bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_KEM, 256, 0},
     {0, "p521_bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_ECP_HYB_KEM, 256, 0},
-    {0, "hqc128", OQS_KEM_alg_hqc_128, KEY_TYPE_KEM, 128, 0},
-    {0, "p256_hqc128", OQS_KEM_alg_hqc_128, KEY_TYPE_ECP_HYB_KEM, 128, 0},
-    {0, "x25519_hqc128", OQS_KEM_alg_hqc_128, KEY_TYPE_ECX_HYB_KEM, 128, 0},
-    {0, "hqc192", OQS_KEM_alg_hqc_192, KEY_TYPE_KEM, 192, 0},
-    {0, "p384_hqc192", OQS_KEM_alg_hqc_192, KEY_TYPE_ECP_HYB_KEM, 192, 0},
-    {0, "x448_hqc192", OQS_KEM_alg_hqc_192, KEY_TYPE_ECX_HYB_KEM, 192, 0},
-    {0, "hqc256", OQS_KEM_alg_hqc_256, KEY_TYPE_KEM, 256, 0},
-    {0, "p521_hqc256", OQS_KEM_alg_hqc_256, KEY_TYPE_ECP_HYB_KEM, 256, 0},
 
 #endif /* OQS_KEM_ENCODERS */
     {0, "mldsa44", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_SIG, 128},

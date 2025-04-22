@@ -613,13 +613,6 @@ MAKE_DECODER(_ecp, "SecP384r1MLKEM1024", SecP384r1MLKEM1024, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(_ecp, "SecP384r1MLKEM1024", SecP384r1MLKEM1024, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "bikel1", bikel1, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "bikel1", bikel1, oqsx, SubjectPublicKeyInfo);
-
-MAKE_DECODER(_ecp, "p256_bikel1", p256_bikel1, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p256_bikel1", p256_bikel1, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(_ecx, "x25519_bikel1", x25519_bikel1, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_bikel1", x25519_bikel1, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "bikel3", bikel3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "bikel3", bikel3, oqsx, SubjectPublicKeyInfo);
 
@@ -632,25 +625,6 @@ MAKE_DECODER(, "bikel5", bikel5, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p521_bikel5", p521_bikel5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p521_bikel5", p521_bikel5, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "hqc128", hqc128, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "hqc128", hqc128, oqsx, SubjectPublicKeyInfo);
-
-MAKE_DECODER(_ecp, "p256_hqc128", p256_hqc128, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p256_hqc128", p256_hqc128, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(_ecx, "x25519_hqc128", x25519_hqc128, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x25519_hqc128", x25519_hqc128, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "hqc192", hqc192, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "hqc192", hqc192, oqsx, SubjectPublicKeyInfo);
-
-MAKE_DECODER(_ecp, "p384_hqc192", p384_hqc192, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p384_hqc192", p384_hqc192, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(_ecx, "x448_hqc192", x448_hqc192, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "x448_hqc192", x448_hqc192, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "hqc256", hqc256, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "hqc256", hqc256, oqsx, SubjectPublicKeyInfo);
-
-MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecp, "p521_hqc256", p521_hqc256, oqsx, SubjectPublicKeyInfo);
 #endif /* OQS_KEM_ENCODERS */
 
 MAKE_DECODER(, "mldsa44", mldsa44, oqsx, PrivateKeyInfo);

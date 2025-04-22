@@ -654,27 +654,16 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
                      CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2", 49),
 #endif
-#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
-    OQS_SIGALG_ENTRY(OV_Is_pkc, OV_Is_pkc, OV_Is_pkc, "1.3.9999.9.5.1", 50),
-    OQS_SIGALG_ENTRY(p256_OV_Is_pkc, p256_OV_Is_pkc, p256_OV_Is_pkc,
-                     "1.3.9999.9.5.2", 51),
-#endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
-    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 52),
+    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 50),
     OQS_SIGALG_ENTRY(p256_OV_Ip_pkc, p256_OV_Ip_pkc, p256_OV_Ip_pkc,
-                     "1.3.9999.9.6.2", 53),
-#endif
-#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
-    OQS_SIGALG_ENTRY(OV_Is_pkc_skc, OV_Is_pkc_skc, OV_Is_pkc_skc,
-                     "1.3.9999.9.9.1", 54),
-    OQS_SIGALG_ENTRY(p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc,
-                     "1.3.9999.9.9.2", 55),
+                     "1.3.9999.9.6.2", 51),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
     OQS_SIGALG_ENTRY(OV_Ip_pkc_skc, OV_Ip_pkc_skc, OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.1", 56),
+                     "1.3.9999.9.10.1", 52),
     OQS_SIGALG_ENTRY(p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.2", 57),
+                     "1.3.9999.9.10.2", 53),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

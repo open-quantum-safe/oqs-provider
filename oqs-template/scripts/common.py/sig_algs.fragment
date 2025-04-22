@@ -1,19 +1,28 @@
 
     # post-quantum signatures
-    {% for sig in config['sigs'] %}{% for variant in sig['variants'] %}'{{ variant['name'] }}',
-    {%- endfor %} {%- endfor %}
+    {% for sig in config['sigs'] %}
+        {%- for variant in sig['variants'] -%}
+            {%- if 'enable_tls' in variant and variant['enable_tls'] -%}
+                '{{ variant['name'] }}',
+            {%- endif -%}
+        {%- endfor -%} 
+    {%- endfor %}
     # post-quantum + classical signatures
     {% for sig in config['sigs'] -%}
         {%- for variant in sig['variants'] -%}
-            {%- for classical_alg in variant['mix_with'] -%}
-            '{{ classical_alg['name'] }}_{{ variant['name'] }}',
-            {%- endfor -%}
+            {%- if 'enable_tls' in variant and variant['enable_tls'] -%}
+                {%- for classical_alg in variant['mix_with'] -%}
+                    '{{ classical_alg['name'] }}_{{ variant['name'] }}',
+                {%- endfor -%}
+            {%- endif -%}
     {%- endfor %} {%- endfor %}
     # post-quantum + classical signatures (COMPOSITE)
     {% for sig in config['sigs'] -%}
         {%- for variant in sig['variants'] -%}
-            {%- for composite_alg in variant['composite'] -%}
-            '{{ variant['name'] }}_{{ composite_alg['name'] }}',
-            {%- endfor -%}
+            {%- if 'enable_tls' in variant and variant['enable_tls'] -%}
+                {%- for composite_alg in variant['composite'] -%}
+                    '{{ variant['name'] }}_{{ composite_alg['name'] }}',
+                {%- endfor -%}
+            {%- endif -%}
     {%- endfor %} {%- endfor %}
 

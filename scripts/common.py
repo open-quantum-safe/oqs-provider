@@ -3,8 +3,9 @@ import subprocess
 import pathlib
 import psutil
 import time
+from packaging.version import Version
 
-key_exchanges = [
+key_exchanges_oqs = [
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_START
     # post-quantum key exchanges
     'frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','mlkem512','mlkem768','mlkem1024','bikel3','bikel5',
@@ -12,7 +13,7 @@ key_exchanges = [
     'p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p256_mlkem512','x25519_mlkem512','p384_mlkem768','x448_mlkem768','X25519MLKEM768','SecP256r1MLKEM768','p521_mlkem1024','SecP384r1MLKEM1024','p384_bikel3','x448_bikel3','p521_bikel5',
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_END
 ]
-signatures = [
+signatures_oqs = [
     'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
@@ -23,6 +24,22 @@ signatures = [
     'mldsa44_pss2048','mldsa44_rsa2048','mldsa44_ed25519','mldsa44_p256','mldsa44_bp256','mldsa65_pss3072','mldsa65_rsa3072','mldsa65_p256','mldsa65_bp256','mldsa65_ed25519','mldsa87_p384','mldsa87_bp384','mldsa87_ed448',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
+
+key_exchanges_ossl = ['mlkem512','mlkem768','mlkem1024', 'X25519MLKEM768','SecP256r1MLKEM768', 'SecP384r1MLKEM1024']
+
+signatures_ossl = ['mldsa44', 'mldsa56', 'mldsa87', 'mldsa44_pss2048','mldsa44_rsa2048','mldsa44_ed25519','mldsa44_p256','mldsa44_bp256','mldsa65_pss3072','mldsa65_rsa3072','mldsa65_p256','mldsa65_bp256','mldsa65_ed25519','mldsa87_p384','mldsa87_bp384','mldsa87_ed448']
+
+key_exchanges = [kex for kex in key_exchanges_oqs if kex not in key_exchanges_ossl]
+signatures = [sig for sig in signatures_oqs if sig not in signatures_ossl]
+
+def set_kex_sig(ossl):
+    # Get OpenSSL version
+    result = subprocess.run([ossl, "--version"], capture_output=True, text=True, check=True)
+    ver_str = result.stdout.split()[1]
+    if Version(ver_str) < Version("3.5.0"):
+        key_exchanges = key_exchanges_oqs
+        signatures = signatures_oqs
+
 
 SERVER_START_ATTEMPTS = 10
 

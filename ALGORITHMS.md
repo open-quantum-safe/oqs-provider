@@ -7,6 +7,8 @@ Some algorithms by default may not be enabled for use in the master code-generat
 
 As standardization for these algorithms within TLS is not done, all TLS code points/IDs can be changed from their default values to values set by environment variables. This facilitates interoperability testing with TLS1.3 implementations that use different IDs.
 
+The following list of algorithms may change when loading oqsprovider (version >= 0.9.0) with OpenSSL (version >= 3.5.0); please see [README.md](README.md#using-with-openssl-3.5.0).
+
 # Code points / algorithm IDs
 
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_START -->

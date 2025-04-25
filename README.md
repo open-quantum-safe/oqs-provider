@@ -79,6 +79,42 @@ A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are
 documented in [ALGORITHMS.md](ALGORITHMS.md).
 
+## Using with OpenSSL 3.5.0 
+
+OpenSSL version 3.5.0 adds native support for:
+
+-**ML-KEM**: `MLKEM512`, `MLKEM768`, `MLKEM1024`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `X448MLKEM1024`, `SecP384r1MLKEM1024`
+
+-**ML-DSA**: `MLDSA44`, `MLDSA65`, `MLDSA87`
+
+When loaded with OpenSSL (version >= 3.5.0), oqsprovider (version >= 0.9.0) automatically disables the following liboqs algorithms: 
+
+-**ML-DSA**: `mldsa44`, `mldsa65`, `mldsa87`, `mldsa_*`
+
+-**ML-KEM**: `mlkem512`, `mlkem768`, `mlkem1024`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `X448MLKEM1024`, `SecP384r1MLKEM1024`
+
+Please note the inclusion of composite signature algorithms `mldsa_*` (`mldsa44_pss2048`, `mldsa44_rsa2048`, `mldsa44_ed25519`, `mldsa44_p256`, `mldsa44_bp256`, `mldsa65_pss3072`, `mldsa65_rsa3072`, `mldsa65_p256`, `mldsa65_bp256`, `mldsa65_ed25519`, `mldsa87_p384`, `mldsa87_bp384`, and `mldsa87_ed448`) in the list of algorithms disabled by this oqsprovider configuration (OpenSSL >= 3.5.0 and oqsprovider >= 0.9.0) even though OpenSSL does not provide alternate implementations.
+
+The new OpenSSL implementations can be be used in such a oqsprovider configuration (OpenSSL >= 3.5.0 and oqsprovider >= 0.9.0) by accessing them through the following algorithm IDs: 
+
+-**ML-DSA**:
+```
+2.16.840.1.101.3.4.3.17, id-ml-dsa-44, ML-DSA-44, MLDSA44
+2.16.840.1.101.3.4.3.18, id-ml-dsa-65, ML-DSA-65, MLDSA65
+2.16.840.1.101.3.4.3.19, id-ml-dsa-87, ML-DSA-87, MLDSA87
+```
+
+-**ML_KEM**: 
+```
+2.16.840.1.101.3.4.4.1, id-alg-ml-kem-512, ML-KEM-512, MLKEM512
+2.16.840.1.101.3.4.4.2, id-alg-ml-kem-768, ML-KEM-768, MLKEM768
+2.16.840.1.101.3.4.4.3, id-alg-ml-kem-1024, ML-KEM-1024, MLKEM1024
+X25519MLKEM768
+X448MLKEM1024
+SecP256r1MLKEM768
+SecP384r1MLKEM1024
+```
+
 Building and testing -- Quick start
 -----------------------------------
 

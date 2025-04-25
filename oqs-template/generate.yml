@@ -1692,7 +1692,7 @@ sigs:
         oid: '1.3.6.1.4.1.62245.2.1.9.2'
         code_point: '0xff28'
         enable: false
-        enable_tls: true
+        enable_tls: false
       # RSDPG 128
       -
         name: 'CROSSrsdpg128balanced'

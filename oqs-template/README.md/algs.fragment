@@ -10,9 +10,10 @@
 - **{{ sig['family'] }}**:
     {%- for variant in sig['variants'] -%}
 `{{ variant['name'] }}`
-{%- if variant['enable'] -%} \* {%- endif -%}
-{%- for classical_alg in variant['mix_with'] -%} , `{{ classical_alg['name']}}_{{ variant['name'] }}`{%- if variant['enable'] -%} \*  {%- endif -%}{%- endfor -%}
-{%- for composite_alg in variant['composite'] -%} , `{{ variant['name'] }}_{{ composite_alg['name']}}`{%- if variant['enable'] -%} \*  {%- endif -%}{%- endfor -%}
+{%- if not variant['enable'] and variant['enable_tls'] -%} \* {%- endif -%}
+{%- if not variant['enable_tls'] -%} \*\* {%- endif -%}
+{%- for classical_alg in variant['mix_with'] -%} , `{{ classical_alg['name']}}_{{ variant['name'] }}`{%- if not variant['enable'] and variant['enable_tls'] -%} \* {%- endif -%}{%- if not variant['enable_tls'] -%} \*\* {%- endif -%}{%- endfor -%}
+{%- for composite_alg in variant['composite'] -%} , `{{ variant['name'] }}_{{ composite_alg['name']}}`{%- if not variant['enable'] and variant['enable_tls'] -%} \* {%- endif -%}{%- if not variant['enable_tls'] -%} \*\* {%- endif -%}{%- endfor -%}
 {%- if not loop.last %}, {% endif -%}
     {%- endfor -%}
 {%- endif -%}

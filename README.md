@@ -44,14 +44,14 @@ This implementation makes available the following quantum safe algorithms:
 ### Signature algorithms
 
 
-- **ML-DSA**:`mldsa44`\*, `p256_mldsa44`\*, `rsa3072_mldsa44`\*, `mldsa44_pss2048`\*, `mldsa44_rsa2048`\*, `mldsa44_ed25519`\*, `mldsa44_p256`\*, `mldsa44_bp256`\*, `mldsa65`\*, `p384_mldsa65`\*, `mldsa65_pss3072`\*, `mldsa65_rsa3072`\*, `mldsa65_p256`\*, `mldsa65_bp256`\*, `mldsa65_ed25519`\*, `mldsa87`\*, `p521_mldsa87`\*, `mldsa87_p384`\*, `mldsa87_bp384`\*, `mldsa87_ed448`\*
-- **Falcon**:`falcon512`\*, `p256_falcon512`\*, `rsa3072_falcon512`\*, `falconpadded512`\*, `p256_falconpadded512`\*, `rsa3072_falconpadded512`\*, `falcon1024`\*, `p521_falcon1024`\*, `falconpadded1024`\*, `p521_falconpadded1024`\*
+- **ML-DSA**:`mldsa44`, `p256_mldsa44`, `rsa3072_mldsa44`, `mldsa44_pss2048`, `mldsa44_rsa2048`, `mldsa44_ed25519`, `mldsa44_p256`, `mldsa44_bp256`, `mldsa65`, `p384_mldsa65`, `mldsa65_pss3072`, `mldsa65_rsa3072`, `mldsa65_p256`, `mldsa65_bp256`, `mldsa65_ed25519`, `mldsa87`, `p521_mldsa87`, `mldsa87_p384`, `mldsa87_bp384`, `mldsa87_ed448`
+- **Falcon**:`falcon512`, `p256_falcon512`, `rsa3072_falcon512`, `falconpadded512`, `p256_falconpadded512`, `rsa3072_falconpadded512`, `falcon1024`, `p521_falcon1024`, `falconpadded1024`, `p521_falconpadded1024`
 
-- **SPHINCS-SHA2**:`sphincssha2128fsimple`\*, `p256_sphincssha2128fsimple`\*, `rsa3072_sphincssha2128fsimple`\*, `sphincssha2128ssimple`\*, `p256_sphincssha2128ssimple`\*, `rsa3072_sphincssha2128ssimple`\*, `sphincssha2192fsimple`\*, `p384_sphincssha2192fsimple`\*, `sphincssha2192ssimple`, `p384_sphincssha2192ssimple`, `sphincssha2256fsimple`, `p521_sphincssha2256fsimple`, `sphincssha2256ssimple`, `p521_sphincssha2256ssimple`
-- **SPHINCS-SHAKE**:`sphincsshake128fsimple`\*, `p256_sphincsshake128fsimple`\*, `rsa3072_sphincsshake128fsimple`\*, `sphincsshake128ssimple`, `p256_sphincsshake128ssimple`, `rsa3072_sphincsshake128ssimple`, `sphincsshake192fsimple`, `p384_sphincsshake192fsimple`, `sphincsshake192ssimple`, `p384_sphincsshake192ssimple`, `sphincsshake256fsimple`, `p521_sphincsshake256fsimple`, `sphincsshake256ssimple`, `p521_sphincsshake256ssimple`
-- **MAYO**:`mayo1`\*, `p256_mayo1`\*, `mayo2`\*, `p256_mayo2`\*, `mayo3`\*, `p384_mayo3`\*, `mayo5`\*, `p521_mayo5`\*
-- **CROSS**:`CROSSrsdp128balanced`\*, `CROSSrsdp128fast`, `CROSSrsdp128small`, `CROSSrsdp192balanced`, `CROSSrsdp192fast`, `CROSSrsdp192small`, `CROSSrsdp256small`, `CROSSrsdpg128balanced`, `CROSSrsdpg128fast`, `CROSSrsdpg128small`, `CROSSrsdpg192balanced`, `CROSSrsdpg192fast`, `CROSSrsdpg192small`, `CROSSrsdpg256balanced`, `CROSSrsdpg256fast`, `CROSSrsdpg256small`
-- **UOV**:`OV_Is`, `p256_OV_Is`, `OV_Ip`, `p256_OV_Ip`, `OV_III`, `p384_OV_III`, `OV_V`, `p521_OV_V`, `OV_Is_pkc`\*, `p256_OV_Is_pkc`\*, `OV_Ip_pkc`\*, `p256_OV_Ip_pkc`\*, `OV_III_pkc`, `p384_OV_III_pkc`, `OV_V_pkc`, `p521_OV_V_pkc`, `OV_Is_pkc_skc`\*, `p256_OV_Is_pkc_skc`\*, `OV_Ip_pkc_skc`\*, `p256_OV_Ip_pkc_skc`\*, `OV_III_pkc_skc`, `p384_OV_III_pkc_skc`, `OV_V_pkc_skc`, `p521_OV_V_pkc_skc`
+- **SPHINCS-SHA2**:`sphincssha2128fsimple`, `p256_sphincssha2128fsimple`, `rsa3072_sphincssha2128fsimple`, `sphincssha2128ssimple`, `p256_sphincssha2128ssimple`, `rsa3072_sphincssha2128ssimple`, `sphincssha2192fsimple`, `p384_sphincssha2192fsimple`, `sphincssha2192ssimple`\*, `p384_sphincssha2192ssimple`\*, `sphincssha2256fsimple`\*, `p521_sphincssha2256fsimple`\*, `sphincssha2256ssimple`\*, `p521_sphincssha2256ssimple`\*
+- **SPHINCS-SHAKE**:`sphincsshake128fsimple`, `p256_sphincsshake128fsimple`, `rsa3072_sphincsshake128fsimple`, `sphincsshake128ssimple`\*, `p256_sphincsshake128ssimple`\*, `rsa3072_sphincsshake128ssimple`\*, `sphincsshake192fsimple`\*, `p384_sphincsshake192fsimple`\*, `sphincsshake192ssimple`\*, `p384_sphincsshake192ssimple`\*, `sphincsshake256fsimple`\*, `p521_sphincsshake256fsimple`\*, `sphincsshake256ssimple`\*, `p521_sphincsshake256ssimple`\*
+- **MAYO**:`mayo1`, `p256_mayo1`, `mayo2`, `p256_mayo2`, `mayo3`, `p384_mayo3`, `mayo5`, `p521_mayo5`
+- **CROSS**:`CROSSrsdp128balanced`, `CROSSrsdp128fast`\*, `CROSSrsdp128small`\*, `CROSSrsdp192balanced`\*, `CROSSrsdp192fast`\*, `CROSSrsdp192small`\*, `CROSSrsdp256small`\*\*, `CROSSrsdpg128balanced`\*, `CROSSrsdpg128fast`\*, `CROSSrsdpg128small`\*, `CROSSrsdpg192balanced`\*, `CROSSrsdpg192fast`\*, `CROSSrsdpg192small`\*, `CROSSrsdpg256balanced`\*, `CROSSrsdpg256fast`\*, `CROSSrsdpg256small`\*
+- **UOV**:`OV_Is`\*\*, `p256_OV_Is`\*\*, `OV_Ip`\*\*, `p256_OV_Ip`\*\*, `OV_III`\*\*, `p384_OV_III`\*\*, `OV_V`\*\*, `p521_OV_V`\*\*, `OV_Is_pkc`\*\*, `p256_OV_Is_pkc`\*\*, `OV_Ip_pkc`, `p256_OV_Ip_pkc`, `OV_III_pkc`\*\*, `p384_OV_III_pkc`\*\*, `OV_V_pkc`\*\*, `p521_OV_V_pkc`\*\*, `OV_Is_pkc_skc`\*\*, `p256_OV_Is_pkc_skc`\*\*, `OV_Ip_pkc_skc`, `p256_OV_Ip_pkc_skc`, `OV_III_pkc_skc`\*\*, `p384_OV_III_pkc_skc`\*\*, `OV_V_pkc_skc`\*\*, `p521_OV_V_pkc_skc`\*\*
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 
@@ -63,9 +63,10 @@ enabled via the standard commands, i.e.,
 `openssl list -signature-algorithms -provider oqsprovider` and
 `openssl list -kem-algorithms -provider oqsprovider`.
 
-In addition, algorithms not denoted with "\*" above are not enabled for
-TLS operations. This designation [can be changed by modifying the
-"enabled" flags in the main algorithm configuration file](CONFIGURE.md#pre-build-configuration).
+In addition, the above algorithms that ARE NOT denoted with either "\*" or "\*\*" ARE enabled for TLS operations.
+The above algorithms that ARE denoted with "\*" ARE NOT enabled for
+TLS operations; this [can be changed by modifying the
+"enabled" flags in the main algorithm configuration file](CONFIGURE.md#pre-build-configuration). The above algorithms that ARE denoted with "\*\*" ARE NOT enabled; this cannot be changed as these algorithms are incompatible with with [RFC 8446](https://datatracker.ietf.org/doc/html/rfc8446).
 
 In order to support parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic

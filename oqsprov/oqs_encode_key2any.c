@@ -1056,6 +1056,16 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define SecP384r1MLKEM1024_evp_type 0
 #define SecP384r1MLKEM1024_input_type "SecP384r1MLKEM1024"
 #define SecP384r1MLKEM1024_pem_type "SecP384r1MLKEM1024"
+#define bikel1_evp_type 0
+#define bikel1_input_type "bikel1"
+#define bikel1_pem_type "bikel1"
+
+#define p256_bikel1_evp_type 0
+#define p256_bikel1_input_type "p256_bikel1"
+#define p256_bikel1_pem_type "p256_bikel1"
+#define x25519_bikel1_evp_type 0
+#define x25519_bikel1_input_type "x25519_bikel1"
+#define x25519_bikel1_pem_type "x25519_bikel1"
 #define bikel3_evp_type 0
 #define bikel3_input_type "bikel3"
 #define bikel3_pem_type "bikel3"
@@ -2093,6 +2103,28 @@ MAKE_ENCODER(_ecp, SecP384r1MLKEM1024, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecp, SecP384r1MLKEM1024, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecp, SecP384r1MLKEM1024, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecp, SecP384r1MLKEM1024);
+MAKE_ENCODER(, bikel1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, bikel1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, bikel1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, bikel1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, bikel1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, bikel1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, bikel1);
+
+MAKE_ENCODER(_ecp, p256_bikel1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_bikel1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p256_bikel1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_bikel1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p256_bikel1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_bikel1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p256_bikel1);
+MAKE_ENCODER(_ecx, x25519_bikel1, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_bikel1, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x25519_bikel1, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_bikel1, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x25519_bikel1, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_bikel1, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecx, x25519_bikel1);
 MAKE_ENCODER(, bikel3, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, bikel3, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, bikel3, oqsx, PrivateKeyInfo, der);

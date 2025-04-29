@@ -289,6 +289,7 @@ kems:
     nid: '0x0241'
     nid_hybrid: '0x2F41'
     oqs_alg: 'OQS_KEM_alg_bike_l1'
+    enable_kem: true
     extra_nids:
       current:
         - hybrid_group: "x25519"

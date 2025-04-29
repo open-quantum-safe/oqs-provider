@@ -56,7 +56,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 180
+#define OQS_OID_CNT 186
 #else
 #define OQS_OID_CNT 116
 #endif
@@ -117,6 +117,12 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p521_mlkem1024",
     "1.3.6.1.4.1.42235.6",
     "SecP384r1MLKEM1024",
+    NULL,
+    "bikel1",
+    NULL,
+    "p256_bikel1",
+    NULL,
+    "x25519_bikel1",
     NULL,
     "bikel3",
     NULL,
@@ -319,20 +325,27 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[50] = envval;
         if ((envval = getenv("OQS_OID_SECP384R1MLKEM1024")))
             oqs_oid_alg_list[52] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL3")))
+        if ((envval = getenv("OQS_OID_BIKEL1")))
             oqs_oid_alg_list[54] = envval;
 
-        if ((envval = getenv("OQS_OID_P384_BIKEL3")))
+        if ((envval = getenv("OQS_OID_P256_BIKEL1")))
             oqs_oid_alg_list[56] = envval;
-        if ((envval = getenv("OQS_OID_X448_BIKEL3")))
+        if ((envval = getenv("OQS_OID_X25519_BIKEL1")))
             oqs_oid_alg_list[58] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL5")))
+        if ((envval = getenv("OQS_OID_BIKEL3")))
             oqs_oid_alg_list[60] = envval;
 
-        if ((envval = getenv("OQS_OID_P521_BIKEL5")))
+        if ((envval = getenv("OQS_OID_P384_BIKEL3")))
             oqs_oid_alg_list[62] = envval;
+        if ((envval = getenv("OQS_OID_X448_BIKEL3")))
+            oqs_oid_alg_list[64] = envval;
+        if ((envval = getenv("OQS_OID_BIKEL5")))
+            oqs_oid_alg_list[66] = envval;
 
-#define OQS_KEMOID_CNT 62 + 2
+        if ((envval = getenv("OQS_OID_P521_BIKEL5")))
+            oqs_oid_alg_list[68] = envval;
+
+#define OQS_KEMOID_CNT 68 + 2
 #else
 #define OQS_KEMOID_CNT 0
 #endif /* OQS_KEM_ENCODERS */
@@ -647,6 +660,11 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMHYBALG(p521_mlkem1024, 256)
     KEMHYBALG(SecP384r1MLKEM1024, 192)
 #endif
+#ifdef OQS_ENABLE_KEM_bike_l1
+    KEMBASEALG(bikel1, 128)
+    KEMHYBALG(p256_bikel1, 128)
+    KEMHYBALG(x25519_bikel1, 128)
+#endif
 #ifdef OQS_ENABLE_KEM_bike_l3
     KEMBASEALG(bikel3, 192)
     KEMHYBALG(p384_bikel3, 192)
@@ -817,6 +835,12 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 
     KEMKMHYBALG(p521_mlkem1024, 256, ecp)
     KEMKMHYBALG(SecP384r1MLKEM1024, 192, ecp)
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l1
+    KEMKMALG(bikel1, 128)
+
+    KEMKMHYBALG(p256_bikel1, 128, ecp)
+    KEMKMHYBALG(x25519_bikel1, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l3
     KEMKMALG(bikel3, 192)

@@ -11,6 +11,7 @@ import os
 @pytest.fixture(params=common.signatures)
 def server0(ossl, ossl_config, test_artifacts_dir, request, worker_id):
     # Setup: start ossl server
+    common.set_kex_sig(ossl)
     common.gen_keys(ossl, ossl_config, request.param, test_artifacts_dir, worker_id)
     server, port = common.start_server(ossl, test_artifacts_dir, request.param, worker_id, 0)
     # Run tests
@@ -21,6 +22,7 @@ def server0(ossl, ossl_config, test_artifacts_dir, request, worker_id):
 @pytest.fixture(params=common.signatures)
 def server1(ossl, ossl_config, test_artifacts_dir, request, worker_id):
     # Setup: start ossl server
+    common.set_kex_sig(ossl)
     common.gen_keys(ossl, ossl_config, request.param, test_artifacts_dir, worker_id)
     server, port = common.start_server(ossl, test_artifacts_dir, request.param, worker_id, 1)
     # Run tests

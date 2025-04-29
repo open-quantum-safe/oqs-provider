@@ -87,17 +87,6 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {0x0243, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
     {0x2F43, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-    {0x0244, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-
-    {0x2F44, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-    {0x2FB0, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-    {0x0245, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-
-    {0x2F45, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-    {0x2FB1, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-    {0x0246, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-
-    {0x2F46, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
 };
 
@@ -209,23 +198,6 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
     OQS_GROUP_ENTRY(bikel5, bikel5, bikel5, 33),
 
     OQS_GROUP_ENTRY(p521_bikel5, p521_bikel5, p521_bikel5, 34),
-#endif
-#ifdef OQS_ENABLE_KEM_hqc_128
-    OQS_GROUP_ENTRY(hqc128, hqc128, hqc128, 35),
-
-    OQS_GROUP_ENTRY(p256_hqc128, p256_hqc128, p256_hqc128, 36),
-    OQS_GROUP_ENTRY(x25519_hqc128, x25519_hqc128, x25519_hqc128, 37),
-#endif
-#ifdef OQS_ENABLE_KEM_hqc_192
-    OQS_GROUP_ENTRY(hqc192, hqc192, hqc192, 38),
-
-    OQS_GROUP_ENTRY(p384_hqc192, p384_hqc192, p384_hqc192, 39),
-    OQS_GROUP_ENTRY(x448_hqc192, x448_hqc192, x448_hqc192, 40),
-#endif
-#ifdef OQS_ENABLE_KEM_hqc_256
-    OQS_GROUP_ENTRY(hqc256, hqc256, hqc256, 41),
-
-    OQS_GROUP_ENTRY(p521_hqc256, p521_hqc256, p521_hqc256, 42),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
 };
@@ -367,23 +339,6 @@ int oqs_patch_codepoints() {
         oqs_group_list[33].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL5"));
     if (getenv("OQS_CODEPOINT_P521_BIKEL5"))
         oqs_group_list[34].group_id = atoi(getenv("OQS_CODEPOINT_P521_BIKEL5"));
-    if (getenv("OQS_CODEPOINT_HQC128"))
-        oqs_group_list[35].group_id = atoi(getenv("OQS_CODEPOINT_HQC128"));
-    if (getenv("OQS_CODEPOINT_P256_HQC128"))
-        oqs_group_list[36].group_id = atoi(getenv("OQS_CODEPOINT_P256_HQC128"));
-    if (getenv("OQS_CODEPOINT_X25519_HQC128"))
-        oqs_group_list[37].group_id =
-            atoi(getenv("OQS_CODEPOINT_X25519_HQC128"));
-    if (getenv("OQS_CODEPOINT_HQC192"))
-        oqs_group_list[38].group_id = atoi(getenv("OQS_CODEPOINT_HQC192"));
-    if (getenv("OQS_CODEPOINT_P384_HQC192"))
-        oqs_group_list[39].group_id = atoi(getenv("OQS_CODEPOINT_P384_HQC192"));
-    if (getenv("OQS_CODEPOINT_X448_HQC192"))
-        oqs_group_list[40].group_id = atoi(getenv("OQS_CODEPOINT_X448_HQC192"));
-    if (getenv("OQS_CODEPOINT_HQC256"))
-        oqs_group_list[41].group_id = atoi(getenv("OQS_CODEPOINT_HQC256"));
-    if (getenv("OQS_CODEPOINT_P521_HQC256"))
-        oqs_group_list[42].group_id = atoi(getenv("OQS_CODEPOINT_P521_HQC256"));
 
     if (getenv("OQS_CODEPOINT_MLDSA44"))
         oqs_sigalg_list[0].code_point = atoi(getenv("OQS_CODEPOINT_MLDSA44"));
@@ -716,27 +671,16 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
                      CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2", 49),
 #endif
-#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
-    OQS_SIGALG_ENTRY(OV_Is_pkc, OV_Is_pkc, OV_Is_pkc, "1.3.9999.9.5.1", 50),
-    OQS_SIGALG_ENTRY(p256_OV_Is_pkc, p256_OV_Is_pkc, p256_OV_Is_pkc,
-                     "1.3.9999.9.5.2", 51),
-#endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
-    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 52),
+    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 50),
     OQS_SIGALG_ENTRY(p256_OV_Ip_pkc, p256_OV_Ip_pkc, p256_OV_Ip_pkc,
-                     "1.3.9999.9.6.2", 53),
-#endif
-#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
-    OQS_SIGALG_ENTRY(OV_Is_pkc_skc, OV_Is_pkc_skc, OV_Is_pkc_skc,
-                     "1.3.9999.9.9.1", 54),
-    OQS_SIGALG_ENTRY(p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc,
-                     "1.3.9999.9.9.2", 55),
+                     "1.3.9999.9.6.2", 51),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
     OQS_SIGALG_ENTRY(OV_Ip_pkc_skc, OV_Ip_pkc_skc, OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.1", 56),
+                     "1.3.9999.9.10.1", 52),
     OQS_SIGALG_ENTRY(p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.2", 57),
+                     "1.3.9999.9.10.2", 53),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

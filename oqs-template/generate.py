@@ -182,12 +182,14 @@ def populate(filename, config, delimiter, overwrite=False):
             contents = preamble + identifier_start + Jinja2.get_template(fragment).render({'config': config}) + postamble
     file_put_contents(filename, contents)
 
-def load_config(include_disabled_sigs=False):
+def load_config(include_disabled_sigs=False, include_disabled_kems=False):
     config = file_get_contents(os.path.join('oqs-template', 'generate.yml'), encoding='utf-8')
     config = yaml.safe_load(config)
     if not include_disabled_sigs:
         for sig in config['sigs']:
             sig['variants'] = [variant for variant in sig['variants'] if ('enable' in variant and variant['enable'])]
+    if not include_disabled_kems:
+        config['kems'] = [kem for kem in config['kems'] if ('enable_kem' in kem and kem['enable_kem'])]
 
     # remove KEMs without NID (old stuff)
     newkems = []

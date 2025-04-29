@@ -3,26 +3,43 @@ import subprocess
 import pathlib
 import psutil
 import time
+from packaging.version import Version
 
-key_exchanges = [
+key_exchanges_oqs = [
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_START
     # post-quantum key exchanges
-    'frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','mlkem512','mlkem768','mlkem1024','bikel1','bikel3','bikel5','hqc128','hqc192','hqc256',
+    'frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','mlkem512','mlkem768','mlkem1024','bikel1','bikel3','bikel5',
     # post-quantum + classical key exchanges
-    'p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p256_mlkem512','x25519_mlkem512','p384_mlkem768','x448_mlkem768','X25519MLKEM768','SecP256r1MLKEM768','p521_mlkem1024','SecP384r1MLKEM1024','p256_bikel1','x25519_bikel1','p384_bikel3','x448_bikel3','p521_bikel5','p256_hqc128','x25519_hqc128','p384_hqc192','x448_hqc192','p521_hqc256',
+    'p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p256_mlkem512','x25519_mlkem512','p384_mlkem768','x448_mlkem768','X25519MLKEM768','SecP256r1MLKEM768','p521_mlkem1024','SecP384r1MLKEM1024','p256_bikel1','x25519_bikel1','p384_bikel3','x448_bikel3','p521_bikel5',
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_END
 ]
-signatures = [
+signatures_oqs = [
     'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
-    'mldsa44','mldsa65','mldsa87','falcon512','falconpadded512','falcon1024','falconpadded1024','sphincssha2128fsimple','sphincssha2128ssimple','sphincssha2192fsimple','sphincsshake128fsimple','mayo1','mayo2','mayo3','mayo5','CROSSrsdp128balanced','OV_Is_pkc','OV_Ip_pkc','OV_Is_pkc_skc','OV_Ip_pkc_skc',
+    'mldsa44','mldsa65','mldsa87','falcon512','falconpadded512','falcon1024','falconpadded1024','sphincssha2128fsimple','sphincssha2128ssimple','sphincssha2192fsimple','sphincsshake128fsimple','mayo1','mayo2','mayo3','mayo5','CROSSrsdp128balanced','OV_Ip_pkc','OV_Ip_pkc_skc',
     # post-quantum + classical signatures
-    'p256_mldsa44','rsa3072_mldsa44','p384_mldsa65','p521_mldsa87','p256_falcon512','rsa3072_falcon512','p256_falconpadded512','rsa3072_falconpadded512','p521_falcon1024','p521_falconpadded1024','p256_sphincssha2128fsimple','rsa3072_sphincssha2128fsimple','p256_sphincssha2128ssimple','rsa3072_sphincssha2128ssimple','p384_sphincssha2192fsimple','p256_sphincsshake128fsimple','rsa3072_sphincsshake128fsimple','p256_mayo1','p256_mayo2','p384_mayo3','p521_mayo5','p256_OV_Is_pkc','p256_OV_Ip_pkc','p256_OV_Is_pkc_skc','p256_OV_Ip_pkc_skc',
+    'p256_mldsa44','rsa3072_mldsa44','p384_mldsa65','p521_mldsa87','p256_falcon512','rsa3072_falcon512','p256_falconpadded512','rsa3072_falconpadded512','p521_falcon1024','p521_falconpadded1024','p256_sphincssha2128fsimple','rsa3072_sphincssha2128fsimple','p256_sphincssha2128ssimple','rsa3072_sphincssha2128ssimple','p384_sphincssha2192fsimple','p256_sphincsshake128fsimple','rsa3072_sphincsshake128fsimple','p256_mayo1','p256_mayo2','p384_mayo3','p521_mayo5','p256_OV_Ip_pkc','p256_OV_Ip_pkc_skc',
     # post-quantum + classical signatures (COMPOSITE)
     'mldsa44_pss2048','mldsa44_rsa2048','mldsa44_ed25519','mldsa44_p256','mldsa44_bp256','mldsa65_pss3072','mldsa65_rsa3072','mldsa65_p256','mldsa65_bp256','mldsa65_ed25519','mldsa87_p384','mldsa87_bp384','mldsa87_ed448',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
+
+key_exchanges_ossl = ['mlkem512','mlkem768','mlkem1024', 'X25519MLKEM768','SecP256r1MLKEM768', 'SecP384r1MLKEM1024']
+
+signatures_ossl = ['mldsa44', 'mldsa56', 'mldsa87', 'mldsa44_pss2048','mldsa44_rsa2048','mldsa44_ed25519','mldsa44_p256','mldsa44_bp256','mldsa65_pss3072','mldsa65_rsa3072','mldsa65_p256','mldsa65_bp256','mldsa65_ed25519','mldsa87_p384','mldsa87_bp384','mldsa87_ed448']
+
+key_exchanges = [kex for kex in key_exchanges_oqs if kex not in key_exchanges_ossl]
+signatures = [sig for sig in signatures_oqs if sig not in signatures_ossl]
+
+def set_kex_sig(ossl):
+    # Get OpenSSL version
+    result = subprocess.run([ossl, "--version"], capture_output=True, text=True, check=True)
+    ver_str = result.stdout.split()[1]
+    if Version(ver_str) < Version("3.5.0"):
+        key_exchanges = key_exchanges_oqs
+        signatures = signatures_oqs
+
 
 SERVER_START_ATTEMPTS = 10
 

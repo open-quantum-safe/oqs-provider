@@ -7,6 +7,8 @@ Some algorithms by default may not be enabled for use in the master code-generat
 
 As standardization for these algorithms within TLS is not done, all TLS code points/IDs can be changed from their default values to values set by environment variables. This facilitates interoperability testing with TLS1.3 implementations that use different IDs.
 
+The following list of algorithms may change when loading oqsprovider (version >= 0.9.0) with OpenSSL (version >= 3.5.0); please see [README.md](README.md#using-with-openssl-3.5.0).
+
 # Code points / algorithm IDs
 
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_START -->
@@ -47,14 +49,6 @@ As standardization for these algorithms within TLS is not done, all TLS code poi
 | x448_bikel3 | 0x2FAF | Yes | OQS_CODEPOINT_X448_BIKEL3 |
 | bikel5 | 0x0243 | Yes | OQS_CODEPOINT_BIKEL5 |
 | p521_bikel5 | 0x2F43 | Yes | OQS_CODEPOINT_P521_BIKEL5 |
-| hqc128 | 0x0244 | Yes | OQS_CODEPOINT_HQC128 |
-| p256_hqc128 | 0x2F44 | Yes | OQS_CODEPOINT_P256_HQC128 |
-| x25519_hqc128 | 0x2FB0 | Yes | OQS_CODEPOINT_X25519_HQC128 |
-| hqc192 | 0x0245 | Yes | OQS_CODEPOINT_HQC192 |
-| p384_hqc192 | 0x2F45 | Yes | OQS_CODEPOINT_P384_HQC192 |
-| x448_hqc192 | 0x2FB1 | Yes | OQS_CODEPOINT_X448_HQC192 |
-| hqc256 | 0x0246 | Yes | OQS_CODEPOINT_HQC256 |
-| p521_hqc256 | 0x2F46 | Yes | OQS_CODEPOINT_P521_HQC256 |
 | mldsa44 | 0x0904 |Yes| OQS_CODEPOINT_MLDSA44
 | p256_mldsa44 | 0xff06 |Yes| OQS_CODEPOINT_P256_MLDSA44
 | rsa3072_mldsa44 | 0xff07 |Yes| OQS_CODEPOINT_RSA3072_MLDSA44
@@ -336,13 +330,5 @@ If [OQS_KEM_ENCODERS](CONFIGURE.md#OQS_KEM_ENCODERS) is enabled the following li
 | x448_bikel3 | NULL | OQS_OID_X448_BIKEL3
 | bikel5 | NULL | OQS_OID_BIKEL5
 | p521_bikel5 | NULL | OQS_OID_P521_BIKEL5
-| hqc128 | NULL | OQS_OID_HQC128
-| p256_hqc128 | NULL | OQS_OID_P256_HQC128
-| x25519_hqc128 | NULL | OQS_OID_X25519_HQC128
-| hqc192 | NULL | OQS_OID_HQC192
-| p384_hqc192 | NULL | OQS_OID_P384_HQC192
-| x448_hqc192 | NULL | OQS_OID_X448_HQC192
-| hqc256 | NULL | OQS_OID_HQC256
-| p521_hqc256 | NULL | OQS_OID_P521_HQC256
 <!--- OQS_TEMPLATE_FRAGMENT_OIDS_END -->
 

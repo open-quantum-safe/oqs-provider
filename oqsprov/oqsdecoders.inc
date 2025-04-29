@@ -115,26 +115,6 @@ DECODER_w_structure("bikel5", der, SubjectPublicKeyInfo, bikel5),
 DECODER_w_structure("p521_bikel5", der, PrivateKeyInfo, p521_bikel5),
 DECODER_w_structure("p521_bikel5", der, SubjectPublicKeyInfo, p521_bikel5),
 #endif
-#ifdef OQS_ENABLE_KEM_hqc_128
-DECODER_w_structure("hqc128", der, PrivateKeyInfo, hqc128),
-DECODER_w_structure("hqc128", der, SubjectPublicKeyInfo, hqc128),
-DECODER_w_structure("p256_hqc128", der, PrivateKeyInfo, p256_hqc128),
-DECODER_w_structure("p256_hqc128", der, SubjectPublicKeyInfo, p256_hqc128),DECODER_w_structure("x25519_hqc128", der, PrivateKeyInfo, x25519_hqc128),
-DECODER_w_structure("x25519_hqc128", der, SubjectPublicKeyInfo, x25519_hqc128),
-#endif
-#ifdef OQS_ENABLE_KEM_hqc_192
-DECODER_w_structure("hqc192", der, PrivateKeyInfo, hqc192),
-DECODER_w_structure("hqc192", der, SubjectPublicKeyInfo, hqc192),
-DECODER_w_structure("p384_hqc192", der, PrivateKeyInfo, p384_hqc192),
-DECODER_w_structure("p384_hqc192", der, SubjectPublicKeyInfo, p384_hqc192),DECODER_w_structure("x448_hqc192", der, PrivateKeyInfo, x448_hqc192),
-DECODER_w_structure("x448_hqc192", der, SubjectPublicKeyInfo, x448_hqc192),
-#endif
-#ifdef OQS_ENABLE_KEM_hqc_256
-DECODER_w_structure("hqc256", der, PrivateKeyInfo, hqc256),
-DECODER_w_structure("hqc256", der, SubjectPublicKeyInfo, hqc256),
-DECODER_w_structure("p521_hqc256", der, PrivateKeyInfo, p521_hqc256),
-DECODER_w_structure("p521_hqc256", der, SubjectPublicKeyInfo, p521_hqc256),
-#endif
 
 #endif /* OQS_KEM_ENCODERS */
 

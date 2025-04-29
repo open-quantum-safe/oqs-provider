@@ -56,6 +56,4 @@ def test_sig_kem_pair(ossl, server1, test_artifacts_dir, kex_name, worker_id):
 
 if __name__ == "__main__":
     import sys
-    print(sys.argv)
-    exit()
     pytest.main(sys.argv)

@@ -7,58 +7,58 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo640aes'
     nid: '65024'
-    nid_hybrid: '0x2F00'
+    nid_hybrid: '65025'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_aes'
     enable_kem: true
     extra_nids:
       current:
         - hybrid_group: "x25519"
-          nid: '0x2F80'
+          nid: '65026'
   -
     family: 'FrodoKEM'
     name_group: 'frodo640shake'
-    nid: '65025'
-    nid_hybrid: '0x2F01'
+    nid: '65027'
+    nid_hybrid: '65028'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_shake'
     enable_kem: true
     extra_nids:
       current:
         - hybrid_group: "x25519"
-          nid: '0x2F81'
+          nid: '65029'
   -
     family: 'FrodoKEM'
     name_group: 'frodo976aes'
-    nid: '65026'
-    nid_hybrid: '0x2F02'
+    nid: '65030'
+    nid_hybrid: '65031'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_aes'
     enable_kem: true
     extra_nids:
       current:
         - hybrid_group: "x448"
-          nid: '0x2F82'
+          nid: '65032'
   -
     family: 'FrodoKEM'
     name_group: 'frodo976shake'
-    nid: '0x0203'
-    nid_hybrid: '0x2F03'
+    nid: '65033'
+    nid_hybrid: '65034'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_shake'
     enable_kem: true
     extra_nids:
       current:
         - hybrid_group: "x448"
-          nid: '0x2F83'
+          nid: '65035'
   -
     family: 'FrodoKEM'
     name_group: 'frodo1344aes'
-    nid: '0x0204'
-    nid_hybrid: '0x2F04'
+    nid: '65036'
+    nid_hybrid: '65037'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_aes'
     enable_kem: true
   -
     family: 'FrodoKEM'
     name_group: 'frodo1344shake'
-    nid: '0x0205'
-    nid_hybrid: '0x2F05'
+    nid: '65038'
+    nid_hybrid: '65039'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_shake'
     enable_kem: true
   -
@@ -294,14 +294,14 @@ kems:
     family: 'BIKE'
     name_group: 'bikel1'
     implementation_version: '5.1'
-    nid: '0x0241'
-    nid_hybrid: '0x2F41'
+    nid: '65040'
+    nid_hybrid: '65041'
     oqs_alg: 'OQS_KEM_alg_bike_l1'
     enable_kem: true
     extra_nids:
       current:
         - hybrid_group: "x25519"
-          nid: '0x2FAE'
+          nid: '65042'
       old:
         - implementation_version: NIST Round 3 submission
           nist-round: 3
@@ -318,14 +318,14 @@ kems:
     family: 'BIKE'
     name_group: 'bikel3'
     implementation_version: '5.1'
-    nid: '0x0242'
-    nid_hybrid: '0x2F42'
+    nid: '65043'
+    nid_hybrid: '65044'
     oqs_alg: 'OQS_KEM_alg_bike_l3'
     enable_kem: true
     extra_nids:
       current:
         - hybrid_group: "x448"
-          nid: '0x2FAF'
+          nid: '65045'
       old:
         - implementation_version: NIST Round 3 submission
           nist-round: 3
@@ -338,8 +338,8 @@ kems:
     family: 'BIKE'
     name_group: 'bikel5'
     implementation_version: '5.1'
-    nid: '0x0243'
-    nid_hybrid: '0x2F43'
+    nid: '65046'
+    nid_hybrid: '65047'
     oqs_alg: 'OQS_KEM_alg_bike_l5'
     enable_kem: true
   -

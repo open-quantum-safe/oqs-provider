@@ -231,6 +231,32 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
                 hybrid_nids.add(extra_hybrid_nid)
     return config
 
+# Validates that non-standard TLS code points are in the private use range
+def validate_iana_code_points(config):
+    reserved = list(range(65024, 65280))
+    in_use = list(reserved)
+    def validate(kem, name):
+        nid = str(kem['nid'])
+        nid = int(nid, 16) if nid[:2] == '0x' else int(nid, 10)
+        if nid in reserved and nid in in_use:
+            in_use.remove(nid)
+        elif nid not in reserved:
+            print(f"Non-standard TLS group {name} code point {kem['nid']} not in private use range.")
+            print(f"Next free code in point in private use range: {min(in_use)}")
+            exit(1)
+        elif nid not in in_use:
+            print(f"Non-standard TLS group {name} code point {kem['nid']} already in use in oqs-provider.")
+            print(f"Next free code in point in private use range: {min(in_use)}")
+            exit(1)
+
+    for kem in config['kems']:
+        if 'iana' not in kem or not kem['iana']:
+            validate(kem, f"{kem['name_group']}")
+
+            for hybrid in kem['hybrids']:
+                if 'iana' not in hybrid or not hybrid['iana']:
+                    validate(hybrid, f"{kem['name_group']}_{hybrid['hybrid_group']}")
+
 # extend config with "hybrid_groups" array:
 config = load_config() # extend config with "hybrid_groups" array
 
@@ -238,6 +264,7 @@ config = load_config() # extend config with "hybrid_groups" array
 # nid_hybrid information
 config = complete_config(config)
 
+validate_iana_code_points(config)
 
 populate('oqsprov/oqsencoders.inc', config, '/////')
 populate('oqsprov/oqsdecoders.inc', config, '/////')

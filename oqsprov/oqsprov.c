@@ -510,7 +510,10 @@ int oqs_patch_oids(void) {
 }
 
 #define SIGALG(NAMES, SECBITS, FUNC)                                           \
-    {NAMES, "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", FUNC}
+    {                                                                          \
+        NAMES, "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",  \
+            FUNC                                                               \
+    }
 #define KEMBASEALG(NAMES, SECBITS)                                             \
     {"" #NAMES "",                                                             \
      "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \

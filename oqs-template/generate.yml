@@ -416,14 +416,14 @@ kems:
   -
     family: 'HQC'
     name_group: 'hqc128'
-    nid: '0x0244'
-    nid_hybrid: '0x2F44'
+    nid: '65048'
+    nid_hybrid: '65049'
     oqs_alg: 'OQS_KEM_alg_hqc_128'
     enable_kem: false
     extra_nids:
       current:
         - hybrid_group: "x25519"
-          nid: '0x2FB0'
+          nid: '65050'
       old:
         - implementation_version: NIST Round 3 submission
           nist-round: 3
@@ -439,14 +439,14 @@ kems:
   -
     family: 'HQC'
     name_group: 'hqc192'
-    nid: '0x0245'
-    nid_hybrid: '0x2F45'
+    nid: '65051'
+    nid_hybrid: '65052'
     oqs_alg: 'OQS_KEM_alg_hqc_192'
     enable_kem: false
     extra_nids:
       current:
         - hybrid_group: "x448"
-          nid: '0x2FB1'
+          nid: '65053'
       old:
         - implementation_version: NIST Round 3 submission
           nist-round: 3
@@ -462,10 +462,10 @@ kems:
   -
     family: 'HQC'
     name_group: 'hqc256'
-    nid: '0x0246'
-    nid_hybrid: '0x2F46'
+    nid: '65054'
+    nid_hybrid: '65055'
     oqs_alg: 'OQS_KEM_alg_hqc_256'
-    enable_kem:: false
+    enable_kem: false
     extra_nids:
       old:
         - implementation_version: NIST Round 3 submission

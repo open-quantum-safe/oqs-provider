@@ -528,9 +528,8 @@ static const OQSX_EVP_INFO nids_sig[] = {
 
 };
 // These two array need to stay synced:
-// note only leading 4 chars of alg name are checked
-static const char *OQSX_ECP_NAMES[] = {
-    "p256", "p384", "p521", "SecP256r1", "SecP384r1", "SecP521r1", 0};
+static const char *OQSX_ECP_NAMES[] = {"p256",      "p384",      "p521",
+                                       "SecP256r1", "SecP384r1", "SecP521r1"};
 static const OQSX_EVP_INFO nids_ecp[] = {
     {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 0}, // 128 bit
     {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 0},        // 192 bit
@@ -538,18 +537,13 @@ static const OQSX_EVP_INFO nids_ecp[] = {
     {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 0}, // 128 bit
     {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 0},        // 192 bit
     {EVP_PKEY_EC, NID_secp521r1, 0, 133, 223, 66, 0},       // 256 bit
-    {0, 0, 0, 0, 0, 0, 0}                                   // 256 bit
 };
 
 // These two array need to stay synced:
-// note only leading 4 chars of alg name are checked
-static const char *OQSX_ECX_NAMES[] = {"x25519", "x448", "X25519", "X448", 0};
+static const char *OQSX_ECX_NAMES[] = {"x25519", "x448"};
 static const OQSX_EVP_INFO nids_ecx[] = {
     {EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
     {EVP_PKEY_X448, 0, 1, 56, 56, 56, 0},   // 192 bit
-    {EVP_PKEY_X25519, 0, 1, 32, 32, 32, 0}, // 128 bit
-    {EVP_PKEY_X448, 0, 1, 56, 56, 56, 0},   // 192 bit
-    {0, 0, 0, 0, 0, 0, 0}                   // 256 bit
 };
 
 static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
@@ -621,16 +615,21 @@ err_init:
 static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
                                     OSSL_LIB_CTX *libctx) {
     int ret = 1;
-    int idx = 0;
+    const OQSX_EVP_INFO *evp_info = NULL;
 
-    while (idx < OSSL_NELEM(OQSX_ECP_NAMES)) {
-        if (!strncmp(tls_name, OQSX_ECP_NAMES[idx], (idx < 3) ? 4 : 7))
+    for (int i = 0; i < OSSL_NELEM(OQSX_ECP_NAMES); i++) {
+        if (!strncasecmp(tls_name, OQSX_ECP_NAMES[i],
+                         strlen(OQSX_ECP_NAMES[i]))) {
+            evp_info = &nids_ecp[i];
             break;
-        idx++;
+        }
     }
-    ON_ERR_GOTO(idx < 0 || idx > 6, err_init_ecp);
+    if (evp_info == NULL) {
+        OQS_KEY_PRINTF2("OQS KEY: Incorrect P hybrid KEM name: %s\n", tls_name);
+        goto err_init_ecp;
+    }
 
-    evp_ctx->evp_info = &nids_ecp[idx];
+    evp_ctx->evp_info = evp_info;
 
     evp_ctx->ctx = EVP_PKEY_CTX_new_from_name(
         libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), NULL);
@@ -653,16 +652,21 @@ err_init_ecp:
 static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx,
                                     OSSL_LIB_CTX *libctx) {
     int ret = 1;
-    int idx = 0;
+    const OQSX_EVP_INFO *evp_info = NULL;
 
-    while (idx < OSSL_NELEM(OQSX_ECX_NAMES)) {
-        if (!strncmp(tls_name, OQSX_ECX_NAMES[idx], 4))
+    for (int i = 0; i < OSSL_NELEM(OQSX_ECX_NAMES); i++) {
+        if (!strncasecmp(tls_name, OQSX_ECX_NAMES[i],
+                         strlen(OQSX_ECX_NAMES[i]))) {
+            evp_info = &nids_ecx[i];
             break;
-        idx++;
+        }
     }
-    ON_ERR_GOTO(idx < 0 || idx > 4, err_init_ecx);
+    if (evp_info == NULL) {
+        OQS_KEY_PRINTF2("OQS KEY: Incorrect X hybrid KEM name: %s\n", tls_name);
+        goto err_init_ecx;
+    }
 
-    evp_ctx->evp_info = &nids_ecx[idx];
+    evp_ctx->evp_info = evp_info;
 
     evp_ctx->keyParam = EVP_PKEY_new();
     ON_ERR_SET_GOTO(!evp_ctx->keyParam, ret, -1, err_init_ecx);

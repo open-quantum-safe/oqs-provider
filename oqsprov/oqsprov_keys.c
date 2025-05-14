@@ -622,7 +622,7 @@ err_init:
 
 static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
                                     OSSL_LIB_CTX *libctx) {
-    int ret = 0;
+    int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
 
     for (int i = 0; i < OSSL_NELEM(OQSX_ECP_NAMES); i++) {
@@ -659,7 +659,7 @@ err_init_ecp:
 
 static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx,
                                     OSSL_LIB_CTX *libctx) {
-    int ret = 0;
+    int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
 
     for (int i = 0; i < OSSL_NELEM(OQSX_ECX_NAMES); i++) {

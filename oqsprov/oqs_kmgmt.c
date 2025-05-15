@@ -1264,6 +1264,107 @@ static void *p256_OV_Ip_pkc_skc_gen_init(void *provctx, int selection) {
                          "p256_OV_Ip_pkc_skc", KEY_TYPE_HYB_SIG, 128, 57, 0);
 }
 
+static void *snova2454_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_24_5_4, "snova2454",
+                        KEY_TYPE_SIG, NULL, 128, 58, 0);
+}
+
+static void *snova2454_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_24_5_4,
+                         "snova2454", 0, 128, 58, 0);
+}
+static void *p256_snova2454_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_24_5_4, "p256_snova2454",
+                        KEY_TYPE_HYB_SIG, NULL, 128, 59, 0);
+}
+
+static void *p256_snova2454_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_24_5_4,
+                         "p256_snova2454", KEY_TYPE_HYB_SIG, 128, 59, 0);
+}
+static void *snova2454esk_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_24_5_4_esk, "snova2454esk",
+                        KEY_TYPE_SIG, NULL, 128, 60, 0);
+}
+
+static void *snova2454esk_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_24_5_4_esk,
+                         "snova2454esk", 0, 128, 60, 0);
+}
+static void *p256_snova2454esk_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_24_5_4_esk, "p256_snova2454esk",
+                        KEY_TYPE_HYB_SIG, NULL, 128, 61, 0);
+}
+
+static void *p256_snova2454esk_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_24_5_4_esk,
+                         "p256_snova2454esk", KEY_TYPE_HYB_SIG, 128, 61, 0);
+}
+static void *snova37172_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_37_17_2, "snova37172",
+                        KEY_TYPE_SIG, NULL, 128, 62, 0);
+}
+
+static void *snova37172_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_37_17_2,
+                         "snova37172", 0, 128, 62, 0);
+}
+static void *p256_snova37172_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_37_17_2, "p256_snova37172",
+                        KEY_TYPE_HYB_SIG, NULL, 128, 63, 0);
+}
+
+static void *p256_snova37172_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_37_17_2,
+                         "p256_snova37172", KEY_TYPE_HYB_SIG, 128, 63, 0);
+}
+static void *snova2455_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_24_5_5, "snova2455",
+                        KEY_TYPE_SIG, NULL, 192, 64, 0);
+}
+
+static void *snova2455_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_24_5_5,
+                         "snova2455", 0, 192, 64, 0);
+}
+static void *p384_snova2455_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_24_5_5, "p384_snova2455",
+                        KEY_TYPE_HYB_SIG, NULL, 192, 65, 0);
+}
+
+static void *p384_snova2455_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_24_5_5,
+                         "p384_snova2455", KEY_TYPE_HYB_SIG, 192, 65, 0);
+}
+static void *snova2965_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_29_6_5, "snova2965",
+                        KEY_TYPE_SIG, NULL, 256, 66, 0);
+}
+
+static void *snova2965_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_29_6_5,
+                         "snova2965", 0, 256, 66, 0);
+}
+static void *p521_snova2965_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_snova_SNOVA_29_6_5, "p521_snova2965",
+                        KEY_TYPE_HYB_SIG, NULL, 256, 67, 0);
+}
+
+static void *p521_snova2965_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_snova_SNOVA_29_6_5,
+                         "p521_snova2965", KEY_TYPE_HYB_SIG, 256, 67, 0);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                        \
@@ -1466,6 +1567,16 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(OV_Is_pkc_skc)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_OV_Is_pkc_skc)
 MAKE_SIG_KEYMGMT_FUNCTIONS(OV_Ip_pkc_skc)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p256_OV_Ip_pkc_skc)
+MAKE_SIG_KEYMGMT_FUNCTIONS(snova2454)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_snova2454)
+MAKE_SIG_KEYMGMT_FUNCTIONS(snova2454esk)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_snova2454esk)
+MAKE_SIG_KEYMGMT_FUNCTIONS(snova37172)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p256_snova37172)
+MAKE_SIG_KEYMGMT_FUNCTIONS(snova2455)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p384_snova2455)
+MAKE_SIG_KEYMGMT_FUNCTIONS(snova2965)
+MAKE_SIG_KEYMGMT_FUNCTIONS(p521_snova2965)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 

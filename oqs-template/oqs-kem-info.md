@@ -77,14 +77,14 @@
 | HQC            | NIST Round 3 submission  | hqc192         | 3            |                    3 | 0x2FAD       | x448                             |
 | HQC            | NIST Round 3 submission  | hqc256         | 3            |                    5 | 0x022E       |                                  |
 | HQC            | NIST Round 3 submission  | hqc256         | 3            |                    5 | 0x2F2E       | secp521_r1                       |
-| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 0x0244       |                                  |
-| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 0x2F44       | secp256_r1                       |
-| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 0x2FB0       | x25519                           |
-| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x0245       |                                  |
-| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x2F45       | secp384_r1                       |
-| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 0x2FB1       | x448                             |
-| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x0246       |                                  |
-| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 0x2F46       | secp521_r1                       |
+| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 65048        |                                  |
+| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 65049        | secp256_r1                       |
+| HQC            | 2023-04-30               | hqc128         | 4            |                    1 | 65050        | x25519                           |
+| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 65051        |                                  |
+| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 65052        | secp384_r1                       |
+| HQC            | 2023-04-30               | hqc192         | 4            |                    3 | 65053        | x448                             |
+| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 65054        |                                  |
+| HQC            | 2023-04-30               | hqc256         | 4            |                    5 | 65055        | secp521_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x11ED       | secp384_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 0x2F4D       | secp521_r1                       |
 | ML-KEM         | ML-KEM                   | mlkem1024      | FIPS203      |                    5 | 514          |                                  |

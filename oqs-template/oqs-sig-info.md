@@ -101,7 +101,7 @@
 | snova60104                                        | Round 2                                       | 2            |                    5 | 0xff4e       | 1.3.9999.10.11.1            |
 | snova60104 **hybrid with** p521                   | Round 2                                       | 2            |                    5 | 0xff4f       | 1.3.9999.10.11.2            |
 | snova2965                                         | Round 2                                       | 2            |                    5 | 0xff51       | 1.3.9999.10.12.1            |
-| snova2965 **hybrid with** p521                    | Round 2                                       | 2            |                    5 | 0xff51       | 1.3.9999.10.12.2            |
+| snova2965 **hybrid with** p521                    | Round 2                                       | 2            |                    5 | 0xff52       | 1.3.9999.10.12.2            |
 | sphincsharaka128frobust                           | NIST Round 3 submission                       | 3            |                    1 | 0xfe42       | 1.3.9999.6.1.1              |
 | sphincsharaka128frobust **hybrid with** p256      | NIST Round 3 submission                       | 3            |                    1 | 0xfe43       | 1.3.9999.6.1.2              |
 | sphincsharaka128frobust **hybrid with** rsa3072   | NIST Round 3 submission                       | 3            |                    1 | 0xfe44       | 1.3.9999.6.1.3              |

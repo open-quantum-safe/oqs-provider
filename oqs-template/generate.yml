@@ -480,7 +480,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xff52
+# Next free signature ID: 0xff53
 sigs:
   # -
     # iso (1)
@@ -2070,4 +2070,4 @@ sigs:
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.10.12.2',
-                    'code_point': '0xff51'}]
+                    'code_point': '0xff52'}]

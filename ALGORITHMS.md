@@ -178,7 +178,7 @@ The following list of algorithms may change when loading oqsprovider (version >=
 | snova60104 | 0xff4e |No| OQS_CODEPOINT_SNOVA60104
 | p521_snova60104 | 0xff4f |No| OQS_CODEPOINT_P521_SNOVA60104
 | snova2965 | 0xff51 |Yes| OQS_CODEPOINT_SNOVA2965
-| p521_snova2965 | 0xff51 |Yes| OQS_CODEPOINT_P521_SNOVA2965
+| p521_snova2965 | 0xff52 |Yes| OQS_CODEPOINT_P521_SNOVA2965
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_END -->
 
 Changing code points

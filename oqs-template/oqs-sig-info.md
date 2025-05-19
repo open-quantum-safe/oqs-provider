@@ -78,6 +78,30 @@
 | mldsa87 **composite with** p384                   | ML-DSA                                        | FIPS204      |                    5 | 0x0909       | 2.16.840.1.114027.80.8.1.11 |
 | mldsa87 **composite with** bp384                  | ML-DSA                                        | FIPS204      |                    5 | 0xfeec       | 2.16.840.1.114027.80.8.1.12 |
 | mldsa87 **composite with** ed448                  | ML-DSA                                        | FIPS204      |                    5 | 0x0912       | 2.16.840.1.114027.80.8.1.13 |
+| snova2454                                         | Round 2                                       | 2            |                    1 | 0xff3a       | 1.3.9999.10.1.1             |
+| snova2454 **hybrid with** p256                    | Round 2                                       | 2            |                    1 | 0xff3b       | 1.3.9999.10.1.2             |
+| snova2454shake                                    | Round 2                                       | 2            |                    1 | 0xff3c       | 1.3.9999.10.2.1             |
+| snova2454shake **hybrid with** p256               | Round 2                                       | 2            |                    1 | 0xff3d       | 1.3.9999.10.2.2             |
+| snova2454esk                                      | Round 2                                       | 2            |                    1 | 0xff3e       | 1.3.9999.10.3.1             |
+| snova2454esk **hybrid with** p256                 | Round 2                                       | 2            |                    1 | 0xff3f       | 1.3.9999.10.3.2             |
+| snova2454shakeesk                                 | Round 2                                       | 2            |                    1 | 0xff40       | 1.3.9999.10.4.1             |
+| snova2454shakeesk **hybrid with** p256            | Round 2                                       | 2            |                    1 | 0xff41       | 1.3.9999.10.4.2             |
+| snova37172                                        | Round 2                                       | 2            |                    1 | 0xff42       | 1.3.9999.10.5.1             |
+| snova37172 **hybrid with** p256                   | Round 2                                       | 2            |                    1 | 0xff43       | 1.3.9999.10.5.2             |
+| snova2583                                         | Round 2                                       | 2            |                    1 | 0xff44       | 1.3.9999.10.6.1             |
+| snova2583 **hybrid with** p256                    | Round 2                                       | 2            |                    1 | 0xff45       | 1.3.9999.10.6.2             |
+| snova56252                                        | Round 2                                       | 2            |                    3 | 0xff46       | 1.3.9999.10.7.1             |
+| snova56252 **hybrid with** p384                   | Round 2                                       | 2            |                    3 | 0xff47       | 1.3.9999.10.7.2             |
+| snova49113                                        | Round 2                                       | 2            |                    3 | 0xff48       | 1.3.9999.10.8.1             |
+| snova49113 **hybrid with** p384                   | Round 2                                       | 2            |                    3 | 0xff49       | 1.3.9999.10.8.2             |
+| snova3784                                         | Round 2                                       | 2            |                    3 | 0xff4a       | 1.3.9999.10.9.1             |
+| snova3784 **hybrid with** p384                    | Round 2                                       | 2            |                    3 | 0xff4b       | 1.3.9999.10.9.2             |
+| snova2455                                         | Round 2                                       | 2            |                    3 | 0xff4c       | 1.3.9999.10.10.1            |
+| snova2455 **hybrid with** p384                    | Round 2                                       | 2            |                    3 | 0xff4d       | 1.3.9999.10.10.2            |
+| snova60104                                        | Round 2                                       | 2            |                    5 | 0xff4e       | 1.3.9999.10.11.1            |
+| snova60104 **hybrid with** p521                   | Round 2                                       | 2            |                    5 | 0xff4f       | 1.3.9999.10.11.2            |
+| snova2965                                         | Round 2                                       | 2            |                    5 | 0xff51       | 1.3.9999.10.12.1            |
+| snova2965 **hybrid with** p521                    | Round 2                                       | 2            |                    5 | 0xff52       | 1.3.9999.10.12.2            |
 | sphincsharaka128frobust                           | NIST Round 3 submission                       | 3            |                    1 | 0xfe42       | 1.3.9999.6.1.1              |
 | sphincsharaka128frobust **hybrid with** p256      | NIST Round 3 submission                       | 3            |                    1 | 0xfe43       | 1.3.9999.6.1.2              |
 | sphincsharaka128frobust **hybrid with** rsa3072   | NIST Round 3 submission                       | 3            |                    1 | 0xfe44       | 1.3.9999.6.1.3              |

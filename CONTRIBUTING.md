@@ -36,9 +36,9 @@ run the following commands in the project main directory prior to finishing a PR
 
     ./scripts/do_code_format.sh
 
-If errors/deviations are reported, review the code or consider running the utility
-script `scripts/format_code.sh` if you'd like to get the code changed to use the
-exact same code style check used in CI.
+If the github CI reports style errors/deviations, review the code or consider running
+the utility script `scripts/format_code.sh` if you'd like to get the code changed to
+use the exact same code style check used in CI.
 
 ### Running CI locally
 

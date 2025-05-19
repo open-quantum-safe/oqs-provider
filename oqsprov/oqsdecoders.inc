@@ -237,4 +237,29 @@ DECODER_w_structure("OV_Ip_pkc_skc", der, PrivateKeyInfo, OV_Ip_pkc_skc),
 DECODER_w_structure("OV_Ip_pkc_skc", der, SubjectPublicKeyInfo, OV_Ip_pkc_skc),DECODER_w_structure("p256_OV_Ip_pkc_skc", der, PrivateKeyInfo, p256_OV_Ip_pkc_skc),
 DECODER_w_structure("p256_OV_Ip_pkc_skc", der, SubjectPublicKeyInfo, p256_OV_Ip_pkc_skc),
 #endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4
+DECODER_w_structure("snova2454", der, PrivateKeyInfo, snova2454),
+DECODER_w_structure("snova2454", der, SubjectPublicKeyInfo, snova2454),DECODER_w_structure("p256_snova2454", der, PrivateKeyInfo, p256_snova2454),
+DECODER_w_structure("p256_snova2454", der, SubjectPublicKeyInfo, p256_snova2454),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4_esk
+DECODER_w_structure("snova2454esk", der, PrivateKeyInfo, snova2454esk),
+DECODER_w_structure("snova2454esk", der, SubjectPublicKeyInfo, snova2454esk),DECODER_w_structure("p256_snova2454esk", der, PrivateKeyInfo, p256_snova2454esk),
+DECODER_w_structure("p256_snova2454esk", der, SubjectPublicKeyInfo, p256_snova2454esk),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_37_17_2
+DECODER_w_structure("snova37172", der, PrivateKeyInfo, snova37172),
+DECODER_w_structure("snova37172", der, SubjectPublicKeyInfo, snova37172),DECODER_w_structure("p256_snova37172", der, PrivateKeyInfo, p256_snova37172),
+DECODER_w_structure("p256_snova37172", der, SubjectPublicKeyInfo, p256_snova37172),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_5
+DECODER_w_structure("snova2455", der, PrivateKeyInfo, snova2455),
+DECODER_w_structure("snova2455", der, SubjectPublicKeyInfo, snova2455),DECODER_w_structure("p384_snova2455", der, PrivateKeyInfo, p384_snova2455),
+DECODER_w_structure("p384_snova2455", der, SubjectPublicKeyInfo, p384_snova2455),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_29_6_5
+DECODER_w_structure("snova2965", der, PrivateKeyInfo, snova2965),
+DECODER_w_structure("snova2965", der, SubjectPublicKeyInfo, snova2965),DECODER_w_structure("p521_snova2965", der, PrivateKeyInfo, p521_snova2965),
+DECODER_w_structure("p521_snova2965", der, SubjectPublicKeyInfo, p521_snova2965),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

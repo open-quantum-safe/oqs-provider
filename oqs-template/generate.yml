@@ -480,7 +480,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xff3a
+# Next free signature ID: 0xff53
 sigs:
   # -
     # iso (1)
@@ -1924,3 +1924,150 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.9.12.2',
                     'code_point': '0xff21'}]
+  -
+    family: 'SNOVA'
+    variants:
+      -
+        name: 'snova2454'
+        pretty_name: 'SNOVA_24_5_4'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_24_5_4'
+        oid: '1.3.9999.10.1.1'
+        code_point: '0xff3a'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.1.2',
+                    'code_point': '0xff3b'}]
+      -
+        name: 'snova2454shake'
+        pretty_name: 'SNOVA_24_5_4_SHAKE'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_24_5_4_SHAKE'
+        oid: '1.3.9999.10.2.1'
+        code_point: '0xff3c'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.2.2',
+                    'code_point': '0xff3d'}]
+      -
+        name: 'snova2454esk'
+        pretty_name: 'SNOVA_24_5_4_esk'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_24_5_4_esk'
+        oid: '1.3.9999.10.3.1'
+        code_point: '0xff3e'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.3.2',
+                    'code_point': '0xff3f'}]
+      -
+        name: 'snova2454shakeesk'
+        pretty_name: 'SNOVA_24_5_4_SHAKE_esk'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_24_5_4_SHAKE_esk'
+        oid: '1.3.9999.10.4.1'
+        code_point: '0xff40'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.4.2',
+                    'code_point': '0xff41'}]
+      -
+        name: 'snova37172'
+        pretty_name: 'SNOVA_37_17_2'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_37_17_2'
+        oid: '1.3.9999.10.5.1'
+        code_point: '0xff42'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.5.2',
+                    'code_point': '0xff43'}]
+      -
+        name: 'snova2583'
+        pretty_name: 'SNOVA_25_8_3'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_25_8_3'
+        oid: '1.3.9999.10.6.1'
+        code_point: '0xff44'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.6.2',
+                    'code_point': '0xff45'}]
+      -
+        name: 'snova56252'
+        pretty_name: 'SNOVA_56_25_2'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_56_25_2'
+        oid: '1.3.9999.10.7.1'
+        code_point: '0xff46'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.10.7.2',
+                    'code_point': '0xff47'}]
+      -
+        name: 'snova49113'
+        pretty_name: 'SNOVA_49_11_3'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_49_11_3'
+        oid: '1.3.9999.10.8.1'
+        code_point: '0xff48'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.10.8.2',
+                    'code_point': '0xff49'}]
+      -
+        name: 'snova3784'
+        pretty_name: 'SNOVA_37_8_4'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_37_8_4'
+        oid: '1.3.9999.10.9.1'
+        code_point: '0xff4a'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.10.9.2',
+                    'code_point': '0xff4b'}]
+      -
+        name: 'snova2455'
+        pretty_name: 'SNOVA_24_5_5'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_24_5_5'
+        oid: '1.3.9999.10.10.1'
+        code_point: '0xff4c'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.10.10.2',
+                    'code_point': '0xff4d'}]
+      -
+        name: 'snova60104'
+        pretty_name: 'SNOVA_60_10_4'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_60_10_4'
+        oid: '1.3.9999.10.11.1'
+        code_point: '0xff4e'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.10.11.2',
+                    'code_point': '0xff4f'}]
+      -
+        name: 'snova2965'
+        pretty_name: 'SNOVA_29_6_5'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_29_6_5'
+        oid: '1.3.9999.10.12.1'
+        code_point: '0xff51'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.10.12.2',
+                    'code_point': '0xff52'}]

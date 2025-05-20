@@ -1,4 +1,4 @@
-# oqs-provider 0.8.1-dev
+# oqs-provider 0.9.0
 
 ## About
 
@@ -14,7 +14,64 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is in-development version 0.8.1-dev of oqs-provider which continues from the earlier 0.8.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs).
+This is version 0.9.0 of oqs-provider which continues from the earlier 0.8.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.13.0 of `liboqs`.
+
+### Deprecation notice
+
+This release of oqsprovider removes default support for Kyber and Dilithium (Round 3 version).
+
+### What's New
+
+In addition to improving CI and testing, fixing platform specific build issues and bugs, and updating build dependencies this release of oqs-provider:
+
+* Adds support for UOV (NIST Additional Signatures Round 2)
+* Adds support for Mayo (NIST Additional Signatures Round 2)
+* Adds support for CROSS (NIST Additional Signatures Round 2)
+* Disables HQC KEM by default, following liboqs v0.13.0, until [a security flaw](https://groups.google.com/a/list.nist.gov/g/pqc-forum/c/Wiu4ZQo3fP8) is fixed.
+* Disables default support for Kyber (Round 3 version).
+* Disables default support for Dilithium (Round 3 version).
+* Restricts non-standard TLS group code points to IANA private use range.
+* Updates TLS group code point and name for ML-KEM 1024 hybrid SecP384r1MLKEM1024.
+* Disables ML-KEM (along with certain hybrid variants) and ML-DSA (along with all composite/hybrid variants) when oqs-provider is loaded with OpenSSL (version >= 3.5.0) which offers native support for some of these algorithms. Please see [README.md](https://github.com/open-quantum-safe/oqs-provider#using-with-openssl-350) for detailed information.
+
+## What's Changed
+* revert to dev by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/602
+* Bump jinja2 from 3.1.4 to 3.1.5 in /oqs-template in the pip group by @dependabot in https://github.com/open-quantum-safe/oqs-provider/pull/601
+* remove default Kyber and Dilithium support by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/603
+* Allow overriding OPENSSL_MODULES_PATH from the command line by @embetrix in https://github.com/open-quantum-safe/oqs-provider/pull/607
+* change code point and name for mlkem1024 hybrid by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/606
+* Include use of loaded 'libctx' context in KEM and SIG procedures (#557) by @RodriM11 in https://github.com/open-quantum-safe/oqs-provider/pull/614
+* limit testing to oqsprovider by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/611
+* add more complete KEM ENCODERS testing in recent openssl versions by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/616
+* enable run-time disablement for erroring algs in openssl 3.5 by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/642
+* Update fullbuild.sh by @dgargar-laude in https://github.com/open-quantum-safe/oqs-provider/pull/633
+* Update fullbuild.sh - add OSSL_CONFIG variable for customization. by @tglowka in https://github.com/open-quantum-safe/oqs-provider/pull/640
+* restrict libctx test to oqsprovider by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/620
+* update SIG alg info by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/645
+* Drop oqsprovider2, appears unused by @vdukhovni in https://github.com/open-quantum-safe/oqs-provider/pull/648
+* Integrate UOV by @mkannwischer in https://github.com/open-quantum-safe/oqs-provider/pull/651
+* Integrate liboqs upstream updates by @SWilson4 in https://github.com/open-quantum-safe/oqs-provider/pull/657
+* Fix windows build in CI by @bhess in https://github.com/open-quantum-safe/oqs-provider/pull/656
+* Update OIDs for CROSS 2.0 by @rtjk in https://github.com/open-quantum-safe/oqs-provider/pull/652
+* Update OIDs and code points for MAYO round 2 by @bhess in https://github.com/open-quantum-safe/oqs-provider/pull/654
+* Update GOVERNANCE.md by @ashman-p in https://github.com/open-quantum-safe/oqs-provider/pull/664
+* Prepare for 0.9.0 release by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/670
+* Make non-standard TLS code points IANA compliant by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/676
+* Finalise #671 by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/678
+* Make NID lookup for hybrid KEMs with P and X curves more robust by @Lekensteyn in https://github.com/open-quantum-safe/oqs-provider/pull/671
+* Update HQC codepoints following #676 by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/680
+
+## New Contributors
+* @embetrix made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/607
+* @RodriM11 made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/614
+* @dgargar-laude made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/633
+* @tglowka made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/640
+* @vdukhovni made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/648
+* @mkannwischer made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/651
+* @rtjk made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/652
+* @Lekensteyn made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/671
+
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.8.0...0.9.0
 
 Previous Release Notes
 ======================

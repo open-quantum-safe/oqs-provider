@@ -1,4 +1,4 @@
-# oqs-provider 0.9.0-rc1
+# oqs-provider 0.9.0
 
 ## About
 
@@ -14,7 +14,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is release candidate 1 of version 0.9.0 of oqs-provider which continues from the earlier 0.8.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.13.0 of `liboqs`.
+This is version 0.9.0 of oqs-provider which continues from the earlier 0.8.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.13.0 of `liboqs`.
 
 ### Deprecation notice
 
@@ -71,7 +71,7 @@ In addition to improving CI and testing, fixing platform specific build issues a
 * @rtjk made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/652
 * @Lekensteyn made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/671
 
-**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.8.0...0.9.0-rc1
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.8.0...0.9.0
 
 Previous Release Notes
 ======================

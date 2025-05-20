@@ -12,7 +12,6 @@ set(PROVIDER_SOURCE_FILES
   oqsprov.c oqsprov_capabilities.c oqsprov_keys.c
   oqs_kmgmt.c oqs_sig.c oqs_kem.c
   oqs_encode_key2any.c oqs_endecoder_common.c oqs_decode_der2key.c oqsprov_bio.c
-  oqsprov.def
 )
 set(PROVIDER_HEADER_FILES
   oqs_prov.h oqs_endecoder_local.h
@@ -72,6 +71,17 @@ if (OQS_LIBRARY_TYPE STREQUAL "MODULE")
 endif()
 
 target_link_libraries(oqsprovider PUBLIC OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+
+# Hide liboqs symbols to applications loading oqsprovider.
+# CheckLinkerFlag requires CMake 3.18, target_link_options requires CMake 3.13.
+if(LIBOQS_LIBRARY_TYPE STREQUAL "STATIC_LIBRARY" AND CMAKE_VERSION VERSION_GREATER_EQUAL "3.18")
+    include(CheckLinkerFlag)
+    check_linker_flag(C "-Wl,--exclude-libs,ALL" LD_SUPPORTS_EXCLUDE_LIBS)
+    if(LD_SUPPORTS_EXCLUDE_LIBS)
+        # For GNU linker (ld) and ELF targets.
+        target_link_options(oqsprovider PRIVATE "-Wl,--exclude-libs,liboqs")
+    endif()
+endif()
 
 install(TARGETS oqsprovider
         LIBRARY DESTINATION "${OPENSSL_MODULES_PATH}"

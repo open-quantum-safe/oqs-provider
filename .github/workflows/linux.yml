@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.5.0, master]
+        ossl-branch: [openssl-3.4.1, openssl-3.5.0, master] # retain openssl-3.4.1 to test non-OpenSSL PQ alg implementations
         cmake-params: [ "", "-DOQS_KEM_ENCODERS=ON" ]
         libjade-build:
           - "ON" 

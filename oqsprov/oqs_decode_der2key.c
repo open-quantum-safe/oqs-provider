@@ -784,4 +784,25 @@ MAKE_DECODER(, "OV_Ip_pkc_skc", OV_Ip_pkc_skc, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, oqsx,
              SubjectPublicKeyInfo);
+MAKE_DECODER(, "snova2454", snova2454, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "snova2454", snova2454, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_snova2454", p256_snova2454, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_snova2454", p256_snova2454, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "snova2454esk", snova2454esk, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "snova2454esk", snova2454esk, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_snova2454esk", p256_snova2454esk, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_snova2454esk", p256_snova2454esk, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER(, "snova37172", snova37172, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "snova37172", snova37172, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_snova37172", p256_snova37172, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_snova37172", p256_snova37172, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "snova2455", snova2455, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "snova2455", snova2455, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p384_snova2455", p384_snova2455, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p384_snova2455", p384_snova2455, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "snova2965", snova2965, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "snova2965", snova2965, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_snova2965", p521_snova2965, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p521_snova2965", p521_snova2965, oqsx, SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

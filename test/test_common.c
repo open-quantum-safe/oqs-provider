@@ -34,6 +34,11 @@ const char *kHybridSignatureAlgorithms[] = {
     "p256_OV_Ip_pkc",
     "p256_OV_Is_pkc_skc",
     "p256_OV_Ip_pkc_skc",
+    "p256_snova2454",
+    "p256_snova2454esk",
+    "p256_snova37172",
+    "p384_snova2455",
+    "p521_snova2965",
     NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END

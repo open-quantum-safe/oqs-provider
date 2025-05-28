@@ -56,9 +56,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 186
+#define OQS_OID_CNT 206
 #else
-#define OQS_OID_CNT 116
+#define OQS_OID_CNT 136
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -252,6 +252,26 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "OV_Ip_pkc_skc",
     "1.3.9999.9.10.2",
     "p256_OV_Ip_pkc_skc",
+    "1.3.9999.10.1.1",
+    "snova2454",
+    "1.3.9999.10.1.2",
+    "p256_snova2454",
+    "1.3.9999.10.3.1",
+    "snova2454esk",
+    "1.3.9999.10.3.2",
+    "p256_snova2454esk",
+    "1.3.9999.10.5.1",
+    "snova37172",
+    "1.3.9999.10.5.2",
+    "p256_snova37172",
+    "1.3.9999.10.10.1",
+    "snova2455",
+    "1.3.9999.10.10.2",
+    "p384_snova2455",
+    "1.3.9999.10.12.1",
+    "snova2965",
+    "1.3.9999.10.12.2",
+    "p521_snova2965",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -465,6 +485,26 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[112 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_OV_IP_PKC_SKC")))
             oqs_oid_alg_list[114 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SNOVA2454")))
+            oqs_oid_alg_list[116 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_SNOVA2454")))
+            oqs_oid_alg_list[118 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SNOVA2454ESK")))
+            oqs_oid_alg_list[120 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_SNOVA2454ESK")))
+            oqs_oid_alg_list[122 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SNOVA37172")))
+            oqs_oid_alg_list[124 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_SNOVA37172")))
+            oqs_oid_alg_list[126 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SNOVA2455")))
+            oqs_oid_alg_list[128 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P384_SNOVA2455")))
+            oqs_oid_alg_list[130 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SNOVA2965")))
+            oqs_oid_alg_list[132 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P521_SNOVA2965")))
+            oqs_oid_alg_list[134 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -607,6 +647,26 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
     SIGALG("OV_Ip_pkc_skc", 128, oqs_signature_functions),
     SIGALG("p256_OV_Ip_pkc_skc", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4
+    SIGALG("snova2454", 128, oqs_signature_functions),
+    SIGALG("p256_snova2454", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4_esk
+    SIGALG("snova2454esk", 128, oqs_signature_functions),
+    SIGALG("p256_snova2454esk", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_37_17_2
+    SIGALG("snova37172", 128, oqs_signature_functions),
+    SIGALG("p256_snova37172", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_5
+    SIGALG("snova2455", 192, oqs_signature_functions),
+    SIGALG("p384_snova2455", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_29_6_5
+    SIGALG("snova2965", 256, oqs_signature_functions),
+    SIGALG("p521_snova2965", 256, oqs_signature_functions),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
@@ -780,6 +840,26 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
     SIGALG("OV_Ip_pkc_skc", 128, oqs_OV_Ip_pkc_skc_keymgmt_functions),
     SIGALG("p256_OV_Ip_pkc_skc", 128, oqs_p256_OV_Ip_pkc_skc_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4
+    SIGALG("snova2454", 128, oqs_snova2454_keymgmt_functions),
+    SIGALG("p256_snova2454", 128, oqs_p256_snova2454_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4_esk
+    SIGALG("snova2454esk", 128, oqs_snova2454esk_keymgmt_functions),
+    SIGALG("p256_snova2454esk", 128, oqs_p256_snova2454esk_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_37_17_2
+    SIGALG("snova37172", 128, oqs_snova37172_keymgmt_functions),
+    SIGALG("p256_snova37172", 128, oqs_p256_snova37172_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_5
+    SIGALG("snova2455", 192, oqs_snova2455_keymgmt_functions),
+    SIGALG("p384_snova2455", 192, oqs_p384_snova2455_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_snova_SNOVA_29_6_5
+    SIGALG("snova2965", 256, oqs_snova2965_keymgmt_functions),
+    SIGALG("p521_snova2965", 256, oqs_p521_snova2965_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes

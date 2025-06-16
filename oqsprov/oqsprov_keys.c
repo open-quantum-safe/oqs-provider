@@ -2111,9 +2111,46 @@ int oqsx_key_maxsize(OQSX_KEY *key) {
                key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature +
                SIZE_OF_UINT32;
     case KEY_TYPE_CMP_SIG:
-        return sizeof(CompositeSignature) +
-               key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature +
-               key->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature;
+        size_t sig1_len = key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature;
+        size_t sig2_len = key->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature;
+        size_t compsig_len = 0;
+
+        // Allocate dummy signature buffers
+        unsigned char *sig1 = OPENSSL_malloc(sig1_len);
+        unsigned char *sig2 = OPENSSL_malloc(sig2_len);
+        if (!sig1 || !sig2) {
+            OQS_KEY_PRINTF("OQSX KEY: OPENSSL_malloc failed\n");
+            goto CMP_SIG_sig;
+        }
+
+        CompositeSignature *compsig = CompositeSignature_new();
+        if (!compsig) {
+            OQS_KEY_PRINTF("OQSX KEY: CompositeSignature_new failed\n");
+            goto CMP_SIG_compsig;
+        }
+
+        compsig->sig1 = ASN1_BIT_STRING_new();
+        compsig->sig2 = ASN1_BIT_STRING_new();
+        if (!compsig->sig1 || !compsig->sig2) {
+            OQS_KEY_PRINTF("OQSX KEY: ASN1_BIT_STRING_new failed\n");
+            goto CMP_SIG_compsig;
+        }
+
+        ASN1_BIT_STRING_set(compsig->sig1, sig1, sig1_len);
+        ASN1_BIT_STRING_set(compsig->sig2, sig2, sig2_len);
+
+        compsig_len = i2d_CompositeSignature(compsig, NULL);
+        if (compsig_len <= 0) {
+            OQS_KEY_PRINTF("OQSX KEY: i2d_CompositeSignature failed\n");
+            goto CMP_SIG_compsig;
+        }
+
+    CMP_SIG_compsig:
+        CompositeSignature_free(compsig);
+    CMP_SIG_sig:
+        OPENSSL_free(sig1);
+        OPENSSL_free(sig2);
+        return compsig_len;
 
     default:
         OQS_KEY_PRINTF("OQSX KEY: Wrong key type\n");

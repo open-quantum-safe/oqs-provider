@@ -644,8 +644,6 @@ sigs:
 # NIST OIDs see https://csrc.nist.gov/projects/computer-security-objects-register/algorithm-registration
 # Signature prefix 2.16.840.1.101.3.4.3.
 # ML-DSA code points: https://datatracker.ietf.org/doc/draft-tls-westerbaan-mldsa/00
-# Composite-ML-DSA OIDs: https://datatracker.ietf.org/doc/draft-ietf-lamps-pq-composite-sigs/02/
-# Composite-ML-DSA code points: https://datatracker.ietf.org/doc/draft-reddy-tls-composite-mldsa/01
   -
     family: 'ML-DSA'
     variants:
@@ -665,31 +663,6 @@ sigs:
                     'pretty_name': 'RSA3072',
                     'oid': '1.3.9999.7.6',
                     'code_point': '0xff07'}]
-        composite:  [{'name': 'pss2048',
-                      'pretty_name': 'RSA PSS 2048',
-                      'security': '112',
-                      'oid': '2.16.840.1.114027.80.8.1.1',
-                      'code_point': '0x090f'},
-                     {'name': 'rsa2048',
-                      'pretty_name': 'RSA2048',
-                      'security': '112',
-                      'oid': '2.16.840.1.114027.80.8.1.2',
-                      'code_point': '0x090c'},
-                     {'name': 'ed25519',
-                      'pretty_name': 'ED25519',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.3',
-                      'code_point': '0x090a'},
-                     {'name': 'p256',
-                      'pretty_name': 'ECDSA p256',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.4',
-                      'code_point': '0x0907'},
-                     {'name': 'bp256',
-                      'pretty_name': 'ECDSA brainpoolP256r1',
-                      'security': '256',
-                      'oid': '2.16.840.1.114027.80.8.1.5',
-                      'code_point': '0xfee5'}]
       -
         name: 'mldsa65'
         pretty_name: 'ML-DSA-65'
@@ -702,31 +675,6 @@ sigs:
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.7.7',
                     'code_point': '0xff08'}]
-        composite:  [{'name': 'pss3072',
-                      'pretty_name': 'RSA PSS 3072',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.6',
-                      'code_point': '0x0910'},
-                     {'name': 'rsa3072',
-                      'pretty_name': 'RSA 3072',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.7',
-                      'code_point': '0x090d'},
-                     {'name': 'p256',
-                      'pretty_name': 'ECDSA p256',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.8',
-                      'code_point': '0x0908'},
-                     {'name': 'bp256',
-                      'pretty_name': 'ECDSA brainpoolP256r1',
-                      'security': '256',
-                      'oid': '2.16.840.1.114027.80.8.1.9',
-                      'code_point': '0xfee9'},
-                     {'name': 'ed25519',
-                      'pretty_name': 'ED25519',
-                      'security': '128',
-                      'oid': '2.16.840.1.114027.80.8.1.10',
-                      'code_point': '0x090b'}]
       -
         name: 'mldsa87'
         pretty_name: 'ML-DSA-87'
@@ -739,21 +687,6 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.7.8',
                     'code_point': '0xff09'}]
-        composite:  [{'name': 'p384',
-                      'pretty_name': 'ECDSA p384',
-                      'security': '192',
-                      'oid': '2.16.840.1.114027.80.8.1.11',
-                      'code_point': '0x0909'},
-                     {'name': 'bp384',
-                      'pretty_name': 'ECDSA brainpoolP384r1',
-                      'security': '384',
-                      'oid': '2.16.840.1.114027.80.8.1.12',
-                      'code_point': '0xfeec'},
-                     {'name': 'ed448',
-                      'pretty_name': 'ED448',
-                      'security': '192',
-                      'oid': '2.16.840.1.114027.80.8.1.13',
-                      'code_point': '0x0912'}]
   -
     # iso (1)
     # identified-organization (3)

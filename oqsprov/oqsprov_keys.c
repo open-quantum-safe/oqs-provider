@@ -53,9 +53,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 103
+#define NID_TABLE_LEN 90
 #else
-#define NID_TABLE_LEN 68
+#define NID_TABLE_LEN 55
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -116,23 +116,10 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "mldsa44", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_SIG, 128},
     {0, "p256_mldsa44", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_mldsa44", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_HYB_SIG, 128},
-    {0, "mldsa44_pss2048", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_CMP_SIG, 112},
-    {0, "mldsa44_rsa2048", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_CMP_SIG, 112},
-    {0, "mldsa44_ed25519", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_CMP_SIG, 128},
-    {0, "mldsa44_p256", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_CMP_SIG, 128},
-    {0, "mldsa44_bp256", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_CMP_SIG, 256},
     {0, "mldsa65", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_SIG, 192},
     {0, "p384_mldsa65", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_HYB_SIG, 192},
-    {0, "mldsa65_pss3072", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_CMP_SIG, 128},
-    {0, "mldsa65_rsa3072", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_CMP_SIG, 128},
-    {0, "mldsa65_p256", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_CMP_SIG, 128},
-    {0, "mldsa65_bp256", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_CMP_SIG, 256},
-    {0, "mldsa65_ed25519", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_CMP_SIG, 128},
     {0, "mldsa87", OQS_SIG_alg_ml_dsa_87, KEY_TYPE_SIG, 256},
     {0, "p521_mldsa87", OQS_SIG_alg_ml_dsa_87, KEY_TYPE_HYB_SIG, 256},
-    {0, "mldsa87_p384", OQS_SIG_alg_ml_dsa_87, KEY_TYPE_CMP_SIG, 192},
-    {0, "mldsa87_bp384", OQS_SIG_alg_ml_dsa_87, KEY_TYPE_CMP_SIG, 384},
-    {0, "mldsa87_ed448", OQS_SIG_alg_ml_dsa_87, KEY_TYPE_CMP_SIG, 192},
     {0, "falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
     {0, "p256_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},

@@ -44,7 +44,7 @@ This implementation makes available the following quantum safe algorithms:
 ### Signature algorithms
 
 
-- **ML-DSA**:`mldsa44`, `p256_mldsa44`, `rsa3072_mldsa44`, `mldsa44_pss2048`, `mldsa44_rsa2048`, `mldsa44_ed25519`, `mldsa44_p256`, `mldsa44_bp256`, `mldsa65`, `p384_mldsa65`, `mldsa65_pss3072`, `mldsa65_rsa3072`, `mldsa65_p256`, `mldsa65_bp256`, `mldsa65_ed25519`, `mldsa87`, `p521_mldsa87`, `mldsa87_p384`, `mldsa87_bp384`, `mldsa87_ed448`
+- **ML-DSA**:`mldsa44`, `p256_mldsa44`, `rsa3072_mldsa44`, `mldsa65`, `p384_mldsa65`, `mldsa87`, `p521_mldsa87`
 - **Falcon**:`falcon512`, `p256_falcon512`, `rsa3072_falcon512`, `falconpadded512`, `p256_falconpadded512`, `rsa3072_falconpadded512`, `falcon1024`, `p521_falcon1024`, `falconpadded1024`, `p521_falconpadded1024`
 
 - **SPHINCS-SHA2**:`sphincssha2128fsimple`, `p256_sphincssha2128fsimple`, `rsa3072_sphincssha2128fsimple`, `sphincssha2128ssimple`, `p256_sphincssha2128ssimple`, `rsa3072_sphincssha2128ssimple`, `sphincssha2192fsimple`, `p384_sphincssha2192fsimple`, `sphincssha2192ssimple`\*, `p384_sphincssha2192ssimple`\*, `sphincssha2256fsimple`\*, `p521_sphincssha2256fsimple`\*, `sphincssha2256ssimple`\*, `p521_sphincssha2256ssimple`\*

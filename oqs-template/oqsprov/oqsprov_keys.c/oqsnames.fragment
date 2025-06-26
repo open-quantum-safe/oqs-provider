@@ -15,9 +15,6 @@
 {%- for classical_alg in variant['mix_with'] %}
 {%- set count.val = count.val + 1 -%}
 {%- endfor -%}
-{%- for composite_alg in variant['composite'] %}
-{%- set count.val = count.val + 1 -%}
-{%- endfor -%}
 {%- endfor -%}
 {%- endfor %}
 
@@ -43,9 +40,6 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
        { 0, "{{variant['name']}}", {{variant['oqs_meth']}}, KEY_TYPE_SIG, {{variant['security']}} },
      {%- for classical_alg in variant['mix_with'] %}
        { 0, "{{ classical_alg['name'] }}_{{variant['name']}}", {{variant['oqs_meth']}}, KEY_TYPE_HYB_SIG, {{variant['security']}} },
-     {%- endfor %}
-     {%- for composite_alg in variant['composite'] %}
-       { 0, "{{variant['name']}}_{{ composite_alg['name'] }}", {{variant['oqs_meth']}}, KEY_TYPE_CMP_SIG, {{composite_alg['security']}} },
      {%- endfor %}
    {%- endfor %}
 {%- endfor %}

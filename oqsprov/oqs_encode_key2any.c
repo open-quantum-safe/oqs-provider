@@ -9,7 +9,6 @@
  */
 
 #include <openssl/asn1.h>
-#include <openssl/asn1t.h>
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
@@ -19,12 +18,10 @@
 #include <openssl/pem.h>
 #include <openssl/pkcs12.h> /* PKCS8_encrypt() */
 #include <openssl/proverr.h>
-#include <openssl/types.h>
 #include <openssl/x509.h>
 #include <string.h>
 
 #include "oqs_endecoder_local.h"
-#include "oqs_prov.h"
 
 #ifdef NDEBUG
 #define OQS_ENC_PRINTF(a)
@@ -278,7 +275,7 @@ static int key_to_pki_pem_priv_bio(BIO *out, const void *key, int key_nid,
                                    ossl_unused const char *pemname,
                                    key_to_paramstring_fn *p2s, i2d_of_void *k2d,
                                    struct key2any_ctx_st *ctx) {
-    int ret = 0, cmp_len = 0;
+    int ret = 0;
     void *str = NULL;
     int strtype = V_ASN1_UNDEF;
     PKCS8_PRIV_KEY_INFO *p8info;
@@ -486,10 +483,7 @@ static int prepare_oqsx_params(const void *oqsxkey, int nid, int save,
 
 static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder) {
     const OQSX_KEY *oqsxkey = vxkey;
-    unsigned char *keyblob, *buf;
-    int keybloblen, nid, buflen = 0;
-    ASN1_OCTET_STRING oct;
-    STACK_OF(ASN1_TYPE) *sk = NULL;
+    unsigned char *keyblob;
     int ret = 0;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_spki_pub_to_der called\n");
@@ -498,79 +492,13 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder) {
         ERR_raise(ERR_LIB_USER, ERR_R_PASSED_NULL_PARAMETER);
         return 0;
     }
-    if (oqsxkey->keytype != KEY_TYPE_CMP_SIG) {
-        keyblob = OPENSSL_memdup(oqsxkey->pubkey, oqsxkey->pubkeylen);
-        if (keyblob == NULL) {
-            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-            return 0;
-        }
-        *pder = keyblob;
-        return oqsxkey->pubkeylen;
-    } else {
-        if ((sk = sk_ASN1_TYPE_new_null()) == NULL)
-            return -1;
-        ASN1_TYPE **aType =
-            OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_TYPE *));
-        ASN1_BIT_STRING **aString =
-            OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_BIT_STRING *));
-        unsigned char **temp =
-            OPENSSL_malloc(oqsxkey->numkeys * sizeof(unsigned char *));
-        size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t));
-        int i;
-
-        for (i = 0; i < oqsxkey->numkeys; i++) {
-            aType[i] = ASN1_TYPE_new();
-            aString[i] = ASN1_BIT_STRING_new();
-            temp[i] = NULL;
-
-            buflen = oqsxkey->pubkeylen_cmp[i];
-            buf = OPENSSL_secure_malloc(buflen);
-            memcpy(buf, oqsxkey->comp_pubkey[i], buflen);
-
-            oct.data = buf;
-            oct.length = buflen;
-            oct.flags = 8;
-            templen[i] = i2d_ASN1_BIT_STRING(&oct, &temp[i]);
-            ASN1_STRING_set(aString[i], temp[i], templen[i]);
-            ASN1_TYPE_set1(aType[i], V_ASN1_SEQUENCE, aString[i]);
-
-            if (!sk_ASN1_TYPE_push(sk, aType[i])) {
-                for (int j = 0; j <= i; j++) {
-                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                    ASN1_BIT_STRING_free(aString[j]);
-                    OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                    aType[j]->value.sequence->length);
-                    OPENSSL_clear_free(temp[j], templen[j]);
-                }
-
-                sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                OPENSSL_secure_clear_free(buf, buflen);
-                OPENSSL_free(aType);
-                OPENSSL_free(aString);
-                OPENSSL_free(temp);
-                OPENSSL_free(templen);
-                return -1;
-            }
-            OPENSSL_secure_clear_free(buf, buflen);
-        }
-        keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
-
-        for (i = 0; i < oqsxkey->numkeys; i++) {
-            OPENSSL_cleanse(aString[i]->data, aString[i]->length);
-            ASN1_BIT_STRING_free(aString[i]);
-            OPENSSL_cleanse(aType[i]->value.sequence->data,
-                            aType[i]->value.sequence->length);
-            OPENSSL_clear_free(temp[i], templen[i]);
-        }
-
-        sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-        OPENSSL_free(aType);
-        OPENSSL_free(aString);
-        OPENSSL_free(temp);
-        OPENSSL_free(templen);
-
-        return keybloblen;
+    keyblob = OPENSSL_memdup(oqsxkey->pubkey, oqsxkey->pubkeylen);
+    if (keyblob == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        return 0;
     }
+    *pder = keyblob;
+    return oqsxkey->pubkeylen;
 }
 
 static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
@@ -578,9 +506,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     unsigned char *buf = NULL;
     uint32_t buflen = 0, privkeylen = 0;
     ASN1_OCTET_STRING oct;
-    int keybloblen, nid;
-    STACK_OF(ASN1_TYPE) *sk = NULL;
-    char *name;
+    int keybloblen;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_pki_priv_to_der called\n");
 
@@ -599,357 +525,63 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 
     // only concatenate private classic key (if any) and OQS private and public
     // key NOT saving public classic key component (if any)
-    if (oqsxkey->keytype != KEY_TYPE_CMP_SIG) {
-        privkeylen = oqsxkey->privkeylen;
-        if (oqsxkey->numkeys > 1) { // hybrid
-            uint32_t actualprivkeylen = 0;
-            size_t fixed_pq_privkeylen =
-                oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
-            size_t space_for_classical_privkey =
-                privkeylen - SIZE_OF_UINT32 - fixed_pq_privkeylen;
-            DECODE_UINT32(actualprivkeylen, oqsxkey->privkey);
-            if ((actualprivkeylen > oqsxkey->evp_info->length_private_key) ||
-                (actualprivkeylen > space_for_classical_privkey)) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                return 0;
-            }
-            privkeylen -=
-                (oqsxkey->evp_info->length_private_key - actualprivkeylen);
+    privkeylen = oqsxkey->privkeylen;
+    if (oqsxkey->numkeys > 1) { // hybrid
+        uint32_t actualprivkeylen = 0;
+        size_t fixed_pq_privkeylen =
+            oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
+        size_t space_for_classical_privkey =
+            privkeylen - SIZE_OF_UINT32 - fixed_pq_privkeylen;
+        DECODE_UINT32(actualprivkeylen, oqsxkey->privkey);
+        if ((actualprivkeylen > oqsxkey->evp_info->length_private_key) ||
+            (actualprivkeylen > space_for_classical_privkey)) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            return 0;
         }
+        privkeylen -=
+            (oqsxkey->evp_info->length_private_key - actualprivkeylen);
+    }
 #ifdef NOPUBKEY_IN_PRIVKEY
-        buflen = privkeylen;
-        buf = OPENSSL_secure_malloc(buflen);
-        if (buf == NULL) {
-            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-            return -1;
-        }
-        OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %zu\n",
-                        buflen);
-        memcpy(buf, oqsxkey->privkey, privkeylen);
+    buflen = privkeylen;
+    buf = OPENSSL_secure_malloc(buflen);
+    if (buf == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        return -1;
+    }
+    OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %zu\n", buflen);
+    memcpy(buf, oqsxkey->privkey, privkeylen);
 #else
-        buflen = privkeylen + oqsx_key_get_oqs_public_key_len(oqsxkey);
-        buf = OPENSSL_secure_malloc(buflen);
-        if (buf == NULL) {
-            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-            return -1;
-        }
-        OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n",
-                        buflen);
-        memcpy(buf, oqsxkey->privkey, privkeylen);
-        if (oqsxkey->reverse_share) {
-            memcpy(buf + privkeylen, oqsxkey->comp_pubkey[0],
-                   oqsx_key_get_oqs_public_key_len(oqsxkey));
-        } else {
-            memcpy(buf + privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys - 1],
-                   oqsx_key_get_oqs_public_key_len(oqsxkey));
-        }
+    buflen = privkeylen + oqsx_key_get_oqs_public_key_len(oqsxkey);
+    buf = OPENSSL_secure_malloc(buflen);
+    if (buf == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        return -1;
+    }
+    OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n",
+                    buflen);
+    memcpy(buf, oqsxkey->privkey, privkeylen);
+    if (oqsxkey->reverse_share) {
+        memcpy(buf + privkeylen, oqsxkey->comp_pubkey[0],
+               oqsx_key_get_oqs_public_key_len(oqsxkey));
+    } else {
+        memcpy(buf + privkeylen, oqsxkey->comp_pubkey[oqsxkey->numkeys - 1],
+               oqsx_key_get_oqs_public_key_len(oqsxkey));
+    }
 #endif
 
-        oct.data = buf;
-        oct.length = buflen;
-        // more logical:
-        // oct.data = oqsxkey->privkey;
-        // oct.length = oqsxkey->privkeylen;
-        oct.flags = 0;
+    oct.data = buf;
+    oct.length = buflen;
+    // more logical:
+    // oct.data = oqsxkey->privkey;
+    // oct.length = oqsxkey->privkeylen;
+    oct.flags = 0;
 
-        keybloblen = i2d_ASN1_OCTET_STRING(&oct, pder);
-        if (keybloblen < 0) {
-            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-            keybloblen = 0; // signal error
-        }
-        OPENSSL_secure_clear_free(buf, buflen);
-    } else {
-        ASN1_TYPE **aType =
-            OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_TYPE *));
-        ASN1_OCTET_STRING **aString =
-            OPENSSL_malloc(oqsxkey->numkeys * sizeof(ASN1_OCTET_STRING *));
-        unsigned char **temp =
-            OPENSSL_malloc(oqsxkey->numkeys * sizeof(unsigned char *));
-        unsigned char *ed_internal;
-        size_t *templen = OPENSSL_malloc(oqsxkey->numkeys * sizeof(size_t)),
-               ed_internallen;
-        PKCS8_PRIV_KEY_INFO *p8inf_internal = NULL;
-        sk = sk_ASN1_TYPE_new_null();
-        int i;
-
-        if (!sk || !templen || !aType || !aString || !temp) {
-            OPENSSL_free(aType);
-            OPENSSL_free(aString);
-            OPENSSL_free(temp);
-            OPENSSL_free(templen);
-            if (sk) {
-                sk_ASN1_TYPE_pop_free(sk, ASN1_TYPE_free);
-            }
-            return -1;
-        }
-
-        for (i = 0; i < oqsxkey->numkeys; i++) {
-            aType[i] = ASN1_TYPE_new();
-            aString[i] = ASN1_OCTET_STRING_new();
-            p8inf_internal = PKCS8_PRIV_KEY_INFO_new();
-            temp[i] = NULL;
-            int nid, version;
-            void *pval;
-
-            if ((name = get_cmpname(OBJ_sn2nid(oqsxkey->tls_name), i)) ==
-                NULL) {
-                for (int j = 0; j <= i; j++) {
-                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                    ASN1_OCTET_STRING_free(aString[j]);
-                    OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                    aType[j]->value.sequence->length);
-                    if (j < i)
-                        OPENSSL_clear_free(temp[j], templen[j]);
-                }
-
-                if (sk_ASN1_TYPE_num(sk) != -1)
-                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                else
-                    ASN1_TYPE_free(aType[i]);
-
-                OPENSSL_free(aType);
-                OPENSSL_free(aString);
-                OPENSSL_free(temp);
-                OPENSSL_free(templen);
-                PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
-                return -1;
-            }
-
-            if (get_oqsname_fromtls(name) == 0) {
-                nid =
-                    oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->keytype;
-                if (nid == EVP_PKEY_RSA) { // get the RSA real key size
-                    unsigned char *enc_len = (unsigned char *)OPENSSL_strndup(
-                        oqsxkey->comp_privkey[i], 4);
-                    OPENSSL_cleanse(enc_len, 2);
-                    DECODE_UINT32(buflen, enc_len);
-                    buflen += 4;
-                    OPENSSL_free(enc_len);
-                    if (buflen > oqsxkey->privkeylen_cmp[i]) {
-                        for (int j = 0; j <= i; j++) {
-                            OPENSSL_cleanse(aString[j]->data,
-                                            aString[j]->length);
-                            ASN1_OCTET_STRING_free(aString[j]);
-                            OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                            aType[j]->value.sequence->length);
-                            if (j < i)
-                                OPENSSL_clear_free(temp[j], templen[j]);
-                        }
-
-                        if (sk_ASN1_TYPE_num(sk) != -1)
-                            sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                        else
-                            ASN1_TYPE_free(aType[i]);
-
-                        OPENSSL_free(aType);
-                        OPENSSL_free(aString);
-                        OPENSSL_free(temp);
-                        OPENSSL_free(templen);
-                        PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
-                        OPENSSL_free(name);
-                        return -1;
-                    }
-                } else
-                    buflen = oqsxkey->privkeylen_cmp[i];
-            } else {
-                nid = OBJ_sn2nid(name);
-                buflen = oqsxkey->privkeylen_cmp[i] + oqsxkey->pubkeylen_cmp[i];
-            }
-
-            buf = OPENSSL_secure_malloc(buflen);
-            if (buf == NULL) {
-                for (int j = 0; j <= i; j++) {
-                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                    ASN1_OCTET_STRING_free(aString[j]);
-                    OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                    aType[j]->value.sequence->length);
-                    if (j < i)
-                        OPENSSL_clear_free(temp[j], templen[j]);
-                }
-
-                if (sk_ASN1_TYPE_num(sk) != -1)
-                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                else
-                    ASN1_TYPE_free(aType[i]);
-
-                OPENSSL_free(aType);
-                OPENSSL_free(aString);
-                OPENSSL_free(temp);
-                OPENSSL_free(templen);
-                PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
-                OPENSSL_free(name);
-                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-                return -1;
-            }
-            if (get_oqsname_fromtls(name) !=
-                0) { // include pubkey in privkey for PQC
-                memcpy(buf, oqsxkey->comp_privkey[i],
-                       oqsxkey->privkeylen_cmp[i]);
-                memcpy(buf + oqsxkey->privkeylen_cmp[i],
-                       oqsxkey->comp_pubkey[i], oqsxkey->pubkeylen_cmp[i]);
-            } else {
-                memcpy(buf, oqsxkey->comp_privkey[i],
-                       buflen); // buflen for classical (RSA)
-                                // might be different from
-                                // oqsxkey->privkeylen_cmp
-            }
-
-            if (nid == EVP_PKEY_EC) { // add the curve OID with the ECPubkey OID
-                version = V_ASN1_OBJECT;
-                pval = OBJ_nid2obj(
-                    oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->nid);
-            } else {
-                version = V_ASN1_UNDEF;
-                pval = NULL;
-            }
-            if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
-                oct.data = buf;
-                oct.length = buflen;
-                oct.flags = 0;
-                ed_internal = NULL;
-
-                ed_internallen = i2d_ASN1_OCTET_STRING(&oct, &ed_internal);
-                if (ed_internallen < 0) {
-                    for (int j = 0; j <= i; j++) {
-                        OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                        ASN1_OCTET_STRING_free(aString[j]);
-                        OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                        aType[j]->value.sequence->length);
-                        OPENSSL_clear_free(temp[j], templen[j]);
-                    }
-
-                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                    OPENSSL_free(name);
-                    OPENSSL_free(aType);
-                    OPENSSL_free(aString);
-                    OPENSSL_free(temp);
-                    OPENSSL_free(templen);
-                    OPENSSL_cleanse(buf,
-                                    buflen); // buf is part of p8inf_internal so
-                                             // we cant free now, we cleanse it
-                                             // to remove pkey from memory
-                    PKCS8_PRIV_KEY_INFO_free(
-                        p8inf_internal); // this also free buf
-                    return -1;
-                }
-
-                if (!PKCS8_pkey_set0(p8inf_internal, OBJ_nid2obj(nid), 0,
-                                     version, pval, ed_internal,
-                                     ed_internallen)) {
-                    for (int j = 0; j <= i; j++) {
-                        OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                        ASN1_OCTET_STRING_free(aString[j]);
-                        OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                        aType[j]->value.sequence->length);
-                        OPENSSL_clear_free(temp[j], templen[j]);
-                    }
-
-                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                    OPENSSL_free(name);
-                    OPENSSL_free(aType);
-                    OPENSSL_free(aString);
-                    OPENSSL_free(temp);
-                    OPENSSL_free(templen);
-                    OPENSSL_secure_clear_free(buf, buflen);
-                    OPENSSL_cleanse(ed_internal, ed_internallen);
-                    PKCS8_PRIV_KEY_INFO_free(
-                        p8inf_internal); // this also free ed_internal
-                    return -1;
-                }
-
-            } else {
-                if (!PKCS8_pkey_set0(p8inf_internal, OBJ_nid2obj(nid), 0,
-                                     version, pval, buf, buflen)) {
-                    for (int j = 0; j <= i; j++) {
-                        OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                        ASN1_OCTET_STRING_free(aString[j]);
-                        OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                        aType[j]->value.sequence->length);
-                        OPENSSL_clear_free(temp[j], templen[j]);
-                    }
-
-                    sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                    OPENSSL_free(name);
-                    OPENSSL_free(aType);
-                    OPENSSL_free(aString);
-                    OPENSSL_free(temp);
-                    OPENSSL_free(templen);
-                    OPENSSL_cleanse(buf,
-                                    buflen); // buf is part of p8inf_internal so
-                                             // we cant free now, we cleanse it
-                                             // to remove pkey from memory
-                    PKCS8_PRIV_KEY_INFO_free(
-                        p8inf_internal); // this also free buf
-                    return -1;
-                }
-            }
-            templen[i] =
-                i2d_PKCS8_PRIV_KEY_INFO(p8inf_internal,
-                                        &temp[i]); // create the privkey info
-                                                   // for each individual key
-            ASN1_STRING_set(aString[i], temp[i],
-                            templen[i]); // add privkey info as ASN1_STRING
-            ASN1_TYPE_set1(aType[i], V_ASN1_SEQUENCE,
-                           aString[i]); // add the ASN1_STRING into a ANS1_TYPE
-                                        // so it can be added into the stack
-
-            if (!sk_ASN1_TYPE_push(sk, aType[i])) {
-                for (int j = 0; j <= i; j++) {
-                    OPENSSL_cleanse(aString[j]->data, aString[j]->length);
-                    ASN1_OCTET_STRING_free(aString[j]);
-                    OPENSSL_cleanse(aType[j]->value.sequence->data,
-                                    aType[j]->value.sequence->length);
-                    OPENSSL_clear_free(temp[j], templen[j]);
-                }
-
-                sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-                OPENSSL_free(name);
-                OPENSSL_free(aType);
-                OPENSSL_free(aString);
-                OPENSSL_free(temp);
-                OPENSSL_free(templen);
-                OPENSSL_cleanse(buf,
-                                buflen); // buf is part of p8inf_internal so we
-                                         // cant free now, we cleanse it to
-                                         // remove pkey from memory
-                if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
-                    OPENSSL_cleanse(ed_internal, ed_internallen);
-                    OPENSSL_secure_free(
-                        buf); // in this case the ed_internal is
-                              // freed from the pkcs8_free instead
-                              // of buf, so we need to free buf here
-                }
-                PKCS8_PRIV_KEY_INFO_free(
-                    p8inf_internal); // this also free buf or ed_internal
-                return -1;
-            }
-            OPENSSL_free(name);
-
-            OPENSSL_cleanse(buf, buflen);
-            if (nid == EVP_PKEY_ED25519 || nid == EVP_PKEY_ED448) {
-                OPENSSL_cleanse(ed_internal, ed_internallen);
-                OPENSSL_secure_free(buf); // in this case the ed_internal is
-                                          // freed from the pkcs8_free instead
-                                          // of buf, so we need to free buf here
-            }
-            PKCS8_PRIV_KEY_INFO_free(p8inf_internal);
-        }
-        keybloblen = i2d_ASN1_SEQUENCE_ANY(sk, pder);
-
-        for (i = 0; i < oqsxkey->numkeys; i++) {
-            OPENSSL_cleanse(aString[i]->data, aString[i]->length);
-            ASN1_OCTET_STRING_free(aString[i]);
-            OPENSSL_cleanse(aType[i]->value.sequence->data,
-                            aType[i]->value.sequence->length);
-            OPENSSL_clear_free(temp[i], templen[i]);
-        }
-
-        sk_ASN1_TYPE_pop_free(sk, &ASN1_TYPE_free);
-        OPENSSL_free(aType);
-        OPENSSL_free(aString);
-        OPENSSL_free(temp);
-        OPENSSL_free(templen);
+    keybloblen = i2d_ASN1_OCTET_STRING(&oct, pder);
+    if (keybloblen < 0) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        keybloblen = 0; // signal error
     }
+    OPENSSL_secure_clear_free(buf, buflen);
     return keybloblen;
 }
 
@@ -1650,11 +1282,6 @@ static int oqsx_to_text(BIO *out, const void *key, int selection) {
                 0)
                 return 0;
             break;
-        case KEY_TYPE_CMP_SIG:
-            if (BIO_printf(out, "%s composite private key:\n",
-                           okey->tls_name) <= 0)
-                return 0;
-            break;
         default:
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
             return 0;
@@ -1677,11 +1304,6 @@ static int oqsx_to_text(BIO *out, const void *key, int selection) {
             if (BIO_printf(out, "%s hybrid public key:\n", okey->tls_name) <= 0)
                 return 0;
             break;
-        case KEY_TYPE_CMP_SIG:
-            if (BIO_printf(out, "%s composite public key:\n", okey->tls_name) <=
-                0)
-                return 0;
-            break;
         default:
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
             return 0;
@@ -1690,133 +1312,67 @@ static int oqsx_to_text(BIO *out, const void *key, int selection) {
 
     if ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0) {
         if (okey->privkey) {
-            if (okey->keytype == KEY_TYPE_CMP_SIG) {
-                char *name;
-                char label[200];
-                int i;
-                uint32_t privlen = 0;
-                for (i = 0; i < okey->numkeys; i++) {
-                    if ((name = get_cmpname(OBJ_sn2nid(okey->tls_name), i)) ==
-                        NULL) {
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
-                        return 0;
-                    }
-                    sprintf(label, "%s key material:", name);
-
-                    if (get_oqsname_fromtls(name) == 0 // classical key
-                        && okey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info
-                                   ->keytype ==
-                               EVP_PKEY_RSA) { // get the RSA real key size
-                        unsigned char *enc_len =
-                            (unsigned char *)OPENSSL_strndup(
-                                okey->comp_privkey[i], 4);
-                        OPENSSL_cleanse(enc_len, 2);
-                        DECODE_UINT32(privlen, enc_len);
-                        privlen += 4;
-                        OPENSSL_free(enc_len);
-                        if (privlen > okey->privkeylen_cmp[i]) {
-                            OPENSSL_free(name);
-                            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                            return 0;
-                        }
-                    } else
-                        privlen = okey->privkeylen_cmp[i];
-                    if (!print_labeled_buf(out, label, okey->comp_privkey[i],
-                                           privlen))
-                        return 0;
-
-                    OPENSSL_free(name);
+            if (okey->numkeys > 1) { // hybrid key
+                char classic_label[200];
+                uint32_t classic_key_len = 0;
+                size_t fixed_pq_privkey_len =
+                    okey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
+                size_t space_for_classical_privkey =
+                    okey->privkeylen - SIZE_OF_UINT32 - fixed_pq_privkey_len;
+                sprintf(classic_label,
+                        "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
+                DECODE_UINT32(classic_key_len, okey->privkey);
+                if (classic_key_len > space_for_classical_privkey) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    return 0;
                 }
-            } else {
-                if (okey->numkeys > 1) { // hybrid key
-                    char classic_label[200];
-                    uint32_t classic_key_len = 0;
-                    size_t fixed_pq_privkey_len =
-                        okey->oqsx_provider_ctx.oqsx_qs_ctx.kem
-                            ->length_secret_key;
-                    size_t space_for_classical_privkey = okey->privkeylen -
-                                                         SIZE_OF_UINT32 -
-                                                         fixed_pq_privkey_len;
-                    sprintf(classic_label, "%s key material:",
-                            OBJ_nid2sn(okey->evp_info->nid));
-                    DECODE_UINT32(classic_key_len, okey->privkey);
-                    if (classic_key_len > space_for_classical_privkey) {
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                        return 0;
-                    }
-                    if (!print_labeled_buf(out, classic_label,
-                                           okey->comp_privkey[0],
-                                           classic_key_len))
-                        return 0;
-                    /* finally print pure PQ key */
-                    if (!print_labeled_buf(
-                            out, "PQ key material:",
-                            okey->comp_privkey[okey->numkeys - 1],
-                            okey->privkeylen - classic_key_len -
-                                SIZE_OF_UINT32))
-                        return 0;
-                } else { // plain PQ key
-                    if (!print_labeled_buf(
-                            out, "PQ key material:",
-                            okey->comp_privkey[okey->numkeys - 1],
-                            okey->privkeylen))
-                        return 0;
-                }
+                if (!print_labeled_buf(out, classic_label,
+                                       okey->comp_privkey[0], classic_key_len))
+                    return 0;
+                /* finally print pure PQ key */
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_privkey[okey->numkeys - 1],
+                                       okey->privkeylen - classic_key_len -
+                                           SIZE_OF_UINT32))
+                    return 0;
+            } else { // plain PQ key
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_privkey[okey->numkeys - 1],
+                                       okey->privkeylen))
+                    return 0;
             }
         }
     }
     if ((selection & OSSL_KEYMGMT_SELECT_PUBLIC_KEY) != 0) {
         if (okey->pubkey) {
-            if (okey->keytype == KEY_TYPE_CMP_SIG) {
-                char *name;
-                char label[200];
-                int i;
-                for (i = 0; i < okey->numkeys; i++) {
-                    if ((name = get_cmpname(OBJ_sn2nid(okey->tls_name), i)) ==
-                        NULL) {
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
-                        return 0;
-                    }
-                    sprintf(label, "%s key material:", name);
-
-                    if (!print_labeled_buf(out, label, okey->comp_pubkey[i],
-                                           okey->pubkeylen_cmp[i]))
-                        return 0;
-
-                    OPENSSL_free(name);
+            if (okey->numkeys > 1) { // hybrid key
+                char classic_label[200];
+                uint32_t classic_key_len = 0;
+                size_t fixed_pq_pubkey_len =
+                    okey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
+                size_t space_for_classical_pubkey =
+                    okey->pubkeylen - SIZE_OF_UINT32 - fixed_pq_pubkey_len;
+                DECODE_UINT32(classic_key_len, okey->pubkey);
+                if (classic_key_len > space_for_classical_pubkey) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    return 0;
                 }
-            } else {
-                if (okey->numkeys > 1) { // hybrid key
-                    char classic_label[200];
-                    uint32_t classic_key_len = 0;
-                    size_t fixed_pq_pubkey_len =
-                        okey->oqsx_provider_ctx.oqsx_qs_ctx.kem
-                            ->length_public_key;
-                    size_t space_for_classical_pubkey =
-                        okey->pubkeylen - SIZE_OF_UINT32 - fixed_pq_pubkey_len;
-                    DECODE_UINT32(classic_key_len, okey->pubkey);
-                    if (classic_key_len > space_for_classical_pubkey) {
-                        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                        return 0;
-                    }
-                    sprintf(classic_label, "%s key material:",
-                            OBJ_nid2sn(okey->evp_info->nid));
-                    if (!print_labeled_buf(out, classic_label,
-                                           okey->comp_pubkey[0],
-                                           classic_key_len))
-                        return 0;
-                    /* finally print pure PQ key */
-                    if (!print_labeled_buf(out, "PQ key material:",
-                                           okey->comp_pubkey[okey->numkeys - 1],
-                                           okey->pubkeylen - classic_key_len -
-                                               SIZE_OF_UINT32))
-                        return 0;
-                } else { // PQ key only
-                    if (!print_labeled_buf(out, "PQ key material:",
-                                           okey->comp_pubkey[okey->numkeys - 1],
-                                           okey->pubkeylen))
-                        return 0;
-                }
+                sprintf(classic_label,
+                        "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
+                if (!print_labeled_buf(out, classic_label, okey->comp_pubkey[0],
+                                       classic_key_len))
+                    return 0;
+                /* finally print pure PQ key */
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_pubkey[okey->numkeys - 1],
+                                       okey->pubkeylen - classic_key_len -
+                                           SIZE_OF_UINT32))
+                    return 0;
+            } else { // PQ key only
+                if (!print_labeled_buf(out, "PQ key material:",
+                                       okey->comp_pubkey[okey->numkeys - 1],
+                                       okey->pubkeylen))
+                    return 0;
             }
         }
     }

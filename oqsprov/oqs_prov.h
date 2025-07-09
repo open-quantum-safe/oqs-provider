@@ -141,8 +141,7 @@ enum oqsx_key_type_en {
     KEY_TYPE_KEM,
     KEY_TYPE_ECP_HYB_KEM,
     KEY_TYPE_ECX_HYB_KEM,
-    KEY_TYPE_HYB_SIG,
-    KEY_TYPE_CMP_SIG
+    KEY_TYPE_HYB_SIG
 };
 
 typedef enum oqsx_key_type_en OQSX_KEY_TYPE;
@@ -155,7 +154,7 @@ struct oqsx_key_st {
     char *propq;
     OQSX_KEY_TYPE keytype;
     OQSX_PROVIDER_CTX oqsx_provider_ctx;
-    EVP_PKEY *classical_pkey; // for hybrid & composite sigs
+    EVP_PKEY *classical_pkey; // for hybrid sigs
     const OQSX_EVP_INFO *evp_info;
     size_t numkeys;
 
@@ -167,19 +166,14 @@ struct oqsx_key_st {
      */
     size_t privkeylen;
     size_t pubkeylen;
-    size_t *privkeylen_cmp;
-    size_t *pubkeylen_cmp;
     size_t bit_security;
     char *tls_name;
 #ifndef OQS_PROVIDER_NOATOMIC
     _Atomic
 #endif
         int references;
-
-    /* point to actual priv key material -- if is a hydrid, the classic key
-     * will be present first, i.e., OQS key always at comp_*key[numkeys-1] - if
-     * is a composite, the classic key will be presented second, i.e., OQS key
-     * always at comp_*key[0]
+    /* point to actual priv key material -- classic key, if present, first
+     * i.e., OQS key always at comp_*key[numkeys-1]
      */
     void **comp_privkey;
     void **comp_pubkey;
@@ -192,25 +186,6 @@ struct oqsx_key_st {
 };
 
 typedef struct oqsx_key_st OQSX_KEY;
-
-// composite signature
-struct SignatureModel {
-    ASN1_BIT_STRING *sig1;
-    ASN1_BIT_STRING *sig2;
-};
-
-typedef struct SignatureModel CompositeSignature;
-
-char *get_oqsname_fromtls(char *tlsname);
-char *get_oqsname(int nid);
-char *get_cmpname(int nid, int index);
-int get_oqsalg_idx(int nid);
-int get_composite_idx(char *name);
-
-/* Workaround for not functioning EC PARAM initialization
- * TBD, check https://github.com/openssl/openssl/issues/16989
- */
-EVP_PKEY *setECParams(EVP_PKEY *eck, int nid);
 
 /* Register given NID with tlsname in OSSL3 registry */
 int oqs_set_nid(char *tlsname, int nid);

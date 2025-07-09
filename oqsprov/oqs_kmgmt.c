@@ -72,7 +72,6 @@ struct oqsx_gen_ctx {
     OSSL_LIB_CTX *libctx;
     char *propq;
     char *oqs_name;
-    char *cmp_name;
     char *tls_name;
     int primitive;
     int selection;
@@ -591,7 +590,6 @@ static void *oqsx_gen_init(void *provctx, int selection, char *oqs_name,
 
     if ((gctx = OPENSSL_zalloc(sizeof(*gctx))) != NULL) {
         gctx->libctx = libctx;
-        gctx->cmp_name = NULL;
         gctx->oqs_name = OPENSSL_strdup(oqs_name);
         gctx->tls_name = OPENSSL_strdup(tls_name);
         gctx->primitive = primitive;

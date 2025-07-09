@@ -26,6 +26,4 @@ components, this provider implements the following standards:
   - Hybrid post-quantum / traditional private keys:
     - Simple concatenation of traditional and post-quantum components in plain binary / OCTET_STRING representations.
 
-- For composite signatures, the implementation follows [this IETF draft](https://datatracker.ietf.org/doc/draft-ietf-lamps-pq-composite-sigs/) (version 02). Note that only those PQ algorithms denoted with the marker "composite" in [oqs-template/generate.yml](oqs-template/generate.yml) are provided with composite variants and not all.
-
 Note: Please heed the [documentation on the enablement of KEM encoders](CONFIGURE.md#oqs_kem_encoders) via PKCS#8 and X.509.

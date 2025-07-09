@@ -74,8 +74,6 @@ this provider also provides different hybrid algorithms, combining classic
 and quantum-safe methods.
 There are two types of combinations:
 The Hybrids are listed above with a prefix denoting a classic algorithm, e.g., for elliptic curve: "p256_".
-The [Composite](https://datatracker.ietf.org/doc/draft-ietf-lamps-pq-composite-sigs/) are listed above with a suffix denoting a
-classic algorithm, e.g., for elliptic curve: "_p256".
 
 A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are
@@ -94,8 +92,6 @@ When loaded with OpenSSL (version >= 3.5.0), oqsprovider (version >= 0.9.0) auto
 -**ML-DSA**: `mldsa44`, `mldsa65`, `mldsa87`, `mldsa_*`
 
 -**ML-KEM**: `mlkem512`, `mlkem768`, `mlkem1024`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `X448MLKEM1024`, `SecP384r1MLKEM1024`
-
-Please note the inclusion of composite signature algorithms `mldsa_*` (`mldsa44_pss2048`, `mldsa44_rsa2048`, `mldsa44_ed25519`, `mldsa44_p256`, `mldsa44_bp256`, `mldsa65_pss3072`, `mldsa65_rsa3072`, `mldsa65_p256`, `mldsa65_bp256`, `mldsa65_ed25519`, `mldsa87_p384`, `mldsa87_bp384`, and `mldsa87_ed448`) in the list of algorithms disabled by this oqsprovider configuration (OpenSSL >= 3.5.0 and oqsprovider >= 0.9.0) even though OpenSSL does not provide alternate implementations.
 
 The new OpenSSL implementations can be be used in such a oqsprovider configuration (OpenSSL >= 3.5.0 and oqsprovider >= 0.9.0) by accessing them through the following algorithm IDs: 
 
@@ -203,7 +199,7 @@ and SLH-DSA. Accordingly, `oqsprovider` can no longer succeed registering
 (O)IDs for these algorithms as these already exist. In addition, `oqsprovider`
 functionally (e.g., support for several key formats) and non-functionally
 (e.g., code quality) is not at par with the implementations for these
-algorithms. Therefore, these, as well as their composite and hybrid variants
+algorithms. Therefore, these, as well as their hybrid variants
 are disabled at runtime upon detection of these being available in `openssl`.
 The same algorithms will continue to work even using the same `oqsprovider`
 binary in OpenSSL installations with a version older than 3.5.
@@ -258,7 +254,7 @@ Contributors to the `oqsprovider` include:
 - Alex Zaslavsky (improvements on OpenSSL integration)
 - Will Childs-Klein (improvements on Kyber hybrid OIDs)
 - Thomas Bailleux (many build, CI and usage improvements for different platforms)
-- Felipe Ventura (composite sig integration and OID management)
+- Felipe Ventura (experimental composite sig integration)
 - Iyán Méndez Veiga (PKCS#12 testing)
 - Alessandro Barenghi (CROSS OIDs)
 
@@ -308,16 +304,7 @@ MERCHANTABILITY AND WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.
 
 ## Standards compliance
 
-This project follows the [NIST PQC standardization process](https://csrc.nist.gov/projects/post-quantum-cryptography)
-and aims to support experimentation with the various PQC algorithms
-under evaluation and in different stages of standardization by NIST.
-`oqsprovider` at this time cannot claim or prove adherence to any
-standards documents published. For more details, review the file
-[STANDARDS.md](STANDARDS.md) carefully. Most notably, hybrid and
-composite implementations exclusively implemented in `oqsprovider`
-are at a pre-standard/draft stage only. Over time the project aims
-to provide standards compliance and solicits input by way of
-contributions to achieve this state.
+This project follows the [NIST PQC standardization process](https://csrc.nist.gov/projects/post-quantum-cryptography) and aims to support experimentation with the various PQC algorithms under evaluation and in different stages of standardization by NIST. `oqsprovider` at this time cannot claim or prove adherence to any standards documents published. For more details, review the file [STANDARDS.md](STANDARDS.md) carefully. Most notably, hybrid implementations exclusively implemented in `oqsprovider` are at a pre-standard/draft stage only. Over time the project aims to provide standards compliance and solicits input by way of contributions to achieve this state.
 
 ## Component disclaimer
 

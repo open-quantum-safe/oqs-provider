@@ -51,13 +51,6 @@ def gen_sig_table(oqslibdocdir):
                               claimed_nist_level,
                               hybrid['code_point'],
                               hybrid['oid']])
-            for composite in variant['composite']:
-                table.append([variant['name'] + ' **composite with** ' + composite['name'],
-                              liboqs_sigs[sig['family']]['spec-version'],
-                              str(liboqs_sigs[sig['family']]['nist-round']),
-                              claimed_nist_level,
-                              composite['code_point'],
-                              composite['oid']])
         except KeyError as ke:
             # Non-existant NIDs mean this alg is not supported any more
             pass

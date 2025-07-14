@@ -4,9 +4,6 @@ extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_keymgmt_functions[];
      {%- for classical_alg in variant['mix_with'] -%}
 extern const OSSL_DISPATCH oqs_{{ classical_alg['name'] }}_{{ variant['name'] }}_keymgmt_functions[];
      {%- endfor -%}
-     {%- for composite_alg in variant['composite'] -%}
-extern const OSSL_DISPATCH oqs_{{ variant['name'] }}_{{ composite_alg['name'] }}_keymgmt_functions[];
-     {%- endfor -%}
    {%- endfor %}
 {%- endfor %}
 {% for kem in config['kems'] %}

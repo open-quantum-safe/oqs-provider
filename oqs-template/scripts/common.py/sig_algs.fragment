@@ -16,13 +16,4 @@
                 {%- endfor -%}
             {%- endif -%}
     {%- endfor %} {%- endfor %}
-    # post-quantum + classical signatures (COMPOSITE)
-    {% for sig in config['sigs'] -%}
-        {%- for variant in sig['variants'] -%}
-            {%- if 'enable_tls' in variant and variant['enable_tls'] -%}
-                {%- for composite_alg in variant['composite'] -%}
-                    '{{ variant['name'] }}_{{ composite_alg['name'] }}',
-                {%- endfor -%}
-            {%- endif -%}
-    {%- endfor %} {%- endfor %}
-
+    

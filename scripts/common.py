@@ -20,9 +20,7 @@ signatures_oqs = [
     'mldsa44','mldsa65','mldsa87','falcon512','falconpadded512','falcon1024','falconpadded1024','sphincssha2128fsimple','sphincssha2128ssimple','sphincssha2192fsimple','sphincsshake128fsimple','mayo1','mayo2','mayo3','mayo5','CROSSrsdp128balanced','OV_Ip_pkc','OV_Ip_pkc_skc','snova2454','snova2454esk','snova37172','snova2455','snova2965',
     # post-quantum + classical signatures
     'p256_mldsa44','rsa3072_mldsa44','p384_mldsa65','p521_mldsa87','p256_falcon512','rsa3072_falcon512','p256_falconpadded512','rsa3072_falconpadded512','p521_falcon1024','p521_falconpadded1024','p256_sphincssha2128fsimple','rsa3072_sphincssha2128fsimple','p256_sphincssha2128ssimple','rsa3072_sphincssha2128ssimple','p384_sphincssha2192fsimple','p256_sphincsshake128fsimple','rsa3072_sphincsshake128fsimple','p256_mayo1','p256_mayo2','p384_mayo3','p521_mayo5','p256_OV_Ip_pkc','p256_OV_Ip_pkc_skc','p256_snova2454','p256_snova2454esk','p256_snova37172','p384_snova2455','p521_snova2965',
-    # post-quantum + classical signatures (COMPOSITE)
-    'mldsa44_pss2048','mldsa44_rsa2048','mldsa44_ed25519','mldsa44_p256','mldsa44_bp256','mldsa65_pss3072','mldsa65_rsa3072','mldsa65_p256','mldsa65_bp256','mldsa65_ed25519','mldsa87_p384','mldsa87_bp384','mldsa87_ed448',
-##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
+    ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 
 key_exchanges_ossl = ['mlkem512','mlkem768','mlkem1024', 'X25519MLKEM768','SecP256r1MLKEM768', 'SecP384r1MLKEM1024']

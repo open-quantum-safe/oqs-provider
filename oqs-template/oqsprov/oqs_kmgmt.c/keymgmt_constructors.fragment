@@ -25,19 +25,6 @@ static void *{{ classical_alg['name'] }}_{{variant['name']}}_gen_init(void *prov
 } 
 
      {%- endfor -%}
-     {%- for composite_alg in variant['composite'] %}
-     {%- set count.val = count.val + 1 %}
-static void *{{ variant['name'] }}_{{ composite_alg['name'] }}_new_key(void *provctx)
-{
-    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), {{variant['oqs_meth']}}, "{{ variant['name'] }}_{{ composite_alg['name'] }}", KEY_TYPE_CMP_SIG, NULL, {{composite_alg['security']}}, {{ count.val }}, 0);
-}
-
-static void *{{ variant['name'] }}_{{ composite_alg['name'] }}_gen_init(void *provctx, int selection)
-{
-    return oqsx_gen_init(provctx, selection, {{variant['oqs_meth']}}, "{{ variant['name'] }}_{{ composite_alg['name'] }}", KEY_TYPE_CMP_SIG, {{composite_alg['security']}}, {{ count.val }}, 0);
-} 
-
-     {%- endfor -%}
    {%- endfor %}
 {% endfor %}
 

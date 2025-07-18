@@ -9,37 +9,8 @@
 
 /** \brief List of hybrid signature algorithms. */
 const char *kHybridSignatureAlgorithms[] = {
-    "p256_mldsa44",
-    "rsa3072_mldsa44",
-    "p384_mldsa65",
-    "p521_mldsa87",
-    "p256_falcon512",
-    "rsa3072_falcon512",
-    "p256_falconpadded512",
-    "rsa3072_falconpadded512",
-    "p521_falcon1024",
-    "p521_falconpadded1024",
-    "p256_sphincssha2128fsimple",
-    "rsa3072_sphincssha2128fsimple",
-    "p256_sphincssha2128ssimple",
-    "rsa3072_sphincssha2128ssimple",
-    "p384_sphincssha2192fsimple",
-    "p256_sphincsshake128fsimple",
-    "rsa3072_sphincsshake128fsimple",
-    "p256_mayo1",
-    "p256_mayo2",
-    "p384_mayo3",
-    "p521_mayo5",
-    "p256_OV_Is_pkc",
-    "p256_OV_Ip_pkc",
-    "p256_OV_Is_pkc_skc",
-    "p256_OV_Ip_pkc_skc",
-    "p256_snova2454",
-    "p256_snova2454esk",
-    "p256_snova37172",
-    "p384_snova2455",
-    "p521_snova2965",
-    NULL,
+"p256_mldsa44","rsa3072_mldsa44","p384_mldsa65","p521_mldsa87","p256_falcon512","rsa3072_falcon512","p256_falconpadded512","rsa3072_falconpadded512","p521_falcon1024","p521_falconpadded1024","p256_sphincssha2128fsimple","rsa3072_sphincssha2128fsimple","p256_sphincssha2128ssimple","rsa3072_sphincssha2128ssimple","p384_sphincssha2192fsimple","p256_sphincsshake128fsimple","rsa3072_sphincsshake128fsimple","p256_mayo1","p256_mayo2","p384_mayo3","p521_mayo5","p256_OV_Is_pkc","p256_OV_Ip_pkc","p256_OV_Is_pkc_skc","p256_OV_Ip_pkc_skc","p256_snova2454","p256_snova2454esk","p256_snova37172","p384_snova2455","p521_snova2965",
+NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END
 
@@ -47,13 +18,8 @@ const char *kHybridSignatureAlgorithms[] = {
 
 /** \brief List of composite signature algorithms. */
 const char *kCompositeSignatureAlgorithms[] = {
-    "mldsa44_pss2048", "mldsa44_rsa2048",
-    "mldsa44_ed25519", "mldsa44_p256",
-    "mldsa44_bp256",   "mldsa65_pss3072",
-    "mldsa65_rsa3072", "mldsa65_p256",
-    "mldsa65_bp256",   "mldsa65_ed25519",
-    "mldsa87_p384",    "mldsa87_bp384",
-    "mldsa87_ed448",   NULL,
+"mldsa44_pss2048","mldsa44_rsa2048","mldsa44_ed25519","mldsa44_p256","mldsa44_bp256","mldsa65_pss3072","mldsa65_rsa3072","mldsa65_p256","mldsa65_bp256","mldsa65_ed25519","mldsa87_p384","mldsa87_bp384","mldsa87_ed448",
+NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_COMPOSITE_SIG_ALGS_END
 
@@ -61,15 +27,31 @@ const char *kCompositeSignatureAlgorithms[] = {
 
 /** \brief List of hybrid KEMs. */
 const char *kHybridKEMAlgorithms[] = {
-    "p256_frodo640aes",     "x25519_frodo640aes", "p256_frodo640shake",
-    "x25519_frodo640shake", "p384_frodo976aes",   "x448_frodo976aes",
-    "p384_frodo976shake",   "x448_frodo976shake", "p521_frodo1344aes",
-    "p521_frodo1344shake",  "p256_mlkem512",      "x25519_mlkem512",
-    "p384_mlkem768",        "x448_mlkem768",      "X25519MLKEM768",
-    "SecP256r1MLKEM768",    "p521_mlkem1024",     "SecP384r1MLKEM1024",
-    "p256_bikel1",          "x25519_bikel1",      "p384_bikel3",
-    "x448_bikel3",          "p521_bikel5",        NULL,
-}; ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_END
+    "p256_frodo640aes",
+    "x25519_frodo640aes",
+    "p256_frodo640shake",
+    "x25519_frodo640shake",
+    "p384_frodo976aes",
+    "x448_frodo976aes",
+    "p384_frodo976shake",
+    "x448_frodo976shake",
+    "p521_frodo1344aes",
+    "p521_frodo1344shake",
+    "p256_mlkem512",
+    "x25519_mlkem512",
+    "p384_mlkem768",
+    "x448_mlkem768",
+    "X25519MLKEM768",
+    "SecP256r1MLKEM768",
+    "p521_mlkem1024",
+    "SecP384r1MLKEM1024",
+    "p256_bikel1",
+    "x25519_bikel1",
+    "p384_bikel3",
+    "x448_bikel3",
+    "p521_bikel5",
+NULL,
+};///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_END
 
 void hexdump(const void *ptr, size_t len) {
     const unsigned char *p = ptr;

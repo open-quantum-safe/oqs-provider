@@ -1,3 +1,39 @@
+# oqs-provider 0.10.0-rc1
+
+## About
+
+The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on the website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.
+
+**oqs-provider** is a standalone [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and [hybrid key exchange](https://datatracker.ietf.org/doc/draft-ietf-pquip-pqt-hybrid-terminology) for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS, CMP and `dgst` (signature) operations.
+
+When deployed, the `oqs-provider` binary (shared library) thus adds support for quantum-safe cryptographic operations to any standard OpenSSL(v3) installation. The ultimate goal is that all `openssl` functionality shall be [PQC-enabled](https://csrc.nist.gov/projects/post-quantum-cryptography).
+
+In general, the oqs-provider `main` branch is meant to be usable in conjunction with the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and the `master` branch of [OpenSSL](https://github.com/openssl/openssl).
+
+Further details on building, testing and use can be found in [README.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/README.md). See in particular limitations on intended use.
+
+## Release notes
+
+This is release candidate 1 of version 0.10.0 of oqs-provider which continues from the earlier 0.9.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.14.0 of `liboqs`.
+
+### Deprecation notice
+This release of oqsprovider removes support for composite signatures.
+
+### What's New
+
+## What's Changed
+* 0.9.0 release by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/681
+* Add SNOVA signatures by @vacuas in https://github.com/open-quantum-safe/oqs-provider/pull/674
+* Switch to dev mode by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/686
+* chore: remove Windows 2019 by @ryjones in https://github.com/open-quantum-safe/oqs-provider/pull/685
+* Remove Composite Signature logic, templating, and documentation. by @praveksharma in https://github.com/open-quantum-safe/oqs-provider/pull/687
+
+## New Contributors
+* @vacuas made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/674
+* @ryjones made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/685
+
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.9.0...0.10.0-rc1
+
 # oqs-provider 0.9.0
 
 ## About

@@ -1,4 +1,4 @@
-# oqs-provider 0.10.0-rc1
+# oqs-provider 0.10.0
 
 ## About
 

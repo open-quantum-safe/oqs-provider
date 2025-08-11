@@ -997,6 +997,14 @@ static int algname_strcmp(const char *const *a, const char *const *b) {
     return strcmp(*a, *b);
 }
 
+#if !defined(OQS_PROVIDER_STATIC) && !defined(_WIN32)
+/*
+ * The provider entrypoint is the only symbol that must to be exported, all
+ * others are internal implementation details that need to remain hidden.
+ * Windows has hidden symbols by default, exports are defined in oqsprov.def.
+ */
+__attribute__((visibility("default")))
+#endif /* !OQS_PROVIDER_STATIC && !_WIN32 */
 int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                  const OSSL_DISPATCH *in,
                                  const OSSL_DISPATCH **out, void **provctx) {

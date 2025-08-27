@@ -46,7 +46,14 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
-$OPENSSL_APP ca -batch -startdate 150123080000Z -enddate 250823090000Z -keyfile $1_rootCA.key -cert $1_rootCA.crt -policy policy_anything -notext -out $1.crt -infiles $1.csr
+# Compute start and end dates (UTC) for certificate validity
+# Default validity is 365 days; override with OQS_CA_DAYS environment variable
+START_DATE=$(date -u +"%Y%m%d%H%M%SZ")
+DAYS=${OQS_CA_DAYS:-365}
+# Use GNU date to compute end date; this should work on Linux test environments
+END_DATE=$(date -u -d "+$DAYS days" +"%Y%m%d%H%M%SZ")
+
+$OPENSSL_APP ca -batch -startdate "$START_DATE" -enddate "$END_DATE" -keyfile $1_rootCA.key -cert $1_rootCA.crt -policy policy_anything -notext -out $1.crt -infiles $1.csr
 
 if [ $? -ne 0 ]; then
    echo "Failed to generate server CRT. Exiting."

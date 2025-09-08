@@ -32,10 +32,25 @@ jobs:
     macos:
       xcode: "14.3.1"
     steps:
-      - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
+      - checkout
+      - run:
+          name: Prepare Homebrew (robust update)
+          command: |
+            set -e
+            for i in 1 2 3; do
+              if brew update --force --quiet; then break; fi
+              echo "brew update attempt $i failed; retrying in 10s"; sleep 10
+            done
       - run:
           name: Install dependencies
-          command: brew install cmake ninja << parameters.OPENSSL_PREINSTALL >>
+          command: |
+            set -e
+            if [ "<< parameters.OPENSSL_PREINSTALL >>" = "openssl" ]; then
+              # For the noopenssl job we skip installing openssl and let source build happen
+              HOMEBREW_NO_AUTO_UPDATE=1 brew install cmake ninja || exit 1
+            else
+              HOMEBREW_NO_AUTO_UPDATE=1 brew install cmake ninja << parameters.OPENSSL_PREINSTALL >> || exit 1
+            fi
       - run:
           name: Get system information
           command: sysctl -a | grep machdep.cpu && cc --version

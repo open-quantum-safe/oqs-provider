@@ -2,6 +2,8 @@
 
 # Test openssl CA functionality using oqsprovider for alg $1
 
+# Env var OQS_CERT_VALIDITY_DAYS can be used to set different test cert validity (default: 365 days)
+
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <algorithmname>. Exiting."
     exit 1
@@ -46,7 +48,8 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
-$OPENSSL_APP ca -batch -startdate 150123080000Z -enddate 250823090000Z -keyfile $1_rootCA.key -cert $1_rootCA.crt -policy policy_anything -notext -out $1.crt -infiles $1.csr
+DAYS=${OQS_CERT_VALIDITY_DAYS:-365}
+$OPENSSL_APP ca -batch -days "$DAYS" -keyfile $1_rootCA.key -cert $1_rootCA.crt -policy policy_anything -notext -out $1.crt -infiles $1.csr
 
 if [ $? -ne 0 ]; then
    echo "Failed to generate server CRT. Exiting."

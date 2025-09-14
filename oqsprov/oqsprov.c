@@ -55,7 +55,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 180
+#define OQS_OID_CNT 184
 #else
 #define OQS_OID_CNT 110
 #endif
@@ -107,6 +107,8 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     NULL,
     "x448_mlkem768",
     NULL,
+    "bp384_mlkem768",
+    NULL,
     "X25519MLKEM768",
     NULL,
     "SecP256r1MLKEM768",
@@ -116,6 +118,8 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p521_mlkem1024",
     "1.3.6.1.4.1.42235.6",
     "SecP384r1MLKEM1024",
+    NULL,
+    "bp512_mlkem1024",
     NULL,
     "bikel1",
     NULL,
@@ -307,38 +311,42 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[40] = envval;
         if ((envval = getenv("OQS_OID_X448_MLKEM768")))
             oqs_oid_alg_list[42] = envval;
-        if ((envval = getenv("OQS_OID_X25519MLKEM768")))
+        if ((envval = getenv("OQS_OID_BP384_MLKEM768")))
             oqs_oid_alg_list[44] = envval;
-        if ((envval = getenv("OQS_OID_SECP256R1MLKEM768")))
+        if ((envval = getenv("OQS_OID_X25519MLKEM768")))
             oqs_oid_alg_list[46] = envval;
-        if ((envval = getenv("OQS_OID_MLKEM1024")))
+        if ((envval = getenv("OQS_OID_SECP256R1MLKEM768")))
             oqs_oid_alg_list[48] = envval;
+        if ((envval = getenv("OQS_OID_MLKEM1024")))
+            oqs_oid_alg_list[50] = envval;
 
         if ((envval = getenv("OQS_OID_P521_MLKEM1024")))
-            oqs_oid_alg_list[50] = envval;
-        if ((envval = getenv("OQS_OID_SECP384R1MLKEM1024")))
             oqs_oid_alg_list[52] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL1")))
+        if ((envval = getenv("OQS_OID_SECP384R1MLKEM1024")))
             oqs_oid_alg_list[54] = envval;
+        if ((envval = getenv("OQS_OID_BP512_MLKEM1024")))
+            oqs_oid_alg_list[56] = envval;
+        if ((envval = getenv("OQS_OID_BIKEL1")))
+            oqs_oid_alg_list[58] = envval;
 
         if ((envval = getenv("OQS_OID_P256_BIKEL1")))
-            oqs_oid_alg_list[56] = envval;
-        if ((envval = getenv("OQS_OID_X25519_BIKEL1")))
-            oqs_oid_alg_list[58] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL3")))
             oqs_oid_alg_list[60] = envval;
+        if ((envval = getenv("OQS_OID_X25519_BIKEL1")))
+            oqs_oid_alg_list[62] = envval;
+        if ((envval = getenv("OQS_OID_BIKEL3")))
+            oqs_oid_alg_list[64] = envval;
 
         if ((envval = getenv("OQS_OID_P384_BIKEL3")))
-            oqs_oid_alg_list[62] = envval;
-        if ((envval = getenv("OQS_OID_X448_BIKEL3")))
-            oqs_oid_alg_list[64] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL5")))
             oqs_oid_alg_list[66] = envval;
+        if ((envval = getenv("OQS_OID_X448_BIKEL3")))
+            oqs_oid_alg_list[68] = envval;
+        if ((envval = getenv("OQS_OID_BIKEL5")))
+            oqs_oid_alg_list[70] = envval;
 
         if ((envval = getenv("OQS_OID_P521_BIKEL5")))
-            oqs_oid_alg_list[68] = envval;
+            oqs_oid_alg_list[72] = envval;
 
-#define OQS_KEMOID_CNT 68 + 2
+#define OQS_KEMOID_CNT 72 + 2
 #else
 #define OQS_KEMOID_CNT 0
 #endif /* OQS_KEM_ENCODERS */
@@ -646,6 +654,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMBASEALG(mlkem768, 192)
     KEMHYBALG(p384_mlkem768, 192)
     KEMHYBALG(x448_mlkem768, 192)
+    KEMHYBALG(bp384_mlkem768, 192)
     KEMHYBALG(X25519MLKEM768, 128)
     KEMHYBALG(SecP256r1MLKEM768, 128)
 #endif
@@ -653,6 +662,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMBASEALG(mlkem1024, 256)
     KEMHYBALG(p521_mlkem1024, 256)
     KEMHYBALG(SecP384r1MLKEM1024, 192)
+    KEMHYBALG(bp512_mlkem1024, 256)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
     KEMBASEALG(bikel1, 128)
@@ -787,72 +797,90 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMALG(frodo640aes, 128)
 
     KEMKMHYBALG(p256_frodo640aes, 128, ecp)
+
     KEMKMHYBALG(x25519_frodo640aes, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_640_shake
     KEMKMALG(frodo640shake, 128)
 
     KEMKMHYBALG(p256_frodo640shake, 128, ecp)
+
     KEMKMHYBALG(x25519_frodo640shake, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_976_aes
     KEMKMALG(frodo976aes, 192)
 
     KEMKMHYBALG(p384_frodo976aes, 192, ecp)
+
     KEMKMHYBALG(x448_frodo976aes, 192, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_976_shake
     KEMKMALG(frodo976shake, 192)
 
     KEMKMHYBALG(p384_frodo976shake, 192, ecp)
+
     KEMKMHYBALG(x448_frodo976shake, 192, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_aes
     KEMKMALG(frodo1344aes, 256)
 
     KEMKMHYBALG(p521_frodo1344aes, 256, ecp)
+
 #endif
 #ifdef OQS_ENABLE_KEM_frodokem_1344_shake
     KEMKMALG(frodo1344shake, 256)
 
     KEMKMHYBALG(p521_frodo1344shake, 256, ecp)
+
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_512
     KEMKMALG(mlkem512, 128)
 
     KEMKMHYBALG(p256_mlkem512, 128, ecp)
+
     KEMKMHYBALG(x25519_mlkem512, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
     KEMKMALG(mlkem768, 192)
 
     KEMKMHYBALG(p384_mlkem768, 192, ecp)
+
     KEMKMHYBALG(x448_mlkem768, 192, ecx)
+    KEMKMHYBALG(bp384_mlkem768, 192, ecbp)
+
     KEMKMHYBALG(X25519MLKEM768, 128, ecx)
     KEMKMHYBALG(SecP256r1MLKEM768, 128, ecp)
+
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
     KEMKMALG(mlkem1024, 256)
 
     KEMKMHYBALG(p521_mlkem1024, 256, ecp)
+
     KEMKMHYBALG(SecP384r1MLKEM1024, 192, ecp)
+
+    KEMKMHYBALG(bp512_mlkem1024, 256, ecbp)
+
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
     KEMKMALG(bikel1, 128)
 
     KEMKMHYBALG(p256_bikel1, 128, ecp)
+
     KEMKMHYBALG(x25519_bikel1, 128, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l3
     KEMKMALG(bikel3, 192)
 
     KEMKMHYBALG(p384_bikel3, 192, ecp)
+
     KEMKMHYBALG(x448_bikel3, 192, ecx)
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l5
     KEMKMALG(bikel5, 256)
 
     KEMKMHYBALG(p521_bikel5, 256, ecp)
+
 #endif
     // clang-format on
     ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
@@ -1007,7 +1035,8 @@ __attribute__((visibility("default")))
 #endif /* !OQS_PROVIDER_STATIC && !_WIN32 */
 int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                  const OSSL_DISPATCH *in,
-                                 const OSSL_DISPATCH **out, void **provctx) {
+                                 const OSSL_DISPATCH **out, void **provctx)
+{
     const OSSL_DISPATCH *orig_in = in;
     OSSL_FUNC_core_obj_create_fn *c_obj_create = NULL;
 

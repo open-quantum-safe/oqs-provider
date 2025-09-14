@@ -221,6 +221,8 @@ kems:
         - hybrid_group: "x448"
 # code point not standardized: Why? XXX
           nid: '0x2FB7'
+        - hybrid_group: "bp384"
+          nid: '65056'
         - hybrid_group: "x25519"
 # https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-x25519mlkem768
           nid: '0x11ec'
@@ -256,6 +258,8 @@ kems:
           nid: '0x11ED'
           iana: true
           standard_name: "SecP384r1MLKEM1024"
+        - hybrid_group: "bp512"
+          nid: '65057'
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'

@@ -53,7 +53,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 90
+#define NID_TABLE_LEN 92
 #else
 #define NID_TABLE_LEN 55
 #endif
@@ -95,6 +95,8 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_KEM, 192, 0},
     {0, "p384_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192, 0},
     {0, "x448_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192, 1},
+    {0, "bp384_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECBP_HYB_KEM, 192,
+     1},
     {0, "X25519MLKEM768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192, 1},
     {0, "SecP256r1MLKEM768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192,
      0},
@@ -103,6 +105,8 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      0},
     {0, "SecP384r1MLKEM1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM,
      256, 0},
+    {0, "bp512_mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECBP_HYB_KEM, 256,
+     1},
     {0, "bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_KEM, 128, 0},
     {0, "p256_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECP_HYB_KEM, 128, 0},
     {0, "x25519_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECX_HYB_KEM, 128, 0},
@@ -254,6 +258,7 @@ static int get_oqsalg_idx(int nid) {
 static void oqsx_comp_set_idx(const OQSX_KEY *key, int *idx_classic,
                               int *idx_pq) {
     int reverse_share = (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+                         key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
                          key->keytype == KEY_TYPE_ECX_HYB_KEM) &&
                         key->reverse_share;
 
@@ -281,9 +286,10 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
     char *privkey = (char *)key->privkey;
     char *pubkey = (char *)key->pubkey;
 
-    // The only special case with reversed keys (so far)
-    // is: x25519_mlkem*
+    // The only special cases with reversed keys (so far)
+    // are: x25519_mlkem*, bp*_mlkem*
     int reverse_share = (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+                         key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
                          key->keytype == KEY_TYPE_ECX_HYB_KEM) &&
                         key->reverse_share;
 
@@ -431,6 +437,8 @@ EVP_PKEY *setECParams(EVP_PKEY *eck, int nid) {
                                          0x02, 0x08, 0x01, 0x01, 0x07};
     const unsigned char bp384params[] = {0x06, 0x09, 0x2b, 0x24, 0x03, 0x03,
                                          0x02, 0x08, 0x01, 0x01, 0x0b};
+    const unsigned char bp512params[] = {0x06, 0x09, 0x2b, 0x24, 0x03, 0x03,
+                                         0x02, 0x08, 0x01, 0x01, 0x0d};
 
     const unsigned char *params;
     switch (nid) {
@@ -449,6 +457,9 @@ EVP_PKEY *setECParams(EVP_PKEY *eck, int nid) {
     case NID_brainpoolP384r1:
         params = bp384params;
         return d2i_KeyParams(EVP_PKEY_EC, &eck, &params, sizeof(bp384params));
+    case NID_brainpoolP512r1:
+        params = bp512params;
+        return d2i_KeyParams(EVP_PKEY_EC, &eck, &params, sizeof(bp512params));
     default:
         return NULL;
     }
@@ -478,6 +489,14 @@ static const OQSX_EVP_INFO nids_ecp[] = {
     {EVP_PKEY_EC, NID_X9_62_prime256v1, 0, 65, 121, 32, 0}, // 128 bit
     {EVP_PKEY_EC, NID_secp384r1, 0, 97, 167, 48, 0},        // 192 bit
     {EVP_PKEY_EC, NID_secp521r1, 0, 133, 223, 66, 0},       // 256 bit
+};
+
+// These two array need to stay synced:
+static const char *OQSX_ECBP_NAMES[] = {"bp256", "bp384", "bp512", 0};
+static const OQSX_EVP_INFO nids_ecbp[] = {
+    {EVP_PKEY_EC, NID_brainpoolP256r1, 0, 65, 122, 32, 0}, // 128 bit
+    {EVP_PKEY_EC, NID_brainpoolP384r1, 0, 97, 171, 48, 0}, // 192 bit
+    {EVP_PKEY_EC, NID_brainpoolP512r1, 0, 129, 221, 64, 0} // 256 bit
 };
 
 // These two array need to stay synced:
@@ -587,6 +606,44 @@ static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
     ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, err_init_ecp);
 
 err_init_ecp:
+    return ret;
+}
+
+static const int oqshybkem_init_ecbp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
+                                     OSSL_LIB_CTX *libctx) {
+    int ret = 1;
+    const OQSX_EVP_INFO *evp_info = NULL;
+
+    for (int i = 0; i < OSSL_NELEM(OQSX_ECBP_NAMES); i++) {
+        if (!strncasecmp(tls_name, OQSX_ECBP_NAMES[i],
+                         strlen(OQSX_ECBP_NAMES[i]))) {
+            evp_info = &nids_ecbp[i];
+            break;
+        }
+    }
+    if (evp_info == NULL) {
+        OQS_KEY_PRINTF2("OQS KEY: Incorrect Brainpool hybrid KEM name: %s\n",
+                        tls_name);
+        goto err_init_ecbp;
+    }
+
+    evp_ctx->evp_info = evp_info;
+
+    evp_ctx->ctx = EVP_PKEY_CTX_new_from_name(
+        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), NULL);
+    ON_ERR_GOTO(!evp_ctx->ctx, err_init_ecbp);
+
+    ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
+    ON_ERR_GOTO(ret <= 0, err_init_ecbp);
+
+    ret = EVP_PKEY_CTX_set_ec_paramgen_curve_nid(evp_ctx->ctx,
+                                                 evp_ctx->evp_info->nid);
+    ON_ERR_GOTO(ret <= 0, err_init_ecbp);
+
+    ret = EVP_PKEY_paramgen(evp_ctx->ctx, &evp_ctx->keyParam);
+    ON_ERR_GOTO(ret <= 0 || !evp_ctx->keyParam, err_init_ecbp);
+
+err_init_ecbp:
     return ret;
 }
 
@@ -752,6 +809,7 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
     }
     if (!oqsx_key_set_composites(key,
                                  key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+                                     key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
                                      key->keytype == KEY_TYPE_ECX_HYB_KEM) ||
         !oqsx_key_recreate_classickey(key, op))
         goto err_key_op;
@@ -913,7 +971,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
 }
 
 static const int (*init_kex_fun[])(char *, OQSX_EVP_CTX *, OSSL_LIB_CTX *) = {
-    oqshybkem_init_ecp, oqshybkem_init_ecx};
+    oqshybkem_init_ecp, oqshybkem_init_ecbp, oqshybkem_init_ecx};
 extern const char *oqs_oid_alg_list[];
 
 OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
@@ -986,6 +1044,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->keytype = KEY_TYPE_KEM;
         break;
     case KEY_TYPE_ECX_HYB_KEM:
+    case KEY_TYPE_ECBP_HYB_KEM:
     case KEY_TYPE_ECP_HYB_KEM:
         ret->reverse_share = reverse_share;
         ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = OQS_KEM_new(oqs_name);
@@ -1119,6 +1178,7 @@ void oqsx_key_free(OQSX_KEY *key) {
     if (key->keytype == KEY_TYPE_KEM)
         OQS_KEM_free(key->oqsx_provider_ctx.oqsx_qs_ctx.kem);
     else if (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+             key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
              key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         OQS_KEM_free(key->oqsx_provider_ctx.oqsx_qs_ctx.kem);
     } else
@@ -1176,6 +1236,7 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
     const OSSL_PARAM *pp1, *pp2;
 
     int classic_lengths_fixed = key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+                                key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
                                 key->keytype == KEY_TYPE_ECX_HYB_KEM;
 
     OQS_KEY_PRINTF("OQSX Key from data called\n");
@@ -1465,6 +1526,7 @@ int oqsx_key_gen(OQSX_KEY *key) {
         key->classical_pkey = pkey;
         ret = oqsx_key_gen_oqs(key, key->keytype != KEY_TYPE_HYB_SIG);
     } else if (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+               key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
                key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         int idx_classic;
         oqsx_comp_set_idx(key, &idx_classic, NULL);
@@ -1503,6 +1565,7 @@ int oqsx_key_maxsize(OQSX_KEY *key) {
     case KEY_TYPE_KEM:
         return key->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_shared_secret;
     case KEY_TYPE_ECP_HYB_KEM:
+    case KEY_TYPE_ECBP_HYB_KEM:
     case KEY_TYPE_ECX_HYB_KEM:
         return key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info
                    ->kex_length_secret +
@@ -1528,6 +1591,7 @@ int oqsx_key_get_oqs_public_key_len(OQSX_KEY *k) {
     case KEY_TYPE_HYB_SIG:
         return k->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_public_key;
     case KEY_TYPE_ECX_HYB_KEM:
+    case KEY_TYPE_ECBP_HYB_KEM:
     case KEY_TYPE_ECP_HYB_KEM:
         return k->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
     default:

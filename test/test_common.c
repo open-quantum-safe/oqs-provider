@@ -56,14 +56,19 @@ const char *kCompositeSignatureAlgorithms[] = {
 
 /** \brief List of hybrid KEMs. */
 const char *kHybridKEMAlgorithms[] = {
-    "p256_frodo640aes",     "x25519_frodo640aes", "p256_frodo640shake",
-    "x25519_frodo640shake", "p384_frodo976aes",   "x448_frodo976aes",
-    "p384_frodo976shake",   "x448_frodo976shake", "p521_frodo1344aes",
-    "p521_frodo1344shake",  "p256_mlkem512",      "x25519_mlkem512",
-    "p384_mlkem768",        "x448_mlkem768",      "X25519MLKEM768",
-    "SecP256r1MLKEM768",    "p521_mlkem1024",     "SecP384r1MLKEM1024",
-    "p256_bikel1",          "x25519_bikel1",      "p384_bikel3",
-    "x448_bikel3",          "p521_bikel5",        NULL,
+    "p256_frodo640aes",   "x25519_frodo640aes",
+    "p256_frodo640shake", "x25519_frodo640shake",
+    "p384_frodo976aes",   "x448_frodo976aes",
+    "p384_frodo976shake", "x448_frodo976shake",
+    "p521_frodo1344aes",  "p521_frodo1344shake",
+    "p256_mlkem512",      "x25519_mlkem512",
+    "p384_mlkem768",      "x448_mlkem768",
+    "bp384_mlkem768",     "X25519MLKEM768",
+    "SecP256r1MLKEM768",  "p521_mlkem1024",
+    "SecP384r1MLKEM1024", "bp512_mlkem1024",
+    "p256_bikel1",        "x25519_bikel1",
+    "p384_bikel3",        "x448_bikel3",
+    "p521_bikel5",        NULL,
 }; ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_END
 
 void hexdump(const void *ptr, size_t len) {

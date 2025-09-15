@@ -230,7 +230,7 @@ static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     {0xff33, 128, TLS1_3_VERSION, 0}, {0xff37, 128, TLS1_3_VERSION, 0},
     {0xff34, 192, TLS1_3_VERSION, 0}, {0xff38, 192, TLS1_3_VERSION, 0},
     {0xff35, 256, TLS1_3_VERSION, 0}, {0xff39, 256, TLS1_3_VERSION, 0},
-    {0xff22, 128, TLS1_3_VERSION, 0}, {0xff0e, 128, TLS1_3_VERSION, 0},
+    {0xff53, 128, TLS1_3_VERSION, 0}, {0xff0e, 128, TLS1_3_VERSION, 0},
     {0xff1a, 128, TLS1_3_VERSION, 0}, {0xff0f, 128, TLS1_3_VERSION, 0},
     {0xff1b, 128, TLS1_3_VERSION, 0}, {0xff12, 128, TLS1_3_VERSION, 0},
     {0xff1e, 128, TLS1_3_VERSION, 0}, {0xff13, 128, TLS1_3_VERSION, 0},
@@ -632,7 +632,7 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 #endif
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
     OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
-                     CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2", 36),
+                     CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2.2", 36),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
     OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 37),

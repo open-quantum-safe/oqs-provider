@@ -601,6 +601,10 @@ MAKE_DECODER(_ecx, "x25519_mlkem512", x25519_mlkem512, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x25519_mlkem512", x25519_mlkem512, oqsx,
              SubjectPublicKeyInfo);
 
+MAKE_DECODER(_ecbp, "bp256_mlkem512", bp256_mlkem512, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecbp, "bp256_mlkem512", bp256_mlkem512, oqsx,
+             SubjectPublicKeyInfo);
+
 MAKE_DECODER(, "mlkem768", mlkem768, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mlkem768", mlkem768, oqsx, SubjectPublicKeyInfo);
 

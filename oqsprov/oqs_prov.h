@@ -564,6 +564,23 @@ extern const OSSL_DISPATCH
 extern const OSSL_DISPATCH
     oqs_SubjectPublicKeyInfo_der_to_x25519_mlkem512_decoder_functions[];
 extern const OSSL_DISPATCH
+    oqs_bp256_mlkem512_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_bp256_mlkem512_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_bp256_mlkem512_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_bp256_mlkem512_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_bp256_mlkem512_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_bp256_mlkem512_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_bp256_mlkem512_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_bp256_mlkem512_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_bp256_mlkem512_decoder_functions[];
+extern const OSSL_DISPATCH
     oqs_mlkem768_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
     oqs_mlkem768_to_PrivateKeyInfo_pem_encoder_functions[];
@@ -1937,6 +1954,7 @@ extern const OSSL_DISPATCH oqs_mlkem512_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecp_p256_mlkem512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_ecx_x25519_mlkem512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ecbp_bp256_mlkem512_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_mlkem768_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecp_p384_mlkem768_keymgmt_functions[];

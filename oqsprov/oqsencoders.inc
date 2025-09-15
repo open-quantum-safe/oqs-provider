@@ -222,6 +222,13 @@ ENCODER_w_structure("x25519_mlkem512", x25519_mlkem512, pem, EncryptedPrivateKey
 ENCODER_w_structure("x25519_mlkem512", x25519_mlkem512, der, SubjectPublicKeyInfo),
 ENCODER_w_structure("x25519_mlkem512", x25519_mlkem512, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT("x25519_mlkem512", x25519_mlkem512),
+ENCODER_w_structure("bp256_mlkem512", bp256_mlkem512, der, PrivateKeyInfo),
+ENCODER_w_structure("bp256_mlkem512", bp256_mlkem512, pem, PrivateKeyInfo),
+ENCODER_w_structure("bp256_mlkem512", bp256_mlkem512, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("bp256_mlkem512", bp256_mlkem512, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("bp256_mlkem512", bp256_mlkem512, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("bp256_mlkem512", bp256_mlkem512, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("bp256_mlkem512", bp256_mlkem512),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
 ENCODER_w_structure("mlkem768", mlkem768, der, PrivateKeyInfo),

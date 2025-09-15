@@ -55,7 +55,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 184
+#define OQS_OID_CNT 186
 #else
 #define OQS_OID_CNT 110
 #endif
@@ -100,6 +100,8 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "p256_mlkem512",
     "1.3.6.1.4.1.22554.5.8.1",
     "x25519_mlkem512",
+    NULL,
+    "bp256_mlkem512",
     "2.16.840.1.101.3.4.4.2",
     "mlkem768",
     NULL,
@@ -304,49 +306,51 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[34] = envval;
         if ((envval = getenv("OQS_OID_X25519_MLKEM512")))
             oqs_oid_alg_list[36] = envval;
-        if ((envval = getenv("OQS_OID_MLKEM768")))
+        if ((envval = getenv("OQS_OID_BP256_MLKEM512")))
             oqs_oid_alg_list[38] = envval;
+        if ((envval = getenv("OQS_OID_MLKEM768")))
+            oqs_oid_alg_list[40] = envval;
 
         if ((envval = getenv("OQS_OID_P384_MLKEM768")))
-            oqs_oid_alg_list[40] = envval;
-        if ((envval = getenv("OQS_OID_X448_MLKEM768")))
             oqs_oid_alg_list[42] = envval;
-        if ((envval = getenv("OQS_OID_BP384_MLKEM768")))
+        if ((envval = getenv("OQS_OID_X448_MLKEM768")))
             oqs_oid_alg_list[44] = envval;
-        if ((envval = getenv("OQS_OID_X25519MLKEM768")))
+        if ((envval = getenv("OQS_OID_BP384_MLKEM768")))
             oqs_oid_alg_list[46] = envval;
-        if ((envval = getenv("OQS_OID_SECP256R1MLKEM768")))
+        if ((envval = getenv("OQS_OID_X25519MLKEM768")))
             oqs_oid_alg_list[48] = envval;
-        if ((envval = getenv("OQS_OID_MLKEM1024")))
+        if ((envval = getenv("OQS_OID_SECP256R1MLKEM768")))
             oqs_oid_alg_list[50] = envval;
+        if ((envval = getenv("OQS_OID_MLKEM1024")))
+            oqs_oid_alg_list[52] = envval;
 
         if ((envval = getenv("OQS_OID_P521_MLKEM1024")))
-            oqs_oid_alg_list[52] = envval;
-        if ((envval = getenv("OQS_OID_SECP384R1MLKEM1024")))
             oqs_oid_alg_list[54] = envval;
-        if ((envval = getenv("OQS_OID_BP512_MLKEM1024")))
+        if ((envval = getenv("OQS_OID_SECP384R1MLKEM1024")))
             oqs_oid_alg_list[56] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL1")))
+        if ((envval = getenv("OQS_OID_BP512_MLKEM1024")))
             oqs_oid_alg_list[58] = envval;
+        if ((envval = getenv("OQS_OID_BIKEL1")))
+            oqs_oid_alg_list[60] = envval;
 
         if ((envval = getenv("OQS_OID_P256_BIKEL1")))
-            oqs_oid_alg_list[60] = envval;
-        if ((envval = getenv("OQS_OID_X25519_BIKEL1")))
             oqs_oid_alg_list[62] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL3")))
+        if ((envval = getenv("OQS_OID_X25519_BIKEL1")))
             oqs_oid_alg_list[64] = envval;
+        if ((envval = getenv("OQS_OID_BIKEL3")))
+            oqs_oid_alg_list[66] = envval;
 
         if ((envval = getenv("OQS_OID_P384_BIKEL3")))
-            oqs_oid_alg_list[66] = envval;
-        if ((envval = getenv("OQS_OID_X448_BIKEL3")))
             oqs_oid_alg_list[68] = envval;
-        if ((envval = getenv("OQS_OID_BIKEL5")))
+        if ((envval = getenv("OQS_OID_X448_BIKEL3")))
             oqs_oid_alg_list[70] = envval;
-
-        if ((envval = getenv("OQS_OID_P521_BIKEL5")))
+        if ((envval = getenv("OQS_OID_BIKEL5")))
             oqs_oid_alg_list[72] = envval;
 
-#define OQS_KEMOID_CNT 72 + 2
+        if ((envval = getenv("OQS_OID_P521_BIKEL5")))
+            oqs_oid_alg_list[74] = envval;
+
+#define OQS_KEMOID_CNT 74 + 2
 #else
 #define OQS_KEMOID_CNT 0
 #endif /* OQS_KEM_ENCODERS */
@@ -649,6 +653,7 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMBASEALG(mlkem512, 128)
     KEMHYBALG(p256_mlkem512, 128)
     KEMHYBALG(x25519_mlkem512, 128)
+    KEMHYBALG(bp256_mlkem512, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
     KEMBASEALG(mlkem768, 192)
@@ -839,6 +844,8 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     KEMKMHYBALG(p256_mlkem512, 128, ecp)
 
     KEMKMHYBALG(x25519_mlkem512, 128, ecx)
+    KEMKMHYBALG(bp256_mlkem512, 128, ecbp)
+
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
     KEMKMALG(mlkem768, 192)

@@ -662,6 +662,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define x25519_mlkem512_evp_type 0
 #define x25519_mlkem512_input_type "x25519_mlkem512"
 #define x25519_mlkem512_pem_type "x25519_mlkem512"
+#define bp256_mlkem512_evp_type 0
+#define bp256_mlkem512_input_type "bp256_mlkem512"
+#define bp256_mlkem512_pem_type "bp256_mlkem512"
 #define mlkem768_evp_type 0
 #define mlkem768_input_type "mlkem768"
 #define mlkem768_pem_type "mlkem768"
@@ -1600,6 +1603,13 @@ MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(_ecx, x25519_mlkem512, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(_ecx, x25519_mlkem512);
+MAKE_ENCODER(_ecbp, bp256_mlkem512, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecbp, bp256_mlkem512, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecbp, bp256_mlkem512, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecbp, bp256_mlkem512, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecbp, bp256_mlkem512, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecbp, bp256_mlkem512, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecbp, bp256_mlkem512);
 MAKE_ENCODER(, mlkem768, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, mlkem768, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, mlkem768, oqsx, PrivateKeyInfo, der);

@@ -34,7 +34,7 @@ This project has adopted the LLVM coding style.
 To check adherence of any new code to this, it therefore is highly recommended to
 run the following commands in the project main directory prior to finishing a PR:
 
-    ./scripts/do_code_format.sh
+    ./scripts/format_code.sh
 
 If the github CI reports style errors/deviations, review the code or consider running
 the utility script `scripts/format_code.sh` if you'd like to get the code changed to

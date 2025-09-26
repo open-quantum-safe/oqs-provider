@@ -693,7 +693,6 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[]) {
 }
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_START
-
 static void *mldsa44_new_key(void *provctx) {
     return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), OQS_SIG_alg_ml_dsa_44,
                         "mldsa44", KEY_TYPE_SIG, NULL, 128, 0, 0);

@@ -253,6 +253,7 @@ Contributors to the `oqsprovider` include:
 - Alex Zaslavsky (improvements on OpenSSL integration)
 - Will Childs-Klein (improvements on Kyber hybrid OIDs)
 - Thomas Bailleux (many build, CI and usage improvements for different platforms)
+- Felipe Ventura (experimental composite sig integration - feature removed now)
 - Iyán Méndez Veiga (PKCS#12 testing)
 - Alessandro Barenghi (CROSS OIDs)
 

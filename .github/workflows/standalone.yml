@@ -48,7 +48,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Full build
-        run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
+        run: LIBOQS_BRANCH=0.14.0 ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
 

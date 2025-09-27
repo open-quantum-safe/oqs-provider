@@ -21,7 +21,7 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy:latest
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH: "main"
+      LIBOQS_BRANCH: "0.14.0"
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
@@ -53,14 +53,14 @@ jobs:
       image: ${{ matrix.container }}
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH: "main"
+      LIBOQS_BRANCH: "0.14.0"
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
       - name: Add safe directory exception
         run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
       - name: Full build
-        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=main OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
+        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
       - name: Re-generate code
@@ -73,7 +73,7 @@ jobs:
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
           python3 oqs-template/generate.py
       - name: Full re-build & test
-        run: rm -rf _build && OPENSSL_BRANCH=${{ matrix.ossl-branch }} LIBOQS_BRANCH=main OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh && ./scripts/runtests.sh
+        run: rm -rf _build && OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh && ./scripts/runtests.sh
       - name: Build .deb install package
         run: cpack -C DebPack
         working-directory: _build
@@ -103,6 +103,7 @@ jobs:
       ASAN_C_FLAGS: "-fsanitize=address -fno-omit-frame-pointer"
       ASAN_OPTIONS: "detect_stack_use_after_return=1,detect_leaks=1"
       OPENSSL_BRANCH: "openssl-3.5.0"
+      LIBOQS_BRANCH: "0.14.0"
     steps:
       - name: Checkout code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
@@ -126,7 +127,7 @@ jobs:
 
       - name: Clone and build liboqs with ASan
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch ${LIBOQS_BRANCH} https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake -GNinja -B build \
@@ -176,6 +177,7 @@ jobs:
       OPENSSL_BRANCH: "master"
       INSTALL_DIR: "/opt/install"
       CMAKE_TOOLCHAIN_FILE: "/opt/linux-aarch64-toolchain.cmake"
+      LIBOQS_BRANCH: "0.14.0"
 
     steps:
       - name: Checkout code
@@ -208,7 +210,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch ${LIBOQS_BRANCH} https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

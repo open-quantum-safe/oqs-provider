@@ -330,68 +330,6 @@ err:
     return idx;
 }
 
-/** \brief Compares the classical keys of two composite key pairs
- *
- * \param sigalg_name algorithm name.
- * \param key1 A key pair.
- * \param key2 A key pair.
- *
- * \return 1 if the compare operation is successful, else 0. */
-static int oqs_cmp_composite_sig_keys(const char *sigalg_name,
-                                      const EVP_PKEY *key1,
-                                      const EVP_PKEY *key2) {
-    int ret = 0, idx;
-    unsigned char *pubkey1 = NULL, *pubkey2 = NULL, *privkey1 = NULL,
-                  *privkey2 = NULL;
-    size_t pubkey1_len, pubkey2_len, privkey1_len, privkey2_len;
-
-    if (get_param_octet_string(key1, OSSL_PKEY_PARAM_PUB_KEY, &pubkey1,
-                               &pubkey1_len)) {
-        goto out;
-    }
-    if (get_param_octet_string(key2, OSSL_PKEY_PARAM_PUB_KEY, &pubkey2,
-                               &pubkey2_len)) {
-        goto out;
-    }
-
-    if (get_param_octet_string(key1, OSSL_PKEY_PARAM_PRIV_KEY, &privkey1,
-                               &privkey1_len)) {
-        goto out;
-    }
-    if (get_param_octet_string(key2, OSSL_PKEY_PARAM_PRIV_KEY, &privkey2,
-                               &privkey2_len)) {
-        goto out;
-    }
-
-    if ((idx = get_idx_info_classical(sigalg_name)) < 0) {
-        goto out;
-    }
-
-    if (!((pubkey1_len == pubkey2_len) && (privkey1_len == privkey2_len))) {
-        goto out;
-    }
-
-    ret = memcmp(pubkey1, pubkey2, info_classical[idx].pubkey_len) == 0 &&
-          memcmp(privkey1, privkey2, info_classical[idx].privkey_len) == 0;
-
-    if (ret)
-        return ret;
-
-    ret = memcmp(pubkey1 + pubkey1_len - info_classical[idx].pubkey_len,
-                 pubkey2 + pubkey2_len - info_classical[idx].pubkey_len,
-                 info_classical[idx].pubkey_len) == 0 &&
-          memcmp(privkey1 + privkey1_len - info_classical[idx].privkey_len,
-                 privkey2 + privkey2_len - info_classical[idx].privkey_len,
-                 info_classical[idx].privkey_len) == 0;
-
-out:
-    free(pubkey1);
-    free(pubkey2);
-    free(privkey1);
-    free(privkey2);
-    return ret;
-}
-
 /** \brief Compares the classical KEM elements of two Encaps/Decaps executions
  *
  * \param kemalg_name algorithm name.
@@ -540,8 +478,6 @@ static int test_oqs_sigs_libctx(const char *sigalg_name) {
 
     if (is_signature_algorithm_hybrid(sigalg_name)) {
         testresult &= oqs_cmp_classical_keys(key1, key2);
-    } else {
-        testresult &= oqs_cmp_composite_sig_keys(sigalg_name, key1, key2);
     }
 
     if (!testresult)
@@ -597,8 +533,7 @@ int main(int argc, char *argv[]) {
                                             &query_nocache);
     if (sigalgs) {
         for (; sigalgs->algorithm_names != NULL; sigalgs++) {
-            if (!is_signature_algorithm_hybrid(sigalgs->algorithm_names) &&
-                !is_signature_algorithm_composite(sigalgs->algorithm_names)) {
+            if (!is_signature_algorithm_hybrid(sigalgs->algorithm_names)) {
                 continue;
             }
             if (test_oqs_sigs_libctx(sigalgs->algorithm_names)) {

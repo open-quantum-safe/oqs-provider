@@ -5,8 +5,13 @@
 MAKE_DECODER(, "{{ kem['name_group'] }}", {{ kem['name_group'] }}, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "{{ kem['name_group'] }}", {{ kem['name_group'] }}, oqsx, SubjectPublicKeyInfo);
 {% for hybrid in kem['hybrids'] %}
-MAKE_DECODER({% if hybrid['hybrid_group'].startswith('x') %}_ecx{% else %}_ecp{% endif %}, {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}, oqsx, PrivateKeyInfo);
-MAKE_DECODER({% if hybrid['hybrid_group'].startswith('x') %}_ecx{% else %}_ecp{% endif %}, {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}, oqsx, SubjectPublicKeyInfo);
+{% if hybrid['hybrid_group'].startswith('x') %}
+MAKE_DECODER(_ecx, {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}, oqsx, SubjectPublicKeyInfo);
+{% else %}
+MAKE_DECODER({% if hybrid['hybrid_group'].startswith('bp') %}_ecbp{% else %}_ecp{% endif %}, {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}, oqsx, PrivateKeyInfo);
+MAKE_DECODER({% if hybrid['hybrid_group'].startswith('bp') %}_ecbp{% else %}_ecp{% endif %}, {% if 'standard_name' in hybrid %}"{{hybrid['standard_name']}}"{% else %}"{{hybrid['hybrid_group']}}_{{ kem['name_group'] }}"{% endif %}, {% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}, oqsx, SubjectPublicKeyInfo);
+{% endif %}
 {%- endfor %}
 {%- endfor %}
 #endif /* OQS_KEM_ENCODERS */

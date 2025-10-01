@@ -77,14 +77,16 @@ DECODER_w_structure("mlkem512", der, PrivateKeyInfo, mlkem512),
 DECODER_w_structure("mlkem512", der, SubjectPublicKeyInfo, mlkem512),
 DECODER_w_structure("p256_mlkem512", der, PrivateKeyInfo, p256_mlkem512),
 DECODER_w_structure("p256_mlkem512", der, SubjectPublicKeyInfo, p256_mlkem512),DECODER_w_structure("x25519_mlkem512", der, PrivateKeyInfo, x25519_mlkem512),
-DECODER_w_structure("x25519_mlkem512", der, SubjectPublicKeyInfo, x25519_mlkem512),
+DECODER_w_structure("x25519_mlkem512", der, SubjectPublicKeyInfo, x25519_mlkem512),DECODER_w_structure("bp256_mlkem512", der, PrivateKeyInfo, bp256_mlkem512),
+DECODER_w_structure("bp256_mlkem512", der, SubjectPublicKeyInfo, bp256_mlkem512),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
 DECODER_w_structure("mlkem768", der, PrivateKeyInfo, mlkem768),
 DECODER_w_structure("mlkem768", der, SubjectPublicKeyInfo, mlkem768),
 DECODER_w_structure("p384_mlkem768", der, PrivateKeyInfo, p384_mlkem768),
 DECODER_w_structure("p384_mlkem768", der, SubjectPublicKeyInfo, p384_mlkem768),DECODER_w_structure("x448_mlkem768", der, PrivateKeyInfo, x448_mlkem768),
-DECODER_w_structure("x448_mlkem768", der, SubjectPublicKeyInfo, x448_mlkem768),DECODER_w_structure("X25519MLKEM768", der, PrivateKeyInfo, X25519MLKEM768),
+DECODER_w_structure("x448_mlkem768", der, SubjectPublicKeyInfo, x448_mlkem768),DECODER_w_structure("bp384_mlkem768", der, PrivateKeyInfo, bp384_mlkem768),
+DECODER_w_structure("bp384_mlkem768", der, SubjectPublicKeyInfo, bp384_mlkem768),DECODER_w_structure("X25519MLKEM768", der, PrivateKeyInfo, X25519MLKEM768),
 DECODER_w_structure("X25519MLKEM768", der, SubjectPublicKeyInfo, X25519MLKEM768),DECODER_w_structure("SecP256r1MLKEM768", der, PrivateKeyInfo, SecP256r1MLKEM768),
 DECODER_w_structure("SecP256r1MLKEM768", der, SubjectPublicKeyInfo, SecP256r1MLKEM768),
 #endif
@@ -93,7 +95,8 @@ DECODER_w_structure("mlkem1024", der, PrivateKeyInfo, mlkem1024),
 DECODER_w_structure("mlkem1024", der, SubjectPublicKeyInfo, mlkem1024),
 DECODER_w_structure("p521_mlkem1024", der, PrivateKeyInfo, p521_mlkem1024),
 DECODER_w_structure("p521_mlkem1024", der, SubjectPublicKeyInfo, p521_mlkem1024),DECODER_w_structure("SecP384r1MLKEM1024", der, PrivateKeyInfo, SecP384r1MLKEM1024),
-DECODER_w_structure("SecP384r1MLKEM1024", der, SubjectPublicKeyInfo, SecP384r1MLKEM1024),
+DECODER_w_structure("SecP384r1MLKEM1024", der, SubjectPublicKeyInfo, SecP384r1MLKEM1024),DECODER_w_structure("bp512_mlkem1024", der, PrivateKeyInfo, bp512_mlkem1024),
+DECODER_w_structure("bp512_mlkem1024", der, SubjectPublicKeyInfo, bp512_mlkem1024),
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
 DECODER_w_structure("bikel1", der, PrivateKeyInfo, bikel1),

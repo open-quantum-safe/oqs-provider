@@ -43,15 +43,6 @@ const char *kHybridSignatureAlgorithms[] = {
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END
 
-///// OQS_TEMPLATE_FRAGMENT_COMPOSITE_SIG_ALGS_START
-
-/** \brief List of composite signature algorithms. */
-const char *kCompositeSignatureAlgorithms[] = {
-
-    NULL,
-};
-///// OQS_TEMPLATE_FRAGMENT_COMPOSITE_SIG_ALGS_END
-
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_START
 
 /** \brief List of hybrid KEMs. */
@@ -149,10 +140,6 @@ static int is_string_in_list(const char **list, const char *s) {
 
 int is_signature_algorithm_hybrid(const char *_alg_) {
     return is_string_in_list(kHybridSignatureAlgorithms, _alg_);
-}
-
-int is_signature_algorithm_composite(const char *_alg_) {
-    return is_string_in_list(kCompositeSignatureAlgorithms, _alg_);
 }
 
 int is_kem_algorithm_hybrid(const char *_alg_) {

@@ -57,13 +57,6 @@ void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
  * \returns 1 if hybrid, else 0. */
 int is_signature_algorithm_hybrid(const char *_alg_);
 
-/** \brief Indicates if a signature algorithm is composite or not.
- *
- * \param alg Algorithm name.
- *
- * \returns 1 if hybrid, else 0. */
-int is_signature_algorithm_composite(const char *_alg_);
-
 /** \brief Indicates if an kem algorithm is hybrid or not.
  *
  * \param alg Algorithm name.

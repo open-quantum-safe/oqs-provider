@@ -16,20 +16,6 @@
 | CROSSrsdpg256balanced                             | 2.2 + PQClean and OQS patches                 | 2            |                    5 | 0xff60       | 1.3.6.1.4.1.62245.2.1.16.2.2 |
 | CROSSrsdpg256fast                                 | 2.2 + PQClean and OQS patches                 | 2            |                    5 | 0xff61       | 1.3.6.1.4.1.62245.2.1.17.2.2 |
 | CROSSrsdpg256small                                | 2.2 + PQClean and OQS patches                 | 2            |                    5 | 0xff62       | 1.3.6.1.4.1.62245.2.1.18.2.2 |
-| dilithium2                                        | 3.1                                           | 3            |                    2 | 0xfea0       | 1.3.6.1.4.1.2.267.7.4.4      |
-| dilithium2 **hybrid with** p256                   | 3.1                                           | 3            |                    2 | 0xfea1       | 1.3.9999.2.7.1               |
-| dilithium2 **hybrid with** rsa3072                | 3.1                                           | 3            |                    2 | 0xfea2       | 1.3.9999.2.7.2               |
-| dilithium3                                        | 3.1                                           | 3            |                    3 | 0xfea3       | 1.3.6.1.4.1.2.267.7.6.5      |
-| dilithium3 **hybrid with** p384                   | 3.1                                           | 3            |                    3 | 0xfea4       | 1.3.9999.2.7.3               |
-| dilithium5                                        | 3.1                                           | 3            |                    5 | 0xfea5       | 1.3.6.1.4.1.2.267.7.8.7      |
-| dilithium5 **hybrid with** p521                   | 3.1                                           | 3            |                    5 | 0xfea6       | 1.3.9999.2.7.4               |
-| dilithium2_aes                                    | NIST Round 3 submission                       | 3            |                    2 | 0xfea7       | 1.3.6.1.4.1.2.267.11.4.4     |
-| dilithium2_aes **hybrid with** p256               | NIST Round 3 submission                       | 3            |                    2 | 0xfea8       | 1.3.9999.2.11.1              |
-| dilithium2_aes **hybrid with** rsa3072            | NIST Round 3 submission                       | 3            |                    2 | 0xfea9       | 1.3.9999.2.11.2              |
-| dilithium3_aes                                    | NIST Round 3 submission                       | 3            |                    3 | 0xfeaa       | 1.3.6.1.4.1.2.267.11.6.5     |
-| dilithium3_aes **hybrid with** p384               | NIST Round 3 submission                       | 3            |                    3 | 0xfeab       | 1.3.9999.2.11.3              |
-| dilithium5_aes                                    | NIST Round 3 submission                       | 3            |                    5 | 0xfeac       | 1.3.6.1.4.1.2.267.11.8.7     |
-| dilithium5_aes **hybrid with** p521               | NIST Round 3 submission                       | 3            |                    5 | 0xfead       | 1.3.9999.2.11.4              |
 | falcon512                                         | 20211101                                      | 3            |                    1 | 0xfed7       | 1.3.9999.3.11                |
 | falcon512 **hybrid with** p256                    | 20211101                                      | 3            |                    1 | 0xfed8       | 1.3.9999.3.12                |
 | falcon512 **hybrid with** rsa3072                 | 20211101                                      | 3            |                    1 | 0xfed9       | 1.3.9999.3.13                |

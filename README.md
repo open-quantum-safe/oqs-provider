@@ -43,7 +43,6 @@ This implementation makes available the following quantum safe algorithms:
 
 ### Signature algorithms
 
-
 - **ML-DSA**:`mldsa44`, `p256_mldsa44`, `rsa3072_mldsa44`, `mldsa65`, `p384_mldsa65`, `mldsa87`, `p521_mldsa87`
 - **Falcon**:`falcon512`, `p256_falcon512`, `rsa3072_falcon512`, `falconpadded512`, `p256_falconpadded512`, `rsa3072_falconpadded512`, `falcon1024`, `p521_falcon1024`, `falconpadded1024`, `p521_falconpadded1024`
 
@@ -254,7 +253,7 @@ Contributors to the `oqsprovider` include:
 - Alex Zaslavsky (improvements on OpenSSL integration)
 - Will Childs-Klein (improvements on Kyber hybrid OIDs)
 - Thomas Bailleux (many build, CI and usage improvements for different platforms)
-- Felipe Ventura (experimental composite sig integration)
+- Felipe Ventura (experimental composite sig integration - feature removed now)
 - Iyán Méndez Veiga (PKCS#12 testing)
 - Alessandro Barenghi (CROSS OIDs)
 

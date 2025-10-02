@@ -1,7 +1,7 @@
 # This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
 # Next free plain KEM ID: 0x024D, p-hybrid: 0x2F4F, X-hybrid: 0x2FB9
 # Switch to using unassigned code points as per https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8:
-# Next free: 65027 (see https://github.com/open-quantum-safe/oqs-provider/issues/561)
+# Next free: 65058 (see https://github.com/open-quantum-safe/oqs-provider/issues/561)
 # ECX hybrid names must start with the name "x...", Brainpool hybrids must start with the name "bp...", all else is considered ECP
 kems:
   -

@@ -289,7 +289,7 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
     char *pubkey = (char *)key->pubkey;
 
     // The only special cases with reversed keys (so far)
-    // are: x25519_mlkem*, bp*_mlkem*
+    // are: x*_mlkem* and bp*_mlkem*
     int reverse_share = (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
                          key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
                          key->keytype == KEY_TYPE_ECX_HYB_KEM) &&

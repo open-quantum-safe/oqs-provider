@@ -537,6 +537,7 @@ MAKE_DECODER(_ecx, "x25519_frodo640aes", x25519_frodo640aes, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x25519_frodo640aes", x25519_frodo640aes, oqsx,
              SubjectPublicKeyInfo);
+
 MAKE_DECODER(, "frodo640shake", frodo640shake, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo640shake", frodo640shake, oqsx, SubjectPublicKeyInfo);
 
@@ -549,6 +550,7 @@ MAKE_DECODER(_ecx, "x25519_frodo640shake", x25519_frodo640shake, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x25519_frodo640shake", x25519_frodo640shake, oqsx,
              SubjectPublicKeyInfo);
+
 MAKE_DECODER(, "frodo976aes", frodo976aes, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo976aes", frodo976aes, oqsx, SubjectPublicKeyInfo);
 
@@ -559,6 +561,7 @@ MAKE_DECODER(_ecp, "p384_frodo976aes", p384_frodo976aes, oqsx,
 MAKE_DECODER(_ecx, "x448_frodo976aes", x448_frodo976aes, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x448_frodo976aes", x448_frodo976aes, oqsx,
              SubjectPublicKeyInfo);
+
 MAKE_DECODER(, "frodo976shake", frodo976shake, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo976shake", frodo976shake, oqsx, SubjectPublicKeyInfo);
 
@@ -571,6 +574,7 @@ MAKE_DECODER(_ecx, "x448_frodo976shake", x448_frodo976shake, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x448_frodo976shake", x448_frodo976shake, oqsx,
              SubjectPublicKeyInfo);
+
 MAKE_DECODER(, "frodo1344aes", frodo1344aes, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo1344aes", frodo1344aes, oqsx, SubjectPublicKeyInfo);
 
@@ -642,6 +646,7 @@ MAKE_DECODER(_ecp, "p256_bikel1", p256_bikel1, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecx, "x25519_bikel1", x25519_bikel1, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x25519_bikel1", x25519_bikel1, oqsx, SubjectPublicKeyInfo);
+
 MAKE_DECODER(, "bikel3", bikel3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "bikel3", bikel3, oqsx, SubjectPublicKeyInfo);
 
@@ -650,6 +655,7 @@ MAKE_DECODER(_ecp, "p384_bikel3", p384_bikel3, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecx, "x448_bikel3", x448_bikel3, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecx, "x448_bikel3", x448_bikel3, oqsx, SubjectPublicKeyInfo);
+
 MAKE_DECODER(, "bikel5", bikel5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "bikel5", bikel5, oqsx, SubjectPublicKeyInfo);
 

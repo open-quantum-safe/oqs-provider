@@ -256,6 +256,7 @@ Contributors to the `oqsprovider` include:
 - Felipe Ventura (experimental composite sig integration - feature removed now)
 - Iyán Méndez Veiga (PKCS#12 testing)
 - Alessandro Barenghi (CROSS OIDs)
+- Rodrigo Martín Sánchez-Ledesma (Brainpool hybrids & OSSL_LIB_CTX use in hybrids)
 
 History
 -------

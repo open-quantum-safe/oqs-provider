@@ -109,6 +109,7 @@ static int oqsx_has(const void *keydata, int selection) {
 static void oqsx_comp_set_idx(const OQSX_KEY *key, int *idx_classic,
                               int *idx_pq) {
     int reverse_share = (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+                         key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
                          key->keytype == KEY_TYPE_ECX_HYB_KEM) &&
                         key->reverse_share;
 
@@ -347,12 +348,13 @@ static const OSSL_PARAM *oqs_imexport_types(int selection) {
     return NULL;
 }
 
-// Tells if a key (SIG, KEM, ECP_HYB_KEM, ECX_HYB_KEM or HYB_SIG) is using
-// hybrid algorithm.
+// Tells if a key (SIG, KEM, ECP_HYB_KEM, ECBP_HYB_KEM, ECX_HYB_KEM or HYB_SIG)
+// is using hybrid algorithm.
 //
 // Returns 1 if hybrid, else 0.
 static int oqsx_key_is_hybrid(const OQSX_KEY *oqsxk) {
     if ((oqsxk->keytype == KEY_TYPE_ECP_HYB_KEM ||
+         oqsxk->keytype == KEY_TYPE_ECBP_HYB_KEM ||
          oqsxk->keytype == KEY_TYPE_ECX_HYB_KEM ||
          oqsxk->keytype == KEY_TYPE_HYB_SIG) &&
         oqsxk->numkeys == 2 && oqsxk->classical_pkey != NULL) {
@@ -471,6 +473,7 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[]) {
         // hybrid KEMs are special in that the classic length information
         // shall not be passed out:
         if (oqsxk->keytype == KEY_TYPE_ECP_HYB_KEM ||
+            oqsxk->keytype == KEY_TYPE_ECBP_HYB_KEM ||
             oqsxk->keytype == KEY_TYPE_ECX_HYB_KEM) {
             if (!OSSL_PARAM_set_octet_string(
                     p, (char *)oqsxk->pubkey + SIZE_OF_UINT32,
@@ -539,6 +542,7 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[]) {
         size_t used_len;
         int classic_pubkey_len;
         if (oqsxkey->keytype == KEY_TYPE_ECP_HYB_KEM ||
+            oqsxkey->keytype == KEY_TYPE_ECBP_HYB_KEM ||
             oqsxkey->keytype == KEY_TYPE_ECX_HYB_KEM) {
             // classic key len already stored by key setup; only data
             // needs to be filled in
@@ -1349,6 +1353,45 @@ static void *p521_snova2965_gen_init(void *provctx, int selection) {
         {OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load},                   \
         {0, NULL}};
 
+#define MAKE_KEM_ECBP_KEYMGMT_FUNCTIONS(tokalg, tokoqsalg, bit_security,       \
+                                        pqfips)                                \
+    static void *ecbp_##tokalg##_new_key(void *provctx) {                      \
+        return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx), tokoqsalg,            \
+                            "" #tokalg "", KEY_TYPE_ECBP_HYB_KEM, NULL,        \
+                            bit_security, -1, pqfips);                         \
+    }                                                                          \
+                                                                               \
+    static void *ecbp_##tokalg##_gen_init(void *provctx, int selection) {      \
+        return oqsx_gen_init(provctx, selection, tokoqsalg, "" #tokalg "",     \
+                             KEY_TYPE_ECBP_HYB_KEM, bit_security, -1, pqfips); \
+    }                                                                          \
+                                                                               \
+    const OSSL_DISPATCH oqs_ecbp_##tokalg##_keymgmt_functions[] = {            \
+        {OSSL_FUNC_KEYMGMT_NEW, (void (*)(void))ecbp_##tokalg##_new_key},      \
+        {OSSL_FUNC_KEYMGMT_FREE, (void (*)(void))oqsx_key_free},               \
+        {OSSL_FUNC_KEYMGMT_GET_PARAMS, (void (*)(void))oqsx_get_params},       \
+        {OSSL_FUNC_KEYMGMT_SETTABLE_PARAMS,                                    \
+         (void (*)(void))oqsx_settable_params},                                \
+        {OSSL_FUNC_KEYMGMT_GETTABLE_PARAMS,                                    \
+         (void (*)(void))oqs_gettable_params},                                 \
+        {OSSL_FUNC_KEYMGMT_SET_PARAMS, (void (*)(void))oqsx_set_params},       \
+        {OSSL_FUNC_KEYMGMT_HAS, (void (*)(void))oqsx_has},                     \
+        {OSSL_FUNC_KEYMGMT_MATCH, (void (*)(void))oqsx_match},                 \
+        {OSSL_FUNC_KEYMGMT_IMPORT, (void (*)(void))oqsx_import},               \
+        {OSSL_FUNC_KEYMGMT_IMPORT_TYPES, (void (*)(void))oqs_imexport_types},  \
+        {OSSL_FUNC_KEYMGMT_EXPORT, (void (*)(void))oqsx_export},               \
+        {OSSL_FUNC_KEYMGMT_EXPORT_TYPES, (void (*)(void))oqs_imexport_types},  \
+        {OSSL_FUNC_KEYMGMT_GEN_INIT,                                           \
+         (void (*)(void))ecbp_##tokalg##_gen_init},                            \
+        {OSSL_FUNC_KEYMGMT_GEN, (void (*)(void))oqsx_gen},                     \
+        {OSSL_FUNC_KEYMGMT_GEN_CLEANUP, (void (*)(void))oqsx_gen_cleanup},     \
+        {OSSL_FUNC_KEYMGMT_GEN_SET_PARAMS,                                     \
+         (void (*)(void))oqsx_gen_set_params},                                 \
+        {OSSL_FUNC_KEYMGMT_GEN_SETTABLE_PARAMS,                                \
+         (void (*)(void))oqsx_gen_settable_params},                            \
+        {OSSL_FUNC_KEYMGMT_LOAD, (void (*)(void))oqsx_load},                   \
+        {0, NULL}};
+
 #define MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(tokalg, tokoqsalg, bit_security,        \
                                        pqfips)                                 \
     static void *ecx_##tokalg##_new_key(void *provctx) {                       \
@@ -1485,11 +1528,15 @@ MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem512, OQS_KEM_alg_ml_kem_512, 128)
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_mlkem512, OQS_KEM_alg_ml_kem_512, 128)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_mlkem512, OQS_KEM_alg_ml_kem_512, 128, 1)
+
+MAKE_KEM_ECBP_KEYMGMT_FUNCTIONS(bp256_mlkem512, OQS_KEM_alg_ml_kem_512, 128, 1)
 MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem768, OQS_KEM_alg_ml_kem_768, 192)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_mlkem768, OQS_KEM_alg_ml_kem_768, 192)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_mlkem768, OQS_KEM_alg_ml_kem_768, 192, 1)
+
+MAKE_KEM_ECBP_KEYMGMT_FUNCTIONS(bp384_mlkem768, OQS_KEM_alg_ml_kem_768, 192, 1)
 
 MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(X25519MLKEM768, OQS_KEM_alg_ml_kem_768, 128, 1)
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(SecP256r1MLKEM768, OQS_KEM_alg_ml_kem_768, 128)
@@ -1497,6 +1544,9 @@ MAKE_KEM_KEYMGMT_FUNCTIONS(mlkem1024, OQS_KEM_alg_ml_kem_1024, 256)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_mlkem1024, OQS_KEM_alg_ml_kem_1024, 256)
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(SecP384r1MLKEM1024, OQS_KEM_alg_ml_kem_1024, 192)
+
+MAKE_KEM_ECBP_KEYMGMT_FUNCTIONS(bp512_mlkem1024, OQS_KEM_alg_ml_kem_1024, 256,
+                                1)
 MAKE_KEM_KEYMGMT_FUNCTIONS(bikel1, OQS_KEM_alg_bike_l1, 128)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_bikel1, OQS_KEM_alg_bike_l1, 128)

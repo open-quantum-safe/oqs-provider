@@ -66,16 +66,19 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
 
     {0x2F4B, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {0x2FB6, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
+    {65056, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {513, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
     {0x2F4C, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {0x2FB7, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
+    {65057, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {0x11ec, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {0x11eb, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {514, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
     {0x2F4D, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {0x11ED, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
+    {65058, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {65040, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
     {65041, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
@@ -90,7 +93,7 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     ///// OQS_TEMPLATE_FRAGMENT_GROUP_ASSIGNMENTS_END
 };
 
-// Adds entries for tlsname, `ecx`_tlsname and `ecp`_tlsname
+// Adds entries for tlsname, `ecx`_tlsname, `ecbp`_tlsname and `ecp`_tlsname
 #define OQS_GROUP_ENTRY(tlsname, realname, algorithm, idx)                     \
     {                                                                          \
         OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME, #tlsname,       \
@@ -165,39 +168,42 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 
     OQS_GROUP_ENTRY(p256_mlkem512, p256_mlkem512, p256_mlkem512, 17),
     OQS_GROUP_ENTRY(x25519_mlkem512, x25519_mlkem512, x25519_mlkem512, 18),
+    OQS_GROUP_ENTRY(bp256_mlkem512, bp256_mlkem512, bp256_mlkem512, 19),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
-    OQS_GROUP_ENTRY(mlkem768, mlkem768, mlkem768, 19),
+    OQS_GROUP_ENTRY(mlkem768, mlkem768, mlkem768, 20),
 
-    OQS_GROUP_ENTRY(p384_mlkem768, p384_mlkem768, p384_mlkem768, 20),
-    OQS_GROUP_ENTRY(x448_mlkem768, x448_mlkem768, x448_mlkem768, 21),
-    OQS_GROUP_ENTRY(X25519MLKEM768, X25519MLKEM768, X25519MLKEM768, 22),
+    OQS_GROUP_ENTRY(p384_mlkem768, p384_mlkem768, p384_mlkem768, 21),
+    OQS_GROUP_ENTRY(x448_mlkem768, x448_mlkem768, x448_mlkem768, 22),
+    OQS_GROUP_ENTRY(bp384_mlkem768, bp384_mlkem768, bp384_mlkem768, 23),
+    OQS_GROUP_ENTRY(X25519MLKEM768, X25519MLKEM768, X25519MLKEM768, 24),
     OQS_GROUP_ENTRY(SecP256r1MLKEM768, SecP256r1MLKEM768, SecP256r1MLKEM768,
-                    23),
+                    25),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_1024
-    OQS_GROUP_ENTRY(mlkem1024, mlkem1024, mlkem1024, 24),
+    OQS_GROUP_ENTRY(mlkem1024, mlkem1024, mlkem1024, 26),
 
-    OQS_GROUP_ENTRY(p521_mlkem1024, p521_mlkem1024, p521_mlkem1024, 25),
+    OQS_GROUP_ENTRY(p521_mlkem1024, p521_mlkem1024, p521_mlkem1024, 27),
     OQS_GROUP_ENTRY(SecP384r1MLKEM1024, SecP384r1MLKEM1024, SecP384r1MLKEM1024,
-                    26),
+                    28),
+    OQS_GROUP_ENTRY(bp512_mlkem1024, bp512_mlkem1024, bp512_mlkem1024, 29),
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l1
-    OQS_GROUP_ENTRY(bikel1, bikel1, bikel1, 27),
+    OQS_GROUP_ENTRY(bikel1, bikel1, bikel1, 30),
 
-    OQS_GROUP_ENTRY(p256_bikel1, p256_bikel1, p256_bikel1, 28),
-    OQS_GROUP_ENTRY(x25519_bikel1, x25519_bikel1, x25519_bikel1, 29),
+    OQS_GROUP_ENTRY(p256_bikel1, p256_bikel1, p256_bikel1, 31),
+    OQS_GROUP_ENTRY(x25519_bikel1, x25519_bikel1, x25519_bikel1, 32),
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l3
-    OQS_GROUP_ENTRY(bikel3, bikel3, bikel3, 30),
+    OQS_GROUP_ENTRY(bikel3, bikel3, bikel3, 33),
 
-    OQS_GROUP_ENTRY(p384_bikel3, p384_bikel3, p384_bikel3, 31),
-    OQS_GROUP_ENTRY(x448_bikel3, x448_bikel3, x448_bikel3, 32),
+    OQS_GROUP_ENTRY(p384_bikel3, p384_bikel3, p384_bikel3, 34),
+    OQS_GROUP_ENTRY(x448_bikel3, x448_bikel3, x448_bikel3, 35),
 #endif
 #ifdef OQS_ENABLE_KEM_bike_l5
-    OQS_GROUP_ENTRY(bikel5, bikel5, bikel5, 33),
+    OQS_GROUP_ENTRY(bikel5, bikel5, bikel5, 36),
 
-    OQS_GROUP_ENTRY(p521_bikel5, p521_bikel5, p521_bikel5, 34),
+    OQS_GROUP_ENTRY(p521_bikel5, p521_bikel5, p521_bikel5, 37),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_END
 };
@@ -299,45 +305,54 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_X25519_MLKEM512"))
         oqs_group_list[18].group_id =
             atoi(getenv("OQS_CODEPOINT_X25519_MLKEM512"));
+    if (getenv("OQS_CODEPOINT_BP256_MLKEM512"))
+        oqs_group_list[19].group_id =
+            atoi(getenv("OQS_CODEPOINT_BP256_MLKEM512"));
     if (getenv("OQS_CODEPOINT_MLKEM768"))
-        oqs_group_list[19].group_id = atoi(getenv("OQS_CODEPOINT_MLKEM768"));
+        oqs_group_list[20].group_id = atoi(getenv("OQS_CODEPOINT_MLKEM768"));
     if (getenv("OQS_CODEPOINT_P384_MLKEM768"))
-        oqs_group_list[20].group_id =
+        oqs_group_list[21].group_id =
             atoi(getenv("OQS_CODEPOINT_P384_MLKEM768"));
     if (getenv("OQS_CODEPOINT_X448_MLKEM768"))
-        oqs_group_list[21].group_id =
-            atoi(getenv("OQS_CODEPOINT_X448_MLKEM768"));
-    if (getenv("OQS_CODEPOINT_X25519MLKEM768"))
         oqs_group_list[22].group_id =
+            atoi(getenv("OQS_CODEPOINT_X448_MLKEM768"));
+    if (getenv("OQS_CODEPOINT_BP384_MLKEM768"))
+        oqs_group_list[23].group_id =
+            atoi(getenv("OQS_CODEPOINT_BP384_MLKEM768"));
+    if (getenv("OQS_CODEPOINT_X25519MLKEM768"))
+        oqs_group_list[24].group_id =
             atoi(getenv("OQS_CODEPOINT_X25519MLKEM768"));
     if (getenv("OQS_CODEPOINT_SECP256R1MLKEM768"))
-        oqs_group_list[23].group_id =
+        oqs_group_list[25].group_id =
             atoi(getenv("OQS_CODEPOINT_SECP256R1MLKEM768"));
     if (getenv("OQS_CODEPOINT_MLKEM1024"))
-        oqs_group_list[24].group_id = atoi(getenv("OQS_CODEPOINT_MLKEM1024"));
+        oqs_group_list[26].group_id = atoi(getenv("OQS_CODEPOINT_MLKEM1024"));
     if (getenv("OQS_CODEPOINT_P521_MLKEM1024"))
-        oqs_group_list[25].group_id =
+        oqs_group_list[27].group_id =
             atoi(getenv("OQS_CODEPOINT_P521_MLKEM1024"));
     if (getenv("OQS_CODEPOINT_SECP384R1MLKEM1024"))
-        oqs_group_list[26].group_id =
+        oqs_group_list[28].group_id =
             atoi(getenv("OQS_CODEPOINT_SECP384R1MLKEM1024"));
-    if (getenv("OQS_CODEPOINT_BIKEL1"))
-        oqs_group_list[27].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL1"));
-    if (getenv("OQS_CODEPOINT_P256_BIKEL1"))
-        oqs_group_list[28].group_id = atoi(getenv("OQS_CODEPOINT_P256_BIKEL1"));
-    if (getenv("OQS_CODEPOINT_X25519_BIKEL1"))
+    if (getenv("OQS_CODEPOINT_BP512_MLKEM1024"))
         oqs_group_list[29].group_id =
+            atoi(getenv("OQS_CODEPOINT_BP512_MLKEM1024"));
+    if (getenv("OQS_CODEPOINT_BIKEL1"))
+        oqs_group_list[30].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL1"));
+    if (getenv("OQS_CODEPOINT_P256_BIKEL1"))
+        oqs_group_list[31].group_id = atoi(getenv("OQS_CODEPOINT_P256_BIKEL1"));
+    if (getenv("OQS_CODEPOINT_X25519_BIKEL1"))
+        oqs_group_list[32].group_id =
             atoi(getenv("OQS_CODEPOINT_X25519_BIKEL1"));
     if (getenv("OQS_CODEPOINT_BIKEL3"))
-        oqs_group_list[30].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL3"));
+        oqs_group_list[33].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL3"));
     if (getenv("OQS_CODEPOINT_P384_BIKEL3"))
-        oqs_group_list[31].group_id = atoi(getenv("OQS_CODEPOINT_P384_BIKEL3"));
+        oqs_group_list[34].group_id = atoi(getenv("OQS_CODEPOINT_P384_BIKEL3"));
     if (getenv("OQS_CODEPOINT_X448_BIKEL3"))
-        oqs_group_list[32].group_id = atoi(getenv("OQS_CODEPOINT_X448_BIKEL3"));
+        oqs_group_list[35].group_id = atoi(getenv("OQS_CODEPOINT_X448_BIKEL3"));
     if (getenv("OQS_CODEPOINT_BIKEL5"))
-        oqs_group_list[33].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL5"));
+        oqs_group_list[36].group_id = atoi(getenv("OQS_CODEPOINT_BIKEL5"));
     if (getenv("OQS_CODEPOINT_P521_BIKEL5"))
-        oqs_group_list[34].group_id = atoi(getenv("OQS_CODEPOINT_P521_BIKEL5"));
+        oqs_group_list[37].group_id = atoi(getenv("OQS_CODEPOINT_P521_BIKEL5"));
 
     if (getenv("OQS_CODEPOINT_MLDSA44"))
         oqs_sigalg_list[0].code_point = atoi(getenv("OQS_CODEPOINT_MLDSA44"));

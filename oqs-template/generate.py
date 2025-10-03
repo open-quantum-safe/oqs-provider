@@ -212,11 +212,11 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
             continue
         hybrid_nids = set()
         for extra_hybrid in kem['extra_nids']['current']:
-            if extra_hybrid['hybrid_group'] == "x25519" or extra_hybrid['hybrid_group'] == "p256"  or extra_hybrid['hybrid_group'] == "secp256_r1":
+            if extra_hybrid['hybrid_group'] == "x25519" or extra_hybrid['hybrid_group'] == "p256" or extra_hybrid['hybrid_group'] == "bp256" or extra_hybrid['hybrid_group'] == "secp256_r1":
                extra_hybrid['bit_security'] = 128
-            if extra_hybrid['hybrid_group'] == "x448" or extra_hybrid['hybrid_group'] == "p384" or extra_hybrid['hybrid_group'] == "secp384_r1":
+            if extra_hybrid['hybrid_group'] == "x448" or extra_hybrid['hybrid_group'] == "p384" or extra_hybrid['hybrid_group'] == "bp384" or extra_hybrid['hybrid_group'] == "secp384_r1":
                extra_hybrid['bit_security'] = 192
-            if extra_hybrid['hybrid_group'] == "p521" or extra_hybrid['hybrid_group'] == "secp521_r1":
+            if extra_hybrid['hybrid_group'] == "p521" or extra_hybrid['hybrid_group'] == "bp512" or extra_hybrid['hybrid_group'] == "secp521_r1":
                extra_hybrid['bit_security'] = 256
             if not 'hybrid_oid' in extra_hybrid:
                 extra_hybrid['hybrid_oid'] = get_tmp_kem_oid()

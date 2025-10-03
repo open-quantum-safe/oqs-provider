@@ -28,13 +28,4 @@ if [[ "$openssl_version" == "OpenSSL 3.0."* ]]; then
         exit 0
 fi
 
-if [[ -z "$CIRCLECI" ]]; then
 docker run -v `pwd`/tmp:/home/oqs/data -it $IMAGE sh -c "cd /home/oqs/data && openssl cms -verify -CAfile $1_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile && diff signeddatafile inputfile"
-else
-# CCI doesn't permit mounting, so let's do as per https://circleci.com/docs/2.0/building-docker-images/#mounting-folders:
-docker create -v /certs --name certs alpine /bin/true && \
-chmod gou+rw tmp/* && \
-docker cp tmp/ certs:/certs && \
-docker run --volumes-from certs -it $IMAGE sh -c "cd /certs/tmp && openssl cms -verify -CAfile $1_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile && diff signeddatafile inputfile" && \
-docker rm certs
-fi

@@ -649,42 +649,54 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
                      CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2.2", 36),
 #endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
+    OQS_SIGALG_ENTRY(DISABLED_OV_Is_pkc, DISABLED_OV_Is_pkc, DISABLED_OV_Is_pkc,
+                     "1.3.9999.9.5.1", 37),
+    OQS_SIGALG_ENTRY(DISABLED_p256_OV_Is_pkc, DISABLED_p256_OV_Is_pkc,
+                     DISABLED_p256_OV_Is_pkc, "1.3.9999.9.5.2", 38),
+#endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
-    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 37),
+    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 39),
     OQS_SIGALG_ENTRY(p256_OV_Ip_pkc, p256_OV_Ip_pkc, p256_OV_Ip_pkc,
-                     "1.3.9999.9.6.2", 38),
+                     "1.3.9999.9.6.2", 40),
+#endif
+#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
+    OQS_SIGALG_ENTRY(DISABLED_OV_Is_pkc_skc, DISABLED_OV_Is_pkc_skc,
+                     DISABLED_OV_Is_pkc_skc, "1.3.9999.9.9.1", 41),
+    OQS_SIGALG_ENTRY(DISABLED_p256_OV_Is_pkc_skc, DISABLED_p256_OV_Is_pkc_skc,
+                     DISABLED_p256_OV_Is_pkc_skc, "1.3.9999.9.9.2", 42),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
     OQS_SIGALG_ENTRY(OV_Ip_pkc_skc, OV_Ip_pkc_skc, OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.1", 39),
+                     "1.3.9999.9.10.1", 43),
     OQS_SIGALG_ENTRY(p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.2", 40),
+                     "1.3.9999.9.10.2", 44),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4
-    OQS_SIGALG_ENTRY(snova2454, snova2454, snova2454, "1.3.9999.10.1.1", 41),
+    OQS_SIGALG_ENTRY(snova2454, snova2454, snova2454, "1.3.9999.10.1.1", 45),
     OQS_SIGALG_ENTRY(p256_snova2454, p256_snova2454, p256_snova2454,
-                     "1.3.9999.10.1.2", 42),
+                     "1.3.9999.10.1.2", 46),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_4_esk
     OQS_SIGALG_ENTRY(snova2454esk, snova2454esk, snova2454esk,
-                     "1.3.9999.10.3.1", 43),
+                     "1.3.9999.10.3.1", 47),
     OQS_SIGALG_ENTRY(p256_snova2454esk, p256_snova2454esk, p256_snova2454esk,
-                     "1.3.9999.10.3.2", 44),
+                     "1.3.9999.10.3.2", 48),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_37_17_2
-    OQS_SIGALG_ENTRY(snova37172, snova37172, snova37172, "1.3.9999.10.5.1", 45),
+    OQS_SIGALG_ENTRY(snova37172, snova37172, snova37172, "1.3.9999.10.5.1", 49),
     OQS_SIGALG_ENTRY(p256_snova37172, p256_snova37172, p256_snova37172,
-                     "1.3.9999.10.5.2", 46),
+                     "1.3.9999.10.5.2", 50),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_24_5_5
-    OQS_SIGALG_ENTRY(snova2455, snova2455, snova2455, "1.3.9999.10.10.1", 47),
+    OQS_SIGALG_ENTRY(snova2455, snova2455, snova2455, "1.3.9999.10.10.1", 51),
     OQS_SIGALG_ENTRY(p384_snova2455, p384_snova2455, p384_snova2455,
-                     "1.3.9999.10.10.2", 48),
+                     "1.3.9999.10.10.2", 52),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_29_6_5
-    OQS_SIGALG_ENTRY(snova2965, snova2965, snova2965, "1.3.9999.10.12.1", 49),
+    OQS_SIGALG_ENTRY(snova2965, snova2965, snova2965, "1.3.9999.10.12.1", 53),
     OQS_SIGALG_ENTRY(p521_snova2965, p521_snova2965, p521_snova2965,
-                     "1.3.9999.10.12.2", 50),
+                     "1.3.9999.10.12.2", 54),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

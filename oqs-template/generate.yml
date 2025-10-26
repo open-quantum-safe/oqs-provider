@@ -83,7 +83,7 @@ kems:
           nid: '0x2F06'
     oqs_alg: 'OQS_KEM_alg_bike1_l1_cpa'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'BIKE'
     name_group: 'bike1l3cpa'
@@ -99,14 +99,14 @@ kems:
           nid: '0x2F07'
     oqs_alg: 'OQS_KEM_alg_bike1_l3_cpa'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber512'
     oid: '1.3.6.1.4.1.2.267.8.2.2'
     oqs_alg: 'OQS_KEM_alg_kyber_512'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
     extra_nids:
       old:
         - implementation_version: NIST Round 3 submission
@@ -165,7 +165,7 @@ kems:
           nid: '0x2F10'
     oqs_alg: 'OQS_KEM_alg_kyber_768'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber1024'
@@ -188,7 +188,7 @@ kems:
           nid: '0x2F11'
     oqs_alg: 'OQS_KEM_alg_kyber_1024'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
 # end of IBM support section
 # NIST OIDs see https://csrc.nist.gov/projects/computer-security-objects-register/algorithm-registration
 # KEM prefix 2.16.840.1.101.3.4.4.
@@ -296,7 +296,7 @@ kems:
           nid: '0x2F28'
     oqs_alg: 'OQS_KEM_alg_bike1_l1_fo'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'BIKE'
     name_group: 'bike1l3fo'
@@ -312,7 +312,7 @@ kems:
           nid: '0x2F24'
     oqs_alg: 'OQS_KEM_alg_bike1_l3_fo'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'BIKE'
     name_group: 'bikel1'
@@ -393,7 +393,7 @@ kems:
           nid: '0x2FA9'
     oqs_alg: 'OQS_KEM_alg_kyber_512_90s'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber90s768'
@@ -419,7 +419,7 @@ kems:
           nid: '0x2FAA'
     oqs_alg: 'OQS_KEM_alg_kyber_768_90s'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber90s1024'
@@ -441,7 +441,7 @@ kems:
           nid: '0x2F40'
     oqs_alg: 'OQS_KEM_alg_kyber_1024_90s'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
   -
     family: 'HQC'
     name_group: 'hqc128'
@@ -449,7 +449,7 @@ kems:
     nid_hybrid: '65049'
     oqs_alg: 'OQS_KEM_alg_hqc_128'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
     extra_nids:
       current:
         - hybrid_group: "x25519"
@@ -473,7 +473,7 @@ kems:
     nid_hybrid: '65052'
     oqs_alg: 'OQS_KEM_alg_hqc_192'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
     extra_nids:
       current:
         - hybrid_group: "x448"
@@ -497,7 +497,7 @@ kems:
     nid_hybrid: '65055'
     oqs_alg: 'OQS_KEM_alg_hqc_256'
     enable_kem: false
-    enable_tls: false
+    enable_tls: true
     extra_nids:
       old:
         - implementation_version: NIST Round 3 submission

@@ -86,9 +86,20 @@ err:
 
 static int test_group(const OSSL_PARAM params[], void *data) {
     int ret = 1;
-    int *errcnt = (int *)data;
+    int *errcnt = (int *)data, *mintls = NULL;
     const OSSL_PARAM *p =
-        OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_GROUP_NAME);
+        OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_GROUP_MIN_TLS);
+
+    if (p == NULL || p->data_type != OSSL_PARAM_INTEGER) {
+        ret = -1;
+        goto err;
+    }
+
+    mintls = (int *)p->data;
+    if (*mintls == -1)
+        return 1;
+
+    p = OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_GROUP_NAME);
     if (p == NULL || p->data_type != OSSL_PARAM_UTF8_STRING) {
         ret = -1;
         goto err;

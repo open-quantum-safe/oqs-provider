@@ -1,7 +1,6 @@
 {% set cnt = namespace(val=-1) %}
 {%- for sig in config['sigs'] %}
     {%- for variant in sig['variants'] %}
-    {%- if 'enable_tls' in variant and variant['enable_tls'] -%}
     {%- set cnt.val = cnt.val + 1 %}
 #ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
     OQS_SIGALG_ENTRY({{variant['name']}}, {{variant['name']}}, {{variant['name']}}, "{{ variant['oid'] }}", {{ cnt.val }}),
@@ -10,7 +9,6 @@
     OQS_SIGALG_ENTRY({{ classical_alg['name'] }}_{{variant['name']}}, {{ classical_alg['name'] }}_{{variant['name']}}, {{ classical_alg['name'] }}_{{variant['name']}}, "{{ classical_alg['oid'] }}", {{ cnt.val }}),
         {%- endfor %}
 #endif
-    {%- endif -%}
     {%- endfor %}
 {%- endfor %}
 

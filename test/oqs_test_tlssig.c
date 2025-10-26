@@ -96,9 +96,20 @@ EVP_SIGNATURE_get0_name(evpsig));
 
 static int test_signature(const OSSL_PARAM params[], void *data) {
     int ret = 0;
-    int *errcnt = (int *)data;
+    int *errcnt = (int *)data, *mintls = NULL;
     const OSSL_PARAM *p =
-        OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_SIGALG_NAME);
+        OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_SIGALG_MIN_TLS);
+
+    if (p == NULL || p->data_type != OSSL_PARAM_INTEGER) {
+        ret = -1;
+        goto err;
+    }
+
+    mintls = (int *)p->data;
+    if (*mintls == -1)
+        return 1;
+
+    p = OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_SIGALG_NAME);
 
     if (p == NULL || p->data_type != OSSL_PARAM_UTF8_STRING) {
         ret = -1;

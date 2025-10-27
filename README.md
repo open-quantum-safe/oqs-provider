@@ -36,7 +36,7 @@ This implementation makes available the following quantum safe algorithms:
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_START -->
 ### KEM algorithms
 
-- **BIKE**:`bikel1`, `p256_bikel1`, `x25519_bikel1`, `bikel3`, `p384_bikel3`, `x448_bikel3`, `bikel5`, `p521_bikel5`
+- **BIKE**:`bikel1`\*, `p256_bikel1`\*, `x25519_bikel1`\*, `bikel3`, `p384_bikel3`, `x448_bikel3`, `bikel5`, `p521_bikel5`
 - **FrodoKEM**:`frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
 - **ML-KEM**:`mlkem512`, `p256_mlkem512`, `x25519_mlkem512`, `bp256_mlkem512`, `mlkem768`, `p384_mlkem768`, `x448_mlkem768`, `bp384_mlkem768`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `mlkem1024`, `p521_mlkem1024`, `SecP384r1MLKEM1024`, `bp512_mlkem1024`
 

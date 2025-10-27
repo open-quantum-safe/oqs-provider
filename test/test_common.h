@@ -24,6 +24,8 @@
 #define cDRED "\033[0;31m"
 #define cGREEN "\033[1;32m"
 #define cDGREEN "\033[0;32m"
+#define cYELLOW "\033[1;33m"
+#define cDYELLOW "\033[0;33m"
 #define cBLUE "\033[1;34m"
 #define cDBLUE "\033[0;34m"
 #define cNORM "\033[m"

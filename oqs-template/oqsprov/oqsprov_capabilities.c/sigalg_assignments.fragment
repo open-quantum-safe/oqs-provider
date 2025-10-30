@@ -1,8 +1,8 @@
 {%- for sig in config['sigs'] %}
     {%- for variant in sig['variants'] %}
-    { {{ variant['code_point'] }}, {{variant['security']}}, TLS1_3_VERSION, 0 }, 
+    { {{ variant['code_point'] }}, {{variant['security']}}, {% if 'enable_tls' in variant and variant['enable_tls'] %}TLS1_3_VERSION{% else %}-1{% endif %}, 0 }, 
         {%- for classical_alg in variant['mix_with'] %}
-    { {{ classical_alg['code_point'] }}, {{ variant['security'] }}, TLS1_3_VERSION, 0 }, 
+    { {{ classical_alg['code_point'] }}, {{ variant['security'] }}, {% if 'enable_tls' in variant and variant['enable_tls'] %}TLS1_3_VERSION{% else %}-1{% endif %}, 0 }, 
         {%- endfor %}
     {%- endfor %}
 {%- endfor %}

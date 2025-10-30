@@ -86,7 +86,7 @@ err:
 
 static int test_group(const OSSL_PARAM params[], void *data) {
     int ret = 1;
-    int *errcnt = (int *)data;
+    int *errcnt = (int *)data, *mintls = NULL;
     const OSSL_PARAM *p =
         OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_GROUP_NAME);
     if (p == NULL || p->data_type != OSSL_PARAM_UTF8_STRING) {
@@ -95,6 +95,23 @@ static int test_group(const OSSL_PARAM params[], void *data) {
     }
 
     char *group_name = OPENSSL_strdup(p->data);
+
+    if (group_name == NULL)
+        return 0;
+
+    p = OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_GROUP_MIN_TLS);
+    if (p == NULL || p->data_type != OSSL_PARAM_INTEGER) {
+        ret = -1;
+        goto err;
+    }
+
+    mintls = (int *)p->data;
+    if (*mintls == -1) {
+        fprintf(stderr,
+                cYELLOW "  TLS-KEM handshake test skipped: %s" cNORM "\n",
+                group_name);
+        goto err;
+    }
 
     ret = test_oqs_groups(group_name, 0);
 

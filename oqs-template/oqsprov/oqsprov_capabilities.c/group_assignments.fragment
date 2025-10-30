@@ -1,7 +1,7 @@
 {% for kem in config['kems'] %}
-   { {{ kem['nid'] }}, {{ kem['bit_security'] }}, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1 },
+   { {{ kem['nid'] }}, {{ kem['bit_security'] }}, {% if 'enable_tls' in kem and kem['enable_tls'] %}TLS1_3_VERSION{% else %}-1{% endif %}, 0, {% if 'enable_tls' in kem and kem['enable_tls'] %}DTLS1_3_VERSION{% else %}-1{% endif %}, 0, 1 },
 {% for hybrid in kem['hybrids'] %}
-   { {{ hybrid['nid'] }}, {{ kem['bit_security'] }}, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1 },
+   { {{ hybrid['nid'] }}, {{ kem['bit_security'] }}, {% if 'enable_tls' in kem and kem['enable_tls'] %}TLS1_3_VERSION{% else %}-1{% endif %}, 0, {% if 'enable_tls' in kem and kem['enable_tls'] %}DTLS1_3_VERSION{% else %}-1{% endif %}, 0, 1 },
 {%- endfor %}
 {%- endfor %}
 

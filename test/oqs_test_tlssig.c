@@ -31,7 +31,7 @@ static int test_oqs_tlssig(const char *sig_name, int dtls_flag) {
 #endif
 
     if (!alg_is_enabled(sig_name)) {
-        printf("Not testing disabled algorithm %s.\n", sig_name);
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", sig_name);
         return 1;
     }
 
@@ -87,7 +87,7 @@ err:
 static void test_oqs_sigs(EVP_SIGNATURE *evpsig, void *vp) {
         OSSL_PROVIDER* prov = EVP_SIGNATURE_get0_provider(evpsig);
         if (!strcmp(OSSL_PROVIDER_get0_name(prov), "oqsprovider")) {
-                printf("Commencing test of %s:\n",
+                fprintf(stderr, "Commencing test of %s:\n",
 EVP_SIGNATURE_get0_name(evpsig));
                 test_oqs_tlssig(EVP_SIGNATURE_get0_name(evpsig));
         }

@@ -64,9 +64,9 @@ void hexdump(const void *ptr, size_t len) {
 
     for (i = 0; i < len; i += j) {
         for (j = 0; j < 16 && i + j < len; j++)
-            printf("%s%02x", j ? "" : " ", p[i + j]);
+            fprintf(stderr, "%s%02x", j ? "" : " ", p[i + j]);
     }
-    printf("\n");
+    fprintf(stderr, "\n");
 }
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))

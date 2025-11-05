@@ -56,7 +56,8 @@ static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
     EVP_PKEY_CTX *ctx = NULL;
 
     if (!alg_is_enabled(type)) {
-        printf("Not generating key for disabled algorithm %s.\n", type);
+        fprintf(stderr, "Not generating key for disabled algorithm %s.\n",
+                type);
         return NULL;
     }
 
@@ -87,7 +88,7 @@ static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format,
     ectx =
         OSSL_ENCODER_CTX_new_for_pkey(pkey, selection, format, structure, NULL);
     if (ectx == NULL) {
-        printf("No suitable encoder found\n");
+        fprintf(stderr, "No suitable encoder found\n");
         goto end;
     }
 
@@ -175,7 +176,7 @@ static int test_oqs_encdec(const char *alg_name) {
             goto end;
 
         if (!OBJ_sn2nid(alg_name)) {
-            printf("No OID registered for %s\n", alg_name);
+            fprintf(stderr, "No OID registered for %s\n", alg_name);
             ok = -1;
             goto end;
         }
@@ -183,7 +184,7 @@ static int test_oqs_encdec(const char *alg_name) {
                                   test_params_list[i].structure,
                                   test_params_list[i].pass,
                                   test_params_list[i].selection, &encoded)) {
-            printf("Failed encoding %s", alg_name);
+            fprintf(stderr, "Failed encoding %s", alg_name);
             goto end;
         }
         if (!decode_EVP_PKEY_prov(
@@ -191,12 +192,12 @@ static int test_oqs_encdec(const char *alg_name) {
                 test_params_list[i].pass, test_params_list[i].keytype,
                 test_params_list[i].selection, &decoded_pkey, encoded->data,
                 encoded->length)) {
-            printf("Failed decoding %s", alg_name);
+            fprintf(stderr, "Failed decoding %s", alg_name);
             goto end;
         }
 
         if (EVP_PKEY_eq(pkey, decoded_pkey) != 1) {
-            printf("Key equality failed for %s", alg_name);
+            fprintf(stderr, "Key equality failed for %s", alg_name);
             goto end;
         }
         EVP_PKEY_free(pkey);

@@ -32,13 +32,13 @@ int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb); // TBD: OK to use?
 #else
 #define OQS_DEC_PRINTF(a)                                                      \
     if (getenv("OQSDEC"))                                                      \
-    printf(a)
+    fprintf(stderr, a)
 #define OQS_DEC_PRINTF2(a, b)                                                  \
     if (getenv("OQSDEC"))                                                      \
-    printf(a, b)
+    fprintf(stderr, a, b)
 #define OQS_DEC_PRINTF3(a, b, c)                                               \
     if (getenv("OQSDEC"))                                                      \
-    printf(a, b, c)
+    fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
 struct der2key_ctx_st; /* Forward declaration */

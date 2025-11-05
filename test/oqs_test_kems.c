@@ -23,7 +23,7 @@ static int test_oqs_kems(const char *kemalg_name) {
     int testresult = 1;
 
     if (!alg_is_enabled(kemalg_name)) {
-        printf("Not testing disabled algorithm %s.\n", kemalg_name);
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", kemalg_name);
         return 1;
     }
     // test with built-in digest only if default provider is active:

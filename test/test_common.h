@@ -33,9 +33,9 @@
 #define TEST_ASSERT(e)                                                         \
     {                                                                          \
         if (!(test = (e)))                                                     \
-            printf(cRED "  Test FAILED" cNORM "\n");                           \
+            fprintf(stderr, cRED "  Test FAILED" cNORM "\n");                  \
         else                                                                   \
-            printf(cGREEN "  Test passed" cNORM "\n");                         \
+            fprintf(stderr, cGREEN "  Test passed" cNORM "\n");                \
     }
 
 void hexdump(const void *ptr, size_t len);

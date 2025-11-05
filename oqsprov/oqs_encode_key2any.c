@@ -30,13 +30,13 @@
 #else
 #define OQS_ENC_PRINTF(a)                                                      \
     if (getenv("OQSENC"))                                                      \
-    printf(a)
+    fprintf(stderr, a)
 #define OQS_ENC_PRINTF2(a, b)                                                  \
     if (getenv("OQSENC"))                                                      \
-    printf(a, b)
+    fprintf(stderr, a, b)
 #define OQS_ENC_PRINTF3(a, b, c)                                               \
     if (getenv("OQSENC"))                                                      \
-    printf(a, b, c)
+    fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
 struct key2any_ctx_st {

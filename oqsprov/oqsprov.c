@@ -26,13 +26,13 @@
 #else
 #define OQS_PROV_PRINTF(a)                                                     \
     if (getenv("OQSPROV"))                                                     \
-    printf(a)
+    fprintf(stderr, a)
 #define OQS_PROV_PRINTF2(a, b)                                                 \
     if (getenv("OQSPROV"))                                                     \
-    printf(a, b)
+    fprintf(stderr, a, b)
 #define OQS_PROV_PRINTF3(a, b, c)                                              \
     if (getenv("OQSPROV"))                                                     \
-    printf(a, b, c)
+    fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
 static STACK_OF(OPENSSL_STRING) *rt_disabled_algs = NULL;
@@ -988,8 +988,9 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
         FILTERED_ALGS(oqsprovider_decoder);
     default:
         if (getenv("OQSPROV"))
-            printf("Unknown operation %d requested from OQS provider\n",
-                   operation_id);
+            fprintf(stderr,
+                    "Unknown operation %d requested from OQS provider\n",
+                    operation_id);
     }
     return NULL;
 }
@@ -1192,10 +1193,10 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     // output disabled algs:
     /*
-    printf("disabled algs: %p (cnt: %d)\n", rt_disabled_algs,
+    fprintf(stderr, "disabled algs: %p (cnt: %d)\n", rt_disabled_algs,
     sk_OPENSSL_STRING_num(rt_disabled_algs));
     for (int i = 0; i < sk_OPENSSL_STRING_num(rt_disabled_algs); ++i) {
-      printf("Disabled alg #%d: %s in OpenSSL version %s\n", i,
+      fprintf(stderr, "Disabled alg #%d: %s in OpenSSL version %s\n", i,
     sk_OPENSSL_STRING_value(rt_disabled_algs, i), ossl_versionp);
     }
     */

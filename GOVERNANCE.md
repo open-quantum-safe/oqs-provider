@@ -116,6 +116,8 @@ Votes are to be executed by way of open GitHub discussions. No quorum is needed 
 ### Release managers
 
 @ashman-p
+@xuganyu96
+@dstebila
 
 ### Emeritus Committers
 @zadlg

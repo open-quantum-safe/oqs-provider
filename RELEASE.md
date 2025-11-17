@@ -16,6 +16,10 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 This is release candidate 1 of version 0.11.0 of oqs-provider which continues from the earlier 0.10.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.15.0 of `liboqs`.
 
+
+### What's New
+Support for bp256_mlkem512, bp384_mlkem768, and bp512_mlkem1024.
+
 ## What's Changed
 * Update CMakeLists.txt by @ashman-p in https://github.com/open-quantum-safe/oqs-provider/pull/693
 * Hide all symbols except for OSSL_provider_init entrypoint by @Lekensteyn in https://github.com/open-quantum-safe/oqs-provider/pull/672

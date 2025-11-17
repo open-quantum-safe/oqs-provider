@@ -695,6 +695,14 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx) {
             goto err;
     }
 
+    if (srcctx->context_string) {
+        dstctx->context_string = OPENSSL_memdup(
+            srcctx->context_string, srcctx->context_string_length);
+        if (dstctx->context_string == NULL)
+            goto err;
+        dstctx->context_string_length = srcctx->context_string_length;
+    }
+
     return dstctx;
 err:
     oqs_sig_freectx(dstctx);

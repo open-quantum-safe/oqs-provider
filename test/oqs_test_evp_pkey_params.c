@@ -400,7 +400,7 @@ int main(int argc, char **argv) {
     const OSSL_ALGORITHM *algs;
     int query_nocache;
     int errcnt;
-    int ret = EXIT_FAILURE;
+    int test = 0;
 
     if (!(libctx = init_openssl())) {
         goto end;
@@ -467,10 +467,6 @@ next_alg:
         }
     }
 
-    if (errcnt == 0) {
-        ret = EXIT_SUCCESS;
-    }
-
 unload_oqs_provider:
     OSSL_PROVIDER_unload(oqs_provider);
 
@@ -481,5 +477,6 @@ free_libctx:
     OSSL_LIB_CTX_free(libctx);
 
 end:
-    return ret;
+    TEST_ASSERT(errcnt == 0)
+    return !test;
 }

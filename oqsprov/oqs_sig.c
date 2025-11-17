@@ -695,6 +695,14 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx) {
             goto err;
     }
 
+    if (srcctx->context_string) {
+        dstctx->context_string = OPENSSL_memdup(srcctx->context_string,
+                                                srcctx->context_string_length);
+        if (dstctx->context_string == NULL)
+            goto err;
+        dstctx->context_string_length = srcctx->context_string_length;
+    }
+
     return dstctx;
 err:
     oqs_sig_freectx(dstctx);
@@ -786,7 +794,8 @@ static const OSSL_PARAM known_settable_ctx_params[] = {
 #if (OPENSSL_VERSION_PREREQ(3, 2))
     OSSL_PARAM_octet_string(OSSL_SIGNATURE_PARAM_CONTEXT_STRING, NULL, 0),
 #endif
-    OSSL_PARAM_END};
+    OSSL_PARAM_END
+};
 
 static const OSSL_PARAM *
 oqs_sig_settable_ctx_params(ossl_unused void *vpsm2ctx,

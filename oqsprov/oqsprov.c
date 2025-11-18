@@ -35,6 +35,8 @@
     fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
+static int rt_algo_filter_enabled = 1;
+
 static STACK_OF(OPENSSL_STRING) *rt_disabled_algs = NULL;
 STACK_OF(OPENSSL_STRING) * oqsprov_get_rt_disabled_algs() {
     return rt_disabled_algs;
@@ -955,10 +957,12 @@ int cnt_rt_disabled(const OSSL_ALGORITHM orig[], int len) {
 }
 
 #define FILTERED_ALGS(algs)                                                    \
+    if (!rt_algo_filter_enabled)                                               \
+        return algs;                                                           \
     d_algs = cnt_rt_disabled(algs, OSSL_NELEM(algs));                          \
     if (algs##_rt == NULL) {                                                   \
-        algs##_rt = OPENSSL_malloc(sizeof(OSSL_ALGORITHM) * OSSL_NELEM(algs) - \
-                                   d_algs);                                    \
+        algs##_rt = OPENSSL_malloc(sizeof(OSSL_ALGORITHM) *                    \
+                                   (OSSL_NELEM(algs) - d_algs));               \
         n_cnt = 0;                                                             \
         for (int i = 0; i < OSSL_NELEM(algs); i++) {                           \
             if (sk_OPENSSL_STRING_find(rt_disabled_algs,                       \
@@ -973,7 +977,8 @@ int cnt_rt_disabled(const OSSL_ALGORITHM orig[], int len) {
 static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
                                                int *no_cache) {
     int d_algs, n_cnt;
-    *no_cache = 1;
+    // do not cache when rt algo filter is enabled
+    *no_cache = rt_algo_filter_enabled;
 
     switch (operation_id) {
     case OSSL_OP_SIGNATURE:
@@ -1200,6 +1205,9 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     sk_OPENSSL_STRING_value(rt_disabled_algs, i), ossl_versionp);
     }
     */
+
+    if (getenv("OQS_CACHE"))
+        rt_algo_filter_enabled = 0;
 
     // if libctx not yet existing, create a new one
     if (((corebiometh = oqs_bio_prov_init_bio_method()) == NULL) ||

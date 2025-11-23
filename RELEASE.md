@@ -18,7 +18,7 @@ This is release candidate 1 of version 0.11.0 of oqs-provider which continues fr
 
 
 ### What's New
-Support for bp256_mlkem512, bp384_mlkem768, and bp512_mlkem1024.
+Generic support for Brainpool-based hybrid PQ logic added.
 
 ## What's Changed
 * Update CMakeLists.txt by @ashman-p in https://github.com/open-quantum-safe/oqs-provider/pull/693

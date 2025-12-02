@@ -217,4 +217,8 @@ e.g., as such: `openssl list -kem-algorithms -propquery oqsprovider.security_bit
 The bit strength of hybrid algorithms is always defined by the bit strength
 of the classic algorithm.
 
+### OQS_CACHE
 
+It is possible to enabled algorithm fetch cache (and greatly improve the performance) via "OQS_CACHE" environmental variable,
+e.g. `OQS_CACHE=1 ./sbin/nginx -c ./conf/nginx.conf`.
+As that feature disables runtime-algorithm filtering, it is only safe for OpenSSL < 3.5.

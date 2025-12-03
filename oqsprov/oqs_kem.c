@@ -26,13 +26,13 @@
 #else
 #define OQS_KEM_PRINTF(a)                                                      \
     if (getenv("OQSKEM"))                                                      \
-    printf(a)
+    fprintf(stderr, a)
 #define OQS_KEM_PRINTF2(a, b)                                                  \
     if (getenv("OQSKEM"))                                                      \
-    printf(a, b)
+    fprintf(stderr, a, b)
 #define OQS_KEM_PRINTF3(a, b, c)                                               \
     if (getenv("OQSKEM"))                                                      \
-    printf(a, b, c)
+    fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
 static OSSL_FUNC_kem_newctx_fn oqs_kem_newctx;

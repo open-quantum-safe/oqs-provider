@@ -26,13 +26,13 @@
 #else
 #define OQS_KEY_PRINTF(a)                                                      \
     if (getenv("OQSKEY"))                                                      \
-    printf(a)
+    fprintf(stderr, a)
 #define OQS_KEY_PRINTF2(a, b)                                                  \
     if (getenv("OQSKEY"))                                                      \
-    printf(a, b)
+    fprintf(stderr, a, b)
 #define OQS_KEY_PRINTF3(a, b, c)                                               \
     if (getenv("OQSKEY"))                                                      \
-    printf(a, b, c)
+    fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
 typedef enum { KEY_OP_PUBLIC, KEY_OP_PRIVATE, KEY_OP_KEYGEN } oqsx_key_op_t;

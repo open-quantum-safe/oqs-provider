@@ -39,7 +39,7 @@ static int test_oqs_groups(const char *group_name, int dtls_flag) {
     int ret = 1, testresult = 0;
 
     if (!alg_is_enabled(group_name)) {
-        printf("Not testing disabled algorithm %s.\n", group_name);
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", group_name);
         return 1;
     }
     testresult =

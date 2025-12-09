@@ -43,13 +43,13 @@ int oqsx_param_build_set_octet_string(OSSL_PARAM_BLD *bld, OSSL_PARAM *p,
 #else
 #define OQS_KM_PRINTF(a)                                                       \
     if (getenv("OQSKM"))                                                       \
-    printf(a)
+    fprintf(stderr, a)
 #define OQS_KM_PRINTF2(a, b)                                                   \
     if (getenv("OQSKM"))                                                       \
-    printf(a, b)
+    fprintf(stderr, a, b)
 #define OQS_KM_PRINTF3(a, b, c)                                                \
     if (getenv("OQSKM"))                                                       \
-    printf(a, b, c)
+    fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
 // our own error codes:

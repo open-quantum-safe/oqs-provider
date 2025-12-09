@@ -423,7 +423,7 @@ static int test_oqs_kems_libctx(const char *kemalg_name) {
     int testresult = 1;
 
     if (!alg_is_enabled(kemalg_name)) {
-        printf("Not testing disabled algorithm %s.\n", kemalg_name);
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", kemalg_name);
         return 1;
     }
     testresult &= oqs_generate_kem_elems(kemalg_name, &key1, &secenc1, &sec1len,
@@ -466,7 +466,7 @@ static int test_oqs_sigs_libctx(const char *sigalg_name) {
     int testresult = 1;
 
     if (!alg_is_enabled(sigalg_name)) {
-        printf("Not testing disabled algorithm %s.\n", sigalg_name);
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", sigalg_name);
         return 1;
     }
     testresult &= oqs_generate_sig_elems(sigalg_name, msg, sizeof(msg), &key1,

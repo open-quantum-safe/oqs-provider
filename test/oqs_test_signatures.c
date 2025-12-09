@@ -27,7 +27,7 @@ static int test_oqs_signatures(const char *sigalg_name) {
     int testresult = 1;
 
     if (!alg_is_enabled(sigalg_name)) {
-        printf("Not testing disabled algorithm %s.\n", sigalg_name);
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", sigalg_name);
         return 1;
     }
     // test with built-in digest only if default provider is active:

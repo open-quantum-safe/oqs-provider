@@ -35,7 +35,7 @@
     fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
-static int rt_algo_filter_enabled = 1;
+static int rt_algo_filter_enabled = 0;
 
 static STACK_OF(OPENSSL_STRING) *rt_disabled_algs = NULL;
 STACK_OF(OPENSSL_STRING) * oqsprov_get_rt_disabled_algs() {
@@ -1173,6 +1173,9 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     // ML-KEM implementation in OpenSSL 3.5 is _much_ more developed than this
     // code
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        // Enable rt algo filter
+        rt_algo_filter_enabled = 1;
+
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem512");
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem768");
         sk_OPENSSL_STRING_push(rt_disabled_algs, "X25519MLKEM768");
@@ -1205,9 +1208,6 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     sk_OPENSSL_STRING_value(rt_disabled_algs, i), ossl_versionp);
     }
     */
-
-    if (getenv("OQS_CACHE"))
-        rt_algo_filter_enabled = 0;
 
     // if libctx not yet existing, create a new one
     if (((corebiometh = oqs_bio_prov_init_bio_method()) == NULL) ||

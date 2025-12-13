@@ -68,10 +68,6 @@ static int test_oqs_kems(const char *kemalg_name) {
         if (!testresult)
             goto err;
 
-        OPENSSL_free(out);
-        OPENSSL_free(secenc);
-        OPENSSL_free(secdec);
-
         // Now encapsulation from public key context
         testresult &=
             EVP_PKEY_get_octet_string_param(key, OSSL_PKEY_PARAM_PUB_KEY, NULL,
@@ -86,6 +82,10 @@ static int test_oqs_kems(const char *kemalg_name) {
             goto err;
         EVP_PKEY_CTX_free(ctx);
         ctx = NULL;
+        OPENSSL_free(out);
+        out = NULL;
+        OPENSSL_free(secenc);
+        secenc = NULL;
 
         testresult &=
             (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, peer, OQSPROV_PROPQ)) !=
@@ -101,6 +101,8 @@ static int test_oqs_kems(const char *kemalg_name) {
             goto err;
         EVP_PKEY_CTX_free(ctx);
         ctx = NULL;
+        OPENSSL_free(secdec);
+        secdec = NULL;
 
         testresult &=
             (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) !=

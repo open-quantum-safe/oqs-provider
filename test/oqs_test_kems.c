@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 
+#include <openssl/core_names.h>
 #include <openssl/evp.h>
 #include <openssl/provider.h>
 #include <string.h>
@@ -14,11 +15,12 @@ static char *configfile = NULL;
 static int test_oqs_kems(const char *kemalg_name) {
     EVP_MD_CTX *mdctx = NULL;
     EVP_PKEY_CTX *ctx = NULL;
-    EVP_PKEY *key = NULL;
+    EVP_PKEY *key = NULL, *peer = NULL;
     unsigned char *out = NULL;
     unsigned char *secenc = NULL;
     unsigned char *secdec = NULL;
-    size_t outlen, seclen;
+    unsigned char *pubkey = NULL;
+    size_t outlen, seclen, publen;
 
     int testresult = 1;
 
@@ -63,11 +65,66 @@ static int test_oqs_kems(const char *kemalg_name) {
             EVP_PKEY_decapsulate_init(ctx, NULL) &&
             (EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) || 1) &&
             memcmp(secenc, secdec, seclen) != 0;
+        if (!testresult)
+            goto err;
+
+        OPENSSL_free(out);
+        OPENSSL_free(secenc);
+        OPENSSL_free(secdec);
+
+        // Now encapsulation from public key context
+        testresult &=
+            EVP_PKEY_get_octet_string_param(key, OSSL_PKEY_PARAM_PUB_KEY, NULL,
+                                            0, &publen) &&
+            (pubkey = OPENSSL_malloc(publen)) != NULL &&
+            EVP_PKEY_get_octet_string_param(key, OSSL_PKEY_PARAM_PUB_KEY,
+                                            pubkey, publen, NULL) &&
+            (peer = EVP_PKEY_new_raw_public_key_ex(
+                 libctx, kemalg_name, OQSPROV_PROPQ, pubkey, publen)) != NULL;
+
+        if (!testresult)
+            goto err;
+        EVP_PKEY_CTX_free(ctx);
+        ctx = NULL;
+
+        testresult &=
+            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, peer, OQSPROV_PROPQ)) !=
+                NULL &&
+            EVP_PKEY_encapsulate_init(ctx, NULL) &&
+            EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen) &&
+            (out = OPENSSL_malloc(outlen)) != NULL &&
+            (secenc = OPENSSL_malloc(seclen)) != NULL &&
+            memset(secenc, 0x11, seclen) != NULL &&
+            EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen);
+
+        if (!testresult)
+            goto err;
+        EVP_PKEY_CTX_free(ctx);
+        ctx = NULL;
+
+        testresult &=
+            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) !=
+                NULL &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            (secdec = OPENSSL_malloc(seclen)) != NULL &&
+            memset(secdec, 0xff, seclen) != NULL &&
+            EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) &&
+            memcmp(secenc, secdec, seclen) == 0;
+
+        out[0] = ~out[0];
+        out[outlen - 1] = ~out[outlen - 1];
+        testresult &=
+            memset(secdec, 0xff, seclen) != NULL &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            (EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) || 1) &&
+            memcmp(secenc, secdec, seclen) != 0;
     }
 
 err:
     EVP_PKEY_free(key);
+    EVP_PKEY_free(peer);
     EVP_PKEY_CTX_free(ctx);
+    OPENSSL_free(pubkey);
     OPENSSL_free(out);
     OPENSSL_free(secenc);
     OPENSSL_free(secdec);
@@ -107,6 +164,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    OSSL_PROVIDER_unload(oqsprov);
     OSSL_LIB_CTX_free(libctx);
 
     TEST_ASSERT(errcnt == 0)

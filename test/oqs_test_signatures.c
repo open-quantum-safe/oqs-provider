@@ -97,19 +97,48 @@ static int test_oqs_signatures(const char *sigalg_name) {
         (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
                                           OQSPROV_PROPQ)) != NULL &&
         EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
-        (alg = EVP_SIGNATURE_fetch(libctx, sigalg_name,
-                                          OQSPROV_PROPQ)) != NULL &&
-        (pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) != NULL &&
+        (alg = EVP_SIGNATURE_fetch(libctx, sigalg_name, OQSPROV_PROPQ)) !=
+            NULL &&
+        (pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) !=
+            NULL &&
         EVP_PKEY_sign_message_init(pctx, alg, NULL) &&
-        EVP_PKEY_sign(pctx, NULL, &siglen, (const unsigned char *)msg, sizeof(msg)) &&
+        EVP_PKEY_sign(pctx, NULL, &siglen, (const unsigned char *)msg,
+                      sizeof(msg)) &&
         (sig = OPENSSL_malloc(siglen)) != NULL &&
-        EVP_PKEY_sign(pctx, sig, &siglen, (const unsigned char *)msg, sizeof(msg))&&
+        EVP_PKEY_sign(pctx, sig, &siglen, (const unsigned char *)msg,
+                      sizeof(msg)) &&
         EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
-        EVP_PKEY_verify(pctx, sig, siglen, (const unsigned char *)msg, sizeof(msg));
+        EVP_PKEY_verify(pctx, sig, siglen, (const unsigned char *)msg,
+                        sizeof(msg));
     sig[0] = ~sig[0];
-    testresult &=
-        EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
-        !EVP_PKEY_verify(pctx, sig, siglen, (const unsigned char *)msg, sizeof(msg));
+    testresult &= EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
+                  !EVP_PKEY_verify(pctx, sig, siglen,
+                                   (const unsigned char *)msg, sizeof(msg));
+
+    EVP_PKEY_free(key);
+    EVP_PKEY_CTX_free(ctx);
+    EVP_PKEY_CTX_free(pctx);
+    OPENSSL_free(sig);
+    key = NULL;
+
+    testresult &= (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
+                                                    OQSPROV_PROPQ)) != NULL &&
+                  EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
+                  (pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key,
+                                                     OQSPROV_PROPQ)) != NULL &&
+                  EVP_PKEY_sign_message_init(pctx, alg, NULL) &&
+                  EVP_PKEY_sign(pctx, NULL, &siglen, (const unsigned char *)msg,
+                                sizeof(msg)) &&
+                  (sig = OPENSSL_malloc(siglen)) != NULL &&
+                  EVP_PKEY_sign(pctx, sig, &siglen, (const unsigned char *)msg,
+                                sizeof(msg)) &&
+                  EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
+                  EVP_PKEY_verify(pctx, sig, siglen, (const unsigned char *)msg,
+                                  sizeof(msg));
+    sig[0] = ~sig[0];
+    testresult &= EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
+                  !EVP_PKEY_verify(pctx, sig, siglen,
+                                   (const unsigned char *)msg, sizeof(msg));
 
     EVP_PKEY_free(key);
     EVP_PKEY_CTX_free(ctx);
@@ -121,44 +150,25 @@ static int test_oqs_signatures(const char *sigalg_name) {
         (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
                                           OQSPROV_PROPQ)) != NULL &&
         EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
-        (pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) != NULL &&
+        (pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) !=
+            NULL &&
         EVP_PKEY_sign_message_init(pctx, alg, NULL) &&
-        EVP_PKEY_sign(pctx, NULL, &siglen, (const unsigned char *)msg, sizeof(msg)) &&
-        (sig = OPENSSL_malloc(siglen)) != NULL &&
-        EVP_PKEY_sign(pctx, sig, &siglen, (const unsigned char *)msg, sizeof(msg))&&
-        EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
-        EVP_PKEY_verify(pctx, sig, siglen, (const unsigned char *)msg, sizeof(msg));
-    sig[0] = ~sig[0];
-    testresult &=
-        EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
-        !EVP_PKEY_verify(pctx, sig, siglen, (const unsigned char *)msg, sizeof(msg));
-
-    EVP_PKEY_free(key);
-    EVP_PKEY_CTX_free(ctx);
-    EVP_PKEY_CTX_free(pctx);
-    OPENSSL_free(sig);
-    key = NULL;
-
-    testresult &=
-        (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
-                                          OQSPROV_PROPQ)) != NULL &&
-        EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key) &&
-        (pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) != NULL &&
-        EVP_PKEY_sign_message_init(pctx, alg, NULL) &&
-        EVP_PKEY_sign_message_update(pctx, (const unsigned char *)msg, sizeof(msg)) &&
+        EVP_PKEY_sign_message_update(pctx, (const unsigned char *)msg,
+                                     sizeof(msg)) &&
         EVP_PKEY_sign_message_final(pctx, NULL, &siglen) &&
         (sig = OPENSSL_malloc(siglen)) != NULL &&
         EVP_PKEY_sign_message_final(pctx, sig, &siglen) &&
         EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
         EVP_PKEY_CTX_set_signature(pctx, sig, siglen) &&
-        EVP_PKEY_verify_message_update(pctx, (const unsigned char *)msg, sizeof(msg)) &&
+        EVP_PKEY_verify_message_update(pctx, (const unsigned char *)msg,
+                                       sizeof(msg)) &&
         EVP_PKEY_verify_message_final(pctx);
     sig[0] = ~sig[0];
-    testresult &=
-        EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
-        EVP_PKEY_CTX_set_signature(pctx, sig, siglen) &&
-        EVP_PKEY_verify_message_update(pctx, (const unsigned char *)msg, sizeof(msg)) &&
-        !EVP_PKEY_verify_message_final(pctx);
+    testresult &= EVP_PKEY_verify_message_init(pctx, alg, NULL) &&
+                  EVP_PKEY_CTX_set_signature(pctx, sig, siglen) &&
+                  EVP_PKEY_verify_message_update(
+                      pctx, (const unsigned char *)msg, sizeof(msg)) &&
+                  !EVP_PKEY_verify_message_final(pctx);
 
     EVP_PKEY_free(key);
     EVP_PKEY_CTX_free(ctx);

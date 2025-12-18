@@ -284,13 +284,11 @@ static int oqs_sig_sign_directly(void *vpoqs_sigctx, unsigned char *sig,
             }
         }
 
-        /* unconditionally hash to be in line with oqs-openssl111:
-         * delete the following line if using pre-performed hash:
-         * poqs_sigctx->mdctx != NULL ||
+        /* delete the following line if using unconditional hash:
+         * if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG) {
          */
 #if (OPENSSL_VERSION_PREREQ(3, 4))
-        if (poqs_sigctx->mdctx != NULL ||
-            poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG) {
+        if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG) {
 #endif
             const EVP_MD *classical_md;
             int digest_len;
@@ -462,12 +460,11 @@ static int oqs_sig_verify_directly(void *vpoqs_sigctx, const unsigned char *sig,
             goto endverify;
         }
 
-        /* same as with sign: delete if pre-existing hashing to be used:
-         *  poqs_sigctx->mdctx != NULL ||
+        /* same as with sign: delete if unconditional hashing to be used:
+         * if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG) {
          */
 #if (OPENSSL_VERSION_PREREQ(3, 4))
-        if (poqs_sigctx->mdctx != NULL ||
-            poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG) {
+        if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG) {
 #endif
             switch (oqs_key->claimed_nist_level) {
             case 1:
@@ -609,16 +606,26 @@ error:
 static int oqs_sig_digest_sign_init(void *vpoqs_sigctx, const char *mdname,
                                     void *voqssig, const OSSL_PARAM params[]) {
     OQS_SIG_PRINTF("OQS SIG provider: digest_sign_init called\n");
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
+                                          EVP_PKEY_OP_SIGNMSG);
+#else
     return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
                                           EVP_PKEY_OP_SIGN);
+#endif
 }
 
 static int oqs_sig_digest_verify_init(void *vpoqs_sigctx, const char *mdname,
                                       void *voqssig,
                                       const OSSL_PARAM params[]) {
     OQS_SIG_PRINTF("OQS SIG provider: sig_digest_verify called\n");
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
+                                          EVP_PKEY_OP_VERIFYMSG);
+#else
     return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
                                           EVP_PKEY_OP_VERIFY);
+#endif
 }
 
 static int oqs_sig_collect_data(PROV_OQSSIG_CTX *poqs_sigctx,

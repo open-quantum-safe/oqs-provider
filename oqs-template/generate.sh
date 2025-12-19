@@ -1,9 +1,9 @@
 #!/bin/bash
-
-cd oqs-template
+set -e
 
 # Step 1: Run the generator:
-cd .. && python3 oqs-template/generate.py
+python3 oqs-template/generate.py
 
 # Step 2: Run clang-format.
-find . -type f -and '(' -name '*.h' -or -name '*.c' -or -name '*.inc' ')' | xargs "${CLANG_FORMAT:-clang-format}" -i
+echo "Run do-code-format.sh"
+./scripts/do_code_format.sh --no-dry-run

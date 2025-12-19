@@ -805,4 +805,112 @@ ENCODER_w_structure("p521_snova2965", p521_snova2965, der, SubjectPublicKeyInfo)
 ENCODER_w_structure("p521_snova2965", p521_snova2965, pem, SubjectPublicKeyInfo),
 ENCODER_TEXT("p521_snova2965", p521_snova2965),
 #endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128s
+ENCODER_w_structure("slhdsapuresha2128s", slhdsapuresha2128s, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128s", slhdsapuresha2128s, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128s", slhdsapuresha2128s, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128s", slhdsapuresha2128s, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128s", slhdsapuresha2128s, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128s", slhdsapuresha2128s, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapuresha2128s", slhdsapuresha2128s),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128f
+ENCODER_w_structure("slhdsapuresha2128f", slhdsapuresha2128f, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128f", slhdsapuresha2128f, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128f", slhdsapuresha2128f, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128f", slhdsapuresha2128f, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128f", slhdsapuresha2128f, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapuresha2128f", slhdsapuresha2128f, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapuresha2128f", slhdsapuresha2128f),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192s
+ENCODER_w_structure("slhdsapuresha2192s", slhdsapuresha2192s, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192s", slhdsapuresha2192s, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192s", slhdsapuresha2192s, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192s", slhdsapuresha2192s, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192s", slhdsapuresha2192s, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192s", slhdsapuresha2192s, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapuresha2192s", slhdsapuresha2192s),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192f
+ENCODER_w_structure("slhdsapuresha2192f", slhdsapuresha2192f, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192f", slhdsapuresha2192f, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192f", slhdsapuresha2192f, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192f", slhdsapuresha2192f, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192f", slhdsapuresha2192f, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapuresha2192f", slhdsapuresha2192f, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapuresha2192f", slhdsapuresha2192f),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256s
+ENCODER_w_structure("slhdsapuresha2256s", slhdsapuresha2256s, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256s", slhdsapuresha2256s, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256s", slhdsapuresha2256s, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256s", slhdsapuresha2256s, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256s", slhdsapuresha2256s, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256s", slhdsapuresha2256s, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapuresha2256s", slhdsapuresha2256s),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256f
+ENCODER_w_structure("slhdsapuresha2256f", slhdsapuresha2256f, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256f", slhdsapuresha2256f, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256f", slhdsapuresha2256f, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256f", slhdsapuresha2256f, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256f", slhdsapuresha2256f, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapuresha2256f", slhdsapuresha2256f, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapuresha2256f", slhdsapuresha2256f),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128s
+ENCODER_w_structure("slhdsapureshake128s", slhdsapureshake128s, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128s", slhdsapureshake128s, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128s", slhdsapureshake128s, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128s", slhdsapureshake128s, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128s", slhdsapureshake128s, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapureshake128s", slhdsapureshake128s, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapureshake128s", slhdsapureshake128s),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128f
+ENCODER_w_structure("slhdsapureshake128f", slhdsapureshake128f, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128f", slhdsapureshake128f, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128f", slhdsapureshake128f, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128f", slhdsapureshake128f, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake128f", slhdsapureshake128f, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapureshake128f", slhdsapureshake128f, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapureshake128f", slhdsapureshake128f),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192s
+ENCODER_w_structure("slhdsapureshake192s", slhdsapureshake192s, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192s", slhdsapureshake192s, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192s", slhdsapureshake192s, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192s", slhdsapureshake192s, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192s", slhdsapureshake192s, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapureshake192s", slhdsapureshake192s, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapureshake192s", slhdsapureshake192s),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192f
+ENCODER_w_structure("slhdsapureshake192f", slhdsapureshake192f, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192f", slhdsapureshake192f, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192f", slhdsapureshake192f, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192f", slhdsapureshake192f, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake192f", slhdsapureshake192f, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapureshake192f", slhdsapureshake192f, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapureshake192f", slhdsapureshake192f),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256s
+ENCODER_w_structure("slhdsapureshake256s", slhdsapureshake256s, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256s", slhdsapureshake256s, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256s", slhdsapureshake256s, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256s", slhdsapureshake256s, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256s", slhdsapureshake256s, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapureshake256s", slhdsapureshake256s, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapureshake256s", slhdsapureshake256s),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256f
+ENCODER_w_structure("slhdsapureshake256f", slhdsapureshake256f, der, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256f", slhdsapureshake256f, pem, PrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256f", slhdsapureshake256f, der, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256f", slhdsapureshake256f, pem, EncryptedPrivateKeyInfo),
+ENCODER_w_structure("slhdsapureshake256f", slhdsapureshake256f, der, SubjectPublicKeyInfo),
+ENCODER_w_structure("slhdsapureshake256f", slhdsapureshake256f, pem, SubjectPublicKeyInfo),
+ENCODER_TEXT("slhdsapureshake256f", slhdsapureshake256f),
+#endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

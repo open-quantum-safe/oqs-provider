@@ -55,9 +55,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 186
+#define OQS_OID_CNT 210
 #else
-#define OQS_OID_CNT 110
+#define OQS_OID_CNT 134
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -251,6 +251,30 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "snova2965",
     "1.3.9999.10.12.2",
     "p521_snova2965",
+    "2.16.840.1.101.3.4.3.20",
+    "slhdsapuresha2128s",
+    "2.16.840.1.101.3.4.3.21",
+    "slhdsapuresha2128f",
+    "2.16.840.1.101.3.4.3.22",
+    "slhdsapuresha2192s",
+    "2.16.840.1.101.3.4.3.23",
+    "slhdsapuresha2192f",
+    "2.16.840.1.101.3.4.3.24",
+    "slhdsapuresha2256s",
+    "2.16.840.1.101.3.4.3.25",
+    "slhdsapuresha2256f",
+    "2.16.840.1.101.3.4.3.26",
+    "slhdsapureshake128s",
+    "2.16.840.1.101.3.4.3.27",
+    "slhdsapureshake128f",
+    "2.16.840.1.101.3.4.3.28",
+    "slhdsapureshake192s",
+    "2.16.840.1.101.3.4.3.29",
+    "slhdsapureshake192f",
+    "2.16.840.1.101.3.4.3.30",
+    "slhdsapureshake256s",
+    "2.16.840.1.101.3.4.3.31",
+    "slhdsapureshake256f",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -464,6 +488,30 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_SNOVA2965")))
             oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHA2128S")))
+            oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHA2128F")))
+            oqs_oid_alg_list[112 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHA2192S")))
+            oqs_oid_alg_list[114 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHA2192F")))
+            oqs_oid_alg_list[116 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHA2256S")))
+            oqs_oid_alg_list[118 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHA2256F")))
+            oqs_oid_alg_list[120 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHAKE128S")))
+            oqs_oid_alg_list[122 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHAKE128F")))
+            oqs_oid_alg_list[124 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHAKE192S")))
+            oqs_oid_alg_list[126 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHAKE192F")))
+            oqs_oid_alg_list[128 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHAKE256S")))
+            oqs_oid_alg_list[130 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_SLHDSAPURESHAKE256F")))
+            oqs_oid_alg_list[132 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -613,6 +661,42 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_29_6_5
     SIGALG("snova2965", 256, oqs_signature_functions),
     SIGALG("p521_snova2965", 256, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128s
+    SIGALG("slhdsapuresha2128s", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128f
+    SIGALG("slhdsapuresha2128f", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192s
+    SIGALG("slhdsapuresha2192s", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192f
+    SIGALG("slhdsapuresha2192f", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256s
+    SIGALG("slhdsapuresha2256s", 256, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256f
+    SIGALG("slhdsapuresha2256f", 256, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128s
+    SIGALG("slhdsapureshake128s", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128f
+    SIGALG("slhdsapureshake128f", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192s
+    SIGALG("slhdsapureshake192s", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192f
+    SIGALG("slhdsapureshake192f", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256s
+    SIGALG("slhdsapureshake256s", 256, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256f
+    SIGALG("slhdsapureshake256f", 256, oqs_signature_functions),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
@@ -796,6 +880,42 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_29_6_5
     SIGALG("snova2965", 256, oqs_snova2965_keymgmt_functions),
     SIGALG("p521_snova2965", 256, oqs_p521_snova2965_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128s
+    SIGALG("slhdsapuresha2128s", 128, oqs_slhdsapuresha2128s_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128f
+    SIGALG("slhdsapuresha2128f", 128, oqs_slhdsapuresha2128f_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192s
+    SIGALG("slhdsapuresha2192s", 192, oqs_slhdsapuresha2192s_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192f
+    SIGALG("slhdsapuresha2192f", 192, oqs_slhdsapuresha2192f_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256s
+    SIGALG("slhdsapuresha2256s", 256, oqs_slhdsapuresha2256s_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256f
+    SIGALG("slhdsapuresha2256f", 256, oqs_slhdsapuresha2256f_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128s
+    SIGALG("slhdsapureshake128s", 128, oqs_slhdsapureshake128s_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128f
+    SIGALG("slhdsapureshake128f", 128, oqs_slhdsapureshake128f_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192s
+    SIGALG("slhdsapureshake192s", 192, oqs_slhdsapureshake192s_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192f
+    SIGALG("slhdsapureshake192f", 192, oqs_slhdsapureshake192f_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256s
+    SIGALG("slhdsapureshake256s", 256, oqs_slhdsapureshake256s_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256f
+    SIGALG("slhdsapureshake256f", 256, oqs_slhdsapureshake256f_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes

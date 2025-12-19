@@ -1900,3 +1900,102 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.10.12.2',
                     'code_point': '0xff52'}]
+  -
+    family: 'SLH-DSA'
+    variants:
+      -
+        name: 'slhdsapuresha2128s'
+        pretty_name: 'SLH_DSA_PURE_SHA2_128S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128s'
+        oid: '2.16.840.1.101.3.4.3.20'
+        code_point: '0x0911'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapuresha2128f'
+        pretty_name: 'SLH_DSA_PURE_SHA2_128F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128f'
+        oid: '2.16.840.1.101.3.4.3.21'
+        code_point: '0x0912'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapuresha2192s'
+        pretty_name: 'SLH_DSA_PURE_SHA2_192S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192s'
+        oid: '2.16.840.1.101.3.4.3.22'
+        code_point: '0x0913'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapuresha2192f'
+        pretty_name: 'SLH_DSA_PURE_SHA2_192F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192f'
+        oid: '2.16.840.1.101.3.4.3.23'
+        code_point: '0x0914'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapuresha2256s'
+        pretty_name: 'SLH_DSA_PURE_SHA2_256S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256s'
+        oid: '2.16.840.1.101.3.4.3.24'
+        code_point: '0x0915'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapuresha2256f'
+        pretty_name: 'SLH_DSA_PURE_SHA2_256F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256f'
+        oid: '2.16.840.1.101.3.4.3.25'
+        code_point: '0x0916'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapureshake128s'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_128S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128s'
+        oid: '2.16.840.1.101.3.4.3.26'
+        code_point: '0x0917'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapureshake128f'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_128F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128f'
+        oid: '2.16.840.1.101.3.4.3.27'
+        code_point: '0x0918'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapureshake192s'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_192S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192s'
+        oid: '2.16.840.1.101.3.4.3.28'
+        code_point: '0x0919'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapureshake192f'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_192F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192f'
+        oid: '2.16.840.1.101.3.4.3.29'
+        code_point: '0x091A'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapureshake256s'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_256S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256s'
+        oid: '2.16.840.1.101.3.4.3.30'
+        code_point: '0x091B'
+        enable: true
+        enable_tls: true
+      -
+        name: 'slhdsapureshake256f'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_256F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256f'
+        oid: '2.16.840.1.101.3.4.3.31'
+        code_point: '0x091C'
+        enable: true
+        enable_tls: true

@@ -11,7 +11,7 @@ jobs:
     uses: ./.github/workflows/coding_style.yml
   standalone_macos_intel:
     needs: [coding_style_tests]
-    runs-on: macos-13
+    runs-on: macos-15
     strategy:
       fail-fast: false
     steps:

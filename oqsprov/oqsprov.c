@@ -1287,29 +1287,93 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     // ML-KEM implementation in OpenSSL 3.5 is _much_ more developed than this
     // code
+    ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_START
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2128s");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2128f");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2192s");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2192f");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2256s");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2256f");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake128s");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake128f");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake192s");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake192f");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake256s");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake256f");
+    }
+
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem512");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem768");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "X25519MLKEM768");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP256r1MLKEM768");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP384r1MLKEM1024");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem1024");
-        // need to disable these as per
-        // https://github.com/open-quantum-safe/oqs-provider/discussions/610#discussioncomment-12246359
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_pss2048");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_rsa2048");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_ed25519");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_p256");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44_bp256");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_pss3072");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_rsa3072");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_p256");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_bp256");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65_ed25519");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87_p384");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87_bp384");
-        sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87_ed448");
     }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem768");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "X25519MLKEM768");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP256r1MLKEM768");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem1024");
+    }
+
+    if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP384r1MLKEM1024");
+    }
+
+    ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_END
 
     // output disabled algs:
     /*

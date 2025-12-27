@@ -1,3 +1,8 @@
+# oqs-provider 0.12.0-dev
+
+Previous Release Notes
+======================
+
 # oqs-provider 0.11.0
 
 ## About
@@ -14,7 +19,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is release candidate 1 of version 0.11.0 of oqs-provider which continues from the earlier 0.10.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.15.0 of `liboqs`.
+This is version 0.11.0 of oqs-provider which continues from the earlier 0.10.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.15.0 of `liboqs`.
 
 
 ### What's New
@@ -38,9 +43,6 @@ Generic support for Brainpool-based hybrid PQ logic added.
 
 ## New Contributors
 mhkangg made their first contribution in https://github.com/open-quantum-safe/oqs-provider/commits?author=mhkangg
-
-Previous Release Notes
-======================
 
 # oqs-provider 0.10.0
 

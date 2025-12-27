@@ -69,6 +69,7 @@ def get_sig_nistlevel(family, alg, docsdir):
     def matches(name, alg):
         def simplify(s):
             return s.lower().replace('_', '').replace('-', '').replace('+', '')
+        if 'SLH_DSA_PURE' in name: name = name.replace('_PURE', '')
         if simplify(name) == simplify(alg['name']): return True
         return False
     # find the variant that matches

@@ -253,51 +253,51 @@ DECODER_w_structure("snova2965", der, SubjectPublicKeyInfo, snova2965),DECODER_w
 DECODER_w_structure("p521_snova2965", der, SubjectPublicKeyInfo, p521_snova2965),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128s
-DECODER_w_structure("slhdsapuresha2128s", der, PrivateKeyInfo, slhdsapuresha2128s),
-DECODER_w_structure("slhdsapuresha2128s", der, SubjectPublicKeyInfo, slhdsapuresha2128s),
+DECODER_w_structure("slhdsasha2128s", der, PrivateKeyInfo, slhdsasha2128s),
+DECODER_w_structure("slhdsasha2128s", der, SubjectPublicKeyInfo, slhdsasha2128s),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128f
-DECODER_w_structure("slhdsapuresha2128f", der, PrivateKeyInfo, slhdsapuresha2128f),
-DECODER_w_structure("slhdsapuresha2128f", der, SubjectPublicKeyInfo, slhdsapuresha2128f),
+DECODER_w_structure("slhdsasha2128f", der, PrivateKeyInfo, slhdsasha2128f),
+DECODER_w_structure("slhdsasha2128f", der, SubjectPublicKeyInfo, slhdsasha2128f),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192s
-DECODER_w_structure("slhdsapuresha2192s", der, PrivateKeyInfo, slhdsapuresha2192s),
-DECODER_w_structure("slhdsapuresha2192s", der, SubjectPublicKeyInfo, slhdsapuresha2192s),
+DECODER_w_structure("slhdsasha2192s", der, PrivateKeyInfo, slhdsasha2192s),
+DECODER_w_structure("slhdsasha2192s", der, SubjectPublicKeyInfo, slhdsasha2192s),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192f
-DECODER_w_structure("slhdsapuresha2192f", der, PrivateKeyInfo, slhdsapuresha2192f),
-DECODER_w_structure("slhdsapuresha2192f", der, SubjectPublicKeyInfo, slhdsapuresha2192f),
+DECODER_w_structure("slhdsasha2192f", der, PrivateKeyInfo, slhdsasha2192f),
+DECODER_w_structure("slhdsasha2192f", der, SubjectPublicKeyInfo, slhdsasha2192f),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256s
-DECODER_w_structure("slhdsapuresha2256s", der, PrivateKeyInfo, slhdsapuresha2256s),
-DECODER_w_structure("slhdsapuresha2256s", der, SubjectPublicKeyInfo, slhdsapuresha2256s),
+DECODER_w_structure("slhdsasha2256s", der, PrivateKeyInfo, slhdsasha2256s),
+DECODER_w_structure("slhdsasha2256s", der, SubjectPublicKeyInfo, slhdsasha2256s),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256f
-DECODER_w_structure("slhdsapuresha2256f", der, PrivateKeyInfo, slhdsapuresha2256f),
-DECODER_w_structure("slhdsapuresha2256f", der, SubjectPublicKeyInfo, slhdsapuresha2256f),
+DECODER_w_structure("slhdsasha2256f", der, PrivateKeyInfo, slhdsasha2256f),
+DECODER_w_structure("slhdsasha2256f", der, SubjectPublicKeyInfo, slhdsasha2256f),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128s
-DECODER_w_structure("slhdsapureshake128s", der, PrivateKeyInfo, slhdsapureshake128s),
-DECODER_w_structure("slhdsapureshake128s", der, SubjectPublicKeyInfo, slhdsapureshake128s),
+DECODER_w_structure("slhdsashake128s", der, PrivateKeyInfo, slhdsashake128s),
+DECODER_w_structure("slhdsashake128s", der, SubjectPublicKeyInfo, slhdsashake128s),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128f
-DECODER_w_structure("slhdsapureshake128f", der, PrivateKeyInfo, slhdsapureshake128f),
-DECODER_w_structure("slhdsapureshake128f", der, SubjectPublicKeyInfo, slhdsapureshake128f),
+DECODER_w_structure("slhdsashake128f", der, PrivateKeyInfo, slhdsashake128f),
+DECODER_w_structure("slhdsashake128f", der, SubjectPublicKeyInfo, slhdsashake128f),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192s
-DECODER_w_structure("slhdsapureshake192s", der, PrivateKeyInfo, slhdsapureshake192s),
-DECODER_w_structure("slhdsapureshake192s", der, SubjectPublicKeyInfo, slhdsapureshake192s),
+DECODER_w_structure("slhdsashake192s", der, PrivateKeyInfo, slhdsashake192s),
+DECODER_w_structure("slhdsashake192s", der, SubjectPublicKeyInfo, slhdsashake192s),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192f
-DECODER_w_structure("slhdsapureshake192f", der, PrivateKeyInfo, slhdsapureshake192f),
-DECODER_w_structure("slhdsapureshake192f", der, SubjectPublicKeyInfo, slhdsapureshake192f),
+DECODER_w_structure("slhdsashake192f", der, PrivateKeyInfo, slhdsashake192f),
+DECODER_w_structure("slhdsashake192f", der, SubjectPublicKeyInfo, slhdsashake192f),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256s
-DECODER_w_structure("slhdsapureshake256s", der, PrivateKeyInfo, slhdsapureshake256s),
-DECODER_w_structure("slhdsapureshake256s", der, SubjectPublicKeyInfo, slhdsapureshake256s),
+DECODER_w_structure("slhdsashake256s", der, PrivateKeyInfo, slhdsashake256s),
+DECODER_w_structure("slhdsashake256s", der, SubjectPublicKeyInfo, slhdsashake256s),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256f
-DECODER_w_structure("slhdsapureshake256f", der, PrivateKeyInfo, slhdsapureshake256f),
-DECODER_w_structure("slhdsapureshake256f", der, SubjectPublicKeyInfo, slhdsapureshake256f),
+DECODER_w_structure("slhdsashake256f", der, PrivateKeyInfo, slhdsashake256f),
+DECODER_w_structure("slhdsashake256f", der, SubjectPublicKeyInfo, slhdsashake256f),
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

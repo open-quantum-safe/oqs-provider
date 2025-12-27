@@ -1904,7 +1904,7 @@ sigs:
     family: 'SLH-DSA'
     variants:
       -
-        name: 'slhdsapuresha2128s'
+        name: 'slhdsasha2128s'
         pretty_name: 'SLH_DSA_PURE_SHA2_128S'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128s'
         oid: '2.16.840.1.101.3.4.3.20'
@@ -1912,7 +1912,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapuresha2128f'
+        name: 'slhdsasha2128f'
         pretty_name: 'SLH_DSA_PURE_SHA2_128F'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128f'
         oid: '2.16.840.1.101.3.4.3.21'
@@ -1920,7 +1920,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapuresha2192s'
+        name: 'slhdsasha2192s'
         pretty_name: 'SLH_DSA_PURE_SHA2_192S'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192s'
         oid: '2.16.840.1.101.3.4.3.22'
@@ -1928,7 +1928,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapuresha2192f'
+        name: 'slhdsasha2192f'
         pretty_name: 'SLH_DSA_PURE_SHA2_192F'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192f'
         oid: '2.16.840.1.101.3.4.3.23'
@@ -1936,7 +1936,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapuresha2256s'
+        name: 'slhdsasha2256s'
         pretty_name: 'SLH_DSA_PURE_SHA2_256S'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256s'
         oid: '2.16.840.1.101.3.4.3.24'
@@ -1944,7 +1944,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapuresha2256f'
+        name: 'slhdsasha2256f'
         pretty_name: 'SLH_DSA_PURE_SHA2_256F'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256f'
         oid: '2.16.840.1.101.3.4.3.25'
@@ -1952,7 +1952,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapureshake128s'
+        name: 'slhdsashake128s'
         pretty_name: 'SLH_DSA_PURE_SHAKE_128S'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128s'
         oid: '2.16.840.1.101.3.4.3.26'
@@ -1960,7 +1960,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapureshake128f'
+        name: 'slhdsashake128f'
         pretty_name: 'SLH_DSA_PURE_SHAKE_128F'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128f'
         oid: '2.16.840.1.101.3.4.3.27'
@@ -1968,7 +1968,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapureshake192s'
+        name: 'slhdsashake192s'
         pretty_name: 'SLH_DSA_PURE_SHAKE_192S'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192s'
         oid: '2.16.840.1.101.3.4.3.28'
@@ -1976,7 +1976,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapureshake192f'
+        name: 'slhdsashake192f'
         pretty_name: 'SLH_DSA_PURE_SHAKE_192F'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192f'
         oid: '2.16.840.1.101.3.4.3.29'
@@ -1984,7 +1984,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapureshake256s'
+        name: 'slhdsashake256s'
         pretty_name: 'SLH_DSA_PURE_SHAKE_256S'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256s'
         oid: '2.16.840.1.101.3.4.3.30'
@@ -1992,7 +1992,7 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'slhdsapureshake256f'
+        name: 'slhdsashake256f'
         pretty_name: 'SLH_DSA_PURE_SHAKE_256F'
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256f'
         oid: '2.16.840.1.101.3.4.3.31'

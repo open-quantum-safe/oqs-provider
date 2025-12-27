@@ -53,9 +53,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 93
+#define NID_TABLE_LEN 105
 #else
-#define NID_TABLE_LEN 55
+#define NID_TABLE_LEN 67
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -195,6 +195,30 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      192},
     {0, "snova2965", OQS_SIG_alg_snova_SNOVA_29_6_5, KEY_TYPE_SIG, 256},
     {0, "p521_snova2965", OQS_SIG_alg_snova_SNOVA_29_6_5, KEY_TYPE_HYB_SIG,
+     256},
+    {0, "slhdsasha2128s", OQS_SIG_alg_slh_dsa_pure_sha2_128s, KEY_TYPE_SIG,
+     128},
+    {0, "slhdsasha2128f", OQS_SIG_alg_slh_dsa_pure_sha2_128f, KEY_TYPE_SIG,
+     128},
+    {0, "slhdsasha2192s", OQS_SIG_alg_slh_dsa_pure_sha2_192s, KEY_TYPE_SIG,
+     192},
+    {0, "slhdsasha2192f", OQS_SIG_alg_slh_dsa_pure_sha2_192f, KEY_TYPE_SIG,
+     192},
+    {0, "slhdsasha2256s", OQS_SIG_alg_slh_dsa_pure_sha2_256s, KEY_TYPE_SIG,
+     256},
+    {0, "slhdsasha2256f", OQS_SIG_alg_slh_dsa_pure_sha2_256f, KEY_TYPE_SIG,
+     256},
+    {0, "slhdsashake128s", OQS_SIG_alg_slh_dsa_pure_shake_128s, KEY_TYPE_SIG,
+     128},
+    {0, "slhdsashake128f", OQS_SIG_alg_slh_dsa_pure_shake_128f, KEY_TYPE_SIG,
+     128},
+    {0, "slhdsashake192s", OQS_SIG_alg_slh_dsa_pure_shake_192s, KEY_TYPE_SIG,
+     192},
+    {0, "slhdsashake192f", OQS_SIG_alg_slh_dsa_pure_shake_192f, KEY_TYPE_SIG,
+     192},
+    {0, "slhdsashake256s", OQS_SIG_alg_slh_dsa_pure_shake_256s, KEY_TYPE_SIG,
+     256},
+    {0, "slhdsashake256f", OQS_SIG_alg_slh_dsa_pure_shake_256f, KEY_TYPE_SIG,
      256},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };

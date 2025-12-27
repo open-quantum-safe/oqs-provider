@@ -1248,6 +1248,133 @@ static void *p521_snova2965_gen_init(void *provctx, int selection) {
                          "p521_snova2965", KEY_TYPE_HYB_SIG, 256, 54, 0);
 }
 
+static void *slhdsasha2128s_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_sha2_128s, "slhdsasha2128s",
+                        KEY_TYPE_SIG, NULL, 128, 55, 0);
+}
+
+static void *slhdsasha2128s_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_slh_dsa_pure_sha2_128s,
+                         "slhdsasha2128s", 0, 128, 55, 0);
+}
+static void *slhdsasha2128f_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_sha2_128f, "slhdsasha2128f",
+                        KEY_TYPE_SIG, NULL, 128, 56, 0);
+}
+
+static void *slhdsasha2128f_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_slh_dsa_pure_sha2_128f,
+                         "slhdsasha2128f", 0, 128, 56, 0);
+}
+static void *slhdsasha2192s_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_sha2_192s, "slhdsasha2192s",
+                        KEY_TYPE_SIG, NULL, 192, 57, 0);
+}
+
+static void *slhdsasha2192s_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_slh_dsa_pure_sha2_192s,
+                         "slhdsasha2192s", 0, 192, 57, 0);
+}
+static void *slhdsasha2192f_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_sha2_192f, "slhdsasha2192f",
+                        KEY_TYPE_SIG, NULL, 192, 58, 0);
+}
+
+static void *slhdsasha2192f_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_slh_dsa_pure_sha2_192f,
+                         "slhdsasha2192f", 0, 192, 58, 0);
+}
+static void *slhdsasha2256s_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_sha2_256s, "slhdsasha2256s",
+                        KEY_TYPE_SIG, NULL, 256, 59, 0);
+}
+
+static void *slhdsasha2256s_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_slh_dsa_pure_sha2_256s,
+                         "slhdsasha2256s", 0, 256, 59, 0);
+}
+static void *slhdsasha2256f_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_sha2_256f, "slhdsasha2256f",
+                        KEY_TYPE_SIG, NULL, 256, 60, 0);
+}
+
+static void *slhdsasha2256f_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_slh_dsa_pure_sha2_256f,
+                         "slhdsasha2256f", 0, 256, 60, 0);
+}
+static void *slhdsashake128s_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_shake_128s, "slhdsashake128s",
+                        KEY_TYPE_SIG, NULL, 128, 61, 0);
+}
+
+static void *slhdsashake128s_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection,
+                         OQS_SIG_alg_slh_dsa_pure_shake_128s, "slhdsashake128s",
+                         0, 128, 61, 0);
+}
+static void *slhdsashake128f_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_shake_128f, "slhdsashake128f",
+                        KEY_TYPE_SIG, NULL, 128, 62, 0);
+}
+
+static void *slhdsashake128f_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection,
+                         OQS_SIG_alg_slh_dsa_pure_shake_128f, "slhdsashake128f",
+                         0, 128, 62, 0);
+}
+static void *slhdsashake192s_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_shake_192s, "slhdsashake192s",
+                        KEY_TYPE_SIG, NULL, 192, 63, 0);
+}
+
+static void *slhdsashake192s_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection,
+                         OQS_SIG_alg_slh_dsa_pure_shake_192s, "slhdsashake192s",
+                         0, 192, 63, 0);
+}
+static void *slhdsashake192f_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_shake_192f, "slhdsashake192f",
+                        KEY_TYPE_SIG, NULL, 192, 64, 0);
+}
+
+static void *slhdsashake192f_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection,
+                         OQS_SIG_alg_slh_dsa_pure_shake_192f, "slhdsashake192f",
+                         0, 192, 64, 0);
+}
+static void *slhdsashake256s_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_shake_256s, "slhdsashake256s",
+                        KEY_TYPE_SIG, NULL, 256, 65, 0);
+}
+
+static void *slhdsashake256s_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection,
+                         OQS_SIG_alg_slh_dsa_pure_shake_256s, "slhdsashake256s",
+                         0, 256, 65, 0);
+}
+static void *slhdsashake256f_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_alg_slh_dsa_pure_shake_256f, "slhdsashake256f",
+                        KEY_TYPE_SIG, NULL, 256, 66, 0);
+}
+
+static void *slhdsashake256f_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection,
+                         OQS_SIG_alg_slh_dsa_pure_shake_256f, "slhdsashake256f",
+                         0, 256, 66, 0);
+}
+
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                        \
@@ -1486,6 +1613,18 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(snova2455)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p384_snova2455)
 MAKE_SIG_KEYMGMT_FUNCTIONS(snova2965)
 MAKE_SIG_KEYMGMT_FUNCTIONS(p521_snova2965)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsasha2128s)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsasha2128f)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsasha2192s)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsasha2192f)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsasha2256s)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsasha2256f)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake128s)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake128f)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake192s)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake192f)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake256s)
+MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake256f)
 
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 

@@ -106,20 +106,22 @@ Votes are to be executed by way of open GitHub discussions. No quorum is needed 
 ### Maintainers
 
 @baentsch
+@ashman-p
 
 ### Committers
 
 @baentsch
 @bhess
+@ashman-p
 @RodriM11
 
 ### Release managers
 
-@ashman-p
 @xuganyu96
 @dstebila
 
 ### Emeritus Committers
+
 @zadlg
 @christianpaquin
 

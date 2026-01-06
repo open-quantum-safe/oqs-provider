@@ -51,6 +51,18 @@
 | mldsa65 **hybrid with** p384                      | ML-DSA                                        | FIPS204      |                    3 | 0xff08       | 1.3.9999.7.7                 |
 | mldsa87                                           | ML-DSA                                        | FIPS204      |                    5 | 0x0906       | 2.16.840.1.101.3.4.3.19      |
 | mldsa87 **hybrid with** p521                      | ML-DSA                                        | FIPS204      |                    5 | 0xff09       | 1.3.9999.7.8                 |
+| slhdsasha2128s                                    | SLH-DSA                                       | FIPS205      |                    1 | 0x0911       | 2.16.840.1.101.3.4.3.20      |
+| slhdsasha2128f                                    | SLH-DSA                                       | FIPS205      |                    1 | 0x0912       | 2.16.840.1.101.3.4.3.21      |
+| slhdsasha2192s                                    | SLH-DSA                                       | FIPS205      |                    3 | 0x0913       | 2.16.840.1.101.3.4.3.22      |
+| slhdsasha2192f                                    | SLH-DSA                                       | FIPS205      |                    3 | 0x0914       | 2.16.840.1.101.3.4.3.23      |
+| slhdsasha2256s                                    | SLH-DSA                                       | FIPS205      |                    5 | 0x0915       | 2.16.840.1.101.3.4.3.24      |
+| slhdsasha2256f                                    | SLH-DSA                                       | FIPS205      |                    5 | 0x0916       | 2.16.840.1.101.3.4.3.25      |
+| slhdsashake128s                                   | SLH-DSA                                       | FIPS205      |                    1 | 0x0917       | 2.16.840.1.101.3.4.3.26      |
+| slhdsashake128f                                   | SLH-DSA                                       | FIPS205      |                    1 | 0x0918       | 2.16.840.1.101.3.4.3.27      |
+| slhdsashake192s                                   | SLH-DSA                                       | FIPS205      |                    3 | 0x0919       | 2.16.840.1.101.3.4.3.28      |
+| slhdsashake192f                                   | SLH-DSA                                       | FIPS205      |                    3 | 0x091A       | 2.16.840.1.101.3.4.3.29      |
+| slhdsashake256s                                   | SLH-DSA                                       | FIPS205      |                    5 | 0x091B       | 2.16.840.1.101.3.4.3.30      |
+| slhdsashake256f                                   | SLH-DSA                                       | FIPS205      |                    5 | 0x091C       | 2.16.840.1.101.3.4.3.31      |
 | snova2454                                         | Round 2                                       | 2            |                    1 | 0xff3a       | 1.3.9999.10.1.1              |
 | snova2454 **hybrid with** p256                    | Round 2                                       | 2            |                    1 | 0xff3b       | 1.3.9999.10.1.2              |
 | snova2454shake                                    | Round 2                                       | 2            |                    1 | 0xff3c       | 1.3.9999.10.2.1              |

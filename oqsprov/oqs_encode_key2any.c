@@ -891,6 +891,42 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
 #define p521_snova2965_evp_type 0
 #define p521_snova2965_input_type "p521_snova2965"
 #define p521_snova2965_pem_type "p521_snova2965"
+#define slhdsasha2128s_evp_type 0
+#define slhdsasha2128s_input_type "slhdsasha2128s"
+#define slhdsasha2128s_pem_type "slhdsasha2128s"
+#define slhdsasha2128f_evp_type 0
+#define slhdsasha2128f_input_type "slhdsasha2128f"
+#define slhdsasha2128f_pem_type "slhdsasha2128f"
+#define slhdsasha2192s_evp_type 0
+#define slhdsasha2192s_input_type "slhdsasha2192s"
+#define slhdsasha2192s_pem_type "slhdsasha2192s"
+#define slhdsasha2192f_evp_type 0
+#define slhdsasha2192f_input_type "slhdsasha2192f"
+#define slhdsasha2192f_pem_type "slhdsasha2192f"
+#define slhdsasha2256s_evp_type 0
+#define slhdsasha2256s_input_type "slhdsasha2256s"
+#define slhdsasha2256s_pem_type "slhdsasha2256s"
+#define slhdsasha2256f_evp_type 0
+#define slhdsasha2256f_input_type "slhdsasha2256f"
+#define slhdsasha2256f_pem_type "slhdsasha2256f"
+#define slhdsashake128s_evp_type 0
+#define slhdsashake128s_input_type "slhdsashake128s"
+#define slhdsashake128s_pem_type "slhdsashake128s"
+#define slhdsashake128f_evp_type 0
+#define slhdsashake128f_input_type "slhdsashake128f"
+#define slhdsashake128f_pem_type "slhdsashake128f"
+#define slhdsashake192s_evp_type 0
+#define slhdsashake192s_input_type "slhdsashake192s"
+#define slhdsashake192s_pem_type "slhdsashake192s"
+#define slhdsashake192f_evp_type 0
+#define slhdsashake192f_input_type "slhdsashake192f"
+#define slhdsashake192f_pem_type "slhdsashake192f"
+#define slhdsashake256s_evp_type 0
+#define slhdsashake256s_input_type "slhdsashake256s"
+#define slhdsashake256s_pem_type "slhdsashake256s"
+#define slhdsashake256f_evp_type 0
+#define slhdsashake256f_input_type "slhdsashake256f"
+#define slhdsashake256f_pem_type "slhdsashake256f"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2134,4 +2170,88 @@ MAKE_ENCODER(, p521_snova2965, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p521_snova2965, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p521_snova2965, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p521_snova2965);
+MAKE_ENCODER(, slhdsasha2128s, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2128s, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2128s, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2128s, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2128s, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2128s, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsasha2128s);
+MAKE_ENCODER(, slhdsasha2128f, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2128f, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2128f, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2128f, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2128f, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2128f, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsasha2128f);
+MAKE_ENCODER(, slhdsasha2192s, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2192s, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2192s, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2192s, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2192s, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2192s, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsasha2192s);
+MAKE_ENCODER(, slhdsasha2192f, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2192f, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2192f, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2192f, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2192f, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2192f, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsasha2192f);
+MAKE_ENCODER(, slhdsasha2256s, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2256s, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2256s, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2256s, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2256s, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2256s, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsasha2256s);
+MAKE_ENCODER(, slhdsasha2256f, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2256f, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2256f, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2256f, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsasha2256f, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsasha2256f, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsasha2256f);
+MAKE_ENCODER(, slhdsashake128s, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake128s, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake128s, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake128s, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake128s, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsashake128s, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsashake128s);
+MAKE_ENCODER(, slhdsashake128f, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake128f, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake128f, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake128f, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake128f, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsashake128f, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsashake128f);
+MAKE_ENCODER(, slhdsashake192s, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake192s, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake192s, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake192s, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake192s, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsashake192s, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsashake192s);
+MAKE_ENCODER(, slhdsashake192f, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake192f, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake192f, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake192f, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake192f, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsashake192f, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsashake192f);
+MAKE_ENCODER(, slhdsashake256s, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake256s, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake256s, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake256s, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake256s, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsashake256s, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsashake256s);
+MAKE_ENCODER(, slhdsashake256f, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake256f, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake256f, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, slhdsashake256f, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, slhdsashake256f, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, slhdsashake256f, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, slhdsashake256f);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

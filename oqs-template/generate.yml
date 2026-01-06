@@ -208,6 +208,7 @@ kems:
     oqs_alg: 'OQS_KEM_alg_ml_kem_512'
     enable_kem: true
     enable_tls: true
+    openssl_version: 3.5.0
     extra_nids:
       current:
         - hybrid_group: "x25519"
@@ -232,6 +233,7 @@ kems:
     oqs_alg: 'OQS_KEM_alg_ml_kem_768'
     enable_kem: true
     enable_tls: true
+    openssl_version: 3.5.0
     extra_nids:
       current:
         - hybrid_group: "x448"
@@ -244,11 +246,13 @@ kems:
           nid: '0x11ec'
           iana: true
           standard_name: "X25519MLKEM768"
+          openssl_version: 3.5.0
         - hybrid_group: "secp256_r1"
 # https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-secp256r1mlkem768
           nid: '0x11eb'
           iana: true
           standard_name: "SecP256r1MLKEM768"
+          openssl_version: 3.5.0
   -
     family: 'ML-KEM'
     fips_standard: 1
@@ -263,6 +267,7 @@ kems:
     oqs_alg: 'OQS_KEM_alg_ml_kem_1024'
     enable_kem: true
     enable_tls: true
+    openssl_version: 3.5.0
     extra_nids:
       current:
         # p384_mlkem1024 hybrid not fully standardized
@@ -275,6 +280,7 @@ kems:
           nid: '0x11ED'
           iana: true
           standard_name: "SecP384r1MLKEM1024"
+          openssl_version: 3.5.0
         - hybrid_group: "bp512"
           nid: '65058'
   -
@@ -551,6 +557,7 @@ sigs:
         code_point: '0x0904'
         enable: true
         enable_tls: true
+        openssl_version: 3.5.0
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
                     'oid': '1.3.9999.7.5',
@@ -567,6 +574,7 @@ sigs:
         code_point: '0x0905'
         enable: true
         enable_tls: true
+        openssl_version: 3.5.0
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
                     'oid': '1.3.9999.7.7',
@@ -579,6 +587,7 @@ sigs:
         code_point: '0x0906'
         enable: true
         enable_tls: true
+        openssl_version: 3.5.0
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.7.8',
@@ -1900,3 +1909,114 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.10.12.2',
                     'code_point': '0xff52'}]
+  -
+    family: 'SLH-DSA'
+    variants:
+      -
+        name: 'slhdsasha2128s'
+        pretty_name: 'SLH_DSA_PURE_SHA2_128S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128s'
+        oid: '2.16.840.1.101.3.4.3.20'
+        code_point: '0x0911'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsasha2128f'
+        pretty_name: 'SLH_DSA_PURE_SHA2_128F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128f'
+        oid: '2.16.840.1.101.3.4.3.21'
+        code_point: '0x0912'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsasha2192s'
+        pretty_name: 'SLH_DSA_PURE_SHA2_192S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192s'
+        oid: '2.16.840.1.101.3.4.3.22'
+        code_point: '0x0913'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsasha2192f'
+        pretty_name: 'SLH_DSA_PURE_SHA2_192F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192f'
+        oid: '2.16.840.1.101.3.4.3.23'
+        code_point: '0x0914'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsasha2256s'
+        pretty_name: 'SLH_DSA_PURE_SHA2_256S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256s'
+        oid: '2.16.840.1.101.3.4.3.24'
+        code_point: '0x0915'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsasha2256f'
+        pretty_name: 'SLH_DSA_PURE_SHA2_256F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256f'
+        oid: '2.16.840.1.101.3.4.3.25'
+        code_point: '0x0916'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsashake128s'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_128S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128s'
+        oid: '2.16.840.1.101.3.4.3.26'
+        code_point: '0x0917'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsashake128f'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_128F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128f'
+        oid: '2.16.840.1.101.3.4.3.27'
+        code_point: '0x0918'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsashake192s'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_192S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192s'
+        oid: '2.16.840.1.101.3.4.3.28'
+        code_point: '0x0919'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsashake192f'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_192F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192f'
+        oid: '2.16.840.1.101.3.4.3.29'
+        code_point: '0x091A'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsashake256s'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_256S'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256s'
+        oid: '2.16.840.1.101.3.4.3.30'
+        code_point: '0x091B'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0
+      -
+        name: 'slhdsashake256f'
+        pretty_name: 'SLH_DSA_PURE_SHAKE_256F'
+        oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256f'
+        oid: '2.16.840.1.101.3.4.3.31'
+        code_point: '0x091C'
+        enable: true
+        enable_tls: true
+        openssl_version: 3.5.0

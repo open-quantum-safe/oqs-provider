@@ -1355,9 +1355,6 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
-        // Enable rt algo filter
-        rt_algo_filter_enabled = 1;
-
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem512");
     }
 

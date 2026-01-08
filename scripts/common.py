@@ -23,9 +23,36 @@ signatures_oqs = [
     ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 
-key_exchanges_ossl = ['mlkem512','mlkem768','mlkem1024', 'X25519MLKEM768','SecP256r1MLKEM768', 'SecP384r1MLKEM1024']
+key_exchanges_ossl = [
+##### OQS_TEMPLATE_FRAGMENT_OSSL_KEX_ALGS_START
+                     'mlkem512',
+                     'mlkem768',
+                     'X25519MLKEM768',
+                     'SecP256r1MLKEM768',
+                     'mlkem1024',
+                     'SecP384r1MLKEM1024',
+##### OQS_TEMPLATE_FRAGMENT_OSSL_KEX_ALGS_END
+                     ]
 
-signatures_ossl = ['mldsa44', 'mldsa56', 'mldsa87', 'mldsa44_pss2048','mldsa44_rsa2048','mldsa44_ed25519','mldsa44_p256','mldsa44_bp256','mldsa65_pss3072','mldsa65_rsa3072','mldsa65_p256','mldsa65_bp256','mldsa65_ed25519','mldsa87_p384','mldsa87_bp384','mldsa87_ed448']
+signatures_ossl = [
+##### OQS_TEMPLATE_FRAGMENT_OSSL_SIG_ALGS_START
+                  'mldsa44',
+                  'mldsa65',
+                  'mldsa87',
+                  'slhdsasha2128s',
+                  'slhdsasha2128f',
+                  'slhdsasha2192s',
+                  'slhdsasha2192f',
+                  'slhdsasha2256s',
+                  'slhdsasha2256f',
+                  'slhdsashake128s',
+                  'slhdsashake128f',
+                  'slhdsashake192s',
+                  'slhdsashake192f',
+                  'slhdsashake256s',
+                  'slhdsashake256f',
+##### OQS_TEMPLATE_FRAGMENT_OSSL_SIG_ALGS_END
+                  ]
 
 key_exchanges = [kex for kex in key_exchanges_oqs if kex not in key_exchanges_ossl]
 signatures = [sig for sig in signatures_oqs if sig not in signatures_ossl]

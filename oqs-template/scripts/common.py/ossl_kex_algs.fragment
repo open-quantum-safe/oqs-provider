@@ -1,0 +1,13 @@
+{%- for kem in config.kems -%}
+  {%- if kem.openssl_version is defined %}
+                     '{{ kem.name_group }}',
+  {%- endif -%}
+  {%- if kem.extra_nids is defined and kem.extra_nids.current is defined -%}
+    {%- for hybrid in kem.extra_nids.current -%}
+      {%- if hybrid.openssl_version is defined %}
+                     '{{ hybrid.standard_name }}',
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor %}
+

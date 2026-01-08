@@ -1,0 +1,8 @@
+{%- for sig in config.sigs -%}
+  {%- for variant in sig.variants -%}
+    {%- if variant.openssl_version is defined %}
+                  '{{ variant.name }}',
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor %}
+

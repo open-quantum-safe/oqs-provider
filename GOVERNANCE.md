@@ -51,16 +51,25 @@ Responsibilities:
 - Assist with security releases when required.
 - Participate in discussions and project meetings.
 
+### Release managers
+
+A release manager is a Contributor versed in creating releases of the project.
+
+Responsibilities:
+
+- Manage the release cycle, incl. creation of suitable user documentation.
+- Execution of downstream tests ascertaining quality of releases.
+
 ### Maintainers
 
-A **Maintainer** is a Committer who makes significant and sustained contributions to the project, and is committed to guiding the direction of the project. Maintainers will have "administrative" permissions in GitHub.
+A **Maintainer** is a Committer who makes significant and sustained contributions to the project, and is committed to guiding the direction of the project. Maintainers will have "administrative" permissions in GitHub and thus are also able to act as Release managers.
 
 Responsibilities:
 
 - Oversee the overall project health and growth.
 - Lead communication for the project.
 - Define general and technical guidelines for the project.
-- Identify priorities and manage the release cycle.
+- Identify priorities.
 
 ### Change of role
 
@@ -106,7 +115,13 @@ Votes are to be executed by way of open GitHub discussions. No quorum is needed 
 @ashman-p
 @RodriM11
 
+### Release managers
+
+@xuganyu96
+@dstebila
+
 ### Emeritus Committers
+
 @zadlg
 @christianpaquin
 

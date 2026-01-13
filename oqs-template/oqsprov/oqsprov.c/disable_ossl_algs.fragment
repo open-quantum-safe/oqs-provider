@@ -2,6 +2,7 @@
   {% for variant in sig.variants %}
     {% if variant.openssl_version is defined %}
     if (strcmp("{{ variant.openssl_version }}", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "{{ variant.name }}");
     }
     {% endif %}
@@ -11,6 +12,7 @@
 {% for kem in config.kems %}
   {% if kem.openssl_version is defined %}
     if (strcmp("{{ kem.openssl_version }}", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "{{ kem.name_group }}");
     }
   {% endif %}
@@ -19,6 +21,7 @@
     {% for hybrid in kem.extra_nids.current %}
       {% if hybrid.openssl_version is defined %}
     if (strcmp("{{ hybrid.openssl_version }}", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "{{ hybrid.standard_name }}");
     }
       {% endif %}

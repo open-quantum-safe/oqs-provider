@@ -1295,89 +1295,107 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_START
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa44");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa65");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mldsa87");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2128s");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2128f");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2192s");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2192f");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2256s");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsasha2256f");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake128s");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake128f");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake192s");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake192f");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake256s");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "slhdsashake256f");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
-        // Enable rt algo filter
         rt_algo_filter_enabled = 1;
-
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem512");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem768");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "X25519MLKEM768");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP256r1MLKEM768");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem1024");
     }
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP384r1MLKEM1024");
     }
 

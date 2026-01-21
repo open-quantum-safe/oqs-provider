@@ -25,6 +25,9 @@
 #define OSSL_MAX_NAME_SIZE 50
 #define OSSL_MAX_PROPQUERY_SIZE 256 /* Property query strings */
 
+static int use_sign_verify_message_api = 0;
+void oqs_sig_activate_message_api(void) { use_sign_verify_message_api = 1; }
+
 #ifdef NDEBUG
 #define OQS_SIG_PRINTF(a)
 #define OQS_SIG_PRINTF2(a, b)
@@ -288,7 +291,8 @@ static int oqs_sig_sign_directly(void *vpoqs_sigctx, unsigned char *sig,
          * if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG) {
          */
 #if (OPENSSL_VERSION_PREREQ(3, 4))
-        if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG) {
+        if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG ||
+            !use_sign_verify_message_api) {
 #endif
             const EVP_MD *classical_md;
             int digest_len;
@@ -464,7 +468,8 @@ static int oqs_sig_verify_directly(void *vpoqs_sigctx, const unsigned char *sig,
          * if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG) {
          */
 #if (OPENSSL_VERSION_PREREQ(3, 4))
-        if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG) {
+        if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG ||
+            !use_sign_verify_message_api) {
 #endif
             switch (oqs_key->claimed_nist_level) {
             case 1:

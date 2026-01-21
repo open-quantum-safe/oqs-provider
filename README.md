@@ -191,6 +191,14 @@ Also new in this version is the possibility to retrieve all currently
 active TLS signature algorithms via a new `openssl list` option:
 `openssl list -tls-signature-algorithms`.
 
+These versions also provide support for the new `sign/verify message`
+interface, which are intended to sign arbitrary large data. The inclusion
+of this capacity has modified the behavior of hybrid signature
+components: unconditional hashing is no longer present, and will only
+happen for `EVP_PKEY_OP_SIGNMSG/EVP_PKEY_OP_VERIFYMSG` operations. This
+means that the behavior of `EVP_PKEY_sign_init` interface is modified, as
+an appropriate message length for hybrid signature schemes is expected.
+
 ## 3.5 and greater
 
 These versions include support for the standard PQC algorithms ML-KEM, ML-DSA

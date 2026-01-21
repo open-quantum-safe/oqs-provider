@@ -1290,6 +1290,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         }
     }
 
+    // OpenSSL 3.4.0 onwards includes sign/verify message API
+    if (strcmp("3.4.0", ossl_versionp) <= 0) {
+        oqs_sig_activate_message_api();
+    }
+
     // ML-KEM implementation in OpenSSL 3.5 is _much_ more developed than this
     // code
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_START

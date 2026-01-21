@@ -25,6 +25,9 @@
 #define OSSL_MAX_NAME_SIZE 50
 #define OSSL_MAX_PROPQUERY_SIZE 256 /* Property query strings */
 
+static int use_sign_verify_message_api = 0;
+void oqs_sig_activate_message_api(void) { use_sign_verify_message_api = 1; }
+
 #ifdef NDEBUG
 #define OQS_SIG_PRINTF(a)
 #define OQS_SIG_PRINTF2(a, b)
@@ -46,6 +49,16 @@ static OSSL_FUNC_signature_sign_init_fn oqs_sig_sign_init;
 static OSSL_FUNC_signature_verify_init_fn oqs_sig_verify_init;
 static OSSL_FUNC_signature_sign_fn oqs_sig_sign;
 static OSSL_FUNC_signature_verify_fn oqs_sig_verify;
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+static OSSL_FUNC_signature_sign_message_init_fn oqs_sig_sign_message_init;
+static OSSL_FUNC_signature_sign_message_update_fn
+    oqs_sig_signverify_message_update;
+static OSSL_FUNC_signature_sign_message_final_fn oqs_sig_sign_message_final;
+static OSSL_FUNC_signature_verify_message_init_fn oqs_sig_verify_message_init;
+static OSSL_FUNC_signature_verify_message_update_fn
+    oqs_sig_signverify_message_update;
+static OSSL_FUNC_signature_verify_message_final_fn oqs_sig_verify_message_final;
+#endif
 static OSSL_FUNC_signature_digest_sign_init_fn oqs_sig_digest_sign_init;
 static OSSL_FUNC_signature_digest_sign_update_fn
     oqs_sig_digest_signverify_update;
@@ -98,6 +111,11 @@ typedef struct {
     /* The Algorithm Identifier of the combined signature algorithm */
     unsigned char *aid;
     size_t aid_len;
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    /* Signature, for verification */
+    unsigned char *signature;
+    size_t siglen;
+#endif
 
     /* main digest */
     EVP_MD *md;
@@ -193,13 +211,29 @@ static int oqs_sig_verify_init(void *vpoqs_sigctx, void *voqssig,
     return oqs_sig_signverify_init(vpoqs_sigctx, voqssig, EVP_PKEY_OP_VERIFY);
 }
 
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+static int oqs_sig_sign_message_init(void *vpoqs_sigctx, void *voqssig,
+                                     const OSSL_PARAM params[]) {
+    OQS_SIG_PRINTF("OQS SIG provider: sign_message_init called\n");
+    return oqs_sig_signverify_init(vpoqs_sigctx, voqssig, EVP_PKEY_OP_SIGNMSG);
+}
+
+static int oqs_sig_verify_message_init(void *vpoqs_sigctx, void *voqssig,
+                                       const OSSL_PARAM params[]) {
+    OQS_SIG_PRINTF("OQS SIG provider: verify_message_init called\n");
+    return oqs_sig_signverify_init(vpoqs_sigctx, voqssig,
+                                   EVP_PKEY_OP_VERIFYMSG);
+}
+
+#endif
+
 /* On entry to this function, data to be signed (tbs) might have been hashed
  * already: this would be the case if poqs_sigctx->mdctx != NULL; if that is
  * NULL, we have to hash in case of hybrid signatures
  */
-static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
-                        size_t sigsize, const unsigned char *tbs,
-                        size_t tbslen) {
+static int oqs_sig_sign_directly(void *vpoqs_sigctx, unsigned char *sig,
+                                 size_t *siglen, size_t sigsize,
+                                 const unsigned char *tbs, size_t tbslen) {
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQSX_KEY *oqsxkey = poqs_sigctx->sig;
     OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
@@ -207,7 +241,8 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     EVP_PKEY *evpkey = oqsxkey->classical_pkey;
     EVP_PKEY_CTX *classical_ctx_sign = NULL;
 
-    OQS_SIG_PRINTF2("OQS SIG provider: sign called for %ld bytes\n", tbslen);
+    OQS_SIG_PRINTF2("OQS SIG provider: sign_directly called for %ld bytes\n",
+                    tbslen);
 
     int is_hybrid = (oqsxkey->keytype == KEY_TYPE_HYB_SIG);
     size_t max_sig_len = oqs_key->length_signature;
@@ -252,55 +287,60 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
             }
         }
 
-        /* unconditionally hash to be in line with oqs-openssl111:
-         * uncomment the following line if using pre-performed hash:
-         * if (poqs_sigctx->mdctx == NULL) { // hashing not yet done
+        /* delete the following line if using unconditional hash:
+         *  if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG ||
+                !use_sign_verify_message_api) {
          */
-        const EVP_MD *classical_md;
-        int digest_len;
-        unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+        if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG ||
+            !use_sign_verify_message_api) {
+#endif
+            const EVP_MD *classical_md;
+            int digest_len;
+            unsigned char
+                digest[SHA512_DIGEST_LENGTH]; /* init with max length */
 
-        /* classical schemes can't sign arbitrarily large data; we hash it
-         * first
-         */
-        switch (oqs_key->claimed_nist_level) {
-        case 1:
-            classical_md = EVP_sha256();
-            digest_len = SHA256_DIGEST_LENGTH;
-            SHA256(tbs, tbslen, (unsigned char *)&digest);
-            break;
-        case 2:
-        case 3:
-            classical_md = EVP_sha384();
-            digest_len = SHA384_DIGEST_LENGTH;
-            SHA384(tbs, tbslen, (unsigned char *)&digest);
-            break;
-        case 4:
-        case 5:
-        default:
-            classical_md = EVP_sha512();
-            digest_len = SHA512_DIGEST_LENGTH;
-            SHA512(tbs, tbslen, (unsigned char *)&digest);
-            break;
+            /* classical schemes can't sign arbitrarily large data; we hash it
+             * first
+             */
+            switch (oqs_key->claimed_nist_level) {
+            case 1:
+                classical_md = EVP_sha256();
+                digest_len = SHA256_DIGEST_LENGTH;
+                SHA256(tbs, tbslen, (unsigned char *)&digest);
+                break;
+            case 2:
+            case 3:
+                classical_md = EVP_sha384();
+                digest_len = SHA384_DIGEST_LENGTH;
+                SHA384(tbs, tbslen, (unsigned char *)&digest);
+                break;
+            case 4:
+            case 5:
+            default:
+                classical_md = EVP_sha512();
+                digest_len = SHA512_DIGEST_LENGTH;
+                SHA512(tbs, tbslen, (unsigned char *)&digest);
+                break;
+            }
+            if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign,
+                                               classical_md) <= 0) ||
+                (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32,
+                               &actual_classical_sig_len, digest,
+                               digest_len) <= 0)) {
+                ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
+                goto endsign;
+            }
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+        } else { // hashing asumed to be done before; just sign:
+            if (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32,
+                              &actual_classical_sig_len, tbs, tbslen) <= 0) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
+                goto endsign;
+            }
         }
-        if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign, classical_md) <=
-             0) ||
-            (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32,
-                           &actual_classical_sig_len, digest,
-                           digest_len) <= 0)) {
-            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-            goto endsign;
-        }
-        /* activate in case we want to use pre-performed hashes:
-         * }
-         * else { // hashing done before; just sign:
-         *     if (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32,
-         * &actual_classical_sig_len, tbs, tbslen) <= 0) {
-         *       ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
-         *       goto endsign;
-         *     }
-         *  }
-         */
+#endif
+
         if (actual_classical_sig_len > oqsxkey->evp_info->length_signature) {
             /* sig is bigger than expected */
             ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
@@ -337,9 +377,32 @@ endsign:
     return rv;
 }
 
-static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
-                          size_t siglen, const unsigned char *tbs,
-                          size_t tbslen) {
+static int oqs_sig_sign(void *vctx, unsigned char *sig, size_t *siglen,
+                        size_t sigsize, const unsigned char *tbs,
+                        size_t tbslen) {
+    PROV_OQSSIG_CTX *ctx = (PROV_OQSSIG_CTX *)vctx;
+    OQS_SIG_PRINTF("OQS SIG provider: sign called\n");
+
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    if (ctx->operation == EVP_PKEY_OP_SIGNMSG) {
+        /*
+         * If |sig| is NULL, the caller is only looking for the sig length.
+         * DO NOT update the input in this case.
+         */
+        if (sig == NULL)
+            return oqs_sig_sign_message_final(ctx, sig, siglen, sigsize);
+
+        if (oqs_sig_signverify_message_update(ctx, tbs, tbslen) <= 0)
+            return 0;
+        return oqs_sig_sign_message_final(ctx, sig, siglen, sigsize);
+    }
+#endif
+    return oqs_sig_sign_directly(ctx, sig, siglen, sigsize, tbs, tbslen);
+}
+
+static int oqs_sig_verify_directly(void *vpoqs_sigctx, const unsigned char *sig,
+                                   size_t siglen, const unsigned char *tbs,
+                                   size_t tbslen) {
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQSX_KEY *oqsxkey = poqs_sigctx->sig;
     OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
@@ -352,9 +415,10 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
     size_t index = 0;
     int rv = 0;
 
-    OQS_SIG_PRINTF3("OQS SIG provider: verify called with siglen %ld bytes and "
-                    "tbslen %ld\n",
-                    siglen, tbslen);
+    OQS_SIG_PRINTF3(
+        "OQS SIG provider: verify_directly called with siglen %ld bytes and "
+        "tbslen %ld\n",
+        siglen, tbslen);
 
     if (!oqsxkey || !oqs_key || !oqsxkey->pubkey || sig == NULL ||
         (tbs == NULL && tbslen > 0)) {
@@ -401,48 +465,54 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig,
             goto endverify;
         }
 
-        /* same as with sign: activate if pre-existing hashing to be used:
-         *  if (poqs_sigctx->mdctx == NULL) { // hashing not yet done
+        /* same as with sign: delete if unconditional hashing to be used:
+         * if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG ||
+                !use_sign_verify_message_api) {
          */
-        switch (oqs_key->claimed_nist_level) {
-        case 1:
-            classical_md = EVP_sha256();
-            digest_len = SHA256_DIGEST_LENGTH;
-            SHA256(tbs, tbslen, (unsigned char *)&digest);
-            break;
-        case 2:
-        case 3:
-            classical_md = EVP_sha384();
-            digest_len = SHA384_DIGEST_LENGTH;
-            SHA384(tbs, tbslen, (unsigned char *)&digest);
-            break;
-        case 4:
-        case 5:
-        default:
-            classical_md = EVP_sha512();
-            digest_len = SHA512_DIGEST_LENGTH;
-            SHA512(tbs, tbslen, (unsigned char *)&digest);
-            break;
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+        if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG ||
+            !use_sign_verify_message_api) {
+#endif
+            switch (oqs_key->claimed_nist_level) {
+            case 1:
+                classical_md = EVP_sha256();
+                digest_len = SHA256_DIGEST_LENGTH;
+                SHA256(tbs, tbslen, (unsigned char *)&digest);
+                break;
+            case 2:
+            case 3:
+                classical_md = EVP_sha384();
+                digest_len = SHA384_DIGEST_LENGTH;
+                SHA384(tbs, tbslen, (unsigned char *)&digest);
+                break;
+            case 4:
+            case 5:
+            default:
+                classical_md = EVP_sha512();
+                digest_len = SHA512_DIGEST_LENGTH;
+                SHA512(tbs, tbslen, (unsigned char *)&digest);
+                break;
+            }
+            if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <=
+                 0) ||
+                (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32,
+                                 actual_classical_sig_len, digest,
+                                 digest_len) <= 0)) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
+                goto endverify;
+            } else {
+                OQS_SIG_PRINTF("OQS SIG: classic verification OK\n");
+            }
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+        } else { // hashing already done:
+            if (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32,
+                                actual_classical_sig_len, tbs, tbslen) <= 0) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
+                goto endverify;
+            }
         }
-        if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <= 0) ||
-            (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32,
-                             actual_classical_sig_len, digest,
-                             digest_len) <= 0)) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-            goto endverify;
-        } else {
-            OQS_SIG_PRINTF("OQS SIG: classic verification OK\n");
-        }
-        /* activate for using pre-existing digest:
-         * }
-         *  else { // hashing already done:
-         *     if (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32,
-         * actual_classical_sig_len, tbs, tbslen) <= 0) {
-         *       ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-         *       goto endverify;
-         *     }
-         *  }
-         */
+#endif
+
         classical_sig_len = SIZE_OF_UINT32 + actual_classical_sig_len;
         index += classical_sig_len;
     }
@@ -472,6 +542,36 @@ endverify:
     }
     OQS_SIG_PRINTF2("OQS SIG provider: verify rv = %d\n", rv);
     return rv;
+}
+
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+static int oqs_sig_verify_set_sig(void *vctx, const unsigned char *sig,
+                                  size_t siglen) {
+    PROV_OQSSIG_CTX *ctx = (PROV_OQSSIG_CTX *)vctx;
+    OSSL_PARAM params[2];
+
+    params[0] = OSSL_PARAM_construct_octet_string(
+        OSSL_SIGNATURE_PARAM_SIGNATURE, (unsigned char *)sig, siglen);
+    params[1] = OSSL_PARAM_construct_end();
+    return oqs_sig_set_ctx_params(ctx, params);
+}
+#endif
+
+static int oqs_sig_verify(void *vctx, const unsigned char *sig, size_t siglen,
+                          const unsigned char *tbs, size_t tbslen) {
+    PROV_OQSSIG_CTX *ctx = (PROV_OQSSIG_CTX *)vctx;
+    OQS_SIG_PRINTF("OQS SIG provider: verify called\n");
+
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    if (ctx->operation == EVP_PKEY_OP_VERIFYMSG) {
+        if (oqs_sig_verify_set_sig(ctx, sig, siglen) <= 0)
+            return 0;
+        if (oqs_sig_signverify_message_update(ctx, tbs, tbslen) <= 0)
+            return 0;
+        return oqs_sig_verify_message_final(ctx);
+    }
+#endif
+    return oqs_sig_verify_directly(ctx, sig, siglen, tbs, tbslen);
 }
 
 static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx,
@@ -513,23 +613,55 @@ error:
 static int oqs_sig_digest_sign_init(void *vpoqs_sigctx, const char *mdname,
                                     void *voqssig, const OSSL_PARAM params[]) {
     OQS_SIG_PRINTF("OQS SIG provider: digest_sign_init called\n");
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
+                                          EVP_PKEY_OP_SIGNMSG);
+#else
     return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
                                           EVP_PKEY_OP_SIGN);
+#endif
 }
 
 static int oqs_sig_digest_verify_init(void *vpoqs_sigctx, const char *mdname,
                                       void *voqssig,
                                       const OSSL_PARAM params[]) {
     OQS_SIG_PRINTF("OQS SIG provider: sig_digest_verify called\n");
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
+                                          EVP_PKEY_OP_VERIFYMSG);
+#else
     return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig,
                                           EVP_PKEY_OP_VERIFY);
+#endif
 }
 
-int oqs_sig_digest_signverify_update(void *vpoqs_sigctx,
-                                     const unsigned char *data,
-                                     size_t datalen) {
-    PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
+static int oqs_sig_collect_data(PROV_OQSSIG_CTX *poqs_sigctx,
+                                const unsigned char *data, size_t datalen) {
+    if (poqs_sigctx->mddata) {
+        unsigned char *newdata =
+            OPENSSL_realloc(poqs_sigctx->mddata, poqs_sigctx->mdsize + datalen);
+        if (newdata == NULL)
+            return 0;
+        memcpy(newdata + poqs_sigctx->mdsize, data, datalen);
+        poqs_sigctx->mddata = newdata;
+        poqs_sigctx->mdsize += datalen;
+    } else { // simple alloc and copy
+        poqs_sigctx->mddata = OPENSSL_malloc(datalen);
+        if (poqs_sigctx->mddata == NULL)
+            return 0;
+        poqs_sigctx->mdsize = datalen;
+        memcpy(poqs_sigctx->mddata, data, poqs_sigctx->mdsize);
+    }
+    OQS_SIG_PRINTF2("OQS SIG provider: oqs_sig_collect_data collected "
+                    "%ld bytes...\n",
+                    poqs_sigctx->mdsize);
+    return 1;
+}
 
+static int oqs_sig_digest_signverify_update(void *vpoqs_sigctx,
+                                            const unsigned char *data,
+                                            size_t datalen) {
+    PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQS_SIG_PRINTF("OQS SIG provider: digest_signverify_update called\n");
 
     if (poqs_sigctx == NULL)
@@ -541,27 +673,24 @@ int oqs_sig_digest_signverify_update(void *vpoqs_sigctx,
         return EVP_DigestUpdate(poqs_sigctx->mdctx, data, datalen);
     else {
         // unconditionally collect data for passing in full to OQS API
-        if (poqs_sigctx->mddata) {
-            unsigned char *newdata = OPENSSL_realloc(
-                poqs_sigctx->mddata, poqs_sigctx->mdsize + datalen);
-            if (newdata == NULL)
-                return 0;
-            memcpy(newdata + poqs_sigctx->mdsize, data, datalen);
-            poqs_sigctx->mddata = newdata;
-            poqs_sigctx->mdsize += datalen;
-        } else { // simple alloc and copy
-            poqs_sigctx->mddata = OPENSSL_malloc(datalen);
-            if (poqs_sigctx->mddata == NULL)
-                return 0;
-            poqs_sigctx->mdsize = datalen;
-            memcpy(poqs_sigctx->mddata, data, poqs_sigctx->mdsize);
-        }
-        OQS_SIG_PRINTF2("OQS SIG provider: digest_signverify_update collected "
-                        "%ld bytes...\n",
-                        poqs_sigctx->mdsize);
+        return oqs_sig_collect_data(poqs_sigctx, data, datalen);
     }
-    return 1;
 }
+
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+static int oqs_sig_signverify_message_update(void *vpoqs_sigctx,
+                                             const unsigned char *data,
+                                             size_t datalen) {
+    PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
+    OQS_SIG_PRINTF("OQS SIG provider: signverify_message_update called\n");
+
+    if (poqs_sigctx == NULL)
+        return 0;
+
+    // unconditionally collect data for passing in full to OQS API
+    return oqs_sig_collect_data(poqs_sigctx, data, datalen);
+}
+#endif
 
 int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig,
                               size_t *siglen, size_t sigsize) {
@@ -592,11 +721,11 @@ int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig,
     poqs_sigctx->flag_allow_md = 1;
 
     if (poqs_sigctx->mdctx != NULL)
-        return oqs_sig_sign(vpoqs_sigctx, sig, siglen, sigsize, digest,
-                            (size_t)dlen);
+        return oqs_sig_sign_directly(vpoqs_sigctx, sig, siglen, sigsize, digest,
+                                     (size_t)dlen);
     else
-        return oqs_sig_sign(vpoqs_sigctx, sig, siglen, sigsize,
-                            poqs_sigctx->mddata, poqs_sigctx->mdsize);
+        return oqs_sig_sign_directly(vpoqs_sigctx, sig, siglen, sigsize,
+                                     poqs_sigctx->mddata, poqs_sigctx->mdsize);
 }
 
 int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
@@ -616,11 +745,39 @@ int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
 
         poqs_sigctx->flag_allow_md = 1;
 
-        return oqs_sig_verify(vpoqs_sigctx, sig, siglen, digest, (size_t)dlen);
+        return oqs_sig_verify_directly(vpoqs_sigctx, sig, siglen, digest,
+                                       (size_t)dlen);
     } else
-        return oqs_sig_verify(vpoqs_sigctx, sig, siglen, poqs_sigctx->mddata,
-                              poqs_sigctx->mdsize);
+        return oqs_sig_verify_directly(vpoqs_sigctx, sig, siglen,
+                                       poqs_sigctx->mddata,
+                                       poqs_sigctx->mdsize);
 }
+
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+int oqs_sig_sign_message_final(void *vpoqs_sigctx, unsigned char *sig,
+                               size_t *siglen, size_t sigsize) {
+    PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
+
+    OQS_SIG_PRINTF("OQS SIG provider: sign_message_final called\n");
+    if (poqs_sigctx == NULL)
+        return 0;
+
+    return oqs_sig_sign_directly(vpoqs_sigctx, sig, siglen, sigsize,
+                                 poqs_sigctx->mddata, poqs_sigctx->mdsize);
+}
+
+int oqs_sig_verify_message_final(void *vpoqs_sigctx) {
+    PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
+
+    OQS_SIG_PRINTF("OQS SIG provider: verify_message_final called\n");
+    if (poqs_sigctx == NULL)
+        return 0;
+
+    return oqs_sig_verify_directly(vpoqs_sigctx, poqs_sigctx->signature,
+                                   poqs_sigctx->siglen, poqs_sigctx->mddata,
+                                   poqs_sigctx->mdsize);
+}
+#endif
 
 static void oqs_sig_freectx(void *vpoqs_sigctx) {
     PROV_OQSSIG_CTX *ctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
@@ -642,6 +799,11 @@ static void oqs_sig_freectx(void *vpoqs_sigctx) {
     OPENSSL_free(ctx->context_string);
     ctx->context_string = NULL;
     ctx->context_string_length = 0;
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    OPENSSL_free(ctx->signature);
+    ctx->signature = NULL;
+    ctx->siglen = 0;
+#endif
     OPENSSL_free(ctx);
 }
 
@@ -783,6 +945,20 @@ static int oqs_sig_set_ctx_params(void *vpoqs_sigctx,
         }
     }
 #endif
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG) {
+        p = OSSL_PARAM_locate_const(params, OSSL_SIGNATURE_PARAM_SIGNATURE);
+        if (p != NULL) {
+            OPENSSL_free(poqs_sigctx->signature);
+            poqs_sigctx->signature = NULL;
+            poqs_sigctx->siglen = 0;
+            if (!OSSL_PARAM_get_octet_string(p,
+                                             (void **)&poqs_sigctx->signature,
+                                             0, &poqs_sigctx->siglen))
+                return 0;
+        }
+    }
+#endif
 
     // not passing in parameters we can act on is no error
     return 1;
@@ -862,6 +1038,20 @@ const OSSL_DISPATCH oqs_signature_functions[] = {
     {OSSL_FUNC_SIGNATURE_SIGN, (void (*)(void))oqs_sig_sign},
     {OSSL_FUNC_SIGNATURE_VERIFY_INIT, (void (*)(void))oqs_sig_verify_init},
     {OSSL_FUNC_SIGNATURE_VERIFY, (void (*)(void))oqs_sig_verify},
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    {OSSL_FUNC_SIGNATURE_SIGN_MESSAGE_INIT,
+     (void (*)(void))oqs_sig_sign_message_init},
+    {OSSL_FUNC_SIGNATURE_SIGN_MESSAGE_UPDATE,
+     (void (*)(void))oqs_sig_signverify_message_update},
+    {OSSL_FUNC_SIGNATURE_SIGN_MESSAGE_FINAL,
+     (void (*)(void))oqs_sig_sign_message_final},
+    {OSSL_FUNC_SIGNATURE_VERIFY_MESSAGE_INIT,
+     (void (*)(void))oqs_sig_verify_message_init},
+    {OSSL_FUNC_SIGNATURE_VERIFY_MESSAGE_UPDATE,
+     (void (*)(void))oqs_sig_signverify_message_update},
+    {OSSL_FUNC_SIGNATURE_VERIFY_MESSAGE_FINAL,
+     (void (*)(void))oqs_sig_verify_message_final},
+#endif
     {OSSL_FUNC_SIGNATURE_DIGEST_SIGN_INIT,
      (void (*)(void))oqs_sig_digest_sign_init},
     {OSSL_FUNC_SIGNATURE_DIGEST_SIGN_UPDATE,

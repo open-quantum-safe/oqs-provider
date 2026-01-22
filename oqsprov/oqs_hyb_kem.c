@@ -14,7 +14,8 @@ static OSSL_FUNC_kem_decapsulate_fn oqs_hyb_kem_decaps;
 
 static int oqs_evp_kem_encaps_keyslot(void *vpkemctx, unsigned char *ct,
                                       size_t *ctlen, unsigned char *secret,
-                                      size_t *secretlen, int keyslot) {
+                                      size_t *secretlen, int keyslot)
+{
     int ret = OQS_SUCCESS, ret2 = 0;
 
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
@@ -91,7 +92,8 @@ err:
 static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
                                       size_t *secretlen,
                                       const unsigned char *ct, size_t ctlen,
-                                      int keyslot) {
+                                      int keyslot)
+{
     OQS_KEM_PRINTF("OQS KEM provider called: oqs_hyb_kem_decaps\n");
 
     int ret = OQS_SUCCESS, ret2 = 0;
@@ -118,9 +120,9 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
             privkey_kexlen);
         ON_ERR_SET_GOTO(!pkey, ret, -10, err);
     } else {
-        pkey =
-            d2i_AutoPrivateKey_ex(&pkey, (const unsigned char **)&privkey_kex,
-                                  privkey_kexlen, libctx, NULL);
+        pkey
+            = d2i_AutoPrivateKey_ex(&pkey, (const unsigned char **)&privkey_kex,
+                                    privkey_kexlen, libctx, NULL);
         ON_ERR_SET_GOTO(!pkey, ret, -2, err);
     }
 
@@ -154,7 +156,8 @@ err:
 /// Hybrid KEM functions
 
 static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
-                              unsigned char *secret, size_t *secretlen) {
+                              unsigned char *secret, size_t *secretlen)
+{
     int ret = OQS_SUCCESS;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQSX_KEY *oqsx_key = pkemctx->kem;
@@ -166,9 +169,9 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
                                      &secretLenClassical,
                                      oqsx_key->reverse_share ? 1 : 0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
-    ret =
-        oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLenPQ, NULL, &secretLenPQ,
-                                  oqsx_key->reverse_share ? 0 : 1);
+    ret = oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLenPQ, NULL,
+                                    &secretLenPQ,
+                                    oqsx_key->reverse_share ? 0 : 1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
     *ctlen = ctLenClassical + ctLenPQ;
@@ -212,7 +215,8 @@ err:
 
 static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
                               size_t *secretlen, const unsigned char *ct,
-                              size_t ctlen) {
+                              size_t ctlen)
+{
     int ret = OQS_SUCCESS;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQSX_KEY *oqsx_key = pkemctx->kem;

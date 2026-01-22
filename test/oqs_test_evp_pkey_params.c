@@ -35,7 +35,8 @@ struct KeyPair {
 /** \brief Frees the memory occupied by a KeyPair.
  *
  * \param kp Keypair to free. */
-static void keypair_free(struct KeyPair *kp) {
+static void keypair_free(struct KeyPair *kp)
+{
     free(kp->pubkey);
     free(kp->privkey);
 }
@@ -43,7 +44,8 @@ static void keypair_free(struct KeyPair *kp) {
 /** \brief Initializes an OpenSSL top-level context.
  *
  * \returns The top-level context, or `NULL` if an error occurred. */
-static OSSL_LIB_CTX *init_openssl(void) {
+static OSSL_LIB_CTX *init_openssl(void)
+{
     OSSL_LIB_CTX *ctx;
 
     if (!(ctx = OSSL_LIB_CTX_new())) {
@@ -60,7 +62,8 @@ static OSSL_LIB_CTX *init_openssl(void) {
  * \paran alg The algorithm to use.
  *
  * \returns The EVP_PKEY context, or `NULL` if an error occurred. */
-static EVP_PKEY_CTX *init_EVP_PKEY_CTX(OSSL_LIB_CTX *libctx, const char *alg) {
+static EVP_PKEY_CTX *init_EVP_PKEY_CTX(OSSL_LIB_CTX *libctx, const char *alg)
+{
     EVP_PKEY_CTX *ctx;
 
     if (!(ctx = EVP_PKEY_CTX_new_from_name(libctx, alg, OQSPROV_PROPQ))) {
@@ -79,7 +82,8 @@ static EVP_PKEY_CTX *init_EVP_PKEY_CTX(OSSL_LIB_CTX *libctx, const char *alg) {
  * \param ctx EVP_PKEY context.
  *
  * \returns 0 on success. */
-static int init_keygen(EVP_PKEY_CTX *ctx) {
+static int init_keygen(EVP_PKEY_CTX *ctx)
+{
     int err;
 
     if ((err = EVP_PKEY_keygen_init(ctx)) == -2) {
@@ -103,7 +107,8 @@ static int init_keygen(EVP_PKEY_CTX *ctx) {
  * \param ctx EVP_PKEY context.
  *
  * \returns The private key, or `NULL` if an error occurred. */
-static EVP_PKEY *generate_private_key(EVP_PKEY_CTX *ctx) {
+static EVP_PKEY *generate_private_key(EVP_PKEY_CTX *ctx)
+{
     EVP_PKEY *private_key = NULL;
     int err;
 
@@ -127,7 +132,8 @@ static EVP_PKEY *generate_private_key(EVP_PKEY_CTX *ctx) {
  *
  * \returns 0 on success. */
 static int private_key_params_get_classical_keys(const EVP_PKEY *private_key,
-                                                 struct KeyPair *out) {
+                                                 struct KeyPair *out)
+{
     int ret = -1;
 
     if (get_param_octet_string(private_key,
@@ -157,7 +163,8 @@ out:
  *
  * \returns 0 on success. */
 static int private_key_params_get_pq_keys(const EVP_PKEY *private_key,
-                                          struct KeyPair *out) {
+                                          struct KeyPair *out)
+{
     int ret = -1;
 
     if (get_param_octet_string(private_key, OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY,
@@ -186,7 +193,8 @@ out:
  *
  * \returns 0 on success. */
 static int private_key_params_get_full_keys(const EVP_PKEY *private_key,
-                                            struct KeyPair *out) {
+                                            struct KeyPair *out)
+{
     int ret = -1;
 
     if (get_param_octet_string(private_key, OSSL_PKEY_PARAM_PUB_KEY,
@@ -221,7 +229,8 @@ out:
  * \returns 0 on success. */
 static int reconstitute_keys(const uint8_t *classical, const size_t classical_n,
                              const uint8_t *pq, const size_t pq_n, int reverse,
-                             uint8_t **buf, size_t *buf_len) {
+                             uint8_t **buf, size_t *buf_len)
+{
     uint32_t header;
     int ret = -1;
 
@@ -259,7 +268,8 @@ out:
  * \returns 0 on success. */
 static int keypairs_verify_consistency(const struct KeyPair *classical,
                                        const struct KeyPair *pq,
-                                       const struct KeyPair *comb) {
+                                       const struct KeyPair *comb)
+{
     uint8_t *reconstitution, *reconstitution_rev;
     size_t n;
     int ret = -1;
@@ -279,8 +289,8 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
                 comb->pubkey_len, n);
         goto free_reconstitute;
     }
-    if (memcmp(reconstitution, comb->pubkey, n) &&
-        memcmp(reconstitution_rev, comb->pubkey, n)) {
+    if (memcmp(reconstitution, comb->pubkey, n)
+        && memcmp(reconstitution_rev, comb->pubkey, n)) {
         fputs(cRED "pubkey and comb->pubkey differ " cNORM "\n", stderr);
         fputs(cRED "pubkey: ", stderr);
         hexdump(reconstitution, n);
@@ -309,8 +319,8 @@ static int keypairs_verify_consistency(const struct KeyPair *classical,
                 comb->privkey_len, n);
         goto free_reconstitute;
     }
-    if (memcmp(reconstitution, comb->privkey, n) &&
-        memcmp(reconstitution_rev, comb->privkey, n)) {
+    if (memcmp(reconstitution, comb->privkey, n)
+        && memcmp(reconstitution_rev, comb->privkey, n)) {
         fputs(cRED "privkey and comb->privkey differ" cNORM "\n", stderr);
         fputs(cRED "privkey: ", stderr);
         hexdump(reconstitution, n);
@@ -335,7 +345,8 @@ out:
  * \param algname Algorithm name.
  *
  * \returns 0 on success. */
-static int test_algorithm(OSSL_LIB_CTX *libctx, const char *algname) {
+static int test_algorithm(OSSL_LIB_CTX *libctx, const char *algname)
+{
     EVP_PKEY_CTX *evp_pkey_ctx;
     EVP_PKEY *private_key;
     struct KeyPair classical_keypair;
@@ -391,7 +402,8 @@ out:
     return ret;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     OSSL_LIB_CTX *libctx;
     OSSL_PROVIDER *default_provider;
     OSSL_PROVIDER *oqs_provider;

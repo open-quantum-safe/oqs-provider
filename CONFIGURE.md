@@ -156,9 +156,9 @@ By default this variable is unset.
 
 Example use:
 
-    OQS_SKIP_TESTS="sphincs" ./scripts/runtests.sh
+    OQS_SKIP_TESTS="slhdsa" ./scripts/runtests.sh
 
-excludes all algorithms of the "Sphincs" family (speeding up testing significantly).
+excludes all algorithms of the "SLH-DSA" family (speeding up testing significantly).
 
 *Note*: By default, interoperability testing with oqs-openssl111 is no longer
 performed by default but can be manually enabled in the script `scripts/runtests.sh`.

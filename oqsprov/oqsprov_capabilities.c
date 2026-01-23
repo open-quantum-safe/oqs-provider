@@ -95,29 +95,27 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
 
 // Adds entries for tlsname, `ecx`_tlsname, `ecbp`_tlsname and `ecp`_tlsname
 #define OQS_GROUP_ENTRY(tlsname, realname, algorithm, idx)                     \
-    {                                                                          \
-        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME, #tlsname,       \
-                               sizeof(#tlsname)),                              \
-            OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME_INTERNAL,    \
-                                   #realname, sizeof(#realname)),              \
-            OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_ALG, #algorithm,  \
-                                   sizeof(#algorithm)),                        \
-            OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_GROUP_ID,                      \
-                            (unsigned int *)&oqs_group_list[idx].group_id),    \
-            OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_GROUP_SECURITY_BITS,           \
-                            (unsigned int *)&oqs_group_list[idx].secbits),     \
-            OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MIN_TLS,                  \
-                           (unsigned int *)&oqs_group_list[idx].mintls),       \
-            OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MAX_TLS,                  \
-                           (unsigned int *)&oqs_group_list[idx].maxtls),       \
-            OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MIN_DTLS,                 \
-                           (unsigned int *)&oqs_group_list[idx].mindtls),      \
-            OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MAX_DTLS,                 \
-                           (unsigned int *)&oqs_group_list[idx].maxdtls),      \
-            OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_IS_KEM,                   \
-                           (unsigned int *)&oqs_group_list[idx].is_kem),       \
-            OSSL_PARAM_END                                                     \
-    }
+    {OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME, #tlsname,          \
+                            sizeof(#tlsname)),                                 \
+     OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_NAME_INTERNAL,           \
+                            #realname, sizeof(#realname)),                     \
+     OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_GROUP_ALG, #algorithm,         \
+                            sizeof(#algorithm)),                               \
+     OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_GROUP_ID,                             \
+                     (unsigned int *)&oqs_group_list[idx].group_id),           \
+     OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_GROUP_SECURITY_BITS,                  \
+                     (unsigned int *)&oqs_group_list[idx].secbits),            \
+     OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MIN_TLS,                         \
+                    (unsigned int *)&oqs_group_list[idx].mintls),              \
+     OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MAX_TLS,                         \
+                    (unsigned int *)&oqs_group_list[idx].maxtls),              \
+     OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MIN_DTLS,                        \
+                    (unsigned int *)&oqs_group_list[idx].mindtls),             \
+     OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_MAX_DTLS,                        \
+                    (unsigned int *)&oqs_group_list[idx].maxdtls),             \
+     OSSL_PARAM_int(OSSL_CAPABILITY_TLS_GROUP_IS_KEM,                          \
+                    (unsigned int *)&oqs_group_list[idx].is_kem),              \
+     OSSL_PARAM_END}
 
 static const OSSL_PARAM oqs_param_group_list[][11] = {
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_NAMES_START
@@ -564,23 +562,21 @@ static int oqs_group_capability(OSSL_CALLBACK *cb, void *arg) {
 
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
 #define OQS_SIGALG_ENTRY(tlsname, realname, algorithm, oid, idx)               \
-    {                                                                          \
-        OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_IANA_NAME, #tlsname, \
-                               sizeof(#tlsname)),                              \
-            OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME, #tlsname,  \
-                                   sizeof(#tlsname)),                          \
-            OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_OID, #oid,       \
-                                   sizeof(#oid)),                              \
-            OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_SIGALG_CODE_POINT,             \
-                            (unsigned int *)&oqs_sigalg_list[idx].code_point), \
-            OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_SIGALG_SECURITY_BITS,          \
-                            (unsigned int *)&oqs_sigalg_list[idx].secbits),    \
-            OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MIN_TLS,                 \
-                           (unsigned int *)&oqs_sigalg_list[idx].mintls),      \
-            OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MAX_TLS,                 \
-                           (unsigned int *)&oqs_sigalg_list[idx].maxtls),      \
-            OSSL_PARAM_END                                                     \
-    }
+    {OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_IANA_NAME, #tlsname,    \
+                            sizeof(#tlsname)),                                 \
+     OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_NAME, #tlsname,         \
+                            sizeof(#tlsname)),                                 \
+     OSSL_PARAM_utf8_string(OSSL_CAPABILITY_TLS_SIGALG_OID, #oid,              \
+                            sizeof(#oid)),                                     \
+     OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_SIGALG_CODE_POINT,                    \
+                     (unsigned int *)&oqs_sigalg_list[idx].code_point),        \
+     OSSL_PARAM_uint(OSSL_CAPABILITY_TLS_SIGALG_SECURITY_BITS,                 \
+                     (unsigned int *)&oqs_sigalg_list[idx].secbits),           \
+     OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MIN_TLS,                        \
+                    (unsigned int *)&oqs_sigalg_list[idx].mintls),             \
+     OSSL_PARAM_int(OSSL_CAPABILITY_TLS_SIGALG_MAX_TLS,                        \
+                    (unsigned int *)&oqs_sigalg_list[idx].maxtls),             \
+     OSSL_PARAM_END}
 
 static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_START

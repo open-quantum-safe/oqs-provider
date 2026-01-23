@@ -24,19 +24,19 @@
 #include "oqs_endecoder_local.h"
 
 #ifdef NDEBUG
-#    define OQS_ENC_PRINTF(a)
-#    define OQS_ENC_PRINTF2(a, b)
-#    define OQS_ENC_PRINTF3(a, b, c)
+#define OQS_ENC_PRINTF(a)
+#define OQS_ENC_PRINTF2(a, b)
+#define OQS_ENC_PRINTF3(a, b, c)
 #else
-#    define OQS_ENC_PRINTF(a) \
-        if (getenv("OQSENC")) \
-        fprintf(stderr, a)
-#    define OQS_ENC_PRINTF2(a, b) \
-        if (getenv("OQSENC"))     \
-        fprintf(stderr, a, b)
-#    define OQS_ENC_PRINTF3(a, b, c) \
-        if (getenv("OQSENC"))        \
-        fprintf(stderr, a, b, c)
+#define OQS_ENC_PRINTF(a)                                                      \
+    if (getenv("OQSENC"))                                                      \
+    fprintf(stderr, a)
+#define OQS_ENC_PRINTF2(a, b)                                                  \
+    if (getenv("OQSENC"))                                                      \
+    fprintf(stderr, a, b)
+#define OQS_ENC_PRINTF3(a, b, c)                                               \
+    if (getenv("OQSENC"))                                                      \
+    fprintf(stderr, a, b, c)
 #endif // NDEBUG
 
 struct key2any_ctx_st {
@@ -63,8 +63,7 @@ typedef int key_to_der_fn(BIO *out, const void *key, int key_nid,
 typedef int write_bio_of_void_fn(BIO *bp, const void *x);
 
 /* Free the blob allocated during key_to_paramstring_fn */
-static void free_asn1_data(int type, void *data)
-{
+static void free_asn1_data(int type, void *data) {
     switch (type) {
     case V_ASN1_OBJECT:
         ASN1_OBJECT_free(data);
@@ -77,8 +76,7 @@ static void free_asn1_data(int type, void *data)
 
 static PKCS8_PRIV_KEY_INFO *key_to_p8info(const void *key, int key_nid,
                                           void *params, int params_type,
-                                          i2d_of_void *k2d)
-{
+                                          i2d_of_void *k2d) {
     /* der, derlen store the key DER output and its length */
     unsigned char *der = NULL;
     int derlen;
@@ -87,13 +85,13 @@ static PKCS8_PRIV_KEY_INFO *key_to_p8info(const void *key, int key_nid,
 
     OQS_ENC_PRINTF("OQS ENC provider: key_to_p8info called\n");
 
-    if ((p8info = PKCS8_PRIV_KEY_INFO_new()) == NULL
-        || (derlen = k2d(key, &der)) <= 0
-        || !PKCS8_pkey_set0(p8info, OBJ_nid2obj(key_nid), 0,
-                            // doesn't work with oqs-openssl:
-                            //  params_type, params,
-                            // does work/interop:
-                            V_ASN1_UNDEF, NULL, der, derlen)) {
+    if ((p8info = PKCS8_PRIV_KEY_INFO_new()) == NULL ||
+        (derlen = k2d(key, &der)) <= 0 ||
+        !PKCS8_pkey_set0(p8info, OBJ_nid2obj(key_nid), 0,
+                         // doesn't work with oqs-openssl:
+                         //  params_type, params,
+                         // does work/interop:
+                         V_ASN1_UNDEF, NULL, der, derlen)) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         PKCS8_PRIV_KEY_INFO_free(p8info);
         OPENSSL_free(der);
@@ -104,8 +102,7 @@ static PKCS8_PRIV_KEY_INFO *key_to_p8info(const void *key, int key_nid,
 }
 
 static X509_SIG *p8info_to_encp8(PKCS8_PRIV_KEY_INFO *p8info,
-                                 struct key2any_ctx_st *ctx)
-{
+                                 struct key2any_ctx_st *ctx) {
     X509_SIG *p8 = NULL;
     char kstr[PEM_BUFSIZE];
     size_t klen = 0;
@@ -129,10 +126,9 @@ static X509_SIG *p8info_to_encp8(PKCS8_PRIV_KEY_INFO *p8info,
 
 static X509_SIG *key_to_encp8(const void *key, int key_nid, void *params,
                               int params_type, i2d_of_void *k2d,
-                              struct key2any_ctx_st *ctx)
-{
-    PKCS8_PRIV_KEY_INFO *p8info
-        = key_to_p8info(key, key_nid, params, params_type, k2d);
+                              struct key2any_ctx_st *ctx) {
+    PKCS8_PRIV_KEY_INFO *p8info =
+        key_to_p8info(key, key_nid, params, params_type, k2d);
     X509_SIG *p8 = NULL;
 
     OQS_ENC_PRINTF("OQS ENC provider: key_to_encp8 called\n");
@@ -148,8 +144,7 @@ static X509_SIG *key_to_encp8(const void *key, int key_nid, void *params,
 
 static X509_PUBKEY *oqsx_key_to_pubkey(const void *key, int key_nid,
                                        void *params, int params_type,
-                                       i2d_of_void k2d)
-{
+                                       i2d_of_void k2d) {
     /* der, derlen store the key DER output and its length */
     unsigned char *der = NULL;
     int derlen;
@@ -159,8 +154,8 @@ static X509_PUBKEY *oqsx_key_to_pubkey(const void *key, int key_nid,
     OQS_ENC_PRINTF2("OQS ENC provider: oqsx_key_to_pubkey called for NID %d\n",
                     key_nid);
 
-    if ((xpk = X509_PUBKEY_new()) == NULL || (derlen = k2d(key, &der)) <= 0
-        || !X509_PUBKEY_set0_param(
+    if ((xpk = X509_PUBKEY_new()) == NULL || (derlen = k2d(key, &der)) <= 0 ||
+        !X509_PUBKEY_set0_param(
             xpk, OBJ_nid2obj(key_nid), V_ASN1_UNDEF,
             NULL, // as per logic in oqs_meth.c in oqs-openssl
             der, derlen)) {
@@ -196,8 +191,7 @@ static int key_to_epki_der_priv_bio(BIO *out, const void *key, int key_nid,
                                     ossl_unused const char *pemname,
                                     key_to_paramstring_fn *p2s,
                                     i2d_of_void *k2d,
-                                    struct key2any_ctx_st *ctx)
-{
+                                    struct key2any_ctx_st *ctx) {
     int ret = 0;
     void *str = NULL;
     int strtype = V_ASN1_UNDEF;
@@ -224,8 +218,7 @@ static int key_to_epki_pem_priv_bio(BIO *out, const void *key, int key_nid,
                                     ossl_unused const char *pemname,
                                     key_to_paramstring_fn *p2s,
                                     i2d_of_void *k2d,
-                                    struct key2any_ctx_st *ctx)
-{
+                                    struct key2any_ctx_st *ctx) {
     int ret = 0;
     void *str = NULL;
     int strtype = V_ASN1_UNDEF;
@@ -251,8 +244,7 @@ static int key_to_epki_pem_priv_bio(BIO *out, const void *key, int key_nid,
 static int key_to_pki_der_priv_bio(BIO *out, const void *key, int key_nid,
                                    ossl_unused const char *pemname,
                                    key_to_paramstring_fn *p2s, i2d_of_void *k2d,
-                                   struct key2any_ctx_st *ctx)
-{
+                                   struct key2any_ctx_st *ctx) {
     int ret = 0;
     void *str = NULL;
     int strtype = V_ASN1_UNDEF;
@@ -282,8 +274,7 @@ static int key_to_pki_der_priv_bio(BIO *out, const void *key, int key_nid,
 static int key_to_pki_pem_priv_bio(BIO *out, const void *key, int key_nid,
                                    ossl_unused const char *pemname,
                                    key_to_paramstring_fn *p2s, i2d_of_void *k2d,
-                                   struct key2any_ctx_st *ctx)
-{
+                                   struct key2any_ctx_st *ctx) {
     int ret = 0;
     void *str = NULL;
     int strtype = V_ASN1_UNDEF;
@@ -312,8 +303,7 @@ static int key_to_pki_pem_priv_bio(BIO *out, const void *key, int key_nid,
 static int key_to_spki_der_pub_bio(BIO *out, const void *key, int key_nid,
                                    ossl_unused const char *pemname,
                                    key_to_paramstring_fn *p2s, i2d_of_void *k2d,
-                                   struct key2any_ctx_st *ctx)
-{
+                                   struct key2any_ctx_st *ctx) {
     int ret = 0;
     OQSX_KEY *okey = (OQSX_KEY *)key;
     X509_PUBKEY *xpk = NULL;
@@ -337,8 +327,7 @@ static int key_to_spki_der_pub_bio(BIO *out, const void *key, int key_nid,
 static int key_to_spki_pem_pub_bio(BIO *out, const void *key, int key_nid,
                                    ossl_unused const char *pemname,
                                    key_to_paramstring_fn *p2s, i2d_of_void *k2d,
-                                   struct key2any_ctx_st *ctx)
-{
+                                   struct key2any_ctx_st *ctx) {
     int ret = 0;
     X509_PUBKEY *xpk = NULL;
     void *str = NULL;
@@ -459,8 +448,7 @@ called\n");
 /* ---------------------------------------------------------------------- */
 
 static int prepare_oqsx_params(const void *oqsxkey, int nid, int save,
-                               void **pstr, int *pstrtype)
-{
+                               void **pstr, int *pstrtype) {
     ASN1_OBJECT *params = NULL;
     OQSX_KEY *k = (OQSX_KEY *)oqsxkey;
 
@@ -493,8 +481,7 @@ static int prepare_oqsx_params(const void *oqsxkey, int nid, int save,
     return 1;
 }
 
-static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
-{
+static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder) {
     const OQSX_KEY *oqsxkey = vxkey;
     unsigned char *keyblob;
     int ret = 0;
@@ -514,8 +501,7 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder)
     return oqsxkey->pubkeylen;
 }
 
-static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
-{
+static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     OQSX_KEY *oqsxkey = (OQSX_KEY *)vxkey;
     unsigned char *buf = NULL;
     uint32_t buflen = 0, privkeylen = 0;
@@ -542,18 +528,18 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
     privkeylen = oqsxkey->privkeylen;
     if (oqsxkey->numkeys > 1) { // hybrid
         uint32_t actualprivkeylen = 0;
-        size_t fixed_pq_privkeylen
-            = oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
-        size_t space_for_classical_privkey
-            = privkeylen - SIZE_OF_UINT32 - fixed_pq_privkeylen;
+        size_t fixed_pq_privkeylen =
+            oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
+        size_t space_for_classical_privkey =
+            privkeylen - SIZE_OF_UINT32 - fixed_pq_privkeylen;
         DECODE_UINT32(actualprivkeylen, oqsxkey->privkey);
-        if ((actualprivkeylen > oqsxkey->evp_info->length_private_key)
-            || (actualprivkeylen > space_for_classical_privkey)) {
+        if ((actualprivkeylen > oqsxkey->evp_info->length_private_key) ||
+            (actualprivkeylen > space_for_classical_privkey)) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             return 0;
         }
-        privkeylen
-            -= (oqsxkey->evp_info->length_private_key - actualprivkeylen);
+        privkeylen -=
+            (oqsxkey->evp_info->length_private_key - actualprivkeylen);
     }
 #ifdef NOPUBKEY_IN_PRIVKEY
     buflen = privkeylen;
@@ -612,301 +598,301 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 // OQS provider uses NIDs generated at load time as EVP_type identifiers
 // so initially this must be 0 and set to a real value by OBJ_sn2nid later
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_START
-#define frodo640aes_evp_type   0
+#define frodo640aes_evp_type 0
 #define frodo640aes_input_type "frodo640aes"
-#define frodo640aes_pem_type   "frodo640aes"
+#define frodo640aes_pem_type "frodo640aes"
 
-#define p256_frodo640aes_evp_type     0
-#define p256_frodo640aes_input_type   "p256_frodo640aes"
-#define p256_frodo640aes_pem_type     "p256_frodo640aes"
-#define x25519_frodo640aes_evp_type   0
+#define p256_frodo640aes_evp_type 0
+#define p256_frodo640aes_input_type "p256_frodo640aes"
+#define p256_frodo640aes_pem_type "p256_frodo640aes"
+#define x25519_frodo640aes_evp_type 0
 #define x25519_frodo640aes_input_type "x25519_frodo640aes"
-#define x25519_frodo640aes_pem_type   "x25519_frodo640aes"
-#define frodo640shake_evp_type        0
-#define frodo640shake_input_type      "frodo640shake"
-#define frodo640shake_pem_type        "frodo640shake"
+#define x25519_frodo640aes_pem_type "x25519_frodo640aes"
+#define frodo640shake_evp_type 0
+#define frodo640shake_input_type "frodo640shake"
+#define frodo640shake_pem_type "frodo640shake"
 
-#define p256_frodo640shake_evp_type     0
-#define p256_frodo640shake_input_type   "p256_frodo640shake"
-#define p256_frodo640shake_pem_type     "p256_frodo640shake"
-#define x25519_frodo640shake_evp_type   0
+#define p256_frodo640shake_evp_type 0
+#define p256_frodo640shake_input_type "p256_frodo640shake"
+#define p256_frodo640shake_pem_type "p256_frodo640shake"
+#define x25519_frodo640shake_evp_type 0
 #define x25519_frodo640shake_input_type "x25519_frodo640shake"
-#define x25519_frodo640shake_pem_type   "x25519_frodo640shake"
-#define frodo976aes_evp_type            0
-#define frodo976aes_input_type          "frodo976aes"
-#define frodo976aes_pem_type            "frodo976aes"
+#define x25519_frodo640shake_pem_type "x25519_frodo640shake"
+#define frodo976aes_evp_type 0
+#define frodo976aes_input_type "frodo976aes"
+#define frodo976aes_pem_type "frodo976aes"
 
-#define p384_frodo976aes_evp_type   0
+#define p384_frodo976aes_evp_type 0
 #define p384_frodo976aes_input_type "p384_frodo976aes"
-#define p384_frodo976aes_pem_type   "p384_frodo976aes"
-#define x448_frodo976aes_evp_type   0
+#define p384_frodo976aes_pem_type "p384_frodo976aes"
+#define x448_frodo976aes_evp_type 0
 #define x448_frodo976aes_input_type "x448_frodo976aes"
-#define x448_frodo976aes_pem_type   "x448_frodo976aes"
-#define frodo976shake_evp_type      0
-#define frodo976shake_input_type    "frodo976shake"
-#define frodo976shake_pem_type      "frodo976shake"
+#define x448_frodo976aes_pem_type "x448_frodo976aes"
+#define frodo976shake_evp_type 0
+#define frodo976shake_input_type "frodo976shake"
+#define frodo976shake_pem_type "frodo976shake"
 
-#define p384_frodo976shake_evp_type   0
+#define p384_frodo976shake_evp_type 0
 #define p384_frodo976shake_input_type "p384_frodo976shake"
-#define p384_frodo976shake_pem_type   "p384_frodo976shake"
-#define x448_frodo976shake_evp_type   0
+#define p384_frodo976shake_pem_type "p384_frodo976shake"
+#define x448_frodo976shake_evp_type 0
 #define x448_frodo976shake_input_type "x448_frodo976shake"
-#define x448_frodo976shake_pem_type   "x448_frodo976shake"
-#define frodo1344aes_evp_type         0
-#define frodo1344aes_input_type       "frodo1344aes"
-#define frodo1344aes_pem_type         "frodo1344aes"
+#define x448_frodo976shake_pem_type "x448_frodo976shake"
+#define frodo1344aes_evp_type 0
+#define frodo1344aes_input_type "frodo1344aes"
+#define frodo1344aes_pem_type "frodo1344aes"
 
-#define p521_frodo1344aes_evp_type   0
+#define p521_frodo1344aes_evp_type 0
 #define p521_frodo1344aes_input_type "p521_frodo1344aes"
-#define p521_frodo1344aes_pem_type   "p521_frodo1344aes"
-#define frodo1344shake_evp_type      0
-#define frodo1344shake_input_type    "frodo1344shake"
-#define frodo1344shake_pem_type      "frodo1344shake"
+#define p521_frodo1344aes_pem_type "p521_frodo1344aes"
+#define frodo1344shake_evp_type 0
+#define frodo1344shake_input_type "frodo1344shake"
+#define frodo1344shake_pem_type "frodo1344shake"
 
-#define p521_frodo1344shake_evp_type   0
+#define p521_frodo1344shake_evp_type 0
 #define p521_frodo1344shake_input_type "p521_frodo1344shake"
-#define p521_frodo1344shake_pem_type   "p521_frodo1344shake"
-#define mlkem512_evp_type              0
-#define mlkem512_input_type            "mlkem512"
-#define mlkem512_pem_type              "mlkem512"
+#define p521_frodo1344shake_pem_type "p521_frodo1344shake"
+#define mlkem512_evp_type 0
+#define mlkem512_input_type "mlkem512"
+#define mlkem512_pem_type "mlkem512"
 
-#define p256_mlkem512_evp_type     0
-#define p256_mlkem512_input_type   "p256_mlkem512"
-#define p256_mlkem512_pem_type     "p256_mlkem512"
-#define x25519_mlkem512_evp_type   0
+#define p256_mlkem512_evp_type 0
+#define p256_mlkem512_input_type "p256_mlkem512"
+#define p256_mlkem512_pem_type "p256_mlkem512"
+#define x25519_mlkem512_evp_type 0
 #define x25519_mlkem512_input_type "x25519_mlkem512"
-#define x25519_mlkem512_pem_type   "x25519_mlkem512"
-#define bp256_mlkem512_evp_type    0
-#define bp256_mlkem512_input_type  "bp256_mlkem512"
-#define bp256_mlkem512_pem_type    "bp256_mlkem512"
-#define mlkem768_evp_type          0
-#define mlkem768_input_type        "mlkem768"
-#define mlkem768_pem_type          "mlkem768"
+#define x25519_mlkem512_pem_type "x25519_mlkem512"
+#define bp256_mlkem512_evp_type 0
+#define bp256_mlkem512_input_type "bp256_mlkem512"
+#define bp256_mlkem512_pem_type "bp256_mlkem512"
+#define mlkem768_evp_type 0
+#define mlkem768_input_type "mlkem768"
+#define mlkem768_pem_type "mlkem768"
 
-#define p384_mlkem768_evp_type       0
-#define p384_mlkem768_input_type     "p384_mlkem768"
-#define p384_mlkem768_pem_type       "p384_mlkem768"
-#define x448_mlkem768_evp_type       0
-#define x448_mlkem768_input_type     "x448_mlkem768"
-#define x448_mlkem768_pem_type       "x448_mlkem768"
-#define bp384_mlkem768_evp_type      0
-#define bp384_mlkem768_input_type    "bp384_mlkem768"
-#define bp384_mlkem768_pem_type      "bp384_mlkem768"
-#define X25519MLKEM768_evp_type      0
-#define X25519MLKEM768_input_type    "X25519MLKEM768"
-#define X25519MLKEM768_pem_type      "X25519MLKEM768"
-#define SecP256r1MLKEM768_evp_type   0
+#define p384_mlkem768_evp_type 0
+#define p384_mlkem768_input_type "p384_mlkem768"
+#define p384_mlkem768_pem_type "p384_mlkem768"
+#define x448_mlkem768_evp_type 0
+#define x448_mlkem768_input_type "x448_mlkem768"
+#define x448_mlkem768_pem_type "x448_mlkem768"
+#define bp384_mlkem768_evp_type 0
+#define bp384_mlkem768_input_type "bp384_mlkem768"
+#define bp384_mlkem768_pem_type "bp384_mlkem768"
+#define X25519MLKEM768_evp_type 0
+#define X25519MLKEM768_input_type "X25519MLKEM768"
+#define X25519MLKEM768_pem_type "X25519MLKEM768"
+#define SecP256r1MLKEM768_evp_type 0
 #define SecP256r1MLKEM768_input_type "SecP256r1MLKEM768"
-#define SecP256r1MLKEM768_pem_type   "SecP256r1MLKEM768"
-#define mlkem1024_evp_type           0
-#define mlkem1024_input_type         "mlkem1024"
-#define mlkem1024_pem_type           "mlkem1024"
+#define SecP256r1MLKEM768_pem_type "SecP256r1MLKEM768"
+#define mlkem1024_evp_type 0
+#define mlkem1024_input_type "mlkem1024"
+#define mlkem1024_pem_type "mlkem1024"
 
-#define p521_mlkem1024_evp_type       0
-#define p521_mlkem1024_input_type     "p521_mlkem1024"
-#define p521_mlkem1024_pem_type       "p521_mlkem1024"
-#define SecP384r1MLKEM1024_evp_type   0
+#define p521_mlkem1024_evp_type 0
+#define p521_mlkem1024_input_type "p521_mlkem1024"
+#define p521_mlkem1024_pem_type "p521_mlkem1024"
+#define SecP384r1MLKEM1024_evp_type 0
 #define SecP384r1MLKEM1024_input_type "SecP384r1MLKEM1024"
-#define SecP384r1MLKEM1024_pem_type   "SecP384r1MLKEM1024"
-#define bp512_mlkem1024_evp_type      0
-#define bp512_mlkem1024_input_type    "bp512_mlkem1024"
-#define bp512_mlkem1024_pem_type      "bp512_mlkem1024"
-#define bikel1_evp_type               0
-#define bikel1_input_type             "bikel1"
-#define bikel1_pem_type               "bikel1"
+#define SecP384r1MLKEM1024_pem_type "SecP384r1MLKEM1024"
+#define bp512_mlkem1024_evp_type 0
+#define bp512_mlkem1024_input_type "bp512_mlkem1024"
+#define bp512_mlkem1024_pem_type "bp512_mlkem1024"
+#define bikel1_evp_type 0
+#define bikel1_input_type "bikel1"
+#define bikel1_pem_type "bikel1"
 
-#define p256_bikel1_evp_type     0
-#define p256_bikel1_input_type   "p256_bikel1"
-#define p256_bikel1_pem_type     "p256_bikel1"
-#define x25519_bikel1_evp_type   0
+#define p256_bikel1_evp_type 0
+#define p256_bikel1_input_type "p256_bikel1"
+#define p256_bikel1_pem_type "p256_bikel1"
+#define x25519_bikel1_evp_type 0
 #define x25519_bikel1_input_type "x25519_bikel1"
-#define x25519_bikel1_pem_type   "x25519_bikel1"
-#define bikel3_evp_type          0
-#define bikel3_input_type        "bikel3"
-#define bikel3_pem_type          "bikel3"
+#define x25519_bikel1_pem_type "x25519_bikel1"
+#define bikel3_evp_type 0
+#define bikel3_input_type "bikel3"
+#define bikel3_pem_type "bikel3"
 
-#define p384_bikel3_evp_type   0
+#define p384_bikel3_evp_type 0
 #define p384_bikel3_input_type "p384_bikel3"
-#define p384_bikel3_pem_type   "p384_bikel3"
-#define x448_bikel3_evp_type   0
+#define p384_bikel3_pem_type "p384_bikel3"
+#define x448_bikel3_evp_type 0
 #define x448_bikel3_input_type "x448_bikel3"
-#define x448_bikel3_pem_type   "x448_bikel3"
-#define bikel5_evp_type        0
-#define bikel5_input_type      "bikel5"
-#define bikel5_pem_type        "bikel5"
+#define x448_bikel3_pem_type "x448_bikel3"
+#define bikel5_evp_type 0
+#define bikel5_input_type "bikel5"
+#define bikel5_pem_type "bikel5"
 
-#define p521_bikel5_evp_type   0
+#define p521_bikel5_evp_type 0
 #define p521_bikel5_input_type "p521_bikel5"
-#define p521_bikel5_pem_type   "p521_bikel5"
+#define p521_bikel5_pem_type "p521_bikel5"
 
-#define mldsa44_evp_type                   0
-#define mldsa44_input_type                 "mldsa44"
-#define mldsa44_pem_type                   "mldsa44"
-#define p256_mldsa44_evp_type              0
-#define p256_mldsa44_input_type            "p256_mldsa44"
-#define p256_mldsa44_pem_type              "p256_mldsa44"
-#define rsa3072_mldsa44_evp_type           0
-#define rsa3072_mldsa44_input_type         "rsa3072_mldsa44"
-#define rsa3072_mldsa44_pem_type           "rsa3072_mldsa44"
-#define mldsa65_evp_type                   0
-#define mldsa65_input_type                 "mldsa65"
-#define mldsa65_pem_type                   "mldsa65"
-#define p384_mldsa65_evp_type              0
-#define p384_mldsa65_input_type            "p384_mldsa65"
-#define p384_mldsa65_pem_type              "p384_mldsa65"
-#define mldsa87_evp_type                   0
-#define mldsa87_input_type                 "mldsa87"
-#define mldsa87_pem_type                   "mldsa87"
-#define p521_mldsa87_evp_type              0
-#define p521_mldsa87_input_type            "p521_mldsa87"
-#define p521_mldsa87_pem_type              "p521_mldsa87"
-#define falcon512_evp_type                 0
-#define falcon512_input_type               "falcon512"
-#define falcon512_pem_type                 "falcon512"
-#define p256_falcon512_evp_type            0
-#define p256_falcon512_input_type          "p256_falcon512"
-#define p256_falcon512_pem_type            "p256_falcon512"
-#define rsa3072_falcon512_evp_type         0
-#define rsa3072_falcon512_input_type       "rsa3072_falcon512"
-#define rsa3072_falcon512_pem_type         "rsa3072_falcon512"
-#define falconpadded512_evp_type           0
-#define falconpadded512_input_type         "falconpadded512"
-#define falconpadded512_pem_type           "falconpadded512"
-#define p256_falconpadded512_evp_type      0
-#define p256_falconpadded512_input_type    "p256_falconpadded512"
-#define p256_falconpadded512_pem_type      "p256_falconpadded512"
-#define rsa3072_falconpadded512_evp_type   0
+#define mldsa44_evp_type 0
+#define mldsa44_input_type "mldsa44"
+#define mldsa44_pem_type "mldsa44"
+#define p256_mldsa44_evp_type 0
+#define p256_mldsa44_input_type "p256_mldsa44"
+#define p256_mldsa44_pem_type "p256_mldsa44"
+#define rsa3072_mldsa44_evp_type 0
+#define rsa3072_mldsa44_input_type "rsa3072_mldsa44"
+#define rsa3072_mldsa44_pem_type "rsa3072_mldsa44"
+#define mldsa65_evp_type 0
+#define mldsa65_input_type "mldsa65"
+#define mldsa65_pem_type "mldsa65"
+#define p384_mldsa65_evp_type 0
+#define p384_mldsa65_input_type "p384_mldsa65"
+#define p384_mldsa65_pem_type "p384_mldsa65"
+#define mldsa87_evp_type 0
+#define mldsa87_input_type "mldsa87"
+#define mldsa87_pem_type "mldsa87"
+#define p521_mldsa87_evp_type 0
+#define p521_mldsa87_input_type "p521_mldsa87"
+#define p521_mldsa87_pem_type "p521_mldsa87"
+#define falcon512_evp_type 0
+#define falcon512_input_type "falcon512"
+#define falcon512_pem_type "falcon512"
+#define p256_falcon512_evp_type 0
+#define p256_falcon512_input_type "p256_falcon512"
+#define p256_falcon512_pem_type "p256_falcon512"
+#define rsa3072_falcon512_evp_type 0
+#define rsa3072_falcon512_input_type "rsa3072_falcon512"
+#define rsa3072_falcon512_pem_type "rsa3072_falcon512"
+#define falconpadded512_evp_type 0
+#define falconpadded512_input_type "falconpadded512"
+#define falconpadded512_pem_type "falconpadded512"
+#define p256_falconpadded512_evp_type 0
+#define p256_falconpadded512_input_type "p256_falconpadded512"
+#define p256_falconpadded512_pem_type "p256_falconpadded512"
+#define rsa3072_falconpadded512_evp_type 0
 #define rsa3072_falconpadded512_input_type "rsa3072_falconpadded512"
-#define rsa3072_falconpadded512_pem_type   "rsa3072_falconpadded512"
-#define falcon1024_evp_type                0
-#define falcon1024_input_type              "falcon1024"
-#define falcon1024_pem_type                "falcon1024"
-#define p521_falcon1024_evp_type           0
-#define p521_falcon1024_input_type         "p521_falcon1024"
-#define p521_falcon1024_pem_type           "p521_falcon1024"
-#define falconpadded1024_evp_type          0
-#define falconpadded1024_input_type        "falconpadded1024"
-#define falconpadded1024_pem_type          "falconpadded1024"
-#define p521_falconpadded1024_evp_type     0
-#define p521_falconpadded1024_input_type   "p521_falconpadded1024"
-#define p521_falconpadded1024_pem_type     "p521_falconpadded1024"
-#define mayo1_evp_type                     0
-#define mayo1_input_type                   "mayo1"
-#define mayo1_pem_type                     "mayo1"
-#define p256_mayo1_evp_type                0
-#define p256_mayo1_input_type              "p256_mayo1"
-#define p256_mayo1_pem_type                "p256_mayo1"
-#define mayo2_evp_type                     0
-#define mayo2_input_type                   "mayo2"
-#define mayo2_pem_type                     "mayo2"
-#define p256_mayo2_evp_type                0
-#define p256_mayo2_input_type              "p256_mayo2"
-#define p256_mayo2_pem_type                "p256_mayo2"
-#define mayo3_evp_type                     0
-#define mayo3_input_type                   "mayo3"
-#define mayo3_pem_type                     "mayo3"
-#define p384_mayo3_evp_type                0
-#define p384_mayo3_input_type              "p384_mayo3"
-#define p384_mayo3_pem_type                "p384_mayo3"
-#define mayo5_evp_type                     0
-#define mayo5_input_type                   "mayo5"
-#define mayo5_pem_type                     "mayo5"
-#define p521_mayo5_evp_type                0
-#define p521_mayo5_input_type              "p521_mayo5"
-#define p521_mayo5_pem_type                "p521_mayo5"
-#define CROSSrsdp128balanced_evp_type      0
-#define CROSSrsdp128balanced_input_type    "CROSSrsdp128balanced"
-#define CROSSrsdp128balanced_pem_type      "CROSSrsdp128balanced"
-#define OV_Is_pkc_evp_type                 0
-#define OV_Is_pkc_input_type               "OV_Is_pkc"
-#define OV_Is_pkc_pem_type                 "OV_Is_pkc"
-#define p256_OV_Is_pkc_evp_type            0
-#define p256_OV_Is_pkc_input_type          "p256_OV_Is_pkc"
-#define p256_OV_Is_pkc_pem_type            "p256_OV_Is_pkc"
-#define OV_Ip_pkc_evp_type                 0
-#define OV_Ip_pkc_input_type               "OV_Ip_pkc"
-#define OV_Ip_pkc_pem_type                 "OV_Ip_pkc"
-#define p256_OV_Ip_pkc_evp_type            0
-#define p256_OV_Ip_pkc_input_type          "p256_OV_Ip_pkc"
-#define p256_OV_Ip_pkc_pem_type            "p256_OV_Ip_pkc"
-#define OV_Is_pkc_skc_evp_type             0
-#define OV_Is_pkc_skc_input_type           "OV_Is_pkc_skc"
-#define OV_Is_pkc_skc_pem_type             "OV_Is_pkc_skc"
-#define p256_OV_Is_pkc_skc_evp_type        0
-#define p256_OV_Is_pkc_skc_input_type      "p256_OV_Is_pkc_skc"
-#define p256_OV_Is_pkc_skc_pem_type        "p256_OV_Is_pkc_skc"
-#define OV_Ip_pkc_skc_evp_type             0
-#define OV_Ip_pkc_skc_input_type           "OV_Ip_pkc_skc"
-#define OV_Ip_pkc_skc_pem_type             "OV_Ip_pkc_skc"
-#define p256_OV_Ip_pkc_skc_evp_type        0
-#define p256_OV_Ip_pkc_skc_input_type      "p256_OV_Ip_pkc_skc"
-#define p256_OV_Ip_pkc_skc_pem_type        "p256_OV_Ip_pkc_skc"
-#define snova2454_evp_type                 0
-#define snova2454_input_type               "snova2454"
-#define snova2454_pem_type                 "snova2454"
-#define p256_snova2454_evp_type            0
-#define p256_snova2454_input_type          "p256_snova2454"
-#define p256_snova2454_pem_type            "p256_snova2454"
-#define snova2454esk_evp_type              0
-#define snova2454esk_input_type            "snova2454esk"
-#define snova2454esk_pem_type              "snova2454esk"
-#define p256_snova2454esk_evp_type         0
-#define p256_snova2454esk_input_type       "p256_snova2454esk"
-#define p256_snova2454esk_pem_type         "p256_snova2454esk"
-#define snova37172_evp_type                0
-#define snova37172_input_type              "snova37172"
-#define snova37172_pem_type                "snova37172"
-#define p256_snova37172_evp_type           0
-#define p256_snova37172_input_type         "p256_snova37172"
-#define p256_snova37172_pem_type           "p256_snova37172"
-#define snova2455_evp_type                 0
-#define snova2455_input_type               "snova2455"
-#define snova2455_pem_type                 "snova2455"
-#define p384_snova2455_evp_type            0
-#define p384_snova2455_input_type          "p384_snova2455"
-#define p384_snova2455_pem_type            "p384_snova2455"
-#define snova2965_evp_type                 0
-#define snova2965_input_type               "snova2965"
-#define snova2965_pem_type                 "snova2965"
-#define p521_snova2965_evp_type            0
-#define p521_snova2965_input_type          "p521_snova2965"
-#define p521_snova2965_pem_type            "p521_snova2965"
-#define slhdsasha2128s_evp_type            0
-#define slhdsasha2128s_input_type          "slhdsasha2128s"
-#define slhdsasha2128s_pem_type            "slhdsasha2128s"
-#define slhdsasha2128f_evp_type            0
-#define slhdsasha2128f_input_type          "slhdsasha2128f"
-#define slhdsasha2128f_pem_type            "slhdsasha2128f"
-#define slhdsasha2192s_evp_type            0
-#define slhdsasha2192s_input_type          "slhdsasha2192s"
-#define slhdsasha2192s_pem_type            "slhdsasha2192s"
-#define slhdsasha2192f_evp_type            0
-#define slhdsasha2192f_input_type          "slhdsasha2192f"
-#define slhdsasha2192f_pem_type            "slhdsasha2192f"
-#define slhdsasha2256s_evp_type            0
-#define slhdsasha2256s_input_type          "slhdsasha2256s"
-#define slhdsasha2256s_pem_type            "slhdsasha2256s"
-#define slhdsasha2256f_evp_type            0
-#define slhdsasha2256f_input_type          "slhdsasha2256f"
-#define slhdsasha2256f_pem_type            "slhdsasha2256f"
-#define slhdsashake128s_evp_type           0
-#define slhdsashake128s_input_type         "slhdsashake128s"
-#define slhdsashake128s_pem_type           "slhdsashake128s"
-#define slhdsashake128f_evp_type           0
-#define slhdsashake128f_input_type         "slhdsashake128f"
-#define slhdsashake128f_pem_type           "slhdsashake128f"
-#define slhdsashake192s_evp_type           0
-#define slhdsashake192s_input_type         "slhdsashake192s"
-#define slhdsashake192s_pem_type           "slhdsashake192s"
-#define slhdsashake192f_evp_type           0
-#define slhdsashake192f_input_type         "slhdsashake192f"
-#define slhdsashake192f_pem_type           "slhdsashake192f"
-#define slhdsashake256s_evp_type           0
-#define slhdsashake256s_input_type         "slhdsashake256s"
-#define slhdsashake256s_pem_type           "slhdsashake256s"
-#define slhdsashake256f_evp_type           0
-#define slhdsashake256f_input_type         "slhdsashake256f"
-#define slhdsashake256f_pem_type           "slhdsashake256f"
+#define rsa3072_falconpadded512_pem_type "rsa3072_falconpadded512"
+#define falcon1024_evp_type 0
+#define falcon1024_input_type "falcon1024"
+#define falcon1024_pem_type "falcon1024"
+#define p521_falcon1024_evp_type 0
+#define p521_falcon1024_input_type "p521_falcon1024"
+#define p521_falcon1024_pem_type "p521_falcon1024"
+#define falconpadded1024_evp_type 0
+#define falconpadded1024_input_type "falconpadded1024"
+#define falconpadded1024_pem_type "falconpadded1024"
+#define p521_falconpadded1024_evp_type 0
+#define p521_falconpadded1024_input_type "p521_falconpadded1024"
+#define p521_falconpadded1024_pem_type "p521_falconpadded1024"
+#define mayo1_evp_type 0
+#define mayo1_input_type "mayo1"
+#define mayo1_pem_type "mayo1"
+#define p256_mayo1_evp_type 0
+#define p256_mayo1_input_type "p256_mayo1"
+#define p256_mayo1_pem_type "p256_mayo1"
+#define mayo2_evp_type 0
+#define mayo2_input_type "mayo2"
+#define mayo2_pem_type "mayo2"
+#define p256_mayo2_evp_type 0
+#define p256_mayo2_input_type "p256_mayo2"
+#define p256_mayo2_pem_type "p256_mayo2"
+#define mayo3_evp_type 0
+#define mayo3_input_type "mayo3"
+#define mayo3_pem_type "mayo3"
+#define p384_mayo3_evp_type 0
+#define p384_mayo3_input_type "p384_mayo3"
+#define p384_mayo3_pem_type "p384_mayo3"
+#define mayo5_evp_type 0
+#define mayo5_input_type "mayo5"
+#define mayo5_pem_type "mayo5"
+#define p521_mayo5_evp_type 0
+#define p521_mayo5_input_type "p521_mayo5"
+#define p521_mayo5_pem_type "p521_mayo5"
+#define CROSSrsdp128balanced_evp_type 0
+#define CROSSrsdp128balanced_input_type "CROSSrsdp128balanced"
+#define CROSSrsdp128balanced_pem_type "CROSSrsdp128balanced"
+#define OV_Is_pkc_evp_type 0
+#define OV_Is_pkc_input_type "OV_Is_pkc"
+#define OV_Is_pkc_pem_type "OV_Is_pkc"
+#define p256_OV_Is_pkc_evp_type 0
+#define p256_OV_Is_pkc_input_type "p256_OV_Is_pkc"
+#define p256_OV_Is_pkc_pem_type "p256_OV_Is_pkc"
+#define OV_Ip_pkc_evp_type 0
+#define OV_Ip_pkc_input_type "OV_Ip_pkc"
+#define OV_Ip_pkc_pem_type "OV_Ip_pkc"
+#define p256_OV_Ip_pkc_evp_type 0
+#define p256_OV_Ip_pkc_input_type "p256_OV_Ip_pkc"
+#define p256_OV_Ip_pkc_pem_type "p256_OV_Ip_pkc"
+#define OV_Is_pkc_skc_evp_type 0
+#define OV_Is_pkc_skc_input_type "OV_Is_pkc_skc"
+#define OV_Is_pkc_skc_pem_type "OV_Is_pkc_skc"
+#define p256_OV_Is_pkc_skc_evp_type 0
+#define p256_OV_Is_pkc_skc_input_type "p256_OV_Is_pkc_skc"
+#define p256_OV_Is_pkc_skc_pem_type "p256_OV_Is_pkc_skc"
+#define OV_Ip_pkc_skc_evp_type 0
+#define OV_Ip_pkc_skc_input_type "OV_Ip_pkc_skc"
+#define OV_Ip_pkc_skc_pem_type "OV_Ip_pkc_skc"
+#define p256_OV_Ip_pkc_skc_evp_type 0
+#define p256_OV_Ip_pkc_skc_input_type "p256_OV_Ip_pkc_skc"
+#define p256_OV_Ip_pkc_skc_pem_type "p256_OV_Ip_pkc_skc"
+#define snova2454_evp_type 0
+#define snova2454_input_type "snova2454"
+#define snova2454_pem_type "snova2454"
+#define p256_snova2454_evp_type 0
+#define p256_snova2454_input_type "p256_snova2454"
+#define p256_snova2454_pem_type "p256_snova2454"
+#define snova2454esk_evp_type 0
+#define snova2454esk_input_type "snova2454esk"
+#define snova2454esk_pem_type "snova2454esk"
+#define p256_snova2454esk_evp_type 0
+#define p256_snova2454esk_input_type "p256_snova2454esk"
+#define p256_snova2454esk_pem_type "p256_snova2454esk"
+#define snova37172_evp_type 0
+#define snova37172_input_type "snova37172"
+#define snova37172_pem_type "snova37172"
+#define p256_snova37172_evp_type 0
+#define p256_snova37172_input_type "p256_snova37172"
+#define p256_snova37172_pem_type "p256_snova37172"
+#define snova2455_evp_type 0
+#define snova2455_input_type "snova2455"
+#define snova2455_pem_type "snova2455"
+#define p384_snova2455_evp_type 0
+#define p384_snova2455_input_type "p384_snova2455"
+#define p384_snova2455_pem_type "p384_snova2455"
+#define snova2965_evp_type 0
+#define snova2965_input_type "snova2965"
+#define snova2965_pem_type "snova2965"
+#define p521_snova2965_evp_type 0
+#define p521_snova2965_input_type "p521_snova2965"
+#define p521_snova2965_pem_type "p521_snova2965"
+#define slhdsasha2128s_evp_type 0
+#define slhdsasha2128s_input_type "slhdsasha2128s"
+#define slhdsasha2128s_pem_type "slhdsasha2128s"
+#define slhdsasha2128f_evp_type 0
+#define slhdsasha2128f_input_type "slhdsasha2128f"
+#define slhdsasha2128f_pem_type "slhdsasha2128f"
+#define slhdsasha2192s_evp_type 0
+#define slhdsasha2192s_input_type "slhdsasha2192s"
+#define slhdsasha2192s_pem_type "slhdsasha2192s"
+#define slhdsasha2192f_evp_type 0
+#define slhdsasha2192f_input_type "slhdsasha2192f"
+#define slhdsasha2192f_pem_type "slhdsasha2192f"
+#define slhdsasha2256s_evp_type 0
+#define slhdsasha2256s_input_type "slhdsasha2256s"
+#define slhdsasha2256s_pem_type "slhdsasha2256s"
+#define slhdsasha2256f_evp_type 0
+#define slhdsasha2256f_input_type "slhdsasha2256f"
+#define slhdsasha2256f_pem_type "slhdsasha2256f"
+#define slhdsashake128s_evp_type 0
+#define slhdsashake128s_input_type "slhdsashake128s"
+#define slhdsashake128s_pem_type "slhdsashake128s"
+#define slhdsashake128f_evp_type 0
+#define slhdsashake128f_input_type "slhdsashake128f"
+#define slhdsashake128f_pem_type "slhdsashake128f"
+#define slhdsashake192s_evp_type 0
+#define slhdsashake192s_input_type "slhdsashake192s"
+#define slhdsashake192s_pem_type "slhdsashake192s"
+#define slhdsashake192f_evp_type 0
+#define slhdsashake192f_input_type "slhdsashake192f"
+#define slhdsashake192f_pem_type "slhdsashake192f"
+#define slhdsashake256s_evp_type 0
+#define slhdsashake256s_input_type "slhdsashake256s"
+#define slhdsashake256s_pem_type "slhdsashake256s"
+#define slhdsashake256f_evp_type 0
+#define slhdsashake256f_input_type "slhdsashake256f"
+#define slhdsashake256f_pem_type "slhdsashake256f"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -914,8 +900,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
 static OSSL_FUNC_decoder_newctx_fn key2any_newctx;
 static OSSL_FUNC_decoder_freectx_fn key2any_freectx;
 
-static void *key2any_newctx(void *provctx)
-{
+static void *key2any_newctx(void *provctx) {
     struct key2any_ctx_st *ctx = OPENSSL_zalloc(sizeof(*ctx));
 
     OQS_ENC_PRINTF("OQS ENC provider: key2any_newctx called\n");
@@ -928,8 +913,7 @@ static void *key2any_newctx(void *provctx)
     return ctx;
 }
 
-static void key2any_freectx(void *vctx)
-{
+static void key2any_freectx(void *vctx) {
     struct key2any_ctx_st *ctx = vctx;
 
     OQS_ENC_PRINTF("OQS ENC provider: key2any_freectx called\n");
@@ -938,8 +922,8 @@ static void key2any_freectx(void *vctx)
     OPENSSL_free(ctx);
 }
 
-static const OSSL_PARAM *key2any_settable_ctx_params(ossl_unused void *provctx)
-{
+static const OSSL_PARAM *
+key2any_settable_ctx_params(ossl_unused void *provctx) {
     static const OSSL_PARAM settables[] = {
         OSSL_PARAM_utf8_string(OSSL_ENCODER_PARAM_CIPHER, NULL, 0),
         OSSL_PARAM_utf8_string(OSSL_ENCODER_PARAM_PROPERTIES, NULL, 0),
@@ -951,16 +935,15 @@ static const OSSL_PARAM *key2any_settable_ctx_params(ossl_unused void *provctx)
     return settables;
 }
 
-static int key2any_set_ctx_params(void *vctx, const OSSL_PARAM params[])
-{
+static int key2any_set_ctx_params(void *vctx, const OSSL_PARAM params[]) {
     struct key2any_ctx_st *ctx = vctx;
     OSSL_LIB_CTX *libctx = ctx->provctx->libctx;
-    const OSSL_PARAM *cipherp
-        = OSSL_PARAM_locate_const(params, OSSL_ENCODER_PARAM_CIPHER);
-    const OSSL_PARAM *propsp
-        = OSSL_PARAM_locate_const(params, OSSL_ENCODER_PARAM_PROPERTIES);
-    const OSSL_PARAM *save_paramsp
-        = OSSL_PARAM_locate_const(params, OSSL_ENCODER_PARAM_SAVE_PARAMETERS);
+    const OSSL_PARAM *cipherp =
+        OSSL_PARAM_locate_const(params, OSSL_ENCODER_PARAM_CIPHER);
+    const OSSL_PARAM *propsp =
+        OSSL_PARAM_locate_const(params, OSSL_ENCODER_PARAM_PROPERTIES);
+    const OSSL_PARAM *save_paramsp =
+        OSSL_PARAM_locate_const(params, OSSL_ENCODER_PARAM_SAVE_PARAMETERS);
 
     OQS_ENC_PRINTF("OQS ENC provider: key2any_set_ctx_params called\n");
 
@@ -977,9 +960,8 @@ static int key2any_set_ctx_params(void *vctx, const OSSL_PARAM params[])
         EVP_CIPHER_free(ctx->cipher);
         ctx->cipher = NULL;
         ctx->cipher_intent = ciphername != NULL;
-        if (ciphername != NULL
-            && ((ctx->cipher = EVP_CIPHER_fetch(libctx, ciphername, props))
-                == NULL)) {
+        if (ciphername != NULL && ((ctx->cipher = EVP_CIPHER_fetch(
+                                        libctx, ciphername, props)) == NULL)) {
             return 0;
         }
     }
@@ -994,15 +976,14 @@ static int key2any_set_ctx_params(void *vctx, const OSSL_PARAM params[])
     return 1;
 }
 
-static int key2any_check_selection(int selection, int selection_mask)
-{
+static int key2any_check_selection(int selection, int selection_mask) {
     /*
      * The selections are kinda sorta "levels", i.e. each selection given
      * here is assumed to include those following.
      */
-    int checks[]
-        = {OSSL_KEYMGMT_SELECT_PRIVATE_KEY, OSSL_KEYMGMT_SELECT_PUBLIC_KEY,
-           OSSL_KEYMGMT_SELECT_ALL_PARAMETERS};
+    int checks[] = {OSSL_KEYMGMT_SELECT_PRIVATE_KEY,
+                    OSSL_KEYMGMT_SELECT_PUBLIC_KEY,
+                    OSSL_KEYMGMT_SELECT_ALL_PARAMETERS};
     size_t i;
 
     OQS_ENC_PRINTF3("OQS ENC provider: key2any_check_selection called with "
@@ -1038,8 +1019,7 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
                           const char *pemname, key_to_der_fn *writer,
                           OSSL_PASSPHRASE_CALLBACK *pwcb, void *pwcbarg,
                           key_to_paramstring_fn *key2paramstring,
-                          i2d_of_void *key2der)
-{
+                          i2d_of_void *key2der) {
     int ret = 0;
     int type = OBJ_sn2nid(typestr);
     OQSX_KEY *oqsk = (OQSX_KEY *)key;
@@ -1061,8 +1041,8 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
             ctx->pwcb = pwcb;
             ctx->pwcbarg = pwcbarg;
 
-            ret = writer(out, key, type, pemname, key2paramstring, key2der,
-                         ctx);
+            ret =
+                writer(out, key, type, pemname, key2paramstring, key2der, ctx);
         }
 
         BIO_free(out);
@@ -1074,27 +1054,27 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
 }
 
 #define DO_PRIVATE_KEY_selection_mask OSSL_KEYMGMT_SELECT_PRIVATE_KEY
-#define DO_PRIVATE_KEY(impl, type, kind, output)                             \
-    if ((selection & DO_PRIVATE_KEY_selection_mask) != 0)                    \
-        return key2any_encode(                                               \
-            ctx, cout, key, impl##_pem_type, impl##_pem_type " PRIVATE KEY", \
-            key_to_##kind##_##output##_priv_bio, cb, cbarg,                  \
+#define DO_PRIVATE_KEY(impl, type, kind, output)                               \
+    if ((selection & DO_PRIVATE_KEY_selection_mask) != 0)                      \
+        return key2any_encode(                                                 \
+            ctx, cout, key, impl##_pem_type, impl##_pem_type " PRIVATE KEY",   \
+            key_to_##kind##_##output##_priv_bio, cb, cbarg,                    \
             prepare_##type##_params, type##_##kind##_priv_to_der);
 
 #define DO_PUBLIC_KEY_selection_mask OSSL_KEYMGMT_SELECT_PUBLIC_KEY
-#define DO_PUBLIC_KEY(impl, type, kind, output)                             \
-    if ((selection & DO_PUBLIC_KEY_selection_mask) != 0)                    \
-        return key2any_encode(                                              \
-            ctx, cout, key, impl##_pem_type, impl##_pem_type " PUBLIC KEY", \
-            key_to_##kind##_##output##_pub_bio, cb, cbarg,                  \
+#define DO_PUBLIC_KEY(impl, type, kind, output)                                \
+    if ((selection & DO_PUBLIC_KEY_selection_mask) != 0)                       \
+        return key2any_encode(                                                 \
+            ctx, cout, key, impl##_pem_type, impl##_pem_type " PUBLIC KEY",    \
+            key_to_##kind##_##output##_pub_bio, cb, cbarg,                     \
             prepare_##type##_params, type##_##kind##_pub_to_der);
 
 #define DO_PARAMETERS_selection_mask OSSL_KEYMGMT_SELECT_ALL_PARAMETERS
-#define DO_PARAMETERS(impl, type, kind, output)                           \
-    if ((selection & DO_PARAMETERS_selection_mask) != 0)                  \
-        return key2any_encode(ctx, cout, key, impl##_pem_type,            \
-                              impl##_pem_type " PARAMETERS",              \
-                              key_to_##kind##_##output##_param_bio, NULL, \
+#define DO_PARAMETERS(impl, type, kind, output)                                \
+    if ((selection & DO_PARAMETERS_selection_mask) != 0)                       \
+        return key2any_encode(ctx, cout, key, impl##_pem_type,                 \
+                              impl##_pem_type " PARAMETERS",                   \
+                              key_to_##kind##_##output##_param_bio, NULL,      \
                               NULL, NULL, type##_##kind##_params_to_der);
 
 /*-
@@ -1131,16 +1111,16 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
  * passphrase callback has been passed to them.
  */
 #define DO_PrivateKeyInfo_selection_mask DO_PRIVATE_KEY_selection_mask
-#define DO_PrivateKeyInfo(impl, type, output) \
+#define DO_PrivateKeyInfo(impl, type, output)                                  \
     DO_PRIVATE_KEY(impl, type, pki, output)
 
 #define DO_EncryptedPrivateKeyInfo_selection_mask DO_PRIVATE_KEY_selection_mask
-#define DO_EncryptedPrivateKeyInfo(impl, type, output) \
+#define DO_EncryptedPrivateKeyInfo(impl, type, output)                         \
     DO_PRIVATE_KEY(impl, type, epki, output)
 
 /* SubjectPublicKeyInfo is a structure for public keys only */
 #define DO_SubjectPublicKeyInfo_selection_mask DO_PUBLIC_KEY_selection_mask
-#define DO_SubjectPublicKeyInfo(impl, type, output) \
+#define DO_SubjectPublicKeyInfo(impl, type, output)                            \
     DO_PUBLIC_KEY(impl, type, spki, output)
 
 /*
@@ -1159,23 +1139,23 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
  *                                      except public key
  */
 #define DO_type_specific_params_selection_mask DO_PARAMETERS_selection_mask
-#define DO_type_specific_params(impl, type, output) \
+#define DO_type_specific_params(impl, type, output)                            \
     DO_PARAMETERS(impl, type, type_specific, output)
-#define DO_type_specific_keypair_selection_mask \
+#define DO_type_specific_keypair_selection_mask                                \
     (DO_PRIVATE_KEY_selection_mask | DO_PUBLIC_KEY_selection_mask)
-#define DO_type_specific_keypair(impl, type, output)  \
-    DO_PRIVATE_KEY(impl, type, type_specific, output) \
+#define DO_type_specific_keypair(impl, type, output)                           \
+    DO_PRIVATE_KEY(impl, type, type_specific, output)                          \
     DO_PUBLIC_KEY(impl, type, type_specific, output)
-#define DO_type_specific_selection_mask      \
-    (DO_type_specific_keypair_selection_mask \
-     | DO_type_specific_params_selection_mask)
-#define DO_type_specific(impl, type, output)     \
-    DO_type_specific_keypair(impl, type, output) \
+#define DO_type_specific_selection_mask                                        \
+    (DO_type_specific_keypair_selection_mask |                                 \
+     DO_type_specific_params_selection_mask)
+#define DO_type_specific(impl, type, output)                                   \
+    DO_type_specific_keypair(impl, type, output)                               \
         DO_type_specific_params(impl, type, output)
-#define DO_type_specific_no_pub_selection_mask \
+#define DO_type_specific_no_pub_selection_mask                                 \
     (DO_PRIVATE_KEY_selection_mask | DO_PARAMETERS_selection_mask)
-#define DO_type_specific_no_pub(impl, type, output)   \
-    DO_PRIVATE_KEY(impl, type, type_specific, output) \
+#define DO_type_specific_no_pub(impl, type, output)                            \
+    DO_PRIVATE_KEY(impl, type, type_specific, output)                          \
     DO_type_specific_params(impl, type, output)
 
 /*
@@ -1204,8 +1184,7 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
     static OSSL_FUNC_encoder_encode_fn impl##_to_##kind##_##output##_encode;   \
                                                                                \
     static void *impl##_to_##kind##_##output##_import_object(                  \
-        void *vctx, int selection, const OSSL_PARAM params[])                  \
-    {                                                                          \
+        void *vctx, int selection, const OSSL_PARAM params[]) {                \
         struct key2any_ctx_st *ctx = vctx;                                     \
                                                                                \
         OQS_ENC_PRINTF("OQS ENC provider: _import_object called\n");           \
@@ -1213,22 +1192,19 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
             oqs##oqskemhyb##_##impl##_keymgmt_functions, ctx->provctx,         \
             selection, params);                                                \
     }                                                                          \
-    static void impl##_to_##kind##_##output##_free_object(void *key)           \
-    {                                                                          \
+    static void impl##_to_##kind##_##output##_free_object(void *key) {         \
         OQS_ENC_PRINTF("OQS ENC provider: _free_object called\n");             \
         oqs_prov_free_key(oqs##oqskemhyb##_##impl##_keymgmt_functions, key);   \
     }                                                                          \
     static int impl##_to_##kind##_##output##_does_selection(void *ctx,         \
-                                                            int selection)     \
-    {                                                                          \
+                                                            int selection) {   \
         OQS_ENC_PRINTF("OQS ENC provider: _does_selection called\n");          \
         return key2any_check_selection(selection, DO_##kind##_selection_mask); \
     }                                                                          \
     static int impl##_to_##kind##_##output##_encode(                           \
         void *ctx, OSSL_CORE_BIO *cout, const void *key,                       \
         const OSSL_PARAM key_abstract[], int selection,                        \
-        OSSL_PASSPHRASE_CALLBACK *cb, void *cbarg)                             \
-    {                                                                          \
+        OSSL_PASSPHRASE_CALLBACK *cb, void *cbarg) {                           \
         /* We don't deal with abstract objects */                              \
         OQS_ENC_PRINTF("OQS ENC provider: _encode called\n");                  \
         if (key_abstract != NULL) {                                            \
@@ -1241,22 +1217,22 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
         return 0;                                                              \
     }                                                                          \
     const OSSL_DISPATCH                                                        \
-        oqs_##impl##_to_##kind##_##output##_encoder_functions[]                \
-        = {{OSSL_FUNC_ENCODER_NEWCTX, (void (*)(void))key2any_newctx},         \
-           {OSSL_FUNC_ENCODER_FREECTX, (void (*)(void))key2any_freectx},       \
-           {OSSL_FUNC_ENCODER_SETTABLE_CTX_PARAMS,                             \
-            (void (*)(void))key2any_settable_ctx_params},                      \
-           {OSSL_FUNC_ENCODER_SET_CTX_PARAMS,                                  \
-            (void (*)(void))key2any_set_ctx_params},                           \
-           {OSSL_FUNC_ENCODER_DOES_SELECTION,                                  \
-            (void (*)(void))impl##_to_##kind##_##output##_does_selection},     \
-           {OSSL_FUNC_ENCODER_IMPORT_OBJECT,                                   \
-            (void (*)(void))impl##_to_##kind##_##output##_import_object},      \
-           {OSSL_FUNC_ENCODER_FREE_OBJECT,                                     \
-            (void (*)(void))impl##_to_##kind##_##output##_free_object},        \
-           {OSSL_FUNC_ENCODER_ENCODE,                                          \
-            (void (*)(void))impl##_to_##kind##_##output##_encode},             \
-           {0, NULL}}
+        oqs_##impl##_to_##kind##_##output##_encoder_functions[] = {            \
+            {OSSL_FUNC_ENCODER_NEWCTX, (void (*)(void))key2any_newctx},        \
+            {OSSL_FUNC_ENCODER_FREECTX, (void (*)(void))key2any_freectx},      \
+            {OSSL_FUNC_ENCODER_SETTABLE_CTX_PARAMS,                            \
+             (void (*)(void))key2any_settable_ctx_params},                     \
+            {OSSL_FUNC_ENCODER_SET_CTX_PARAMS,                                 \
+             (void (*)(void))key2any_set_ctx_params},                          \
+            {OSSL_FUNC_ENCODER_DOES_SELECTION,                                 \
+             (void (*)(void))impl##_to_##kind##_##output##_does_selection},    \
+            {OSSL_FUNC_ENCODER_IMPORT_OBJECT,                                  \
+             (void (*)(void))impl##_to_##kind##_##output##_import_object},     \
+            {OSSL_FUNC_ENCODER_FREE_OBJECT,                                    \
+             (void (*)(void))impl##_to_##kind##_##output##_free_object},       \
+            {OSSL_FUNC_ENCODER_ENCODE,                                         \
+             (void (*)(void))impl##_to_##kind##_##output##_encode},            \
+            {0, NULL}}
 
 /* ---------------------------------------------------------------------- */
 
@@ -1266,8 +1242,7 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
 #define LABELED_BUF_PRINT_WIDTH 15
 
 static int print_labeled_buf(BIO *out, const char *label,
-                             const unsigned char *buf, size_t buflen)
-{
+                             const unsigned char *buf, size_t buflen) {
     size_t i;
 
     if (BIO_printf(out, "%s\n", label) <= 0)
@@ -1281,8 +1256,8 @@ static int print_labeled_buf(BIO *out, const char *label,
                 return 0;
         }
 
-        if (BIO_printf(out, "%02x%s", buf[i], (i == buflen - 1) ? "" : ":")
-            <= 0)
+        if (BIO_printf(out, "%02x%s", buf[i], (i == buflen - 1) ? "" : ":") <=
+            0)
             return 0;
     }
     if (BIO_printf(out, "\n") <= 0)
@@ -1291,8 +1266,7 @@ static int print_labeled_buf(BIO *out, const char *label,
     return 1;
 }
 
-static int oqsx_to_text(BIO *out, const void *key, int selection)
-{
+static int oqsx_to_text(BIO *out, const void *key, int selection) {
     OQSX_KEY *okey = (OQSX_KEY *)key;
 
     if (out == NULL || okey == NULL) {
@@ -1316,8 +1290,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
         case KEY_TYPE_ECBP_HYB_KEM:
         case KEY_TYPE_ECX_HYB_KEM:
         case KEY_TYPE_HYB_SIG:
-            if (BIO_printf(out, "%s hybrid private key:\n", okey->tls_name)
-                <= 0)
+            if (BIO_printf(out, "%s hybrid private key:\n", okey->tls_name) <=
+                0)
                 return 0;
             break;
         default:
@@ -1354,11 +1328,10 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
             if (okey->numkeys > 1) { // hybrid key
                 char classic_label[200];
                 uint32_t classic_key_len = 0;
-                size_t fixed_pq_privkey_len
-                    = okey->oqsx_provider_ctx.oqsx_qs_ctx.kem
-                          ->length_secret_key;
-                size_t space_for_classical_privkey
-                    = okey->privkeylen - SIZE_OF_UINT32 - fixed_pq_privkey_len;
+                size_t fixed_pq_privkey_len =
+                    okey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
+                size_t space_for_classical_privkey =
+                    okey->privkeylen - SIZE_OF_UINT32 - fixed_pq_privkey_len;
                 sprintf(classic_label,
                         "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
                 DECODE_UINT32(classic_key_len, okey->privkey);
@@ -1372,8 +1345,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 /* finally print pure PQ key */
                 if (!print_labeled_buf(out, "PQ key material:",
                                        okey->comp_privkey[okey->numkeys - 1],
-                                       okey->privkeylen - classic_key_len
-                                           - SIZE_OF_UINT32))
+                                       okey->privkeylen - classic_key_len -
+                                           SIZE_OF_UINT32))
                     return 0;
             } else { // plain PQ key
                 if (!print_labeled_buf(out, "PQ key material:",
@@ -1388,10 +1361,10 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
             if (okey->numkeys > 1) { // hybrid key
                 char classic_label[200];
                 uint32_t classic_key_len = 0;
-                size_t fixed_pq_pubkey_len = okey->oqsx_provider_ctx.oqsx_qs_ctx
-                                                 .kem->length_public_key;
-                size_t space_for_classical_pubkey
-                    = okey->pubkeylen - SIZE_OF_UINT32 - fixed_pq_pubkey_len;
+                size_t fixed_pq_pubkey_len =
+                    okey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
+                size_t space_for_classical_pubkey =
+                    okey->pubkeylen - SIZE_OF_UINT32 - fixed_pq_pubkey_len;
                 DECODE_UINT32(classic_key_len, okey->pubkey);
                 if (classic_key_len > space_for_classical_pubkey) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
@@ -1405,8 +1378,8 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
                 /* finally print pure PQ key */
                 if (!print_labeled_buf(out, "PQ key material:",
                                        okey->comp_pubkey[okey->numkeys - 1],
-                                       okey->pubkeylen - classic_key_len
-                                           - SIZE_OF_UINT32))
+                                       okey->pubkeylen - classic_key_len -
+                                           SIZE_OF_UINT32))
                     return 0;
             } else { // PQ key only
                 if (!print_labeled_buf(out, "PQ key material:",
@@ -1420,20 +1393,14 @@ static int oqsx_to_text(BIO *out, const void *key, int selection)
     return 1;
 }
 
-static void *key2text_newctx(void *provctx)
-{
-    return provctx;
-}
+static void *key2text_newctx(void *provctx) { return provctx; }
 
-static void key2text_freectx(ossl_unused void *vctx)
-{
-}
+static void key2text_freectx(ossl_unused void *vctx) {}
 
 static int
 key2text_encode(void *vctx, const void *key, int selection, OSSL_CORE_BIO *cout,
                 int (*key2text)(BIO *out, const void *key, int selection),
-                OSSL_PASSPHRASE_CALLBACK *cb, void *cbarg)
-{
+                OSSL_PASSPHRASE_CALLBACK *cb, void *cbarg) {
     BIO *out = oqs_bio_new_from_core_bio(vctx, cout);
     int ret;
 
@@ -1446,44 +1413,41 @@ key2text_encode(void *vctx, const void *key, int selection, OSSL_CORE_BIO *cout,
     return ret;
 }
 
-#define MAKE_TEXT_ENCODER(oqskemhyb, impl)                                   \
-    static OSSL_FUNC_encoder_import_object_fn impl##2text_import_object;     \
-    static OSSL_FUNC_encoder_free_object_fn impl##2text_free_object;         \
-    static OSSL_FUNC_encoder_encode_fn impl##2text_encode;                   \
-                                                                             \
-    static void *impl##2text_import_object(void *ctx, int selection,         \
-                                           const OSSL_PARAM params[])        \
-    {                                                                        \
-        return oqs_prov_import_key(                                          \
-            oqs##oqskemhyb##_##impl##_keymgmt_functions, ctx, selection,     \
-            params);                                                         \
-    }                                                                        \
-    static void impl##2text_free_object(void *key)                           \
-    {                                                                        \
-        oqs_prov_free_key(oqs##oqskemhyb##_##impl##_keymgmt_functions, key); \
-    }                                                                        \
-    static int impl##2text_encode(                                           \
-        void *vctx, OSSL_CORE_BIO *cout, const void *key,                    \
-        const OSSL_PARAM key_abstract[], int selection,                      \
-        OSSL_PASSPHRASE_CALLBACK *cb, void *cbarg)                           \
-    {                                                                        \
-        /* We don't deal with abstract objects */                            \
-        if (key_abstract != NULL) {                                          \
-            ERR_raise(ERR_LIB_USER, ERR_R_PASSED_INVALID_ARGUMENT);          \
-            return 0;                                                        \
-        }                                                                    \
-        return key2text_encode(vctx, key, selection, cout, oqsx_to_text, cb, \
-                               cbarg);                                       \
-    }                                                                        \
-    const OSSL_DISPATCH oqs_##impl##_to_text_encoder_functions[]             \
-        = {{OSSL_FUNC_ENCODER_NEWCTX, (void (*)(void))key2text_newctx},      \
-           {OSSL_FUNC_ENCODER_FREECTX, (void (*)(void))key2text_freectx},    \
-           {OSSL_FUNC_ENCODER_IMPORT_OBJECT,                                 \
-            (void (*)(void))impl##2text_import_object},                      \
-           {OSSL_FUNC_ENCODER_FREE_OBJECT,                                   \
-            (void (*)(void))impl##2text_free_object},                        \
-           {OSSL_FUNC_ENCODER_ENCODE, (void (*)(void))impl##2text_encode},   \
-           {0, NULL}}
+#define MAKE_TEXT_ENCODER(oqskemhyb, impl)                                     \
+    static OSSL_FUNC_encoder_import_object_fn impl##2text_import_object;       \
+    static OSSL_FUNC_encoder_free_object_fn impl##2text_free_object;           \
+    static OSSL_FUNC_encoder_encode_fn impl##2text_encode;                     \
+                                                                               \
+    static void *impl##2text_import_object(void *ctx, int selection,           \
+                                           const OSSL_PARAM params[]) {        \
+        return oqs_prov_import_key(                                            \
+            oqs##oqskemhyb##_##impl##_keymgmt_functions, ctx, selection,       \
+            params);                                                           \
+    }                                                                          \
+    static void impl##2text_free_object(void *key) {                           \
+        oqs_prov_free_key(oqs##oqskemhyb##_##impl##_keymgmt_functions, key);   \
+    }                                                                          \
+    static int impl##2text_encode(                                             \
+        void *vctx, OSSL_CORE_BIO *cout, const void *key,                      \
+        const OSSL_PARAM key_abstract[], int selection,                        \
+        OSSL_PASSPHRASE_CALLBACK *cb, void *cbarg) {                           \
+        /* We don't deal with abstract objects */                              \
+        if (key_abstract != NULL) {                                            \
+            ERR_raise(ERR_LIB_USER, ERR_R_PASSED_INVALID_ARGUMENT);            \
+            return 0;                                                          \
+        }                                                                      \
+        return key2text_encode(vctx, key, selection, cout, oqsx_to_text, cb,   \
+                               cbarg);                                         \
+    }                                                                          \
+    const OSSL_DISPATCH oqs_##impl##_to_text_encoder_functions[] = {           \
+        {OSSL_FUNC_ENCODER_NEWCTX, (void (*)(void))key2text_newctx},           \
+        {OSSL_FUNC_ENCODER_FREECTX, (void (*)(void))key2text_freectx},         \
+        {OSSL_FUNC_ENCODER_IMPORT_OBJECT,                                      \
+         (void (*)(void))impl##2text_import_object},                           \
+        {OSSL_FUNC_ENCODER_FREE_OBJECT,                                        \
+         (void (*)(void))impl##2text_free_object},                             \
+        {OSSL_FUNC_ENCODER_ENCODE, (void (*)(void))impl##2text_encode},        \
+        {0, NULL}}
 
 /*
  * Replacements for i2d_{TYPE}PrivateKey, i2d_{TYPE}PublicKey,

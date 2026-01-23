@@ -18,18 +18,17 @@ static char *configfile = NULL;
 static char *certsdir = NULL;
 
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
-static int test_oqs_tlssig(const char *sig_name, int dtls_flag)
-{
+static int test_oqs_tlssig(const char *sig_name, int dtls_flag) {
     SSL_CTX *cctx = NULL, *sctx = NULL;
     SSL *clientssl = NULL, *serverssl = NULL;
     int ret = 1, testresult = 0;
     char certpath[300];
     char privkeypath[300];
-#    ifndef OPENSSL_SYS_VMS
+#ifndef OPENSSL_SYS_VMS
     const char *sep = "/";
-#    else
+#else
     const char *sep = "";
-#    endif
+#endif
 
     if (!alg_is_enabled(sig_name)) {
         fprintf(stderr, "Not testing disabled algorithm %s.\n", sig_name);
@@ -62,8 +61,8 @@ static int test_oqs_tlssig(const char *sig_name, int dtls_flag)
         goto err;
     }
 
-    testresult
-        = create_tls_objects(sctx, cctx, &serverssl, &clientssl, dtls_flag);
+    testresult =
+        create_tls_objects(sctx, cctx, &serverssl, &clientssl, dtls_flag);
 
     if (!testresult) {
         ret = -2;
@@ -95,12 +94,11 @@ EVP_SIGNATURE_get0_name(evpsig));
 }
 */
 
-static int test_signature(const OSSL_PARAM params[], void *data)
-{
+static int test_signature(const OSSL_PARAM params[], void *data) {
     int ret = 1;
     int *errcnt = (int *)data, *mintls = NULL;
-    const OSSL_PARAM *p
-        = OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_SIGALG_NAME);
+    const OSSL_PARAM *p =
+        OSSL_PARAM_locate_const(params, OSSL_CAPABILITY_TLS_SIGALG_NAME);
     if (p == NULL || p->data_type != OSSL_PARAM_UTF8_STRING) {
         ret = -1;
         goto err;
@@ -141,7 +139,7 @@ static int test_signature(const OSSL_PARAM params[], void *data)
         (*errcnt)++;
     }
 
-#    ifdef DTLS1_3_VERSION
+#ifdef DTLS1_3_VERSION
     ret = test_oqs_tlssig(sigalg_name, 1);
 
     if (ret >= 0) {
@@ -157,15 +155,14 @@ static int test_signature(const OSSL_PARAM params[], void *data)
         ERR_print_errors_fp(stderr);
         (*errcnt)++;
     }
-#    endif
+#endif
 
 err:
     OPENSSL_free(sigalg_name);
     return ret;
 }
 
-static int test_provider_signatures(OSSL_PROVIDER *provider, void *vctx)
-{
+static int test_provider_signatures(OSSL_PROVIDER *provider, void *vctx) {
     const char *provname = OSSL_PROVIDER_get0_name(provider);
 
     if (!strcmp(provname, PROVIDER_NAME_OQS))
@@ -176,8 +173,7 @@ static int test_provider_signatures(OSSL_PROVIDER *provider, void *vctx)
 }
 #endif /* OSSL_CAPABILITY_TLS_SIGALG_NAME */
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     size_t i;
     int errcnt = 0, test = 0;
 

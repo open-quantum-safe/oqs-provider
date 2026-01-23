@@ -11,7 +11,7 @@
 #include "test_common.h"
 
 #ifdef _MSC_VER
-#    define strtok_r strtok_s
+#define strtok_r strtok_s
 #endif
 
 #define MAX_DUMMY_ENTROPY_BUFFERLEN 0x100000
@@ -54,8 +54,7 @@ static char *configfile = NULL;
  * the test's library context
  *
  * \return 1 if the configuration is successfully loaded, else 0. */
-static int oqs_load_det_pseudorandom_generator()
-{
+static int oqs_load_det_pseudorandom_generator() {
     OSSL_PARAM params[2], *p = params;
     unsigned int entropy_len = MAX_DUMMY_ENTROPY_BUFFERLEN;
     int ret = 0;
@@ -104,8 +103,7 @@ err:
 /** \brief Resets the test's library context DRBG instances
  *
  * \return 1 if the configuration is successfully restarted, else 0. */
-static int oqs_reset_det_pseudorandom_generator()
-{
+static int oqs_reset_det_pseudorandom_generator() {
     OSSL_PARAM params[2], *p = params;
     unsigned int strength = 256;
 
@@ -151,8 +149,7 @@ static int oqs_reset_det_pseudorandom_generator()
 static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
                                   unsigned char **secenc, size_t *seclen,
                                   unsigned char **secdec, unsigned char **out,
-                                  size_t *outlen)
-{
+                                  size_t *outlen) {
     int testresult = 0;
     EVP_PKEY_CTX *ctx = NULL;
 
@@ -161,31 +158,29 @@ static int oqs_generate_kem_elems(const char *kemalg_name, EVP_PKEY **key,
     }
 
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult
-            = (ctx
-               = EVP_PKEY_CTX_new_from_name(libctx, kemalg_name, OQSPROV_PROPQ))
-                  != NULL
-              && EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
+        testresult = (ctx = EVP_PKEY_CTX_new_from_name(
+                          libctx, kemalg_name, OQSPROV_PROPQ)) != NULL &&
+                     EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key);
 
         if (!testresult)
             goto err;
         EVP_PKEY_CTX_free(ctx);
         ctx = NULL;
 
-        testresult
-            &= (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, *key, OQSPROV_PROPQ))
-                   != NULL
-               && EVP_PKEY_encapsulate_init(ctx, NULL)
-               && EVP_PKEY_encapsulate(ctx, NULL, outlen, NULL, seclen)
-               && (*out = OPENSSL_malloc(*outlen)) != NULL
-               && (*secenc = OPENSSL_malloc(*seclen)) != NULL
-               && memset(*secenc, 0x11, *seclen) != NULL
-               && (*secdec = OPENSSL_malloc(*seclen)) != NULL
-               && memset(*secdec, 0xff, *seclen) != NULL
-               && EVP_PKEY_encapsulate(ctx, *out, outlen, *secenc, seclen)
-               && EVP_PKEY_decapsulate_init(ctx, NULL)
-               && EVP_PKEY_decapsulate(ctx, *secdec, seclen, *out, *outlen)
-               && memcmp(*secenc, *secdec, *seclen) == 0;
+        testresult &=
+            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, *key, OQSPROV_PROPQ)) !=
+                NULL &&
+            EVP_PKEY_encapsulate_init(ctx, NULL) &&
+            EVP_PKEY_encapsulate(ctx, NULL, outlen, NULL, seclen) &&
+            (*out = OPENSSL_malloc(*outlen)) != NULL &&
+            (*secenc = OPENSSL_malloc(*seclen)) != NULL &&
+            memset(*secenc, 0x11, *seclen) != NULL &&
+            (*secdec = OPENSSL_malloc(*seclen)) != NULL &&
+            memset(*secdec, 0xff, *seclen) != NULL &&
+            EVP_PKEY_encapsulate(ctx, *out, outlen, *secenc, seclen) &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            EVP_PKEY_decapsulate(ctx, *secdec, seclen, *out, *outlen) &&
+            memcmp(*secenc, *secdec, *seclen) == 0;
     }
 
 err:
@@ -205,8 +200,7 @@ err:
  * \return 1 if the operations are successful, else 0. */
 static int oqs_generate_sig_elems(const char *sigalg_name, const char *msg,
                                   size_t msglen, EVP_PKEY **key,
-                                  unsigned char **sig, size_t *siglen)
-{
+                                  unsigned char **sig, size_t *siglen) {
     int testresult = 0;
     EVP_PKEY_CTX *ctx = NULL;
     EVP_MD_CTX *mdctx = NULL;
@@ -216,21 +210,20 @@ static int oqs_generate_sig_elems(const char *sigalg_name, const char *msg,
     }
 
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult = (ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
-                                                       OQSPROV_PROPQ))
-                         != NULL
-                     && EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key)
-                     && (mdctx = EVP_MD_CTX_new()) != NULL
-                     && EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx,
-                                              NULL, *key, NULL)
-                     && EVP_DigestSignUpdate(mdctx, msg, msglen)
-                     && EVP_DigestSignFinal(mdctx, NULL, siglen)
-                     && (*sig = OPENSSL_malloc(*siglen)) != NULL
-                     && EVP_DigestSignFinal(mdctx, *sig, siglen)
-                     && EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx,
-                                                NULL, *key, NULL)
-                     && EVP_DigestVerifyUpdate(mdctx, msg, msglen)
-                     && EVP_DigestVerifyFinal(mdctx, *sig, *siglen);
+        testresult = (ctx = EVP_PKEY_CTX_new_from_name(
+                          libctx, sigalg_name, OQSPROV_PROPQ)) != NULL &&
+                     EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, key) &&
+                     (mdctx = EVP_MD_CTX_new()) != NULL &&
+                     EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL,
+                                           *key, NULL) &&
+                     EVP_DigestSignUpdate(mdctx, msg, msglen) &&
+                     EVP_DigestSignFinal(mdctx, NULL, siglen) &&
+                     (*sig = OPENSSL_malloc(*siglen)) != NULL &&
+                     EVP_DigestSignFinal(mdctx, *sig, siglen) &&
+                     EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx,
+                                             NULL, *key, NULL) &&
+                     EVP_DigestVerifyUpdate(mdctx, msg, msglen) &&
+                     EVP_DigestVerifyFinal(mdctx, *sig, *siglen);
     }
 
 err:
@@ -245,8 +238,7 @@ err:
  * \param key2 A key pair.
  *
  * \return 1 if the compare operation is successful, else 0. */
-static int oqs_cmp_classical_keys(const EVP_PKEY *key1, const EVP_PKEY *key2)
-{
+static int oqs_cmp_classical_keys(const EVP_PKEY *key1, const EVP_PKEY *key2) {
     int ret = 0;
     unsigned char *pubkey1 = NULL, *pubkey2 = NULL, *privkey1 = NULL,
                   *privkey2 = NULL;
@@ -273,8 +265,8 @@ static int oqs_cmp_classical_keys(const EVP_PKEY *key1, const EVP_PKEY *key2)
     if (!ret) {
         goto out;
     }
-    ret &= memcmp(pubkey1, pubkey2, pubkey1_len) == 0
-           && memcmp(privkey1, privkey2, privkey1_len) == 0;
+    ret &= memcmp(pubkey1, pubkey2, pubkey1_len) == 0 &&
+           memcmp(privkey1, privkey2, privkey1_len) == 0;
 
 out:
     free(pubkey1);
@@ -289,8 +281,7 @@ out:
  * \param alg_name algorithm name.
  *
  * \return The associated index, or -1 in case no match is found. */
-int get_idx_info_classical(const char *alg_name)
-{
+int get_idx_info_classical(const char *alg_name) {
     char *name = NULL, *rest = NULL, *algdup = NULL;
     int idx = 0;
 
@@ -311,25 +302,25 @@ int get_idx_info_classical(const char *alg_name)
     }
 
     while (idx < OSSL_NELEM(info_classical)) {
-        if (strlen(name) >= strlen(info_classical[idx].name)
-            && !strncmp(name, info_classical[idx].name,
-                        strlen(info_classical[idx].name)))
+        if (strlen(name) >= strlen(info_classical[idx].name) &&
+            !strncmp(name, info_classical[idx].name,
+                     strlen(info_classical[idx].name)))
             goto err;
         idx++;
     }
 
-    if (idx == OSSL_NELEM(info_classical)
-        && rest) { // Might have encountered a 'composite'
-                   // alg, so try again with the second
-                   // part of the separator
+    if (idx == OSSL_NELEM(info_classical) &&
+        rest) { // Might have encountered a 'composite'
+                // alg, so try again with the second
+                // part of the separator
         name = rest;
         idx = 0;
     }
 
     while (idx < OSSL_NELEM(info_classical)) {
-        if (strlen(name) >= strlen(info_classical[idx].name)
-            && !strncmp(name, info_classical[idx].name,
-                        strlen(info_classical[idx].name)))
+        if (strlen(name) >= strlen(info_classical[idx].name) &&
+            !strncmp(name, info_classical[idx].name,
+                     strlen(info_classical[idx].name)))
             goto err;
         idx++;
     }
@@ -354,8 +345,7 @@ static int oqs_cmp_kem_elems(const char *kemalg_name, const unsigned char *sec1,
                              size_t sec1len, const unsigned char *sec2,
                              size_t sec2len, const unsigned char *ct1,
                              size_t ct1len, const unsigned char *ct2,
-                             size_t ct2len)
-{
+                             size_t ct2len) {
     int ret, idx;
 
     if ((idx = get_idx_info_classical(kemalg_name)) < 0) {
@@ -364,18 +354,16 @@ static int oqs_cmp_kem_elems(const char *kemalg_name, const unsigned char *sec1,
 
     ret = memcmp(sec1 + sec1len - info_classical[idx].sec_len,
                  sec2 + sec2len - info_classical[idx].sec_len,
-                 info_classical[idx].sec_len)
-              == 0
-          && memcmp(ct1 + ct1len - info_classical[idx].pubkey_len,
-                    ct2 + ct2len - info_classical[idx].pubkey_len,
-                    info_classical[idx].pubkey_len)
-                 == 0;
+                 info_classical[idx].sec_len) == 0 &&
+          memcmp(ct1 + ct1len - info_classical[idx].pubkey_len,
+                 ct2 + ct2len - info_classical[idx].pubkey_len,
+                 info_classical[idx].pubkey_len) == 0;
 
     if (ret)
         return ret;
 
-    ret = memcmp(sec1, sec2, info_classical[idx].sec_len) == 0
-          && memcmp(ct1, ct2, info_classical[idx].pubkey_len) == 0;
+    ret = memcmp(sec1, sec2, info_classical[idx].sec_len) == 0 &&
+          memcmp(ct1, ct2, info_classical[idx].pubkey_len) == 0;
 
     return ret;
 }
@@ -391,8 +379,7 @@ static int oqs_cmp_kem_elems(const char *kemalg_name, const unsigned char *sec1,
  * \return 1 if the compare operation is successful, else 0. */
 static int oqs_cmp_sig_elems(const char *sigalg_name, const unsigned char *sig1,
                              size_t sig1len, const unsigned char *sig2,
-                             size_t sig2len)
-{
+                             size_t sig2len) {
     int ret, idx;
     uint32_t classical_sig1_len = 0, classical_sig2_len = 0;
 
@@ -402,8 +389,7 @@ static int oqs_cmp_sig_elems(const char *sigalg_name, const unsigned char *sig1,
 
     ret = memcmp(sig1 + sig1len - info_classical[idx].sig_len,
                  sig2 + sig2len - info_classical[idx].sig_len,
-                 info_classical[idx].sig_len)
-          == 0;
+                 info_classical[idx].sig_len) == 0;
     if (ret)
         return ret;
 
@@ -417,8 +403,7 @@ static int oqs_cmp_sig_elems(const char *sigalg_name, const unsigned char *sig1,
         return ret;
 
     ret &= memcmp(sig1 + SIZE_OF_UINT32, sig2 + SIZE_OF_UINT32,
-                  classical_sig1_len)
-           == 0;
+                  classical_sig1_len) == 0;
 
     return ret;
 }
@@ -428,8 +413,7 @@ static int oqs_cmp_sig_elems(const char *sigalg_name, const unsigned char *sig1,
  * \param kemalg_name algorithm name.
  *
  * \return 1 if the compare operation is successful, else 0. */
-static int test_oqs_kems_libctx(const char *kemalg_name)
-{
+static int test_oqs_kems_libctx(const char *kemalg_name) {
     EVP_PKEY *key1 = NULL, *key2 = NULL;
     unsigned char *out1 = NULL, *out2 = NULL;
     unsigned char *secenc1 = NULL, *secenc2 = NULL;
@@ -442,11 +426,10 @@ static int test_oqs_kems_libctx(const char *kemalg_name)
         fprintf(stderr, "Not testing disabled algorithm %s.\n", kemalg_name);
         return 1;
     }
-    testresult
-        &= oqs_generate_kem_elems(kemalg_name, &key1, &secenc1, &sec1len,
-                                  &secdec1, &out1, &out1len)
-           && oqs_generate_kem_elems(kemalg_name, &key2, &secenc2, &sec2len,
-                                     &secdec2, &out2, &out2len);
+    testresult &= oqs_generate_kem_elems(kemalg_name, &key1, &secenc1, &sec1len,
+                                         &secdec1, &out1, &out1len) &&
+                  oqs_generate_kem_elems(kemalg_name, &key2, &secenc2, &sec2len,
+                                         &secdec2, &out2, &out2len);
     if (!testresult)
         goto err;
 
@@ -474,8 +457,7 @@ err:
  * \param sigalg_name algorithm name.
  *
  * \return 1 if the compare operation is successful, else 0. */
-static int test_oqs_sigs_libctx(const char *sigalg_name)
-{
+static int test_oqs_sigs_libctx(const char *sigalg_name) {
     EVP_PKEY *key1 = NULL, *key2 = NULL;
     const char msg[] = "The quick brown fox jumps over... you know what";
     unsigned char *sig1 = NULL, *sig2 = NULL;
@@ -488,9 +470,9 @@ static int test_oqs_sigs_libctx(const char *sigalg_name)
         return 1;
     }
     testresult &= oqs_generate_sig_elems(sigalg_name, msg, sizeof(msg), &key1,
-                                         &sig1, &sig1len)
-                  && oqs_generate_sig_elems(sigalg_name, msg, sizeof(msg),
-                                            &key2, &sig2, &sig2len);
+                                         &sig1, &sig1len) &&
+                  oqs_generate_sig_elems(sigalg_name, msg, sizeof(msg), &key2,
+                                         &sig2, &sig2len);
     if (!testresult)
         goto err;
 
@@ -511,8 +493,7 @@ err:
     return testresult;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     size_t i;
     int errcnt = 0, test = 0, query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;
@@ -528,8 +509,8 @@ int main(int argc, char *argv[])
 
     oqsprov = OSSL_PROVIDER_load(libctx, modulename);
 
-    kemalgs
-        = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
+    kemalgs =
+        OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
     if (kemalgs) {
         for (; kemalgs->algorithm_names != NULL; kemalgs++) {
             if (!is_kem_algorithm_hybrid(kemalgs->algorithm_names)) {

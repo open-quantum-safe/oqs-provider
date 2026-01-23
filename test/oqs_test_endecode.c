@@ -51,8 +51,7 @@ static ENDECODE_PARAMS test_params_list[] = {
 };
 
 static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
-                                  OSSL_PARAM *genparams)
-{
+                                  OSSL_PARAM *genparams) {
     EVP_PKEY *pkey = NULL;
     EVP_PKEY_CTX *ctx = NULL;
 
@@ -70,25 +69,24 @@ static EVP_PKEY *oqstest_make_key(const char *type, EVP_PKEY *template,
      * No real need to check the errors other than for the cascade
      * effect.  |pkey| will simply remain NULL if something goes wrong.
      */
-    (void)(ctx != NULL && EVP_PKEY_keygen_init(ctx) > 0
-           && (genparams == NULL || EVP_PKEY_CTX_set_params(ctx, genparams) > 0)
-           && EVP_PKEY_keygen(ctx, &pkey) > 0);
+    (void)(ctx != NULL && EVP_PKEY_keygen_init(ctx) > 0 &&
+           (genparams == NULL || EVP_PKEY_CTX_set_params(ctx, genparams) > 0) &&
+           EVP_PKEY_keygen(ctx, &pkey) > 0);
     EVP_PKEY_CTX_free(ctx);
     return pkey;
 }
 
 static int encode_EVP_PKEY_prov(const EVP_PKEY *pkey, const char *format,
                                 const char *structure, const char *pass,
-                                const int selection, BUF_MEM **encoded)
-{
+                                const int selection, BUF_MEM **encoded) {
     OSSL_ENCODER_CTX *ectx;
     BIO *mem_ser = NULL;
     BUF_MEM *mem_buf = NULL;
     const char *cipher = "AES-256-CBC";
     int ok = 0;
 
-    ectx = OSSL_ENCODER_CTX_new_for_pkey(pkey, selection, format, structure,
-                                         NULL);
+    ectx =
+        OSSL_ENCODER_CTX_new_for_pkey(pkey, selection, format, structure, NULL);
     if (ectx == NULL) {
         fprintf(stderr, "No suitable encoder found\n");
         goto end;
@@ -128,8 +126,7 @@ end:
 static int decode_EVP_PKEY_prov(const char *input_type, const char *structure,
                                 const char *pass, const char *keytype,
                                 const int selection, EVP_PKEY **object,
-                                const void *encoded, const long encoded_len)
-{
+                                const void *encoded, const long encoded_len) {
     EVP_PKEY *pkey = NULL;
     OSSL_DECODER_CTX *dctx = NULL;
     BIO *encoded_bio = NULL;
@@ -166,8 +163,7 @@ end:
     return ok;
 }
 
-static int test_oqs_encdec(const char *alg_name)
-{
+static int test_oqs_encdec(const char *alg_name) {
     EVP_PKEY *pkey = NULL;
     EVP_PKEY *decoded_pkey = NULL;
     BUF_MEM *encoded = NULL;
@@ -219,8 +215,7 @@ end:
     return ok;
 }
 
-static int test_algs(const OSSL_ALGORITHM *algs)
-{
+static int test_algs(const OSSL_ALGORITHM *algs) {
     int errcnt = 0;
     for (; algs->algorithm_names != NULL; algs++) {
         switch (test_oqs_encdec(algs->algorithm_names)) {
@@ -246,8 +241,7 @@ static int test_algs(const OSSL_ALGORITHM *algs)
     return errcnt;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     size_t i;
     int errcnt = 0, test = 0, query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;

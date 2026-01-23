@@ -12,8 +12,7 @@ static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
 static char *configfile = NULL;
 
-static int test_oqs_kems(const char *kemalg_name)
-{
+static int test_oqs_kems(const char *kemalg_name) {
     EVP_MD_CTX *mdctx = NULL;
     EVP_PKEY_CTX *ctx = NULL;
     EVP_PKEY *key = NULL, *peer = NULL;
@@ -33,54 +32,51 @@ static int test_oqs_kems(const char *kemalg_name)
     // limit testing to oqsprovider as other implementations may support
     // different key formats than what is defined by NIST
     if (OSSL_PROVIDER_available(libctx, "default")) {
-        testresult &= (ctx = EVP_PKEY_CTX_new_from_name(libctx, kemalg_name,
-                                                        OQSPROV_PROPQ))
-                          != NULL
-                      && EVP_PKEY_keygen_init(ctx)
-                      && EVP_PKEY_generate(ctx, &key);
+        testresult &= (ctx = EVP_PKEY_CTX_new_from_name(
+                           libctx, kemalg_name, OQSPROV_PROPQ)) != NULL &&
+                      EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key);
 
         if (!testresult)
             goto err;
         EVP_PKEY_CTX_free(ctx);
         ctx = NULL;
 
-        testresult
-            &= (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ))
-                   != NULL
-               && EVP_PKEY_encapsulate_init(ctx, NULL)
-               && EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen)
-               && (out = OPENSSL_malloc(outlen)) != NULL
-               && (secenc = OPENSSL_malloc(seclen)) != NULL
-               && memset(secenc, 0x11, seclen) != NULL
-               && (secdec = OPENSSL_malloc(seclen)) != NULL
-               && memset(secdec, 0xff, seclen) != NULL
-               && EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen)
-               && EVP_PKEY_decapsulate_init(ctx, NULL)
-               && EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen)
-               && memcmp(secenc, secdec, seclen) == 0;
+        testresult &=
+            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) !=
+                NULL &&
+            EVP_PKEY_encapsulate_init(ctx, NULL) &&
+            EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen) &&
+            (out = OPENSSL_malloc(outlen)) != NULL &&
+            (secenc = OPENSSL_malloc(seclen)) != NULL &&
+            memset(secenc, 0x11, seclen) != NULL &&
+            (secdec = OPENSSL_malloc(seclen)) != NULL &&
+            memset(secdec, 0xff, seclen) != NULL &&
+            EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen) &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) &&
+            memcmp(secenc, secdec, seclen) == 0;
         if (!testresult)
             goto err;
 
         out[0] = ~out[0];
         out[outlen - 1] = ~out[outlen - 1];
-        testresult
-            &= memset(secdec, 0xff, seclen) != NULL
-               && EVP_PKEY_decapsulate_init(ctx, NULL)
-               && (EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) || 1)
-               && memcmp(secenc, secdec, seclen) != 0;
+        testresult &=
+            memset(secdec, 0xff, seclen) != NULL &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            (EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) || 1) &&
+            memcmp(secenc, secdec, seclen) != 0;
         if (!testresult)
             goto err;
 
         // Now encapsulation from public key context
-        testresult
-            &= EVP_PKEY_get_octet_string_param(key, OSSL_PKEY_PARAM_PUB_KEY,
-                                               NULL, 0, &publen)
-               && (pubkey = OPENSSL_malloc(publen)) != NULL
-               && EVP_PKEY_get_octet_string_param(key, OSSL_PKEY_PARAM_PUB_KEY,
-                                                  pubkey, publen, NULL)
-               && (peer = EVP_PKEY_new_raw_public_key_ex(
-                       libctx, kemalg_name, OQSPROV_PROPQ, pubkey, publen))
-                      != NULL;
+        testresult &=
+            EVP_PKEY_get_octet_string_param(key, OSSL_PKEY_PARAM_PUB_KEY, NULL,
+                                            0, &publen) &&
+            (pubkey = OPENSSL_malloc(publen)) != NULL &&
+            EVP_PKEY_get_octet_string_param(key, OSSL_PKEY_PARAM_PUB_KEY,
+                                            pubkey, publen, NULL) &&
+            (peer = EVP_PKEY_new_raw_public_key_ex(
+                 libctx, kemalg_name, OQSPROV_PROPQ, pubkey, publen)) != NULL;
 
         if (!testresult)
             goto err;
@@ -91,15 +87,15 @@ static int test_oqs_kems(const char *kemalg_name)
         OPENSSL_free(secenc);
         secenc = NULL;
 
-        testresult
-            &= (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, peer, OQSPROV_PROPQ))
-                   != NULL
-               && EVP_PKEY_encapsulate_init(ctx, NULL)
-               && EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen)
-               && (out = OPENSSL_malloc(outlen)) != NULL
-               && (secenc = OPENSSL_malloc(seclen)) != NULL
-               && memset(secenc, 0x11, seclen) != NULL
-               && EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen);
+        testresult &=
+            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, peer, OQSPROV_PROPQ)) !=
+                NULL &&
+            EVP_PKEY_encapsulate_init(ctx, NULL) &&
+            EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen) &&
+            (out = OPENSSL_malloc(outlen)) != NULL &&
+            (secenc = OPENSSL_malloc(seclen)) != NULL &&
+            memset(secenc, 0x11, seclen) != NULL &&
+            EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen);
 
         if (!testresult)
             goto err;
@@ -108,22 +104,22 @@ static int test_oqs_kems(const char *kemalg_name)
         OPENSSL_free(secdec);
         secdec = NULL;
 
-        testresult
-            &= (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ))
-                   != NULL
-               && EVP_PKEY_decapsulate_init(ctx, NULL)
-               && (secdec = OPENSSL_malloc(seclen)) != NULL
-               && memset(secdec, 0xff, seclen) != NULL
-               && EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen)
-               && memcmp(secenc, secdec, seclen) == 0;
+        testresult &=
+            (ctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) !=
+                NULL &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            (secdec = OPENSSL_malloc(seclen)) != NULL &&
+            memset(secdec, 0xff, seclen) != NULL &&
+            EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) &&
+            memcmp(secenc, secdec, seclen) == 0;
 
         out[0] = ~out[0];
         out[outlen - 1] = ~out[outlen - 1];
-        testresult
-            &= memset(secdec, 0xff, seclen) != NULL
-               && EVP_PKEY_decapsulate_init(ctx, NULL)
-               && (EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) || 1)
-               && memcmp(secenc, secdec, seclen) != 0;
+        testresult &=
+            memset(secdec, 0xff, seclen) != NULL &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            (EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) || 1) &&
+            memcmp(secenc, secdec, seclen) != 0;
     }
 
 err:
@@ -139,8 +135,7 @@ err:
 
 #define nelem(a) (sizeof(a) / sizeof((a)[0]))
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     size_t i;
     int errcnt = 0, test = 0, query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;
@@ -155,8 +150,8 @@ int main(int argc, char *argv[])
 
     oqsprov = OSSL_PROVIDER_load(libctx, modulename);
 
-    kemalgs
-        = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
+    kemalgs =
+        OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
     if (kemalgs) {
         for (; kemalgs->algorithm_names != NULL; kemalgs++) {
             if (test_oqs_kems(kemalgs->algorithm_names)) {

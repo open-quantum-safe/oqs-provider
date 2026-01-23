@@ -41,7 +41,7 @@ A **Contributor** is a Community Member who contributes directly to the project 
 
 ### Committers
 
-A **Committer** is a Contributor with increased experience in the project who helps review pull requests and actively participates in discussions about the project. Committers will be members of the open-quantum-safe GitHub organization and will have "write" permissions in GitHub.
+A **Committer** is a Contributor with increased interest in the project who helps review pull requests and actively participates in discussions about the project. Committers will be members of the open-quantum-safe GitHub organization and will have "write" permissions in GitHub.
 
 Responsibilities:
 
@@ -62,14 +62,11 @@ Responsibilities:
 
 ### Maintainers
 
-A **Maintainer** is a Committer who makes significant and sustained contributions to the project, and is committed to guiding the direction of the project. Maintainers will have "administrative" permissions in GitHub and thus are also able to act as Release managers.
+A **Maintainer** is a Committer and Release Manager. Maintainers will have "administrative" permissions in GitHub.
 
 Responsibilities:
 
-- Oversee the overall project health and growth.
-- Lead communication for the project.
-- Define general and technical guidelines for the project.
-- Identify priorities.
+- Assess project status and role assignments
 
 ### Change of role
 

@@ -475,7 +475,10 @@ int oqs_patch_oids(void) {
 }
 
 #define SIGALG(NAMES, SECBITS, FUNC)                                           \
-    {NAMES, "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "", FUNC}
+    {                                                                          \
+        NAMES, "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",  \
+            FUNC                                                               \
+    }
 #define KEMBASEALG(NAMES, SECBITS)                                             \
     {"" #NAMES "",                                                             \
      "provider=oqsprovider,oqsprovider.security_bits=" #SECBITS "",            \
@@ -1083,7 +1086,8 @@ __attribute__((visibility("default")))
 #endif /* !OQS_PROVIDER_STATIC && !_WIN32 */
 int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                  const OSSL_DISPATCH *in,
-                                 const OSSL_DISPATCH **out, void **provctx) {
+                                 const OSSL_DISPATCH **out, void **provctx)
+{
     const OSSL_DISPATCH *orig_in = in;
     OSSL_FUNC_core_obj_create_fn *c_obj_create = NULL;
 

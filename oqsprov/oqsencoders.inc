@@ -8,33 +8,39 @@
  */
 
 #ifndef ENCODER_PROVIDER
-#    error Macro ENCODER_PROVIDER undefined
+#error Macro ENCODER_PROVIDER undefined
 #endif
 
-#define ENCODER_STRUCTURE_type_specific_keypair   "type-specific"
-#define ENCODER_STRUCTURE_type_specific_params    "type-specific"
-#define ENCODER_STRUCTURE_type_specific           "type-specific"
-#define ENCODER_STRUCTURE_type_specific_no_pub    "type-specific"
-#define ENCODER_STRUCTURE_PKCS8                   "pkcs8"
-#define ENCODER_STRUCTURE_SubjectPublicKeyInfo    "SubjectPublicKeyInfo"
-#define ENCODER_STRUCTURE_PrivateKeyInfo          "PrivateKeyInfo"
+#define ENCODER_STRUCTURE_type_specific_keypair "type-specific"
+#define ENCODER_STRUCTURE_type_specific_params "type-specific"
+#define ENCODER_STRUCTURE_type_specific "type-specific"
+#define ENCODER_STRUCTURE_type_specific_no_pub "type-specific"
+#define ENCODER_STRUCTURE_PKCS8 "pkcs8"
+#define ENCODER_STRUCTURE_SubjectPublicKeyInfo "SubjectPublicKeyInfo"
+#define ENCODER_STRUCTURE_PrivateKeyInfo "PrivateKeyInfo"
 #define ENCODER_STRUCTURE_EncryptedPrivateKeyInfo "EncryptedPrivateKeyInfo"
-#define ENCODER_STRUCTURE_PKCS1                   "pkcs1"
-#define ENCODER_STRUCTURE_PKCS3                   "pkcs3"
+#define ENCODER_STRUCTURE_PKCS1 "pkcs1"
+#define ENCODER_STRUCTURE_PKCS3 "pkcs3"
 
 /* Arguments are prefixed with '_' to avoid build breaks on certain platforms */
-#define ENCODER_TEXT(_name, _sym)                        \
-    {_name, "provider=" ENCODER_PROVIDER ",output=text", \
-     (oqs_##_sym##_to_text_encoder_functions)}
-#define ENCODER(_name, _sym, _fips, _output)                  \
-    {_name, "provider=" ENCODER_PROVIDER ",output=" #_output, \
-     (oqs_##_sym##_to_##_output##_encoder_functions)}
+#define ENCODER_TEXT(_name, _sym)                                              \
+    {                                                                          \
+        _name, "provider=" ENCODER_PROVIDER ",output=text",                    \
+            (oqs_##_sym##_to_text_encoder_functions)                           \
+    }
+#define ENCODER(_name, _sym, _fips, _output)                                   \
+    {                                                                          \
+        _name, "provider=" ENCODER_PROVIDER ",output=" #_output,               \
+            (oqs_##_sym##_to_##_output##_encoder_functions)                    \
+    }
 
-#define ENCODER_w_structure(_name, _sym, _output, _structure) \
-    {_name,                                                   \
-     "provider=" ENCODER_PROVIDER ",output=" #_output         \
-     ",structure=" ENCODER_STRUCTURE_##_structure,            \
-     (oqs_##_sym##_to_##_structure##_##_output##_encoder_functions)}
+#define ENCODER_w_structure(_name, _sym, _output, _structure)                  \
+    {                                                                          \
+        _name,                                                                 \
+            "provider=" ENCODER_PROVIDER ",output=" #_output                   \
+            ",structure=" ENCODER_STRUCTURE_##_structure,                      \
+            (oqs_##_sym##_to_##_structure##_##_output##_encoder_functions)     \
+    }
 
 /*
  * Entries for human text "encoders"
@@ -75,7 +81,7 @@
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_START
 #ifdef OQS_KEM_ENCODERS
 
-#    ifdef OQS_ENABLE_KEM_frodokem_640_aes
+#ifdef OQS_ENABLE_KEM_frodokem_640_aes
 ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("frodo640aes", frodo640aes, pem, PrivateKeyInfo),
     ENCODER_w_structure("frodo640aes", frodo640aes, der,
@@ -111,8 +117,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("x25519_frodo640aes", x25519_frodo640aes, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("x25519_frodo640aes", x25519_frodo640aes),
-#    endif
-#    ifdef OQS_ENABLE_KEM_frodokem_640_shake
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_640_shake
     ENCODER_w_structure("frodo640shake", frodo640shake, der, PrivateKeyInfo),
     ENCODER_w_structure("frodo640shake", frodo640shake, pem, PrivateKeyInfo),
     ENCODER_w_structure("frodo640shake", frodo640shake, der,
@@ -150,8 +156,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("x25519_frodo640shake", x25519_frodo640shake, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("x25519_frodo640shake", x25519_frodo640shake),
-#    endif
-#    ifdef OQS_ENABLE_KEM_frodokem_976_aes
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_976_aes
     ENCODER_w_structure("frodo976aes", frodo976aes, der, PrivateKeyInfo),
     ENCODER_w_structure("frodo976aes", frodo976aes, pem, PrivateKeyInfo),
     ENCODER_w_structure("frodo976aes", frodo976aes, der,
@@ -187,8 +193,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("x448_frodo976aes", x448_frodo976aes, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("x448_frodo976aes", x448_frodo976aes),
-#    endif
-#    ifdef OQS_ENABLE_KEM_frodokem_976_shake
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_976_shake
     ENCODER_w_structure("frodo976shake", frodo976shake, der, PrivateKeyInfo),
     ENCODER_w_structure("frodo976shake", frodo976shake, pem, PrivateKeyInfo),
     ENCODER_w_structure("frodo976shake", frodo976shake, der,
@@ -226,8 +232,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("x448_frodo976shake", x448_frodo976shake, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("x448_frodo976shake", x448_frodo976shake),
-#    endif
-#    ifdef OQS_ENABLE_KEM_frodokem_1344_aes
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_1344_aes
     ENCODER_w_structure("frodo1344aes", frodo1344aes, der, PrivateKeyInfo),
     ENCODER_w_structure("frodo1344aes", frodo1344aes, pem, PrivateKeyInfo),
     ENCODER_w_structure("frodo1344aes", frodo1344aes, der,
@@ -252,8 +258,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("p521_frodo1344aes", p521_frodo1344aes, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("p521_frodo1344aes", p521_frodo1344aes),
-#    endif
-#    ifdef OQS_ENABLE_KEM_frodokem_1344_shake
+#endif
+#ifdef OQS_ENABLE_KEM_frodokem_1344_shake
     ENCODER_w_structure("frodo1344shake", frodo1344shake, der, PrivateKeyInfo),
     ENCODER_w_structure("frodo1344shake", frodo1344shake, pem, PrivateKeyInfo),
     ENCODER_w_structure("frodo1344shake", frodo1344shake, der,
@@ -278,8 +284,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("p521_frodo1344shake", p521_frodo1344shake, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("p521_frodo1344shake", p521_frodo1344shake),
-#    endif
-#    ifdef OQS_ENABLE_KEM_ml_kem_512
+#endif
+#ifdef OQS_ENABLE_KEM_ml_kem_512
     ENCODER_w_structure("mlkem512", mlkem512, der, PrivateKeyInfo),
     ENCODER_w_structure("mlkem512", mlkem512, pem, PrivateKeyInfo),
     ENCODER_w_structure("mlkem512", mlkem512, der, EncryptedPrivateKeyInfo),
@@ -322,8 +328,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("bp256_mlkem512", bp256_mlkem512, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("bp256_mlkem512", bp256_mlkem512),
-#    endif
-#    ifdef OQS_ENABLE_KEM_ml_kem_768
+#endif
+#ifdef OQS_ENABLE_KEM_ml_kem_768
     ENCODER_w_structure("mlkem768", mlkem768, der, PrivateKeyInfo),
     ENCODER_w_structure("mlkem768", mlkem768, pem, PrivateKeyInfo),
     ENCODER_w_structure("mlkem768", mlkem768, der, EncryptedPrivateKeyInfo),
@@ -388,8 +394,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("SecP256r1MLKEM768", SecP256r1MLKEM768, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("SecP256r1MLKEM768", SecP256r1MLKEM768),
-#    endif
-#    ifdef OQS_ENABLE_KEM_ml_kem_1024
+#endif
+#ifdef OQS_ENABLE_KEM_ml_kem_1024
     ENCODER_w_structure("mlkem1024", mlkem1024, der, PrivateKeyInfo),
     ENCODER_w_structure("mlkem1024", mlkem1024, pem, PrivateKeyInfo),
     ENCODER_w_structure("mlkem1024", mlkem1024, der, EncryptedPrivateKeyInfo),
@@ -434,8 +440,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("bp512_mlkem1024", bp512_mlkem1024, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("bp512_mlkem1024", bp512_mlkem1024),
-#    endif
-#    ifdef OQS_ENABLE_KEM_bike_l1
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l1
     ENCODER_w_structure("bikel1", bikel1, der, PrivateKeyInfo),
     ENCODER_w_structure("bikel1", bikel1, pem, PrivateKeyInfo),
     ENCODER_w_structure("bikel1", bikel1, der, EncryptedPrivateKeyInfo),
@@ -463,8 +469,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("x25519_bikel1", x25519_bikel1, pem,
                         SubjectPublicKeyInfo),
     ENCODER_TEXT("x25519_bikel1", x25519_bikel1),
-#    endif
-#    ifdef OQS_ENABLE_KEM_bike_l3
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l3
     ENCODER_w_structure("bikel3", bikel3, der, PrivateKeyInfo),
     ENCODER_w_structure("bikel3", bikel3, pem, PrivateKeyInfo),
     ENCODER_w_structure("bikel3", bikel3, der, EncryptedPrivateKeyInfo),
@@ -490,8 +496,8 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("x448_bikel3", x448_bikel3, der, SubjectPublicKeyInfo),
     ENCODER_w_structure("x448_bikel3", x448_bikel3, pem, SubjectPublicKeyInfo),
     ENCODER_TEXT("x448_bikel3", x448_bikel3),
-#    endif
-#    ifdef OQS_ENABLE_KEM_bike_l5
+#endif
+#ifdef OQS_ENABLE_KEM_bike_l5
     ENCODER_w_structure("bikel5", bikel5, der, PrivateKeyInfo),
     ENCODER_w_structure("bikel5", bikel5, pem, PrivateKeyInfo),
     ENCODER_w_structure("bikel5", bikel5, der, EncryptedPrivateKeyInfo),
@@ -508,7 +514,7 @@ ENCODER_w_structure("frodo640aes", frodo640aes, der, PrivateKeyInfo),
     ENCODER_w_structure("p521_bikel5", p521_bikel5, der, SubjectPublicKeyInfo),
     ENCODER_w_structure("p521_bikel5", p521_bikel5, pem, SubjectPublicKeyInfo),
     ENCODER_TEXT("p521_bikel5", p521_bikel5),
-#    endif
+#endif
 
 #endif /* OQS_KEM_ENCODERS */
 

@@ -327,7 +327,7 @@ kems:
     nid_hybrid: '65041'
     oqs_alg: 'OQS_KEM_alg_bike_l1'
     enable_kem: true
-    enable_tls: false
+    enable_tls: true
     extra_nids:
       current:
         - hybrid_group: "x25519"

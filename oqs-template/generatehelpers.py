@@ -56,11 +56,6 @@ def get_kem_nistlevel(alg, docsdir):
 def get_sig_nistlevel(family, alg, docsdir):
     # translate family names in generate.yml to directory names for liboqs algorithm datasheets
     if family['family'] == 'CRYSTALS-Dilithium': datasheetname = 'dilithium'
-    elif family['family'] == 'SPHINCS-Haraka': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHA256': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHAKE256': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHA2': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHAKE': datasheetname = 'sphincs'
     else: datasheetname = family['family'].lower().replace('-', '_')
     # load datasheet
     algymlfilename = os.path.join(docsdir, 'algorithms', 'sig', '{:s}.yml'.format(datasheetname))

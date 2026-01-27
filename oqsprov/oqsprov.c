@@ -57,9 +57,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 210
+#define OQS_OID_CNT 188
 #else
-#define OQS_OID_CNT 134
+#define OQS_OID_CNT 112
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -177,28 +177,6 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "falconpadded1024",
     "1.3.9999.3.20",
     "p521_falconpadded1024",
-    "1.3.9999.6.4.13",
-    "sphincssha2128fsimple",
-    "1.3.9999.6.4.14",
-    "p256_sphincssha2128fsimple",
-    "1.3.9999.6.4.15",
-    "rsa3072_sphincssha2128fsimple",
-    "1.3.9999.6.4.16",
-    "sphincssha2128ssimple",
-    "1.3.9999.6.4.17",
-    "p256_sphincssha2128ssimple",
-    "1.3.9999.6.4.18",
-    "rsa3072_sphincssha2128ssimple",
-    "1.3.9999.6.5.10",
-    "sphincssha2192fsimple",
-    "1.3.9999.6.5.11",
-    "p384_sphincssha2192fsimple",
-    "1.3.9999.6.7.13",
-    "sphincsshake128fsimple",
-    "1.3.9999.6.7.14",
-    "p256_sphincsshake128fsimple",
-    "1.3.9999.6.7.15",
-    "rsa3072_sphincsshake128fsimple",
     "1.3.9999.8.1.3",
     "mayo1",
     "1.3.9999.8.1.4",
@@ -414,106 +392,84 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[30 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_FALCONPADDED1024")))
             oqs_oid_alg_list[32 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_SPHINCSSHA2128FSIMPLE")))
-            oqs_oid_alg_list[34 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_P256_SPHINCSSHA2128FSIMPLE")))
-            oqs_oid_alg_list[36 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHA2128FSIMPLE")))
-            oqs_oid_alg_list[38 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_SPHINCSSHA2128SSIMPLE")))
-            oqs_oid_alg_list[40 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_P256_SPHINCSSHA2128SSIMPLE")))
-            oqs_oid_alg_list[42 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHA2128SSIMPLE")))
-            oqs_oid_alg_list[44 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_SPHINCSSHA2192FSIMPLE")))
-            oqs_oid_alg_list[46 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_P384_SPHINCSSHA2192FSIMPLE")))
-            oqs_oid_alg_list[48 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[50 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_P256_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[52 + OQS_KEMOID_CNT] = envval;
-        if ((envval = getenv("OQS_OID_RSA3072_SPHINCSSHAKE128FSIMPLE")))
-            oqs_oid_alg_list[54 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO1")))
-            oqs_oid_alg_list[56 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[34 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_MAYO1")))
-            oqs_oid_alg_list[58 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[36 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO2")))
-            oqs_oid_alg_list[60 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[38 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_MAYO2")))
-            oqs_oid_alg_list[62 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[40 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO3")))
-            oqs_oid_alg_list[64 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[42 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P384_MAYO3")))
-            oqs_oid_alg_list[66 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[44 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_MAYO5")))
-            oqs_oid_alg_list[68 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[46 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_MAYO5")))
-            oqs_oid_alg_list[70 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[48 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_CROSSRSDP128BALANCED")))
-            oqs_oid_alg_list[72 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[50 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_OV_IS_PKC")))
-            oqs_oid_alg_list[74 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[52 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_OV_IS_PKC")))
-            oqs_oid_alg_list[76 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[54 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_OV_IP_PKC")))
-            oqs_oid_alg_list[78 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[56 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_OV_IP_PKC")))
-            oqs_oid_alg_list[80 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[58 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_OV_IS_PKC_SKC")))
-            oqs_oid_alg_list[82 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[60 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_OV_IS_PKC_SKC")))
-            oqs_oid_alg_list[84 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[62 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_OV_IP_PKC_SKC")))
-            oqs_oid_alg_list[86 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[64 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_OV_IP_PKC_SKC")))
-            oqs_oid_alg_list[88 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[66 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SNOVA2454")))
-            oqs_oid_alg_list[90 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[68 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_SNOVA2454")))
-            oqs_oid_alg_list[92 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[70 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SNOVA2454ESK")))
-            oqs_oid_alg_list[94 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[72 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_SNOVA2454ESK")))
-            oqs_oid_alg_list[96 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[74 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SNOVA37172")))
-            oqs_oid_alg_list[98 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[76 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P256_SNOVA37172")))
-            oqs_oid_alg_list[100 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[78 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SNOVA2455")))
-            oqs_oid_alg_list[102 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[80 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P384_SNOVA2455")))
-            oqs_oid_alg_list[104 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[82 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SNOVA2965")))
-            oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[84 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_P521_SNOVA2965")))
-            oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[86 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHA2128S")))
-            oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[88 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHA2128F")))
-            oqs_oid_alg_list[112 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[90 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHA2192S")))
-            oqs_oid_alg_list[114 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[92 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHA2192F")))
-            oqs_oid_alg_list[116 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[94 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHA2256S")))
-            oqs_oid_alg_list[118 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[96 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHA2256F")))
-            oqs_oid_alg_list[120 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[98 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHAKE128S")))
-            oqs_oid_alg_list[122 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[100 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHAKE128F")))
-            oqs_oid_alg_list[124 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[102 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHAKE192S")))
-            oqs_oid_alg_list[126 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[104 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHAKE192F")))
-            oqs_oid_alg_list[128 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[106 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHAKE256S")))
-            oqs_oid_alg_list[130 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHAKE256F")))
-            oqs_oid_alg_list[132 + OQS_KEMOID_CNT] = envval;
+            oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -589,25 +545,6 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #ifdef OQS_ENABLE_SIG_falcon_padded_1024
     SIGALG("falconpadded1024", 256, oqs_signature_functions),
     SIGALG("p521_falconpadded1024", 256, oqs_signature_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
-    SIGALG("sphincssha2128fsimple", 128, oqs_signature_functions),
-    SIGALG("p256_sphincssha2128fsimple", 128, oqs_signature_functions),
-    SIGALG("rsa3072_sphincssha2128fsimple", 128, oqs_signature_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
-    SIGALG("sphincssha2128ssimple", 128, oqs_signature_functions),
-    SIGALG("p256_sphincssha2128ssimple", 128, oqs_signature_functions),
-    SIGALG("rsa3072_sphincssha2128ssimple", 128, oqs_signature_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
-    SIGALG("sphincssha2192fsimple", 192, oqs_signature_functions),
-    SIGALG("p384_sphincssha2192fsimple", 192, oqs_signature_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
-    SIGALG("sphincsshake128fsimple", 128, oqs_signature_functions),
-    SIGALG("p256_sphincsshake128fsimple", 128, oqs_signature_functions),
-    SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_1
     SIGALG("mayo1", 128, oqs_signature_functions),
@@ -808,25 +745,6 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
 #ifdef OQS_ENABLE_SIG_falcon_padded_1024
     SIGALG("falconpadded1024", 256, oqs_falconpadded1024_keymgmt_functions),
     SIGALG("p521_falconpadded1024", 256, oqs_p521_falconpadded1024_keymgmt_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128f_simple
-    SIGALG("sphincssha2128fsimple", 128, oqs_sphincssha2128fsimple_keymgmt_functions),
-    SIGALG("p256_sphincssha2128fsimple", 128, oqs_p256_sphincssha2128fsimple_keymgmt_functions),
-    SIGALG("rsa3072_sphincssha2128fsimple", 128, oqs_rsa3072_sphincssha2128fsimple_keymgmt_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_128s_simple
-    SIGALG("sphincssha2128ssimple", 128, oqs_sphincssha2128ssimple_keymgmt_functions),
-    SIGALG("p256_sphincssha2128ssimple", 128, oqs_p256_sphincssha2128ssimple_keymgmt_functions),
-    SIGALG("rsa3072_sphincssha2128ssimple", 128, oqs_rsa3072_sphincssha2128ssimple_keymgmt_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_sha2_192f_simple
-    SIGALG("sphincssha2192fsimple", 192, oqs_sphincssha2192fsimple_keymgmt_functions),
-    SIGALG("p384_sphincssha2192fsimple", 192, oqs_p384_sphincssha2192fsimple_keymgmt_functions),
-#endif
-#ifdef OQS_ENABLE_SIG_sphincs_shake_128f_simple
-    SIGALG("sphincsshake128fsimple", 128, oqs_sphincsshake128fsimple_keymgmt_functions),
-    SIGALG("p256_sphincsshake128fsimple", 128, oqs_p256_sphincsshake128fsimple_keymgmt_functions),
-    SIGALG("rsa3072_sphincsshake128fsimple", 128, oqs_rsa3072_sphincsshake128fsimple_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_mayo_1
     SIGALG("mayo1", 128, oqs_mayo1_keymgmt_functions),

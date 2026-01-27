@@ -6,8 +6,8 @@
 
 arch=$(uname -m)
 
-# tested on Ubuntu 22 / x86_64 and macOS 13 / arm64
-if [ "$arch" != "x86_64" ] && [ "$arch" != "arm64" ]
+# tested on Ubuntu 22 / x86_64, macOS 13 / arm64, and Ubuntu 24 / aarch64
+if [ "$arch" != "x86_64" ] && [ "$arch" != "arm64" ] && [ "$arch" != "aarch64" ]
 then
 	echo "This script does not currently support systems where \`uname -m\` returns $arch."
 	exit 1

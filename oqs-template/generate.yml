@@ -557,6 +557,7 @@ sigs:
         code_point: '0x0904'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
@@ -574,6 +575,7 @@ sigs:
         code_point: '0x0905'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
@@ -587,6 +589,7 @@ sigs:
         code_point: '0x0906'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
@@ -1920,6 +1923,7 @@ sigs:
         code_point: '0x0911'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsasha2128f'
@@ -1929,6 +1933,7 @@ sigs:
         code_point: '0x0912'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsasha2192s'
@@ -1938,6 +1943,7 @@ sigs:
         code_point: '0x0913'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsasha2192f'
@@ -1947,6 +1953,7 @@ sigs:
         code_point: '0x0914'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsasha2256s'
@@ -1956,6 +1963,7 @@ sigs:
         code_point: '0x0915'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsasha2256f'
@@ -1965,6 +1973,7 @@ sigs:
         code_point: '0x0916'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsashake128s'
@@ -1974,6 +1983,7 @@ sigs:
         code_point: '0x0917'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsashake128f'
@@ -1983,6 +1993,7 @@ sigs:
         code_point: '0x0918'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsashake192s'
@@ -1992,6 +2003,7 @@ sigs:
         code_point: '0x0919'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsashake192f'
@@ -2001,6 +2013,7 @@ sigs:
         code_point: '0x091A'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsashake256s'
@@ -2010,6 +2023,7 @@ sigs:
         code_point: '0x091B'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0
       -
         name: 'slhdsashake256f'
@@ -2019,4 +2033,5 @@ sigs:
         code_point: '0x091C'
         enable: true
         enable_tls: true
+        support_ctx_str: true
         openssl_version: 3.5.0

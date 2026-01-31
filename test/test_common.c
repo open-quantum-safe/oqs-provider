@@ -43,6 +43,18 @@ const char *kHybridSignatureAlgorithms[] = {
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END
 
+///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_START
+
+/** \brief List of signature algorithms with support for context strings. */
+const char *kCtxStrSignatureAlgorithms[] = {
+    "mldsa44",         "p256_mldsa44",    "rsa3072_mldsa44", "mldsa65",
+    "p384_mldsa65",    "mldsa87",         "p521_mldsa87",    "slhdsasha2128s",
+    "slhdsasha2128f",  "slhdsasha2192s",  "slhdsasha2192f",  "slhdsasha2256s",
+    "slhdsasha2256f",  "slhdsashake128s", "slhdsashake128f", "slhdsashake192s",
+    "slhdsashake192f", "slhdsashake256s", "slhdsashake256f", NULL,
+};
+///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_END
+
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_START
 
 /** \brief List of hybrid KEMs. */
@@ -141,6 +153,10 @@ static int is_string_in_list(const char **list, const char *s) {
 
 int is_signature_algorithm_hybrid(const char *_alg_) {
     return is_string_in_list(kHybridSignatureAlgorithms, _alg_);
+}
+
+int does_signature_algorithm_support_ctx_str(const char *_alg_) {
+    return is_string_in_list(kCtxStrSignatureAlgorithms, _alg_);
 }
 
 int is_kem_algorithm_hybrid(const char *_alg_) {

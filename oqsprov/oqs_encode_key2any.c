@@ -501,12 +501,13 @@ static int oqsx_spki_pub_to_der(const void *vxkey, unsigned char **pder) {
     return oqsxkey->pubkeylen;
 }
 
-static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
+static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder)
+{
     OQSX_KEY *oqsxkey = (OQSX_KEY *)vxkey;
     unsigned char *buf = NULL;
     uint32_t buflen = 0, privkeylen = 0;
-    ASN1_OCTET_STRING oct;
-    int keybloblen;
+    ASN1_OCTET_STRING *oct = NULL;
+    int keybloblen = -1;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_pki_priv_to_der called\n");
 
@@ -528,25 +529,25 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     privkeylen = oqsxkey->privkeylen;
     if (oqsxkey->numkeys > 1) { // hybrid
         uint32_t actualprivkeylen = 0;
-        size_t fixed_pq_privkeylen =
-            oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
-        size_t space_for_classical_privkey =
-            privkeylen - SIZE_OF_UINT32 - fixed_pq_privkeylen;
+        size_t fixed_pq_privkeylen
+            = oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
+        size_t space_for_classical_privkey
+            = privkeylen - SIZE_OF_UINT32 - fixed_pq_privkeylen;
         DECODE_UINT32(actualprivkeylen, oqsxkey->privkey);
-        if ((actualprivkeylen > oqsxkey->evp_info->length_private_key) ||
-            (actualprivkeylen > space_for_classical_privkey)) {
+        if ((actualprivkeylen > oqsxkey->evp_info->length_private_key)
+            || (actualprivkeylen > space_for_classical_privkey)) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             return 0;
         }
-        privkeylen -=
-            (oqsxkey->evp_info->length_private_key - actualprivkeylen);
+        privkeylen
+            -= (oqsxkey->evp_info->length_private_key - actualprivkeylen);
     }
 #ifdef NOPUBKEY_IN_PRIVKEY
     buflen = privkeylen;
     buf = OPENSSL_secure_malloc(buflen);
     if (buf == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-        return -1;
+        goto done;
     }
     OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %zu\n", buflen);
     memcpy(buf, oqsxkey->privkey, privkeylen);
@@ -555,7 +556,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     buf = OPENSSL_secure_malloc(buflen);
     if (buf == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-        return -1;
+        goto done;
     }
     OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n",
                     buflen);
@@ -569,19 +570,27 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     }
 #endif
 
-    oct.data = buf;
-    oct.length = buflen;
-    // more logical:
-    // oct.data = oqsxkey->privkey;
-    // oct.length = oqsxkey->privkeylen;
-    oct.flags = 0;
+    if ((oct = ASN1_OCTET_STRING_new()) == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        goto done;
+    }
 
-    keybloblen = i2d_ASN1_OCTET_STRING(&oct, pder);
+    if (!ASN1_STRING_set(oct, buf, buflen)) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        goto done;
+    }
+
+    keybloblen = i2d_ASN1_OCTET_STRING(oct, pder);
     if (keybloblen < 0) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         keybloblen = 0; // signal error
+        goto done;
     }
+
+done:
+    ASN1_OCTET_STRING_free(oct);
     OPENSSL_secure_clear_free(buf, buflen);
+
     return keybloblen;
 }
 

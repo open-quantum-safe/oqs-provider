@@ -1,0 +1,17 @@
+
+
+/** \brief List of signature algorithms with support for context strings. */
+const char *kCtxStrSignatureAlgorithms[] = {
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+     {%- if 'support_ctx_str' in variant and variant['support_ctx_str'] -%}
+       "{{variant['name']}}",
+       {%- for classical_alg in variant['mix_with'] -%}
+         "{{ classical_alg['name'] }}_{{ variant['name'] }}",
+       {%- endfor -%}
+     {% endif %}
+   {%- endfor %}
+{%- endfor %}
+NULL,
+};
+

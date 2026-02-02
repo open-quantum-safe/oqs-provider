@@ -108,7 +108,9 @@ static int test_oqs_signatures_with_ctx_str(const char *sigalg_name) {
         fprintf(stderr, "Not testing disabled algorithm %s.\n", sigalg_name);
         return 1;
     }
-#if (OPENSSL_VERSION_PREREQ(3, 2))
+#if (OPENSSL_VERSION_PREREQ(3, 2) &&                                           \
+     (defined OQS_VERSION_MINOR &&                                             \
+      (OQS_VERSION_MAJOR > 0 || OQS_VERSION_MINOR >= 14)))
     params[0] = OSSL_PARAM_construct_octet_string(
         OSSL_SIGNATURE_PARAM_CONTEXT_STRING, (void *)ctx_str, sizeof(ctx_str));
 

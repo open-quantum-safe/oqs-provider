@@ -53,9 +53,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 105
+#define NID_TABLE_LEN 94
 #else
-#define NID_TABLE_LEN 67
+#define NID_TABLE_LEN 56
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -139,28 +139,6 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "falconpadded1024", OQS_SIG_alg_falcon_padded_1024, KEY_TYPE_SIG, 256},
     {0, "p521_falconpadded1024", OQS_SIG_alg_falcon_padded_1024,
      KEY_TYPE_HYB_SIG, 256},
-    {0, "sphincssha2128fsimple", OQS_SIG_alg_sphincs_sha2_128f_simple,
-     KEY_TYPE_SIG, 128},
-    {0, "p256_sphincssha2128fsimple", OQS_SIG_alg_sphincs_sha2_128f_simple,
-     KEY_TYPE_HYB_SIG, 128},
-    {0, "rsa3072_sphincssha2128fsimple", OQS_SIG_alg_sphincs_sha2_128f_simple,
-     KEY_TYPE_HYB_SIG, 128},
-    {0, "sphincssha2128ssimple", OQS_SIG_alg_sphincs_sha2_128s_simple,
-     KEY_TYPE_SIG, 128},
-    {0, "p256_sphincssha2128ssimple", OQS_SIG_alg_sphincs_sha2_128s_simple,
-     KEY_TYPE_HYB_SIG, 128},
-    {0, "rsa3072_sphincssha2128ssimple", OQS_SIG_alg_sphincs_sha2_128s_simple,
-     KEY_TYPE_HYB_SIG, 128},
-    {0, "sphincssha2192fsimple", OQS_SIG_alg_sphincs_sha2_192f_simple,
-     KEY_TYPE_SIG, 192},
-    {0, "p384_sphincssha2192fsimple", OQS_SIG_alg_sphincs_sha2_192f_simple,
-     KEY_TYPE_HYB_SIG, 192},
-    {0, "sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple,
-     KEY_TYPE_SIG, 128},
-    {0, "p256_sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple,
-     KEY_TYPE_HYB_SIG, 128},
-    {0, "rsa3072_sphincsshake128fsimple", OQS_SIG_alg_sphincs_shake_128f_simple,
-     KEY_TYPE_HYB_SIG, 128},
     {0, "mayo1", OQS_SIG_alg_mayo_1, KEY_TYPE_SIG, 128},
     {0, "p256_mayo1", OQS_SIG_alg_mayo_1, KEY_TYPE_HYB_SIG, 128},
     {0, "mayo2", OQS_SIG_alg_mayo_2, KEY_TYPE_SIG, 128},

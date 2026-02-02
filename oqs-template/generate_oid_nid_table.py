@@ -34,9 +34,6 @@ def gen_sig_table(oqslibdocdir):
         else:
             sys.exit("variant['security'] value malformed.")
 
-        if sig['family'].startswith('SPHINCS'):
-            sig['family'] = 'SPHINCS+'
-
         if variant['name'].startswith('dilithium2'):
             claimed_nist_level = 2
 

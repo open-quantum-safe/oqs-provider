@@ -32,7 +32,7 @@ typedef struct {
 
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_START
 
-#define SIGS_DICT_LEN 67
+#define SIGS_DICT_LEN 56
 
 /** \brief List of signature algorithms with support for context strings. */
 oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
@@ -54,17 +54,6 @@ oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
     {OQS_SIG_alg_falcon_1024, "p521_falcon1024"},
     {OQS_SIG_alg_falcon_padded_1024, "falconpadded1024"},
     {OQS_SIG_alg_falcon_padded_1024, "p521_falconpadded1024"},
-    {OQS_SIG_alg_sphincs_sha2_128f_simple, "sphincssha2128fsimple"},
-    {OQS_SIG_alg_sphincs_sha2_128f_simple, "p256_sphincssha2128fsimple"},
-    {OQS_SIG_alg_sphincs_sha2_128f_simple, "rsa3072_sphincssha2128fsimple"},
-    {OQS_SIG_alg_sphincs_sha2_128s_simple, "sphincssha2128ssimple"},
-    {OQS_SIG_alg_sphincs_sha2_128s_simple, "p256_sphincssha2128ssimple"},
-    {OQS_SIG_alg_sphincs_sha2_128s_simple, "rsa3072_sphincssha2128ssimple"},
-    {OQS_SIG_alg_sphincs_sha2_192f_simple, "sphincssha2192fsimple"},
-    {OQS_SIG_alg_sphincs_sha2_192f_simple, "p384_sphincssha2192fsimple"},
-    {OQS_SIG_alg_sphincs_shake_128f_simple, "sphincsshake128fsimple"},
-    {OQS_SIG_alg_sphincs_shake_128f_simple, "p256_sphincsshake128fsimple"},
-    {OQS_SIG_alg_sphincs_shake_128f_simple, "rsa3072_sphincsshake128fsimple"},
     {OQS_SIG_alg_mayo_1, "mayo1"},
     {OQS_SIG_alg_mayo_1, "p256_mayo1"},
     {OQS_SIG_alg_mayo_2, "mayo2"},

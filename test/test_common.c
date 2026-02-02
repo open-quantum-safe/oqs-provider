@@ -3,6 +3,7 @@
 #include "test_common.h"
 
 #include <openssl/evp.h>
+#include <oqs/oqs.h>
 #include <string.h>
 
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_START
@@ -43,15 +44,85 @@ const char *kHybridSignatureAlgorithms[] = {
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END
 
+typedef struct {
+    char *oqsname;
+    char *alg_name;
+} oqs_naming_dict;
+
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_START
 
+#define SIGS_DICT_LEN 67
+
 /** \brief List of signature algorithms with support for context strings. */
-const char *kCtxStrSignatureAlgorithms[] = {
-    "mldsa44",         "p256_mldsa44",    "rsa3072_mldsa44", "mldsa65",
-    "p384_mldsa65",    "mldsa87",         "p521_mldsa87",    "slhdsasha2128s",
-    "slhdsasha2128f",  "slhdsasha2192s",  "slhdsasha2192f",  "slhdsasha2256s",
-    "slhdsasha2256f",  "slhdsashake128s", "slhdsashake128f", "slhdsashake192s",
-    "slhdsashake192f", "slhdsashake256s", "slhdsashake256f", NULL,
+oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
+
+    {OQS_SIG_alg_ml_dsa_44, "mldsa44"},
+    {OQS_SIG_alg_ml_dsa_44, "p256_mldsa44"},
+    {OQS_SIG_alg_ml_dsa_44, "rsa3072_mldsa44"},
+    {OQS_SIG_alg_ml_dsa_65, "mldsa65"},
+    {OQS_SIG_alg_ml_dsa_65, "p384_mldsa65"},
+    {OQS_SIG_alg_ml_dsa_87, "mldsa87"},
+    {OQS_SIG_alg_ml_dsa_87, "p521_mldsa87"},
+    {OQS_SIG_alg_falcon_512, "falcon512"},
+    {OQS_SIG_alg_falcon_512, "p256_falcon512"},
+    {OQS_SIG_alg_falcon_512, "rsa3072_falcon512"},
+    {OQS_SIG_alg_falcon_padded_512, "falconpadded512"},
+    {OQS_SIG_alg_falcon_padded_512, "p256_falconpadded512"},
+    {OQS_SIG_alg_falcon_padded_512, "rsa3072_falconpadded512"},
+    {OQS_SIG_alg_falcon_1024, "falcon1024"},
+    {OQS_SIG_alg_falcon_1024, "p521_falcon1024"},
+    {OQS_SIG_alg_falcon_padded_1024, "falconpadded1024"},
+    {OQS_SIG_alg_falcon_padded_1024, "p521_falconpadded1024"},
+    {OQS_SIG_alg_sphincs_sha2_128f_simple, "sphincssha2128fsimple"},
+    {OQS_SIG_alg_sphincs_sha2_128f_simple, "p256_sphincssha2128fsimple"},
+    {OQS_SIG_alg_sphincs_sha2_128f_simple, "rsa3072_sphincssha2128fsimple"},
+    {OQS_SIG_alg_sphincs_sha2_128s_simple, "sphincssha2128ssimple"},
+    {OQS_SIG_alg_sphincs_sha2_128s_simple, "p256_sphincssha2128ssimple"},
+    {OQS_SIG_alg_sphincs_sha2_128s_simple, "rsa3072_sphincssha2128ssimple"},
+    {OQS_SIG_alg_sphincs_sha2_192f_simple, "sphincssha2192fsimple"},
+    {OQS_SIG_alg_sphincs_sha2_192f_simple, "p384_sphincssha2192fsimple"},
+    {OQS_SIG_alg_sphincs_shake_128f_simple, "sphincsshake128fsimple"},
+    {OQS_SIG_alg_sphincs_shake_128f_simple, "p256_sphincsshake128fsimple"},
+    {OQS_SIG_alg_sphincs_shake_128f_simple, "rsa3072_sphincsshake128fsimple"},
+    {OQS_SIG_alg_mayo_1, "mayo1"},
+    {OQS_SIG_alg_mayo_1, "p256_mayo1"},
+    {OQS_SIG_alg_mayo_2, "mayo2"},
+    {OQS_SIG_alg_mayo_2, "p256_mayo2"},
+    {OQS_SIG_alg_mayo_3, "mayo3"},
+    {OQS_SIG_alg_mayo_3, "p384_mayo3"},
+    {OQS_SIG_alg_mayo_5, "mayo5"},
+    {OQS_SIG_alg_mayo_5, "p521_mayo5"},
+    {OQS_SIG_alg_cross_rsdp_128_balanced, "CROSSrsdp128balanced"},
+    {OQS_SIG_alg_uov_ov_Is_pkc, "OV_Is_pkc"},
+    {OQS_SIG_alg_uov_ov_Is_pkc, "p256_OV_Is_pkc"},
+    {OQS_SIG_alg_uov_ov_Ip_pkc, "OV_Ip_pkc"},
+    {OQS_SIG_alg_uov_ov_Ip_pkc, "p256_OV_Ip_pkc"},
+    {OQS_SIG_alg_uov_ov_Is_pkc_skc, "OV_Is_pkc_skc"},
+    {OQS_SIG_alg_uov_ov_Is_pkc_skc, "p256_OV_Is_pkc_skc"},
+    {OQS_SIG_alg_uov_ov_Ip_pkc_skc, "OV_Ip_pkc_skc"},
+    {OQS_SIG_alg_uov_ov_Ip_pkc_skc, "p256_OV_Ip_pkc_skc"},
+    {OQS_SIG_alg_snova_SNOVA_24_5_4, "snova2454"},
+    {OQS_SIG_alg_snova_SNOVA_24_5_4, "p256_snova2454"},
+    {OQS_SIG_alg_snova_SNOVA_24_5_4_esk, "snova2454esk"},
+    {OQS_SIG_alg_snova_SNOVA_24_5_4_esk, "p256_snova2454esk"},
+    {OQS_SIG_alg_snova_SNOVA_37_17_2, "snova37172"},
+    {OQS_SIG_alg_snova_SNOVA_37_17_2, "p256_snova37172"},
+    {OQS_SIG_alg_snova_SNOVA_24_5_5, "snova2455"},
+    {OQS_SIG_alg_snova_SNOVA_24_5_5, "p384_snova2455"},
+    {OQS_SIG_alg_snova_SNOVA_29_6_5, "snova2965"},
+    {OQS_SIG_alg_snova_SNOVA_29_6_5, "p521_snova2965"},
+    {OQS_SIG_alg_slh_dsa_pure_sha2_128s, "slhdsasha2128s"},
+    {OQS_SIG_alg_slh_dsa_pure_sha2_128f, "slhdsasha2128f"},
+    {OQS_SIG_alg_slh_dsa_pure_sha2_192s, "slhdsasha2192s"},
+    {OQS_SIG_alg_slh_dsa_pure_sha2_192f, "slhdsasha2192f"},
+    {OQS_SIG_alg_slh_dsa_pure_sha2_256s, "slhdsasha2256s"},
+    {OQS_SIG_alg_slh_dsa_pure_sha2_256f, "slhdsasha2256f"},
+    {OQS_SIG_alg_slh_dsa_pure_shake_128s, "slhdsashake128s"},
+    {OQS_SIG_alg_slh_dsa_pure_shake_128f, "slhdsashake128f"},
+    {OQS_SIG_alg_slh_dsa_pure_shake_192s, "slhdsashake192s"},
+    {OQS_SIG_alg_slh_dsa_pure_shake_192f, "slhdsashake192f"},
+    {OQS_SIG_alg_slh_dsa_pure_shake_256s, "slhdsashake256s"},
+    {OQS_SIG_alg_slh_dsa_pure_shake_256f, "slhdsashake256f"},
 };
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_END
 
@@ -155,13 +226,21 @@ int is_signature_algorithm_hybrid(const char *_alg_) {
     return is_string_in_list(kHybridSignatureAlgorithms, _alg_);
 }
 
-int does_signature_algorithm_support_ctx_str(const char *_alg_) {
-    return is_string_in_list(kCtxStrSignatureAlgorithms, _alg_);
-}
-
 int is_kem_algorithm_hybrid(const char *_alg_) {
     return is_string_in_list(kHybridKEMAlgorithms, _alg_);
 }
+
+#if defined OQS_VERSION_MINOR &&                                               \
+    (OQS_VERSION_MAJOR > 0 || OQS_VERSION_MINOR >= 14)
+int does_signature_algorithm_support_ctx_str(const char *_alg_) {
+    for (unsigned int i = 0; i < SIGS_DICT_LEN; i++) {
+        if (strcmp(kOQSNameMapSignatureAlgorithms[i].alg_name, _alg_) == 0)
+            return OQS_SIG_supports_ctx_str(
+                kOQSNameMapSignatureAlgorithms[i].oqsname);
+    }
+    return 0;
+}
+#endif
 
 int get_param_octet_string(const EVP_PKEY *key, const char *param_name,
                            uint8_t **buf, size_t *buf_len) {

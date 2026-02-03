@@ -1,5 +1,8 @@
 # oqs-provider 0.12.0-dev
 
+### What's New
+Support for OpenSSL's sign/verify message API added.
+
 Previous Release Notes
 ======================
 

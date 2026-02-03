@@ -99,6 +99,7 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 #define PROV_OQS_LIBCTX_OF(provctx)                                            \
     provctx ? (((PROV_OQS_CTX *)provctx)->libctx) : NULL
 
+void oqs_sig_activate_message_api(void);
 #include "oqs/oqs.h"
 
 /* helper structure for classic key components in hybrid keys.

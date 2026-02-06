@@ -505,8 +505,8 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     OQSX_KEY *oqsxkey = (OQSX_KEY *)vxkey;
     unsigned char *buf = NULL;
     uint32_t buflen = 0, privkeylen = 0;
-    ASN1_OCTET_STRING oct;
-    int keybloblen;
+    ASN1_OCTET_STRING *oct = NULL;
+    int keybloblen = -1;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_pki_priv_to_der called\n");
 
@@ -546,7 +546,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     buf = OPENSSL_secure_malloc(buflen);
     if (buf == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-        return -1;
+        goto done;
     }
     OQS_ENC_PRINTF2("OQS ENC provider: saving privkey of length %zu\n", buflen);
     memcpy(buf, oqsxkey->privkey, privkeylen);
@@ -555,7 +555,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     buf = OPENSSL_secure_malloc(buflen);
     if (buf == NULL) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
-        return -1;
+        goto done;
     }
     OQS_ENC_PRINTF2("OQS ENC provider: saving priv+pubkey of length %d\n",
                     buflen);
@@ -569,19 +569,27 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     }
 #endif
 
-    oct.data = buf;
-    oct.length = buflen;
-    // more logical:
-    // oct.data = oqsxkey->privkey;
-    // oct.length = oqsxkey->privkeylen;
-    oct.flags = 0;
+    if ((oct = ASN1_OCTET_STRING_new()) == NULL) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        goto done;
+    }
 
-    keybloblen = i2d_ASN1_OCTET_STRING(&oct, pder);
+    if (!ASN1_STRING_set(oct, buf, buflen)) {
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+        goto done;
+    }
+
+    keybloblen = i2d_ASN1_OCTET_STRING(oct, pder);
     if (keybloblen < 0) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         keybloblen = 0; // signal error
+        goto done;
     }
+
+done:
+    ASN1_OCTET_STRING_free(oct);
     OPENSSL_secure_clear_free(buf, buflen);
+
     return keybloblen;
 }
 

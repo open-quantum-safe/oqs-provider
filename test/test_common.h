@@ -59,6 +59,16 @@ void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
  * \returns 1 if hybrid, else 0. */
 int is_signature_algorithm_hybrid(const char *_alg_);
 
+#if defined OQS_VERSION_MINOR &&                                               \
+    (OQS_VERSION_MAJOR > 0 || OQS_VERSION_MINOR >= 14)
+/** \brief Indicates if a signature algorithm supports context strings.
+ *
+ * \param alg Algorithm name.
+ *
+ * \returns 1 if it does, else 0. */
+int does_signature_algorithm_support_ctx_str(const char *_alg_);
+#endif
+
 /** \brief Indicates if an kem algorithm is hybrid or not.
  *
  * \param alg Algorithm name.

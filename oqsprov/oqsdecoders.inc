@@ -36,8 +36,79 @@
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_START
 #ifdef OQS_KEM_ENCODERS
 
+#ifdef OQS_ENABLE_KEM_efrodokem_640_aes
+DECODER_w_structure("efrodo640aes", der, PrivateKeyInfo, efrodo640aes),
+    DECODER_w_structure("efrodo640aes", der, SubjectPublicKeyInfo,
+                        efrodo640aes),
+    DECODER_w_structure("p256_efrodo640aes", der, PrivateKeyInfo,
+                        p256_efrodo640aes),
+    DECODER_w_structure("p256_efrodo640aes", der, SubjectPublicKeyInfo,
+                        p256_efrodo640aes),
+    DECODER_w_structure("x25519_efrodo640aes", der, PrivateKeyInfo,
+                        x25519_efrodo640aes),
+    DECODER_w_structure("x25519_efrodo640aes", der, SubjectPublicKeyInfo,
+                        x25519_efrodo640aes),
+#endif
+#ifdef OQS_ENABLE_KEM_efrodokem_640_shake
+    DECODER_w_structure("efrodo640shake", der, PrivateKeyInfo, efrodo640shake),
+    DECODER_w_structure("efrodo640shake", der, SubjectPublicKeyInfo,
+                        efrodo640shake),
+    DECODER_w_structure("p256_efrodo640shake", der, PrivateKeyInfo,
+                        p256_efrodo640shake),
+    DECODER_w_structure("p256_efrodo640shake", der, SubjectPublicKeyInfo,
+                        p256_efrodo640shake),
+    DECODER_w_structure("x25519_efrodo640shake", der, PrivateKeyInfo,
+                        x25519_efrodo640shake),
+    DECODER_w_structure("x25519_efrodo640shake", der, SubjectPublicKeyInfo,
+                        x25519_efrodo640shake),
+#endif
+#ifdef OQS_ENABLE_KEM_efrodokem_976_aes
+    DECODER_w_structure("efrodo976aes", der, PrivateKeyInfo, efrodo976aes),
+    DECODER_w_structure("efrodo976aes", der, SubjectPublicKeyInfo,
+                        efrodo976aes),
+    DECODER_w_structure("p384_efrodo976aes", der, PrivateKeyInfo,
+                        p384_efrodo976aes),
+    DECODER_w_structure("p384_efrodo976aes", der, SubjectPublicKeyInfo,
+                        p384_efrodo976aes),
+    DECODER_w_structure("x448_efrodo976aes", der, PrivateKeyInfo,
+                        x448_efrodo976aes),
+    DECODER_w_structure("x448_efrodo976aes", der, SubjectPublicKeyInfo,
+                        x448_efrodo976aes),
+#endif
+#ifdef OQS_ENABLE_KEM_efrodokem_976_shake
+    DECODER_w_structure("efrodo976shake", der, PrivateKeyInfo, efrodo976shake),
+    DECODER_w_structure("efrodo976shake", der, SubjectPublicKeyInfo,
+                        efrodo976shake),
+    DECODER_w_structure("p384_efrodo976shake", der, PrivateKeyInfo,
+                        p384_efrodo976shake),
+    DECODER_w_structure("p384_efrodo976shake", der, SubjectPublicKeyInfo,
+                        p384_efrodo976shake),
+    DECODER_w_structure("x448_efrodo976shake", der, PrivateKeyInfo,
+                        x448_efrodo976shake),
+    DECODER_w_structure("x448_efrodo976shake", der, SubjectPublicKeyInfo,
+                        x448_efrodo976shake),
+#endif
+#ifdef OQS_ENABLE_KEM_efrodokem_1344_aes
+    DECODER_w_structure("efrodo1344aes", der, PrivateKeyInfo, efrodo1344aes),
+    DECODER_w_structure("efrodo1344aes", der, SubjectPublicKeyInfo,
+                        efrodo1344aes),
+    DECODER_w_structure("p521_efrodo1344aes", der, PrivateKeyInfo,
+                        p521_efrodo1344aes),
+    DECODER_w_structure("p521_efrodo1344aes", der, SubjectPublicKeyInfo,
+                        p521_efrodo1344aes),
+#endif
+#ifdef OQS_ENABLE_KEM_efrodokem_1344_shake
+    DECODER_w_structure("efrodo1344shake", der, PrivateKeyInfo,
+                        efrodo1344shake),
+    DECODER_w_structure("efrodo1344shake", der, SubjectPublicKeyInfo,
+                        efrodo1344shake),
+    DECODER_w_structure("p521_efrodo1344shake", der, PrivateKeyInfo,
+                        p521_efrodo1344shake),
+    DECODER_w_structure("p521_efrodo1344shake", der, SubjectPublicKeyInfo,
+                        p521_efrodo1344shake),
+#endif
 #ifdef OQS_ENABLE_KEM_frodokem_640_aes
-DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
+    DECODER_w_structure("frodo640aes", der, PrivateKeyInfo, frodo640aes),
     DECODER_w_structure("frodo640aes", der, SubjectPublicKeyInfo, frodo640aes),
     DECODER_w_structure("p256_frodo640aes", der, PrivateKeyInfo,
                         p256_frodo640aes),

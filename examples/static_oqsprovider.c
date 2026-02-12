@@ -22,8 +22,7 @@ static const char *kOQSProviderName = "oqsprovider";
  * oqsprovider.
  *
  * \returns 0 if success, else -1. */
-static int load_oqs_provider(OSSL_LIB_CTX *libctx)
-{
+static int load_oqs_provider(OSSL_LIB_CTX *libctx) {
     OSSL_PROVIDER *provider;
     int ret;
 
@@ -35,8 +34,8 @@ static int load_oqs_provider(OSSL_LIB_CTX *libctx)
         return -1;
     }
 
-    ret = OSSL_PROVIDER_add_builtin(libctx, kOQSProviderName,
-                                    oqs_provider_init);
+    ret =
+        OSSL_PROVIDER_add_builtin(libctx, kOQSProviderName, oqs_provider_init);
     if (ret != 1) {
         fprintf(stderr,
                 "`OSSL_PROVIDER_add_builtin` failed with returned code %i\n",
@@ -69,8 +68,7 @@ static int load_oqs_provider(OSSL_LIB_CTX *libctx)
     return 0;
 }
 
-int main()
-{
+int main() {
     OSSL_LIB_CTX *libctx;
     int ret;
 

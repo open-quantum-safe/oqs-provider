@@ -606,6 +606,60 @@ done:
 // OQS provider uses NIDs generated at load time as EVP_type identifiers
 // so initially this must be 0 and set to a real value by OBJ_sn2nid later
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_START
+#define efrodo640aes_evp_type 0
+#define efrodo640aes_input_type "efrodo640aes"
+#define efrodo640aes_pem_type "efrodo640aes"
+
+#define p256_efrodo640aes_evp_type 0
+#define p256_efrodo640aes_input_type "p256_efrodo640aes"
+#define p256_efrodo640aes_pem_type "p256_efrodo640aes"
+#define x25519_efrodo640aes_evp_type 0
+#define x25519_efrodo640aes_input_type "x25519_efrodo640aes"
+#define x25519_efrodo640aes_pem_type "x25519_efrodo640aes"
+#define efrodo640shake_evp_type 0
+#define efrodo640shake_input_type "efrodo640shake"
+#define efrodo640shake_pem_type "efrodo640shake"
+
+#define p256_efrodo640shake_evp_type 0
+#define p256_efrodo640shake_input_type "p256_efrodo640shake"
+#define p256_efrodo640shake_pem_type "p256_efrodo640shake"
+#define x25519_efrodo640shake_evp_type 0
+#define x25519_efrodo640shake_input_type "x25519_efrodo640shake"
+#define x25519_efrodo640shake_pem_type "x25519_efrodo640shake"
+#define efrodo976aes_evp_type 0
+#define efrodo976aes_input_type "efrodo976aes"
+#define efrodo976aes_pem_type "efrodo976aes"
+
+#define p384_efrodo976aes_evp_type 0
+#define p384_efrodo976aes_input_type "p384_efrodo976aes"
+#define p384_efrodo976aes_pem_type "p384_efrodo976aes"
+#define x448_efrodo976aes_evp_type 0
+#define x448_efrodo976aes_input_type "x448_efrodo976aes"
+#define x448_efrodo976aes_pem_type "x448_efrodo976aes"
+#define efrodo976shake_evp_type 0
+#define efrodo976shake_input_type "efrodo976shake"
+#define efrodo976shake_pem_type "efrodo976shake"
+
+#define p384_efrodo976shake_evp_type 0
+#define p384_efrodo976shake_input_type "p384_efrodo976shake"
+#define p384_efrodo976shake_pem_type "p384_efrodo976shake"
+#define x448_efrodo976shake_evp_type 0
+#define x448_efrodo976shake_input_type "x448_efrodo976shake"
+#define x448_efrodo976shake_pem_type "x448_efrodo976shake"
+#define efrodo1344aes_evp_type 0
+#define efrodo1344aes_input_type "efrodo1344aes"
+#define efrodo1344aes_pem_type "efrodo1344aes"
+
+#define p521_efrodo1344aes_evp_type 0
+#define p521_efrodo1344aes_input_type "p521_efrodo1344aes"
+#define p521_efrodo1344aes_pem_type "p521_efrodo1344aes"
+#define efrodo1344shake_evp_type 0
+#define efrodo1344shake_input_type "efrodo1344shake"
+#define efrodo1344shake_pem_type "efrodo1344shake"
+
+#define p521_efrodo1344shake_evp_type 0
+#define p521_efrodo1344shake_input_type "p521_efrodo1344shake"
+#define p521_efrodo1344shake_pem_type "p521_efrodo1344shake"
 #define frodo640aes_evp_type 0
 #define frodo640aes_input_type "frodo640aes"
 #define frodo640aes_pem_type "frodo640aes"
@@ -1473,6 +1527,124 @@ key2text_encode(void *vctx, const void *key, int selection, OSSL_CORE_BIO *cout,
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_START
 #ifdef OQS_KEM_ENCODERS
 
+MAKE_ENCODER(, efrodo640aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo640aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo640aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo640aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo640aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, efrodo640aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, efrodo640aes);
+
+MAKE_ENCODER(_ecp, p256_efrodo640aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_efrodo640aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p256_efrodo640aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_efrodo640aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p256_efrodo640aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_efrodo640aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p256_efrodo640aes);
+MAKE_ENCODER(_ecx, x25519_efrodo640aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_efrodo640aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x25519_efrodo640aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_efrodo640aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x25519_efrodo640aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_efrodo640aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecx, x25519_efrodo640aes);
+MAKE_ENCODER(, efrodo640shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo640shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo640shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo640shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo640shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, efrodo640shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, efrodo640shake);
+
+MAKE_ENCODER(_ecp, p256_efrodo640shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_efrodo640shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p256_efrodo640shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_efrodo640shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p256_efrodo640shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p256_efrodo640shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p256_efrodo640shake);
+MAKE_ENCODER(_ecx, x25519_efrodo640shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_efrodo640shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x25519_efrodo640shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_efrodo640shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x25519_efrodo640shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecx, x25519_efrodo640shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecx, x25519_efrodo640shake);
+MAKE_ENCODER(, efrodo976aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo976aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo976aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo976aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo976aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, efrodo976aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, efrodo976aes);
+
+MAKE_ENCODER(_ecp, p384_efrodo976aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_efrodo976aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p384_efrodo976aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_efrodo976aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p384_efrodo976aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_efrodo976aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p384_efrodo976aes);
+MAKE_ENCODER(_ecx, x448_efrodo976aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x448_efrodo976aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x448_efrodo976aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x448_efrodo976aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x448_efrodo976aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecx, x448_efrodo976aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecx, x448_efrodo976aes);
+MAKE_ENCODER(, efrodo976shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo976shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo976shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo976shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo976shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, efrodo976shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, efrodo976shake);
+
+MAKE_ENCODER(_ecp, p384_efrodo976shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_efrodo976shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p384_efrodo976shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_efrodo976shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p384_efrodo976shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p384_efrodo976shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p384_efrodo976shake);
+MAKE_ENCODER(_ecx, x448_efrodo976shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x448_efrodo976shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x448_efrodo976shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecx, x448_efrodo976shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecx, x448_efrodo976shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecx, x448_efrodo976shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecx, x448_efrodo976shake);
+MAKE_ENCODER(, efrodo1344aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo1344aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo1344aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo1344aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo1344aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, efrodo1344aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, efrodo1344aes);
+
+MAKE_ENCODER(_ecp, p521_efrodo1344aes, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p521_efrodo1344aes, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p521_efrodo1344aes, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p521_efrodo1344aes, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p521_efrodo1344aes, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p521_efrodo1344aes, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p521_efrodo1344aes);
+MAKE_ENCODER(, efrodo1344shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo1344shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo1344shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, efrodo1344shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, efrodo1344shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, efrodo1344shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, efrodo1344shake);
+
+MAKE_ENCODER(_ecp, p521_efrodo1344shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p521_efrodo1344shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p521_efrodo1344shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(_ecp, p521_efrodo1344shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(_ecp, p521_efrodo1344shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(_ecp, p521_efrodo1344shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(_ecp, p521_efrodo1344shake);
 MAKE_ENCODER(, frodo640aes, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, frodo640aes, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, frodo640aes, oqsx, PrivateKeyInfo, der);

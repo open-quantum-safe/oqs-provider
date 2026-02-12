@@ -37,7 +37,7 @@ This implementation makes available the following quantum safe algorithms:
 ### KEM algorithms
 
 - **BIKE**:`bikel1`\*, `p256_bikel1`\*, `x25519_bikel1`\*, `bikel3`, `p384_bikel3`, `x448_bikel3`, `bikel5`, `p521_bikel5`
-- **FrodoKEM**:`frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
+- **FrodoKEM**:`efrodo640aes`, `p256_efrodo640aes`, `x25519_efrodo640aes`, `efrodo640shake`, `p256_efrodo640shake`, `x25519_efrodo640shake`, `efrodo976aes`, `p384_efrodo976aes`, `x448_efrodo976aes`, `efrodo976shake`, `p384_efrodo976shake`, `x448_efrodo976shake`, `efrodo1344aes`, `p521_efrodo1344aes`, `efrodo1344shake`, `p521_efrodo1344shake`, `frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
 - **ML-KEM**:`mlkem512`, `p256_mlkem512`, `x25519_mlkem512`, `bp256_mlkem512`, `mlkem768`, `p384_mlkem768`, `x448_mlkem768`, `bp384_mlkem768`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `mlkem1024`, `p521_mlkem1024`, `SecP384r1MLKEM1024`, `bp512_mlkem1024`
 
 ### Signature algorithms
@@ -108,6 +108,12 @@ X448MLKEM1024
 SecP256r1MLKEM768
 SecP384r1MLKEM1024
 ```
+
+## Using with LibOQS 0.16.0
+
+LibOQS version 0.16.0 includes support for both FrodoKEM variants, as specified in their submission for standardization under [ISO](https://frodokem.org/files/FrodoKEM_standard_proposal_20250929.pdf). In said specification, the
+name `frodokem` now refers to a new variant, labeled **salted**, while the original specification is renamed to `efrodokem`, the **ephemeral**
+variant. Therefore, users must be aware that the string `frodokem*` will refer to different FrodoKEM variants depending upon the `liboqs` version employed.
 
 Building and testing -- Quick start
 -----------------------------------

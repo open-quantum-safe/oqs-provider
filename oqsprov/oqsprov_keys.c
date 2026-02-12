@@ -53,7 +53,7 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 94
+#define NID_TABLE_LEN 110
 #else
 #define NID_TABLE_LEN 56
 #endif
@@ -61,6 +61,35 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
 #ifdef OQS_KEM_ENCODERS
 
+    {0, "efrodo640aes", OQS_KEM_alg_efrodokem_640_aes, KEY_TYPE_KEM, 128, 0},
+    {0, "p256_efrodo640aes", OQS_KEM_alg_efrodokem_640_aes,
+     KEY_TYPE_ECP_HYB_KEM, 128, 0},
+    {0, "x25519_efrodo640aes", OQS_KEM_alg_efrodokem_640_aes,
+     KEY_TYPE_ECX_HYB_KEM, 128, 0},
+    {0, "efrodo640shake", OQS_KEM_alg_efrodokem_640_shake, KEY_TYPE_KEM, 128,
+     0},
+    {0, "p256_efrodo640shake", OQS_KEM_alg_efrodokem_640_shake,
+     KEY_TYPE_ECP_HYB_KEM, 128, 0},
+    {0, "x25519_efrodo640shake", OQS_KEM_alg_efrodokem_640_shake,
+     KEY_TYPE_ECX_HYB_KEM, 128, 0},
+    {0, "efrodo976aes", OQS_KEM_alg_efrodokem_976_aes, KEY_TYPE_KEM, 192, 0},
+    {0, "p384_efrodo976aes", OQS_KEM_alg_efrodokem_976_aes,
+     KEY_TYPE_ECP_HYB_KEM, 192, 0},
+    {0, "x448_efrodo976aes", OQS_KEM_alg_efrodokem_976_aes,
+     KEY_TYPE_ECX_HYB_KEM, 192, 0},
+    {0, "efrodo976shake", OQS_KEM_alg_efrodokem_976_shake, KEY_TYPE_KEM, 192,
+     0},
+    {0, "p384_efrodo976shake", OQS_KEM_alg_efrodokem_976_shake,
+     KEY_TYPE_ECP_HYB_KEM, 192, 0},
+    {0, "x448_efrodo976shake", OQS_KEM_alg_efrodokem_976_shake,
+     KEY_TYPE_ECX_HYB_KEM, 192, 0},
+    {0, "efrodo1344aes", OQS_KEM_alg_efrodokem_1344_aes, KEY_TYPE_KEM, 256, 0},
+    {0, "p521_efrodo1344aes", OQS_KEM_alg_efrodokem_1344_aes,
+     KEY_TYPE_ECP_HYB_KEM, 256, 0},
+    {0, "efrodo1344shake", OQS_KEM_alg_efrodokem_1344_shake, KEY_TYPE_KEM, 256,
+     0},
+    {0, "p521_efrodo1344shake", OQS_KEM_alg_efrodokem_1344_shake,
+     KEY_TYPE_ECP_HYB_KEM, 256, 0},
     {0, "frodo640aes", OQS_KEM_alg_frodokem_640_aes, KEY_TYPE_KEM, 128, 0},
     {0, "p256_frodo640aes", OQS_KEM_alg_frodokem_640_aes, KEY_TYPE_ECP_HYB_KEM,
      128, 0},

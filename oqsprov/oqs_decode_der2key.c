@@ -526,6 +526,72 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx) {
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_START
 #ifdef OQS_KEM_ENCODERS
 
+MAKE_DECODER(, "efrodo640aes", efrodo640aes, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "efrodo640aes", efrodo640aes, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p256_efrodo640aes", p256_efrodo640aes, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p256_efrodo640aes", p256_efrodo640aes, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecx, "x25519_efrodo640aes", x25519_efrodo640aes, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x25519_efrodo640aes", x25519_efrodo640aes, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(, "efrodo640shake", efrodo640shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "efrodo640shake", efrodo640shake, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p256_efrodo640shake", p256_efrodo640shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p256_efrodo640shake", p256_efrodo640shake, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecx, "x25519_efrodo640shake", x25519_efrodo640shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x25519_efrodo640shake", x25519_efrodo640shake, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(, "efrodo976aes", efrodo976aes, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "efrodo976aes", efrodo976aes, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p384_efrodo976aes", p384_efrodo976aes, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p384_efrodo976aes", p384_efrodo976aes, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecx, "x448_efrodo976aes", x448_efrodo976aes, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x448_efrodo976aes", x448_efrodo976aes, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(, "efrodo976shake", efrodo976shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "efrodo976shake", efrodo976shake, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p384_efrodo976shake", p384_efrodo976shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p384_efrodo976shake", p384_efrodo976shake, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecx, "x448_efrodo976shake", x448_efrodo976shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x448_efrodo976shake", x448_efrodo976shake, oqsx,
+             SubjectPublicKeyInfo);
+
+MAKE_DECODER(, "efrodo1344aes", efrodo1344aes, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "efrodo1344aes", efrodo1344aes, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p521_efrodo1344aes", p521_efrodo1344aes, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p521_efrodo1344aes", p521_efrodo1344aes, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER(, "efrodo1344shake", efrodo1344shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "efrodo1344shake", efrodo1344shake, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p521_efrodo1344shake", p521_efrodo1344shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p521_efrodo1344shake", p521_efrodo1344shake, oqsx,
+             SubjectPublicKeyInfo);
 MAKE_DECODER(, "frodo640aes", frodo640aes, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "frodo640aes", frodo640aes, oqsx, SubjectPublicKeyInfo);
 

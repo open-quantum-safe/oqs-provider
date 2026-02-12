@@ -1,15 +1,15 @@
 # This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
 # Next free plain KEM ID: 0x024D, p-hybrid: 0x2F4F, X-hybrid: 0x2FB9
 # Switch to using unassigned code points as per https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8:
-# Next free: 65058 (see https://github.com/open-quantum-safe/oqs-provider/issues/561)
+# Next free: 65075 (see https://github.com/open-quantum-safe/oqs-provider/issues/561)
 # ECX hybrid names must start with the name "x...", Brainpool hybrids must start with the name "bp...", all else is considered ECP
 kems:
   -
     family: 'FrodoKEM'
-    name_group: 'frodo640aes'
+    name_group: 'efrodo640aes'
     nid: '65024'
     nid_hybrid: '65025'
-    oqs_alg: 'OQS_KEM_alg_frodokem_640_aes'
+    oqs_alg: 'OQS_KEM_alg_efrodokem_640_aes'
     enable_kem: true
     enable_tls: true
     extra_nids:
@@ -18,10 +18,10 @@ kems:
           nid: '65026'
   -
     family: 'FrodoKEM'
-    name_group: 'frodo640shake'
+    name_group: 'efrodo640shake'
     nid: '65027'
     nid_hybrid: '65028'
-    oqs_alg: 'OQS_KEM_alg_frodokem_640_shake'
+    oqs_alg: 'OQS_KEM_alg_efrodokem_640_shake'
     enable_kem: true
     enable_tls: true
     extra_nids:
@@ -30,10 +30,10 @@ kems:
           nid: '65029'
   -
     family: 'FrodoKEM'
-    name_group: 'frodo976aes'
+    name_group: 'efrodo976aes'
     nid: '65030'
     nid_hybrid: '65031'
-    oqs_alg: 'OQS_KEM_alg_frodokem_976_aes'
+    oqs_alg: 'OQS_KEM_alg_efrodokem_976_aes'
     enable_kem: true
     enable_tls: true
     extra_nids:
@@ -42,10 +42,10 @@ kems:
           nid: '65032'
   -
     family: 'FrodoKEM'
-    name_group: 'frodo976shake'
+    name_group: 'efrodo976shake'
     nid: '65033'
     nid_hybrid: '65034'
-    oqs_alg: 'OQS_KEM_alg_frodokem_976_shake'
+    oqs_alg: 'OQS_KEM_alg_efrodokem_976_shake'
     enable_kem: true
     enable_tls: true
     extra_nids:
@@ -54,17 +54,81 @@ kems:
           nid: '65035'
   -
     family: 'FrodoKEM'
-    name_group: 'frodo1344aes'
+    name_group: 'efrodo1344aes'
     nid: '65036'
     nid_hybrid: '65037'
+    oqs_alg: 'OQS_KEM_alg_efrodokem_1344_aes'
+    enable_kem: true
+    enable_tls: true
+  -
+    family: 'FrodoKEM'
+    name_group: 'efrodo1344shake'
+    nid: '65038'
+    nid_hybrid: '65039'
+    oqs_alg: 'OQS_KEM_alg_efrodokem_1344_shake'
+    enable_kem: true
+    enable_tls: true
+  -
+    family: 'FrodoKEM'
+    name_group: 'frodo640aes'
+    nid: '65059'
+    nid_hybrid: '65060'
+    oqs_alg: 'OQS_KEM_alg_frodokem_640_aes'
+    enable_kem: true
+    enable_tls: true
+    extra_nids:
+      current:
+        - hybrid_group: "x25519"
+          nid: '65061'
+  -
+    family: 'FrodoKEM'
+    name_group: 'frodo640shake'
+    nid: '65062'
+    nid_hybrid: '65063'
+    oqs_alg: 'OQS_KEM_alg_frodokem_640_shake'
+    enable_kem: true
+    enable_tls: true
+    extra_nids:
+      current:
+        - hybrid_group: "x25519"
+          nid: '65064'
+  -
+    family: 'FrodoKEM'
+    name_group: 'frodo976aes'
+    nid: '65065'
+    nid_hybrid: '65066'
+    oqs_alg: 'OQS_KEM_alg_frodokem_976_aes'
+    enable_kem: true
+    enable_tls: true
+    extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '65067'
+  -
+    family: 'FrodoKEM'
+    name_group: 'frodo976shake'
+    nid: '65068'
+    nid_hybrid: '65069'
+    oqs_alg: 'OQS_KEM_alg_frodokem_976_shake'
+    enable_kem: true
+    enable_tls: true
+    extra_nids:
+      current:
+        - hybrid_group: "x448"
+          nid: '65070'
+  -
+    family: 'FrodoKEM'
+    name_group: 'frodo1344aes'
+    nid: '65071'
+    nid_hybrid: '65072'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_aes'
     enable_kem: true
     enable_tls: true
   -
     family: 'FrodoKEM'
     name_group: 'frodo1344shake'
-    nid: '65038'
-    nid_hybrid: '65039'
+    nid: '65073'
+    nid_hybrid: '65074'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_shake'
     enable_kem: true
     enable_tls: true

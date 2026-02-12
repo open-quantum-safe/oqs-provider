@@ -3,7 +3,7 @@
 ### What's New
 Support for OpenSSL's sign/verify message API added.
 
-Includes both variants of FrodoKEM algorithm. Previous 'frodokem' variants are what not are referred to as **ephemeral** variants (i.e. 'efrodokem'), while current 'frodokem' are the new **salted** variants.
+Includes both variants of FrodoKEM algorithm. Previous `frodokem` variants are what now are referred to as **ephemeral** variants (i.e. `efrodokem`), while current `frodokem` are the new **salted** variants.
 
 Previous Release Notes
 ======================

@@ -109,6 +109,12 @@ SecP256r1MLKEM768
 SecP384r1MLKEM1024
 ```
 
+## Using with LibOQS 0.16.0
+
+LibOQS version 0.16.0 includes support for both FrodoKEM variants, as specified in their submission for standardization under [ISO](https://frodokem.org/files/FrodoKEM_standard_proposal_20250929.pdf). In said specification, the
+name `frodokem` now refers to a new variant, labeled **salted**, while the original specification is renamed to `efrodokem`, the **ephemeral**
+variant. Therefore, users must be aware that the string `frodokem*` will refer to different FrodoKEM variants depending upon the `liboqs` version employed.
+
 Building and testing -- Quick start
 -----------------------------------
 

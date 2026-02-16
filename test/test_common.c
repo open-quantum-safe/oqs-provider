@@ -34,7 +34,7 @@ typedef struct {
 
 #define SIGS_DICT_LEN 56
 
-/** \brief List of signature algorithms with support for context strings. */
+/** \brief Mapping of signature algorithm with PQ naming in liboqs */
 oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
 
     {OQS_SIG_alg_ml_dsa_44, "mldsa44"},

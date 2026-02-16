@@ -13,7 +13,7 @@
 
 #define SIGS_DICT_LEN {{ count.val }}
 
-/** \brief List of signature algorithms with support for context strings. */
+/** \brief Mapping of signature algorithm with PQ naming in liboqs */
 oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}

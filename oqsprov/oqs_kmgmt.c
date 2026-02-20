@@ -1488,6 +1488,43 @@ MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake192f)
 MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake256s)
 MAKE_SIG_KEYMGMT_FUNCTIONS(slhdsashake256f)
 
+MAKE_KEM_KEYMGMT_FUNCTIONS(efrodo640aes, OQS_KEM_alg_efrodokem_640_aes, 128)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_efrodo640aes, OQS_KEM_alg_efrodokem_640_aes,
+                               128)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_efrodo640aes,
+                               OQS_KEM_alg_efrodokem_640_aes, 128, 0)
+MAKE_KEM_KEYMGMT_FUNCTIONS(efrodo640shake, OQS_KEM_alg_efrodokem_640_shake, 128)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_efrodo640shake,
+                               OQS_KEM_alg_efrodokem_640_shake, 128)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x25519_efrodo640shake,
+                               OQS_KEM_alg_efrodokem_640_shake, 128, 0)
+MAKE_KEM_KEYMGMT_FUNCTIONS(efrodo976aes, OQS_KEM_alg_efrodokem_976_aes, 192)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_efrodo976aes, OQS_KEM_alg_efrodokem_976_aes,
+                               192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_efrodo976aes, OQS_KEM_alg_efrodokem_976_aes,
+                               192, 0)
+MAKE_KEM_KEYMGMT_FUNCTIONS(efrodo976shake, OQS_KEM_alg_efrodokem_976_shake, 192)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p384_efrodo976shake,
+                               OQS_KEM_alg_efrodokem_976_shake, 192)
+
+MAKE_KEM_ECX_KEYMGMT_FUNCTIONS(x448_efrodo976shake,
+                               OQS_KEM_alg_efrodokem_976_shake, 192, 0)
+MAKE_KEM_KEYMGMT_FUNCTIONS(efrodo1344aes, OQS_KEM_alg_efrodokem_1344_aes, 256)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_efrodo1344aes,
+                               OQS_KEM_alg_efrodokem_1344_aes, 256)
+MAKE_KEM_KEYMGMT_FUNCTIONS(efrodo1344shake, OQS_KEM_alg_efrodokem_1344_shake,
+                           256)
+
+MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_efrodo1344shake,
+                               OQS_KEM_alg_efrodokem_1344_shake, 256)
 MAKE_KEM_KEYMGMT_FUNCTIONS(frodo640aes, OQS_KEM_alg_frodokem_640_aes, 128)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p256_frodo640aes, OQS_KEM_alg_frodokem_640_aes,

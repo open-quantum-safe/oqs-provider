@@ -606,9 +606,10 @@ err_init:
 }
 
 static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
-                                    OSSL_LIB_CTX *libctx) {
+                                    OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
+    (void)(propq);
 
     for (int i = 0; i < OSSL_NELEM(OQSX_ECP_NAMES); i++) {
         if (!strncasecmp(tls_name, OQSX_ECP_NAMES[i],
@@ -643,9 +644,10 @@ err_init_ecp:
 }
 
 static const int oqshybkem_init_ecbp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
-                                     OSSL_LIB_CTX *libctx) {
+                                     OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
+    (void)(propq);
 
     for (int i = 0; i < OSSL_NELEM(OQSX_ECBP_NAMES); i++) {
         if (!strncasecmp(tls_name, OQSX_ECBP_NAMES[i],
@@ -681,7 +683,7 @@ err_init_ecbp:
 }
 
 static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx,
-                                    OSSL_LIB_CTX *libctx) {
+                                    OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
 
@@ -705,7 +707,7 @@ static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx,
     ret = EVP_PKEY_set_type(evp_ctx->keyParam, evp_ctx->evp_info->keytype);
     ON_ERR_SET_GOTO(ret <= 0, ret, -1, err_init_ecx);
 
-    evp_ctx->ctx = EVP_PKEY_CTX_new_from_pkey(libctx, evp_ctx->keyParam, NULL);
+    evp_ctx->ctx = EVP_PKEY_CTX_new_from_pkey(libctx, evp_ctx->keyParam, propq);
     ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err_init_ecx);
 
 err_init_ecx:
@@ -1003,7 +1005,8 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     return oqsx;
 }
 
-static const int (*init_kex_fun[])(char *, OQSX_EVP_CTX *, OSSL_LIB_CTX *) = {
+static const int (*init_kex_fun[])(char *, OQSX_EVP_CTX *, OSSL_LIB_CTX *,
+                                   const char *) = {
     oqshybkem_init_ecp, oqshybkem_init_ecbp, oqshybkem_init_ecx};
 extern const char *oqs_oid_alg_list[];
 
@@ -1092,7 +1095,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ON_ERR_GOTO(!evp_ctx, err);
 
         ret2 = (init_kex_fun[primitive - KEY_TYPE_ECP_HYB_KEM])(
-            tls_name, evp_ctx, libctx);
+            tls_name, evp_ctx, libctx, propq);
         ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->keyParam || !evp_ctx->ctx, err);
 
         ret->numkeys = 2;

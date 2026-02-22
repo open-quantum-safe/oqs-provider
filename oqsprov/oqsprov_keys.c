@@ -609,7 +609,6 @@ static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
                                     OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
-    (void)(propq);
 
     for (int i = 0; i < OSSL_NELEM(OQSX_ECP_NAMES); i++) {
         if (!strncasecmp(tls_name, OQSX_ECP_NAMES[i],
@@ -626,7 +625,7 @@ static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
     evp_ctx->evp_info = evp_info;
 
     evp_ctx->ctx = EVP_PKEY_CTX_new_from_name(
-        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), NULL);
+        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), propq);
     ON_ERR_GOTO(!evp_ctx->ctx, err_init_ecp);
 
     ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
@@ -647,7 +646,6 @@ static const int oqshybkem_init_ecbp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
                                      OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
-    (void)(propq);
 
     for (int i = 0; i < OSSL_NELEM(OQSX_ECBP_NAMES); i++) {
         if (!strncasecmp(tls_name, OQSX_ECBP_NAMES[i],
@@ -665,7 +663,7 @@ static const int oqshybkem_init_ecbp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
     evp_ctx->evp_info = evp_info;
 
     evp_ctx->ctx = EVP_PKEY_CTX_new_from_name(
-        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), NULL);
+        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), propq);
     ON_ERR_GOTO(!evp_ctx->ctx, err_init_ecbp);
 
     ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);

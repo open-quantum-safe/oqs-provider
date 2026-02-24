@@ -1280,7 +1280,7 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
         ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
         return 0;
     }
-    if (pp1 != NULL) {
+    if (pp1 != NULL && include_private) {
         if (pp1->data_type != OSSL_PARAM_OCTET_STRING) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             return 0;

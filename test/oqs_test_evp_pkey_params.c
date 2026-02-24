@@ -391,6 +391,43 @@ out:
     return ret;
 }
 
+/** \brief Tests the export/import capacity of an algorithm.
+ *
+ * \param libctx Top-level OpenSSL context.
+ * \param algname Algorithm name.
+ *
+ * \returns 0 on success. */
+static int test_export_data(OSSL_LIB_CTX *libctx, const char *algname) {
+    EVP_PKEY_CTX *ctx = NULL;
+    EVP_PKEY *key = NULL, *copy = NULL;
+    OSSL_PARAM *todata_params = NULL;
+    int testresult = 1;
+
+    testresult &= (ctx = EVP_PKEY_CTX_new_from_name(libctx, algname,
+                                                    OQSPROV_PROPQ)) != NULL &&
+                  EVP_PKEY_keygen_init(ctx) && EVP_PKEY_generate(ctx, &key);
+
+    if (!testresult)
+        goto err;
+    EVP_PKEY_CTX_free(ctx);
+    ctx = NULL;
+
+    testresult &=
+        EVP_PKEY_todata(key, EVP_PKEY_KEYPAIR, &todata_params) &&
+        (ctx = EVP_PKEY_CTX_new_from_name(libctx, algname, OQSPROV_PROPQ)) !=
+            NULL &&
+        EVP_PKEY_fromdata_init(ctx) &&
+        EVP_PKEY_fromdata(ctx, &copy, EVP_PKEY_KEYPAIR, todata_params) &&
+        EVP_PKEY_eq(key, copy);
+
+err:
+    EVP_PKEY_free(key);
+    EVP_PKEY_free(copy);
+    EVP_PKEY_CTX_free(ctx);
+    OSSL_PARAM_free(todata_params);
+    return !testresult;
+}
+
 int main(int argc, char **argv) {
     OSSL_LIB_CTX *libctx;
     OSSL_PROVIDER *default_provider;
@@ -421,48 +458,30 @@ int main(int argc, char **argv) {
     }
 
     errcnt = 0;
-    algs = OSSL_PROVIDER_query_operation(oqs_provider, OSSL_OP_SIGNATURE,
+    algs = OSSL_PROVIDER_query_operation(oqs_provider, OSSL_OP_KEYMGMT,
                                          &query_nocache);
     if (!algs) {
-        fprintf(stderr, cRED "  No signature algorithms found" cNORM "\n");
-        ERR_print_errors_fp(stderr);
-        ++errcnt;
-        goto next_alg;
-    }
-
-    for (; algs->algorithm_names != NULL; ++algs) {
-        if (!is_signature_algorithm_hybrid(algs->algorithm_names)) {
-            continue;
-        }
-        if (test_algorithm(libctx, algs->algorithm_names)) {
-            fprintf(stderr, cRED " failed for %s " cNORM "\n",
-                    algs->algorithm_names);
-            ++errcnt;
-        } else {
-            fprintf(stderr, cGREEN "%s succeeded" cNORM "\n",
-                    algs->algorithm_names);
-        }
-    }
-
-next_alg:
-    algs = OSSL_PROVIDER_query_operation(oqs_provider, OSSL_OP_KEM,
-                                         &query_nocache);
-    if (!algs) {
-        fprintf(stderr, cRED "  No KEM algorithms found" cNORM "\n");
+        fprintf(stderr, cRED "  No algorithms found" cNORM "\n");
         ERR_print_errors_fp(stderr);
         ++errcnt;
         goto unload_oqs_provider;
     }
+
     for (; algs->algorithm_names != NULL; ++algs) {
-        if (!is_kem_algorithm_hybrid(algs->algorithm_names)) {
-            continue;
+        test = test_export_data(libctx, algs->algorithm_names);
+        if (is_signature_algorithm_hybrid(algs->algorithm_names) ||
+            is_kem_algorithm_hybrid(algs->algorithm_names)) {
+            test = test || test_algorithm(libctx, algs->algorithm_names);
         }
-        if (test_algorithm(libctx, algs->algorithm_names)) {
-            fprintf(stderr, cRED " failed for %s " cNORM "\n",
+        if (test) {
+            ERR_print_errors_fp(stderr);
+            fprintf(stderr,
+                    cRED "EVP_PKEY params test failed for %s " cNORM "\n",
                     algs->algorithm_names);
             ++errcnt;
         } else {
-            fprintf(stderr, cGREEN "%s succeeded" cNORM "\n",
+            fprintf(stderr,
+                    cGREEN "EVP_PKEY params test %s succeeded" cNORM "\n",
                     algs->algorithm_names);
         }
     }

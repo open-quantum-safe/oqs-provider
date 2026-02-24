@@ -221,7 +221,7 @@ static int oqsx_match(const void *keydata1, const void *keydata2,
 static int oqsx_import(void *keydata, int selection,
                        const OSSL_PARAM params[]) {
     OQSX_KEY *key = keydata;
-    int ok = 0;
+    int ok = 0, include_private;
 
     OQS_KM_PRINTF("OQSKEYMGMT: import called \n");
     if (key == NULL) {
@@ -229,8 +229,9 @@ static int oqsx_import(void *keydata, int selection,
         return ok;
     }
 
-    if (((selection & OSSL_KEYMGMT_SELECT_ALL_PARAMETERS) != 0) &&
-        (oqsx_key_fromdata(key, params, 1)))
+    include_private = ((selection & OSSL_KEYMGMT_SELECT_PRIVATE_KEY) != 0);
+    if (((selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0) &&
+        (oqsx_key_fromdata(key, params, include_private)))
         ok = 1;
     return ok;
 }

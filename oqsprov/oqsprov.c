@@ -1284,9 +1284,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         ossl_versionp = *(void **)version_request[0].data;
     }
 
-    // Standardized PQ implementation in OpenSSL 3.5 is _much_ more developed than
-    // this code; disable oqsprovider's versions before OID/sigid registration
-    // so they don't appear in OpenSSL's algorithm discovery table.
+    /* Standardized PQ implementation in OpenSSL 3.5 is _much_ more developed
+     * than this code; disable oqsprovider's versions before OID/sigid
+     * registration so they don't appear in OpenSSL's algorithm discovery table.
+     */
+
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_START
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {

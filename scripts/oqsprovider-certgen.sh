@@ -33,7 +33,7 @@ mkdir -p tmp
 $OPENSSL_APP req -x509 -new -newkey $1 -keyout tmp/$1_CA.key -out tmp/$1_CA.crt -nodes -subj "/CN=oqstest CA" -days 365 && \
 $OPENSSL_APP genpkey -algorithm $1 -out tmp/$1_srv.key && \
 $OPENSSL_APP req -new -newkey $1 -keyout tmp/$1_srv.key -out tmp/$1_srv.csr -nodes -subj "/CN=oqstest server" && \
-$OPENSSL_APP x509 -req -in tmp/$1_srv.csr -out tmp/$1_srv.crt -CA tmp/$1_CA.crt -CAkey tmp/$1_CA.key -CAcreateserial -days 365 && \
+$OPENSSL_APP x509 -req -in tmp/$1_srv.csr -out tmp/$1_srv.crt -CA tmp/$1_CA.crt -CAkey tmp/$1_CA.key -CAcreateserial -days 365 -extensions usr_cert && \
 $OPENSSL_APP verify -CAfile tmp/$1_CA.crt tmp/$1_srv.crt
 # test PEM/DER/TEXT encoder/decoder logic:
 $OPENSSL_APP pkey -text -in tmp/$1_CA.key

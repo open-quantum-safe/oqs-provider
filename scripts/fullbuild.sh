@@ -9,7 +9,7 @@
 # EnvVar LIBOQS_BRANCH: Defines branch/release of liboqs; default value "main"
 # EnvVar OQS_ALGS_ENABLED: If set, defines OQS algs to be enabled, e.g., "STD"
 # EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
-# EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL3
+# EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL
 #        Setting this to feature/dtls-1.3 enables build&test of all PQ algs using DTLS1.3 feature branch
 # EnvVar OSSL_CONFIG: If set, passes arguments to the "./config" command that precedes the "make" of the OpenSSL
 # EnvVar liboqs_DIR: If set, needs to point to a directory where liboqs has been installed to
@@ -48,13 +48,13 @@ else
 fi
 
 if [ -z "$OPENSSL_INSTALL" ]; then
- openssl version | grep "OpenSSL 3" > /dev/null 2>&1
+ openssl version | grep "OpenSSL [34]" > /dev/null 2>&1
  #if [ \($? -ne 0 \) -o \( ! -z "$OPENSSL_BRANCH" \) ]; then
  if [ $? -ne 0 ] || [ ! -z "$OPENSSL_BRANCH" ]; then
    if [ -z "$OPENSSL_BRANCH" ]; then
       export OPENSSL_BRANCH="master"
    fi
-   # No OSSL3 installation given/found, or specific branch build requested
+   # No OSSL3/4 installation given/found, or specific branch build requested
    echo "OpenSSL3 to be built from source at branch $OPENSSL_BRANCH."
 
    if [ ! -d "openssl" ]; then
@@ -104,7 +104,7 @@ if [ -z $liboqs_DIR ]; then
     fi
   fi
 
-  # Ensure liboqs is built against OpenSSL3, not a possibly still system-
+  # Ensure liboqs is built against OpenSSL3/4, not a possibly still system-
   # installed OpenSSL111: We otherwise have mismatching symbols at runtime
   # (detected particularly late when building shared)
   if [ ! -z $OPENSSL_INSTALL ]; then

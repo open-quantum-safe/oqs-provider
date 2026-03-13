@@ -2,14 +2,14 @@
 [![GitHub actions](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/windows.yml/badge.svg)](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/windows.yml)
 [![GitHub actions](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/macos.yml/badge.svg)](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/macos.yml)
 
-oqsprovider - Open Quantum Safe provider for OpenSSL (3.x)
-==========================================================
+oqsprovider - Open Quantum Safe provider for OpenSSL (>=v3)
+===========================================================
 
 Purpose
 -------
 
 This repository contains code to enable quantum-safe cryptography (QSC)
-in a standard OpenSSL (3.x) distribution by way of implementing a single
+in a standard OpenSSL (>v1.1) distribution by way of implementing a single
 shared library, the OQS
 [provider](https://www.openssl.org/docs/manmaster/man7/provider.html).
 
@@ -75,19 +75,13 @@ A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are
 documented in [ALGORITHMS.md](ALGORITHMS.md).
 
-## Using with OpenSSL 3.5.0 
+## Using with OpenSSL >= 3.5.0 
 
-OpenSSL version 3.5.0 adds native support for:
+OpenSSL version 3.5.0 adds native support for the standardized PQ algorithm families MLKEM, MLDSA, SLHDSA as well as support for standardized hybrid PQ schemes.
 
--**ML-KEM**: `MLKEM512`, `MLKEM768`, `MLKEM1024`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `X448MLKEM1024`, `SecP384r1MLKEM1024`
-
--**ML-DSA**: `MLDSA44`, `MLDSA65`, `MLDSA87`
-
-When loaded with OpenSSL (version >= 3.5.0), oqsprovider (version >= 0.9.0) automatically disables the following liboqs algorithms: 
-
--**ML-DSA**: `mldsa44`, `mldsa65`, `mldsa87`, `mldsa_*`
-
--**ML-KEM**: `mlkem512`, `mlkem768`, `mlkem1024`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `X448MLKEM1024`, `SecP384r1MLKEM1024`
+As these code bases are substantially more advanced and better maintained than the same facilties made
+available via `oqsprovider` these algorithm families get disabled when running in `openssl` versions
+already containing them in the default provider.
 
 The new OpenSSL implementations can be be used in such a oqsprovider configuration (OpenSSL >= 3.5.0 and oqsprovider >= 0.9.0) by accessing them through the following algorithm IDs: 
 
@@ -235,6 +229,16 @@ A problem basically related to any TLS server installation is the observed
 [limitation to 64 TLS signature algorithms](https://github.com/open-quantum-safe/oqs-provider/issues/399)
 by some TLS server implementations. Therefore, again caution is advised
 [activating more than 64 PQ signature algorithms via the pre-build configuration facility](CONFIGURE.md#pre-build-configuration).
+
+## General disclaimer
+
+In general, any use of the standardized algorithm families in any `openssl` version via
+`oqsprovider` is strongly discouraged due to the disparities in key material representation
+and key generation logic that has developed since 2024.
+
+`oqsprovider` is primarily meant as a vehicle to enable testing of experimental PQ
+crypto and has no intention of and/or commitment for duplicating the efforts going into
+the development of production quality PQ crypto in `openssl`'s default provider.
 
 Governance & Contributions
 --------------------------

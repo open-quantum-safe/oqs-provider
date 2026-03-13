@@ -1284,77 +1284,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         ossl_versionp = *(void **)version_request[0].data;
     }
 
-    // insert all OIDs to the global objects list
-    for (i = 0; i < OQS_OID_CNT; i += 2) {
-        int id_ok = 1;
+    /* Standardized PQ implementation in OpenSSL 3.5 is _much_ more developed
+     * than this code; disable oqsprovider's versions before OID/sigid
+     * registration so they don't appear in OpenSSL's algorithm discovery table.
+     */
 
-        if (oqs_oid_alg_list[i] == NULL) {
-            OQS_PROV_PRINTF2("OQS PROV: Warning: No OID registered for %s\n",
-                             oqs_oid_alg_list[i + 1]);
-        } else {
-            if (!c_obj_create(handle, oqs_oid_alg_list[i],
-                              oqs_oid_alg_list[i + 1],
-                              oqs_oid_alg_list[i + 1])) {
-                OQS_PROV_PRINTF2("error registering NID for %s\n",
-                                 oqs_oid_alg_list[i + 1]);
-                id_ok = 0;
-                goto end_for;
-            }
-
-            /* create object (NID) again to avoid setup corner case problems
-             * see https://github.com/openssl/openssl/discussions/21903
-             * Not testing for errors is intentional.
-             * At least one core version hangs up; so don't do this there:
-             */
-            if (strcmp("3.1.0", ossl_versionp)) {
-                ERR_set_mark();
-                OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
-                           oqs_oid_alg_list[i + 1]);
-                ERR_pop_to_mark();
-            }
-
-            if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
-                             OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-                goto end_init;
-            }
-
-            if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
-                                 oqs_oid_alg_list[i + 1])) {
-                OQS_PROV_PRINTF2("error registering %s with no hash\n",
-                                 oqs_oid_alg_list[i + 1]);
-                id_ok = 0;
-                goto end_for;
-            }
-
-            if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
-                OQS_PROV_PRINTF3(
-                    "OQS PROV: successfully registered %s with NID %d\n",
-                    oqs_oid_alg_list[i + 1],
-                    OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
-            } else {
-                fprintf(stderr,
-                        "OQS PROV: Impossible error: NID unregistered "
-                        "for %s.\n",
-                        oqs_oid_alg_list[i + 1]);
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-                goto end_init;
-            }
-        end_for:
-            if (!id_ok) {
-                sk_OPENSSL_STRING_push(rt_disabled_algs,
-                                       (char *)(oqs_oid_alg_list[i + 1]));
-            }
-        }
-    }
-
-    // OpenSSL 3.4.0 onwards includes sign/verify message API
-    if (strcmp("3.4.0", ossl_versionp) <= 0) {
-        oqs_sig_activate_message_api();
-    }
-
-    // ML-KEM implementation in OpenSSL 3.5 is _much_ more developed than this
-    // code
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_START
 
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
@@ -1463,6 +1397,80 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     }
 
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_END
+
+    // insert all OIDs to the global objects list
+    for (i = 0; i < OQS_OID_CNT; i += 2) {
+        int id_ok = 1;
+
+        if (oqs_oid_alg_list[i] == NULL) {
+            OQS_PROV_PRINTF2("OQS PROV: Warning: No OID registered for %s\n",
+                             oqs_oid_alg_list[i + 1]);
+        } else {
+            // Skip OID/sigid registration for version-disabled algorithms
+            if (rt_disabled_algs &&
+                sk_OPENSSL_STRING_find(rt_disabled_algs,
+                                       (char *)oqs_oid_alg_list[i + 1]) >= 0)
+                goto end_for;
+            if (!c_obj_create(handle, oqs_oid_alg_list[i],
+                              oqs_oid_alg_list[i + 1],
+                              oqs_oid_alg_list[i + 1])) {
+                OQS_PROV_PRINTF2("error registering NID for %s\n",
+                                 oqs_oid_alg_list[i + 1]);
+                id_ok = 0;
+                goto end_for;
+            }
+
+            /* create object (NID) again to avoid setup corner case problems
+             * see https://github.com/openssl/openssl/discussions/21903
+             * Not testing for errors is intentional.
+             * At least one core version hangs up; so don't do this there:
+             */
+            if (strcmp("3.1.0", ossl_versionp)) {
+                ERR_set_mark();
+                OBJ_create(oqs_oid_alg_list[i], oqs_oid_alg_list[i + 1],
+                           oqs_oid_alg_list[i + 1]);
+                ERR_pop_to_mark();
+            }
+
+            if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
+                             OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
+
+            if (!c_obj_add_sigid(handle, oqs_oid_alg_list[i + 1], "",
+                                 oqs_oid_alg_list[i + 1])) {
+                OQS_PROV_PRINTF2("error registering %s with no hash\n",
+                                 oqs_oid_alg_list[i + 1]);
+                id_ok = 0;
+                goto end_for;
+            }
+
+            if (OBJ_sn2nid(oqs_oid_alg_list[i + 1]) != 0) {
+                OQS_PROV_PRINTF3(
+                    "OQS PROV: successfully registered %s with NID %d\n",
+                    oqs_oid_alg_list[i + 1],
+                    OBJ_sn2nid(oqs_oid_alg_list[i + 1]));
+            } else {
+                fprintf(stderr,
+                        "OQS PROV: Impossible error: NID unregistered "
+                        "for %s.\n",
+                        oqs_oid_alg_list[i + 1]);
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                goto end_init;
+            }
+        end_for:
+            if (!id_ok) {
+                sk_OPENSSL_STRING_push(rt_disabled_algs,
+                                       (char *)(oqs_oid_alg_list[i + 1]));
+            }
+        }
+    }
+
+    // OpenSSL 3.4.0 onwards includes sign/verify message API
+    if (strcmp("3.4.0", ossl_versionp) <= 0) {
+        oqs_sig_activate_message_api();
+    }
 
     // output disabled algs:
     /*

@@ -77,7 +77,7 @@ documented in [ALGORITHMS.md](ALGORITHMS.md).
 
 ## Using with OpenSSL >= 3.5.0 
 
-OpenSSL version 3.5.0 adds native support for the standardized PQ algorithm families MLKEM, MLDSA, SLHDSA.
+OpenSSL version 3.5.0 adds native support for the standardized PQ algorithm families MLKEM, MLDSA, SLHDSA as well as support for standardized hybrid PQ schemes.
 
 As these code bases are substantially more advanced and better maintained than the same facilties made
 available via `oqsprovider` these algorithm families get disabled when running in `openssl` versions

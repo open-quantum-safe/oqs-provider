@@ -6,7 +6,8 @@ This project aims to operate by the following principles:
 
 - **Openness**: The project will be open in its operation, open to contributions, and produce open source software.
 - **Respect**: The project will foster respectful interactions with all participants.
-- **Scientific integrity**: The project will follow advancements in cryptographic research and will be guided by standards and best practices.
+- **Scientific integrity**: The project will follow advancements in cryptographic research and will be guided by standards and best practices with a slant towards favouring the advancement of long term research goals over short term commercial interests.
+- **Best effort**: The project will do the best its members can do to provide support to its users without making over-ambitious promises; no user shall be led to assume this code is meant to be used in commercial offerings.
 
 Decision making in the project will follow the principles above, and be governed first and foremost by reason and mutually respectful interaction between all participants.
 The project will aim to build consensus for decisions, and will where possible operate by the approach of [lazy consensus](https://community.apache.org/committers/decisionMaking.html).
@@ -41,14 +42,16 @@ A **Contributor** is a Community Member who contributes directly to the project 
 
 ### Committers
 
-A **Committer** is a Contributor with increased experience in the project who helps review pull requests and actively participates in discussions about the project. Committers will be members of the open-quantum-safe GitHub organization and will have "write" permissions in GitHub.
+A **Committer** is a Contributor with increased interest in the project who helps review pull requests and actively participates in discussions about the project. Committers will be members of the open-quantum-safe GitHub organization and will have "write" permissions in GitHub.
 
 Responsibilities:
 
 - Further the goals of the project.
 - Monitor and respond to GitHub issues.
-- Review and merge pull requests.
+- Review and merge pull requests in cooperation with other Committers.
 - Assist with security releases when required.
+- Jointly agree on general and technical guidelines for the project.
+- Jointly agree project priorities.
 - Participate in discussions and project meetings.
 
 ### Release managers
@@ -62,14 +65,13 @@ Responsibilities:
 
 ### Maintainers
 
-A **Maintainer** is a Committer who makes significant and sustained contributions to the project, and is committed to guiding the direction of the project. Maintainers will have "administrative" permissions in GitHub and thus are also able to act as Release managers.
+A **Maintainer** is a Committer with additional responsibilities and experience. Maintainers will have "administrative" permissions in GitHub.
 
 Responsibilities:
 
-- Oversee the overall project health and growth.
-- Lead communication for the project.
-- Define general and technical guidelines for the project.
-- Identify priorities.
+- Assess project status and role assignments.
+- Propose communication about the project.
+- Propose changes to this governance document.
 
 ### Change of role
 
@@ -107,6 +109,7 @@ Votes are to be executed by way of open GitHub discussions. No quorum is needed 
 
 @baentsch
 @ashman-p
+@RodriM11
 
 ### Committers
 

@@ -821,6 +821,10 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx) {
     dstctx->sig = NULL;
     dstctx->md = NULL;
     dstctx->mdctx = NULL;
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    dstctx->signature = NULL;
+    dstctx->siglen = 0;
+#endif
 
     if (srcctx->sig != NULL && !oqsx_key_up_ref(srcctx->sig))
         goto err;
@@ -864,6 +868,15 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx) {
             goto err;
         dstctx->context_string_length = srcctx->context_string_length;
     }
+
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    if (srcctx->signature) {
+        dstctx->signature = OPENSSL_memdup(srcctx->signature, srcctx->siglen);
+        if (dstctx->signature == NULL)
+            goto err;
+        dstctx->siglen = srcctx->siglen;
+    }
+#endif
 
     return dstctx;
 err:

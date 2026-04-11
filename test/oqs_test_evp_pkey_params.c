@@ -391,6 +391,101 @@ out:
     return ret;
 }
 
+/** \brief Tests that get_params succeeds on a pubkey-only hybrid key.
+ *
+ * Regression test for GHSA-mqwg-cg22-g8r8: oqsx_get_hybrid_params() had a
+ * duplicate NULL check (comp_privkey checked twice instead of also checking
+ * privkey), which caused it to dereference a NULL privkey pointer when only
+ * a public key was present.
+ *
+ * \param libctx Top-level OpenSSL context.
+ * \param algname Algorithm name.
+ *
+ * \returns 0 on success. */
+static int test_pubkey_only_hybrid_get_params(OSSL_LIB_CTX *libctx,
+                                              const char *algname) {
+    EVP_PKEY_CTX *ctx = NULL;
+    EVP_PKEY *key = NULL, *pubonly = NULL;
+    OSSL_PARAM *todata_params = NULL;
+    uint8_t *buf = NULL;
+    size_t buf_len = 0;
+    int ret = -1;
+
+    /* Generate a full keypair. */
+    ctx = EVP_PKEY_CTX_new_from_name(libctx, algname, OQSPROV_PROPQ);
+    if (!ctx || EVP_PKEY_keygen_init(ctx) != 1 ||
+        EVP_PKEY_generate(ctx, &key) != 1) {
+        fprintf(stderr,
+                cRED "  pubkey-only test: keygen failed for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+    EVP_PKEY_CTX_free(ctx);
+    ctx = NULL;
+
+    /* Export only the public key. */
+    if (EVP_PKEY_todata(key, EVP_PKEY_PUBLIC_KEY, &todata_params) != 1) {
+        fprintf(stderr,
+                cRED "  pubkey-only test: todata failed for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+
+    /* Re-import as a public-key-only EVP_PKEY. */
+    ctx = EVP_PKEY_CTX_new_from_name(libctx, algname, OQSPROV_PROPQ);
+    if (!ctx || EVP_PKEY_fromdata_init(ctx) != 1 ||
+        EVP_PKEY_fromdata(ctx, &pubonly, EVP_PKEY_PUBLIC_KEY,
+                          todata_params) != 1) {
+        fprintf(stderr,
+                cRED "  pubkey-only test: fromdata failed for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+
+    /* Request the classical public key param -- this calls
+     * oqsx_get_hybrid_params(). Before the fix, the duplicate NULL check
+     * would let the code dereference key->privkey even though it is NULL. */
+    if (EVP_PKEY_get_octet_string_param(
+            pubonly, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, NULL, 0,
+            &buf_len) != 1) {
+        fprintf(stderr,
+                cRED "  pubkey-only test: get classical pubkey size "
+                     "failed for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+    buf = malloc(buf_len);
+    if (!buf) {
+        fprintf(stderr, cRED "  pubkey-only test: malloc failed" cNORM "\n");
+        goto err;
+    }
+    if (EVP_PKEY_get_octet_string_param(
+            pubonly, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, buf, buf_len,
+            &buf_len) != 1) {
+        fprintf(stderr,
+                cRED "  pubkey-only test: get classical pubkey "
+                     "failed for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+    if (buf_len == 0) {
+        fprintf(stderr,
+                cRED "  pubkey-only test: classical pubkey is empty "
+                     "for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+    ret = 0;
+
+err:
+    free(buf);
+    EVP_PKEY_free(key);
+    EVP_PKEY_free(pubonly);
+    EVP_PKEY_CTX_free(ctx);
+    OSSL_PARAM_free(todata_params);
+    return ret;
+}
+
 /** \brief Tests the export/import capacity of an algorithm.
  *
  * \param libctx Top-level OpenSSL context.
@@ -472,6 +567,11 @@ int main(int argc, char **argv) {
         if (is_signature_algorithm_hybrid(algs->algorithm_names) ||
             is_kem_algorithm_hybrid(algs->algorithm_names)) {
             test = test || test_algorithm(libctx, algs->algorithm_names);
+        }
+        if (is_signature_algorithm_hybrid(algs->algorithm_names)) {
+            test = test ||
+                   test_pubkey_only_hybrid_get_params(libctx,
+                                                      algs->algorithm_names);
         }
         if (test) {
             ERR_print_errors_fp(stderr);

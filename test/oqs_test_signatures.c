@@ -251,8 +251,8 @@ static int test_oqs_sig_dupctx_double_free(const char *sigalg_name) {
     }
 
     /* Generate a key and produce a valid signature */
-    if (!(ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name,
-                                            OQSPROV_PROPQ)) ||
+    if (!(ctx =
+              EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, OQSPROV_PROPQ)) ||
         !EVP_PKEY_keygen_init(ctx) || !EVP_PKEY_generate(ctx, &key) ||
         !(alg = EVP_SIGNATURE_fetch(libctx, sigalg_name, OQSPROV_PROPQ)) ||
         !(pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) ||

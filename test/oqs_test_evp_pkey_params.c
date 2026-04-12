@@ -434,8 +434,8 @@ static int test_pubkey_only_hybrid_get_params(OSSL_LIB_CTX *libctx,
     /* Re-import as a public-key-only EVP_PKEY. */
     ctx = EVP_PKEY_CTX_new_from_name(libctx, algname, OQSPROV_PROPQ);
     if (!ctx || EVP_PKEY_fromdata_init(ctx) != 1 ||
-        EVP_PKEY_fromdata(ctx, &pubonly, EVP_PKEY_PUBLIC_KEY,
-                          todata_params) != 1) {
+        EVP_PKEY_fromdata(ctx, &pubonly, EVP_PKEY_PUBLIC_KEY, todata_params) !=
+            1) {
         fprintf(stderr,
                 cRED "  pubkey-only test: fromdata failed for %s" cNORM "\n",
                 algname);
@@ -445,9 +445,9 @@ static int test_pubkey_only_hybrid_get_params(OSSL_LIB_CTX *libctx,
     /* Request the classical public key param -- this calls
      * oqsx_get_hybrid_params(). Before the fix, the duplicate NULL check
      * would let the code dereference key->privkey even though it is NULL. */
-    if (EVP_PKEY_get_octet_string_param(
-            pubonly, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, NULL, 0,
-            &buf_len) != 1) {
+    if (EVP_PKEY_get_octet_string_param(pubonly,
+                                        OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY,
+                                        NULL, 0, &buf_len) != 1) {
         fprintf(stderr,
                 cRED "  pubkey-only test: get classical pubkey size "
                      "failed for %s" cNORM "\n",
@@ -459,9 +459,9 @@ static int test_pubkey_only_hybrid_get_params(OSSL_LIB_CTX *libctx,
         fprintf(stderr, cRED "  pubkey-only test: malloc failed" cNORM "\n");
         goto err;
     }
-    if (EVP_PKEY_get_octet_string_param(
-            pubonly, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, buf, buf_len,
-            &buf_len) != 1) {
+    if (EVP_PKEY_get_octet_string_param(pubonly,
+                                        OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY,
+                                        buf, buf_len, &buf_len) != 1) {
         fprintf(stderr,
                 cRED "  pubkey-only test: get classical pubkey "
                      "failed for %s" cNORM "\n",
@@ -569,9 +569,8 @@ int main(int argc, char **argv) {
             test = test || test_algorithm(libctx, algs->algorithm_names);
         }
         if (is_signature_algorithm_hybrid(algs->algorithm_names)) {
-            test = test ||
-                   test_pubkey_only_hybrid_get_params(libctx,
-                                                      algs->algorithm_names);
+            test = test || test_pubkey_only_hybrid_get_params(
+                               libctx, algs->algorithm_names);
         }
         if (test) {
             ERR_print_errors_fp(stderr);

@@ -409,7 +409,7 @@ static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[]) {
         pq_pubkey = key->comp_pubkey[idx_pq];
         pq_pubkey_len = key->pubkeylen - classical_pubkey_len - SIZE_OF_UINT32;
     }
-    if (key->comp_privkey != NULL && key->comp_privkey != NULL) {
+    if (key->comp_privkey != NULL && key->privkey != NULL) {
         pq_privkey = key->comp_privkey[idx_pq];
         pq_privkey_len =
             key->privkeylen - classical_privkey_len - SIZE_OF_UINT32;

@@ -230,6 +230,86 @@ static int test_oqs_signatures_with_ctx_str(const char *sigalg_name) {
     return testresult;
 }
 
+/* Regression test for GHSA-2gh6-p878-65cq: double-free of ctx->signature
+ * when a signature context with a populated 'signature' field is duplicated
+ * and both copies are freed. */
+static int test_oqs_sig_dupctx_double_free(const char *sigalg_name) {
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+    EVP_PKEY_CTX *ctx = NULL, *pctx = NULL, *pctx_dup = NULL;
+    EVP_PKEY *key = NULL;
+    EVP_SIGNATURE *alg = NULL;
+    EVP_MD_CTX *mdctx = NULL, *mdctx_dup = NULL;
+    EVP_PKEY_CTX *dvpctx = NULL;
+    const char msg[] = "The quick brown fox jumps over... you know what";
+    unsigned char *sig = NULL;
+    size_t siglen;
+    int testresult = 0;
+
+    if (!alg_is_enabled(sigalg_name)) {
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", sigalg_name);
+        return 1;
+    }
+
+    /* Generate a key and produce a valid signature */
+    if (!(ctx =
+              EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, OQSPROV_PROPQ)) ||
+        !EVP_PKEY_keygen_init(ctx) || !EVP_PKEY_generate(ctx, &key) ||
+        !(alg = EVP_SIGNATURE_fetch(libctx, sigalg_name, OQSPROV_PROPQ)) ||
+        !(pctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ)) ||
+        !EVP_PKEY_sign_message_init(pctx, alg, NULL) ||
+        !EVP_PKEY_sign(pctx, NULL, &siglen, (const unsigned char *)msg,
+                       sizeof(msg)) ||
+        !(sig = OPENSSL_malloc(siglen)) ||
+        !EVP_PKEY_sign(pctx, sig, &siglen, (const unsigned char *)msg,
+                       sizeof(msg)))
+        goto err;
+
+    /* Test 1: EVP_PKEY_CTX_dup after EVP_PKEY_CTX_set_signature.
+     * Populate ctx->signature via verify_message_init + set_signature,
+     * then duplicate the context and free both copies. */
+    if (!EVP_PKEY_verify_message_init(pctx, alg, NULL) ||
+        !EVP_PKEY_CTX_set_signature(pctx, sig, siglen) ||
+        !(pctx_dup = EVP_PKEY_CTX_dup(pctx)))
+        goto err;
+
+    EVP_PKEY_CTX_free(pctx_dup);
+    pctx_dup = NULL;
+    EVP_PKEY_CTX_free(pctx);
+    pctx = NULL;
+
+    /* Test 2: EVP_MD_CTX_copy_ex with DigestVerify.
+     * The internal EVP_PKEY_CTX is duplicated via the provider's dupctx. */
+    if (!(mdctx = EVP_MD_CTX_new()) ||
+        !EVP_DigestVerifyInit_ex(mdctx, &dvpctx, NULL, libctx, NULL, key,
+                                 NULL) ||
+        !EVP_PKEY_CTX_set_signature(dvpctx, sig, siglen) ||
+        !(mdctx_dup = EVP_MD_CTX_new()) ||
+        !EVP_MD_CTX_copy_ex(mdctx_dup, mdctx))
+        goto err;
+
+    EVP_MD_CTX_free(mdctx_dup);
+    mdctx_dup = NULL;
+    EVP_MD_CTX_free(mdctx);
+    mdctx = NULL;
+
+    testresult = 1;
+
+err:
+    EVP_PKEY_CTX_free(pctx_dup);
+    EVP_PKEY_CTX_free(pctx);
+    EVP_MD_CTX_free(mdctx_dup);
+    EVP_MD_CTX_free(mdctx);
+    EVP_PKEY_CTX_free(ctx);
+    EVP_SIGNATURE_free(alg);
+    EVP_PKEY_free(key);
+    OPENSSL_free(sig);
+    return testresult;
+#else
+    (void)sigalg_name;
+    return 1;
+#endif
+}
+
 #define nelem(a) (sizeof(a) / sizeof((a)[0]))
 
 int main(int argc, char *argv[]) {
@@ -252,7 +332,8 @@ int main(int argc, char *argv[]) {
     if (sigalgs) {
         for (; sigalgs->algorithm_names != NULL; sigalgs++) {
             if (test_oqs_signatures(sigalgs->algorithm_names) &&
-                test_oqs_signatures_with_ctx_str(sigalgs->algorithm_names)) {
+                test_oqs_signatures_with_ctx_str(sigalgs->algorithm_names) &&
+                test_oqs_sig_dupctx_double_free(sigalgs->algorithm_names)) {
                 fprintf(stderr,
                         cGREEN "  Signature test succeeded: %s" cNORM "\n",
                         sigalgs->algorithm_names);

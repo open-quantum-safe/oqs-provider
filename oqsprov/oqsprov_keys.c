@@ -1587,6 +1587,7 @@ err_gen:
     if (ret) {
         EVP_PKEY_free(pkey);
         key->classical_pkey = NULL;
+        oqsx_key_free(key);
     }
     return ret;
 }

@@ -45,6 +45,11 @@ if(OQS_PROVIDER_BUILD_STATIC AND BUILD_SHARED_LIBS)
   message(FATAL_ERROR "`OQS_PROVIDER_BUILD_STATIC` is not compatible with `BUILD_SHARED_LIBS`.")
 endif()
 
+option(OQS_PROVIDER_SHARED_TYPE "Build a shared library type instead of a module library type" OFF)
+if(OQS_PROVIDER_SHARED_TYPE AND NOT OQS_PROVIDER_SHARED_TYPE)
+  message(FATAL_ERROR "`OQS_PROVIDER_SHARED_TYPE` is not compatible with not `BUILD_SHARED_LIBS`.")
+endif()
+
 include(CheckLibraryExists)
 include(CheckFunctionExists)
 

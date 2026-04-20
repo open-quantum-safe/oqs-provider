@@ -100,6 +100,18 @@ void load_oqs_provider(OSSL_LIB_CTX *libctx) {
 See [`examples/static_oqsprovider.c`](examples/static_oqsprovider.c) for a complete
 example of how to load oqsprovider using `OSSL_PROVIDER_add_builtin`.
 
+### OQS_PROVIDER_SHARED_TYPE
+
+By setting `-DOQS_PROVIDER_SHARED_TYPE=ON` at compile-time, oqs-provider can be
+compiled as a shared library instead of the default behavior of a shared module.
+This will provide the shared object with a `SONAME` and `SOVERSION` so it can
+be directly linked as a shared library, if desired.
+Since the vast majority of use cases will require the object to have a type `MODULE`, 
+the default value therefore is `OFF`.
+
+> **Warning**
+> `OQS_PROVIDER_SHARED_TYPE` and `NOT BUILD_SHARED_LIBS` are mutually exclusive.
+
 ### BUILD_TESTING
 
 By setting this to "OFF", no tests or examples will be compiled.

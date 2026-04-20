@@ -497,6 +497,13 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[]) {
     if (oqsx_get_hybrid_params(oqsxk, params))
         return 0;
 
+    if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PROPERTIES)) != NULL) {
+        const char *pq = oqsxk->propq != NULL ? oqsxk->propq : "";
+
+        if (!OSSL_PARAM_set_utf8_string(p, pq))
+            return 0;
+    }
+
     // not passing in params to respond to is no error
     return 1;
 }
@@ -506,6 +513,7 @@ static const OSSL_PARAM oqsx_gettable_params[] = {
     OSSL_PARAM_int(OSSL_PKEY_PARAM_SECURITY_BITS, NULL),
     OSSL_PARAM_int(OSSL_PKEY_PARAM_MAX_SIZE, NULL),
     OSSL_PARAM_octet_string(OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY, NULL, 0),
+    OSSL_PARAM_utf8_string(OSSL_PKEY_PARAM_PROPERTIES, NULL, 0),
     OQS_KEY_TYPES(),
     OSSL_PARAM_END};
 

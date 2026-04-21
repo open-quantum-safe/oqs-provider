@@ -135,7 +135,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    load_default_provider(libctx);
     load_oqs_provider(libctx, argv[1], argv[2]);
 
     oqsprov = OSSL_PROVIDER_load(libctx, argv[1]);

@@ -165,10 +165,6 @@ set_tests_properties(oqs_evp_pkey_params
 )
 endif()
 
-add_executable(oqs_test_prop_str oqs_test_prop_str.c test_common.c)
-target_include_directories(oqs_test_prop_str PRIVATE "../oqsprov")
-target_link_libraries(oqs_test_prop_str PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
-
 add_test(
     NAME oqs_test_prop_str
     COMMAND oqs_test_prop_str
@@ -186,6 +182,10 @@ set_tests_properties(oqs_test_prop_str
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
 )
 endif()
+
+add_executable(oqs_test_prop_str oqs_test_prop_str.c test_common.c)
+target_include_directories(oqs_test_prop_str PRIVATE "../oqsprov")
+target_link_libraries(oqs_test_prop_str PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 
 if (OQS_PROVIDER_BUILD_STATIC)
   targets_set_static_provider(oqs_test_signatures

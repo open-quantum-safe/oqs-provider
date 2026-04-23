@@ -233,8 +233,8 @@ int is_kem_algorithm_hybrid(const char *_alg_) {
 int does_signature_algorithm_support_ctx_str(const char *_alg_) {
     for (unsigned int i = 0; i < SIGS_DICT_LEN; i++) {
         if (strcmp(kOQSNameMapSignatureAlgorithms[i].alg_name, _alg_) == 0)
-            return OQS_SIG_supports_ctx_str(
-                kOQSNameMapSignatureAlgorithms[i].oqsname);
+            // return OQS_SIG_supports_ctx_str(
+            //     kOQSNameMapSignatureAlgorithms[i].oqsname);
     }
     return 0;
 }

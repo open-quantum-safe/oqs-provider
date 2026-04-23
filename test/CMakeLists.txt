@@ -185,7 +185,7 @@ endif()
 
 add_executable(oqs_test_prop_str oqs_test_prop_str.c test_common.c)
 target_include_directories(oqs_test_prop_str PRIVATE "../oqsprov")
-target_link_libraries(oqs_test_prop_str PRIVATE ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+target_link_libraries(oqs_test_prop_str PRIVATE ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 
 if (OQS_PROVIDER_BUILD_STATIC)
   targets_set_static_provider(oqs_test_signatures

@@ -229,8 +229,7 @@ int main(int argc, char *argv[]) {
             int hybrid = is_kem_algorithm_hybrid(algname);
 
             if (!alg_is_enabled(algname)) {
-                fprintf(stderr,
-                        "Skip disabled KEM %s (OQS_TST_PROPQ_2).\n",
+                fprintf(stderr, "Skip disabled KEM %s (OQS_TST_PROPQ_2).\n",
                         algname);
                 continue;
             }
@@ -252,8 +251,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (kem2_runs == 0) {
-        fprintf(stderr,
-                "No KEM algs tested for OQS_TST_PROPQ_2.\n");
+        fprintf(stderr, "No KEM algs tested for OQS_TST_PROPQ_2.\n");
     }
 
     sig_algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
@@ -267,8 +265,7 @@ int main(int argc, char *argv[]) {
                 continue;
 
             if (!alg_is_enabled(algname)) {
-                fprintf(stderr, "Skip disabled PQ signature %s.\n",
-                        algname);
+                fprintf(stderr, "Skip disabled PQ signature %s.\n", algname);
                 continue;
             }
 
@@ -311,10 +308,9 @@ int main(int argc, char *argv[]) {
             const char *algname = algs->algorithm_names;
 
             if (!alg_is_enabled(algname)) {
-                fprintf(
-                    stderr,
-                    "Skip disabled signature %s (OQS_TST_PROPQ_2).\n",
-                    algname);
+                fprintf(stderr,
+                        "Skip disabled signature %s (OQS_TST_PROPQ_2).\n",
+                        algname);
                 continue;
             }
 
@@ -334,9 +330,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (sig2_runs == 0) {
-        fprintf(
-            stderr,
-            "No PQ signature algs tested for OQS_TST_PROPQ_2.\n");
+        fprintf(stderr, "No PQ signature algs tested for OQS_TST_PROPQ_2.\n");
     }
 
     ret = errcnt != 0 ? 1 : 0;

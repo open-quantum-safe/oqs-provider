@@ -71,6 +71,8 @@ static int test_propq_on_pkey_ex(OSSL_LIB_CTX *libctx, const char *algname,
     }
     if (EVP_PKEY_keygen(ctx, &pkey) <= 0) {
         fprintf(stderr, "EVP_PKEY_keygen failed for %s\n", algname);
+        EVP_PKEY_free(pkey);
+        pkey = NULL;
         goto err;
     }
     EVP_PKEY_CTX_free(ctx);

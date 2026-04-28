@@ -600,6 +600,10 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
 free_evp_ctx:
     EVP_PKEY_CTX_free(evp_ctx->ctx);
     evp_ctx->ctx = NULL;
+    if (evp_ctx->keyParam) {
+        EVP_PKEY_free(evp_ctx->keyParam);
+        evp_ctx->keyParam = NULL;
+    }
 
 err_init:
     return ret;
@@ -1176,6 +1180,10 @@ err:
         OPENSSL_free(ret->propq);
         OPENSSL_free(ret->comp_privkey);
         OPENSSL_free(ret->comp_pubkey);
+        OQS_KEM_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.kem);
+        ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = NULL;
+        OQS_SIG_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.sig);
+        ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = NULL;
     }
     OPENSSL_free(ret);
     return NULL;

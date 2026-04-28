@@ -262,10 +262,6 @@ int main(int argc, char *argv[]) {
         for (algs = sig_algs; algs->algorithm_names != NULL; algs++) {
             const char *algname = algs->algorithm_names;
 
-            /* User asked for PQ signatures; skip hybrids here. */
-            if (is_signature_algorithm_hybrid(algname))
-                continue;
-
             if (!alg_is_enabled(algname)) {
                 fprintf(stderr, "Skip disabled PQ signature %s.\n", algname);
                 continue;

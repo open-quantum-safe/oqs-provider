@@ -711,8 +711,13 @@ static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx,
 
     evp_ctx->ctx = EVP_PKEY_CTX_new_from_pkey(libctx, evp_ctx->keyParam, propq);
     ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err_init_ecx);
+    return ret;
 
 err_init_ecx:
+    if (evp_ctx->keyParam) {
+        EVP_PKEY_free(evp_ctx->keyParam);
+        evp_ctx->keyParam = NULL;
+    }
     return ret;
 }
 
@@ -1175,6 +1180,21 @@ err:
     if (ret->lock)
         CRYPTO_THREAD_lock_free(ret->lock);
 #endif
+
+    if (ret->oqsx_provider_ctx.oqsx_evp_ctx) {
+        EVP_PKEY_CTX_free(ret->oqsx_provider_ctx.oqsx_evp_ctx->ctx);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx->ctx = NULL;
+        EVP_PKEY_free(ret->oqsx_provider_ctx.oqsx_evp_ctx->keyParam);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx->keyParam = NULL;
+        OPENSSL_free(ret->oqsx_provider_ctx.oqsx_evp_ctx);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx = NULL;
+    }
+
+    if (evp_ctx) {
+        OPENSSL_free(evp_ctx);
+        evp_ctx = NULL;
+    }
+
     if (ret) {
         OPENSSL_free(ret->tls_name);
         OPENSSL_free(ret->propq);

@@ -600,13 +600,17 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
 free_evp_ctx:
     EVP_PKEY_CTX_free(evp_ctx->ctx);
     evp_ctx->ctx = NULL;
+    if (evp_ctx->keyParam) {
+        EVP_PKEY_free(evp_ctx->keyParam);
+        evp_ctx->keyParam = NULL;
+    }
 
 err_init:
     return ret;
 }
 
 static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
-                                    OSSL_LIB_CTX *libctx) {
+                                    OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
 
@@ -625,7 +629,7 @@ static const int oqshybkem_init_ecp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
     evp_ctx->evp_info = evp_info;
 
     evp_ctx->ctx = EVP_PKEY_CTX_new_from_name(
-        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), NULL);
+        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), propq);
     ON_ERR_GOTO(!evp_ctx->ctx, err_init_ecp);
 
     ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
@@ -643,7 +647,7 @@ err_init_ecp:
 }
 
 static const int oqshybkem_init_ecbp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
-                                     OSSL_LIB_CTX *libctx) {
+                                     OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
 
@@ -663,7 +667,7 @@ static const int oqshybkem_init_ecbp(char *tls_name, OQSX_EVP_CTX *evp_ctx,
     evp_ctx->evp_info = evp_info;
 
     evp_ctx->ctx = EVP_PKEY_CTX_new_from_name(
-        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), NULL);
+        libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), propq);
     ON_ERR_GOTO(!evp_ctx->ctx, err_init_ecbp);
 
     ret = EVP_PKEY_paramgen_init(evp_ctx->ctx);
@@ -681,7 +685,7 @@ err_init_ecbp:
 }
 
 static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx,
-                                    OSSL_LIB_CTX *libctx) {
+                                    OSSL_LIB_CTX *libctx, const char *propq) {
     int ret = 1;
     const OQSX_EVP_INFO *evp_info = NULL;
 
@@ -705,10 +709,15 @@ static const int oqshybkem_init_ecx(char *tls_name, OQSX_EVP_CTX *evp_ctx,
     ret = EVP_PKEY_set_type(evp_ctx->keyParam, evp_ctx->evp_info->keytype);
     ON_ERR_SET_GOTO(ret <= 0, ret, -1, err_init_ecx);
 
-    evp_ctx->ctx = EVP_PKEY_CTX_new_from_pkey(libctx, evp_ctx->keyParam, NULL);
+    evp_ctx->ctx = EVP_PKEY_CTX_new_from_pkey(libctx, evp_ctx->keyParam, propq);
     ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err_init_ecx);
+    return ret;
 
 err_init_ecx:
+    if (evp_ctx->keyParam) {
+        EVP_PKEY_free(evp_ctx->keyParam);
+        evp_ctx->keyParam = NULL;
+    }
     return ret;
 }
 
@@ -1003,7 +1012,8 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     return oqsx;
 }
 
-static const int (*init_kex_fun[])(char *, OQSX_EVP_CTX *, OSSL_LIB_CTX *) = {
+static const int (*init_kex_fun[])(char *, OQSX_EVP_CTX *, OSSL_LIB_CTX *,
+                                   const char *) = {
     oqshybkem_init_ecp, oqshybkem_init_ecbp, oqshybkem_init_ecx};
 extern const char *oqs_oid_alg_list[];
 
@@ -1092,7 +1102,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ON_ERR_GOTO(!evp_ctx, err);
 
         ret2 = (init_kex_fun[primitive - KEY_TYPE_ECP_HYB_KEM])(
-            tls_name, evp_ctx, libctx);
+            tls_name, evp_ctx, libctx, propq);
         ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->keyParam || !evp_ctx->ctx, err);
 
         ret->numkeys = 2;
@@ -1170,11 +1180,30 @@ err:
     if (ret->lock)
         CRYPTO_THREAD_lock_free(ret->lock);
 #endif
+
+    if (ret->oqsx_provider_ctx.oqsx_evp_ctx) {
+        EVP_PKEY_CTX_free(ret->oqsx_provider_ctx.oqsx_evp_ctx->ctx);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx->ctx = NULL;
+        EVP_PKEY_free(ret->oqsx_provider_ctx.oqsx_evp_ctx->keyParam);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx->keyParam = NULL;
+        OPENSSL_free(ret->oqsx_provider_ctx.oqsx_evp_ctx);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx = NULL;
+    }
+
+    if (evp_ctx) {
+        OPENSSL_free(evp_ctx);
+        evp_ctx = NULL;
+    }
+
     if (ret) {
         OPENSSL_free(ret->tls_name);
         OPENSSL_free(ret->propq);
         OPENSSL_free(ret->comp_privkey);
         OPENSSL_free(ret->comp_pubkey);
+        OQS_KEM_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.kem);
+        ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = NULL;
+        OQS_SIG_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.sig);
+        ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = NULL;
     }
     OPENSSL_free(ret);
     return NULL;

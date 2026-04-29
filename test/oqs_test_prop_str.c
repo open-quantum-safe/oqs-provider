@@ -11,9 +11,6 @@
 // The narrow propq (OQS_TST_PROPQ_2) case:
 // - KEM hybrids: keygen using only "provider=oqsprovider" is expected to fail.
 // because the classical algorithms are not implemented in the OQS provider.
-// - Signature hybrids: keygen using only "provider=oqsprovider" is expected to
-// fail because the classical algorithms are not implemented in the
-// OQS provider.
 //
 // Usage: oqs_test_prop_str <modulename> <config_file>
 
@@ -160,9 +157,6 @@ int main(int argc, char *argv[]) {
                 continue;
             }
 
-            fprintf(stderr, "testing KEM \"%s\" (PROPERTIES / propq)\n",
-                    algname);
-
             {
                 int ok1 =
                     test_propq_on_pkey_ex(libctx, algname, 0, OQS_TST_PROPQ);
@@ -214,15 +208,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if (kem_runs == 0) {
-        fprintf(stderr, "No KEM algs tested for OQS_TST_PROPQ.\n");
-    }
-
-    if (kem2_runs == 0) {
-        fprintf(stderr,
-                "No hybrid KEM algs tested for OQS_TST_PROPQ_2 third check.\n");
-    }
-
     sig_algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
                                              &query_nocache);
     if (sig_algs) {
@@ -230,14 +215,8 @@ int main(int argc, char *argv[]) {
             const char *algname = algs->algorithm_names;
 
             if (!alg_is_enabled(algname)) {
-                fprintf(stderr, "Skip disabled PQ signature %s.\n", algname);
                 continue;
             }
-
-            fprintf(stderr,
-                    "testing PQ signature \"%s\" "
-                    "(PROPERTIES / propq + OQS_TST_PROPQ_2)\n",
-                    algname);
 
             {
                 int ok1 =
@@ -283,14 +262,6 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-    }
-
-    if (sig_runs == 0) {
-        fprintf(stderr, "No PQ signature algs tested for OQS_TST_PROPQ.\n");
-    }
-
-    if (sig2_runs == 0) {
-        fprintf(stderr, "No PQ signature algs tested for OQS_TST_PROPQ_2.\n");
     }
 
     ret = errcnt != 0 ? 1 : 0;

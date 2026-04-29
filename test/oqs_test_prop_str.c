@@ -8,10 +8,12 @@
 // (default: provider=oqsprovider). Override at compile time with
 // -DOQS_TST_PROPQ=... / -DOQS_TST_PROPQ_2=...
 //
-// The narrow propq (OQS_TST_PROPQ_2) case: non-hybrid KEMs and all signature
-// algorithms should pass both sub-tests. Hybrid KEMs should not pass both: with
-// only "provider=oqsprovider" they typically fail (e.g. keygen) or otherwise do
-// not complete both checks successfully.
+// The narrow propq (OQS_TST_PROPQ_2) case:
+// - KEM hybrids: keygen using only "provider=oqsprovider" is expected to fail.
+// because the classical algorithms are not implemented in the OQS provider.
+// - Signature hybrids: keygen using only "provider=oqsprovider" is expected to
+// fail because the classical algorithms are not implemented in the
+// OQS provider.
 //
 // Usage: oqs_test_prop_str <modulename> <config_file>
 
@@ -117,48 +119,14 @@ cleanup:
     return ok;
 }
 
-/* KEM: non-hybrids must get ok1&&ok2; hybrid KEMs must not get both. */
-/* SIG: every enabled algorithm must get ok1&&ok2. */
-static void acc_propq2_narrow(int ok1, int ok2, int is_kem, int is_kem_hybrid,
-                              const char *label, const char *algname,
-                              int *errcnt, int *runs) {
-    int pass;
-    if (is_kem)
-        pass = is_kem_hybrid ? !(ok1 && ok2) : (ok1 && ok2);
-    else
-        pass = (ok1 && ok2);
-
-    if (pass) {
-        fprintf(
-            stderr,
-            cGREEN
-            "  %s (OQS_TST_PROPQ_2) kem_hybrid=%d: passed: %s (got %d,%d)" cNORM
-            "\n",
-            label, is_kem ? is_kem_hybrid : 0, algname, ok1, ok2);
-    } else {
-        fprintf(
-            stderr,
-            cRED
-            "  %s (OQS_TST_PROPQ_2) kem_hybrid=%d: failed: %s (got %d,%d)" cNORM
-            "\n",
-            label, is_kem ? is_kem_hybrid : 0, algname, ok1, ok2);
-        (*errcnt)++;
-    }
-    (*runs)++;
-}
-
 int main(int argc, char *argv[]) {
     const OSSL_ALGORITHM *algs;
     const OSSL_ALGORITHM *kem_algs;
     const OSSL_ALGORITHM *sig_algs;
     OSSL_LIB_CTX *libctx = NULL;
     OSSL_PROVIDER *oqsprov = NULL;
-    int query_nocache = 0;
-    int errcnt = 0;
-    int kem_runs = 0;
-    int sig_runs = 0;
-    int kem2_runs = 0;
-    int sig2_runs = 0;
+    int query_nocache = 0, errcnt = 0, kem_runs = 0, sig_runs = 0,
+        kem2_runs = 0, sig2_runs = 0;
     int ret;
 
     if (argc != 3) {
@@ -200,6 +168,7 @@ int main(int argc, char *argv[]) {
                     test_propq_on_pkey_ex(libctx, algname, 0, OQS_TST_PROPQ);
                 int ok2 =
                     test_propq_on_pkey_ex(libctx, algname, 1, OQS_TST_PROPQ);
+                int hybrid = is_kem_algorithm_hybrid(algname);
 
                 if (!ok1)
                     errcnt++;
@@ -217,6 +186,30 @@ int main(int argc, char *argv[]) {
                                  "%s" cNORM "\n",
                             algname);
                 }
+
+                /*
+                 * Third check: in the narrow OQS_TST_PROPQ_2 case, hybrid KEMs
+                 * are expected to fail keygen because the OQS provider does
+                 * not implement the classical algorithms.
+                 */
+                if (hybrid) {
+                    if (!test_propq_on_pkey_ex(libctx, algname, 0,
+                                               OQS_TST_PROPQ_2)) {
+                        fprintf(stderr,
+                                cGREEN "  KEM hybrid OQS_TST_PROPQ_2 "
+                                       "check passed (expected failure): "
+                                       "%s" cNORM "\n",
+                                algname);
+                    } else {
+                        fprintf(stderr,
+                                cRED "  KEM hybrid OQS_TST_PROPQ_2 check "
+                                     "failed (unexpected success): %s" cNORM
+                                     "\n",
+                                algname);
+                        errcnt++;
+                    }
+                    kem2_runs++;
+                }
             }
         }
     }
@@ -225,35 +218,9 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "No KEM algs tested for OQS_TST_PROPQ.\n");
     }
 
-    if (kem_algs) {
-        for (algs = kem_algs; algs->algorithm_names != NULL; algs++) {
-            const char *algname = algs->algorithm_names;
-            int hybrid = is_kem_algorithm_hybrid(algname);
-
-            if (!alg_is_enabled(algname)) {
-                fprintf(stderr, "Skip disabled KEM %s (OQS_TST_PROPQ_2).\n",
-                        algname);
-                continue;
-            }
-
-            fprintf(stderr,
-                    "testing KEM \"%s\" (OQS_TST_PROPQ_2, hybrid check)\n",
-                    algname);
-
-            {
-                int ok1 =
-                    test_propq_on_pkey_ex(libctx, algname, 0, OQS_TST_PROPQ_2);
-                int ok2 =
-                    test_propq_on_pkey_ex(libctx, algname, 1, OQS_TST_PROPQ_2);
-
-                acc_propq2_narrow(ok1, ok2, 1, hybrid, "KEM", algname, &errcnt,
-                                  &kem2_runs);
-            }
-        }
-    }
-
     if (kem2_runs == 0) {
-        fprintf(stderr, "No KEM algs tested for OQS_TST_PROPQ_2.\n");
+        fprintf(stderr,
+                "No hybrid KEM algs tested for OQS_TST_PROPQ_2 third check.\n");
     }
 
     sig_algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,
@@ -268,7 +235,8 @@ int main(int argc, char *argv[]) {
             }
 
             fprintf(stderr,
-                    "testing PQ signature \"%s\" (PROPERTIES / propq)\n",
+                    "testing PQ signature \"%s\" "
+                    "(PROPERTIES / propq + OQS_TST_PROPQ_2)\n",
                     algname);
 
             {
@@ -293,38 +261,32 @@ int main(int argc, char *argv[]) {
                                  "%s" cNORM "\n",
                             algname);
                 }
+
+                {
+                    int ok3 = test_propq_on_pkey_ex(libctx, algname, 0,
+                                                    OQS_TST_PROPQ_2);
+                    int ok4 = test_propq_on_pkey_ex(libctx, algname, 1,
+                                                    OQS_TST_PROPQ_2);
+                    if (ok3 && ok4) {
+                        fprintf(stderr,
+                                cGREEN "  SIG (OQS_TST_PROPQ_2) "
+                                       "passed: %s (got %d,%d)" cNORM "\n",
+                                algname, ok3, ok4);
+                    } else {
+                        fprintf(stderr,
+                                cRED "  SIG (OQS_TST_PROPQ_2) "
+                                     "failed: %s (got %d,%d)" cNORM "\n",
+                                algname, ok3, ok4);
+                        errcnt++;
+                    }
+                    sig2_runs++;
+                }
             }
         }
     }
 
     if (sig_runs == 0) {
         fprintf(stderr, "No PQ signature algs tested for OQS_TST_PROPQ.\n");
-    }
-
-    if (sig_algs) {
-        for (algs = sig_algs; algs->algorithm_names != NULL; algs++) {
-            const char *algname = algs->algorithm_names;
-
-            if (!alg_is_enabled(algname)) {
-                fprintf(stderr,
-                        "Skip disabled signature %s (OQS_TST_PROPQ_2).\n",
-                        algname);
-                continue;
-            }
-
-            fprintf(stderr, "testing signature \"%s\" (OQS_TST_PROPQ_2)\n",
-                    algname);
-
-            {
-                int ok1 =
-                    test_propq_on_pkey_ex(libctx, algname, 0, OQS_TST_PROPQ_2);
-                int ok2 =
-                    test_propq_on_pkey_ex(libctx, algname, 1, OQS_TST_PROPQ_2);
-
-                acc_propq2_narrow(ok1, ok2, 0, 0, "SIG", algname, &errcnt,
-                                  &sig2_runs);
-            }
-        }
     }
 
     if (sig2_runs == 0) {

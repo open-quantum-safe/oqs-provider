@@ -540,7 +540,8 @@ static const OQSX_EVP_INFO nids_ecx[] = {
 };
 
 static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
-                            OSSL_LIB_CTX *libctx, char *algname) {
+                            OSSL_LIB_CTX *libctx, char *algname,
+                            const char *propq) {
     int ret = 1;
     int idx = (bit_security - 128) / 64;
     ON_ERR_GOTO(idx < 0 || idx > 5, err_init);
@@ -573,13 +574,13 @@ static int oqsx_hybsig_init(int bit_security, OQSX_EVP_CTX *evp_ctx,
         ON_ERR_SET_GOTO(ret <= 0, ret, -1, err_init);
 
         evp_ctx->ctx =
-            EVP_PKEY_CTX_new_from_pkey(libctx, evp_ctx->keyParam, NULL);
+            EVP_PKEY_CTX_new_from_pkey(libctx, evp_ctx->keyParam, propq);
         ON_ERR_SET_GOTO(!evp_ctx->ctx, ret, -1, err_init);
     } else {
         evp_ctx->evp_info = &nids_sig[idx];
 
         evp_ctx->ctx = EVP_PKEY_CTX_new_from_name(
-            libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), NULL);
+            libctx, OBJ_nid2sn(evp_ctx->evp_info->keytype), propq);
         ON_ERR_GOTO(!evp_ctx->ctx, err_init);
 
         if (idx < 5) { // EC
@@ -1134,7 +1135,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         evp_ctx = OPENSSL_zalloc(sizeof(OQSX_EVP_CTX));
         ON_ERR_GOTO(!evp_ctx, err);
 
-        ret2 = oqsx_hybsig_init(bit_security, evp_ctx, libctx, tls_name);
+        ret2 = oqsx_hybsig_init(bit_security, evp_ctx, libctx, tls_name, propq);
         ON_ERR_GOTO(ret2 <= 0 || !evp_ctx->ctx, err);
 
         ret->numkeys = 2;

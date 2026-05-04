@@ -5,6 +5,9 @@ Support for OpenSSL's sign/verify message API added.
 
 Includes both variants of FrodoKEM algorithm. Previous `frodokem` variants are what now are referred to as **ephemeral** variants (i.e. `efrodokem`), while current `frodokem` are the new **salted** variants.
 
+Classical algorithms now retain the property queries established from the hybrid PQ algorithm that they correspond to. This means
+that the use of the property query 'provider=oqsprovider' without any additional property query, as `oqsprovider` alone does not implement classical crypto which is required for hybrid schemes to work, will make hybrid schemes fail.
+
 Previous Release Notes
 ======================
 

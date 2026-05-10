@@ -955,6 +955,24 @@ done:
 #define slhdsashake256f_evp_type 0
 #define slhdsashake256f_input_type "slhdsashake256f"
 #define slhdsashake256f_pem_type "slhdsashake256f"
+#define mqom2cat1gf16fastr5_evp_type 0
+#define mqom2cat1gf16fastr5_input_type "mqom2cat1gf16fastr5"
+#define mqom2cat1gf16fastr5_pem_type "mqom2cat1gf16fastr5"
+#define p256_mqom2cat1gf16fastr5_evp_type 0
+#define p256_mqom2cat1gf16fastr5_input_type "p256_mqom2cat1gf16fastr5"
+#define p256_mqom2cat1gf16fastr5_pem_type "p256_mqom2cat1gf16fastr5"
+#define mqom2cat3gf16fastr5_evp_type 0
+#define mqom2cat3gf16fastr5_input_type "mqom2cat3gf16fastr5"
+#define mqom2cat3gf16fastr5_pem_type "mqom2cat3gf16fastr5"
+#define p384_mqom2cat3gf16fastr5_evp_type 0
+#define p384_mqom2cat3gf16fastr5_input_type "p384_mqom2cat3gf16fastr5"
+#define p384_mqom2cat3gf16fastr5_pem_type "p384_mqom2cat3gf16fastr5"
+#define mqom2cat5gf16fastr5_evp_type 0
+#define mqom2cat5gf16fastr5_input_type "mqom2cat5gf16fastr5"
+#define mqom2cat5gf16fastr5_pem_type "mqom2cat5gf16fastr5"
+#define p521_mqom2cat5gf16fastr5_evp_type 0
+#define p521_mqom2cat5gf16fastr5_input_type "p521_mqom2cat5gf16fastr5"
+#define p521_mqom2cat5gf16fastr5_pem_type "p521_mqom2cat5gf16fastr5"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2317,4 +2335,46 @@ MAKE_ENCODER(, slhdsashake256f, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, slhdsashake256f, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, slhdsashake256f, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, slhdsashake256f);
+MAKE_ENCODER(, mqom2cat1gf16fastr5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mqom2cat1gf16fastr5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mqom2cat1gf16fastr5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mqom2cat1gf16fastr5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mqom2cat1gf16fastr5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mqom2cat1gf16fastr5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mqom2cat1gf16fastr5);
+MAKE_ENCODER(, p256_mqom2cat1gf16fastr5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mqom2cat1gf16fastr5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mqom2cat1gf16fastr5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_mqom2cat1gf16fastr5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_mqom2cat1gf16fastr5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_mqom2cat1gf16fastr5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_mqom2cat1gf16fastr5);
+MAKE_ENCODER(, mqom2cat3gf16fastr5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mqom2cat3gf16fastr5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mqom2cat3gf16fastr5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mqom2cat3gf16fastr5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mqom2cat3gf16fastr5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mqom2cat3gf16fastr5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mqom2cat3gf16fastr5);
+MAKE_ENCODER(, p384_mqom2cat3gf16fastr5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p384_mqom2cat3gf16fastr5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_mqom2cat3gf16fastr5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p384_mqom2cat3gf16fastr5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_mqom2cat3gf16fastr5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p384_mqom2cat3gf16fastr5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p384_mqom2cat3gf16fastr5);
+MAKE_ENCODER(, mqom2cat5gf16fastr5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, mqom2cat5gf16fastr5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, mqom2cat5gf16fastr5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, mqom2cat5gf16fastr5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, mqom2cat5gf16fastr5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, mqom2cat5gf16fastr5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, mqom2cat5gf16fastr5);
+MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p521_mqom2cat5gf16fastr5);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

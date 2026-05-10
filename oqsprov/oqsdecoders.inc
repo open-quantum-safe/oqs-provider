@@ -484,4 +484,34 @@ DECODER_w_structure("efrodo640aes", der, PrivateKeyInfo, efrodo640aes),
     DECODER_w_structure("slhdsashake256f", der, SubjectPublicKeyInfo,
                         slhdsashake256f),
 #endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat1_gf16_fast_r5
+    DECODER_w_structure("mqom2cat1gf16fastr5", der, PrivateKeyInfo,
+                        mqom2cat1gf16fastr5),
+    DECODER_w_structure("mqom2cat1gf16fastr5", der, SubjectPublicKeyInfo,
+                        mqom2cat1gf16fastr5),
+    DECODER_w_structure("p256_mqom2cat1gf16fastr5", der, PrivateKeyInfo,
+                        p256_mqom2cat1gf16fastr5),
+    DECODER_w_structure("p256_mqom2cat1gf16fastr5", der, SubjectPublicKeyInfo,
+                        p256_mqom2cat1gf16fastr5),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat3_gf16_fast_r5
+    DECODER_w_structure("mqom2cat3gf16fastr5", der, PrivateKeyInfo,
+                        mqom2cat3gf16fastr5),
+    DECODER_w_structure("mqom2cat3gf16fastr5", der, SubjectPublicKeyInfo,
+                        mqom2cat3gf16fastr5),
+    DECODER_w_structure("p384_mqom2cat3gf16fastr5", der, PrivateKeyInfo,
+                        p384_mqom2cat3gf16fastr5),
+    DECODER_w_structure("p384_mqom2cat3gf16fastr5", der, SubjectPublicKeyInfo,
+                        p384_mqom2cat3gf16fastr5),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat5_gf16_fast_r5
+    DECODER_w_structure("mqom2cat5gf16fastr5", der, PrivateKeyInfo,
+                        mqom2cat5gf16fastr5),
+    DECODER_w_structure("mqom2cat5gf16fastr5", der, SubjectPublicKeyInfo,
+                        mqom2cat5gf16fastr5),
+    DECODER_w_structure("p521_mqom2cat5gf16fastr5", der, PrivateKeyInfo,
+                        p521_mqom2cat5gf16fastr5),
+    DECODER_w_structure("p521_mqom2cat5gf16fastr5", der, SubjectPublicKeyInfo,
+                        p521_mqom2cat5gf16fastr5),
+#endif
     ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

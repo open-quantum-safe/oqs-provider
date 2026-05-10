@@ -57,9 +57,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 220
+#define OQS_OID_CNT 232
 #else
-#define OQS_OID_CNT 112
+#define OQS_OID_CNT 124
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -287,6 +287,18 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "slhdsashake256s",
     "2.16.840.1.101.3.4.3.31",
     "slhdsashake256f",
+    "1.3.9999.11.1.1",
+    "mqom2cat1gf16fastr5",
+    "1.3.9999.11.1.2",
+    "p256_mqom2cat1gf16fastr5",
+    "1.3.9999.11.3.1",
+    "mqom2cat3gf16fastr5",
+    "1.3.9999.11.3.2",
+    "p384_mqom2cat3gf16fastr5",
+    "1.3.9999.11.5.1",
+    "mqom2cat5gf16fastr5",
+    "1.3.9999.11.5.2",
+    "p521_mqom2cat5gf16fastr5",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
 };
 
@@ -540,6 +552,18 @@ int oqs_patch_oids(void) {
             oqs_oid_alg_list[108 + OQS_KEMOID_CNT] = envval;
         if ((envval = getenv("OQS_OID_SLHDSASHAKE256F")))
             oqs_oid_alg_list[110 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MQOM2CAT1GF16FASTR5")))
+            oqs_oid_alg_list[112 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P256_MQOM2CAT1GF16FASTR5")))
+            oqs_oid_alg_list[114 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MQOM2CAT3GF16FASTR5")))
+            oqs_oid_alg_list[116 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P384_MQOM2CAT3GF16FASTR5")))
+            oqs_oid_alg_list[118 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_MQOM2CAT5GF16FASTR5")))
+            oqs_oid_alg_list[120 + OQS_KEMOID_CNT] = envval;
+        if ((envval = getenv("OQS_OID_P521_MQOM2CAT5GF16FASTR5")))
+            oqs_oid_alg_list[122 + OQS_KEMOID_CNT] = envval;
     } ///// OQS_TEMPLATE_FRAGMENT_OID_PATCHING_END
     return 1;
 }
@@ -706,6 +730,18 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256f
     SIGALG("slhdsashake256f", 256, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat1_gf16_fast_r5
+    SIGALG("mqom2cat1gf16fastr5", 128, oqs_signature_functions),
+    SIGALG("p256_mqom2cat1gf16fastr5", 128, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat3_gf16_fast_r5
+    SIGALG("mqom2cat3gf16fastr5", 192, oqs_signature_functions),
+    SIGALG("p384_mqom2cat3gf16fastr5", 192, oqs_signature_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat5_gf16_fast_r5
+    SIGALG("mqom2cat5gf16fastr5", 256, oqs_signature_functions),
+    SIGALG("p521_mqom2cat5gf16fastr5", 256, oqs_signature_functions),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     {NULL, NULL, NULL}};
@@ -936,6 +972,18 @@ static const OSSL_ALGORITHM
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256f
     SIGALG("slhdsashake256f", 256, oqs_slhdsashake256f_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat1_gf16_fast_r5
+    SIGALG("mqom2cat1gf16fastr5", 128, oqs_mqom2cat1gf16fastr5_keymgmt_functions),
+    SIGALG("p256_mqom2cat1gf16fastr5", 128, oqs_p256_mqom2cat1gf16fastr5_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat3_gf16_fast_r5
+    SIGALG("mqom2cat3gf16fastr5", 192, oqs_mqom2cat3gf16fastr5_keymgmt_functions),
+    SIGALG("p384_mqom2cat3gf16fastr5", 192, oqs_p384_mqom2cat3gf16fastr5_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_mqom_mqom2_cat5_gf16_fast_r5
+    SIGALG("mqom2cat5gf16fastr5", 256, oqs_mqom2cat5gf16fastr5_keymgmt_functions),
+    SIGALG("p521_mqom2cat5gf16fastr5", 256, oqs_p521_mqom2cat5gf16fastr5_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_efrodokem_640_aes
@@ -1226,8 +1274,7 @@ __attribute__((visibility("default")))
 #endif /* !OQS_PROVIDER_STATIC && !_WIN32 */
 int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                  const OSSL_DISPATCH *in,
-                                 const OSSL_DISPATCH **out, void **provctx)
-{
+                                 const OSSL_DISPATCH **out, void **provctx) {
     const OSSL_DISPATCH *orig_in = in;
     OSSL_FUNC_core_obj_create_fn *c_obj_create = NULL;
 

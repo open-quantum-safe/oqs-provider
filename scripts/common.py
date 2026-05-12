@@ -17,9 +17,9 @@ signatures_oqs = [
     'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
-    'mldsa44','mldsa65','mldsa87','falcon512','falconpadded512','falcon1024','falconpadded1024','mayo1','mayo2','mayo3','mayo5','CROSSrsdp128balanced','OV_Ip_pkc','OV_Ip_pkc_skc','snova2454','snova2454esk','snova37172','snova2455','snova2965','slhdsasha2128s','slhdsasha2128f','slhdsasha2192s','slhdsasha2192f','slhdsasha2256s','slhdsasha2256f','slhdsashake128s','slhdsashake128f','slhdsashake192s','slhdsashake192f','slhdsashake256s','slhdsashake256f',
+    'mldsa44','mldsa65','mldsa87','falcon512','falconpadded512','falcon1024','falconpadded1024','mayo1','mayo2','mayo3','mayo5','CROSSrsdp128balanced','OV_Ip_pkc','OV_Ip_pkc_skc','snova2454','snova2454esk','snova37172','snova2455','snova2965','slhdsasha2128s','slhdsasha2128f','slhdsasha2192s','slhdsasha2192f','slhdsasha2256s','slhdsasha2256f','slhdsashake128s','slhdsashake128f','slhdsashake192s','slhdsashake192f','slhdsashake256s','slhdsashake256f','mqom2cat1gf16fastr5','mqom2cat3gf16fastr5','mqom2cat5gf16fastr5',
     # post-quantum + classical signatures
-    'p256_mldsa44','rsa3072_mldsa44','p384_mldsa65','p521_mldsa87','p256_falcon512','rsa3072_falcon512','p256_falconpadded512','rsa3072_falconpadded512','p521_falcon1024','p521_falconpadded1024','p256_mayo1','p256_mayo2','p384_mayo3','p521_mayo5','p256_OV_Ip_pkc','p256_OV_Ip_pkc_skc','p256_snova2454','p256_snova2454esk','p256_snova37172','p384_snova2455','p521_snova2965',
+    'p256_mldsa44','rsa3072_mldsa44','p384_mldsa65','p521_mldsa87','p256_falcon512','rsa3072_falcon512','p256_falconpadded512','rsa3072_falconpadded512','p521_falcon1024','p521_falconpadded1024','p256_mayo1','p256_mayo2','p384_mayo3','p521_mayo5','p256_OV_Ip_pkc','p256_OV_Ip_pkc_skc','p256_snova2454','p256_snova2454esk','p256_snova37172','p384_snova2455','p521_snova2965','p256_mqom2cat1gf16fastr5','p384_mqom2cat3gf16fastr5','p521_mqom2cat5gf16fastr5',
     ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 

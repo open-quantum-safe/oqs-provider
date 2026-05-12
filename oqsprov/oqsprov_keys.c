@@ -53,9 +53,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 110
+#define NID_TABLE_LEN 116
 #else
-#define NID_TABLE_LEN 56
+#define NID_TABLE_LEN 62
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -227,6 +227,18 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      256},
     {0, "slhdsashake256f", OQS_SIG_alg_slh_dsa_pure_shake_256f, KEY_TYPE_SIG,
      256},
+    {0, "mqom2cat1gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat1_gf16_fast_r5,
+     KEY_TYPE_SIG, 128},
+    {0, "p256_mqom2cat1gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat1_gf16_fast_r5,
+     KEY_TYPE_HYB_SIG, 128},
+    {0, "mqom2cat3gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat3_gf16_fast_r5,
+     KEY_TYPE_SIG, 192},
+    {0, "p384_mqom2cat3gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat3_gf16_fast_r5,
+     KEY_TYPE_HYB_SIG, 192},
+    {0, "mqom2cat5gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat5_gf16_fast_r5,
+     KEY_TYPE_SIG, 256},
+    {0, "p521_mqom2cat5gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat5_gf16_fast_r5,
+     KEY_TYPE_HYB_SIG, 256},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };
 

@@ -10,18 +10,33 @@
 
 /** \brief List of hybrid signature algorithms. */
 const char *kHybridSignatureAlgorithms[] = {
-    "p256_mldsa44",         "rsa3072_mldsa44",
-    "p384_mldsa65",         "p521_mldsa87",
-    "p256_falcon512",       "rsa3072_falcon512",
-    "p256_falconpadded512", "rsa3072_falconpadded512",
-    "p521_falcon1024",      "p521_falconpadded1024",
-    "p256_mayo1",           "p256_mayo2",
-    "p384_mayo3",           "p521_mayo5",
-    "p256_OV_Is_pkc",       "p256_OV_Ip_pkc",
-    "p256_OV_Is_pkc_skc",   "p256_OV_Ip_pkc_skc",
-    "p256_snova2454",       "p256_snova2454esk",
-    "p256_snova37172",      "p384_snova2455",
-    "p521_snova2965",       NULL,
+    "p256_mldsa44",
+    "rsa3072_mldsa44",
+    "p384_mldsa65",
+    "p521_mldsa87",
+    "p256_falcon512",
+    "rsa3072_falcon512",
+    "p256_falconpadded512",
+    "rsa3072_falconpadded512",
+    "p521_falcon1024",
+    "p521_falconpadded1024",
+    "p256_mayo1",
+    "p256_mayo2",
+    "p384_mayo3",
+    "p521_mayo5",
+    "p256_OV_Is_pkc",
+    "p256_OV_Ip_pkc",
+    "p256_OV_Is_pkc_skc",
+    "p256_OV_Ip_pkc_skc",
+    "p256_snova2454",
+    "p256_snova2454esk",
+    "p256_snova37172",
+    "p384_snova2455",
+    "p521_snova2965",
+    "p256_mqom2cat1gf16fastr5",
+    "p384_mqom2cat3gf16fastr5",
+    "p521_mqom2cat5gf16fastr5",
+    NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END
 
@@ -32,7 +47,7 @@ typedef struct {
 
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_START
 
-#define SIGS_DICT_LEN 56
+#define SIGS_DICT_LEN 62
 
 /** \brief Mapping of signature algorithm with PQ naming in liboqs */
 oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
@@ -93,6 +108,12 @@ oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
     {OQS_SIG_alg_slh_dsa_pure_shake_192f, "slhdsashake192f"},
     {OQS_SIG_alg_slh_dsa_pure_shake_256s, "slhdsashake256s"},
     {OQS_SIG_alg_slh_dsa_pure_shake_256f, "slhdsashake256f"},
+    {OQS_SIG_alg_mqom_mqom2_cat1_gf16_fast_r5, "mqom2cat1gf16fastr5"},
+    {OQS_SIG_alg_mqom_mqom2_cat1_gf16_fast_r5, "p256_mqom2cat1gf16fastr5"},
+    {OQS_SIG_alg_mqom_mqom2_cat3_gf16_fast_r5, "mqom2cat3gf16fastr5"},
+    {OQS_SIG_alg_mqom_mqom2_cat3_gf16_fast_r5, "p384_mqom2cat3gf16fastr5"},
+    {OQS_SIG_alg_mqom_mqom2_cat5_gf16_fast_r5, "mqom2cat5gf16fastr5"},
+    {OQS_SIG_alg_mqom_mqom2_cat5_gf16_fast_r5, "p521_mqom2cat5gf16fastr5"},
 };
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_END
 

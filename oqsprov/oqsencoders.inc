@@ -24,23 +24,17 @@
 
 /* Arguments are prefixed with '_' to avoid build breaks on certain platforms */
 #define ENCODER_TEXT(_name, _sym)                                              \
-    {                                                                          \
-        _name, "provider=" ENCODER_PROVIDER ",output=text",                    \
-            (oqs_##_sym##_to_text_encoder_functions)                           \
-    }
+    {_name, "provider=" ENCODER_PROVIDER ",output=text",                       \
+     (oqs_##_sym##_to_text_encoder_functions)}
 #define ENCODER(_name, _sym, _fips, _output)                                   \
-    {                                                                          \
-        _name, "provider=" ENCODER_PROVIDER ",output=" #_output,               \
-            (oqs_##_sym##_to_##_output##_encoder_functions)                    \
-    }
+    {_name, "provider=" ENCODER_PROVIDER ",output=" #_output,                  \
+     (oqs_##_sym##_to_##_output##_encoder_functions)}
 
 #define ENCODER_w_structure(_name, _sym, _output, _structure)                  \
-    {                                                                          \
-        _name,                                                                 \
-            "provider=" ENCODER_PROVIDER ",output=" #_output                   \
-            ",structure=" ENCODER_STRUCTURE_##_structure,                      \
-            (oqs_##_sym##_to_##_structure##_##_output##_encoder_functions)     \
-    }
+    {_name,                                                                    \
+     "provider=" ENCODER_PROVIDER ",output=" #_output                          \
+     ",structure=" ENCODER_STRUCTURE_##_structure,                             \
+     (oqs_##_sym##_to_##_structure##_##_output##_encoder_functions)}
 
 /*
  * Entries for human text "encoders"

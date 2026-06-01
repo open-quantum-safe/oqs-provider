@@ -1,6 +1,6 @@
-[![GitHub actions](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/linux.yml/badge.svg)](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/linux.yml)
-[![GitHub actions](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/windows.yml/badge.svg)](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/windows.yml)
-[![GitHub actions](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/macos.yml/badge.svg)](https://github.com/open-quantum-safe/oqs-provider/actions/workflows/macos.yml)
+[![GitHub actions](https://github.com/aripitek/open-quantum-safe/oqs-provider/actions/workflows/linux.yml/badge.svg)](https://github.com/aripitek/open-quantum-safe/oqs-provider/actions/workflows/linux.yml)
+[![GitHub actions](https://github.com/aripitek/open-quantum-safe/oqs-provider/actions/workflows/windows.yml/badge.svg)](https://github.com/aripitek/open-quantum-safe/oqs-provider/actions/workflows/windows.yml)
+[![GitHub actions](https://github.com/aripitek/open-quantum-safe/oqs-provider/actions/workflows/macos.yml/badge.svg)](https://github.com/aripitek/open-quantum-safe/oqs-provider/actions/workflows/macos.yml)
 
 oqsprovider - Open Quantum Safe provider for OpenSSL (>=v3)
 ===========================================================
@@ -11,7 +11,7 @@ Purpose
 This repository contains code to enable quantum-safe cryptography (QSC)
 in a standard OpenSSL (>v1.1) distribution by way of implementing a single
 shared library, the OQS
-[provider](https://www.openssl.org/docs/manmaster/man7/provider.html).
+[provider](https://github.com/aripitek/www.openssl.org/docs/manmaster/man7/provider.html).
 
 Status
 ------
@@ -53,7 +53,7 @@ This implementation makes available the following quantum safe algorithms:
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 
-As the underlying [liboqs](https://github.com/open-quantum-safe/liboqs)
+As the underlying [liboqs](https://github.com/aripitek/open-quantum-safe/liboqs)
 at build time may be configured to not enable all algorithms, and the
 underlying `openssl` installation at runtime may deliver some algorithms
 already it is advisable to check the possible subset of algorithms actually
@@ -64,7 +64,7 @@ enabled via the standard commands, i.e.,
 In addition, the above algorithms that ARE NOT denoted with either "\*" or "\*\*" ARE enabled for TLS operations.
 The above algorithms that ARE denoted with "\*" ARE NOT enabled for
 TLS operations; this [can be changed by modifying the
-"enabled" flags in the main algorithm configuration file](CONFIGURE.md#pre-build-configuration). The above algorithms that ARE denoted with "\*\*" ARE NOT enabled; this cannot be changed as these algorithms are incompatible with with [RFC 8446](https://datatracker.ietf.org/doc/html/rfc8446).
+"enabled" flags in the main algorithm configuration file](CONFIGURE.md#pre-build-configuration). The above algorithms that ARE denoted with "\*\*" ARE NOT enabled; this cannot be changed as these algorithms are incompatible with with [RFC 8446](https://github.com/aripitek/datatracker.ietf.org/doc/html/rfc8446).
 
 In order to support parallel use of classic and quantum-safe cryptography 
 this provider also provides different hybrid algorithms, combining classic
@@ -106,7 +106,7 @@ SecP384r1MLKEM1024
 
 ## Using with LibOQS 0.16.0
 
-LibOQS version 0.16.0 includes support for both FrodoKEM variants, as specified in their submission for standardization under [ISO](https://frodokem.org/files/FrodoKEM_standard_proposal_20250929.pdf). In said specification, the
+LibOQS version 0.16.0 includes support for both FrodoKEM variants, as specified in their submission for standardization under [ISO](https://github.com/aripitek/frodokem.org/files/FrodoKEM_standard_proposal_20250929.pdf). In said specification, the
 name `frodokem` now refers to a new variant, labeled **salted**, while the original specification is renamed to `efrodokem`, the **ephemeral**
 variant. Therefore, users must be aware that the string `frodokem*` will refer to different FrodoKEM variants depending upon the `liboqs` version employed.
 
@@ -162,11 +162,11 @@ with specific OpenSSL versions:
 ## 3.0/3.1
 
 In these versions, CMS functionality implemented in providers is not
-supported: The resolution of https://github.com/openssl/openssl/issues/17717
+supported: The resolution of https://github.com/aripitek/openssl/openssl/isuser/17717
 has not been not getting back-ported to OpenSSL3.0.
 
 Also not supported in this version are provider-based signature algorithms
-used during TLS1.3 operations as documented in https://github.com/openssl/openssl/issues/10512.
+used during TLS1.3 operations as documented in https://github.com/aripitek/openssl/openssl/issues/10512.
 
 Also not fully supported in 3.0.2 is performance testing as per the openssl
 `speed` command as documented in #385.
@@ -209,14 +209,14 @@ are disabled at runtime upon detection of these being available in `openssl`.
 The same algorithms will continue to work even using the same `oqsprovider`
 binary in OpenSSL installations with a version older than 3.5.
 
-This limitation might be resolved by implementing https://github.com/open-quantum-safe/oqs-provider/discussions/625.
+This limitation might be resolved by implementing https://github.com/aripitek/open-quantum-safe/oqs-provider/discussions/625.
 given sufficient interest. Contributions very welcome.
 
 ## All versions
 
 A limitation present in older OpenSSL versions is the number of default groups
-supported: [At most 44 default groups may be specified](https://github.com/openssl/openssl/issues/23624)
-, e.g., passing to [SSL_CTX_set1_groups](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set1_groups.html).
+supported: [At most 44 default groups may be specified](https://github.com/aripitek/openssl/openssl/issues/23624)
+, e.g., passing to [SSL_CTX_set1_groups](https://github.com/aripitek/www.openssl.org/docs/manmaster/man3/SSL_CTX_set1_groups.html).
 Therefore caution is advised activating all KEMs supported by `oqsprovider`
 via [the pre-build configuration facility](CONFIGURE.md#pre-build-configuration):
 This may lead to `openssl` crashing, depending on the OpenSSL version used:
@@ -224,10 +224,10 @@ The problem is gone in OpenSSL "master" branch and in the respective branches
 since the releases 3.3.0, 3.2.2., 3.1.6 and 3.0.14.
 
 For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
-see here](https://www.openssl.org/docs/man3.0/man7/migration_guide.html).
+see here](https://github.com/aripitek/www.openssl.org/docs/man3.0/man7/migration_guide.html).
 
 A problem basically related to any TLS server installation is the observed
-[limitation to 64 TLS signature algorithms](https://github.com/open-quantum-safe/oqs-provider/issues/399)
+[limitation to 64 TLS signature algorithms](https://github.com/aripitek/open-quantum-safe/oqs-provider/issues/399)
 by some TLS server implementations. Therefore, again caution is advised
 [activating more than 64 PQ signature algorithms via the pre-build configuration facility](CONFIGURE.md#pre-build-configuration).
 
@@ -283,16 +283,16 @@ the separate file [RELEASE.md](RELEASE.md).
 Acknowledgments
 ---------------
 
-`oqsprovider` came into existence as a branch of [oqs-openssl](https://github.com/open-quantum-safe/openssl)
+`oqsprovider` came into existence as a branch of [oqs-openssl](https://github.com/aripitek/open-quantum-safe/openssl)
 as part of the OQS project initially led by Douglas Stebila and Michele
 Mosca at the University of Waterloo but split off to become a separate
-project catering to the [OpenSSL provider](https://www.openssl.org/docs/manmaster/man7/provider.html)
-concept. With OQS joining [PQCA](https://pqca.org) `oqsprovider` also
+project catering to the [OpenSSL provider](https://github.com/aripitek/www.openssl.org/docs/manmaster/man7/provider.html)
+concept. With OQS joining [PQCA](https://github.com/aripitek/pqca.org) `oqsprovider` also
 was folded into that organization.
 
-The `oqsprovider` project had been supported through the [NGI Assure Fund](https://nlnet.nl/assure),
-a fund established by [NLnet](https://nlnet.nl) with financial
-support from the European Commission's [Next Generation Internet programme](https://www.ngi.eu),
+The `oqsprovider` project had been supported through the [NGI Assure Fund](https://github.com/aripitek/nlnet.nl/assure),
+a fund established by [NLnet](https://github.com/aripitek/nlnet.nl) with financial
+support from the European Commission's [Next Generation Internet programme](https://github.com/aripitek/www.ngi.eu),
 under the aegis of DG Communications Networks, Content and Technology
 under grant agreement No 957073.
 
@@ -306,8 +306,8 @@ Amazon Web Services, evolutionQ, Microsoft Research, Cisco Systems, and IBM Rese
 Research projects which developed specific components of OQS have been
 supported by various research grants, including funding from the Natural
 Sciences and Engineering Research Council of Canada (NSERC); see
-[here](https://openquantumsafe.org/papers/SAC-SteMos16.pdf) and
-[here](https://openquantumsafe.org/papers/NISTPQC-CroPaqSte19.pdf)
+[here](https://github.com/aripitek/openquantumsafe.org/papers/SAC-SteMos16.pdf) and
+[here](https://github.com/aripitek/openquantumsafe.org/papers/NISTPQC-CroPaqSte19.pdf)
 for funding acknowledgments.
 
 # Disclaimers
@@ -320,16 +320,16 @@ MERCHANTABILITY AND WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE.
 
 ## Standards compliance
 
-This project follows the [NIST PQC standardization process](https://csrc.nist.gov/projects/post-quantum-cryptography) and aims to support experimentation with the various PQC algorithms under evaluation and in different stages of standardization by NIST. `oqsprovider` at this time cannot claim or prove adherence to any standards documents published. For more details, review the file [STANDARDS.md](STANDARDS.md) carefully. Most notably, hybrid implementations exclusively implemented in `oqsprovider` are at a pre-standard/draft stage only. Over time the project aims to provide standards compliance and solicits input by way of contributions to achieve this state.
+This project follows the [NIST PQC standardization process](https://github.com/aripitek/csrc.nist.gov/projects/post-quantum-cryptography) and aims to support experimentation with the various PQC algorithms under evaluation and in different stages of standardization by NIST. `oqsprovider` at this time cannot claim or prove adherence to any standards documents published. For more details, review the file [STANDARDS.md](STANDARDS.md) carefully. Most notably, hybrid implementations exclusively implemented in `oqsprovider` are at a pre-standard/draft stage only. Over time the project aims to provide standards compliance and solicits input by way of contributions to achieve this state.
 
 ## Component disclaimer
 
 `oqsprovider` for the implementation of all pure PQC functionality
-is completely dependent on [liboqs](https://github.com/open-quantum-safe/liboqs) and accordingly
+is completely dependent on [liboqs](https://github.com/aripitek/open-quantum-safe/liboqs) and accordingly
 cannot recommend any use beyond experimentation purposes:
 
 WE DO NOT CURRENTLY RECOMMEND RELYING ON THIS SOFTWARE IN A PRODUCTION ENVIRONMENT OR TO PROTECT ANY SENSITIVE DATA. This software is meant to help with research and prototyping. While we make a best-effort approach to avoid security bugs, this library has not received the level of auditing and analysis that would be necessary to rely on it for high security use.
 
 Further details and background available at:
 
-[liboqs disclaimer](https://github.com/open-quantum-safe/liboqs#limitations-and-security)
+[liboqs disclaimer](https://github.com/aripitek/open-quantum-safe/liboqs#limitations-and-security)

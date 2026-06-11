@@ -1543,6 +1543,12 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
          * expected downstream. Selftest uses set1/get1 to avoid the same
          * hotpath.
          */
+        /*
+         * EVP_PKEY_get1_encoded_public_key always allocates its own buffer
+         * (signature: int f(EVP_PKEY *, unsigned char **)). There is no variant
+         * that writes into a caller-supplied buffer as i2d_PublicKey did.
+         * memcpy into pubkey+aux and OPENSSL_free are therefore unavoidable.
+         */
         pubkeylen =
             (int)EVP_PKEY_get1_encoded_public_key(pkey, &pubkey_enc_alloc);
         ON_ERR_SET_GOTO(pubkeylen <= 0 ||
@@ -1560,6 +1566,12 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
         /* selftest: public key round-trip via set1/get1 avoids encoder scan */
         EVP_PKEY *ck2 = EVP_PKEY_new();
         ON_ERR_SET_GOTO(!ck2, ret, -13, errhyb);
+        /*
+         * ck2 is a bare EVP_PKEY_new() with no type or group set.
+         * EVP_PKEY_set1_encoded_public_key fails without the EC group present.
+         * copy_parameters transfers the curve from pkey without copying key
+         * material — correct setup for a round-trip selftest on a fresh object.
+         */
         if (!EVP_PKEY_copy_parameters(ck2, pkey) ||
             !EVP_PKEY_set1_encoded_public_key(ck2, pubkey + aux, pubkeylen)) {
             EVP_PKEY_free(ck2);

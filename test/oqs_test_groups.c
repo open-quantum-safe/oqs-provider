@@ -129,7 +129,7 @@ static int test_group(const OSSL_PARAM params[], void *data) {
         (*errcnt)++;
     }
 
-#ifdef DTLS1_3_VERSION
+#if !defined(OPENSSL_NO_DTLS1_3) && defined(DTLS1_3_VERSION)
     ret = test_oqs_groups(group_name, 1);
 
     if (ret >= 0) {

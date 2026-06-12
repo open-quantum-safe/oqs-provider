@@ -139,7 +139,7 @@ static int test_signature(const OSSL_PARAM params[], void *data) {
         (*errcnt)++;
     }
 
-#ifdef DTLS1_3_VERSION
+#if !defined(OPENSSL_NO_DTLS1_3) && defined(DTLS1_3_VERSION)
     ret = test_oqs_tlssig(sigalg_name, 1);
 
     if (ret >= 0) {

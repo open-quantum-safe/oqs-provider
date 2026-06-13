@@ -1563,21 +1563,10 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
         ON_ERR_SET_GOTO(!privkey_enc ||
                             privkeylen > (int)ctx->evp_info->length_private_key,
                         ret, -12, errhyb);
-        /* selftest: public key round-trip via set1/get1 avoids encoder scan */
-        EVP_PKEY *ck2 = EVP_PKEY_new();
-        ON_ERR_SET_GOTO(!ck2, ret, -13, errhyb);
-        /*
-         * ck2 is a bare EVP_PKEY_new() with no type or group set.
-         * EVP_PKEY_set1_encoded_public_key fails without the EC group present.
-         * copy_parameters transfers the curve from pkey without copying key
-         * material — correct setup for a round-trip selftest on a fresh object.
-         */
-        if (!EVP_PKEY_copy_parameters(ck2, pkey) ||
-            !EVP_PKEY_set1_encoded_public_key(ck2, pubkey + aux, pubkeylen)) {
-            EVP_PKEY_free(ck2);
-            ON_ERR_SET_GOTO(1, ret, -14, errhyb);
-        }
-        EVP_PKEY_free(ck2);
+        /* selftest: verify encoded public key round-trips via set1 */
+        ON_ERR_SET_GOTO(
+            !EVP_PKEY_set1_encoded_public_key(pkey, pubkey + aux, pubkeylen),
+            ret, -13, errhyb);
     }
     if (encode) {
         ENCODE_UINT32(pubkey_sizeenc, pubkeylen);

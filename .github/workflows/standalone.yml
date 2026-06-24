@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
   coding_style_tests:
     uses: ./.github/workflows/coding_style.yml
@@ -18,7 +21,9 @@ jobs:
       - name: Install prerequisites
         run: brew install liboqs
       - name: Checkout oqsprovider code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          persist-credentials: false
       - name: Build and test oqsprovider
         # try this only if brew'd liboqs knows about ML-KEM:
         run: |
@@ -37,7 +42,7 @@ jobs:
       matrix:
         include:
           - name: ubuntu-latest
-            container: ubuntu:latest
+            container: ubuntu@sha256:53958ec7b67c2c9355df922dd08dbf0360611f8c3cdb656875e81873db9ffdba
     container:
       image: ${{ matrix.container }}
     env:
@@ -46,9 +51,10 @@ jobs:
       - name: Update container
         run: apt update && apt install -y cmake ninja-build gcc libssl-dev git
       - name: Checkout code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          persist-credentials: false
       - name: Full build
         run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
-

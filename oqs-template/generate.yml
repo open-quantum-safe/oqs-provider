@@ -514,11 +514,11 @@ kems:
     enable_tls: true
   -
     family: 'HQC'
-    name_group: 'hqc128'
+    name_group: 'hqc1'
     nid: '65048'
     nid_hybrid: '65049'
-    oqs_alg: 'OQS_KEM_alg_hqc_128'
-    enable_kem: false
+    oqs_alg: 'OQS_KEM_alg_hqc_1'
+    enable_kem: true
     enable_tls: true
     extra_nids:
       current:
@@ -538,11 +538,11 @@ kems:
           nid: '0x2FAC'
   -
     family: 'HQC'
-    name_group: 'hqc192'
+    name_group: 'hqc3'
     nid: '65051'
     nid_hybrid: '65052'
-    oqs_alg: 'OQS_KEM_alg_hqc_192'
-    enable_kem: false
+    oqs_alg: 'OQS_KEM_alg_hqc_3'
+    enable_kem: true
     enable_tls: true
     extra_nids:
       current:
@@ -562,11 +562,11 @@ kems:
           nid: '0x2FAD'
   -
     family: 'HQC'
-    name_group: 'hqc256'
+    name_group: 'hqc5'
     nid: '65054'
     nid_hybrid: '65055'
-    oqs_alg: 'OQS_KEM_alg_hqc_256'
-    enable_kem: false
+    oqs_alg: 'OQS_KEM_alg_hqc_5'
+    enable_kem: true
     enable_tls: true
     extra_nids:
       old:

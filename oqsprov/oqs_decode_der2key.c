@@ -727,6 +727,29 @@ MAKE_DECODER(, "bikel5", bikel5, oqsx, SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecp, "p521_bikel5", p521_bikel5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(_ecp, "p521_bikel5", p521_bikel5, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "hqc1", hqc1, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "hqc1", hqc1, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p256_hqc1", p256_hqc1, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p256_hqc1", p256_hqc1, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecx, "x25519_hqc1", x25519_hqc1, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x25519_hqc1", x25519_hqc1, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(, "hqc3", hqc3, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "hqc3", hqc3, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p384_hqc3", p384_hqc3, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p384_hqc3", p384_hqc3, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecx, "x448_hqc3", x448_hqc3, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x448_hqc3", x448_hqc3, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(, "hqc5", hqc5, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "hqc5", hqc5, oqsx, SubjectPublicKeyInfo);
+
+MAKE_DECODER(_ecp, "p521_hqc5", p521_hqc5, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecp, "p521_hqc5", p521_hqc5, oqsx, SubjectPublicKeyInfo);
 #endif /* OQS_KEM_ENCODERS */
 
 MAKE_DECODER(, "mldsa44", mldsa44, oqsx, PrivateKeyInfo);

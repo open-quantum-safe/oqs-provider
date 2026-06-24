@@ -8,6 +8,8 @@ Includes both variants of FrodoKEM algorithm. Previous `frodokem` variants are w
 Classical algorithms now retain the property queries established from the hybrid PQ algorithm that they correspond to. This means
 that the use of the property query 'provider=oqsprovider' without any additional property query, as `oqsprovider` alone does not implement classical crypto which is required for hybrid schemes to work, will make hybrid schemes fail.
 
+Re-instates back support for HQC, with the appropriate naming convention from `liboqs` 0.16.0.
+
 Previous Release Notes
 ======================
 

@@ -57,7 +57,7 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 232
+#define OQS_OID_CNT 248
 #else
 #define OQS_OID_CNT 124
 #endif
@@ -172,6 +172,22 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "bikel5",
     NULL,
     "p521_bikel5",
+    NULL,
+    "hqc1",
+    NULL,
+    "p256_hqc1",
+    NULL,
+    "x25519_hqc1",
+    NULL,
+    "hqc3",
+    NULL,
+    "p384_hqc3",
+    NULL,
+    "x448_hqc3",
+    NULL,
+    "hqc5",
+    NULL,
+    "p521_hqc5",
 
 #endif /* OQS_KEM_ENCODERS */
 
@@ -435,8 +451,27 @@ int oqs_patch_oids(void) {
 
         if ((envval = getenv("OQS_OID_P521_BIKEL5")))
             oqs_oid_alg_list[106] = envval;
+        if ((envval = getenv("OQS_OID_HQC1")))
+            oqs_oid_alg_list[108] = envval;
 
-#define OQS_KEMOID_CNT 106 + 2
+        if ((envval = getenv("OQS_OID_P256_HQC1")))
+            oqs_oid_alg_list[110] = envval;
+        if ((envval = getenv("OQS_OID_X25519_HQC1")))
+            oqs_oid_alg_list[112] = envval;
+        if ((envval = getenv("OQS_OID_HQC3")))
+            oqs_oid_alg_list[114] = envval;
+
+        if ((envval = getenv("OQS_OID_P384_HQC3")))
+            oqs_oid_alg_list[116] = envval;
+        if ((envval = getenv("OQS_OID_X448_HQC3")))
+            oqs_oid_alg_list[118] = envval;
+        if ((envval = getenv("OQS_OID_HQC5")))
+            oqs_oid_alg_list[120] = envval;
+
+        if ((envval = getenv("OQS_OID_P521_HQC5")))
+            oqs_oid_alg_list[122] = envval;
+
+#define OQS_KEMOID_CNT 122 + 2
 #else
 #define OQS_KEMOID_CNT 0
 #endif /* OQS_KEM_ENCODERS */
@@ -837,6 +872,20 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
     KEMBASEALG(bikel5, 256)
     KEMHYBALG(p521_bikel5, 256)
 #endif
+#ifdef OQS_ENABLE_KEM_hqc_1
+    KEMBASEALG(hqc1, 128)
+    KEMHYBALG(p256_hqc1, 128)
+    KEMHYBALG(x25519_hqc1, 128)
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_3
+    KEMBASEALG(hqc3, 192)
+    KEMHYBALG(p384_hqc3, 192)
+    KEMHYBALG(x448_hqc3, 192)
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_5
+    KEMBASEALG(hqc5, 256)
+    KEMHYBALG(p521_hqc5, 256)
+#endif
     // clang-format on
     ///// OQS_TEMPLATE_FRAGMENT_KEM_FUNCTIONS_END
     {NULL, NULL, NULL}};
@@ -1112,6 +1161,26 @@ static const OSSL_ALGORITHM
     KEMKMALG(bikel5, 256)
 
     KEMKMHYBALG(p521_bikel5, 256, ecp)
+
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_1
+    KEMKMALG(hqc1, 128)
+
+    KEMKMHYBALG(p256_hqc1, 128, ecp)
+
+    KEMKMHYBALG(x25519_hqc1, 128, ecx)
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_3
+    KEMKMALG(hqc3, 192)
+
+    KEMKMHYBALG(p384_hqc3, 192, ecp)
+
+    KEMKMHYBALG(x448_hqc3, 192, ecx)
+#endif
+#ifdef OQS_ENABLE_KEM_hqc_5
+    KEMKMALG(hqc5, 256)
+
+    KEMKMHYBALG(p521_hqc5, 256, ecp)
 
 #endif
             // clang-format on

@@ -944,6 +944,11 @@ static int oqs_sigalg_capability(OSSL_CALLBACK *cb, void *arg) {
     // liboqs:
     assert(OSSL_NELEM(oqs_param_sigalg_list) <= OSSL_NELEM(oqs_sigalg_list));
     for (i = 0; i < OSSL_NELEM(oqs_param_sigalg_list); i++) {
+        // do not advertise algorithms that cannot be used in TLS handshakes
+        // (mintls == -1), so they are not listed as TLS signature algorithms
+        const int *mintls = (const int *)oqs_param_sigalg_list[i][5].data;
+        if (mintls != NULL && *mintls < 0)
+            continue;
         // do not register algorithms disabled at runtime
         if (sk_OPENSSL_STRING_find(oqsprov_get_rt_disabled_algs(),
                                    (char *)oqs_param_sigalg_list[i][1].data) <

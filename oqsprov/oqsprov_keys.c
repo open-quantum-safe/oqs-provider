@@ -1540,7 +1540,7 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
          * Use EVP_PKEY_get1_encoded_public_key to avoid the encoder scan
          * triggered by i2d_PublicKey when OQS_KEM_ENCODERS is enabled.
          * i2d_PrivateKey is retained — not deprecated, produces DER format
-         * expected downstream. Selftest uses set1/get1 to avoid the same
+         * expected downstream. Selftest uses set1 to avoid the same
          * hotpath.
          */
         /*

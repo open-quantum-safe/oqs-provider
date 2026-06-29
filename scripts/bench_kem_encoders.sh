@@ -5,7 +5,7 @@
 #   ./scripts/bench_kem_encoders.sh [BUILD_DIR] [OPENSSL_DIR] [ALGORITHMS]
 #
 # Arguments:
-#   BUILD_DIR    directory containing lib/oqsprovider.{so,dylib}
+#   BUILD_DIR    directory containing oqsprovider library
 #                (default: _build_enc)
 #   OPENSSL_DIR  OpenSSL installation prefix containing bin/openssl
 #                (default: auto-detected from PATH)
@@ -57,12 +57,12 @@ FAILED=0
 for ALG in ${ALGORITHMS}; do
     THRESHOLD="$(threshold_for_alg "${ALG}")"
 
-    # Run openssl speed and extract keygen/s (last column of the result line)
+    # Run openssl speed and extract keygen/s (3rd to last column of the result line)
     RESULT=$(${OPENSSL_BIN} speed \
         -provider-path "${PROVIDER_PATH}" \
         -provider oqsprovider \
         -provider default \
-        "${ALG}" 2>&1 | grep "^[[:space:]]*${ALG}" | awk '{print $NF}')
+        "${ALG}" 2>&1 | grep "^[[:space:]]*${ALG}" | awk '{print $(NF-2)}')
 
     if [ -z "${RESULT}" ]; then
         echo "SKIP  ${ALG}: no result from openssl speed (algorithm may not be available)"

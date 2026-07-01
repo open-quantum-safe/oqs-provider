@@ -30,11 +30,11 @@ jobs:
       MAKE_PARAMS: -j 4
     steps:
       - name: Checkout provider
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Checkout openssl
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
           set-safe-directory: true
@@ -42,7 +42,7 @@ jobs:
           path: openssl
           ref: master
       - name: checkout liboqs
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
           set-safe-directory: true
@@ -50,12 +50,12 @@ jobs:
           ref: main
           path: liboqs
       - name: Install cygwin
-        uses: cygwin/cygwin-install-action@a3d72946b163026bbd0fa9a88379ccbda4bd86bb # master
+        uses: cygwin/cygwin-install-action@d2090847213be12ce5ccfd44de18e482a134d735 # v6.1
         with:
           packages: perl git ninja gcc-core cmake make python3 python3-devel python3-setuptools python3-exceptiongroup
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: c:\cygwin\opt\openssl32
           key: ${{ runner.os }}-cygwinopenssl32
@@ -68,7 +68,7 @@ jobs:
       - name: Save OpenSSL
         id: cache-openssl-save
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        uses: actions/cache/save@6f8efc29b200d32929f49075959781ed54ec270c # v3
+        uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: |
             c:\cygwin\opt\openssl32
@@ -105,7 +105,7 @@ jobs:
         run: bash -c "echo $PATH && PATH=/opt/openssl32/bin:/usr/bin ctest -V"
         working-directory: _build
       - name: Retain oqsprovider.dll
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-cygwin
           path: D:/a/oqs-provider/oqs-provider/_build/bin/oqsprovider.dll
@@ -129,38 +129,38 @@ jobs:
     steps:
       - name: Restore OpenSSL32 cache
         id: cache-openssl32
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: c:\openssl32
           key: ${{ runner.os }}-msvcopenssl32
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Checkout OpenSSL master
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
           set-safe-directory: true
           repository: openssl/openssl
           path: openssl
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
           ref: main
           path: liboqs
-      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
+      - uses: ilammy/msvc-dev-cmd@a102174a2b586eec2ea151a69e6fd14404a8ce7c # v1.13.0
         with:
           arch: ${{ matrix.platform.arch }}
       - name: Setup nasm for OpenSSL build
-        uses: ilammy/setup-nasm@72793074d3c8cdda771dba85f6deafe00623038b # v1
+        uses: ilammy/setup-nasm@e77cc62a22a374a4d0668286007cc3e3b4c17760 # v1.5.2
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         with:
           platform: ${{ matrix.platform.arch }}
       - name: Setup perl for OpenSSl build
-        uses: shogo82148/actions-setup-perl@a198315ec4e9244f206879ea7b63078003aec8a6 # v1
+        uses: shogo82148/actions-setup-perl@a198315ec4e9244f206879ea7b63078003aec8a6 # v1.41.1
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
 # OQS_USE_OPENSSL=OFF by default on Win32
 # if cmake --build fails, try explicit
@@ -205,7 +205,7 @@ jobs:
       - name: Save OpenSSL
         id: cache-openssl-save
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        uses: actions/cache/save@6f8efc29b200d32929f49075959781ed54ec270c # v3
+        uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: |
             c:\openssl32
@@ -219,7 +219,7 @@ jobs:
         run: |
           ctest -V --test-dir _build
       - name: Retain oqsprovider.dll
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-msvc
           path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll
@@ -246,43 +246,43 @@ jobs:
     steps:
         - name: Restore native OpenSSL32 cache
           id: cache-openssl32n
-          uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+          uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
           with:
             path: c:\openssl32n
             key: ${{ runner.os }}-msvcopenssl32n
-        - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
           with:
             persist-credentials: false
         - name: Checkout OpenSSL master
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
-          uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+          uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
           with:
             persist-credentials: false
             set-safe-directory: true
             repository: openssl/openssl
             path: openssl
-        - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
           with:
             persist-credentials: false
             set-safe-directory: true
             repository: open-quantum-safe/liboqs
             ref: main
             path: liboqs
-        - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
+        - uses: ilammy/msvc-dev-cmd@a102174a2b586eec2ea151a69e6fd14404a8ce7c # v1.13.0
           with:
             arch: ${{ matrix.platform.arch }}
         - name: Add msbuild to PATH
-          uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1
+          uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
           with:
             msbuild-architecture: ${{matrix.msarch}}
             vs-version: '[16.10,]'
         - name: Setup nasm for OpenSSL build
-          uses: ilammy/setup-nasm@72793074d3c8cdda771dba85f6deafe00623038b # v1
+          uses: ilammy/setup-nasm@e77cc62a22a374a4d0668286007cc3e3b4c17760 # v1.5.2
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           with:
             platform: ${{ matrix.platform.arch }}
         - name: Setup perl for OpenSSL build
-          uses: shogo82148/actions-setup-perl@a198315ec4e9244f206879ea7b63078003aec8a6 # v1
+          uses: shogo82148/actions-setup-perl@a198315ec4e9244f206879ea7b63078003aec8a6 # v1.41.1
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
         - name: build liboqs
           run: |
@@ -315,7 +315,7 @@ jobs:
         - name: Save OpenSSL
           id: cache-openssl-save
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
-          uses: actions/cache/save@6f8efc29b200d32929f49075959781ed54ec270c # v3
+          uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
           with:
             path: |
               c:\openssl32n
@@ -328,7 +328,7 @@ jobs:
           run: |
             ctest -V --test-dir _build -C ${{ matrix.type }}
         - name: Retain oqsprovider.dll
-          uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+          uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
           with:
             name: ${{matrix.os}} ${{matrix.platform.arch}} oqs-provider-msvc
             path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll

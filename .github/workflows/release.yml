@@ -47,13 +47,13 @@ jobs:
             && echo "provider_ref=$provider_ref" >> "$GITHUB_ENV" \
             || echo "provider_ref=main" >> "$GITHUB_ENV"
       - name: Checkout oqs-provider on requested ref if it exists; otherwise, fall back to main
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
           ref: ${{ env.provider_ref }}
       # This is designed to be triggered automatically from liboqs CI, so don't bother validating the liboqs ref.
       - name: Checkout liboqs at requested ref
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
           repository: open-quantum-safe/liboqs

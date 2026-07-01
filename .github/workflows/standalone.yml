@@ -21,7 +21,7 @@ jobs:
       - name: Install prerequisites
         run: brew install liboqs
       - name: Checkout oqsprovider code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Build and test oqsprovider
@@ -51,7 +51,7 @@ jobs:
       - name: Update container
         run: apt update && apt install -y cmake ninja-build gcc libssl-dev git
       - name: Checkout code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Full build

@@ -81,19 +81,23 @@ documented in [ALGORITHMS.md](ALGORITHMS.md).
 Starting with version 3.5, OpenSSL natively implements a growing set of
 standardized PQ algorithms (e.g., ML-KEM, ML-DSA and SLH-DSA) in its default
 provider. Because these implementations are more advanced and better maintained
-than the equivalent facilities in `oqsprovider`, the following simple rule
-applies:
+than the equivalent facilities in `oqsprovider`, the following rule applies:
 
-> **If any PQ algorithm or algorithm component is standardized, that algorithm
-> is not available via `oqsprovider` when running in OpenSSL >= 3.5.**
+> **A PQ algorithm is not available via `oqsprovider` on OpenSSL >= 3.5 if
+> OpenSSL's own default provider already implements that exact algorithm.**
 
-This covers both the pure algorithms and any hybrid built from a component that
-OpenSSL already provides. Hybrid or experimental algorithms whose components are
-*not* yet implemented in OpenSSL remain available through `oqsprovider`.
+The rule keys on the algorithm as a whole, not on its components. It applies to
+the standardized pure algorithms (ML-KEM, ML-DSA and SLH-DSA) and to any
+standardized hybrid algorithm that OpenSSL ships natively (currently the hybrid
+KEMs `X25519MLKEM768`, `SecP256r1MLKEM768` and `SecP384r1MLKEM1024`).
+A hybrid remains available through `oqsprovider` as long as OpenSSL does not
+implement that specific combination, even when one of its components is
+standardized: for example, `x25519_mlkem512` and `p256_mlkem512` stay available
+even though OpenSSL provides their `ML-KEM-512` component.
 
-Everyone interested in testing any of these standardized PQ algorithms (pure as
-well as hybrid) via `oqsprovider` must therefore do so in an OpenSSL version
-`>= 3.2` and `< 3.5`.
+Everyone interested in testing any of the disabled standardized PQ algorithms
+(pure as well as hybrid) via `oqsprovider` must therefore do so in an OpenSSL
+version `>= 3.2` and `< 3.5`.
 
 > [!NOTE]
 > A concrete consequence is that SLH-DSA cannot be used for TLS via

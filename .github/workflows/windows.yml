@@ -50,7 +50,7 @@ jobs:
           ref: main
           path: liboqs
       - name: Install cygwin
-        uses: cygwin/cygwin-install-action@d2090847213be12ce5ccfd44de18e482a134d735 # v6.1
+        uses: cygwin/cygwin-install-action@3f0a3f9f988f7e96b8c18098ae05eaec175f5b52 # v6.1
         with:
           packages: perl git ninja gcc-core cmake make python3 python3-devel python3-setuptools python3-exceptiongroup
       - name: Retrieve OpenSSL32 from cache
@@ -151,11 +151,11 @@ jobs:
           repository: open-quantum-safe/liboqs
           ref: main
           path: liboqs
-      - uses: ilammy/msvc-dev-cmd@a102174a2b586eec2ea151a69e6fd14404a8ce7c # v1.13.0
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
         with:
           arch: ${{ matrix.platform.arch }}
       - name: Setup nasm for OpenSSL build
-        uses: ilammy/setup-nasm@e77cc62a22a374a4d0668286007cc3e3b4c17760 # v1.5.2
+        uses: ilammy/setup-nasm@72793074d3c8cdda771dba85f6deafe00623038b # v1.5.2
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         with:
           platform: ${{ matrix.platform.arch }}
@@ -268,7 +268,7 @@ jobs:
             repository: open-quantum-safe/liboqs
             ref: main
             path: liboqs
-        - uses: ilammy/msvc-dev-cmd@a102174a2b586eec2ea151a69e6fd14404a8ce7c # v1.13.0
+        - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
           with:
             arch: ${{ matrix.platform.arch }}
         - name: Add msbuild to PATH
@@ -277,7 +277,7 @@ jobs:
             msbuild-architecture: ${{matrix.msarch}}
             vs-version: '[16.10,]'
         - name: Setup nasm for OpenSSL build
-          uses: ilammy/setup-nasm@e77cc62a22a374a4d0668286007cc3e3b4c17760 # v1.5.2
+          uses: ilammy/setup-nasm@72793074d3c8cdda771dba85f6deafe00623038b # v1.5.2
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           with:
             platform: ${{ matrix.platform.arch }}

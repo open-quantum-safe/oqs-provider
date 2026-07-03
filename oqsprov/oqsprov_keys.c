@@ -1491,7 +1491,6 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
     EVP_PKEY_CTX *kgctx = NULL;
     EVP_PKEY *pkey = NULL;
     unsigned char *pubkey_encoded = NULL;
-    unsigned char *pubkey_enc_alloc = NULL;
     int idx_classic;
     OQSX_EVP_CTX *ctx = key->oqsx_provider_ctx.oqsx_evp_ctx;
     OSSL_LIB_CTX *libctx = key->libctx;
@@ -1537,36 +1536,24 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
                         ret, -4, errhyb);
     } else {
         /*
-         * Use EVP_PKEY_get1_encoded_public_key to avoid the encoder scan
-         * triggered by i2d_PublicKey when OQS_KEM_ENCODERS is enabled.
-         * i2d_PrivateKey is retained — not deprecated, produces DER format
-         * expected downstream. Selftest uses set1 to avoid the same
-         * hotpath.
+         * Use EVP_PKEY_get_octet_string_param to write directly into the
+         * pre-allocated pubkey+aux buffer, avoiding the encoder scan
+         * triggered by i2d_PublicKey when OQS_KEM_ENCODERS is enabled and
+         * the temporary allocation that EVP_PKEY_get1_encoded_public_key
+         * requires. i2d_PrivateKey is retained — not deprecated, produces
+         * DER format expected downstream.
          */
-        /*
-         * EVP_PKEY_get1_encoded_public_key always allocates its own buffer
-         * (signature: int f(EVP_PKEY *, unsigned char **)). There is no variant
-         * that writes into a caller-supplied buffer as i2d_PublicKey did.
-         * memcpy into pubkey+aux and OPENSSL_free are therefore unavoidable.
-         */
-        pubkeylen =
-            (int)EVP_PKEY_get1_encoded_public_key(pkey, &pubkey_enc_alloc);
-        ON_ERR_SET_GOTO(pubkeylen <= 0 ||
-                            pubkeylen > (int)ctx->evp_info->length_public_key,
+        pubkeylen = (int)ctx->evp_info->length_public_key;
+        ON_ERR_SET_GOTO(!EVP_PKEY_get_octet_string_param(
+                            pkey, OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY,
+                            pubkey + aux, (size_t)pubkeylen, NULL),
                         ret, -11, errhyb);
-        memcpy(pubkey + aux, pubkey_enc_alloc, pubkeylen);
-        OPENSSL_free(pubkey_enc_alloc);
-        pubkey_enc_alloc = NULL;
 
         unsigned char *privkey_enc = privkey + aux;
         privkeylen = i2d_PrivateKey(pkey, &privkey_enc);
         ON_ERR_SET_GOTO(!privkey_enc ||
                             privkeylen > (int)ctx->evp_info->length_private_key,
                         ret, -12, errhyb);
-        /* selftest: verify encoded public key round-trips via set1 */
-        ON_ERR_SET_GOTO(
-            !EVP_PKEY_set1_encoded_public_key(pkey, pubkey + aux, pubkeylen),
-            ret, -13, errhyb);
     }
     if (encode) {
         ENCODE_UINT32(pubkey_sizeenc, pubkeylen);
@@ -1578,14 +1565,12 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
 
     EVP_PKEY_CTX_free(kgctx);
     OPENSSL_free(pubkey_encoded);
-    OPENSSL_free(pubkey_enc_alloc);
     return pkey;
 
 errhyb:
     EVP_PKEY_CTX_free(kgctx);
     EVP_PKEY_free(pkey);
     OPENSSL_free(pubkey_encoded);
-    OPENSSL_free(pubkey_enc_alloc);
     return NULL;
 }
 

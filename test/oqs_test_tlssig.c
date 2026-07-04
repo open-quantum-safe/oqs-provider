@@ -117,9 +117,17 @@ static int test_signature(const OSSL_PARAM params[], void *data) {
 
     mintls = (int *)p->data;
     if (*mintls == -1) {
-        fprintf(stderr,
-                cYELLOW "  TLS-SIG handshake test skipped: %s" cNORM "\n",
-                sigalg_name);
+        /* Regression test for #784: the provider must not advertise sigalgs
+           that cannot be used in TLS (min_tls == -1) in its TLS-SIGALG
+           capability list. */
+        fprintf(
+            stderr,
+            cRED
+            "  TLS-SIG capability wrongly advertised (min_tls == -1): %s" cNORM
+            "\n",
+            sigalg_name);
+        (*errcnt)++;
+        ret = -1;
         goto err;
     }
 

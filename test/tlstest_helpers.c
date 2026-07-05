@@ -22,7 +22,8 @@ int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename,
         !ASN1_INTEGER_set(X509_get_serialNumber(x509), 1) ||
         !X509_gmtime_adj(X509_getm_notBefore(x509), 0) ||
         !X509_gmtime_adj(X509_getm_notAfter(x509), 31536000L) ||
-        !X509_set_pubkey(x509, pkey) || !(name = X509_get_subject_name(x509)) ||
+        !X509_set_pubkey(x509, pkey) ||
+        !(name = X509_NAME_dup(X509_get_subject_name(x509))) ||
         !X509_NAME_add_entry_by_txt(name, "C", MBSTRING_ASC,
                                     (unsigned char *)"CH", -1, -1, 0) ||
         !X509_NAME_add_entry_by_txt(name, "O", MBSTRING_ASC,
@@ -39,6 +40,7 @@ int create_cert_key(OSSL_LIB_CTX *libctx, char *algname, char *certfilename,
 
     EVP_PKEY_free(pkey);
     X509_free(x509);
+    X509_NAME_free(name);
     EVP_PKEY_CTX_free(evpctx);
     BIO_free(keybio);
     BIO_free(certbio);

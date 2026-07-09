@@ -1543,24 +1543,25 @@ static EVP_PKEY *oqsx_key_gen_evp_key_kem(OQSX_KEY *key, unsigned char *pubkey,
                             privkeylen != ctx->evp_info->length_private_key,
                         ret, -4, errhyb);
     } else {
-        unsigned char *pubkey_enc = pubkey + aux;
-        const unsigned char *pubkey_enc2 = pubkey + aux;
-        pubkeylen = i2d_PublicKey(pkey, &pubkey_enc);
-        ON_ERR_SET_GOTO(!pubkey_enc ||
-                            pubkeylen > (int)ctx->evp_info->length_public_key,
+        /*
+         * Use EVP_PKEY_get_octet_string_param to write directly into the
+         * pre-allocated pubkey+aux buffer, avoiding the encoder scan
+         * triggered by i2d_PublicKey when OQS_KEM_ENCODERS is enabled and
+         * the temporary allocation that EVP_PKEY_get1_encoded_public_key
+         * requires. i2d_PrivateKey is retained — not deprecated, produces
+         * DER format expected downstream.
+         */
+        pubkeylen = (int)ctx->evp_info->length_public_key;
+        ON_ERR_SET_GOTO(!EVP_PKEY_get_octet_string_param(
+                            pkey, OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY,
+                            pubkey + aux, (size_t)pubkeylen, NULL),
                         ret, -11, errhyb);
+
         unsigned char *privkey_enc = privkey + aux;
-        const unsigned char *privkey_enc2 = privkey + aux;
         privkeylen = i2d_PrivateKey(pkey, &privkey_enc);
         ON_ERR_SET_GOTO(!privkey_enc ||
                             privkeylen > (int)ctx->evp_info->length_private_key,
                         ret, -12, errhyb);
-        // selftest:
-        EVP_PKEY *ck2 =
-            d2i_PrivateKey_ex(ctx->evp_info->keytype, NULL, &privkey_enc2,
-                              privkeylen, libctx, NULL);
-        ON_ERR_SET_GOTO(!ck2, ret, -14, errhyb);
-        EVP_PKEY_free(ck2);
     }
     if (encode) {
         ENCODE_UINT32(pubkey_sizeenc, pubkeylen);

@@ -77,33 +77,36 @@ A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are
 documented in [ALGORITHMS.md](ALGORITHMS.md).
 
-## Using with OpenSSL >= 3.5.0 
+## Using with OpenSSL >= 3.5
 
-OpenSSL version 3.5.0 adds native support for the standardized PQ algorithm families MLKEM, MLDSA, SLHDSA as well as support for standardized hybrid PQ schemes.
+Starting with version 3.5, OpenSSL natively implements a growing set of
+standardized PQ algorithms (e.g., ML-KEM, ML-DSA and SLH-DSA) in its default
+provider. Because these implementations are more advanced and better maintained
+than the equivalent facilities in `oqsprovider`, the following rule applies:
 
-As these code bases are substantially more advanced and better maintained than the same facilties made
-available via `oqsprovider` these algorithm families get disabled when running in `openssl` versions
-already containing them in the default provider.
+> **A PQ algorithm is not available via `oqsprovider` on OpenSSL >= 3.5 if
+> OpenSSL's own default provider already implements that exact algorithm.**
 
-The new OpenSSL implementations can be be used in such a oqsprovider configuration (OpenSSL >= 3.5.0 and oqsprovider >= 0.9.0) by accessing them through the following algorithm IDs: 
+The rule keys on the algorithm as a whole, not on its components. It applies to
+the standardized pure algorithms (ML-KEM, ML-DSA and SLH-DSA) and to any
+standardized hybrid algorithm that OpenSSL ships natively (currently the hybrid
+KEMs `X25519MLKEM768`, `SecP256r1MLKEM768` and `SecP384r1MLKEM1024`).
+A hybrid remains available through `oqsprovider` as long as OpenSSL does not
+implement that specific combination, even when one of its components is
+standardized: for example, `x25519_mlkem512` and `p256_mlkem512` stay available
+even though OpenSSL provides their `ML-KEM-512` component.
 
--**ML-DSA**:
-```
-2.16.840.1.101.3.4.3.17, id-ml-dsa-44, ML-DSA-44, MLDSA44
-2.16.840.1.101.3.4.3.18, id-ml-dsa-65, ML-DSA-65, MLDSA65
-2.16.840.1.101.3.4.3.19, id-ml-dsa-87, ML-DSA-87, MLDSA87
-```
+Everyone interested in testing any of the disabled standardized PQ algorithms
+(pure as well as hybrid) via `oqsprovider` must therefore do so in an OpenSSL
+version `>= 3.2` and `< 3.5`.
 
--**ML_KEM**: 
-```
-2.16.840.1.101.3.4.4.1, id-alg-ml-kem-512, ML-KEM-512, MLKEM512
-2.16.840.1.101.3.4.4.2, id-alg-ml-kem-768, ML-KEM-768, MLKEM768
-2.16.840.1.101.3.4.4.3, id-alg-ml-kem-1024, ML-KEM-1024, MLKEM1024
-X25519MLKEM768
-X448MLKEM1024
-SecP256r1MLKEM768
-SecP384r1MLKEM1024
-```
+> [!NOTE]
+> A concrete consequence is that SLH-DSA cannot be used for TLS via
+> `oqsprovider` when running in OpenSSL >= 3.5, because OpenSSL disables the
+> `oqsprovider` implementation but (as of this writing) does not itself offer
+> SLH-DSA for TLS. Use an OpenSSL version `>= 3.2` and `< 3.5` to test SLH-DSA
+> in TLS. OpenSSL >= 4.1 will add support for SLH-DSA on TLS (see
+> [this merged commit](https://github.com/openssl/openssl/commit/4a08aa1346aa00151b09cc45fb2ce01ddee27230)).
 
 ## Using with LibOQS 0.16.0
 
@@ -200,15 +203,17 @@ an appropriate message length for hybrid signature schemes is expected.
 
 ## 3.5 and greater
 
-These versions include support for the standard PQC algorithms ML-KEM, ML-DSA
-and SLH-DSA. Accordingly, `oqsprovider` can no longer succeed registering
-(O)IDs for these algorithms as these already exist. In addition, `oqsprovider`
-functionally (e.g., support for several key formats) and non-functionally
-(e.g., code quality) is not at par with the implementations for these
-algorithms. Therefore, these, as well as their hybrid variants
-are disabled at runtime upon detection of these being available in `openssl`.
-The same algorithms will continue to work even using the same `oqsprovider`
-binary in OpenSSL installations with a version older than 3.5.
+These versions include support for an increasing set of standardized PQC
+algorithms (e.g., ML-KEM, ML-DSA and SLH-DSA). Accordingly, `oqsprovider` can no
+longer succeed registering (O)IDs for these algorithms as these already exist.
+In addition, `oqsprovider` functionally (e.g., support for several key formats)
+and non-functionally (e.g., code quality) is not at par with the implementations
+for these algorithms. Therefore, as described in
+[Using with OpenSSL >= 3.5](#using-with-openssl--35), any algorithm whose
+component is standardized and implemented in OpenSSL is disabled at runtime upon
+detection of it being available in `openssl`. The same algorithms will continue
+to work even using the same `oqsprovider` binary in OpenSSL installations with a
+version older than 3.5.
 
 This limitation might be resolved by implementing https://github.com/open-quantum-safe/oqs-provider/discussions/625.
 given sufficient interest. Contributions very welcome.

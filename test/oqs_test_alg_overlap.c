@@ -94,9 +94,9 @@ static int count_overlap(const OSSL_ALGORITHM *oqs_algs,
              tok = strtok_r(NULL, ":", &save)) {
             if (name_in_algs(def_algs, tok, match, sizeof(match))) {
                 fprintf(stderr,
-                        cRED "  %s overlap: oqsprovider \"%s\" also provided by "
-                             "default as \"%s\" (shared name \"%s\")" cNORM
-                             "\n",
+                        cRED
+                        "  %s overlap: oqsprovider \"%s\" also provided by "
+                        "default as \"%s\" (shared name \"%s\")" cNORM "\n",
                         optype, oqs_alg->algorithm_names, match, tok);
                 overlap++;
                 reported = 1;

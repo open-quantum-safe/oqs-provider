@@ -29,6 +29,7 @@
 
 #ifdef _WIN32
 #define strcasecmp _stricmp
+#define strtok_r strtok_s
 #endif
 
 /*

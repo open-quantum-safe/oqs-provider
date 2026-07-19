@@ -113,8 +113,8 @@
 | ML-KEM         | ML-KEM                                                | mlkem1024       | FIPS203      |                    5 | 0x2F4D       | secp521_r1                       |
 | ML-KEM         | ML-KEM                                                | mlkem1024       | FIPS203      |                    5 | 514          |                                  |
 | ML-KEM         | ML-KEM                                                | mlkem1024       | FIPS203      |                    5 | 65058        | bp512                            |
-| ML-KEM         | ML-KEM                                                | mlkem512        | FIPS203      |                    1 | 0x2F4B       | secp256_r1                       |
-| ML-KEM         | ML-KEM                                                | mlkem512        | FIPS203      |                    1 | 0x2FB6       | x25519                           |
+| ML-KEM         | ML-KEM                                                | mlkem512        | FIPS203      |                    1 | 0x11e9       | secp256_r1                       |
+| ML-KEM         | ML-KEM                                                | mlkem512        | FIPS203      |                    1 | 0x11ea       | x25519                           |
 | ML-KEM         | ML-KEM                                                | mlkem512        | FIPS203      |                    1 | 512          |                                  |
 | ML-KEM         | ML-KEM                                                | mlkem512        | FIPS203      |                    1 | 65056        | bp256                            |
 | ML-KEM         | ML-KEM                                                | mlkem768        | FIPS203      |                    3 | 0x11eb       | secp256_r1                       |

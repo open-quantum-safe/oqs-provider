@@ -131,9 +131,9 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "2.16.840.1.101.3.4.4.1",
     "mlkem512",
     "1.3.6.1.4.1.22554.5.7.1",
-    "p256_mlkem512",
+    "SecP256r1MLKEM512",
     "1.3.6.1.4.1.22554.5.8.1",
-    "x25519_mlkem512",
+    "MLKEM512X25519",
     NULL,
     "bp256_mlkem512",
     "2.16.840.1.101.3.4.4.2",
@@ -404,9 +404,9 @@ int oqs_patch_oids(void) {
         if ((envval = getenv("OQS_OID_MLKEM512")))
             oqs_oid_alg_list[64] = envval;
 
-        if ((envval = getenv("OQS_OID_P256_MLKEM512")))
+        if ((envval = getenv("OQS_OID_SECP256R1MLKEM512")))
             oqs_oid_alg_list[66] = envval;
-        if ((envval = getenv("OQS_OID_X25519_MLKEM512")))
+        if ((envval = getenv("OQS_OID_MLKEM512X25519")))
             oqs_oid_alg_list[68] = envval;
         if ((envval = getenv("OQS_OID_BP256_MLKEM512")))
             oqs_oid_alg_list[70] = envval;
@@ -840,8 +840,8 @@ static const OSSL_ALGORITHM oqsprovider_asym_kems[] = {
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_512
     KEMBASEALG(mlkem512, 128)
-    KEMHYBALG(p256_mlkem512, 128)
-    KEMHYBALG(x25519_mlkem512, 128)
+    KEMHYBALG(SecP256r1MLKEM512, 128)
+    KEMHYBALG(MLKEM512X25519, 128)
     KEMHYBALG(bp256_mlkem512, 128)
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
@@ -1115,9 +1115,9 @@ static const OSSL_ALGORITHM
 #ifdef OQS_ENABLE_KEM_ml_kem_512
     KEMKMALG(mlkem512, 128)
 
-    KEMKMHYBALG(p256_mlkem512, 128, ecp)
+    KEMKMHYBALG(SecP256r1MLKEM512, 128, ecp)
 
-    KEMKMHYBALG(x25519_mlkem512, 128, ecx)
+    KEMKMHYBALG(MLKEM512X25519, 128, ecx)
     KEMKMHYBALG(bp256_mlkem512, 128, ecbp)
 
 #endif

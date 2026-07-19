@@ -118,6 +118,7 @@ def complete_config(config):
           exit(1)
       phyb['bit_security']=bits_level
       phyb['nid']=kem['nid_hybrid']
+      if 'hybrid_name' in kem: phyb['standard_name'] = kem['hybrid_name']
       if 'hybrid_oid' in kem: phyb['hybrid_oid']=kem['hybrid_oid']
       else: phyb['hybrid_oid'] = get_tmp_kem_oid()
       kem['hybrids'].insert(0, phyb)

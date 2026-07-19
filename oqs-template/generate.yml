@@ -265,10 +265,11 @@ kems:
     iana: true
 # NIST kem 1
     oid: '2.16.840.1.101.3.4.4.1'
-# code point not standardized: Why? XXX
-    nid_hybrid: '0x2F4B'
+# https://www.ietf.org/archive/id/draft-rosomakho-tls-ecdhe-mlkem512-00.html#name-secp256r1mlkem512-2
+    nid_hybrid: '0x11e9'
 # retain OIDs of the Legion of the BouncyCastle: XXX check if OK
     hybrid_oid: '1.3.6.1.4.1.22554.5.7.1'
+    hybrid_name: 'SecP256r1MLKEM512'
     oqs_alg: 'OQS_KEM_alg_ml_kem_512'
     enable_kem: true
     enable_tls: true
@@ -278,9 +279,10 @@ kems:
         - hybrid_group: "x25519"
 # retain OIDs of the Legion of the BouncyCastle: XXX check if OK
           hybrid_oid: '1.3.6.1.4.1.22554.5.8.1'
-# code point not standardized: Why? XXX
-          nid: '0x2FB6'
+# https://www.ietf.org/archive/id/draft-rosomakho-tls-ecdhe-mlkem512-00.html#name-mlkem512x25519-2
+          nid: '0x11ea'
           iana: true
+          standard_name: "MLKEM512X25519"
         - hybrid_group: "bp256"
           nid: '65056'
   -

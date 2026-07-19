@@ -105,25 +105,25 @@ def complete_config(config):
           exit(1)
       kem['bit_security'] = bits_level
 
-      # now add hybrid_nid to hybrid_groups
-      phyb = {}
-      if (bits_level == 128):
-          phyb['hybrid_group']='p256'
-      elif (bits_level == 192):
-          phyb['hybrid_group']='p384'
-      elif (bits_level == 256):
-          phyb['hybrid_group']='p521'
-      else:
-          print("Warning: Unknown bit level for %s. Cannot assign hybrid." % (kem['group_name']))
-          exit(1)
-      phyb['bit_security']=bits_level
-      phyb['nid']=kem['nid_hybrid']
-      if 'hybrid_name' in kem: phyb['standard_name'] = kem['hybrid_name']
-      if 'hybrid_oid' in kem: phyb['hybrid_oid']=kem['hybrid_oid']
-      else: phyb['hybrid_oid'] = get_tmp_kem_oid()
-      kem['hybrids'].insert(0, phyb)
-      if not 'oid' in kem:
-         kem['oid'] = get_tmp_kem_oid()
+      if 'nid_hybrid' in kem:
+          # now add hybrid_nid to hybrid_groups
+          phyb = {}
+          if (bits_level == 128):
+              phyb['hybrid_group']='p256'
+          elif (bits_level == 192):
+              phyb['hybrid_group']='p384'
+          elif (bits_level == 256):
+              phyb['hybrid_group']='p521'
+          else:
+              print("Warning: Unknown bit level for %s. Cannot assign hybrid." % (kem['group_name']))
+              exit(1)
+          phyb['bit_security']=bits_level
+          phyb['nid']=kem['nid_hybrid']
+          if 'hybrid_oid' in kem: phyb['hybrid_oid']=kem['hybrid_oid']
+          else: phyb['hybrid_oid'] = get_tmp_kem_oid()
+          kem['hybrids'].insert(0, phyb)
+          if not 'oid' in kem:
+             kem['oid'] = get_tmp_kem_oid()
 
    for famsig in config['sigs']:
       for sig in famsig['variants']:

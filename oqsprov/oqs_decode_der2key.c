@@ -663,8 +663,8 @@ MAKE_DECODER(_ecp, "SecP256r1MLKEM512", SecP256r1MLKEM512, oqsx,
 MAKE_DECODER(_ecp, "SecP256r1MLKEM512", SecP256r1MLKEM512, oqsx,
              SubjectPublicKeyInfo);
 
-MAKE_DECODER(_ecx, "MLKEM512X25519", MLKEM512X25519, oqsx, PrivateKeyInfo);
-MAKE_DECODER(_ecx, "MLKEM512X25519", MLKEM512X25519, oqsx,
+MAKE_DECODER(_ecx, "x25519_mlkem512", x25519_mlkem512, oqsx, PrivateKeyInfo);
+MAKE_DECODER(_ecx, "x25519_mlkem512", x25519_mlkem512, oqsx,
              SubjectPublicKeyInfo);
 
 MAKE_DECODER(_ecbp, "bp256_mlkem512", bp256_mlkem512, oqsx, PrivateKeyInfo);

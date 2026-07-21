@@ -284,7 +284,7 @@ kems:
 # https://www.ietf.org/archive/id/draft-rosomakho-tls-ecdhe-mlkem512-00.html#name-mlkem512x25519-2
           nid: '0x11ea'
           iana: true
-          standard_name: "MLKEM512X25519"
+          #standard_name: "MLKEM512X25519"
         - hybrid_group: "bp256"
           nid: '65056'
   -

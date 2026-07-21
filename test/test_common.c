@@ -131,7 +131,7 @@ const char *kHybridKEMAlgorithms[] = {
     "p384_frodo976aes",    "x448_frodo976aes",
     "p384_frodo976shake",  "x448_frodo976shake",
     "p521_frodo1344aes",   "p521_frodo1344shake",
-    "SecP256r1MLKEM512",   "MLKEM512X25519",
+    "SecP256r1MLKEM512",   "x25519_mlkem512",
     "bp256_mlkem512",      "p384_mlkem768",
     "x448_mlkem768",       "bp384_mlkem768",
     "X25519MLKEM768",      "SecP256r1MLKEM768",

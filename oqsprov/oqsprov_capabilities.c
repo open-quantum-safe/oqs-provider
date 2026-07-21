@@ -240,7 +240,7 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 
     OQS_GROUP_ENTRY(SecP256r1MLKEM512, SecP256r1MLKEM512, SecP256r1MLKEM512,
                     33),
-    OQS_GROUP_ENTRY(MLKEM512X25519, MLKEM512X25519, MLKEM512X25519, 34),
+    OQS_GROUP_ENTRY(x25519_mlkem512, x25519_mlkem512, x25519_mlkem512, 34),
     OQS_GROUP_ENTRY(bp256_mlkem512, bp256_mlkem512, bp256_mlkem512, 35),
 #endif
 #ifdef OQS_ENABLE_KEM_ml_kem_768
@@ -472,9 +472,9 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_SECP256R1MLKEM512"))
         oqs_group_list[33].group_id =
             atoi(getenv("OQS_CODEPOINT_SECP256R1MLKEM512"));
-    if (getenv("OQS_CODEPOINT_MLKEM512X25519"))
+    if (getenv("OQS_CODEPOINT_X25519_MLKEM512"))
         oqs_group_list[34].group_id =
-            atoi(getenv("OQS_CODEPOINT_MLKEM512X25519"));
+            atoi(getenv("OQS_CODEPOINT_X25519_MLKEM512"));
     if (getenv("OQS_CODEPOINT_BP256_MLKEM512"))
         oqs_group_list[35].group_id =
             atoi(getenv("OQS_CODEPOINT_BP256_MLKEM512"));

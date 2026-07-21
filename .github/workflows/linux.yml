@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
   coding_style_tests:
     uses: ./.github/workflows/coding_style.yml
@@ -18,13 +21,15 @@ jobs:
         cmake-params: [ "" ]
         libjade-build: ["ON", "OFF"]
     container:
-      image: openquantumsafe/ci-ubuntu-jammy:latest
+      image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
     env:
       MAKE_PARAMS: "-j 18"
       LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
       - name: Full build
         run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Test
@@ -43,12 +48,12 @@ jobs:
           - "OFF"
         include:
           - name: alpine
-            container: openquantumsafe/ci-alpine-amd64:latest
+            container: openquantumsafe/ci-alpine-amd64@sha256:ed0c927d3c54b68cdb74d734073def77bfa4d510f35b8d4ace8acfb150016378
 # focal test done on CircleCI - save the compute cycles here until CCI is dropped
 #          - name: focal
 #            container: openquantumsafe/ci-ubuntu-focal-x86_64:latest
           - name: jammy
-            container: openquantumsafe/ci-ubuntu-jammy:latest
+            container: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
     container:
       image: ${{ matrix.container }}
     env:
@@ -56,7 +61,9 @@ jobs:
       LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
       - name: Add safe directory exception
         run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
       - name: Full build
@@ -78,7 +85,7 @@ jobs:
         run: cpack -C DebPack
         working-directory: _build
       - name: Retain .deb installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ matrix.ossl-branch }} ${{ matrix.cmake-params }} ${{ matrix.libjade-build }} oqsprovider-x64
           path: _build/*.deb
@@ -96,7 +103,7 @@ jobs:
     strategy:
       fail-fast: false
     container:
-      image: openquantumsafe/ci-ubuntu-jammy:latest
+      image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
     env:
       CC: "clang"
       CXX: "clang++"
@@ -105,7 +112,9 @@ jobs:
       OPENSSL_BRANCH: "openssl-3.5.0"
     steps:
       - name: Checkout code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install dependencies
         run: apt-get update && apt-get install -y clang llvm ninja-build git cmake libclang-14-dev libclang-common-14-dev
@@ -171,7 +180,7 @@ jobs:
     strategy:
       fail-fast: false
     container:
-      image: openquantumsafe/ci-ubuntu-jammy:latest
+      image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
     env:
       OPENSSL_BRANCH: "openssl-4.0.1"
       INSTALL_DIR: "/opt/install"
@@ -179,7 +188,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install dependencies
         run: apt-get update && apt-get install -y ninja-build git cmake nodejs gcc-aarch64-linux-gnu libc6-dev-arm64-cross qemu-user
@@ -249,8 +260,7 @@ jobs:
             dpkg -I oqs-provider-*.deb | grep -q "Architecture: arm64"
 
       - name: Retain .deb installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: oqsprovider-aarch64
           path: build/*.deb
-

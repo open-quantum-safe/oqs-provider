@@ -1,6 +1,9 @@
 name: Coding style tests
 on: [workflow_call]
 
+permissions:
+  contents: read
+
 jobs:
   check_clang_format:
     name: "Coding style"
@@ -8,13 +11,15 @@ jobs:
     strategy:
       fail-fast: false
     container:
-      image: openquantumsafe/ci-ubuntu-latest:latest
+      image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
     steps:
       - name: Install dependencies
         run: apt-get update && apt-get install -y clang-format
 
       - name: Checkout code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Check coding style using clang-format
         run: ./scripts/do_code_format.sh
@@ -31,4 +36,3 @@ jobs:
           ./scripts/do_code_format.sh --no-dry-run && \
           git diff && \
           ! git status | grep modified
-

@@ -27,23 +27,27 @@ jobs:
       MAKE_PARAMS: -j 4
     steps:
       - name: Checkout provider
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
-      - name: Checkout openssl
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          persist-credentials: false
+      - name: Checkout openssl
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
           set-safe-directory: true
           repository: openssl/openssl
           path: openssl
       - name: checkout liboqs
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
           ref: main
           path: liboqs
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32
-        uses: actions/cache@v4
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: .localopenssl32
           key: ${{ runner.os }}-openssl32
@@ -54,7 +58,7 @@ jobs:
       - name: Save OpenSSL
         id: cache-openssl-save
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: |
             .localopenssl32
@@ -84,7 +88,7 @@ jobs:
             fi'
         working-directory: scripts
       - name: Retain oqsprovider.dylib
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: oqs-provider-${{matrix.os}}-x64
           path: _build/lib/oqsprovider.dylib

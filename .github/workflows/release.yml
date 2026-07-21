@@ -4,6 +4,9 @@ on:
   repository_dispatch:
     types: [ "liboqs-release" ]
 
+permissions:
+  contents: read
+
 # To trigger this job, generate a GitHub personal access token and run the following command:
 #
 # curl --request POST \
@@ -23,7 +26,7 @@ jobs:
   release-test:
     runs-on: ubuntu-latest
     container:
-      image: openquantumsafe/ci-ubuntu-jammy:latest
+      image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
 
     steps:
       - name: Check if requested ref exists
@@ -44,13 +47,15 @@ jobs:
             && echo "provider_ref=$provider_ref" >> "$GITHUB_ENV" \
             || echo "provider_ref=main" >> "$GITHUB_ENV"
       - name: Checkout oqs-provider on requested ref if it exists; otherwise, fall back to main
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          persist-credentials: false
           ref: ${{ env.provider_ref }}
       # This is designed to be triggered automatically from liboqs CI, so don't bother validating the liboqs ref.
       - name: Checkout liboqs at requested ref
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          persist-credentials: false
           repository: open-quantum-safe/liboqs
           path: liboqs
           ref: ${{ github.event.client_payload.liboqs_ref }}

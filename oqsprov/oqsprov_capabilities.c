@@ -86,8 +86,8 @@ static OQS_GROUP_CONSTANTS oqs_group_list[] = {
     {65074, 256, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {512, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
-    {0x2F4B, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
-    {0x2FB6, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
+    {0x11e9, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
+    {0x11ea, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {65056, 128, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
     {513, 192, TLS1_3_VERSION, 0, DTLS1_3_VERSION, 0, 1},
 
@@ -238,7 +238,8 @@ static const OSSL_PARAM oqs_param_group_list[][11] = {
 #ifdef OQS_ENABLE_KEM_ml_kem_512
     OQS_GROUP_ENTRY(mlkem512, mlkem512, mlkem512, 32),
 
-    OQS_GROUP_ENTRY(p256_mlkem512, p256_mlkem512, p256_mlkem512, 33),
+    OQS_GROUP_ENTRY(SecP256r1MLKEM512, SecP256r1MLKEM512, SecP256r1MLKEM512,
+                    33),
     OQS_GROUP_ENTRY(x25519_mlkem512, x25519_mlkem512, x25519_mlkem512, 34),
     OQS_GROUP_ENTRY(bp256_mlkem512, bp256_mlkem512, bp256_mlkem512, 35),
 #endif
@@ -468,9 +469,9 @@ int oqs_patch_codepoints() {
             atoi(getenv("OQS_CODEPOINT_P521_FRODO1344SHAKE"));
     if (getenv("OQS_CODEPOINT_MLKEM512"))
         oqs_group_list[32].group_id = atoi(getenv("OQS_CODEPOINT_MLKEM512"));
-    if (getenv("OQS_CODEPOINT_P256_MLKEM512"))
+    if (getenv("OQS_CODEPOINT_SECP256R1MLKEM512"))
         oqs_group_list[33].group_id =
-            atoi(getenv("OQS_CODEPOINT_P256_MLKEM512"));
+            atoi(getenv("OQS_CODEPOINT_SECP256R1MLKEM512"));
     if (getenv("OQS_CODEPOINT_X25519_MLKEM512"))
         oqs_group_list[34].group_id =
             atoi(getenv("OQS_CODEPOINT_X25519_MLKEM512"));

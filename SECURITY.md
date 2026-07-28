@@ -48,4 +48,3 @@ this sort opened in this repository will be closed immediately without further a
 - Proof of Concept: The report must include code or a clear, reproducible set of steps to demonstrate the issue and the exploit.
 
 - Mitigation Strategy: The report must include suggested code changes or specific steps to mitigate the identified vulnerability.
-Security Advisory interface.

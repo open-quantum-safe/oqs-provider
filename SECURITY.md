@@ -39,11 +39,13 @@ this sort opened in this repository will be closed immediately without further a
 
 ## Reporting a serious Vulnerability
 
-Considering the background above, if you still think you have found a serious vulnerability, please
-follow [this information to report it](https://openquantumsafe.org/liboqs/security.html#reporting-security-bugs)
-and/or directly create [a draft security advisory via github](https://github.com/open-quantum-safe/oqs-provider/security/advisories/new).
+- Categorization: The reported issue must be identified as a logic error, safety check failure, API misuse, or memory boundary violation within the current repository.
 
-Should too many CVE reports be received that do not warrant this designation, and/or reports are
-generated with the sole goal of receiving ["CVE reporting credits", or are plain AI slop](https://daniel.haxx.se/blog/2025/07/14/death-by-a-thousand-slops/),
-this project reserves the right to completely stop accepting CVE reports by way of disabling the
+- Source Verification: If the vulnerability originates from liboqs or libcrypto (OpenSSL), the reporter must redirect the report to the respective upstream project; such reports will be closed immediately in this repository.
+
+- Severity Assessment: The reporter must evaluate if the vulnerability is serious enough to warrant a CVE.
+
+- Proof of Concept: The report must include code or a clear, reproducible set of steps to demonstrate the issue and the exploit.
+
+- Mitigation Strategy: The report must include suggested code changes or specific steps to mitigate the identified vulnerability.
 Security Advisory interface.

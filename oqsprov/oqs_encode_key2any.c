@@ -8,6 +8,7 @@
  * ToDo: Adding hybrid alg support
  */
 
+#include <limits.h>
 #include <openssl/asn1.h>
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
@@ -61,6 +62,26 @@ typedef int key_to_der_fn(BIO *out, const void *key, int key_nid,
                           const char *pemname, key_to_paramstring_fn *p2s,
                           i2d_of_void *k2d, struct key2any_ctx_st *ctx);
 typedef int write_bio_of_void_fn(BIO *bp, const void *x);
+
+#if OPENSSL_VERSION_PREREQ(4, 1)
+static int oqsx_legacy_asn1_string_set(ASN1_STRING *str, const void *data,
+                                       int len) {
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+    int ret = ASN1_STRING_set(str, data, len);
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+    return ret;
+}
+#endif
 
 /* Free the blob allocated during key_to_paramstring_fn */
 static void free_asn1_data(int type, void *data) {
@@ -507,6 +528,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     uint32_t buflen = 0, privkeylen = 0;
     ASN1_OCTET_STRING *oct = NULL;
     int keybloblen = -1;
+#if OPENSSL_VERSION_PREREQ(4, 1)
+    int string_set_result;
+#endif
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_pki_priv_to_der called\n");
 
@@ -575,7 +599,14 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     }
 
 #if OPENSSL_VERSION_PREREQ(4, 1)
-    if (!ASN1_STRING_set_data(oct, buf, buflen)) {
+    if (OpenSSL_version_num() >= 0x40100000L) {
+        string_set_result = ASN1_STRING_set_data(oct, buf, buflen);
+    } else if (buflen <= INT_MAX) {
+        string_set_result = oqsx_legacy_asn1_string_set(oct, buf, (int)buflen);
+    } else {
+        string_set_result = 0;
+    }
+    if (!string_set_result) {
 #else
     if (!ASN1_STRING_set(oct, buf, buflen)) {
 #endif

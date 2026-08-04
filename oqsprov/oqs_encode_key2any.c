@@ -574,7 +574,11 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         goto done;
     }
 
+#if OPENSSL_VERSION_PREREQ(4, 1)
+    if (!ASN1_STRING_set_data(oct, buf, buflen)) {
+#else
     if (!ASN1_STRING_set(oct, buf, buflen)) {
+#endif
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         goto done;
     }

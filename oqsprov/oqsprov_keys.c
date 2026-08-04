@@ -9,6 +9,7 @@
  */
 
 #include <assert.h>
+#include <limits.h>
 #include <openssl/core_names.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
@@ -1015,6 +1016,9 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     unsigned char *concat_key;
     const unsigned char *buf;
     int count, aux, i, buflen, key_diff = 0;
+#if OPENSSL_VERSION_PREREQ(4, 1)
+    size_t octlen;
+#endif
 
     if (!PKCS8_pkey_get0(NULL, &p, &plen, &palg, p8inf))
         return 0;
@@ -1025,7 +1029,17 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
         plen = 0;
     } else {
         p = ASN1_STRING_get0_data(oct);
+#if OPENSSL_VERSION_PREREQ(4, 1)
+        octlen = ASN1_STRING_length_ex(oct);
+        if (octlen > INT_MAX) {
+            ASN1_OCTET_STRING_free(oct);
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            return NULL;
+        }
+        plen = (int)octlen;
+#else
         plen = ASN1_STRING_length(oct);
+#endif
     }
 
     oqsx = oqsx_key_op(palg, p, plen + key_diff, KEY_OP_PRIVATE, libctx, propq);

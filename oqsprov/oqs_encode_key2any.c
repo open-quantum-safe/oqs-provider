@@ -1374,7 +1374,8 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
              (void (*)(void))impl##_to_##kind##_##output##_free_object},       \
             {OSSL_FUNC_ENCODER_ENCODE,                                         \
              (void (*)(void))impl##_to_##kind##_##output##_encode},            \
-            {0, NULL}}
+            {0, NULL}                                                          \
+        }
 
 /* ---------------------------------------------------------------------- */
 
@@ -1589,7 +1590,8 @@ key2text_encode(void *vctx, const void *key, int selection, OSSL_CORE_BIO *cout,
         {OSSL_FUNC_ENCODER_FREE_OBJECT,                                        \
          (void (*)(void))impl##2text_free_object},                             \
         {OSSL_FUNC_ENCODER_ENCODE, (void (*)(void))impl##2text_encode},        \
-        {0, NULL}}
+        {0, NULL}                                                              \
+    }
 
 /*
  * Replacements for i2d_{TYPE}PrivateKey, i2d_{TYPE}PublicKey,

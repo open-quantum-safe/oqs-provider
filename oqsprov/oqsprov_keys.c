@@ -38,25 +38,6 @@
 
 typedef enum { KEY_OP_PUBLIC, KEY_OP_PRIVATE, KEY_OP_KEYGEN } oqsx_key_op_t;
 
-#if OPENSSL_VERSION_PREREQ(4, 1)
-static int oqsx_legacy_asn1_string_length(const ASN1_STRING *str) {
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-    int ret = ASN1_STRING_length(str);
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-    return ret;
-}
-#endif
-
 /// NID/name table
 
 typedef struct {
@@ -1049,17 +1030,13 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     } else {
         p = ASN1_STRING_get0_data(oct);
 #if OPENSSL_VERSION_PREREQ(4, 1)
-        if (OpenSSL_version_num() >= 0x40100000L) {
-            octlen = ASN1_STRING_length_ex(oct);
-            if (octlen > INT_MAX) {
-                ASN1_OCTET_STRING_free(oct);
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                return NULL;
-            }
-            plen = (int)octlen;
-        } else {
-            plen = oqsx_legacy_asn1_string_length(oct);
+        octlen = ASN1_STRING_length_ex(oct);
+        if (octlen > INT_MAX) {
+            ASN1_OCTET_STRING_free(oct);
+            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+            return NULL;
         }
+        plen = (int)octlen;
 #else
         plen = ASN1_STRING_length(oct);
 #endif

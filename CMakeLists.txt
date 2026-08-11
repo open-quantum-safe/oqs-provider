@@ -52,10 +52,23 @@ endif()
 
 include(CheckLibraryExists)
 include(CheckFunctionExists)
+include(CheckSymbolExists)
 
 # Add required includes and install locations for openssl
 find_package(OpenSSL 3.0 REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
+set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
+set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_CRYPTO_LIBRARY})
+check_symbol_exists(ASN1_STRING_set_data "openssl/asn1.h"
+                    OQSPROV_HAVE_ASN1_STRING_SET_DATA)
+check_symbol_exists(ASN1_STRING_length_ex "openssl/asn1.h"
+                    OQSPROV_HAVE_ASN1_STRING_LENGTH_EX)
+unset(CMAKE_REQUIRED_INCLUDES)
+unset(CMAKE_REQUIRED_LIBRARIES)
+if(OQSPROV_HAVE_ASN1_STRING_SET_DATA AND
+   OQSPROV_HAVE_ASN1_STRING_LENGTH_EX)
+    add_compile_definitions(OQSPROV_HAVE_OPENSSL_4_1_ASN1_API)
+endif()
 if (WIN32)
 # get_filename_component seems to fail when facing windows paths
 # so use new(er) cmake_path instruction there

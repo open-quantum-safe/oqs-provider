@@ -1016,7 +1016,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     unsigned char *concat_key;
     const unsigned char *buf;
     int count, aux, i, buflen, key_diff = 0;
-#if OPENSSL_VERSION_PREREQ(4, 1)
+#ifdef OQSPROV_HAVE_OPENSSL_4_1_ASN1_API
     size_t octlen;
 #endif
 
@@ -1029,7 +1029,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
         plen = 0;
     } else {
         p = ASN1_STRING_get0_data(oct);
-#if OPENSSL_VERSION_PREREQ(4, 1)
+#ifdef OQSPROV_HAVE_OPENSSL_4_1_ASN1_API
         octlen = ASN1_STRING_length_ex(oct);
         if (octlen > INT_MAX) {
             ASN1_OCTET_STRING_free(oct);

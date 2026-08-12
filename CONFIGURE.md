@@ -187,6 +187,31 @@ By default this variable is unset.
 
 This environment variable can be used to pass arguments to the `./config` command that precedes the `make` of the OpenSSL, e.g. to build in [debug](https://wiki.openssl.org/index.php/Compilation_and_Installation#Debug_Configuration).
 
+### OQS_PROVIDER_SRC_DIR
+
+Directory holding the `oqs-provider` sources to be built by `fullbuild.sh`.
+If this variable is not set, the parent directory of the `fullbuild.sh`
+script itself is used, so the sources are always found regardless of the
+directory the script is invoked from.
+
+### OQS_PROVIDER_BUILD_DIR
+
+Directory into which `fullbuild.sh` builds `oqs-provider` and in which
+`runtests.sh` expects the provider module and the `ctest` setup to be found.
+If this variable is not set, `_build` below the current directory is used.
+
+Together with [`OQS_PROVIDER_SRC_DIR`](#oqs_provider_src_dir) this permits
+building and testing "out of source", i.e., with the build and test target
+not co-located with the source code:
+
+    mkdir /tmp/oqsprovider-build && cd /tmp/oqsprovider-build
+    /path/to/oqs-provider/scripts/fullbuild.sh
+    /path/to/oqs-provider/scripts/runtests.sh
+
+*Note*: `fullbuild.sh` continues to place its `openssl`, `liboqs` and
+`.local` working directories below the current directory, so an out-of-source
+build leaves the source tree untouched.
+
 ## LIBOQS configuration options
 
 These are [documented in full here](https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs).

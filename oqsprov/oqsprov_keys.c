@@ -967,8 +967,22 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op) {
 #ifndef NOPUBKEY_IN_PRIVKEY
                 // re-create classic public key part from
                 // private key:
-                int pubkeylen = i2d_PublicKey(key->classical_pkey, &enc_pubkey);
+                // Query the encoded length before writing (mirroring the
+                // raw_key_support branch above), instead of writing first
+                // and checking the length afterwards: i2d_PublicKey() with
+                // a NULL output pointer only computes the size, it does not
+                // write. classical_privkey_len is bounded above, but its
+                // *content* is attacker-controlled and unconstrained, so an
+                // oversized reconstructed public key must be rejected
+                // before any write into the fixed-size destination buffer,
+                // not after.
+                int pubkeylen = i2d_PublicKey(key->classical_pkey, NULL);
                 if (pubkeylen != key->evp_info->length_public_key) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                    goto rec_err;
+                }
+                if (i2d_PublicKey(key->classical_pkey, &enc_pubkey) !=
+                    pubkeylen) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     goto rec_err;
                 }

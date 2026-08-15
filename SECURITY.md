@@ -18,7 +18,47 @@ We only support the most recent release.
 | 0.5.1   | :x:                |
 | < 0.5   | :x:                |
 
-## Reporting a Vulnerability
-Please follow [this information to report a vulnerability](https://openquantumsafe.org/liboqs/security.html#reporting-security-bugs) and/or directly create [a draft security advisory via github](https://github.com/open-quantum-safe/oqs-provider/security/advisories/new).
+# Security Policy
+
+A vulnerability to this software can take many forms: incorrect logic, missing safety checks, bad API
+use, either "downwards" (towards `liboqs`) or "upwards" (towards `openssl`), missing memory boundary
+checks, etc.
+
+For any such problem, reporters are first asked to consider whether these are indeed so serious that
+they require issuance of a [CVE](https://www.cve.org). In most cases, this is not necessary,
+particularly considering this project is not meant for productive use, i.e., that there should be no
+software in need of a patch under CVE "embargo". Therefore, to ease the load on the maintenance team,
+we ask to report simple vulnerabilities by creation of issues or even better, directly by providing a
+PR with a fix. This helps the community best by immediately fixing the problem when detected and
+reduces the strain on a very thin and also time-limited base of maintainers.
+
+What cannot be seen as a vulnerability to this software at all is incorrect or weak PQ algorithm
+implementations actually provided by either of these libraries (`liboqs` or `libcrypto` from
+`openssl`). Any such problem shall be reported to those projects, respectively. Any report of
+this sort opened in this repository will be closed immediately without further action.
+
+## Criteria for a valid security report
+
+- **Categorization**: The reported issue must be identified as a logic error, safety check failure,
+  API misuse, or memory boundary violation within the current repository.
+- **Source verification**: If the vulnerability originates from `liboqs` or `libcrypto` (OpenSSL),
+  the reporter must redirect the report to the respective upstream project; such reports will be
+  closed immediately in this repository.
+- **Severity assessment**: The reporter must evaluate whether the vulnerability is serious enough to
+  warrant a CVE.
+- **Proof of concept**: The report must include code or a clear, reproducible set of steps to
+  demonstrate the issue and the exploit.
+- **Mitigation strategy**: The report must include suggested code changes or specific steps to
+  mitigate the identified vulnerability.
+
+## Reporting a serious vulnerability
+
+Considering the background above, if you still think you have found a serious vulnerability, please
+follow [this information to report it](https://openquantumsafe.org/liboqs/security.html#reporting-security-bugs)
+and/or directly create [a draft security advisory via GitHub](https://github.com/open-quantum-safe/oqs-provider/security/advisories/new).
+
+If the volume of reports that fall short of these criteria becomes too high, or otherwise interferes
+with the project's normal workflow, maintainers reserve the right to take whatever action is needed —
+including restricting access to the Security Advisory interface.
 
 

@@ -163,6 +163,113 @@ end:
     return ok;
 }
 
+#ifdef OQS_KEM_ENCODERS
+static unsigned char *find_bytes(unsigned char *haystack, size_t haystack_len,
+                                 const unsigned char *needle,
+                                 size_t needle_len) {
+    size_t i;
+
+    if (needle_len == 0 || haystack_len < needle_len)
+        return NULL;
+    for (i = 0; i <= haystack_len - needle_len; i++) {
+        if (memcmp(haystack + i, needle, needle_len) == 0)
+            return haystack + i;
+    }
+    return NULL;
+}
+
+static int import_hybrid_key(const char *alg_name, int selection,
+                             unsigned char *public_key, size_t public_key_len,
+                             unsigned char *private_key,
+                             size_t private_key_len) {
+    EVP_PKEY_CTX *ctx = NULL;
+    EVP_PKEY *key = NULL;
+    OSSL_PARAM params[3];
+    int ok = 0;
+
+    params[0] = OSSL_PARAM_construct_octet_string(OSSL_PKEY_PARAM_PUB_KEY,
+                                                  public_key, public_key_len);
+    if (selection == EVP_PKEY_KEYPAIR) {
+        params[1] = OSSL_PARAM_construct_octet_string(
+            OSSL_PKEY_PARAM_PRIV_KEY, private_key, private_key_len);
+        params[2] = OSSL_PARAM_construct_end();
+    } else {
+        params[1] = OSSL_PARAM_construct_end();
+    }
+
+    ctx = EVP_PKEY_CTX_new_from_name(keyctx, alg_name, OQSPROV_PROPQ);
+    ok = ctx != NULL && EVP_PKEY_fromdata_init(ctx) == 1 &&
+         EVP_PKEY_fromdata(ctx, &key, selection, params) == 1;
+    EVP_PKEY_free(key);
+    EVP_PKEY_CTX_free(ctx);
+    return ok;
+}
+
+static int test_hybrid_kem_rejects_invalid_classical_length(void) {
+    const char *alg_name = "p256_mlkem512";
+    EVP_PKEY *key = NULL, *decoded = NULL;
+    BUF_MEM *spki = NULL;
+    unsigned char *public_key = NULL, *private_key = NULL, *embedded = NULL;
+    size_t public_key_len = 0, private_key_len = 0;
+    int ok = 0;
+
+    if (!alg_is_enabled(alg_name))
+        return 1;
+    key = oqstest_make_key(alg_name, NULL, NULL);
+    if (key == NULL ||
+        get_param_octet_string(key, OSSL_PKEY_PARAM_PUB_KEY, &public_key,
+                               &public_key_len) != 0 ||
+        get_param_octet_string(key, OSSL_PKEY_PARAM_PRIV_KEY, &private_key,
+                               &private_key_len) != 0)
+        goto end;
+
+    if (!import_hybrid_key(alg_name, EVP_PKEY_PUBLIC_KEY, public_key,
+                           public_key_len, NULL, 0) ||
+        !import_hybrid_key(alg_name, EVP_PKEY_KEYPAIR, public_key,
+                           public_key_len, private_key, private_key_len) ||
+        !encode_EVP_PKEY_prov(key, "DER", "SubjectPublicKeyInfo", NULL,
+                              EVP_PKEY_PUBLIC_KEY, &spki) ||
+        !decode_EVP_PKEY_prov("DER", "SubjectPublicKeyInfo", NULL, alg_name,
+                              EVP_PKEY_PUBLIC_KEY, &decoded, spki->data,
+                              spki->length))
+        goto end;
+    EVP_PKEY_free(decoded);
+    decoded = NULL;
+
+    embedded = find_bytes((unsigned char *)spki->data, spki->length, public_key,
+                          public_key_len);
+    if (embedded == NULL || public_key_len < 5)
+        goto end;
+
+    public_key[0] = public_key[1] = public_key[2] = 0;
+    public_key[3] = 1;
+    public_key[4] = 0;
+    embedded[0] = embedded[1] = embedded[2] = 0;
+    embedded[3] = 1;
+    embedded[4] = 0;
+
+    if (import_hybrid_key(alg_name, EVP_PKEY_PUBLIC_KEY, public_key,
+                          public_key_len, NULL, 0) ||
+        import_hybrid_key(alg_name, EVP_PKEY_KEYPAIR, public_key,
+                          public_key_len, private_key, private_key_len) ||
+        decode_EVP_PKEY_prov("DER", "SubjectPublicKeyInfo", NULL, alg_name,
+                             EVP_PKEY_PUBLIC_KEY, &decoded, spki->data,
+                             spki->length))
+        goto end;
+
+    ERR_clear_error();
+    ok = 1;
+
+end:
+    EVP_PKEY_free(key);
+    EVP_PKEY_free(decoded);
+    BUF_MEM_free(spki);
+    free(public_key);
+    free(private_key);
+    return ok;
+}
+#endif
+
 static int test_oqs_encdec(const char *alg_name) {
     EVP_PKEY *pkey = NULL;
     EVP_PKEY *decoded_pkey = NULL;
@@ -280,6 +387,14 @@ int main(int argc, char *argv[]) {
         errcnt += test_algs(algs);
     } else {
         fprintf(stderr, cRED "  No KEM algorithms found" cNORM "\n");
+        ERR_print_errors_fp(stderr);
+        errcnt++;
+    }
+
+    if (!test_hybrid_kem_rejects_invalid_classical_length()) {
+        fprintf(stderr,
+                cRED "  Invalid hybrid KEM classical length was accepted" cNORM
+                     "\n");
         ERR_print_errors_fp(stderr);
         errcnt++;
     }

@@ -125,6 +125,7 @@ add_executable(oqs_test_tlssig oqs_test_tlssig.c test_common.c tlstest_helpers.c
 target_link_libraries(oqs_test_tlssig PRIVATE OQS::oqs ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 
 add_executable(oqs_test_endecode oqs_test_endecode.c test_common.c)
+target_include_directories(oqs_test_endecode PRIVATE "../oqsprov")
 target_link_libraries(oqs_test_endecode PRIVATE OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 add_test(
   NAME oqs_endecode

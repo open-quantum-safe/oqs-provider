@@ -22,7 +22,7 @@ static long fail_nth = -1;
 static long hits = 0;
 
 void *test_malloc(size_t num, const char *file, int line) {
-    if (file && strcasestr(file, target_file) != NULL) {
+    if (file && strstr(file, target_file) != NULL) {
         if (hits++ == fail_nth) {
             fprintf(stderr, cGREEN "   Injecting malloc failure at %s:%d\n",
                     file, line);

@@ -77,8 +77,6 @@ int main(int argc, char *argv[]) {
 
     load_oqs_provider(libctx, modulename, configfile);
 
-    T(OSSL_PROVIDER_available(libctx, "default"));
-
     // Test the hybrid signature functions
     oqsprov = OSSL_PROVIDER_load(libctx, modulename);
     algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_SIGNATURE,

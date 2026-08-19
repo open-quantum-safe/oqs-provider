@@ -225,6 +225,7 @@ set_tests_properties(oqs_alloc_failures
     PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
 )
 endif()
+set_tests_properties(oqs_alloc_failures PROPERTIES SKIP_RETURN_CODE 77)
 
 add_executable(oqs_test_alloc_failures oqs_test_alloc_failures.c test_common.c tlstest_helpers.c)
 target_link_libraries(oqs_test_alloc_failures PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})

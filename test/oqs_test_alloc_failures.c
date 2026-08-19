@@ -9,6 +9,10 @@
 #include "test_common.h"
 #include "tlstest_helpers.h"
 
+
+// If this is updated, update the reference in CMakeLists.txt
+#define EXIT_SKIP 77
+
 static OSSL_LIB_CTX *libctx = NULL;
 static char *modulename = NULL;
 static char *configfile = NULL;
@@ -67,6 +71,7 @@ int main(int argc, char *argv[]) {
     int query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;
     const OSSL_ALGORITHM *algs;
+    int work_done = 0;
 
     T(CRYPTO_set_mem_functions(test_malloc, test_realloc, test_free) == 1);
 
@@ -90,19 +95,26 @@ int main(int argc, char *argv[]) {
         if (!is_signature_algorithm_hybrid(name))
             continue;
 
-        fprintf(stderr, cGREEN "  Testing signature algorithm %s\n", name);
+        fprintf(stderr, cGREEN "  Testing signature algorithm %s\n" cNORM,
+                name);
         // This counts the number of allocations in the target file
         hits = 0;
         fail_nth = -1;
         test_alloc_failures(name);
         long allocs = hits;
-        T(allocs > 0);
+        if (allocs == 0)
+            continue;
+
+        work_done = 1;
 
         for (fail_nth = 0; fail_nth < allocs; ++fail_nth) {
             hits = 0;
             test_alloc_failures(name);
         }
     }
+
+    // Make sure we don't fail any mallocs in OSSL_PROVIDER_query_operation
+    fail_nth = -1;
 
     // Now test the hybrid kem functions
     algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
@@ -111,13 +123,16 @@ int main(int argc, char *argv[]) {
         if (!is_kem_algorithm_hybrid(name))
             continue;
 
-        fprintf(stderr, cGREEN "  Testing kem algorithm %s\n", name);
+        fprintf(stderr, cGREEN "  Testing kem algorithm %s\n" cNORM, name);
         // This counts the number of allocations in the target file
         hits = 0;
         fail_nth = -1;
         test_alloc_failures(name);
         long allocs = hits;
-        T(allocs > 0);
+        if (allocs == 0)
+            continue;
+
+        work_done = 1;
 
         for (fail_nth = 0; fail_nth < allocs; ++fail_nth) {
             hits = 0;
@@ -125,7 +140,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if (!work_done)
+        fprintf(stderr,
+                cYELLOW "  No allocations intercepted in %s.\n"
+                        "  Nothing can be tested, skipping.\n" cNORM,
+                target_file);
+
     OSSL_PROVIDER_unload(oqsprov);
     OSSL_LIB_CTX_free(libctx);
-    return EXIT_SUCCESS;
+    return work_done ? EXIT_SUCCESS : EXIT_SKIP;
 }

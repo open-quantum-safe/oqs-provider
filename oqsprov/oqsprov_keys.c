@@ -1232,6 +1232,10 @@ err:
     }
 
     if (evp_ctx) {
+        EVP_PKEY_CTX_free(evp_ctx->ctx);
+        evp_ctx->ctx = NULL;
+        EVP_PKEY_free(evp_ctx->keyParam);
+        evp_ctx->keyParam = NULL;
         OPENSSL_free(evp_ctx);
         evp_ctx = NULL;
     }

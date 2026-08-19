@@ -1211,6 +1211,10 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
     return ret;
 err:
     ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+
+    if (!ret)
+        return NULL;
+
 #ifdef OQS_PROVIDER_NOATOMIC
     if (ret->lock)
         CRYPTO_THREAD_lock_free(ret->lock);

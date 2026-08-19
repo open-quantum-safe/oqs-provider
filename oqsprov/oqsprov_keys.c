@@ -1155,6 +1155,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->oqsx_provider_ctx.oqsx_evp_ctx = evp_ctx;
         ret->keytype = primitive;
         ret->evp_info = evp_ctx->evp_info;
+        evp_ctx = NULL;
         break;
     case KEY_TYPE_HYB_SIG:
         ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = OQS_SIG_new(oqs_name);
@@ -1187,6 +1188,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->oqsx_provider_ctx.oqsx_evp_ctx = evp_ctx;
         ret->keytype = primitive;
         ret->evp_info = evp_ctx->evp_info;
+        evp_ctx = NULL;
         break;
     default:
         OQS_KEY_PRINTF2("OQSX_KEY: Unknown key type encountered: %d\n",

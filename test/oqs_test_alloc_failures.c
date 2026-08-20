@@ -9,7 +9,6 @@
 #include "test_common.h"
 #include "tlstest_helpers.h"
 
-
 // If this is updated, update the reference in CMakeLists.txt
 #define EXIT_SKIP 77
 

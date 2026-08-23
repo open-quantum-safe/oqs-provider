@@ -59,16 +59,25 @@ find_package(OpenSSL 3.0 REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
 set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_CRYPTO_LIBRARY})
+check_symbol_exists(ASN1_STRING_set1_data "openssl/asn1.h"
+                    OQSPROV_HAVE_ASN1_STRING_SET1_DATA)
 check_symbol_exists(ASN1_STRING_set_data "openssl/asn1.h"
                     OQSPROV_HAVE_ASN1_STRING_SET_DATA)
+check_symbol_exists(ASN1_STRING_get_length "openssl/asn1.h"
+                    OQSPROV_HAVE_ASN1_STRING_GET_LENGTH)
 check_symbol_exists(ASN1_STRING_length_ex "openssl/asn1.h"
                     OQSPROV_HAVE_ASN1_STRING_LENGTH_EX)
 unset(CMAKE_REQUIRED_INCLUDES)
 unset(CMAKE_REQUIRED_LIBRARIES)
-if(OQSPROV_HAVE_ASN1_STRING_SET_DATA AND
-   OQSPROV_HAVE_ASN1_STRING_LENGTH_EX)
-    add_compile_definitions(OQSPROV_HAVE_OPENSSL_4_1_ASN1_API)
-endif()
+foreach(asn1_api IN ITEMS
+        ASN1_STRING_SET1_DATA
+        ASN1_STRING_SET_DATA
+        ASN1_STRING_GET_LENGTH
+        ASN1_STRING_LENGTH_EX)
+    if(OQSPROV_HAVE_${asn1_api})
+        add_compile_definitions(OQSPROV_HAVE_${asn1_api})
+    endif()
+endforeach()
 if (WIN32)
 # get_filename_component seems to fail when facing windows paths
 # so use new(er) cmake_path instruction there

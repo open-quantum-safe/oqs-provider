@@ -574,7 +574,9 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         goto done;
     }
 
-#ifdef OQSPROV_HAVE_OPENSSL_4_1_ASN1_API
+#ifdef OQSPROV_HAVE_ASN1_STRING_SET1_DATA
+    if (!ASN1_STRING_set1_data(oct, buf, buflen)) {
+#elif defined(OQSPROV_HAVE_ASN1_STRING_SET_DATA)
     if (!ASN1_STRING_set_data(oct, buf, buflen)) {
 #else
     if (!ASN1_STRING_set(oct, buf, buflen)) {

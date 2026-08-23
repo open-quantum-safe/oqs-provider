@@ -409,17 +409,23 @@ int main(int argc, char *argv[]) {
     algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
 
     if (algs) {
+        const OSSL_ALGORITHM *kemalgs;
+
         errcnt += test_algs(algs);
+        for (kemalgs = algs; kemalgs->algorithm_names != NULL; kemalgs++) {
+            if (!is_kem_algorithm_hybrid(kemalgs->algorithm_names))
+                continue;
+            if (!test_hybrid_kem_text_components(kemalgs->algorithm_names)) {
+                fprintf(stderr,
+                        cRED "  Hybrid KEM TEXT encoding test failed: %s" cNORM
+                             "\n",
+                        kemalgs->algorithm_names);
+                ERR_print_errors_fp(stderr);
+                errcnt++;
+            }
+        }
     } else {
         fprintf(stderr, cRED "  No KEM algorithms found" cNORM "\n");
-        ERR_print_errors_fp(stderr);
-        errcnt++;
-    }
-
-    if (!test_hybrid_kem_text_components("p256_mlkem512") ||
-        !test_hybrid_kem_text_components("x25519_mlkem512")) {
-        fprintf(stderr,
-                cRED "  Hybrid KEM TEXT encoding test failed" cNORM "\n");
         ERR_print_errors_fp(stderr);
         errcnt++;
     }

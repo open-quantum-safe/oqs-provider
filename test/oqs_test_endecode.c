@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0 AND MIT
 
+#include <limits.h>
+#include <openssl/asn1.h>
 #include <openssl/buffer.h>
 #include <openssl/core_names.h>
 #include <openssl/decoder.h>
@@ -8,6 +10,7 @@
 #include <openssl/pem.h>
 #include <openssl/provider.h>
 #include <openssl/trace.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -166,20 +169,6 @@ end:
 }
 
 #ifdef OQS_KEM_ENCODERS
-static unsigned char *find_bytes(unsigned char *haystack, size_t haystack_len,
-                                 const unsigned char *needle,
-                                 size_t needle_len) {
-    size_t i;
-
-    if (needle_len == 0 || haystack_len < needle_len)
-        return NULL;
-    for (i = 0; i <= haystack_len - needle_len; i++) {
-        if (memcmp(haystack + i, needle, needle_len) == 0)
-            return haystack + i;
-    }
-    return NULL;
-}
-
 static int import_hybrid_key(const char *alg_name, int selection,
                              unsigned char *public_key, size_t public_key_len,
                              unsigned char *private_key,
@@ -207,73 +196,186 @@ static int import_hybrid_key(const char *alg_name, int selection,
     return ok;
 }
 
-static int get_classical_public_key(const EVP_PKEY *key,
-                                    unsigned char **classical_public_key,
-                                    size_t *classical_public_key_len) {
-    *classical_public_key = NULL;
-    *classical_public_key_len = 0;
+enum hybrid_length_test_result {
+    HYBRID_LENGTH_TEST_FAILED = 0,
+    HYBRID_LENGTH_TEST_PASSED = 1,
+    HYBRID_LENGTH_TEST_SKIP_DISABLED = -1,
+    HYBRID_LENGTH_TEST_SKIP_NO_CLASSICAL = -2,
+    HYBRID_LENGTH_TEST_SKIP_NON_SEC1 = -3,
+};
 
-    if (EVP_PKEY_get_octet_string_param(
-            key, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, NULL, 0,
-            classical_public_key_len) != 1 ||
-        *classical_public_key_len == 0) {
+static int get_optional_octet_string_param(const EVP_PKEY *key,
+                                           const char *param_name,
+                                           unsigned char **value,
+                                           size_t *value_len) {
+    *value = NULL;
+    *value_len = 0;
+
+    if (EVP_PKEY_get_octet_string_param(key, param_name, NULL, 0, value_len) !=
+            1 ||
+        *value_len == 0) {
         ERR_clear_error();
         return 0;
     }
-    *classical_public_key = malloc(*classical_public_key_len);
-    if (*classical_public_key == NULL)
+    *value = malloc(*value_len);
+    if (*value == NULL)
         return -1;
-    if (EVP_PKEY_get_octet_string_param(
-            key, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, *classical_public_key,
-            *classical_public_key_len, classical_public_key_len) != 1) {
-        free(*classical_public_key);
-        *classical_public_key = NULL;
+    if (EVP_PKEY_get_octet_string_param(key, param_name, *value, *value_len,
+                                        value_len) != 1) {
+        free(*value);
+        *value = NULL;
         return -1;
     }
     return 1;
 }
 
-static int
+static int is_uncompressed_sec1_public_key(const unsigned char *public_key,
+                                           size_t public_key_len) {
+    /* SEC1 encodes an uncompressed point as 0x04 || X || Y. */
+    return public_key_len >= 3 && public_key[0] == 0x04 &&
+           (public_key_len - 1) % 2 == 0;
+}
+
+static int test_uncompressed_sec1_public_key_selector(void) {
+    unsigned char sec1_public_key[65] = {0x04};
+    unsigned char ecx_public_key[32] = {0x04};
+    unsigned char compressed_sec1_public_key[33] = {0x02};
+
+    return is_uncompressed_sec1_public_key(sec1_public_key,
+                                           sizeof(sec1_public_key)) &&
+           !is_uncompressed_sec1_public_key(ecx_public_key,
+                                            sizeof(ecx_public_key)) &&
+           !is_uncompressed_sec1_public_key(compressed_sec1_public_key,
+                                            sizeof(compressed_sec1_public_key));
+}
+
+static unsigned char *locate_classical_public_key(
+    unsigned char *public_key, size_t public_key_len,
+    const unsigned char *classical_public_key, size_t classical_public_key_len,
+    const unsigned char *pq_public_key, size_t pq_public_key_len) {
+    unsigned char *components;
+    uint32_t encoded_classical_len;
+
+    if (classical_public_key_len > SIZE_MAX - SIZE_OF_UINT32 ||
+        pq_public_key_len >
+            SIZE_MAX - SIZE_OF_UINT32 - classical_public_key_len ||
+        public_key_len !=
+            SIZE_OF_UINT32 + classical_public_key_len + pq_public_key_len ||
+        classical_public_key_len > UINT32_MAX)
+        return NULL;
+
+    DECODE_UINT32(encoded_classical_len, public_key);
+    if (encoded_classical_len != classical_public_key_len)
+        return NULL;
+
+    /* Hybrid public keys contain either CLASSICAL || PQ or PQ || CLASSICAL. */
+    components = public_key + SIZE_OF_UINT32;
+    if (memcmp(components, classical_public_key, classical_public_key_len) ==
+            0 &&
+        memcmp(components + classical_public_key_len, pq_public_key,
+               pq_public_key_len) == 0)
+        return components;
+
+    if (memcmp(components, pq_public_key, pq_public_key_len) == 0 &&
+        memcmp(components + pq_public_key_len, classical_public_key,
+               classical_public_key_len) == 0)
+        return components + pq_public_key_len;
+
+    return NULL;
+}
+
+static unsigned char *get_spki_public_key(BUF_MEM *spki,
+                                          const unsigned char *expected,
+                                          size_t expected_len) {
+    const unsigned char *cursor, *outer_end;
+    long object_len;
+    int object_class, object_tag, ret;
+
+    if (spki == NULL || spki->data == NULL || spki->length > LONG_MAX)
+        return NULL;
+
+    cursor = (const unsigned char *)spki->data;
+    /* Walk SubjectPublicKeyInfo structurally to its subjectPublicKey BIT
+     * STRING. */
+    ret = ASN1_get_object(&cursor, &object_len, &object_tag, &object_class,
+                          (long)spki->length);
+    if ((ret & 0x80) != 0 || (ret & V_ASN1_CONSTRUCTED) == 0 ||
+        object_class != V_ASN1_UNIVERSAL || object_tag != V_ASN1_SEQUENCE ||
+        object_len < 0 ||
+        (size_t)object_len >
+            spki->length -
+                (size_t)(cursor - (const unsigned char *)spki->data) ||
+        cursor + object_len != (const unsigned char *)spki->data + spki->length)
+        return NULL;
+    outer_end = cursor + object_len;
+
+    ret = ASN1_get_object(&cursor, &object_len, &object_tag, &object_class,
+                          (long)(outer_end - cursor));
+    if ((ret & 0x80) != 0 || (ret & V_ASN1_CONSTRUCTED) == 0 ||
+        object_class != V_ASN1_UNIVERSAL || object_tag != V_ASN1_SEQUENCE ||
+        object_len < 0 || object_len > outer_end - cursor)
+        return NULL;
+    cursor += object_len;
+
+    ret = ASN1_get_object(&cursor, &object_len, &object_tag, &object_class,
+                          (long)(outer_end - cursor));
+    if ((ret & 0x80) != 0 || (ret & V_ASN1_CONSTRUCTED) != 0 ||
+        object_class != V_ASN1_UNIVERSAL || object_tag != V_ASN1_BIT_STRING ||
+        object_len < 1 || object_len - 1 != expected_len ||
+        object_len > outer_end - cursor || cursor[0] != 0 ||
+        cursor + object_len != outer_end ||
+        memcmp(cursor + 1, expected, expected_len) != 0)
+        return NULL;
+
+    return (unsigned char *)cursor + 1;
+}
+
+static enum hybrid_length_test_result
 test_hybrid_kem_rejects_invalid_classical_length(const char *alg_name) {
     EVP_PKEY *key = NULL, *decoded = NULL;
     BUF_MEM *spki = NULL;
     unsigned char *public_key = NULL, *private_key = NULL;
     unsigned char *classical_public_key = NULL, *classical_in_public = NULL;
-    unsigned char *embedded = NULL, *classical_in_spki = NULL;
+    unsigned char *pq_public_key = NULL, *spki_public_key = NULL;
+    unsigned char *classical_in_spki = NULL;
     size_t public_key_len = 0, private_key_len = 0;
-    size_t classical_public_key_len = 0;
-    int classical_key_status;
-    int ok = 0;
+    size_t classical_public_key_len = 0, pq_public_key_len = 0;
+    int param_status;
+    enum hybrid_length_test_result result = HYBRID_LENGTH_TEST_FAILED;
 
     if (!alg_is_enabled(alg_name))
-        return -1;
+        return HYBRID_LENGTH_TEST_SKIP_DISABLED;
     key = oqstest_make_key(alg_name, NULL, NULL);
     if (key == NULL)
         goto end;
 
-    classical_key_status = get_classical_public_key(key, &classical_public_key,
-                                                    &classical_public_key_len);
-    if (classical_key_status == 0) {
-        ok = -1;
+    param_status = get_optional_octet_string_param(
+        key, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY, &classical_public_key,
+        &classical_public_key_len);
+    if (param_status == 0) {
+        result = HYBRID_LENGTH_TEST_SKIP_NO_CLASSICAL;
         goto end;
     }
-    if (classical_key_status < 0)
+    if (param_status < 0)
         goto end;
-    if (classical_public_key_len < 2 || classical_public_key[0] != 0x04) {
-        ok = -1;
+    if (!is_uncompressed_sec1_public_key(classical_public_key,
+                                         classical_public_key_len)) {
+        result = HYBRID_LENGTH_TEST_SKIP_NON_SEC1;
         goto end;
     }
+    if (get_optional_octet_string_param(key, OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY,
+                                        &pq_public_key,
+                                        &pq_public_key_len) != 1)
+        goto end;
     if (get_param_octet_string(key, OSSL_PKEY_PARAM_PUB_KEY, &public_key,
                                &public_key_len) != 0 ||
         get_param_octet_string(key, OSSL_PKEY_PARAM_PRIV_KEY, &private_key,
                                &private_key_len) != 0)
         goto end;
 
-    classical_in_public =
-        public_key_len > 4
-            ? find_bytes(public_key + 4, public_key_len - 4,
-                         classical_public_key, classical_public_key_len)
-            : NULL;
+    classical_in_public = locate_classical_public_key(
+        public_key, public_key_len, classical_public_key,
+        classical_public_key_len, pq_public_key, pq_public_key_len);
     if (classical_in_public == NULL)
         goto end;
 
@@ -293,19 +395,19 @@ test_hybrid_kem_rejects_invalid_classical_length(const char *alg_name) {
         EVP_PKEY_free(decoded);
         decoded = NULL;
 
-        embedded = find_bytes((unsigned char *)spki->data, spki->length,
-                              public_key, public_key_len);
-        if (embedded == NULL)
+        spki_public_key = get_spki_public_key(spki, public_key, public_key_len);
+        if (spki_public_key == NULL)
             goto end;
-        classical_in_spki = embedded + (classical_in_public - public_key);
+        classical_in_spki =
+            spki_public_key + (classical_in_public - public_key);
     }
 
     public_key[0] = public_key[1] = public_key[2] = 0;
     public_key[3] = 1;
     classical_in_public[0] = 0;
-    if (embedded != NULL) {
-        embedded[0] = embedded[1] = embedded[2] = 0;
-        embedded[3] = 1;
+    if (spki_public_key != NULL) {
+        spki_public_key[0] = spki_public_key[1] = spki_public_key[2] = 0;
+        spki_public_key[3] = 1;
         classical_in_spki[0] = 0;
     }
 
@@ -320,7 +422,7 @@ test_hybrid_kem_rejects_invalid_classical_length(const char *alg_name) {
         goto end;
 
     ERR_clear_error();
-    ok = 1;
+    result = HYBRID_LENGTH_TEST_PASSED;
 
 end:
     EVP_PKEY_free(key);
@@ -329,23 +431,42 @@ end:
     free(public_key);
     free(private_key);
     free(classical_public_key);
-    return ok;
+    free(pq_public_key);
+    return result;
 }
 
 static int
 test_hybrid_kems_reject_invalid_classical_lengths(const OSSL_ALGORITHM *algs) {
-    int errcnt = 0, tested = 0;
+    int discovered = 0, disabled = 0, no_classical = 0, non_sec1 = 0;
+    int errcnt = 0, tested = 0, spki_tested = 0;
+
+    if (!test_uncompressed_sec1_public_key_selector()) {
+        fprintf(stderr,
+                cRED "  Invalid SEC1 public-key selector controls" cNORM "\n");
+        errcnt++;
+    }
 
     for (; algs->algorithm_names != NULL; algs++) {
+        int has_spki = OBJ_sn2nid(algs->algorithm_names) != NID_undef;
+
+        discovered++;
         switch (test_hybrid_kem_rejects_invalid_classical_length(
             algs->algorithm_names)) {
-        case 1:
+        case HYBRID_LENGTH_TEST_PASSED:
             fprintf(stderr,
                     cGREEN "  Invalid classical length rejected: %s" cNORM "\n",
                     algs->algorithm_names);
             tested++;
+            spki_tested += has_spki;
             break;
-        case -1:
+        case HYBRID_LENGTH_TEST_SKIP_DISABLED:
+            disabled++;
+            break;
+        case HYBRID_LENGTH_TEST_SKIP_NO_CLASSICAL:
+            no_classical++;
+            break;
+        case HYBRID_LENGTH_TEST_SKIP_NON_SEC1:
+            non_sec1++;
             break;
         default:
             fprintf(stderr,
@@ -357,6 +478,14 @@ test_hybrid_kems_reject_invalid_classical_lengths(const OSSL_ALGORITHM *algs) {
             break;
         }
     }
+    fprintf(stderr,
+            cBLUE
+            "  Invalid classical length coverage: discovered=%d, "
+            "tested=%d, spki=%d, skipped_disabled=%d, "
+            "skipped_no_classical=%d, skipped_non_sec1=%d, failed=%d" cNORM
+            "\n",
+            discovered, tested, spki_tested, disabled, no_classical, non_sec1,
+            errcnt);
     if (tested == 0) {
         fprintf(stderr, cRED
                 "  No hybrid KEM with a supported EC key found" cNORM "\n");

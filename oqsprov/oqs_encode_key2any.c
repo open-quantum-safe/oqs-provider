@@ -574,7 +574,13 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         goto done;
     }
 
+#ifdef OQSPROV_HAVE_ASN1_STRING_SET1_DATA
+    if (!ASN1_STRING_set1_data(oct, buf, buflen)) {
+#elif defined(OQSPROV_HAVE_ASN1_STRING_SET_DATA)
+    if (!ASN1_STRING_set_data(oct, buf, buflen)) {
+#else
     if (!ASN1_STRING_set(oct, buf, buflen)) {
+#endif
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         goto done;
     }
@@ -1339,7 +1345,8 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
              (void (*)(void))impl##_to_##kind##_##output##_free_object},       \
             {OSSL_FUNC_ENCODER_ENCODE,                                         \
              (void (*)(void))impl##_to_##kind##_##output##_encode},            \
-            {0, NULL}}
+            {0, NULL}                                                          \
+        }
 
 /* ---------------------------------------------------------------------- */
 
@@ -1570,7 +1577,8 @@ key2text_encode(void *vctx, const void *key, int selection, OSSL_CORE_BIO *cout,
         {OSSL_FUNC_ENCODER_FREE_OBJECT,                                        \
          (void (*)(void))impl##2text_free_object},                             \
         {OSSL_FUNC_ENCODER_ENCODE, (void (*)(void))impl##2text_encode},        \
-        {0, NULL}}
+        {0, NULL}                                                              \
+    }
 
 /*
  * Replacements for i2d_{TYPE}PrivateKey, i2d_{TYPE}PublicKey,

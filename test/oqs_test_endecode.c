@@ -11,6 +11,7 @@
 #include <string.h>
 
 #include "oqs/oqs.h"
+#include "oqs_prov.h"
 #include "test_common.h"
 
 static OSSL_LIB_CTX *libctx = NULL;
@@ -122,6 +123,137 @@ end:
     OSSL_ENCODER_CTX_free(ectx);
     return ok;
 }
+
+#ifdef OQS_KEM_ENCODERS
+static char *format_component(const char *label, const unsigned char *buf,
+                              size_t buflen) {
+    BIO *out = NULL;
+    BUF_MEM *mem = NULL;
+    char *formatted = NULL;
+    size_t i;
+
+    out = BIO_new(BIO_s_mem());
+    if (out == NULL || (label != NULL && BIO_printf(out, "%s\n", label) <= 0))
+        goto end;
+
+    for (i = 0; i < buflen; i++) {
+        if ((i % 15) == 0) {
+            if (i > 0 && BIO_printf(out, "\n") <= 0)
+                goto end;
+            if (BIO_printf(out, "    ") <= 0)
+                goto end;
+        }
+        if (BIO_printf(out, "%02x%s", buf[i], (i == buflen - 1) ? "" : ":") <=
+            0)
+            goto end;
+    }
+    if (BIO_printf(out, "\n") <= 0)
+        goto end;
+
+    BIO_get_mem_ptr(out, &mem);
+    if (mem == NULL)
+        goto end;
+    formatted = OPENSSL_malloc(mem->length + 1);
+    if (formatted == NULL)
+        goto end;
+    memcpy(formatted, mem->data, mem->length);
+    formatted[mem->length] = '\0';
+
+end:
+    BIO_free(out);
+    return formatted;
+}
+
+static int text_contains_component(const BUF_MEM *encoded, const char *label,
+                                   const unsigned char *component,
+                                   size_t component_len) {
+    char *formatted = NULL;
+    char *text = NULL;
+    int ok = 0;
+
+    formatted = format_component(label, component, component_len);
+    text = OPENSSL_malloc(encoded->length + 1);
+    if (formatted == NULL || text == NULL)
+        goto end;
+    memcpy(text, encoded->data, encoded->length);
+    text[encoded->length] = '\0';
+    ok = strstr(text, formatted) != NULL;
+
+end:
+    OPENSSL_free(formatted);
+    OPENSSL_free(text);
+    return ok;
+}
+
+static int test_hybrid_kem_text_components(const char *alg_name) {
+    EVP_PKEY_CTX *ctx = NULL;
+    EVP_PKEY *key = NULL, *pubonly = NULL;
+    OSSL_PARAM *public_params = NULL;
+    BUF_MEM *keypair_text = NULL, *public_text = NULL;
+    unsigned char *classic_pub = NULL, *classic_priv = NULL;
+    unsigned char *pq_pub = NULL, *pq_priv = NULL;
+    size_t classic_pub_len = 0, classic_priv_len = 0;
+    size_t pq_pub_len = 0, pq_priv_len = 0;
+    int ok = 0;
+
+    if (!alg_is_enabled(alg_name))
+        return 1;
+
+    key = oqstest_make_key(alg_name, NULL, NULL);
+    if (key == NULL ||
+        get_param_octet_string(key, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY,
+                               &classic_pub, &classic_pub_len) != 0 ||
+        get_param_octet_string(key, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY,
+                               &classic_priv, &classic_priv_len) != 0 ||
+        get_param_octet_string(key, OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY, &pq_pub,
+                               &pq_pub_len) != 0 ||
+        get_param_octet_string(key, OQS_HYBRID_PKEY_PARAM_PQ_PRIV_KEY, &pq_priv,
+                               &pq_priv_len) != 0)
+        goto end;
+
+    if (!encode_EVP_PKEY_prov(key, "TEXT", NULL, NULL,
+                              OSSL_KEYMGMT_SELECT_KEYPAIR, &keypair_text) ||
+        !text_contains_component(keypair_text, NULL, classic_priv,
+                                 classic_priv_len) ||
+        !text_contains_component(keypair_text, "PQ key material:", pq_priv,
+                                 pq_priv_len) ||
+        !text_contains_component(keypair_text, NULL, classic_pub,
+                                 classic_pub_len) ||
+        !text_contains_component(keypair_text, "PQ key material:", pq_pub,
+                                 pq_pub_len))
+        goto end;
+
+    if (EVP_PKEY_todata(key, EVP_PKEY_PUBLIC_KEY, &public_params) != 1)
+        goto end;
+    ctx = EVP_PKEY_CTX_new_from_name(keyctx, alg_name, OQSPROV_PROPQ);
+    if (ctx == NULL || EVP_PKEY_fromdata_init(ctx) != 1 ||
+        EVP_PKEY_fromdata(ctx, &pubonly, EVP_PKEY_PUBLIC_KEY, public_params) !=
+            1)
+        goto end;
+    if (!encode_EVP_PKEY_prov(pubonly, "TEXT", NULL, NULL,
+                              OSSL_KEYMGMT_SELECT_PUBLIC_KEY, &public_text) ||
+        !text_contains_component(public_text, NULL, classic_pub,
+                                 classic_pub_len) ||
+        !text_contains_component(public_text, "PQ key material:", pq_pub,
+                                 pq_pub_len))
+        goto end;
+
+    ok = 1;
+
+end:
+    EVP_PKEY_CTX_free(ctx);
+    EVP_PKEY_free(key);
+    EVP_PKEY_free(pubonly);
+    OSSL_PARAM_free(public_params);
+    BUF_MEM_free(keypair_text);
+    BUF_MEM_free(public_text);
+    free(classic_pub);
+    free(classic_priv);
+    free(pq_pub);
+    free(pq_priv);
+    return ok;
+}
+#endif
 
 static int decode_EVP_PKEY_prov(const char *input_type, const char *structure,
                                 const char *pass, const char *keytype,
@@ -277,7 +409,21 @@ int main(int argc, char *argv[]) {
     algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
 
     if (algs) {
+        const OSSL_ALGORITHM *kemalgs;
+
         errcnt += test_algs(algs);
+        for (kemalgs = algs; kemalgs->algorithm_names != NULL; kemalgs++) {
+            if (!is_kem_algorithm_hybrid(kemalgs->algorithm_names))
+                continue;
+            if (!test_hybrid_kem_text_components(kemalgs->algorithm_names)) {
+                fprintf(stderr,
+                        cRED "  Hybrid KEM TEXT encoding test failed: %s" cNORM
+                             "\n",
+                        kemalgs->algorithm_names);
+                ERR_print_errors_fp(stderr);
+                errcnt++;
+            }
+        }
     } else {
         fprintf(stderr, cRED "  No KEM algorithms found" cNORM "\n");
         ERR_print_errors_fp(stderr);

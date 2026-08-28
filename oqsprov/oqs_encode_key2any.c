@@ -1439,6 +1439,10 @@ static int oqsx_to_text(BIO *out, const void *key, int selection) {
                     okey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key;
                 size_t space_for_classical_privkey =
                     okey->privkeylen - SIZE_OF_UINT32 - fixed_pq_privkey_len;
+                int idx_classic = okey->reverse_share ? okey->numkeys - 1 : 0;
+                int idx_pq = okey->reverse_share ? 0 : okey->numkeys - 1;
+                size_t pq_privkey_len;
+
                 sprintf(classic_label,
                         "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
                 DECODE_UINT32(classic_key_len, okey->privkey);
@@ -1446,14 +1450,18 @@ static int oqsx_to_text(BIO *out, const void *key, int selection) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     return 0;
                 }
+                pq_privkey_len =
+                    okey->reverse_share
+                        ? fixed_pq_privkey_len
+                        : okey->privkeylen - classic_key_len - SIZE_OF_UINT32;
                 if (!print_labeled_buf(out, classic_label,
-                                       okey->comp_privkey[0], classic_key_len))
+                                       okey->comp_privkey[idx_classic],
+                                       classic_key_len))
                     return 0;
                 /* finally print pure PQ key */
-                if (!print_labeled_buf(out, "PQ key material:",
-                                       okey->comp_privkey[okey->numkeys - 1],
-                                       okey->privkeylen - classic_key_len -
-                                           SIZE_OF_UINT32))
+                if (!print_labeled_buf(
+                        out, "PQ key material:", okey->comp_privkey[idx_pq],
+                        pq_privkey_len))
                     return 0;
             } else { // plain PQ key
                 if (!print_labeled_buf(out, "PQ key material:",
@@ -1472,21 +1480,29 @@ static int oqsx_to_text(BIO *out, const void *key, int selection) {
                     okey->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
                 size_t space_for_classical_pubkey =
                     okey->pubkeylen - SIZE_OF_UINT32 - fixed_pq_pubkey_len;
+                int idx_classic = okey->reverse_share ? okey->numkeys - 1 : 0;
+                int idx_pq = okey->reverse_share ? 0 : okey->numkeys - 1;
+                size_t pq_pubkey_len;
+
                 DECODE_UINT32(classic_key_len, okey->pubkey);
                 if (classic_key_len > space_for_classical_pubkey) {
                     ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
                     return 0;
                 }
+                pq_pubkey_len =
+                    okey->reverse_share
+                        ? fixed_pq_pubkey_len
+                        : okey->pubkeylen - classic_key_len - SIZE_OF_UINT32;
                 sprintf(classic_label,
                         "%s key material:", OBJ_nid2sn(okey->evp_info->nid));
-                if (!print_labeled_buf(out, classic_label, okey->comp_pubkey[0],
+                if (!print_labeled_buf(out, classic_label,
+                                       okey->comp_pubkey[idx_classic],
                                        classic_key_len))
                     return 0;
                 /* finally print pure PQ key */
-                if (!print_labeled_buf(out, "PQ key material:",
-                                       okey->comp_pubkey[okey->numkeys - 1],
-                                       okey->pubkeylen - classic_key_len -
-                                           SIZE_OF_UINT32))
+                if (!print_labeled_buf(
+                        out, "PQ key material:", okey->comp_pubkey[idx_pq],
+                        pq_pubkey_len))
                     return 0;
             } else { // PQ key only
                 if (!print_labeled_buf(out, "PQ key material:",

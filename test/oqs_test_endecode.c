@@ -201,7 +201,6 @@ enum hybrid_length_test_result {
     HYBRID_LENGTH_TEST_PASSED = 1,
     HYBRID_LENGTH_TEST_SKIP_DISABLED = -1,
     HYBRID_LENGTH_TEST_SKIP_NO_CLASSICAL = -2,
-    HYBRID_LENGTH_TEST_SKIP_NON_SEC1 = -3,
 };
 
 static int get_optional_octet_string_param(const EVP_PKEY *key,
@@ -227,26 +226,6 @@ static int get_optional_octet_string_param(const EVP_PKEY *key,
         return -1;
     }
     return 1;
-}
-
-static int is_uncompressed_sec1_public_key(const unsigned char *public_key,
-                                           size_t public_key_len) {
-    /* SEC1 encodes an uncompressed point as 0x04 || X || Y. */
-    return public_key_len >= 3 && public_key[0] == 0x04 &&
-           (public_key_len - 1) % 2 == 0;
-}
-
-static int test_uncompressed_sec1_public_key_selector(void) {
-    unsigned char sec1_public_key[65] = {0x04};
-    unsigned char ecx_public_key[32] = {0x04};
-    unsigned char compressed_sec1_public_key[33] = {0x02};
-
-    return is_uncompressed_sec1_public_key(sec1_public_key,
-                                           sizeof(sec1_public_key)) &&
-           !is_uncompressed_sec1_public_key(ecx_public_key,
-                                            sizeof(ecx_public_key)) &&
-           !is_uncompressed_sec1_public_key(compressed_sec1_public_key,
-                                            sizeof(compressed_sec1_public_key));
 }
 
 static unsigned char *locate_classical_public_key(
@@ -358,11 +337,6 @@ test_hybrid_kem_rejects_invalid_classical_length(const char *alg_name) {
     }
     if (param_status < 0)
         goto end;
-    if (!is_uncompressed_sec1_public_key(classical_public_key,
-                                         classical_public_key_len)) {
-        result = HYBRID_LENGTH_TEST_SKIP_NON_SEC1;
-        goto end;
-    }
     if (get_optional_octet_string_param(key, OQS_HYBRID_PKEY_PARAM_PQ_PUB_KEY,
                                         &pq_public_key,
                                         &pq_public_key_len) != 1)
@@ -437,14 +411,8 @@ end:
 
 static int
 test_hybrid_kems_reject_invalid_classical_lengths(const OSSL_ALGORITHM *algs) {
-    int discovered = 0, disabled = 0, no_classical = 0, non_sec1 = 0;
+    int discovered = 0, disabled = 0, no_classical = 0;
     int errcnt = 0, tested = 0, spki_tested = 0;
-
-    if (!test_uncompressed_sec1_public_key_selector()) {
-        fprintf(stderr,
-                cRED "  Invalid SEC1 public-key selector controls" cNORM "\n");
-        errcnt++;
-    }
 
     for (; algs->algorithm_names != NULL; algs++) {
         int has_spki = OBJ_sn2nid(algs->algorithm_names) != NID_undef;
@@ -465,9 +433,6 @@ test_hybrid_kems_reject_invalid_classical_lengths(const OSSL_ALGORITHM *algs) {
         case HYBRID_LENGTH_TEST_SKIP_NO_CLASSICAL:
             no_classical++;
             break;
-        case HYBRID_LENGTH_TEST_SKIP_NON_SEC1:
-            non_sec1++;
-            break;
         default:
             fprintf(stderr,
                     cRED "  Invalid classical length test failed: %s" cNORM
@@ -479,13 +444,10 @@ test_hybrid_kems_reject_invalid_classical_lengths(const OSSL_ALGORITHM *algs) {
         }
     }
     fprintf(stderr,
-            cBLUE
-            "  Invalid classical length coverage: discovered=%d, "
-            "tested=%d, spki=%d, skipped_disabled=%d, "
-            "skipped_no_classical=%d, skipped_non_sec1=%d, failed=%d" cNORM
-            "\n",
-            discovered, tested, spki_tested, disabled, no_classical, non_sec1,
-            errcnt);
+            cBLUE "  Invalid classical length coverage: discovered=%d, "
+                  "tested=%d, spki=%d, skipped_disabled=%d, "
+                  "skipped_no_classical=%d, failed=%d" cNORM "\n",
+            discovered, tested, spki_tested, disabled, no_classical, errcnt);
     if (tested == 0) {
         fprintf(stderr, cRED
                 "  No hybrid KEM with a supported EC key found" cNORM "\n");

@@ -568,8 +568,20 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[]) {
                 return 0;
             }
         }
-        OPENSSL_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
+        // privkey is allocated from the secure heap (see oqsx_key_allocate_*),
+        // so it must be released with the matching secure free. Setting only
+        // privkey to NULL would leave the comp_privkey[] slots dangling into
+        // the freed buffer (they alias into privkey, see
+        // oqsx_key_set_composites()); clear them too so the KEM decaps and
+        // hybrid-params paths cannot read freed memory (GHSA-g63q-c378-wphj,
+        // variant of GHSA-mqwg-cg22-g8r8).
+        OPENSSL_secure_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
         oqsxkey->privkey = NULL;
+        if (oqsxkey->comp_privkey != NULL) {
+            for (size_t i = 0; i < oqsxkey->numkeys; i++) {
+                oqsxkey->comp_privkey[i] = NULL;
+            }
+        }
     }
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PROPERTIES);
     if (p != NULL) {

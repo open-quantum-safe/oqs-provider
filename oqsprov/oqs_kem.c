@@ -161,7 +161,11 @@ static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
         return -1;
     }
     kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
-    if (pkemctx->kem->comp_privkey == NULL ||
+    // privkey must be checked in addition to comp_privkey[]: the latter aliases
+    // into privkey, so after privkey is freed (e.g. via set_params with
+    // OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY) comp_privkey[keyslot] may still be a
+    // non-NULL dangling pointer (GHSA-g63q-c378-wphj).
+    if (pkemctx->kem->privkey == NULL || pkemctx->kem->comp_privkey == NULL ||
         pkemctx->kem->comp_privkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");
         return -1;

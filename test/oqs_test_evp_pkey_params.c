@@ -486,6 +486,124 @@ err:
     return ret;
 }
 
+/** \brief Tests that KEM decapsulation fails cleanly after the private key has
+ * been dropped via OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY.
+ *
+ * Regression test for GHSA-g63q-c378-wphj (a variant of GHSA-mqwg-cg22-g8r8):
+ * oqsx_set_params() frees oqsxkey->privkey when the caller sets the encoded
+ * public key, but used to leave the comp_privkey[] slots pointing into the
+ * freed buffer. The KEM decapsulation path only checked comp_privkey[keyslot]
+ * (still non-NULL) and fed the dangling pointer to the cryptographic core,
+ * causing a use-after-free. After the fix, decapsulation must fail because the
+ * private key is gone rather than read freed memory.
+ *
+ * The trigger uses only public OpenSSL API. The function self-selects KEM
+ * algorithms (signatures do not support encapsulation) so it can be called for
+ * every keymgmt algorithm. Run under AddressSanitizer to surface the UAF on a
+ * vulnerable build.
+ *
+ * \param libctx Top-level OpenSSL context.
+ * \param algname Algorithm name.
+ *
+ * \returns 0 on success (including for non-KEM algorithms, which are skipped).
+ */
+static int test_decaps_after_set_encoded_public_key(OSSL_LIB_CTX *libctx,
+                                                    const char *algname) {
+    EVP_PKEY_CTX *ctx = NULL, *encctx = NULL, *decctx = NULL;
+    EVP_PKEY *key = NULL;
+    unsigned char *encpub = NULL, *ct = NULL, *secret = NULL;
+    size_t encpub_len = 0, ctlen = 0, secretlen = 0;
+    int ret = -1;
+
+    /* Generate a full keypair. */
+    ctx = EVP_PKEY_CTX_new_from_name(libctx, algname, OQSPROV_PROPQ);
+    if (!ctx || EVP_PKEY_keygen_init(ctx) != 1 ||
+        EVP_PKEY_generate(ctx, &key) != 1) {
+        fprintf(stderr,
+                cRED "  decaps-after-set-encoded-pubkey: keygen failed "
+                     "for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+    EVP_PKEY_CTX_free(ctx);
+    ctx = NULL;
+
+    /* Only KEM algorithms support encapsulation; signatures are skipped. */
+    encctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ);
+    if (!encctx) {
+        goto err;
+    }
+    if (EVP_PKEY_encapsulate_init(encctx, NULL) <= 0) {
+        ERR_clear_error();
+        ret = 0; /* not a KEM: nothing to exercise here */
+        goto err;
+    }
+
+    /* Produce a valid ciphertext from the public key (needs no private key). */
+    if (EVP_PKEY_encapsulate(encctx, NULL, &ctlen, NULL, &secretlen) != 1) {
+        goto err;
+    }
+    ct = malloc(ctlen);
+    secret = malloc(secretlen);
+    if (!ct || !secret) {
+        fprintf(stderr, cRED "  decaps-after-set-encoded-pubkey: malloc "
+                             "failed" cNORM "\n");
+        goto err;
+    }
+    if (EVP_PKEY_encapsulate(encctx, ct, &ctlen, secret, &secretlen) != 1) {
+        goto err;
+    }
+
+    /* Read back the encoded public key so it can be fed straight back in at the
+     * exact size the provider expects. */
+    encpub_len = EVP_PKEY_get1_encoded_public_key(key, &encpub);
+    if (encpub_len == 0 || encpub == NULL) {
+        fprintf(stderr,
+                cRED "  decaps-after-set-encoded-pubkey: get encoded pubkey "
+                     "failed for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+
+    /* Trigger: setting the encoded public key frees the private key. */
+    if (EVP_PKEY_set1_encoded_public_key(key, encpub, encpub_len) != 1) {
+        fprintf(stderr,
+                cRED "  decaps-after-set-encoded-pubkey: set encoded pubkey "
+                     "failed for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+
+    /* Decapsulation must now fail cleanly rather than read freed memory. On a
+     * vulnerable build this reads comp_privkey[] pointing into the freed
+     * private key (heap-use-after-free under ASan). */
+    decctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ);
+    if (!decctx || EVP_PKEY_decapsulate_init(decctx, NULL) != 1) {
+        goto err;
+    }
+    memset(secret, 0, secretlen);
+    if (EVP_PKEY_decapsulate(decctx, secret, &secretlen, ct, ctlen) > 0) {
+        fprintf(stderr,
+                cRED "  decaps-after-set-encoded-pubkey: decapsulation "
+                     "unexpectedly succeeded without a private key "
+                     "for %s" cNORM "\n",
+                algname);
+        goto err;
+    }
+    ERR_clear_error(); /* the expected decapsulation failure raised errors */
+    ret = 0;
+
+err:
+    free(encpub);
+    free(ct);
+    free(secret);
+    EVP_PKEY_free(key);
+    EVP_PKEY_CTX_free(ctx);
+    EVP_PKEY_CTX_free(encctx);
+    EVP_PKEY_CTX_free(decctx);
+    return ret;
+}
+
 /** \brief Tests the export/import capacity of an algorithm.
  *
  * \param libctx Top-level OpenSSL context.
@@ -572,6 +690,10 @@ int main(int argc, char **argv) {
             test = test || test_pubkey_only_hybrid_get_params(
                                libctx, algs->algorithm_names);
         }
+        /* KEMs only (function skips signatures): regression for
+         * GHSA-g63q-c378-wphj. */
+        test = test || test_decaps_after_set_encoded_public_key(
+                           libctx, algs->algorithm_names);
         if (test) {
             ERR_print_errors_fp(stderr);
             fprintf(stderr,

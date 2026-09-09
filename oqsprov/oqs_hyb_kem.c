@@ -99,10 +99,8 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
     const OQSX_EVP_CTX *evp_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx;
     OSSL_LIB_CTX *libctx = pkemctx->libctx;
 
-    // privkey must be checked in addition to comp_privkey[]: the latter aliases
-    // into privkey, so after privkey is freed (e.g. via set_params with
-    // OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY) comp_privkey[keyslot] may still be a
-    // non-NULL dangling pointer (GHSA-g63q-c378-wphj).
+    // comp_privkey[keyslot] aliases into privkey and can dangle once privkey is
+    // freed, so guard on privkey too. GHSA-g63q-c378-wphj
     if (pkemctx->kem->privkey == NULL || pkemctx->kem->comp_privkey == NULL ||
         pkemctx->kem->comp_privkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");

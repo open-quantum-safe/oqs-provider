@@ -489,18 +489,13 @@ err:
 /** \brief Tests that KEM decapsulation fails cleanly after the private key has
  * been dropped via OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY.
  *
- * Regression test for GHSA-g63q-c378-wphj (a variant of GHSA-mqwg-cg22-g8r8):
- * oqsx_set_params() frees oqsxkey->privkey when the caller sets the encoded
- * public key, but used to leave the comp_privkey[] slots pointing into the
- * freed buffer. The KEM decapsulation path only checked comp_privkey[keyslot]
- * (still non-NULL) and fed the dangling pointer to the cryptographic core,
- * causing a use-after-free. After the fix, decapsulation must fail because the
- * private key is gone rather than read freed memory.
+ * Regression test for GHSA-g63q-c378-wphj: dropping the private key via the
+ * encoded-public-key param left comp_privkey[] dangling into the freed buffer,
+ * which KEM decaps then read. Post-fix, decaps must fail rather than read freed
+ * memory (heap-use-after-free under AddressSanitizer on a vulnerable build).
  *
- * The trigger uses only public OpenSSL API. The function self-selects KEM
- * algorithms (signatures do not support encapsulation) so it can be called for
- * every keymgmt algorithm. Run under AddressSanitizer to surface the UAF on a
- * vulnerable build.
+ * Uses only public OpenSSL API and self-selects KEMs (signatures cannot
+ * encapsulate), so it is safe to call for every keymgmt algorithm.
  *
  * \param libctx Top-level OpenSSL context.
  * \param algname Algorithm name.
@@ -554,8 +549,7 @@ static int test_decaps_after_set_encoded_public_key(OSSL_LIB_CTX *libctx,
         goto err;
     }
 
-    /* Read back the encoded public key so it can be fed straight back in at the
-     * exact size the provider expects. */
+    /* Read the encoded public key back to feed it in at the expected size. */
     encpub_len = EVP_PKEY_get1_encoded_public_key(key, &encpub);
     if (encpub_len == 0 || encpub == NULL) {
         fprintf(stderr,
@@ -574,9 +568,8 @@ static int test_decaps_after_set_encoded_public_key(OSSL_LIB_CTX *libctx,
         goto err;
     }
 
-    /* Decapsulation must now fail cleanly rather than read freed memory. On a
-     * vulnerable build this reads comp_privkey[] pointing into the freed
-     * private key (heap-use-after-free under ASan). */
+    /* Must fail cleanly now; a vulnerable build reads the freed privkey here.
+     */
     decctx = EVP_PKEY_CTX_new_from_pkey(libctx, key, OQSPROV_PROPQ);
     if (!decctx || EVP_PKEY_decapsulate_init(decctx, NULL) != 1) {
         goto err;

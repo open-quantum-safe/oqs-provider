@@ -8,6 +8,7 @@
  *
  */
 
+#include "oqsprov_compat.h"
 #include <assert.h>
 #include <openssl/core_names.h>
 #include <openssl/err.h>
@@ -1052,7 +1053,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
         plen = 0;
     } else {
         p = ASN1_STRING_get0_data(oct);
-        plen = ASN1_STRING_length(oct);
+        plen = oqsx_ASN1_STRING_length(oct);
     }
 
     oqsx = oqsx_key_op(palg, p, plen + key_diff, KEY_OP_PRIVATE, libctx, propq);

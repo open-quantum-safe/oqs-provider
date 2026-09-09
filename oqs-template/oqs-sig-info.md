@@ -36,14 +36,14 @@
 | falcon1024 **hybrid with** p521           | NIST Round 3 submission                   | 3            |                    5 | 0xfe0f       | 1.3.9999.3.5                 |
 | falconpadded1024                          | 20211101                                  | 3            |                    5 | 0xfedf       | 1.3.9999.3.19                |
 | falconpadded1024 **hybrid with** p521     | 20211101                                  | 3            |                    5 | 0xfee0       | 1.3.9999.3.20                |
-| mayo1                                     | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff32       | 1.3.9999.8.1.3               |
-| mayo1 **hybrid with** p256                | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff36       | 1.3.9999.8.1.4               |
-| mayo2                                     | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff33       | 1.3.9999.8.2.3               |
-| mayo2 **hybrid with** p256                | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff37       | 1.3.9999.8.2.4               |
-| mayo3                                     | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff34       | 1.3.9999.8.3.3               |
-| mayo3 **hybrid with** p384                | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff38       | 1.3.9999.8.3.4               |
-| mayo5                                     | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff35       | 1.3.9999.8.5.3               |
-| mayo5 **hybrid with** p521                | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff39       | 1.3.9999.8.5.4               |
+| mayo1                                     | NIST Round 3 (September 2026)             | 3            |                    1 | 0xff7b       | 1.3.9999.8.1.5               |
+| mayo1 **hybrid with** p256                | NIST Round 3 (September 2026)             | 3            |                    1 | 0xff7f       | 1.3.9999.8.1.6               |
+| mayo2                                     | NIST Round 3 (September 2026)             | 3            |                    1 | 0xff7c       | 1.3.9999.8.2.5               |
+| mayo2 **hybrid with** p256                | NIST Round 3 (September 2026)             | 3            |                    1 | 0xff80       | 1.3.9999.8.2.6               |
+| mayo3                                     | NIST Round 3 (September 2026)             | 3            |                    3 | 0xff7d       | 1.3.9999.8.3.5               |
+| mayo3 **hybrid with** p384                | NIST Round 3 (September 2026)             | 3            |                    3 | 0xff81       | 1.3.9999.8.3.6               |
+| mayo5                                     | NIST Round 3 (September 2026)             | 3            |                    5 | 0xff7e       | 1.3.9999.8.5.5               |
+| mayo5 **hybrid with** p521                | NIST Round 3 (September 2026)             | 3            |                    5 | 0xff82       | 1.3.9999.8.5.6               |
 | mldsa44                                   | ML-DSA                                    | FIPS204      |                    1 | 0x0904       | 2.16.840.1.101.3.4.3.17      |
 | mldsa44 **hybrid with** p256              | ML-DSA                                    | FIPS204      |                    1 | 0xff06       | 1.3.9999.7.5                 |
 | mldsa44 **hybrid with** rsa3072           | ML-DSA                                    | FIPS204      |                    1 | 0xff07       | 1.3.9999.7.6                 |

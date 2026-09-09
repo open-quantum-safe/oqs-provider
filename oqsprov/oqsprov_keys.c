@@ -778,9 +778,21 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
     OQS_KEY_PRINTF2("OQSX KEY: Recreated OQSX key %s\n", key->tls_name);
 
     if (op == KEY_OP_PUBLIC) {
+        uint32_t classical_pubkey_len = 0;
+        int classic_lengths_fixed = key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+                                    key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
+                                    key->keytype == KEY_TYPE_ECX_HYB_KEM;
+
         if (key->pubkeylen != plen) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             goto err_key_op;
+        }
+        if (classic_lengths_fixed) {
+            DECODE_UINT32(classical_pubkey_len, p);
+            if (classical_pubkey_len != key->evp_info->length_public_key) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err_key_op;
+            }
         }
         if (oqsx_key_allocate_keymaterial(key, 0)) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
@@ -1373,6 +1385,8 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
         memcpy(key->privkey, pp1->data, pp1->data_size);
     }
     if (pp2 != NULL) {
+        uint32_t classical_pubkey_len = 0;
+
         if (pp2->data_type != OSSL_PARAM_OCTET_STRING) {
             OQS_KEY_PRINTF("invalid data type\n");
             return 0;
@@ -1380,6 +1394,13 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
         if (key->pubkeylen != pp2->data_size) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
             return 0;
+        }
+        if (classic_lengths_fixed) {
+            DECODE_UINT32(classical_pubkey_len, pp2->data);
+            if (classical_pubkey_len != key->evp_info->length_public_key) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                return 0;
+            }
         }
         OPENSSL_secure_clear_free(key->pubkey, pp2->data_size);
         key->pubkey = OPENSSL_secure_malloc(pp2->data_size);

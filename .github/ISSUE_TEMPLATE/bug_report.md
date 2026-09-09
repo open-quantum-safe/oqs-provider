@@ -48,6 +48,16 @@ problems.
 **Additional context**
 Add any other context about the problem here.
 
+**Use of generative AI**
+If this report (text, reproduction steps, code, or suspected-vulnerability
+analysis) was produced with the help of generative AI, please say so and describe
+the nature of the use. You are expected to have verified and affirm such content
+yourself before submission. See
+[CONTRIBUTING.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/CONTRIBUTING.md);
+for suspected security issues, please also follow
+[SECURITY.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/SECURITY.md)
+and the [threat model](https://github.com/open-quantum-safe/oqs-provider/blob/main/.github/THREAT_MODEL.md).
+
 **Hints**
 To exclude a build/setup error, please consider running your test
 commands to reproduce the problem in our [pre-build docker image](https://hub.docker.com/repository/docker/openquantumsafe/oqs-ossl3/general),

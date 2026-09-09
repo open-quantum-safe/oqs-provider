@@ -111,27 +111,27 @@
 | snova60104 **hybrid with** p521           | Round 2                                   | 2            |                    5 | 0xff4f       | 1.3.9999.10.11.2             |
 | snova2965                                 | Round 2                                   | 2            |                    5 | 0xff51       | 1.3.9999.10.12.1             |
 | snova2965 **hybrid with** p521            | Round 2                                   | 2            |                    5 | 0xff52       | 1.3.9999.10.12.2             |
-| OV_Is                                     | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff0a       | 1.3.9999.9.1.1               |
-| OV_Is **hybrid with** p256                | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff16       | 1.3.9999.9.1.2               |
-| OV_Ip                                     | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff0b       | 1.3.9999.9.2.1               |
-| OV_Ip **hybrid with** p256                | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff17       | 1.3.9999.9.2.2               |
-| OV_III                                    | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff0c       | 1.3.9999.9.3.1               |
-| OV_III **hybrid with** p384               | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff18       | 1.3.9999.9.3.2               |
-| OV_V                                      | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff0d       | 1.3.9999.9.4.1               |
-| OV_V **hybrid with** p521                 | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff19       | 1.3.9999.9.4.2               |
-| OV_Is_pkc                                 | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff0e       | 1.3.9999.9.5.1               |
-| OV_Is_pkc **hybrid with** p256            | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff1a       | 1.3.9999.9.5.2               |
-| OV_Ip_pkc                                 | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff0f       | 1.3.9999.9.6.1               |
-| OV_Ip_pkc **hybrid with** p256            | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff1b       | 1.3.9999.9.6.2               |
-| OV_III_pkc                                | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff10       | 1.3.9999.9.7.1               |
-| OV_III_pkc **hybrid with** p384           | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff1c       | 1.3.9999.9.7.2               |
-| OV_V_pkc                                  | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff11       | 1.3.9999.9.8.1               |
-| OV_V_pkc **hybrid with** p521             | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff1d       | 1.3.9999.9.8.2               |
-| OV_Is_pkc_skc                             | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff12       | 1.3.9999.9.9.1               |
-| OV_Is_pkc_skc **hybrid with** p256        | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff1e       | 1.3.9999.9.9.2               |
-| OV_Ip_pkc_skc                             | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff13       | 1.3.9999.9.10.1              |
-| OV_Ip_pkc_skc **hybrid with** p256        | NIST Round 2 (February 2025)              | 2            |                    1 | 0xff1f       | 1.3.9999.9.10.2              |
-| OV_III_pkc_skc                            | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff14       | 1.3.9999.9.11.1              |
-| OV_III_pkc_skc **hybrid with** p384       | NIST Round 2 (February 2025)              | 2            |                    3 | 0xff20       | 1.3.9999.9.11.2              |
-| OV_V_pkc_skc                              | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff15       | 1.3.9999.9.12.1              |
-| OV_V_pkc_skc **hybrid with** p521         | NIST Round 2 (February 2025)              | 2            |                    5 | 0xff21       | 1.3.9999.9.12.2              |
+| OV_Is                                     | NIST Round 3                              | 3            |                    1 | 0xff0a       | 1.3.9999.9.1.1               |
+| OV_Is **hybrid with** p256                | NIST Round 3                              | 3            |                    1 | 0xff16       | 1.3.9999.9.1.2               |
+| OV_Ip                                     | NIST Round 3                              | 3            |                    1 | 0xff0b       | 1.3.9999.9.2.1               |
+| OV_Ip **hybrid with** p256                | NIST Round 3                              | 3            |                    1 | 0xff17       | 1.3.9999.9.2.2               |
+| OV_III                                    | NIST Round 3                              | 3            |                    3 | 0xff0c       | 1.3.9999.9.3.1               |
+| OV_III **hybrid with** p384               | NIST Round 3                              | 3            |                    3 | 0xff18       | 1.3.9999.9.3.2               |
+| OV_V                                      | NIST Round 3                              | 3            |                    5 | 0xff0d       | 1.3.9999.9.4.1               |
+| OV_V **hybrid with** p521                 | NIST Round 3                              | 3            |                    5 | 0xff19       | 1.3.9999.9.4.2               |
+| OV_Is_pkc                                 | NIST Round 3                              | 3            |                    1 | 0xff0e       | 1.3.9999.9.5.1               |
+| OV_Is_pkc **hybrid with** p256            | NIST Round 3                              | 3            |                    1 | 0xff1a       | 1.3.9999.9.5.2               |
+| OV_Ip_pkc                                 | NIST Round 3                              | 3            |                    1 | 0xff0f       | 1.3.9999.9.6.1               |
+| OV_Ip_pkc **hybrid with** p256            | NIST Round 3                              | 3            |                    1 | 0xff1b       | 1.3.9999.9.6.2               |
+| OV_III_pkc                                | NIST Round 3                              | 3            |                    3 | 0xff10       | 1.3.9999.9.7.1               |
+| OV_III_pkc **hybrid with** p384           | NIST Round 3                              | 3            |                    3 | 0xff1c       | 1.3.9999.9.7.2               |
+| OV_V_pkc                                  | NIST Round 3                              | 3            |                    5 | 0xff11       | 1.3.9999.9.8.1               |
+| OV_V_pkc **hybrid with** p521             | NIST Round 3                              | 3            |                    5 | 0xff1d       | 1.3.9999.9.8.2               |
+| OV_Is_pkc_skc                             | NIST Round 3                              | 3            |                    1 | 0xff12       | 1.3.9999.9.9.1               |
+| OV_Is_pkc_skc **hybrid with** p256        | NIST Round 3                              | 3            |                    1 | 0xff1e       | 1.3.9999.9.9.2               |
+| OV_Ip_pkc_skc                             | NIST Round 3                              | 3            |                    1 | 0xff13       | 1.3.9999.9.10.1              |
+| OV_Ip_pkc_skc **hybrid with** p256        | NIST Round 3                              | 3            |                    1 | 0xff1f       | 1.3.9999.9.10.2              |
+| OV_III_pkc_skc                            | NIST Round 3                              | 3            |                    3 | 0xff14       | 1.3.9999.9.11.1              |
+| OV_III_pkc_skc **hybrid with** p384       | NIST Round 3                              | 3            |                    3 | 0xff20       | 1.3.9999.9.11.2              |
+| OV_V_pkc_skc                              | NIST Round 3                              | 3            |                    5 | 0xff15       | 1.3.9999.9.12.1              |
+| OV_V_pkc_skc **hybrid with** p521         | NIST Round 3                              | 3            |                    5 | 0xff21       | 1.3.9999.9.12.2              |

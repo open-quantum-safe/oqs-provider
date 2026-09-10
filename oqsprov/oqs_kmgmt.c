@@ -570,7 +570,7 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[]) {
         }
         // comp_privkey[] are interior pointers into privkey, not owned
         // allocations: NULL them (never free) once privkey is gone. Free
-        // privkey from the secure heap it lives on. GHSA-g63q-c378-wphj
+        // privkey from the secure heap it lives on.
         OPENSSL_secure_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
         oqsxkey->privkey = NULL;
         if (oqsxkey->comp_privkey != NULL) {

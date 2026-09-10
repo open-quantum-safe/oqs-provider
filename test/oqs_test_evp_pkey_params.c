@@ -489,10 +489,11 @@ err:
 /** \brief Tests that KEM decapsulation fails cleanly after the private key has
  * been dropped via OSSL_PKEY_PARAM_ENCODED_PUBLIC_KEY.
  *
- * Regression test for GHSA-g63q-c378-wphj: dropping the private key via the
- * encoded-public-key param left comp_privkey[] dangling into the freed buffer,
- * which KEM decaps then read. Post-fix, decaps must fail rather than read freed
- * memory (heap-use-after-free under AddressSanitizer on a vulnerable build).
+ * Regression test for GHSA-g63q-c378-wphj (canonical reference for this fix):
+ * dropping the private key via the encoded-public-key param left comp_privkey[]
+ * dangling into the freed buffer, which KEM decaps then read. Post-fix, decaps
+ * must fail rather than read freed memory (heap-use-after-free under
+ * AddressSanitizer on a vulnerable build).
  *
  * Uses only public OpenSSL API and self-selects KEMs (signatures cannot
  * encapsulate), so it is safe to call for every keymgmt algorithm.
@@ -683,8 +684,7 @@ int main(int argc, char **argv) {
             test = test || test_pubkey_only_hybrid_get_params(
                                libctx, algs->algorithm_names);
         }
-        /* KEMs only (function skips signatures): regression for
-         * GHSA-g63q-c378-wphj. */
+        /* KEMs only (function skips signatures) */
         test = test || test_decaps_after_set_encoded_public_key(
                            libctx, algs->algorithm_names);
         if (test) {

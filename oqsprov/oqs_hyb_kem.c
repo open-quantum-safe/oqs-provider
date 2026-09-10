@@ -100,7 +100,7 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
     OSSL_LIB_CTX *libctx = pkemctx->libctx;
 
     // comp_privkey[keyslot] aliases into privkey and can dangle once privkey is
-    // freed, so guard on privkey too. GHSA-g63q-c378-wphj
+    // freed, so guard on privkey too.
     if (pkemctx->kem->privkey == NULL || pkemctx->kem->comp_privkey == NULL ||
         pkemctx->kem->comp_privkey[keyslot] == NULL) {
         OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");

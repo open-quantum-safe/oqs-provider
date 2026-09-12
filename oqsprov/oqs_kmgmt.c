@@ -568,8 +568,16 @@ static int oqsx_set_params(void *key, const OSSL_PARAM params[]) {
                 return 0;
             }
         }
-        OPENSSL_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
+        // comp_privkey[] are interior pointers into privkey, not owned
+        // allocations: NULL them (never free) once privkey is gone. Free
+        // privkey from the secure heap it lives on.
+        OPENSSL_secure_clear_free(oqsxkey->privkey, oqsxkey->privkeylen);
         oqsxkey->privkey = NULL;
+        if (oqsxkey->comp_privkey != NULL) {
+            for (size_t i = 0; i < oqsxkey->numkeys; i++) {
+                oqsxkey->comp_privkey[i] = NULL;
+            }
+        }
     }
     p = OSSL_PARAM_locate_const(params, OSSL_PKEY_PARAM_PROPERTIES);
     if (p != NULL) {

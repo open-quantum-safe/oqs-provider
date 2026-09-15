@@ -14,7 +14,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ## Release notes
 
-This is release candidate 1 of version 0.12.0 of oqs-provider which continues from the earlier 0.11.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.16.0 of `liboqs`.
+This is release candidate 2 of version 0.12.0 of oqs-provider which continues from the earlier 0.11.0 release. This release is fully tested to be used in conjunction with the main branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and is guaranteed to be in sync with v0.16.0 of `liboqs`.
 
 ### What's New
 Support for OpenSSL's sign/verify message API added.
@@ -72,7 +72,7 @@ Adds support for the MQOM signature algorithm and for "pure" SLH-DSA algorithms.
 * Add security submission guidance for AI agents and humans by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/824
 * Fix use-after-free of comp_privkey in KEM decapsulation (GHSA-g63q-c378-wphj) by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/829
 
-**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.11.0...0.12.0-rc1
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.11.0...0.12.0-rc2
 
 Previous Release Notes
 ======================

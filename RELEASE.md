@@ -68,6 +68,9 @@ Adds support for the MQOM signature algorithm and for "pure" SLH-DSA algorithms.
 * Update SECURITY.md [skip ci] by @RodriM11 in https://github.com/open-quantum-safe/oqs-provider/pull/813
 * oqsx_key_new() double free by Timothy Copeland in https://github.com/open-quantum-safe/oqs-provider/pull/816
 * Fix component selection in hybrid KEM TEXT encoding by @satokan in https://github.com/open-quantum-safe/oqs-provider/pull/815
+* Reject inconsistent classical lengths in hybrid KEM public keys by @satokan in https://github.com/open-quantum-safe/oqs-provider/pull/814
+* Add security submission guidance for AI agents and humans by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/824
+* Fix use-after-free of comp_privkey in KEM decapsulation (GHSA-g63q-c378-wphj) by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/829
 
 **Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.11.0...0.12.0-rc1
 

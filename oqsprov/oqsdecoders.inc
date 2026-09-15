@@ -21,17 +21,13 @@
 
 /* Arguments are prefixed with '_' to avoid build breaks on certain platforms */
 #define DECODER(_name, _input, _output)                                        \
-    {                                                                          \
-        _name, "provider=" DECODER_PROVIDER ",input=" #_input,                 \
-            (oqs_##_input##_to_##_output##_decoder_functions)                  \
-    }
+    {_name, "provider=" DECODER_PROVIDER ",input=" #_input,                    \
+     (oqs_##_input##_to_##_output##_decoder_functions)}
 #define DECODER_w_structure(_name, _input, _structure, _output)                \
-    {                                                                          \
-        _name,                                                                 \
-            "provider=" DECODER_PROVIDER ",input=" #_input                     \
-            ",structure=" DECODER_STRUCTURE_##_structure,                      \
-            (oqs_##_structure##_##_input##_to_##_output##_decoder_functions)   \
-    }
+    {_name,                                                                    \
+     "provider=" DECODER_PROVIDER ",input=" #_input                            \
+     ",structure=" DECODER_STRUCTURE_##_structure,                             \
+     (oqs_##_structure##_##_input##_to_##_output##_decoder_functions)}
 
 ///// OQS_TEMPLATE_FRAGMENT_MAKE_START
 #ifdef OQS_KEM_ENCODERS

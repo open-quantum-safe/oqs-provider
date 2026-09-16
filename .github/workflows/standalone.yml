@@ -64,6 +64,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Full build
-        run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
+        run: LIBOQS_BRANCH=0.16.0 ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V

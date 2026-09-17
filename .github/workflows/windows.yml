@@ -47,7 +47,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: main
+          ref: 0.16.0
           path: liboqs
       - name: Install cygwin
         uses: cygwin/cygwin-install-action@3f0a3f9f988f7e96b8c18098ae05eaec175f5b52 # v6.1
@@ -145,7 +145,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: main
+          ref: 0.16.0
           path: liboqs
       - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
         with:
@@ -262,7 +262,7 @@ jobs:
             persist-credentials: false
             set-safe-directory: true
             repository: open-quantum-safe/liboqs
-            ref: main
+            ref: 0.16.0
             path: liboqs
         - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
           with:

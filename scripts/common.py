@@ -205,7 +205,9 @@ def gen_keys(ossl, ossl_config, sig_alg, test_artifacts_dir, filename_prefix):
                                   '-CA', os.path.join(test_artifacts_dir, '{}_{}_CA.crt'.format(filename_prefix, sig_alg)),
                                   '-CAkey', os.path.join(test_artifacts_dir, '{}_{}_CA.key'.format(filename_prefix, sig_alg)),
                                   '-CAcreateserial',
-                                  '-days', '365'])
+                                  '-days', '365',
+                                  '-extfile', ossl_config,
+                                  '-extensions', 'usr_cert'])
 
     # also create pubkeys from certs for dgst verify tests:
     env = os.environ

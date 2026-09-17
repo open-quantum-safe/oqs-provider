@@ -58,12 +58,18 @@ jobs:
             libssl-dev \
             git \
             pkg-config \
-            ca-certificates
+            ca-certificates \
+            python3 \
+            python3-pip \
+            python3-jinja2 \
+            python3-yaml \
+            python3-tabulate \
+            python3-markupsafe
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Full build
-        run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
+        run: LIBOQS_BRANCH=0.16.0 ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V

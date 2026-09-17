@@ -27,7 +27,7 @@ jobs:
       - name: Verify nothing changes on re-generate code
         run: |
           git config --global user.name "ciuser" && \
-          git clone https://github.com/open-quantum-safe/liboqs.git && \
+          git clone --depth=1 --branch 0.16.0 https://github.com/open-quantum-safe/liboqs.git && \
           git config --global user.email "ci@openquantumsafe.org" && \
           git config --global --add safe.directory `pwd` && \
           export LIBOQS_SRC_DIR=`pwd`/liboqs && \

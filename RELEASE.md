@@ -13,14 +13,13 @@ In general, the oqs-provider `main` branch is meant to be usable in conjunction 
 Further details on building, testing and use can be found in [README.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/README.md). See in particular limitations on intended use.
 
 ### What's New
-Support for OpenSSL's sign/verify message API added.
-
-Includes both variants of FrodoKEM algorithm. Previous `frodokem` variants are what now are referred to as **ephemeral** variants (i.e. `efrodokem`), while current `frodokem` are the new **salted** variants.
-
-Classical algorithms now retain the property queries established from the hybrid PQ algorithm that they correspond to. This means
-that the use of the property query 'provider=oqsprovider' without any additional property query, as `oqsprovider` alone does not implement classical crypto which is required for hybrid schemes to work, will make hybrid schemes fail.
-
-Re-instates back support for HQC, with the updated naming convention from `liboqs` 0.16.0.
+* Added both FrodoKEM variants: previous `frodokem` names are now **ephemeral** (`efrodokem`); current `frodokem` names are the **salted** variants ([#749](https://github.com/open-quantum-safe/oqs-provider/pull/749)). See table ([here](https://github.com/open-quantum-safe/oqs-provider/blob/0.12.0-rc2-branch/ALGORITHMS.md#code-points--algorithm-ids)).
+* Reinstated HQC with the `liboqs` 0.16.0 naming ([#787](https://github.com/open-quantum-safe/oqs-provider/pull/787)).
+* Added the MQOM signature algorithm ([#779](https://github.com/open-quantum-safe/oqs-provider/pull/779)).
+* Added "pure" SLH-DSA algorithms ([#732](https://github.com/open-quantum-safe/oqs-provider/pull/732)).
+* Added support for OpenSSL (v3.4+) EVP_PKEY_sign_message_* ([#739](https://github.com/open-quantum-safe/oqs-provider/pull/739)).
+* Removed SPHINCS+ support ([#740](https://github.com/open-quantum-safe/oqs-provider/pull/740)).
+* Classical algorithms retain the property queries from their hybrid PQ counterparts. ([#774](https://github.com/open-quantum-safe/oqs-provider/pull/774), [#776](https://github.com/open-quantum-safe/oqs-provider/pull/776)).
 
 ## What's Changed
 * Reject inconsistent classical lengths in hybrid KEM public keys by @satokan in https://github.com/open-quantum-safe/oqs-provider/pull/814

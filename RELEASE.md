@@ -78,7 +78,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 * @ghen2 https://github.com/open-quantum-safe/oqs-provider/pull/802
 * @novotimo https://github.com/open-quantum-safe/oqs-provider/pull/816
 
-**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.11.0...0.11.0
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.11.0...0.12.0-rc2
 
 Previous Release Notes
 ======================

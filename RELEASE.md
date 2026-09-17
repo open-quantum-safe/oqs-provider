@@ -4,9 +4,9 @@
 
 The **Open Quantum Safe (OQS) project** has the goal of developing and prototyping quantum-resistant cryptography.  More information on OQS can be found on the website: https://openquantumsafe.org/ and on Github at https://github.com/open-quantum-safe/.
 
-**oqs-provider** is a standalone [OpenSSL 3](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and [hybrid key exchange](https://datatracker.ietf.org/doc/draft-ietf-pquip-pqt-hybrid-terminology) for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS, CMP and `dgst` (signature) operations.
+**oqs-provider** is a standalone [OpenSSL 3+](https://github.com/openssl/openssl) [provider](https://www.openssl.org/docs/manmaster/man7/provider.html) enabling [liboqs](https://github.com/open-quantum-safe/liboqs)-based quantum-safe and [hybrid key exchange](https://datatracker.ietf.org/doc/draft-ietf-pquip-pqt-hybrid-terminology) for TLS 1.3, as well as quantum-safe and hybrid X.509 certificate generation, CMS, CMP and `dgst` (signature) operations.
 
-When deployed, the `oqs-provider` binary (shared library) thus adds support for quantum-safe cryptographic operations to any standard OpenSSL(v3) installation. The ultimate goal is that all `openssl` functionality shall be [PQC-enabled](https://csrc.nist.gov/projects/post-quantum-cryptography).
+When deployed, the `oqs-provider` binary (shared library) thus adds support for quantum-safe cryptographic operations to any standard OpenSSL(v3+) installation. The ultimate goal is that all `openssl` functionality shall be [PQC-enabled](https://csrc.nist.gov/projects/post-quantum-cryptography).
 
 In general, the oqs-provider `main` branch is meant to be usable in conjunction with the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and the `master` branch of [OpenSSL](https://github.com/openssl/openssl).
 
@@ -14,12 +14,12 @@ Further details on building, testing and use can be found in [README.md](https:/
 
 ### What's New
 * Added both FrodoKEM variants: previous `frodokem` names are now **ephemeral** (`efrodokem`); current `frodokem` names are the **salted** variants ([#749](https://github.com/open-quantum-safe/oqs-provider/pull/749)). See table ([here](https://github.com/open-quantum-safe/oqs-provider/blob/0.12.0-rc2-branch/ALGORITHMS.md#code-points--algorithm-ids)).
-* Reinstated HQC with the `liboqs` 0.16.0 naming ([#787](https://github.com/open-quantum-safe/oqs-provider/pull/787)).
-* Added the MQOM signature algorithm ([#779](https://github.com/open-quantum-safe/oqs-provider/pull/779)).
-* Added "pure" SLH-DSA algorithms ([#732](https://github.com/open-quantum-safe/oqs-provider/pull/732)).
+* Reinstated HQC with the `liboqs` 0.16.0 naming hqc128, hqc192 and hqc256 to hqc1, hqc3 and hqc5. ([#787](https://github.com/open-quantum-safe/oqs-provider/pull/787)).
+* Added the MQOM signature algorithm ([#779](https://github.com/open-quantum-safe/oqs-provider/pull/779)). 
+* Added "pure" SLH-DSA algorithms ([#732](https://github.com/open-quantum-safe/oqs-provider/pull/732)). Supports OpenSSL versions < 3.5.
 * Added support for OpenSSL (v3.4+) EVP_PKEY_sign_message_* ([#739](https://github.com/open-quantum-safe/oqs-provider/pull/739)).
 * Removed SPHINCS+ support ([#740](https://github.com/open-quantum-safe/oqs-provider/pull/740)).
-* Classical algorithms retain the property queries from their hybrid PQ counterparts. ([#774](https://github.com/open-quantum-safe/oqs-provider/pull/774), [#776](https://github.com/open-quantum-safe/oqs-provider/pull/776)).
+
 
 ## What's Changed
 * Reject inconsistent classical lengths in hybrid KEM public keys by @satokan in https://github.com/open-quantum-safe/oqs-provider/pull/814
@@ -28,9 +28,9 @@ Further details on building, testing and use can be found in [README.md](https:/
 * Change remaining 'printf' to 'fprint(stderr' by @RodriM11 in https://github.com/open-quantum-safe/oqs-provider/pull/716
 * fix issue 628 and change oqs_test_evp_pkey_params.c to use TEST_ASSERT() by @HelenHZhang in https://github.com/open-quantum-safe/oqs-provider/pull/722
 * revert from release to dev mode by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/733
-* Add "Pure" Stateless Hash-Based Algorithms (SLH-DSA-*) Support by @pi-314159 in https://github.com/open-quantum-safe/oqs-provider/pull/732
-* disable OpenSSL algorithms in scripts/common.py by @pi-314159 in https://github.com/open-quantum-safe/oqs-provider/pull/738
-* oqs_provider. Enable Algo Fetch Cache mechanism only for OpenSSL v3.5.0 or newer. by @woinan in https://github.com/open-quantum-safe/oqs-provider/pull/735
+* Add "Pure" Stateless Hash-Based Algorithms (SLH-DSA-*) Support by @pi-314159 in https://github.com/open-quantum-safe/oqs-provider/pull/732. Supported with OpenSSL version less than 3.5.
+* Disable OpenSSL algorithms in scripts/common.py by @pi-314159 in https://github.com/open-quantum-safe/oqs-provider/pull/738
+* Enable Algo Fetch Cache mechanism only for OpenSSL v3.5.0 or newer. by @woinan in https://github.com/open-quantum-safe/oqs-provider/pull/735
 * Updating Governance by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/715
 * Expand 'oqs_test_kem' to perform encapsulation from pubkey only by @RodriM11 in https://github.com/open-quantum-safe/oqs-provider/pull/730
 * Remove SPHINCS+ by @dstebila in https://github.com/open-quantum-safe/oqs-provider/pull/740
@@ -67,6 +67,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 * Reject inconsistent classical lengths in hybrid KEM public keys by @satokan in https://github.com/open-quantum-safe/oqs-provider/pull/814
 * Add security submission guidance for AI agents and humans by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/824
 * Fix use-after-free of comp_privkey in KEM decapsulation (GHSA-g63q-c378-wphj) by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/829
+* Classical algorithms retain the property queries from their hybrid PQ counterparts. ([#774](https://github.com/open-quantum-safe/oqs-provider/pull/774), [#776](https://github.com/open-quantum-safe/oqs-provider/pull/776)).
 
 ## New Contributors
 * @HelenHZhang made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/722

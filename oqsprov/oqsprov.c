@@ -47,8 +47,19 @@ static STACK_OF(OPENSSL_STRING) *rt_disabled_algs = NULL;
  */
 static CRYPTO_ONCE rt_lock_init = CRYPTO_ONCE_STATIC_INIT;
 static CRYPTO_RWLOCK *rt_lock = NULL;
+/* provider instances currently loaded in the process */
+static int rt_loaded = 0;
 
 static void create_rt_lock(void) { rt_lock = CRYPTO_THREAD_lock_new(); }
+
+#if defined(__GNUC__)
+/* The lock outlives every provider instance, so it goes with the module, as
+ * the self-test lock of OpenSSL's FIPS provider does. MSVC builds keep it for
+ * the lifetime of the process.
+ */
+static void free_rt_lock(void) __attribute__((destructor));
+static void free_rt_lock(void) { CRYPTO_THREAD_lock_free(rt_lock); }
+#endif
 
 int oqsprov_alg_rt_disabled(const char *algname) {
     int disabled;
@@ -1382,13 +1393,13 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
     return NULL;
 }
 
-static void oqsprovider_teardown(void *provctx) {
-    oqsx_freeprovctx((PROV_OQS_CTX *)provctx);
-    /* Releasing the process-global state is premature while another library
-     * context still has the provider loaded; the lock at least keeps that from
-     * corrupting memory.
-     */
-    if (CRYPTO_THREAD_write_lock(rt_lock)) {
+/* Other library contexts may still have the provider loaded: the state they
+ * share is released by the last instance to go.
+ */
+static void rt_unload(void) {
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        return;
+    if (--rt_loaded == 0) {
         OPENSSL_free(oqsprovider_signatures_rt);
         oqsprovider_signatures_rt = NULL;
         OPENSSL_free(oqsprovider_asym_kems_rt);
@@ -1401,9 +1412,14 @@ static void oqsprovider_teardown(void *provctx) {
         oqsprovider_decoder_rt = NULL;
         sk_OPENSSL_STRING_free(rt_disabled_algs);
         rt_disabled_algs = NULL;
-        CRYPTO_THREAD_unlock(rt_lock);
+        OQS_destroy();
     }
-    OQS_destroy();
+    CRYPTO_THREAD_unlock(rt_lock);
+}
+
+static void oqsprovider_teardown(void *provctx) {
+    oqsx_freeprovctx((PROV_OQS_CTX *)provctx);
+    rt_unload();
 }
 
 /* Functions we provide to the core */
@@ -1450,7 +1466,7 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     OSSL_FUNC_core_obj_add_sigid_fn *c_obj_add_sigid = NULL;
     BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
-    int i, rc = 0, patched;
+    int i, rc = 0, patched, counted = 0;
     char *opensslv;
     const char *ossl_versionp = NULL;
     OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
@@ -1468,6 +1484,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     if (!CRYPTO_THREAD_write_lock(rt_lock))
         goto end_init;
+    rt_loaded++;
+    counted = 1;
     patched = oqs_patch_codepoints() && oqs_patch_oids();
     CRYPTO_THREAD_unlock(rt_lock);
     if (!patched)
@@ -1506,8 +1524,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     if (!CRYPTO_THREAD_write_lock(rt_lock))
         goto end_init;
 
-    if (!rt_disabled_algs)
+    /* every load builds the same list, so start it afresh */
+    if (rt_disabled_algs == NULL)
         rt_disabled_algs = sk_OPENSSL_STRING_new(algname_strcmp);
+    else
+        sk_OPENSSL_STRING_zero(rt_disabled_algs);
 
     /* Standardized PQ implementation in OpenSSL 3.5 is _much_ more developed
      * than this code; disable oqsprovider's versions before OID/sigid
@@ -1761,6 +1782,8 @@ end_init:
         if (provctx && *provctx) {
             oqsprovider_teardown(*provctx);
             *provctx = NULL;
+        } else if (counted) {
+            rt_unload();
         }
     }
     return rc;

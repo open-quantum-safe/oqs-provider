@@ -60,7 +60,7 @@ API may be considered, e.g., as such:
 
     OSSL_PROVIDER_load(OSSL_LIB_CTX_new(), "oqsprovider");
 
-Loading the provider concurrently into several library contexts is safe. Unloading it from one context while others still use it is not, so keep the provider loaded until all contexts that use it are freed.
+The provider may be loaded into several library contexts at once, also concurrently; the state shared between them is released when the last of them unloads it.
 
 The provider (binary) search path may be set via the [OSSL_PROVIDER_set_default_search_path](https://www.openssl.org/docs/manmaster/man3/OSSL_PROVIDER_set_default_search_path.html) API.
 

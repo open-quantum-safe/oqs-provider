@@ -39,6 +39,7 @@ static int count_oqs_provider_algs(OSSL_LIB_CTX *libctx) {
     for (; algs != NULL && algs->algorithm_names != NULL; algs++)
         algcount++;
 
+    OSSL_PROVIDER_unload(oqsprov);
     return algcount;
 }
 

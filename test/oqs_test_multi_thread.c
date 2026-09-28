@@ -2,9 +2,17 @@
 
 #include <openssl/core_dispatch.h>
 #include <openssl/provider.h>
-#include <pthread.h>
 
 #include "test_common.h"
+
+#ifdef _WIN32
+#include <process.h>
+#include <windows.h>
+typedef HANDLE thread_t;
+#else
+#include <pthread.h>
+typedef pthread_t thread_t;
+#endif
 
 #define NUM_THREADS 16
 
@@ -43,17 +51,46 @@ static int count_oqs_provider_algs(OSSL_LIB_CTX *libctx) {
     return algcount;
 }
 
-static void *load_oqs_provider_thread(void *arg) {
-    struct thread_ctx *tctx = arg;
-
+static void load_oqs_provider_thread(struct thread_ctx *tctx) {
     T((tctx->libctx = OSSL_LIB_CTX_new()) != NULL);
     tctx->algcount = count_oqs_provider_algs(tctx->libctx);
+}
+
+#ifdef _WIN32
+static unsigned __stdcall thread_main(void *arg) {
+    load_oqs_provider_thread(arg);
+    return 0;
+}
+
+static int thread_start(thread_t *thread, struct thread_ctx *tctx) {
+    *thread = (HANDLE)_beginthreadex(NULL, 0, thread_main, tctx, 0, NULL);
+    return *thread != NULL;
+}
+
+static int thread_join(thread_t thread) {
+    int ok = WaitForSingleObject(thread, INFINITE) == WAIT_OBJECT_0;
+
+    CloseHandle(thread);
+    return ok;
+}
+#else
+static void *thread_main(void *arg) {
+    load_oqs_provider_thread(arg);
     return NULL;
 }
 
+static int thread_start(thread_t *thread, struct thread_ctx *tctx) {
+    return pthread_create(thread, NULL, thread_main, tctx) == 0;
+}
+
+static int thread_join(thread_t thread) {
+    return pthread_join(thread, NULL) == 0;
+}
+#endif
+
 int main(int argc, char *argv[]) {
     struct thread_ctx tctx[NUM_THREADS] = {0};
-    pthread_t threads[NUM_THREADS];
+    thread_t threads[NUM_THREADS];
     OSSL_LIB_CTX *libctx = NULL;
     int i, algcount, errcnt = 0, test = 0;
 
@@ -67,11 +104,10 @@ int main(int argc, char *argv[]) {
     OSSL_LIB_CTX_free(libctx);
 
     for (i = 0; i < NUM_THREADS; i++)
-        T(pthread_create(threads + i, NULL, load_oqs_provider_thread,
-                         tctx + i) == 0);
+        T(thread_start(threads + i, tctx + i));
 
     for (i = 0; i < NUM_THREADS; i++)
-        T(pthread_join(threads[i], NULL) == 0);
+        T(thread_join(threads[i]));
 
     for (i = 0; i < NUM_THREADS; i++) {
         if (tctx[i].algcount != algcount) {

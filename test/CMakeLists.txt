@@ -231,8 +231,6 @@ set_tests_properties(oqs_alloc_failures PROPERTIES SKIP_RETURN_CODE 77)
 add_executable(oqs_test_alloc_failures oqs_test_alloc_failures.c test_common.c tlstest_helpers.c)
 target_link_libraries(oqs_test_alloc_failures PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 
-find_package(Threads)
-if (CMAKE_USE_PTHREADS_INIT)
 add_test(
     NAME oqs_multi_thread
     COMMAND oqs_test_multi_thread
@@ -244,13 +242,14 @@ set_tests_properties(oqs_multi_thread
 )
 
 add_executable(oqs_test_multi_thread oqs_test_multi_thread.c test_common.c)
-target_link_libraries(oqs_test_multi_thread PRIVATE ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs Threads::Threads ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+target_link_libraries(oqs_test_multi_thread PRIVATE ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+if (NOT WIN32)
+  find_package(Threads REQUIRED)
+  target_link_libraries(oqs_test_multi_thread PRIVATE Threads::Threads)
 endif()
 
 if (OQS_PROVIDER_BUILD_STATIC)
-  if (CMAKE_USE_PTHREADS_INIT)
-    targets_set_static_provider(oqs_test_multi_thread)
-  endif()
+  targets_set_static_provider(oqs_test_multi_thread)
   targets_set_static_provider(oqs_test_signatures
     oqs_test_kems
     oqs_test_libctx

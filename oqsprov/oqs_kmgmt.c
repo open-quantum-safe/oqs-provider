@@ -613,6 +613,11 @@ static void *oqsx_gen_init(void *provctx, int selection, char *oqs_name,
         gctx->libctx = libctx;
         gctx->oqs_name = OPENSSL_strdup(oqs_name);
         gctx->tls_name = OPENSSL_strdup(tls_name);
+        if (gctx->oqs_name == NULL || gctx->tls_name == NULL) {
+            oqsx_gen_cleanup(gctx);
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            return NULL;
+        }
         gctx->primitive = primitive;
         gctx->selection = selection;
         gctx->bit_security = bit_security;
@@ -698,6 +703,8 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[]) {
 
         OPENSSL_free(gctx->tls_name);
         gctx->tls_name = OPENSSL_strdup(algname);
+        if (gctx->tls_name == NULL)
+            return 0;
     }
     p = OSSL_PARAM_locate_const(params, OSSL_KDF_PARAM_PROPERTIES);
     if (p != NULL) {

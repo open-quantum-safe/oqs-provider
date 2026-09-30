@@ -1548,6 +1548,11 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem512");
     }
 
+    if (strcmp("4.0.0", ossl_versionp) <= 0) {
+        rt_algo_filter_enabled = 1;
+        sk_OPENSSL_STRING_push(rt_disabled_algs, "SecP256r1MLKEM512");
+    }
+
     if (strcmp("3.5.0", ossl_versionp) <= 0) {
         rt_algo_filter_enabled = 1;
         sk_OPENSSL_STRING_push(rt_disabled_algs, "mlkem768");

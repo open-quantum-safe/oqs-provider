@@ -22,6 +22,29 @@ All PRs should move to "Ready for Review" stage only if all CI tests pass (are g
 The OQS core team is happy to provide feedback also to Draft PRs in order to improve
 them before the final "Review" stage.
 
+### Use of generative AI
+
+Pull requests containing code, documentation, or text produced with the help of
+generative AI must declare that in the pull request description and describe the
+nature of the use. The same applies to issues and, in particular, security
+reports. Contributors are expected to have verified and affirm such contributions
+themselves before submission.
+
+When AI use is extensive or definitive (as opposed to merely assistive), the
+contribution's commits must additionally credit the tool with a
+`Co-Authored-By:` trailer naming the AI, for example:
+
+```
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+```
+
+Contributors using AI assistants are encouraged to read the OpenSSF's
+[Security-Focused Guide for AI Code Assistant Instructions](https://best.openssf.org/Security-Focused-Guide-for-AI-Code-Assistant-Instructions).
+Automated agents and researchers investigating potential vulnerabilities should
+also follow the repository-specific guidance in
+[`.github/AGENTS.md`](.github/AGENTS.md) and the
+[`.github/THREAT_MODEL.md`](.github/THREAT_MODEL.md).
+
 ### CODEOWNERS
 
 This file is used to track which contributors are most well suited for reviewing

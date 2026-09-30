@@ -54,9 +54,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 124
+#define NID_TABLE_LEN 132
 #else
-#define NID_TABLE_LEN 62
+#define NID_TABLE_LEN 70
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -198,21 +198,24 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "OV_Ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_SIG, 128},
     {0, "p256_OV_Ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_HYB_SIG,
      128},
-    {0, "snova2454", OQS_SIG_alg_snova_SNOVA_24_5_4, KEY_TYPE_SIG, 128},
-    {0, "p256_snova2454", OQS_SIG_alg_snova_SNOVA_24_5_4, KEY_TYPE_HYB_SIG,
-     128},
-    {0, "snova2454esk", OQS_SIG_alg_snova_SNOVA_24_5_4_esk, KEY_TYPE_SIG, 128},
-    {0, "p256_snova2454esk", OQS_SIG_alg_snova_SNOVA_24_5_4_esk,
-     KEY_TYPE_HYB_SIG, 128},
-    {0, "snova37172", OQS_SIG_alg_snova_SNOVA_37_17_2, KEY_TYPE_SIG, 128},
-    {0, "p256_snova37172", OQS_SIG_alg_snova_SNOVA_37_17_2, KEY_TYPE_HYB_SIG,
-     128},
-    {0, "snova2455", OQS_SIG_alg_snova_SNOVA_24_5_5, KEY_TYPE_SIG, 192},
-    {0, "p384_snova2455", OQS_SIG_alg_snova_SNOVA_24_5_5, KEY_TYPE_HYB_SIG,
-     192},
-    {0, "snova2965", OQS_SIG_alg_snova_SNOVA_29_6_5, KEY_TYPE_SIG, 256},
-    {0, "p521_snova2965", OQS_SIG_alg_snova_SNOVA_29_6_5, KEY_TYPE_HYB_SIG,
-     256},
+    {0, "snova1k", OQS_SIG_alg_snova_SNOVA_I_K, KEY_TYPE_SIG, 128},
+    {0, "p256_snova1k", OQS_SIG_alg_snova_SNOVA_I_K, KEY_TYPE_HYB_SIG, 128},
+    {0, "snova1b", OQS_SIG_alg_snova_SNOVA_I_B, KEY_TYPE_SIG, 128},
+    {0, "p256_snova1b", OQS_SIG_alg_snova_SNOVA_I_B, KEY_TYPE_HYB_SIG, 128},
+    {0, "snova1s", OQS_SIG_alg_snova_SNOVA_I_S, KEY_TYPE_SIG, 128},
+    {0, "p256_snova1s", OQS_SIG_alg_snova_SNOVA_I_S, KEY_TYPE_HYB_SIG, 128},
+    {0, "snova3k", OQS_SIG_alg_snova_SNOVA_III_K, KEY_TYPE_SIG, 192},
+    {0, "p384_snova3k", OQS_SIG_alg_snova_SNOVA_III_K, KEY_TYPE_HYB_SIG, 192},
+    {0, "snova3b", OQS_SIG_alg_snova_SNOVA_III_B, KEY_TYPE_SIG, 192},
+    {0, "p384_snova3b", OQS_SIG_alg_snova_SNOVA_III_B, KEY_TYPE_HYB_SIG, 192},
+    {0, "snova3s", OQS_SIG_alg_snova_SNOVA_III_S, KEY_TYPE_SIG, 192},
+    {0, "p384_snova3s", OQS_SIG_alg_snova_SNOVA_III_S, KEY_TYPE_HYB_SIG, 192},
+    {0, "snova5k", OQS_SIG_alg_snova_SNOVA_V_K, KEY_TYPE_SIG, 256},
+    {0, "p521_snova5k", OQS_SIG_alg_snova_SNOVA_V_K, KEY_TYPE_HYB_SIG, 256},
+    {0, "snova5b", OQS_SIG_alg_snova_SNOVA_V_B, KEY_TYPE_SIG, 256},
+    {0, "p521_snova5b", OQS_SIG_alg_snova_SNOVA_V_B, KEY_TYPE_HYB_SIG, 256},
+    {0, "snova5s", OQS_SIG_alg_snova_SNOVA_V_S, KEY_TYPE_SIG, 256},
+    {0, "p521_snova5s", OQS_SIG_alg_snova_SNOVA_V_S, KEY_TYPE_HYB_SIG, 256},
     {0, "slhdsasha2128s", OQS_SIG_alg_slh_dsa_pure_sha2_128s, KEY_TYPE_SIG,
      128},
     {0, "slhdsasha2128f", OQS_SIG_alg_slh_dsa_pure_sha2_128f, KEY_TYPE_SIG,
@@ -237,17 +240,17 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
      256},
     {0, "slhdsashake256f", OQS_SIG_alg_slh_dsa_pure_shake_256f, KEY_TYPE_SIG,
      256},
-    {0, "mqom2cat1gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat1_gf16_fast_r5,
+    {0, "mqom3cat1gf16fastct", OQS_SIG_alg_mqom_mqom3_cat1_gf16_fast_ct,
      KEY_TYPE_SIG, 128},
-    {0, "p256_mqom2cat1gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat1_gf16_fast_r5,
+    {0, "p256_mqom3cat1gf16fastct", OQS_SIG_alg_mqom_mqom3_cat1_gf16_fast_ct,
      KEY_TYPE_HYB_SIG, 128},
-    {0, "mqom2cat3gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat3_gf16_fast_r5,
+    {0, "mqom3cat3gf16fastct", OQS_SIG_alg_mqom_mqom3_cat3_gf16_fast_ct,
      KEY_TYPE_SIG, 192},
-    {0, "p384_mqom2cat3gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat3_gf16_fast_r5,
+    {0, "p384_mqom3cat3gf16fastct", OQS_SIG_alg_mqom_mqom3_cat3_gf16_fast_ct,
      KEY_TYPE_HYB_SIG, 192},
-    {0, "mqom2cat5gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat5_gf16_fast_r5,
+    {0, "mqom3cat5gf16fastct", OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct,
      KEY_TYPE_SIG, 256},
-    {0, "p521_mqom2cat5gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat5_gf16_fast_r5,
+    {0, "p521_mqom3cat5gf16fastct", OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct,
      KEY_TYPE_HYB_SIG, 256},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };
@@ -779,9 +782,21 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
     OQS_KEY_PRINTF2("OQSX KEY: Recreated OQSX key %s\n", key->tls_name);
 
     if (op == KEY_OP_PUBLIC) {
+        uint32_t classical_pubkey_len = 0;
+        int classic_lengths_fixed = key->keytype == KEY_TYPE_ECP_HYB_KEM ||
+                                    key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
+                                    key->keytype == KEY_TYPE_ECX_HYB_KEM;
+
         if (key->pubkeylen != plen) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             goto err_key_op;
+        }
+        if (classic_lengths_fixed) {
+            DECODE_UINT32(classical_pubkey_len, p);
+            if (classical_pubkey_len != key->evp_info->length_public_key) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err_key_op;
+            }
         }
         if (oqsx_key_allocate_keymaterial(key, 0)) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
@@ -1374,6 +1389,8 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
         memcpy(key->privkey, pp1->data, pp1->data_size);
     }
     if (pp2 != NULL) {
+        uint32_t classical_pubkey_len = 0;
+
         if (pp2->data_type != OSSL_PARAM_OCTET_STRING) {
             OQS_KEY_PRINTF("invalid data type\n");
             return 0;
@@ -1381,6 +1398,13 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
         if (key->pubkeylen != pp2->data_size) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
             return 0;
+        }
+        if (classic_lengths_fixed) {
+            DECODE_UINT32(classical_pubkey_len, pp2->data);
+            if (classical_pubkey_len != key->evp_info->length_public_key) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                return 0;
+            }
         }
         OPENSSL_secure_clear_free(key->pubkey, pp2->data_size);
         key->pubkey = OPENSSL_secure_malloc(pp2->data_size);

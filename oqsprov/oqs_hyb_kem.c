@@ -99,6 +99,14 @@ static int oqs_evp_kem_decaps_keyslot(void *vpkemctx, unsigned char *secret,
     const OQSX_EVP_CTX *evp_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx;
     OSSL_LIB_CTX *libctx = pkemctx->libctx;
 
+    // comp_privkey[keyslot] aliases into privkey and can dangle once privkey is
+    // freed, so guard on privkey too.
+    if (pkemctx->kem->privkey == NULL || pkemctx->kem->comp_privkey == NULL ||
+        pkemctx->kem->comp_privkey[keyslot] == NULL) {
+        OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");
+        return -1;
+    }
+
     size_t pubkey_kexlen = evp_ctx->evp_info->length_public_key;
     size_t kexDeriveLen = evp_ctx->evp_info->kex_length_secret;
     unsigned char *privkey_kex = pkemctx->kem->comp_privkey[keyslot];

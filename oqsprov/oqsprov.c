@@ -1466,7 +1466,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     OSSL_FUNC_core_obj_add_sigid_fn *c_obj_add_sigid = NULL;
     BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
-    int i, rc = 0, patched, counted = 0;
+    int i, rc = 0, patched, counted = 0, nid, nid_ok;
+    STACK_OF(OPENSSL_STRING) *disabled = NULL, *failed = NULL;
     char *opensslv;
     const char *ossl_versionp = NULL;
     OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
@@ -1649,6 +1650,17 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_END
 
+    /* Registering an OID can make the core load its configuration, which may
+     * load this provider again on the same thread. rt_lock is not recursive,
+     * so work from a private copy of the list and never hold the lock across
+     * a call into the core.
+     */
+    disabled = sk_OPENSSL_STRING_dup(rt_disabled_algs);
+    CRYPTO_THREAD_unlock(rt_lock);
+    failed = sk_OPENSSL_STRING_new_null();
+    if (disabled == NULL || failed == NULL)
+        goto end_init;
+
     // insert all OIDs to the global objects list
     for (i = 0; i < OQS_OID_CNT; i += 2) {
         int id_ok = 1;
@@ -1658,8 +1670,7 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                              oqs_oid_alg_list[i + 1]);
         } else {
             // Skip OID/sigid registration for version-disabled algorithms
-            if (rt_disabled_algs &&
-                sk_OPENSSL_STRING_find(rt_disabled_algs,
+            if (sk_OPENSSL_STRING_find(disabled,
                                        (char *)oqs_oid_alg_list[i + 1]) >= 0)
                 goto end_for;
             /* Registration also fails if the OID has been created in the
@@ -1693,10 +1704,13 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 ERR_pop_to_mark();
             }
 
-            if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
-                             OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
+            nid = OBJ_sn2nid(oqs_oid_alg_list[i + 1]);
+            if (!CRYPTO_THREAD_write_lock(rt_lock))
+                goto end_init;
+            nid_ok = oqs_set_nid((char *)oqs_oid_alg_list[i + 1], nid);
+            CRYPTO_THREAD_unlock(rt_lock);
+            if (!nid_ok) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-                CRYPTO_THREAD_unlock(rt_lock);
                 goto end_init;
             }
 
@@ -1719,22 +1733,25 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                         "for %s.\n",
                         oqs_oid_alg_list[i + 1]);
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
-                CRYPTO_THREAD_unlock(rt_lock);
                 goto end_init;
             }
         end_for:
-            if (!id_ok) {
-                sk_OPENSSL_STRING_push(rt_disabled_algs,
-                                       (char *)(oqs_oid_alg_list[i + 1]));
-            }
+            if (!id_ok &&
+                !sk_OPENSSL_STRING_push(failed,
+                                        (char *)(oqs_oid_alg_list[i + 1])))
+                goto end_init;
         }
     }
 
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        goto end_init;
+    for (i = 0; i < sk_OPENSSL_STRING_num(failed); i++)
+        sk_OPENSSL_STRING_push(rt_disabled_algs,
+                               sk_OPENSSL_STRING_value(failed, i));
     // OpenSSL 3.4.0 onwards includes sign/verify message API
     if (strcmp("3.4.0", ossl_versionp) <= 0) {
         oqs_sig_activate_message_api();
     }
-
     CRYPTO_THREAD_unlock(rt_lock);
 
     // output disabled algs:
@@ -1770,6 +1787,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     rc = 1;
 
 end_init:
+    sk_OPENSSL_STRING_free(disabled);
+    sk_OPENSSL_STRING_free(failed);
     if (!rc) {
         if (ossl_versionp) {
             OQS_PROV_PRINTF2(

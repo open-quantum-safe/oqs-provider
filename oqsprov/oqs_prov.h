@@ -200,6 +200,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
 
 /* allocate key material; component pointers need to be set separately */
 int oqsx_key_allocate_keymaterial(OQSX_KEY *key, int include_private);
+int oqsx_key_prepare_empty(OQSX_KEY *key);
 
 /* free all data structures, incl. key material */
 void oqsx_key_free(OQSX_KEY *key);

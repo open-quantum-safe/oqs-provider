@@ -637,6 +637,18 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx) {
         return NULL;
     }
 
+    /* A request without key-pair material (EVP_PKEY_paramgen, as the TLS
+       server uses before loading the peer's key share) needs only the key
+       object with its buffers, not a generated key pair. Plain KEMs only. */
+    if ((gctx->selection & OSSL_KEYMGMT_SELECT_KEYPAIR) == 0 &&
+        key->keytype == KEY_TYPE_KEM) {
+        if (oqsx_key_prepare_empty(key)) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
+            oqsx_key_free(key);
+            return NULL;
+        }
+        return key;
+    }
     if (oqsx_key_gen(key)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
         return NULL;

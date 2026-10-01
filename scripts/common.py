@@ -26,6 +26,7 @@ signatures_oqs = [
 key_exchanges_ossl = [
 ##### OQS_TEMPLATE_FRAGMENT_OSSL_KEX_ALGS_START
                      'mlkem512',
+                     'SecP256r1MLKEM512',
                      'mlkem768',
                      'X25519MLKEM768',
                      'SecP256r1MLKEM768',

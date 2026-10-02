@@ -67,3 +67,52 @@ jobs:
         run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
+
+  # Ascertain that the convenience build and test scripts also work when the
+  # build and test target is not co-located with the source code, see
+  # https://github.com/open-quantum-safe/oqs-provider/issues/545
+  standalone_linux_intel_out_of_source:
+    needs: [coding_style_tests]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ubuntu-latest
+            container: ubuntu@sha256:53958ec7b67c2c9355df922dd08dbf0360611f8c3cdb656875e81873db9ffdba
+    container:
+      image: ${{ matrix.container }}
+    env:
+      MAKE_PARAMS: "-j 18"
+    steps:
+      - name: Update container
+        run: |
+          apt update
+          DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
+            build-essential \
+            cmake \
+            ninja-build \
+            libssl-dev \
+            git \
+            pkg-config \
+            ca-certificates
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          path: src
+          persist-credentials: false
+      - name: Full build outside the source tree
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/oos"
+          cd "$GITHUB_WORKSPACE/oos"
+          LIBOQS_BRANCH=main "$GITHUB_WORKSPACE/src/scripts/fullbuild.sh"
+      - name: Test outside the source tree
+        run: |
+          cd "$GITHUB_WORKSPACE/oos"
+          "$GITHUB_WORKSPACE/src/scripts/runtests.sh" -V
+      - name: Ensure the source tree was not written to
+        run: |
+          cd "$GITHUB_WORKSPACE/src"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE/src"
+          git status --porcelain
+          test -z "$(git status --porcelain)"

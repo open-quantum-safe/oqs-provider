@@ -13,7 +13,7 @@ In general, the oqs-provider `main` branch is meant to be usable in conjunction 
 Further details on building, testing and use can be found in [README.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/README.md). See in particular limitations on intended use.
 
 ### What's New
-* Added both FrodoKEM variants: previous `frodokem` names are now **ephemeral** (`efrodokem`); current `frodokem` names are the **salted** variants ([#749](https://github.com/open-quantum-safe/oqs-provider/pull/749)). See table ([here](https://github.com/open-quantum-safe/oqs-provider/blob/0.12.0-rc2-branch/ALGORITHMS.md#code-points--algorithm-ids)).
+* Added both FrodoKEM variants: previous `frodokem` names are now **ephemeral** (`efrodokem`); current `frodokem` names are the **salted** variants ([#749](https://github.com/open-quantum-safe/oqs-provider/pull/749)). See table ([here](https://github.com/open-quantum-safe/oqs-provider/blob/0.12.0/ALGORITHMS.md#code-points--algorithm-ids)).
 * Reinstated HQC with the `liboqs` 0.16.0 naming hqc128, hqc192 and hqc256 to hqc1, hqc3 and hqc5. ([#787](https://github.com/open-quantum-safe/oqs-provider/pull/787)).
 * Added the MQOM signature algorithm ([#779](https://github.com/open-quantum-safe/oqs-provider/pull/779)). 
 * Added "pure" SLH-DSA algorithms ([#732](https://github.com/open-quantum-safe/oqs-provider/pull/732)). Supports OpenSSL versions < 3.5.
@@ -78,7 +78,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 * @ghen2 https://github.com/open-quantum-safe/oqs-provider/pull/802
 * @novotimo https://github.com/open-quantum-safe/oqs-provider/pull/816
 
-**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.11.0...0.12.0-rc2
+**Full Changelog**: https://github.com/open-quantum-safe/oqs-provider/compare/0.11.0...0.12.0
 
 Previous Release Notes
 ======================

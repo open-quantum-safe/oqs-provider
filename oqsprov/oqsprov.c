@@ -1319,6 +1319,8 @@ int cnt_rt_disabled(const OSSL_ALGORITHM orig[], int len) {
     if (algs##_rt == NULL) {                                                   \
         algs##_rt = OPENSSL_malloc(sizeof(OSSL_ALGORITHM) *                    \
                                    (OSSL_NELEM(algs) - d_algs));               \
+        if (algs##_rt == NULL)                                                 \
+            return NULL;                                                       \
         n_cnt = 0;                                                             \
         for (int i = 0; i < OSSL_NELEM(algs); i++) {                           \
             if (sk_OPENSSL_STRING_find(rt_disabled_algs,                       \
@@ -1419,6 +1421,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                                     {NULL, 0, NULL, 0, 0}};
     if (!rt_disabled_algs)
         rt_disabled_algs = sk_OPENSSL_STRING_new(algname_strcmp);
+    if (!rt_disabled_algs)
+        goto end_init;
 
     OQS_init();
 
@@ -1460,6 +1464,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     if (c_get_params(handle, version_request)) {
         ossl_versionp = *(void **)version_request[0].data;
     }
+    if (ossl_versionp == NULL)
+        goto end_init;
 
     /* Standardized PQ implementation in OpenSSL 3.5 is _much_ more developed
      * than this code; disable oqsprovider's versions before OID/sigid

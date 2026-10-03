@@ -10,7 +10,7 @@
 #   OPENSSL_DIR  OpenSSL installation prefix containing bin/openssl
 #                (default: auto-detected from PATH)
 #   ALGORITHMS   space-separated list of KEM algorithm names to benchmark
-#                (default: p256_mlkem512 p384_mlkem768 p521_mlkem1024 x25519_mlkem512)
+#                (default: p256_bikel1 p384_bikel3 p521_bikel5 x25519_bikel1)
 #
 # Exit codes:
 #   0  all algorithms meet the minimum keygen/s threshold
@@ -21,20 +21,19 @@ set -euo pipefail
 
 BUILD_DIR="${1:-_build_enc}"
 OPENSSL_BIN="${2:-openssl}"
-ALGORITHMS="${3:-p256_mlkem512 p384_mlkem768 p521_mlkem1024 x25519_mlkem512}"
+ALGORITHMS="${3:-p256_bikel1 p384_bikel3 p521_bikel5 x25519_bikel1}"
 
-# Minimum acceptable keygen/s for P-curve hybrid KEMs with OQS_KEM_ENCODERS=ON.
-# Thresholds are set at ~50% of observed keygen/s on a reference
-# Apple M-series machine with OpenSSL 3.6.2 and OQS_KEM_ENCODERS=ON,
-# intentionally conservative to catch catastrophic regressions without
-# being fragile to normal run-to-run variance. Adjust for your hardware.
+# Minimum acceptable keygen/s for the benchmarked hybrid KEMs with
+# OQS_KEM_ENCODERS=ON. These are intentionally conservative placeholders meant
+# to catch catastrophic regressions without being fragile to normal
+# run-to-run variance. Adjust (and re-measure) for your hardware and algorithms.
 
 threshold_for_alg() {
     case "$1" in
-        p256_mlkem512) echo 300 ;;
-        p384_mlkem768) echo 150 ;;
-        p521_mlkem1024) echo 150 ;;
-        x25519_mlkem512) echo 5000 ;;
+        p256_bikel1) echo 100 ;;
+        p384_bikel3) echo 50 ;;
+        p521_bikel5) echo 30 ;;
+        x25519_bikel1) echo 100 ;;
         *) return 1 ;;
     esac
 }

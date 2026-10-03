@@ -45,7 +45,6 @@ typedef struct {
     char *oqsname;
     int keytype;
     int secbits;
-    int reverseshare;
 } oqs_nid_name_t;
 
 static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
@@ -53,117 +52,84 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 132
+#define NID_TABLE_LEN 99
 #else
-#define NID_TABLE_LEN 70
+#define NID_TABLE_LEN 51
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
 #ifdef OQS_KEM_ENCODERS
 
-    {0, "efrodo640aes", OQS_KEM_alg_efrodokem_640_aes, KEY_TYPE_KEM, 128, 0},
+    {0, "efrodo640aes", OQS_KEM_alg_efrodokem_640_aes, KEY_TYPE_KEM, 128},
     {0, "p256_efrodo640aes", OQS_KEM_alg_efrodokem_640_aes,
-     KEY_TYPE_ECP_HYB_KEM, 128, 0},
+     KEY_TYPE_ECP_HYB_KEM, 128},
     {0, "x25519_efrodo640aes", OQS_KEM_alg_efrodokem_640_aes,
-     KEY_TYPE_ECX_HYB_KEM, 128, 0},
-    {0, "efrodo640shake", OQS_KEM_alg_efrodokem_640_shake, KEY_TYPE_KEM, 128,
-     0},
+     KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "efrodo640shake", OQS_KEM_alg_efrodokem_640_shake, KEY_TYPE_KEM, 128},
     {0, "p256_efrodo640shake", OQS_KEM_alg_efrodokem_640_shake,
-     KEY_TYPE_ECP_HYB_KEM, 128, 0},
+     KEY_TYPE_ECP_HYB_KEM, 128},
     {0, "x25519_efrodo640shake", OQS_KEM_alg_efrodokem_640_shake,
-     KEY_TYPE_ECX_HYB_KEM, 128, 0},
-    {0, "efrodo976aes", OQS_KEM_alg_efrodokem_976_aes, KEY_TYPE_KEM, 192, 0},
+     KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "efrodo976aes", OQS_KEM_alg_efrodokem_976_aes, KEY_TYPE_KEM, 192},
     {0, "p384_efrodo976aes", OQS_KEM_alg_efrodokem_976_aes,
-     KEY_TYPE_ECP_HYB_KEM, 192, 0},
+     KEY_TYPE_ECP_HYB_KEM, 192},
     {0, "x448_efrodo976aes", OQS_KEM_alg_efrodokem_976_aes,
-     KEY_TYPE_ECX_HYB_KEM, 192, 0},
-    {0, "efrodo976shake", OQS_KEM_alg_efrodokem_976_shake, KEY_TYPE_KEM, 192,
-     0},
+     KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "efrodo976shake", OQS_KEM_alg_efrodokem_976_shake, KEY_TYPE_KEM, 192},
     {0, "p384_efrodo976shake", OQS_KEM_alg_efrodokem_976_shake,
-     KEY_TYPE_ECP_HYB_KEM, 192, 0},
+     KEY_TYPE_ECP_HYB_KEM, 192},
     {0, "x448_efrodo976shake", OQS_KEM_alg_efrodokem_976_shake,
-     KEY_TYPE_ECX_HYB_KEM, 192, 0},
-    {0, "efrodo1344aes", OQS_KEM_alg_efrodokem_1344_aes, KEY_TYPE_KEM, 256, 0},
+     KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "efrodo1344aes", OQS_KEM_alg_efrodokem_1344_aes, KEY_TYPE_KEM, 256},
     {0, "p521_efrodo1344aes", OQS_KEM_alg_efrodokem_1344_aes,
-     KEY_TYPE_ECP_HYB_KEM, 256, 0},
-    {0, "efrodo1344shake", OQS_KEM_alg_efrodokem_1344_shake, KEY_TYPE_KEM, 256,
-     0},
+     KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "efrodo1344shake", OQS_KEM_alg_efrodokem_1344_shake, KEY_TYPE_KEM, 256},
     {0, "p521_efrodo1344shake", OQS_KEM_alg_efrodokem_1344_shake,
-     KEY_TYPE_ECP_HYB_KEM, 256, 0},
-    {0, "frodo640aes", OQS_KEM_alg_frodokem_640_aes, KEY_TYPE_KEM, 128, 0},
+     KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "frodo640aes", OQS_KEM_alg_frodokem_640_aes, KEY_TYPE_KEM, 128},
     {0, "p256_frodo640aes", OQS_KEM_alg_frodokem_640_aes, KEY_TYPE_ECP_HYB_KEM,
-     128, 0},
+     128},
     {0, "x25519_frodo640aes", OQS_KEM_alg_frodokem_640_aes,
-     KEY_TYPE_ECX_HYB_KEM, 128, 0},
-    {0, "frodo640shake", OQS_KEM_alg_frodokem_640_shake, KEY_TYPE_KEM, 128, 0},
+     KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "frodo640shake", OQS_KEM_alg_frodokem_640_shake, KEY_TYPE_KEM, 128},
     {0, "p256_frodo640shake", OQS_KEM_alg_frodokem_640_shake,
-     KEY_TYPE_ECP_HYB_KEM, 128, 0},
+     KEY_TYPE_ECP_HYB_KEM, 128},
     {0, "x25519_frodo640shake", OQS_KEM_alg_frodokem_640_shake,
-     KEY_TYPE_ECX_HYB_KEM, 128, 0},
-    {0, "frodo976aes", OQS_KEM_alg_frodokem_976_aes, KEY_TYPE_KEM, 192, 0},
+     KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "frodo976aes", OQS_KEM_alg_frodokem_976_aes, KEY_TYPE_KEM, 192},
     {0, "p384_frodo976aes", OQS_KEM_alg_frodokem_976_aes, KEY_TYPE_ECP_HYB_KEM,
-     192, 0},
+     192},
     {0, "x448_frodo976aes", OQS_KEM_alg_frodokem_976_aes, KEY_TYPE_ECX_HYB_KEM,
-     192, 0},
-    {0, "frodo976shake", OQS_KEM_alg_frodokem_976_shake, KEY_TYPE_KEM, 192, 0},
+     192},
+    {0, "frodo976shake", OQS_KEM_alg_frodokem_976_shake, KEY_TYPE_KEM, 192},
     {0, "p384_frodo976shake", OQS_KEM_alg_frodokem_976_shake,
-     KEY_TYPE_ECP_HYB_KEM, 192, 0},
+     KEY_TYPE_ECP_HYB_KEM, 192},
     {0, "x448_frodo976shake", OQS_KEM_alg_frodokem_976_shake,
-     KEY_TYPE_ECX_HYB_KEM, 192, 0},
-    {0, "frodo1344aes", OQS_KEM_alg_frodokem_1344_aes, KEY_TYPE_KEM, 256, 0},
+     KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "frodo1344aes", OQS_KEM_alg_frodokem_1344_aes, KEY_TYPE_KEM, 256},
     {0, "p521_frodo1344aes", OQS_KEM_alg_frodokem_1344_aes,
-     KEY_TYPE_ECP_HYB_KEM, 256, 0},
-    {0, "frodo1344shake", OQS_KEM_alg_frodokem_1344_shake, KEY_TYPE_KEM, 256,
-     0},
+     KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "frodo1344shake", OQS_KEM_alg_frodokem_1344_shake, KEY_TYPE_KEM, 256},
     {0, "p521_frodo1344shake", OQS_KEM_alg_frodokem_1344_shake,
-     KEY_TYPE_ECP_HYB_KEM, 256, 0},
-    {0, "mlkem512", OQS_KEM_alg_ml_kem_512, KEY_TYPE_KEM, 128, 0},
-    {0, "SecP256r1MLKEM512", OQS_KEM_alg_ml_kem_512, KEY_TYPE_ECP_HYB_KEM, 128,
-     0},
-    {0, "x25519_mlkem512", OQS_KEM_alg_ml_kem_512, KEY_TYPE_ECX_HYB_KEM, 128,
-     1},
-    {0, "bp256_mlkem512", OQS_KEM_alg_ml_kem_512, KEY_TYPE_ECBP_HYB_KEM, 128,
-     1},
-    {0, "mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_KEM, 192, 0},
-    {0, "p384_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192, 0},
-    {0, "x448_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192, 1},
-    {0, "bp384_mlkem768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECBP_HYB_KEM, 192,
-     1},
-    {0, "X25519MLKEM768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECX_HYB_KEM, 192, 1},
-    {0, "SecP256r1MLKEM768", OQS_KEM_alg_ml_kem_768, KEY_TYPE_ECP_HYB_KEM, 192,
-     0},
-    {0, "mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_KEM, 256, 0},
-    {0, "p521_mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM, 256,
-     0},
-    {0, "SecP384r1MLKEM1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECP_HYB_KEM,
-     256, 0},
-    {0, "bp512_mlkem1024", OQS_KEM_alg_ml_kem_1024, KEY_TYPE_ECBP_HYB_KEM, 256,
-     1},
-    {0, "bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_KEM, 128, 0},
-    {0, "p256_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECP_HYB_KEM, 128, 0},
-    {0, "x25519_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECX_HYB_KEM, 128, 0},
-    {0, "bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_KEM, 192, 0},
-    {0, "p384_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECP_HYB_KEM, 192, 0},
-    {0, "x448_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECX_HYB_KEM, 192, 0},
-    {0, "bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_KEM, 256, 0},
-    {0, "p521_bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_ECP_HYB_KEM, 256, 0},
-    {0, "hqc1", OQS_KEM_alg_hqc_1, KEY_TYPE_KEM, 128, 0},
-    {0, "p256_hqc1", OQS_KEM_alg_hqc_1, KEY_TYPE_ECP_HYB_KEM, 128, 0},
-    {0, "x25519_hqc1", OQS_KEM_alg_hqc_1, KEY_TYPE_ECX_HYB_KEM, 128, 0},
-    {0, "hqc3", OQS_KEM_alg_hqc_3, KEY_TYPE_KEM, 192, 0},
-    {0, "p384_hqc3", OQS_KEM_alg_hqc_3, KEY_TYPE_ECP_HYB_KEM, 192, 0},
-    {0, "x448_hqc3", OQS_KEM_alg_hqc_3, KEY_TYPE_ECX_HYB_KEM, 192, 0},
-    {0, "hqc5", OQS_KEM_alg_hqc_5, KEY_TYPE_KEM, 256, 0},
-    {0, "p521_hqc5", OQS_KEM_alg_hqc_5, KEY_TYPE_ECP_HYB_KEM, 256, 0},
+     KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_KEM, 128},
+    {0, "p256_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECP_HYB_KEM, 128},
+    {0, "x25519_bikel1", OQS_KEM_alg_bike_l1, KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_KEM, 192},
+    {0, "p384_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECP_HYB_KEM, 192},
+    {0, "x448_bikel3", OQS_KEM_alg_bike_l3, KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_KEM, 256},
+    {0, "p521_bikel5", OQS_KEM_alg_bike_l5, KEY_TYPE_ECP_HYB_KEM, 256},
+    {0, "hqc1", OQS_KEM_alg_hqc_1, KEY_TYPE_KEM, 128},
+    {0, "p256_hqc1", OQS_KEM_alg_hqc_1, KEY_TYPE_ECP_HYB_KEM, 128},
+    {0, "x25519_hqc1", OQS_KEM_alg_hqc_1, KEY_TYPE_ECX_HYB_KEM, 128},
+    {0, "hqc3", OQS_KEM_alg_hqc_3, KEY_TYPE_KEM, 192},
+    {0, "p384_hqc3", OQS_KEM_alg_hqc_3, KEY_TYPE_ECP_HYB_KEM, 192},
+    {0, "x448_hqc3", OQS_KEM_alg_hqc_3, KEY_TYPE_ECX_HYB_KEM, 192},
+    {0, "hqc5", OQS_KEM_alg_hqc_5, KEY_TYPE_KEM, 256},
+    {0, "p521_hqc5", OQS_KEM_alg_hqc_5, KEY_TYPE_ECP_HYB_KEM, 256},
 
 #endif /* OQS_KEM_ENCODERS */
-    {0, "mldsa44", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_SIG, 128},
-    {0, "p256_mldsa44", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_HYB_SIG, 128},
-    {0, "rsa3072_mldsa44", OQS_SIG_alg_ml_dsa_44, KEY_TYPE_HYB_SIG, 128},
-    {0, "mldsa65", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_SIG, 192},
-    {0, "p384_mldsa65", OQS_SIG_alg_ml_dsa_65, KEY_TYPE_HYB_SIG, 192},
-    {0, "mldsa87", OQS_SIG_alg_ml_dsa_87, KEY_TYPE_SIG, 256},
-    {0, "p521_mldsa87", OQS_SIG_alg_ml_dsa_87, KEY_TYPE_HYB_SIG, 256},
     {0, "falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_SIG, 128},
     {0, "p256_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},
     {0, "rsa3072_falcon512", OQS_SIG_alg_falcon_512, KEY_TYPE_HYB_SIG, 128},
@@ -215,30 +181,6 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "p521_snova5b", OQS_SIG_alg_snova_SNOVA_V_B, KEY_TYPE_HYB_SIG, 256},
     {0, "snova5s", OQS_SIG_alg_snova_SNOVA_V_S, KEY_TYPE_SIG, 256},
     {0, "p521_snova5s", OQS_SIG_alg_snova_SNOVA_V_S, KEY_TYPE_HYB_SIG, 256},
-    {0, "slhdsasha2128s", OQS_SIG_alg_slh_dsa_pure_sha2_128s, KEY_TYPE_SIG,
-     128},
-    {0, "slhdsasha2128f", OQS_SIG_alg_slh_dsa_pure_sha2_128f, KEY_TYPE_SIG,
-     128},
-    {0, "slhdsasha2192s", OQS_SIG_alg_slh_dsa_pure_sha2_192s, KEY_TYPE_SIG,
-     192},
-    {0, "slhdsasha2192f", OQS_SIG_alg_slh_dsa_pure_sha2_192f, KEY_TYPE_SIG,
-     192},
-    {0, "slhdsasha2256s", OQS_SIG_alg_slh_dsa_pure_sha2_256s, KEY_TYPE_SIG,
-     256},
-    {0, "slhdsasha2256f", OQS_SIG_alg_slh_dsa_pure_sha2_256f, KEY_TYPE_SIG,
-     256},
-    {0, "slhdsashake128s", OQS_SIG_alg_slh_dsa_pure_shake_128s, KEY_TYPE_SIG,
-     128},
-    {0, "slhdsashake128f", OQS_SIG_alg_slh_dsa_pure_shake_128f, KEY_TYPE_SIG,
-     128},
-    {0, "slhdsashake192s", OQS_SIG_alg_slh_dsa_pure_shake_192s, KEY_TYPE_SIG,
-     192},
-    {0, "slhdsashake192f", OQS_SIG_alg_slh_dsa_pure_shake_192f, KEY_TYPE_SIG,
-     192},
-    {0, "slhdsashake256s", OQS_SIG_alg_slh_dsa_pure_shake_256s, KEY_TYPE_SIG,
-     256},
-    {0, "slhdsashake256f", OQS_SIG_alg_slh_dsa_pure_shake_256f, KEY_TYPE_SIG,
-     256},
     {0, "mqom3cat1gf16fastct", OQS_SIG_alg_mqom_mqom3_cat1_gf16_fast_ct,
      KEY_TYPE_SIG, 128},
     {0, "p256_mqom3cat1gf16fastct", OQS_SIG_alg_mqom_mqom3_cat1_gf16_fast_ct,
@@ -274,15 +216,6 @@ static int get_secbits(int nid) {
     return 0;
 }
 
-static int get_reverseshare(int nid) {
-    int i;
-    for (i = 0; i < NID_TABLE_LEN; i++) {
-        if (nid_names[i].nid == nid)
-            return nid_names[i].reverseshare;
-    }
-    return 0;
-}
-
 static int get_keytype(int nid) {
     int i;
     for (i = 0; i < NID_TABLE_LEN; i++) {
@@ -314,22 +247,10 @@ static int get_oqsalg_idx(int nid) {
  */
 static void oqsx_comp_set_idx(const OQSX_KEY *key, int *idx_classic,
                               int *idx_pq) {
-    int reverse_share = (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
-                         key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
-                         key->keytype == KEY_TYPE_ECX_HYB_KEM) &&
-                        key->reverse_share;
-
-    if (reverse_share) {
-        if (idx_classic)
-            *idx_classic = key->numkeys - 1;
-        if (idx_pq)
-            *idx_pq = 0;
-    } else {
-        if (idx_classic)
-            *idx_classic = 0;
-        if (idx_pq)
-            *idx_pq = key->numkeys - 1;
-    }
+    if (idx_classic)
+        *idx_classic = 0;
+    if (idx_pq)
+        *idx_pq = key->numkeys - 1;
 }
 
 /* Sets the index of the key components in a comp_privkey or comp_pubkey array
@@ -342,13 +263,6 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
     uint32_t classic_privkey_len = 0;
     char *privkey = (char *)key->privkey;
     char *pubkey = (char *)key->pubkey;
-
-    // The only special cases with reversed keys (so far)
-    // are: x*_mlkem* and bp*_mlkem*
-    int reverse_share = (key->keytype == KEY_TYPE_ECP_HYB_KEM ||
-                         key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
-                         key->keytype == KEY_TYPE_ECX_HYB_KEM) &&
-                        key->reverse_share;
 
     if (set_privkey_offsets) {
         key->comp_privkey[0] = privkey + SIZE_OF_UINT32;
@@ -364,19 +278,9 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
             classic_privkey_len = key->evp_info->length_private_key;
         }
 
-        if (reverse_share) {
-            // structure is:
-            // UINT32 (encoding classic key size) | PQ_KEY | CLASSIC_KEY
-            key->comp_privkey[1] =
-                privkey +
-                key->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_secret_key +
-                SIZE_OF_UINT32;
-        } else {
-            // structure is:
-            // UINT32 (encoding classic key size) | CLASSIC_KEY | PQ_KEY
-            key->comp_privkey[1] =
-                privkey + classic_privkey_len + SIZE_OF_UINT32;
-        }
+        // structure is:
+        // UINT32 (encoding classic key size) | CLASSIC_KEY | PQ_KEY
+        key->comp_privkey[1] = privkey + classic_privkey_len + SIZE_OF_UINT32;
     }
 
     if (set_pubkey_offsets) {
@@ -393,18 +297,9 @@ static int oqsx_comp_set_offsets(const OQSX_KEY *key, int set_privkey_offsets,
             classic_pubkey_len = key->evp_info->length_public_key;
         }
 
-        if (reverse_share) {
-            // structure is:
-            // UINT32 (encoding classic key size) | PQ_KEY | CLASSIC_KEY
-            key->comp_pubkey[1] =
-                pubkey +
-                key->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key +
-                SIZE_OF_UINT32;
-        } else {
-            // structure is:
-            // UINT32 (encoding classic key size) | CLASSIC_KEY | PQ_KEY
-            key->comp_pubkey[1] = pubkey + classic_pubkey_len + SIZE_OF_UINT32;
-        }
+        // structure is:
+        // UINT32 (encoding classic key size) | CLASSIC_KEY | PQ_KEY
+        key->comp_pubkey[1] = pubkey + classic_pubkey_len + SIZE_OF_UINT32;
     }
 
 err:
@@ -476,8 +371,7 @@ static OQSX_KEY *oqsx_key_new_from_nid(OSSL_LIB_CTX *libctx, const char *propq,
     }
 
     return oqsx_key_new(libctx, get_oqsname(nid), tls_algname, get_keytype(nid),
-                        propq, get_secbits(nid), get_oqsalg_idx(nid),
-                        get_reverseshare(nid));
+                        propq, get_secbits(nid), get_oqsalg_idx(nid));
 }
 
 /* Workaround for not functioning EC PARAM initialization
@@ -874,14 +768,8 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
         if (key->numkeys == 2) {
             unsigned char *pubkey = (unsigned char *)key->pubkey;
             ENCODE_UINT32(pubkey, key->evp_info->length_public_key);
-            if (key->reverse_share) {
-                memcpy(pubkey + SIZE_OF_UINT32, p + actualprivkeylen,
-                       plen - actualprivkeylen);
-            } else {
-                memcpy(pubkey + SIZE_OF_UINT32 +
-                           key->evp_info->length_public_key,
-                       p + actualprivkeylen, plen - actualprivkeylen);
-            }
+            memcpy(pubkey + SIZE_OF_UINT32 + key->evp_info->length_public_key,
+                   p + actualprivkeylen, plen - actualprivkeylen);
         } else
             memcpy(key->pubkey, p + key->privkeylen, plen - key->privkeylen);
 #endif
@@ -1070,7 +958,7 @@ extern const char *oqs_oid_alg_list[];
 
 OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
                        int primitive, const char *propq, int bit_security,
-                       int alg_idx, int reverse_share) {
+                       int alg_idx) {
     OQSX_KEY *ret =
         OPENSSL_zalloc(sizeof(*ret)); // ensure all component pointers are NULL
     OQSX_EVP_CTX *evp_ctx = NULL;
@@ -1140,7 +1028,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
     case KEY_TYPE_ECX_HYB_KEM:
     case KEY_TYPE_ECBP_HYB_KEM:
     case KEY_TYPE_ECP_HYB_KEM:
-        ret->reverse_share = reverse_share;
         ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = OQS_KEM_new(oqs_name);
         if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.kem) {
             fprintf(stderr,

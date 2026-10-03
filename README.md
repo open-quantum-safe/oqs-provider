@@ -39,17 +39,14 @@ This implementation makes available the following quantum safe algorithms:
 - **BIKE**:`bikel1`\*, `p256_bikel1`\*, `x25519_bikel1`\*, `bikel3`, `p384_bikel3`, `x448_bikel3`, `bikel5`, `p521_bikel5`
 - **FrodoKEM**:`efrodo640aes`, `p256_efrodo640aes`, `x25519_efrodo640aes`, `efrodo640shake`, `p256_efrodo640shake`, `x25519_efrodo640shake`, `efrodo976aes`, `p384_efrodo976aes`, `x448_efrodo976aes`, `efrodo976shake`, `p384_efrodo976shake`, `x448_efrodo976shake`, `efrodo1344aes`, `p521_efrodo1344aes`, `efrodo1344shake`, `p521_efrodo1344shake`, `frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
 - **HQC**:`hqc1`, `p256_hqc1`, `x25519_hqc1`, `hqc3`, `p384_hqc3`, `x448_hqc3`, `hqc5`, `p521_hqc5`
-- **ML-KEM**:`mlkem512`, `SecP256r1MLKEM512`, `x25519_mlkem512`, `bp256_mlkem512`, `mlkem768`, `p384_mlkem768`, `x448_mlkem768`, `bp384_mlkem768`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `mlkem1024`, `p521_mlkem1024`, `SecP384r1MLKEM1024`, `bp512_mlkem1024`
 
 ### Signature algorithms
 
-- **ML-DSA**:`mldsa44`, `p256_mldsa44`, `rsa3072_mldsa44`, `mldsa65`, `p384_mldsa65`, `mldsa87`, `p521_mldsa87`
 - **Falcon**:`falcon512`, `p256_falcon512`, `rsa3072_falcon512`, `falconpadded512`, `p256_falconpadded512`, `rsa3072_falconpadded512`, `falcon1024`, `p521_falcon1024`, `falconpadded1024`, `p521_falconpadded1024`
 - **MAYO**:`mayo1`, `p256_mayo1`, `mayo2`, `p256_mayo2`, `mayo3`, `p384_mayo3`, `mayo5`, `p521_mayo5`
 - **CROSS**:`CROSSrsdp128balanced`, `CROSSrsdp128fast`\*, `CROSSrsdp128small`\*, `CROSSrsdp192balanced`\*, `CROSSrsdp192fast`\*, `CROSSrsdp192small`\*, `CROSSrsdp256small`\*\*, `CROSSrsdpg128balanced`\*, `CROSSrsdpg128fast`\*, `CROSSrsdpg128small`\*, `CROSSrsdpg192balanced`\*, `CROSSrsdpg192fast`\*, `CROSSrsdpg192small`\*, `CROSSrsdpg256balanced`\*, `CROSSrsdpg256fast`\*, `CROSSrsdpg256small`\*
 - **UOV**:`OV_Is`\*\*, `p256_OV_Is`\*\*, `OV_Ip`\*\*, `p256_OV_Ip`\*\*, `OV_III`\*\*, `p384_OV_III`\*\*, `OV_V`\*\*, `p521_OV_V`\*\*, `OV_Is_pkc`\*\*, `p256_OV_Is_pkc`\*\*, `OV_Ip_pkc`, `p256_OV_Ip_pkc`, `OV_III_pkc`\*\*, `p384_OV_III_pkc`\*\*, `OV_V_pkc`\*\*, `p521_OV_V_pkc`\*\*, `OV_Is_pkc_skc`\*\*, `p256_OV_Is_pkc_skc`\*\*, `OV_Ip_pkc_skc`, `p256_OV_Ip_pkc_skc`, `OV_III_pkc_skc`\*\*, `p384_OV_III_pkc_skc`\*\*, `OV_V_pkc_skc`\*\*, `p521_OV_V_pkc_skc`\*\*
 - **SNOVA**:`snova1k`, `p256_snova1k`, `snova1b`, `p256_snova1b`, `snova1s`, `p256_snova1s`, `snova3k`, `p384_snova3k`, `snova3b`, `p384_snova3b`, `snova3s`, `p384_snova3s`, `snova5k`, `p521_snova5k`, `snova5b`, `p521_snova5b`, `snova5s`, `p521_snova5s`
-- **SLH-DSA**:`slhdsasha2128s`, `slhdsasha2128f`, `slhdsasha2192s`, `slhdsasha2192f`, `slhdsasha2256s`, `slhdsasha2256f`, `slhdsashake128s`, `slhdsashake128f`, `slhdsashake192s`, `slhdsashake192f`, `slhdsashake256s`, `slhdsashake256f`
 - **MQOM**:`mqom3cat1gf16fastct`, `p256_mqom3cat1gf16fastct`, `mqom3cat1gf16fastot`\*, `p256_mqom3cat1gf16fastot`\*, `mqom3cat1gf16shortct`\*, `p256_mqom3cat1gf16shortct`\*, `mqom3cat1gf16shortot`\*, `p256_mqom3cat1gf16shortot`\*, `mqom3cat1gf2shorterct`\*, `p256_mqom3cat1gf2shorterct`\*, `mqom3cat1gf2shorterot`\*, `p256_mqom3cat1gf2shorterot`\*, `mqom3cat3gf16fastct`, `p384_mqom3cat3gf16fastct`, `mqom3cat3gf16fastot`\*, `p384_mqom3cat3gf16fastot`\*, `mqom3cat3gf16shortct`\*, `p384_mqom3cat3gf16shortct`\*, `mqom3cat3gf16shortot`\*, `p384_mqom3cat3gf16shortot`\*, `mqom3cat3gf2shorterct`\*, `p384_mqom3cat3gf2shorterct`\*, `mqom3cat3gf2shorterot`\*, `p384_mqom3cat3gf2shorterot`\*, `mqom3cat5gf16fastct`, `p521_mqom3cat5gf16fastct`, `mqom3cat5gf16fastot`\*, `p521_mqom3cat5gf16fastot`\*, `mqom3cat5gf16shortct`\*, `p521_mqom3cat5gf16shortct`\*, `mqom3cat5gf16shortot`\*, `p521_mqom3cat5gf16shortot`\*, `mqom3cat5gf2shorterct`\*, `p521_mqom3cat5gf2shorterct`\*, `mqom3cat5gf2shorterot`\*, `p521_mqom3cat5gf2shorterot`\*
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
@@ -77,36 +74,23 @@ A full list of algorithms, their interoperability code points and OIDs as well
 as a method to dynamically adapt them, e.g., for interoperability testing are
 documented in [ALGORITHMS.md](ALGORITHMS.md).
 
-## Using with OpenSSL >= 3.5
+## Standardized algorithms (ML-KEM, ML-DSA, SLH-DSA)
 
 Starting with version 3.5, OpenSSL natively implements a growing set of
 standardized PQ algorithms (e.g., ML-KEM, ML-DSA and SLH-DSA) in its default
-provider. Because these implementations are more advanced and better maintained
-than the equivalent facilities in `oqsprovider`, the following rule applies:
+provider. Because those implementations are more advanced and better maintained
+than the equivalent facilities used to be in `oqsprovider`, and to avoid
+duplicating effort, `oqsprovider` no longer ships the NIST-standardized
+algorithms at all:
 
-> **A PQ algorithm is not available via `oqsprovider` on OpenSSL >= 3.5 if
-> OpenSSL's own default provider already implements that exact algorithm.**
+> **The standardized pure algorithms (ML-KEM, ML-DSA, SLH-DSA) and all of their
+> hybrid/composite combinations have been removed from `oqsprovider`. Use
+> OpenSSL's own default provider (version >= 3.5.0) for these algorithms.**
 
-The rule keys on the algorithm as a whole, not on its components. It applies to
-the standardized pure algorithms (ML-KEM, ML-DSA and SLH-DSA) and to any
-standardized hybrid algorithm that OpenSSL ships natively (currently the hybrid
-KEMs `X25519MLKEM768`, `SecP256r1MLKEM768` and `SecP384r1MLKEM1024`).
-A hybrid remains available through `oqsprovider` as long as OpenSSL does not
-implement that specific combination, even when one of its components is
-standardized: for example, `x25519_mlkem512` and `p256_mlkem512` stay available
-even though OpenSSL provides their `ML-KEM-512` component.
-
-Everyone interested in testing any of the disabled standardized PQ algorithms
-(pure as well as hybrid) via `oqsprovider` must therefore do so in an OpenSSL
-version `>= 3.2` and `< 3.5`.
-
-> [!NOTE]
-> A concrete consequence is that SLH-DSA cannot be used for TLS via
-> `oqsprovider` when running in OpenSSL >= 3.5, because OpenSSL disables the
-> `oqsprovider` implementation but (as of this writing) does not itself offer
-> SLH-DSA for TLS. Use an OpenSSL version `>= 3.2` and `< 3.5` to test SLH-DSA
-> in TLS. OpenSSL >= 4.1 will add support for SLH-DSA on TLS (see
-> [this merged commit](https://github.com/openssl/openssl/commit/4a08aa1346aa00151b09cc45fb2ce01ddee27230)).
+`oqsprovider` focuses on the remaining experimental and not-yet-standardized PQC
+algorithms. Earlier `oqsprovider` releases (and OpenSSL versions `>= 3.2` and
+`< 3.5`, which have no native PQ support) can still be used to experiment with
+the now-removed standardized algorithms.
 
 ## Using with LibOQS 0.16.0
 
@@ -204,19 +188,14 @@ an appropriate message length for hybrid signature schemes is expected.
 ## 3.5 and greater
 
 These versions include support for an increasing set of standardized PQC
-algorithms (e.g., ML-KEM, ML-DSA and SLH-DSA). Accordingly, `oqsprovider` can no
-longer succeed registering (O)IDs for these algorithms as these already exist.
-In addition, `oqsprovider` functionally (e.g., support for several key formats)
-and non-functionally (e.g., code quality) is not at par with the implementations
-for these algorithms. Therefore, as described in
-[Using with OpenSSL >= 3.5](#using-with-openssl--35), any algorithm whose
-component is standardized and implemented in OpenSSL is disabled at runtime upon
-detection of it being available in `openssl`. The same algorithms will continue
-to work even using the same `oqsprovider` binary in OpenSSL installations with a
-version older than 3.5.
-
-This limitation might be resolved by implementing https://github.com/open-quantum-safe/oqs-provider/discussions/625.
-given sufficient interest. Contributions very welcome.
+algorithms (e.g., ML-KEM, ML-DSA and SLH-DSA). `oqsprovider` functionally (e.g.,
+support for several key formats) and non-functionally (e.g., code quality) is
+not at par with the implementations for these algorithms, and duplicating them
+would only add maintenance burden and an unnecessary vulnerability surface.
+Therefore, as described in
+[Standardized algorithms](#standardized-algorithms-ml-kem-ml-dsa-slh-dsa), these
+standardized algorithms (and their hybrids) have been removed from `oqsprovider`
+entirely; use OpenSSL's own default provider for them.
 
 ## All versions
 
@@ -239,9 +218,12 @@ by some TLS server implementations. Therefore, again caution is advised
 
 ## General disclaimer
 
-In general, any use of the standardized algorithm families in any `openssl` version via
-`oqsprovider` is strongly discouraged due to the disparities in key material representation
-and key generation logic that has developed since 2024.
+The standardized algorithm families (ML-KEM, ML-DSA, SLH-DSA) are no longer
+provided by `oqsprovider`: they are available directly in `openssl`'s default
+provider (version >= 3.5.0), which should be used for them. Any remaining use of
+these families via older `oqsprovider` releases is strongly discouraged due to
+the disparities in key material representation and key generation logic that has
+developed since 2024.
 
 `oqsprovider` is primarily meant as a vehicle to enable testing of experimental PQ
 crypto and has no intention of and/or commitment for duplicating the efforts going into

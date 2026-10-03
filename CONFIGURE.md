@@ -168,9 +168,9 @@ By default this variable is unset.
 
 Example use:
 
-    OQS_SKIP_TESTS="slhdsa" ./scripts/runtests.sh
+    OQS_SKIP_TESTS="frodo" ./scripts/runtests.sh
 
-excludes all algorithms of the "SLH-DSA" family (speeding up testing significantly).
+excludes all algorithms of the "FrodoKEM" family (speeding up testing significantly).
 
 *Note*: By default, interoperability testing with oqs-openssl111 is no longer
 performed by default but can be manually enabled in the script `scripts/runtests.sh`.
@@ -197,10 +197,12 @@ presence of `liboqs` during deployment:
 ### OQS_ALGS_ENABLED
 
 In order to reduce the size of the oqsprovider, it is possible to limit the number
-of algorithms supported, e.g., to the set of NIST standardized algorithms. This is
-facilitated by setting the `liboqs` build option `-DOQS_ALGS_ENABLED=STD` when building
-`liboqs`. The list of algorithms supported by `oqs-provider` is defined by
-the contents of the file `generate.yml` documented in the [pre-build configuration](#pre-build-configuration).
+of algorithms supported. This is facilitated by setting the `liboqs` build option
+`-DOQS_ALGS_ENABLED` when building `liboqs`. Note that `oqs-provider` no longer
+ships the NIST-standardized algorithms (ML-KEM, ML-DSA, SLH-DSA): these are
+available directly in OpenSSL (version >= 3.5.0). The list of algorithms supported
+by `oqs-provider` is defined by the contents of the file `generate.yml` documented
+in the [pre-build configuration](#pre-build-configuration).
 
 ### OQS_LIBJADE_BUILD
 

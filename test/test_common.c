@@ -10,10 +10,6 @@
 
 /** \brief List of hybrid signature algorithms. */
 const char *kHybridSignatureAlgorithms[] = {
-    "p256_mldsa44",
-    "rsa3072_mldsa44",
-    "p384_mldsa65",
-    "p521_mldsa87",
     "p256_falcon512",
     "rsa3072_falcon512",
     "p256_falconpadded512",
@@ -51,18 +47,11 @@ typedef struct {
 
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_START
 
-#define SIGS_DICT_LEN 70
+#define SIGS_DICT_LEN 51
 
 /** \brief Mapping of signature algorithm with PQ naming in liboqs */
 oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
 
-    {OQS_SIG_alg_ml_dsa_44, "mldsa44"},
-    {OQS_SIG_alg_ml_dsa_44, "p256_mldsa44"},
-    {OQS_SIG_alg_ml_dsa_44, "rsa3072_mldsa44"},
-    {OQS_SIG_alg_ml_dsa_65, "mldsa65"},
-    {OQS_SIG_alg_ml_dsa_65, "p384_mldsa65"},
-    {OQS_SIG_alg_ml_dsa_87, "mldsa87"},
-    {OQS_SIG_alg_ml_dsa_87, "p521_mldsa87"},
     {OQS_SIG_alg_falcon_512, "falcon512"},
     {OQS_SIG_alg_falcon_512, "p256_falcon512"},
     {OQS_SIG_alg_falcon_512, "rsa3072_falcon512"},
@@ -108,18 +97,6 @@ oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
     {OQS_SIG_alg_snova_SNOVA_V_B, "p521_snova5b"},
     {OQS_SIG_alg_snova_SNOVA_V_S, "snova5s"},
     {OQS_SIG_alg_snova_SNOVA_V_S, "p521_snova5s"},
-    {OQS_SIG_alg_slh_dsa_pure_sha2_128s, "slhdsasha2128s"},
-    {OQS_SIG_alg_slh_dsa_pure_sha2_128f, "slhdsasha2128f"},
-    {OQS_SIG_alg_slh_dsa_pure_sha2_192s, "slhdsasha2192s"},
-    {OQS_SIG_alg_slh_dsa_pure_sha2_192f, "slhdsasha2192f"},
-    {OQS_SIG_alg_slh_dsa_pure_sha2_256s, "slhdsasha2256s"},
-    {OQS_SIG_alg_slh_dsa_pure_sha2_256f, "slhdsasha2256f"},
-    {OQS_SIG_alg_slh_dsa_pure_shake_128s, "slhdsashake128s"},
-    {OQS_SIG_alg_slh_dsa_pure_shake_128f, "slhdsashake128f"},
-    {OQS_SIG_alg_slh_dsa_pure_shake_192s, "slhdsashake192s"},
-    {OQS_SIG_alg_slh_dsa_pure_shake_192f, "slhdsashake192f"},
-    {OQS_SIG_alg_slh_dsa_pure_shake_256s, "slhdsashake256s"},
-    {OQS_SIG_alg_slh_dsa_pure_shake_256f, "slhdsashake256f"},
     {OQS_SIG_alg_mqom_mqom3_cat1_gf16_fast_ct, "mqom3cat1gf16fastct"},
     {OQS_SIG_alg_mqom_mqom3_cat1_gf16_fast_ct, "p256_mqom3cat1gf16fastct"},
     {OQS_SIG_alg_mqom_mqom3_cat3_gf16_fast_ct, "mqom3cat3gf16fastct"},
@@ -133,27 +110,37 @@ oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
 
 /** \brief List of hybrid KEMs. */
 const char *kHybridKEMAlgorithms[] = {
-    "p256_efrodo640aes",   "x25519_efrodo640aes",
-    "p256_efrodo640shake", "x25519_efrodo640shake",
-    "p384_efrodo976aes",   "x448_efrodo976aes",
-    "p384_efrodo976shake", "x448_efrodo976shake",
-    "p521_efrodo1344aes",  "p521_efrodo1344shake",
-    "p256_frodo640aes",    "x25519_frodo640aes",
-    "p256_frodo640shake",  "x25519_frodo640shake",
-    "p384_frodo976aes",    "x448_frodo976aes",
-    "p384_frodo976shake",  "x448_frodo976shake",
-    "p521_frodo1344aes",   "p521_frodo1344shake",
-    "SecP256r1MLKEM512",   "x25519_mlkem512",
-    "bp256_mlkem512",      "p384_mlkem768",
-    "x448_mlkem768",       "bp384_mlkem768",
-    "X25519MLKEM768",      "SecP256r1MLKEM768",
-    "p521_mlkem1024",      "SecP384r1MLKEM1024",
-    "bp512_mlkem1024",     "p256_bikel1",
-    "x25519_bikel1",       "p384_bikel3",
-    "x448_bikel3",         "p521_bikel5",
-    "p256_hqc1",           "x25519_hqc1",
-    "p384_hqc3",           "x448_hqc3",
-    "p521_hqc5",           NULL,
+    "p256_efrodo640aes",
+    "x25519_efrodo640aes",
+    "p256_efrodo640shake",
+    "x25519_efrodo640shake",
+    "p384_efrodo976aes",
+    "x448_efrodo976aes",
+    "p384_efrodo976shake",
+    "x448_efrodo976shake",
+    "p521_efrodo1344aes",
+    "p521_efrodo1344shake",
+    "p256_frodo640aes",
+    "x25519_frodo640aes",
+    "p256_frodo640shake",
+    "x25519_frodo640shake",
+    "p384_frodo976aes",
+    "x448_frodo976aes",
+    "p384_frodo976shake",
+    "x448_frodo976shake",
+    "p521_frodo1344aes",
+    "p521_frodo1344shake",
+    "p256_bikel1",
+    "x25519_bikel1",
+    "p384_bikel3",
+    "x448_bikel3",
+    "p521_bikel5",
+    "p256_hqc1",
+    "x25519_hqc1",
+    "p384_hqc3",
+    "x448_hqc3",
+    "p521_hqc5",
+    NULL,
 }; ///// OQS_TEMPLATE_FRAGMENT_HYBRID_KEM_ALGS_END
 
 void hexdump(const void *ptr, size_t len) {

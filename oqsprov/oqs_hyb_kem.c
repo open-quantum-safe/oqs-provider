@@ -171,12 +171,10 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     unsigned char *ctClassical, *ctPQ, *secretClassical, *secretPQ;
 
     ret = oqs_evp_kem_encaps_keyslot(vpkemctx, NULL, &ctLenClassical, NULL,
-                                     &secretLenClassical,
-                                     oqsx_key->reverse_share ? 1 : 0);
+                                     &secretLenClassical, 0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
-    ret =
-        oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLenPQ, NULL, &secretLenPQ,
-                                  oqsx_key->reverse_share ? 0 : 1);
+    ret = oqs_qs_kem_encaps_keyslot(vpkemctx, NULL, &ctLenPQ, NULL,
+                                    &secretLenPQ, 1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
     *ctlen = ctLenClassical + ctLenPQ;
@@ -188,30 +186,18 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
         return 1;
     }
 
-    /* Rule: if the classical algorthm is not FIPS approved
-       but the PQ algorithm is: PQ share comes first
-       otherwise: classical share comes first
-     */
-    if (oqsx_key->reverse_share) {
-        ctPQ = ct;
-        ctClassical = ct + ctLenPQ;
-        secretPQ = secret;
-        secretClassical = secret + secretLenPQ;
-    } else {
-        ctClassical = ct;
-        ctPQ = ct + ctLenClassical;
-        secretClassical = secret;
-        secretPQ = secret + secretLenClassical;
-    }
+    /* classical share comes first */
+    ctClassical = ct;
+    ctPQ = ct + ctLenClassical;
+    secretClassical = secret;
+    secretPQ = secret + secretLenClassical;
 
     ret = oqs_evp_kem_encaps_keyslot(vpkemctx, ctClassical, &ctLenClassical,
-                                     secretClassical, &secretLenClassical,
-                                     oqsx_key->reverse_share ? 1 : 0);
+                                     secretClassical, &secretLenClassical, 0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
     ret = oqs_qs_kem_encaps_keyslot(vpkemctx, ctPQ, &ctLenPQ, secretPQ,
-                                    &secretLenPQ,
-                                    oqsx_key->reverse_share ? 0 : 1);
+                                    &secretLenPQ, 1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
 err:
@@ -233,10 +219,9 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
     unsigned char *secretClassical, *secretPQ;
 
     ret = oqs_evp_kem_decaps_keyslot(vpkemctx, NULL, &secretLenClassical, NULL,
-                                     0, oqsx_key->reverse_share ? 1 : 0);
+                                     0, 0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
-    ret = oqs_qs_kem_decaps_keyslot(vpkemctx, NULL, &secretLenPQ, NULL, 0,
-                                    oqsx_key->reverse_share ? 0 : 1);
+    ret = oqs_qs_kem_decaps_keyslot(vpkemctx, NULL, &secretLenPQ, NULL, 0, 1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
     *secretlen = secretLenClassical + secretLenPQ;
@@ -249,28 +234,18 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
 
     ON_ERR_SET_GOTO(ctLenClassical + ctLenPQ != ctlen, ret, OQS_ERROR, err);
 
-    /* Rule: if the classical algorthm is not FIPS approved
-       but the PQ algorithm is: PQ share comes first
-       otherwise: classical share comes first
-     */
-    if (oqsx_key->reverse_share) {
-        ctPQ = ct;
-        ctClassical = ct + ctLenPQ;
-        secretPQ = secret;
-        secretClassical = secret + secretLenPQ;
-    } else {
-        ctClassical = ct;
-        ctPQ = ct + ctLenClassical;
-        secretClassical = secret;
-        secretPQ = secret + secretLenClassical;
-    }
+    /* classical share comes first */
+    ctClassical = ct;
+    ctPQ = ct + ctLenClassical;
+    secretClassical = secret;
+    secretPQ = secret + secretLenClassical;
 
-    ret = oqs_evp_kem_decaps_keyslot(
-        vpkemctx, secretClassical, &secretLenClassical, ctClassical,
-        ctLenClassical, oqsx_key->reverse_share ? 1 : 0);
+    ret = oqs_evp_kem_decaps_keyslot(vpkemctx, secretClassical,
+                                     &secretLenClassical, ctClassical,
+                                     ctLenClassical, 0);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
     ret = oqs_qs_kem_decaps_keyslot(vpkemctx, secretPQ, &secretLenPQ, ctPQ,
-                                    ctLenPQ, oqsx_key->reverse_share ? 0 : 1);
+                                    ctLenPQ, 1);
     ON_ERR_SET_GOTO(ret <= 0, ret, OQS_ERROR, err);
 
 err:

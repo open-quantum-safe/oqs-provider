@@ -7,11 +7,11 @@
 // implements a growing set of standardized PQ algorithms (ML-KEM, ML-DSA,
 // SLH-DSA and some standardized hybrid KEMs). To avoid clashing (O)ID/name
 // registrations and to let OpenSSL's more mature implementations win,
-// oqsprovider disables those exact algorithms at runtime (see
-// oqsprov/oqsprov.c). This test asserts that property directly instead of
-// relying on code inspection: it queries the algorithms registered by the
-// oqsprovider and by the default provider and checks that the two sets share
-// no (case-insensitive) name or alias.
+// oqsprovider no longer ships those standardized algorithms at all (they were
+// removed from the build; see oqs-template/generate.yml). This test asserts
+// that property directly instead of relying on code inspection: it queries the
+// algorithms registered by the oqsprovider and by the default provider and
+// checks that the two sets share no (case-insensitive) name or alias.
 //
 // On OpenSSL < 3.5 the default provider ships no PQ algorithms, so the two
 // sets are trivially disjoint and the test still passes.
@@ -52,7 +52,7 @@ static int name_in_algs(const OSSL_ALGORITHM *algs, const char *name,
 
         /*
          * algorithm_names is itself a colon-separated list of aliases for the
-         * same algorithm (e.g. "mlkem512:MLKEM512:1.3.6.1.4.1.2.267.7.4.4").
+         * same algorithm (e.g. "frodo640aes:FRODO640AES").
          * Copy it into a scratch buffer (strtok_r mutates its input) and
          * compare each alias against name, case insensitively.
          */

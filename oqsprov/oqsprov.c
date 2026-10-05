@@ -1736,9 +1736,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 goto end_init;
             }
         end_for:
-            if (!id_ok &&
-                !sk_OPENSSL_STRING_push(failed,
-                                        (char *)(oqs_oid_alg_list[i + 1])))
+            if (!id_ok && !sk_OPENSSL_STRING_push(
+                              failed, (char *)(oqs_oid_alg_list[i + 1])))
                 goto end_init;
         }
     }

@@ -613,6 +613,11 @@ static void *oqsx_gen_init(void *provctx, int selection, char *oqs_name,
         gctx->libctx = libctx;
         gctx->oqs_name = OPENSSL_strdup(oqs_name);
         gctx->tls_name = OPENSSL_strdup(tls_name);
+        if (gctx->oqs_name == NULL || gctx->tls_name == NULL) {
+            oqsx_gen_cleanup(gctx);
+            ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+            return NULL;
+        }
         gctx->primitive = primitive;
         gctx->selection = selection;
         gctx->bit_security = bit_security;
@@ -637,6 +642,18 @@ static void *oqsx_genkey(struct oqsx_gen_ctx *gctx) {
         return NULL;
     }
 
+    /* A request without key-pair material (EVP_PKEY_paramgen, as the TLS
+       server uses before loading the peer's key share) needs only the key
+       object with its buffers, not a generated key pair. Plain KEMs only. */
+    if ((gctx->selection & OSSL_KEYMGMT_SELECT_KEYPAIR) == 0 &&
+        key->keytype == KEY_TYPE_KEM) {
+        if (oqsx_key_prepare_empty(key)) {
+            ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
+            oqsx_key_free(key);
+            return NULL;
+        }
+        return key;
+    }
     if (oqsx_key_gen(key)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_UNEXPECTED_NULL);
         return NULL;
@@ -698,6 +715,8 @@ static int oqsx_gen_set_params(void *genctx, const OSSL_PARAM params[]) {
 
         OPENSSL_free(gctx->tls_name);
         gctx->tls_name = OPENSSL_strdup(algname);
+        if (gctx->tls_name == NULL)
+            return 0;
     }
     p = OSSL_PARAM_locate_const(params, OSSL_KDF_PARAM_PROPERTIES);
     if (p != NULL) {

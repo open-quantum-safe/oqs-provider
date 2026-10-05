@@ -1631,6 +1631,16 @@ errhyb:
     return NULL;
 }
 
+/* Allocate key buffers and component pointers for a plain KEM key without
+   generating a key pair; returns 0 on success. */
+int oqsx_key_prepare_empty(OQSX_KEY *key) {
+    if ((key->privkey == NULL || key->pubkey == NULL) &&
+        (oqsx_key_allocate_keymaterial(key, 0) ||
+         oqsx_key_allocate_keymaterial(key, 1)))
+        return 1;
+    return !oqsx_key_set_composites(key, 0);
+}
+
 /* allocates OQS and classical keys */
 int oqsx_key_gen(OQSX_KEY *key) {
     int ret = 0;

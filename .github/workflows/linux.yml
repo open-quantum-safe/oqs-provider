@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.4.1, openssl-3.5.0, openssl-4.0.1, master] # retain openssl-3.4.1 to test non-OpenSSL PQ alg implementations
+        ossl-branch: [openssl-3.4.1, openssl-3.5.0, openssl-4.0.3] # retain openssl-3.4.1 to test non-OpenSSL PQ alg implementations
         cmake-params: [ "", "-DOQS_KEM_ENCODERS=ON" ]
         libjade-build:
           - "ON" 
@@ -182,7 +182,7 @@ jobs:
     container:
       image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
     env:
-      OPENSSL_BRANCH: "openssl-4.0.1"
+      OPENSSL_BRANCH: "openssl-4.0.3"
       INSTALL_DIR: "/opt/install"
       CMAKE_TOOLCHAIN_FILE: "/opt/linux-aarch64-toolchain.cmake"
 

@@ -40,7 +40,7 @@ jobs:
           set-safe-directory: true
           repository: openssl/openssl
           path: openssl
-          ref: master
+          ref: openssl-4.0.3
       - name: checkout liboqs
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: c:\cygwin\opt\openssl32
-          key: ${{ runner.os }}-cygwinopenssl32
+          key: ${{ runner.os }}-cygwinopenssl-4.0.3
       - name: Build openssl3 if not cached
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         run: bash -c "./config --prefix=/opt/openssl32 ${{ matrix.platform.config }} && perl configdata.pm --dump && make $MAKE_PARAMS && make install_sw"
@@ -72,7 +72,7 @@ jobs:
         with:
           path: |
             c:\cygwin\opt\openssl32
-          key: ${{ runner.os }}-cygwinopenssl32
+          key: ${{ runner.os }}-cygwinopenssl-4.0.3
       - name: Set installpath
         run: |
            echo "IP=$(cygpath -u $PWD)/.local" >> "$env:GITHUB_ENV"
@@ -128,17 +128,18 @@ jobs:
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: c:\openssl32
-          key: ${{ runner.os }}-msvcopenssl32
+          key: ${{ runner.os }}-msvcopenssl-4.0.3
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
-      - name: Checkout OpenSSL master
+      - name: Checkout OpenSSL
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
           set-safe-directory: true
           repository: openssl/openssl
+          ref: openssl-4.0.3
           path: openssl
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -205,7 +206,7 @@ jobs:
         with:
           path: |
             c:\openssl32
-          key: ${{ runner.os }}-msvcopenssl32
+          key: ${{ runner.os }}-msvcopenssl-4.0.3
       - name: build oqs-provider
         run: |
           cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
@@ -245,17 +246,18 @@ jobs:
           uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
           with:
             path: c:\openssl32n
-            key: ${{ runner.os }}-msvcopenssl32n
+            key: ${{ runner.os }}-msvcopenssl-4.0.3-n
         - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
           with:
             persist-credentials: false
-        - name: Checkout OpenSSL master
+        - name: Checkout OpenSSL
           if: steps.cache-openssl32n.outputs.cache-hit != 'true'
           uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
           with:
             persist-credentials: false
             set-safe-directory: true
             repository: openssl/openssl
+            ref: openssl-4.0.3
             path: openssl
         - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
           with:
@@ -315,7 +317,7 @@ jobs:
           with:
             path: |
               c:\openssl32n
-            key: ${{ runner.os }}-msvcopenssl32n
+            key: ${{ runner.os }}-msvcopenssl-4.0.3-n
         - name: build oqs-provider
           run: |
             cmake --toolchain ${{ matrix.toolchain }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32n" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build

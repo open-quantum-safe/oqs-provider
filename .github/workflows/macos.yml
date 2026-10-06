@@ -36,6 +36,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: openssl/openssl
+          ref: openssl-4.0.3
           path: openssl
       - name: checkout liboqs
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -50,7 +51,7 @@ jobs:
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: .localopenssl32
-          key: ${{ runner.os }}-openssl32
+          key: ${{ runner.os }}-openssl-4.0.3
       - name: Build openssl3 if not cached
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         run: pwd && ./config --prefix=`pwd`/../.localopenssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs
@@ -62,7 +63,7 @@ jobs:
         with:
           path: |
             .localopenssl32
-          key: ${{ runner.os }}-openssl32
+          key: ${{ runner.os }}-openssl-4.0.3
       - name: build liboqs
         run: |
            cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs -DOQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ${{ matrix.params.oqsconfig }} -S . -B _build

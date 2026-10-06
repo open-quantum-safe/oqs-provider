@@ -21,7 +21,7 @@ Further details on building, testing and use can be found in [README.md](https:/
 * Removed SPHINCS+ support ([#740](https://github.com/open-quantum-safe/oqs-provider/pull/740)).
 
 
-## What's Changed
+## What Changed
 * Reject inconsistent classical lengths in hybrid KEM public keys by @satokan in https://github.com/open-quantum-safe/oqs-provider/pull/814
 * Add security submission guidance for AI agents and humans by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/824
 * Fix use-after-free of comp_privkey in KEM decapsulation (GHSA-g63q-c378-wphj) by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/829
@@ -68,6 +68,9 @@ Further details on building, testing and use can be found in [README.md](https:/
 * Add security submission guidance for AI agents and humans by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/824
 * Fix use-after-free of comp_privkey in KEM decapsulation (GHSA-g63q-c378-wphj) by @baentsch in https://github.com/open-quantum-safe/oqs-provider/pull/829
 * Classical algorithms retain the property queries from their hybrid PQ counterparts. ([#774](https://github.com/open-quantum-safe/oqs-provider/pull/774), [#776](https://github.com/open-quantum-safe/oqs-provider/pull/776)).
+
+## Known Issues
+This release supports version OpenSSL 4.0.3 or lower. This is due to OpenSSL commit openssl/openssl#32670 which causes a KEM name collision with SecP256r1MLKEM512.
 
 ## New Contributors
 * @HelenHZhang made their first contribution in https://github.com/open-quantum-safe/oqs-provider/pull/722

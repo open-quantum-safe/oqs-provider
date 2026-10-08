@@ -8,7 +8,7 @@ The **Open Quantum Safe (OQS) project** has the goal of developing and prototypi
 
 When deployed, the `oqs-provider` binary (shared library) thus adds support for quantum-safe cryptographic operations to any standard OpenSSL(v3+) installation. The ultimate goal is that all `openssl` functionality shall be [PQC-enabled](https://csrc.nist.gov/projects/post-quantum-cryptography).
 
-In general, the oqs-provider `main` branch is meant to be usable in conjunction with the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and the `master` branch of [OpenSSL](https://github.com/openssl/openssl). See [Known Issues](https://github.com/open-quantum-safe/oqs-provider/edit/0.12.0-rc2-branch/RELEASE.md#known-issues) for any exceptions.
+In general, the oqs-provider `main` branch is meant to be usable in conjunction with the `main` branch of [liboqs](https://github.com/open-quantum-safe/liboqs) and the `master` branch of [OpenSSL](https://github.com/openssl/openssl). See [Known Issues](https://github.com/open-quantum-safe/oqs-provider/edit/0.12.0-release/RELEASE.md#known-issues) for any exceptions.
 
 Further details on building, testing and use can be found in [README.md](https://github.com/open-quantum-safe/oqs-provider/blob/main/README.md). See in particular limitations on intended use.
 

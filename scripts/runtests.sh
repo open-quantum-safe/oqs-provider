@@ -56,8 +56,19 @@ interop() {
     fi
 }
 
+# Locate this script such that the helper scripts and the OpenSSL config
+# shipped alongside it are found also when testing out of source, i.e., when
+# the current directory is not the source root:
+OQS_PROVIDER_SCRIPTDIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+
+# Build directory holding the provider module and the ctest setup; defaults to
+# "_build" below the current directory as created by "fullbuild.sh":
+if [ -z "${OQS_PROVIDER_BUILD_DIR}" ]; then
+    export OQS_PROVIDER_BUILD_DIR="$(pwd)/_build"
+fi
+
 if [ -z "${OQS_PROVIDER_TESTSCRIPTS}" ]; then
-    export OQS_PROVIDER_TESTSCRIPTS="$(pwd)/scripts"
+    export OQS_PROVIDER_TESTSCRIPTS="${OQS_PROVIDER_SCRIPTDIR}"
 fi
 
 if [ -n "${OPENSSL_INSTALL}" ]; then
@@ -78,7 +89,7 @@ if [ -n "${OPENSSL_INSTALL}" ]; then
 fi
 
 if [ -z "${OPENSSL_CONF}" ]; then
-    export OPENSSL_CONF="$(pwd)/scripts/openssl-ca.cnf"
+    export OPENSSL_CONF="${OQS_PROVIDER_SCRIPTDIR}/openssl-ca.cnf"
 fi
 
 if [ -z "${OPENSSL_APP}" ]; then
@@ -90,7 +101,7 @@ if [ -z "${OPENSSL_APP}" ]; then
 fi
 
 if [ -z "${OPENSSL_MODULES}" ]; then
-    export OPENSSL_MODULES="$(pwd)/_build/lib"
+    export OPENSSL_MODULES="${OQS_PROVIDER_BUILD_DIR}/lib"
 fi
 
 if [ -z "${LD_LIBRARY_PATH}" ]; then
@@ -192,7 +203,7 @@ ${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-externalinterop.sh
 # Without removing OPENSSL_CONF ctest hangs... ???
 unset OPENSSL_CONF
 rv=0
-if ! ( cd _build && ctest $@ ); then
+if ! ( cd "${OQS_PROVIDER_BUILD_DIR}" && ctest $@ ); then
    rv=1
 fi
 

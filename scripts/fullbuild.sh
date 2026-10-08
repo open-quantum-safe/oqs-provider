@@ -13,6 +13,19 @@
 #        Setting this to feature/dtls-1.3 enables build&test of all PQ algs using DTLS1.3 feature branch
 # EnvVar OSSL_CONFIG: If set, passes arguments to the "./config" command that precedes the "make" of the OpenSSL
 # EnvVar liboqs_DIR: If set, needs to point to a directory where liboqs has been installed to
+# EnvVar OQS_PROVIDER_SRC_DIR: oqs-provider source directory; defaults to the directory containing this script's parent
+# EnvVar OQS_PROVIDER_BUILD_DIR: oqs-provider build directory; defaults to "_build" below the current directory
+
+# Both defaults below reproduce the historic behaviour when this script is run
+# as "./scripts/fullbuild.sh" from the source root; setting them (or just
+# running from elsewhere) permits building out of source:
+if [ -z "$OQS_PROVIDER_SRC_DIR" ]; then
+   export OQS_PROVIDER_SRC_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+fi
+
+if [ -z "$OQS_PROVIDER_BUILD_DIR" ]; then
+   export OQS_PROVIDER_BUILD_DIR=$(pwd)/_build
+fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
    SHLIBEXT="dylib"
@@ -24,10 +37,10 @@ fi
 
 if [ $# -gt 0 ]; then
    if [ "$1" == "-f" ]; then
-      rm -rf _build
+      rm -rf "$OQS_PROVIDER_BUILD_DIR"
    fi
    if [ "$1" == "-F" ]; then
-      rm -rf _build openssl liboqs .local
+      rm -rf "$OQS_PROVIDER_BUILD_DIR" openssl liboqs .local
    fi
 fi
 
@@ -128,16 +141,16 @@ if [ -z $liboqs_DIR ]; then
 fi
 
 # Check whether provider is built:
-if [ ! -f "_build/lib/oqsprovider.$SHLIBEXT" ]; then
-   echo "oqsprovider (_build/lib/oqsprovider.$SHLIBEXT) not built: Building..."
+if [ ! -f "$OQS_PROVIDER_BUILD_DIR/lib/oqsprovider.$SHLIBEXT" ]; then
+   echo "oqsprovider ($OQS_PROVIDER_BUILD_DIR/lib/oqsprovider.$SHLIBEXT) not built: Building..."
    # for full debug build add: -DCMAKE_BUILD_TYPE=Debug
    #BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
    BUILD_TYPE=""
    # for omitting public key in private keys add -DNOPUBKEY_IN_PRIVKEY=ON
    if [ -z "$OPENSSL_INSTALL" ]; then
-       cmake $CMAKE_PARAMS $CMAKE_OPENSSL_LOCATION $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
+       cmake $CMAKE_PARAMS $CMAKE_OPENSSL_LOCATION $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S "$OQS_PROVIDER_SRC_DIR" -B "$OQS_PROVIDER_BUILD_DIR" && cmake --build "$OQS_PROVIDER_BUILD_DIR"
    else
-       cmake $CMAKE_PARAMS -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S . -B _build && cmake --build _build
+       cmake $CMAKE_PARAMS -DOPENSSL_ROOT_DIR=$OPENSSL_INSTALL $BUILD_TYPE $OQSPROV_CMAKE_PARAMS -S "$OQS_PROVIDER_SRC_DIR" -B "$OQS_PROVIDER_BUILD_DIR" && cmake --build "$OQS_PROVIDER_BUILD_DIR"
    fi
    if [ $? -ne 0 ]; then
      echo "provider build failed. Exiting."

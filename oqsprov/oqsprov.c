@@ -10,6 +10,7 @@
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
+#include <openssl/crypto.h>
 #include <openssl/err.h>
 #include <openssl/objects.h>
 #include <openssl/params.h>
@@ -38,8 +39,37 @@
 static int rt_algo_filter_enabled = 0;
 
 static STACK_OF(OPENSSL_STRING) *rt_disabled_algs = NULL;
-STACK_OF(OPENSSL_STRING) * oqsprov_get_rt_disabled_algs() {
-    return rt_disabled_algs;
+
+/* The tables patched from the environment, the OID/NID registration and the
+ * list of algorithms disabled at runtime are global to the process, i.e.,
+ * shared by all library contexts loading this provider: guard them against
+ * concurrent provider loads.
+ */
+static CRYPTO_ONCE rt_lock_init = CRYPTO_ONCE_STATIC_INIT;
+static CRYPTO_RWLOCK *rt_lock = NULL;
+/* provider instances currently loaded in the process */
+static int rt_loaded = 0;
+
+static void create_rt_lock(void) { rt_lock = CRYPTO_THREAD_lock_new(); }
+
+#if defined(__GNUC__)
+/* The lock outlives every provider instance, so it goes with the module, as
+ * the self-test lock of OpenSSL's FIPS provider does. MSVC builds keep it for
+ * the lifetime of the process.
+ */
+static void free_rt_lock(void) __attribute__((destructor));
+static void free_rt_lock(void) { CRYPTO_THREAD_lock_free(rt_lock); }
+#endif
+
+int oqsprov_alg_rt_disabled(const char *algname) {
+    int disabled;
+
+    /* sk_find() sorts the stack on first use, hence no read lock here. */
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        return 0;
+    disabled = sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)algname) >= 0;
+    CRYPTO_THREAD_unlock(rt_lock);
+    return disabled;
 }
 
 /*
@@ -1313,14 +1343,18 @@ int cnt_rt_disabled(const OSSL_ALGORITHM orig[], int len) {
 }
 
 #define FILTERED_ALGS(algs)                                                    \
-    if (!rt_algo_filter_enabled)                                               \
+    if (!rt_algo_filter_enabled) {                                             \
+        CRYPTO_THREAD_unlock(rt_lock);                                         \
         return algs;                                                           \
+    }                                                                          \
     d_algs = cnt_rt_disabled(algs, OSSL_NELEM(algs));                          \
     if (algs##_rt == NULL) {                                                   \
         algs##_rt = OPENSSL_malloc(sizeof(OSSL_ALGORITHM) *                    \
                                    (OSSL_NELEM(algs) - d_algs));               \
-        if (algs##_rt == NULL)                                                 \
+        if (algs##_rt == NULL) {                                               \
+            CRYPTO_THREAD_unlock(rt_lock);                                     \
             return NULL;                                                       \
+        }                                                                      \
         n_cnt = 0;                                                             \
         for (int i = 0; i < OSSL_NELEM(algs); i++) {                           \
             if (sk_OPENSSL_STRING_find(rt_disabled_algs,                       \
@@ -1330,11 +1364,15 @@ int cnt_rt_disabled(const OSSL_ALGORITHM orig[], int len) {
             }                                                                  \
         }                                                                      \
     }                                                                          \
+    CRYPTO_THREAD_unlock(rt_lock);                                             \
     return algs##_rt
 
 static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
                                                int *no_cache) {
     int d_algs, n_cnt;
+
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        return NULL;
     // do not cache when rt algo filter is enabled
     *no_cache = rt_algo_filter_enabled;
 
@@ -1355,24 +1393,37 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
                     "Unknown operation %d requested from OQS provider\n",
                     operation_id);
     }
+    CRYPTO_THREAD_unlock(rt_lock);
     return NULL;
+}
+
+/* Other library contexts may still have the provider loaded: the state they
+ * share is released by the last instance to go.
+ */
+static void rt_unload(void) {
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        return;
+    if (--rt_loaded == 0) {
+        OPENSSL_free(oqsprovider_signatures_rt);
+        oqsprovider_signatures_rt = NULL;
+        OPENSSL_free(oqsprovider_asym_kems_rt);
+        oqsprovider_asym_kems_rt = NULL;
+        OPENSSL_free(oqsprovider_keymgmt_rt);
+        oqsprovider_keymgmt_rt = NULL;
+        OPENSSL_free(oqsprovider_encoder_rt);
+        oqsprovider_encoder_rt = NULL;
+        OPENSSL_free(oqsprovider_decoder_rt);
+        oqsprovider_decoder_rt = NULL;
+        sk_OPENSSL_STRING_free(rt_disabled_algs);
+        rt_disabled_algs = NULL;
+        OQS_destroy();
+    }
+    CRYPTO_THREAD_unlock(rt_lock);
 }
 
 static void oqsprovider_teardown(void *provctx) {
     oqsx_freeprovctx((PROV_OQS_CTX *)provctx);
-    OPENSSL_free(oqsprovider_signatures_rt);
-    oqsprovider_signatures_rt = NULL;
-    OPENSSL_free(oqsprovider_asym_kems_rt);
-    oqsprovider_asym_kems_rt = NULL;
-    OPENSSL_free(oqsprovider_keymgmt_rt);
-    oqsprovider_keymgmt_rt = NULL;
-    OPENSSL_free(oqsprovider_encoder_rt);
-    oqsprovider_encoder_rt = NULL;
-    OPENSSL_free(oqsprovider_decoder_rt);
-    oqsprovider_decoder_rt = NULL;
-    sk_OPENSSL_STRING_free(rt_disabled_algs);
-    rt_disabled_algs = NULL;
-    OQS_destroy();
+    rt_unload();
 }
 
 /* Functions we provide to the core */
@@ -1396,6 +1447,12 @@ static int algname_strcmp(const char *const *a, const char *const *b) {
     return strcmp(*a, *b);
 }
 
+static int oqs_oid_registered(const char *oid, const char *sn) {
+    int nid = OBJ_txt2nid(oid);
+
+    return nid != NID_undef && OBJ_sn2nid(sn) == nid;
+}
+
 #if !defined(OQS_PROVIDER_STATIC) && !defined(_WIN32)
 /*
  * The provider entrypoint is the only symbol that must to be exported, all
@@ -1413,26 +1470,30 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     OSSL_FUNC_core_obj_add_sigid_fn *c_obj_add_sigid = NULL;
     BIO_METHOD *corebiometh;
     OSSL_LIB_CTX *libctx = NULL;
-    int i, rc = 0;
+    int i, rc = 0, patched, counted = 0, nid, nid_ok;
+    STACK_OF(OPENSSL_STRING) *disabled = NULL, *failed = NULL;
     char *opensslv;
     const char *ossl_versionp = NULL;
     OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
                                      &opensslv, sizeof(&opensslv), 0},
                                     {NULL, 0, NULL, 0, 0}};
-    if (!rt_disabled_algs)
-        rt_disabled_algs = sk_OPENSSL_STRING_new(algname_strcmp);
-    if (!rt_disabled_algs)
-        goto end_init;
 
     OQS_init();
 
     if (!oqs_prov_bio_from_dispatch(in))
         goto end_init;
 
-    if (!oqs_patch_codepoints())
+    if (!CRYPTO_THREAD_run_once(&rt_lock_init, create_rt_lock) ||
+        rt_lock == NULL)
         goto end_init;
 
-    if (!oqs_patch_oids())
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        goto end_init;
+    rt_loaded++;
+    counted = 1;
+    patched = oqs_patch_codepoints() && oqs_patch_oids();
+    CRYPTO_THREAD_unlock(rt_lock);
+    if (!patched)
         goto end_init;
 
     for (; in->function_id != 0; in++) {
@@ -1466,6 +1527,19 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     }
     if (ossl_versionp == NULL)
         goto end_init;
+
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        goto end_init;
+
+    /* every load builds the same list, so start it afresh */
+    if (rt_disabled_algs == NULL)
+        rt_disabled_algs = sk_OPENSSL_STRING_new(algname_strcmp);
+    else
+        sk_OPENSSL_STRING_zero(rt_disabled_algs);
+    if (rt_disabled_algs == NULL) {
+        CRYPTO_THREAD_unlock(rt_lock);
+        goto end_init;
+    }
 
     /* Standardized PQ implementation in OpenSSL 3.5 is _much_ more developed
      * than this code; disable oqsprovider's versions before OID/sigid
@@ -1586,6 +1660,17 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_END
 
+    /* Registering an OID can make the core load its configuration, which may
+     * load this provider again on the same thread. rt_lock is not recursive,
+     * so work from a private copy of the list and never hold the lock across
+     * a call into the core.
+     */
+    disabled = sk_OPENSSL_STRING_dup(rt_disabled_algs);
+    CRYPTO_THREAD_unlock(rt_lock);
+    failed = sk_OPENSSL_STRING_new_null();
+    if (disabled == NULL || failed == NULL)
+        goto end_init;
+
     // insert all OIDs to the global objects list
     for (i = 0; i < OQS_OID_CNT; i += 2) {
         int id_ok = 1;
@@ -1595,18 +1680,27 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                              oqs_oid_alg_list[i + 1]);
         } else {
             // Skip OID/sigid registration for version-disabled algorithms
-            if (rt_disabled_algs &&
-                sk_OPENSSL_STRING_find(rt_disabled_algs,
+            if (sk_OPENSSL_STRING_find(disabled,
                                        (char *)oqs_oid_alg_list[i + 1]) >= 0)
                 goto end_for;
+            /* Registration also fails if the OID has been created in the
+             * meantime by another thread or library, in which case the NID is
+             * usable all the same, see
+             * https://github.com/open-quantum-safe/oqs-provider/issues/272
+             */
+            ERR_set_mark();
             if (!c_obj_create(handle, oqs_oid_alg_list[i],
                               oqs_oid_alg_list[i + 1],
-                              oqs_oid_alg_list[i + 1])) {
+                              oqs_oid_alg_list[i + 1]) &&
+                !oqs_oid_registered(oqs_oid_alg_list[i],
+                                    oqs_oid_alg_list[i + 1])) {
+                ERR_clear_last_mark();
                 OQS_PROV_PRINTF2("error registering NID for %s\n",
                                  oqs_oid_alg_list[i + 1]);
                 id_ok = 0;
                 goto end_for;
             }
+            ERR_pop_to_mark();
 
             /* create object (NID) again to avoid setup corner case problems
              * see https://github.com/openssl/openssl/discussions/21903
@@ -1620,8 +1714,12 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 ERR_pop_to_mark();
             }
 
-            if (!oqs_set_nid((char *)oqs_oid_alg_list[i + 1],
-                             OBJ_sn2nid(oqs_oid_alg_list[i + 1]))) {
+            nid = OBJ_sn2nid(oqs_oid_alg_list[i + 1]);
+            if (!CRYPTO_THREAD_write_lock(rt_lock))
+                goto end_init;
+            nid_ok = oqs_set_nid((char *)oqs_oid_alg_list[i + 1], nid);
+            CRYPTO_THREAD_unlock(rt_lock);
+            if (!nid_ok) {
                 ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
                 goto end_init;
             }
@@ -1648,17 +1746,22 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 goto end_init;
             }
         end_for:
-            if (!id_ok) {
-                sk_OPENSSL_STRING_push(rt_disabled_algs,
-                                       (char *)(oqs_oid_alg_list[i + 1]));
-            }
+            if (!id_ok && !sk_OPENSSL_STRING_push(
+                              failed, (char *)(oqs_oid_alg_list[i + 1])))
+                goto end_init;
         }
     }
 
+    if (!CRYPTO_THREAD_write_lock(rt_lock))
+        goto end_init;
+    for (i = 0; i < sk_OPENSSL_STRING_num(failed); i++)
+        sk_OPENSSL_STRING_push(rt_disabled_algs,
+                               sk_OPENSSL_STRING_value(failed, i));
     // OpenSSL 3.4.0 onwards includes sign/verify message API
     if (strcmp("3.4.0", ossl_versionp) <= 0) {
         oqs_sig_activate_message_api();
     }
+    CRYPTO_THREAD_unlock(rt_lock);
 
     // output disabled algs:
     /*
@@ -1693,6 +1796,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     rc = 1;
 
 end_init:
+    sk_OPENSSL_STRING_free(disabled);
+    sk_OPENSSL_STRING_free(failed);
     if (!rc) {
         if (ossl_versionp) {
             OQS_PROV_PRINTF2(
@@ -1705,6 +1810,8 @@ end_init:
         if (provctx && *provctx) {
             oqsprovider_teardown(*provctx);
             *provctx = NULL;
+        } else if (counted) {
+            rt_unload();
         }
     }
     return rc;

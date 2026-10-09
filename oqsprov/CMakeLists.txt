@@ -10,7 +10,7 @@ message(STATUS "Building commit ${GIT_COMMIT_HASH} in ${CMAKE_SOURCE_DIR}")
 add_definitions(-DOQS_PROVIDER_COMMIT=" \(${GIT_COMMIT_HASH}\)")
 set(PROVIDER_SOURCE_FILES
   oqsprov.c oqsprov_capabilities.c oqsprov_keys.c
-  oqs_kmgmt.c oqs_sig.c oqs_kem.c
+  oqs_kmgmt.c oqs_sig.c oqs_stfl_sig.c oqs_kem.c
   oqs_encode_key2any.c oqs_endecoder_common.c oqs_decode_der2key.c oqsprov_bio.c
   oqsprov.def
 )

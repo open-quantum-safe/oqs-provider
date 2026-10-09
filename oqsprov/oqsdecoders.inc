@@ -533,3 +533,18 @@ DECODER_w_structure("efrodo640aes", der, PrivateKeyInfo, efrodo640aes),
                         p521_mqom2cat5gf16fastr5),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_MAKE_END
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    /* LMS decoders */
+    DECODER_w_structure("lms_sha256_h5_w8",  der, PrivateKeyInfo,     lms_sha256_h5_w8),
+    DECODER_w_structure("lms_sha256_h5_w8",  der, SubjectPublicKeyInfo, lms_sha256_h5_w8),
+    DECODER_w_structure("lms_sha256_h10_w4", der, PrivateKeyInfo,     lms_sha256_h10_w4),
+    DECODER_w_structure("lms_sha256_h10_w4", der, SubjectPublicKeyInfo, lms_sha256_h10_w4),
+    DECODER_w_structure("lms_sha256_h10_w8", der, PrivateKeyInfo,     lms_sha256_h10_w8),
+    DECODER_w_structure("lms_sha256_h10_w8", der, SubjectPublicKeyInfo, lms_sha256_h10_w8),
+    DECODER_w_structure("lms_sha256_h15_w8", der, PrivateKeyInfo,     lms_sha256_h15_w8),
+    DECODER_w_structure("lms_sha256_h15_w8", der, SubjectPublicKeyInfo, lms_sha256_h15_w8),
+    DECODER_w_structure("lms_sha256_h20_w8", der, PrivateKeyInfo,     lms_sha256_h20_w8),
+    DECODER_w_structure("lms_sha256_h20_w8", der, SubjectPublicKeyInfo, lms_sha256_h20_w8),
+    DECODER_w_structure("lms_sha256_h25_w8", der, PrivateKeyInfo,     lms_sha256_h25_w8),
+    DECODER_w_structure("lms_sha256_h25_w8", der, SubjectPublicKeyInfo, lms_sha256_h25_w8),
+#endif /* OQS_ENABLE_SIG_STFL_LMS */

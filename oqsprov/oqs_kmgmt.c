@@ -1326,6 +1326,70 @@ static void *p521_mqom2cat5gf16fastr5_gen_init(void *provctx, int selection) {
 
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_CONSTRUCTORS_END
 
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+#include "oqs/sig_stfl.h"
+/* LMS — Leighton-Micali Signature keymgmt constructors */
+static void *lms_sha256_h5_w8_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_STFL_alg_lms_sha256_h5_w8,
+                        "lms_sha256_h5_w8", KEY_TYPE_STFL_SIG, NULL, 128, 0, 0);
+}
+static void *lms_sha256_h5_w8_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_STFL_alg_lms_sha256_h5_w8,
+                         "lms_sha256_h5_w8", KEY_TYPE_STFL_SIG, 128, 0, 0);
+}
+
+static void *lms_sha256_h10_w4_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_STFL_alg_lms_sha256_h10_w4,
+                        "lms_sha256_h10_w4", KEY_TYPE_STFL_SIG, NULL, 128, 0, 0);
+}
+static void *lms_sha256_h10_w4_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_STFL_alg_lms_sha256_h10_w4,
+                         "lms_sha256_h10_w4", KEY_TYPE_STFL_SIG, 128, 0, 0);
+}
+
+static void *lms_sha256_h10_w8_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_STFL_alg_lms_sha256_h10_w8,
+                        "lms_sha256_h10_w8", KEY_TYPE_STFL_SIG, NULL, 128, 0, 0);
+}
+static void *lms_sha256_h10_w8_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_STFL_alg_lms_sha256_h10_w8,
+                         "lms_sha256_h10_w8", KEY_TYPE_STFL_SIG, 128, 0, 0);
+}
+
+static void *lms_sha256_h15_w8_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_STFL_alg_lms_sha256_h15_w8,
+                        "lms_sha256_h15_w8", KEY_TYPE_STFL_SIG, NULL, 128, 0, 0);
+}
+static void *lms_sha256_h15_w8_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_STFL_alg_lms_sha256_h15_w8,
+                         "lms_sha256_h15_w8", KEY_TYPE_STFL_SIG, 128, 0, 0);
+}
+
+static void *lms_sha256_h20_w8_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_STFL_alg_lms_sha256_h20_w8,
+                        "lms_sha256_h20_w8", KEY_TYPE_STFL_SIG, NULL, 128, 0, 0);
+}
+static void *lms_sha256_h20_w8_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_STFL_alg_lms_sha256_h20_w8,
+                         "lms_sha256_h20_w8", KEY_TYPE_STFL_SIG, 128, 0, 0);
+}
+
+static void *lms_sha256_h25_w8_new_key(void *provctx) {
+    return oqsx_key_new(PROV_OQS_LIBCTX_OF(provctx),
+                        OQS_SIG_STFL_alg_lms_sha256_h25_w8,
+                        "lms_sha256_h25_w8", KEY_TYPE_STFL_SIG, NULL, 128, 0, 0);
+}
+static void *lms_sha256_h25_w8_gen_init(void *provctx, int selection) {
+    return oqsx_gen_init(provctx, selection, OQS_SIG_STFL_alg_lms_sha256_h25_w8,
+                         "lms_sha256_h25_w8", KEY_TYPE_STFL_SIG, 128, 0, 0);
+}
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
+
 #define MAKE_SIG_KEYMGMT_FUNCTIONS(alg)                                        \
                                                                                \
     const OSSL_DISPATCH oqs_##alg##_keymgmt_functions[] = {                    \
@@ -1694,3 +1758,12 @@ MAKE_KEM_KEYMGMT_FUNCTIONS(hqc5, OQS_KEM_alg_hqc_5, 256)
 
 MAKE_KEM_ECP_KEYMGMT_FUNCTIONS(p521_hqc5, OQS_KEM_alg_hqc_5, 256)
 ///// OQS_TEMPLATE_FRAGMENT_KEYMGMT_FUNCTIONS_END
+
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+MAKE_SIG_KEYMGMT_FUNCTIONS(lms_sha256_h5_w8)
+MAKE_SIG_KEYMGMT_FUNCTIONS(lms_sha256_h10_w4)
+MAKE_SIG_KEYMGMT_FUNCTIONS(lms_sha256_h10_w8)
+MAKE_SIG_KEYMGMT_FUNCTIONS(lms_sha256_h15_w8)
+MAKE_SIG_KEYMGMT_FUNCTIONS(lms_sha256_h20_w8)
+MAKE_SIG_KEYMGMT_FUNCTIONS(lms_sha256_h25_w8)
+#endif /* OQS_ENABLE_SIG_STFL_LMS */

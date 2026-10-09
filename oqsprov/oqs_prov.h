@@ -101,6 +101,9 @@ void oqsx_freeprovctx(PROV_OQS_CTX *ctx);
 
 void oqs_sig_activate_message_api(void);
 #include "oqs/oqs.h"
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+#include "oqs/sig_stfl.h"
+#endif
 
 /* helper structure for classic key components in hybrid keys.
  * Actual tables in oqsprov_keys.c
@@ -128,6 +131,9 @@ typedef struct oqsx_evp_ctx_st OQSX_EVP_CTX;
 typedef union {
     OQS_SIG *sig;
     OQS_KEM *kem;
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    OQS_SIG_STFL *sig_stfl;
+#endif
 } OQSX_QS_CTX;
 
 struct oqsx_provider_ctx_st {
@@ -143,7 +149,8 @@ enum oqsx_key_type_en {
     KEY_TYPE_ECP_HYB_KEM,
     KEY_TYPE_ECBP_HYB_KEM,
     KEY_TYPE_ECX_HYB_KEM,
-    KEY_TYPE_HYB_SIG
+    KEY_TYPE_HYB_SIG,
+    KEY_TYPE_STFL_SIG  /* Stateful hash-based signatures (LMS/XMSS) */
 };
 
 typedef enum oqsx_key_type_en OQSX_KEY_TYPE;
@@ -185,6 +192,16 @@ struct oqsx_key_st {
      */
     void *privkey;
     void *pubkey;
+
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    /* Stateful signature (LMS) live secret key object (not serialized).
+     * Required to be non-NULL for signing; populated during keygen or key load.
+     */
+    OQS_SIG_STFL_SECRET_KEY *stfl_secret_key;
+    /* Path to the file used by the secure_store_sk callback to persist state
+     * after each signing operation.  Caller-managed; freed in oqsx_key_free. */
+    char *stfl_state_file;
+#endif
 };
 
 typedef struct oqsx_key_st OQSX_KEY;
@@ -237,6 +254,9 @@ int oqs_patch_codepoints(void);
 extern const OSSL_DISPATCH oqs_generic_kem_functions[];
 extern const OSSL_DISPATCH oqs_hybrid_kem_functions[];
 extern const OSSL_DISPATCH oqs_signature_functions[];
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+extern const OSSL_DISPATCH oqs_stfl_signature_functions[];
+#endif
 
 ///// OQS_TEMPLATE_FRAGMENT_ENDECODER_FUNCTIONS_START
 #ifdef OQS_KEM_ENCODERS
@@ -2351,6 +2371,28 @@ extern const OSSL_DISPATCH
         [];
 ///// OQS_TEMPLATE_FRAGMENT_ENDECODER_FUNCTIONS_END
 
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+/* LMS encoder/decoder dispatch table declarations */
+#define DECLARE_LMS_ENCODER_DECODER(name) \
+extern const OSSL_DISPATCH oqs_##name##_to_PrivateKeyInfo_der_encoder_functions[]; \
+extern const OSSL_DISPATCH oqs_##name##_to_PrivateKeyInfo_pem_encoder_functions[]; \
+extern const OSSL_DISPATCH oqs_##name##_to_EncryptedPrivateKeyInfo_der_encoder_functions[]; \
+extern const OSSL_DISPATCH oqs_##name##_to_EncryptedPrivateKeyInfo_pem_encoder_functions[]; \
+extern const OSSL_DISPATCH oqs_##name##_to_SubjectPublicKeyInfo_der_encoder_functions[]; \
+extern const OSSL_DISPATCH oqs_##name##_to_SubjectPublicKeyInfo_pem_encoder_functions[]; \
+extern const OSSL_DISPATCH oqs_##name##_to_text_encoder_functions[]; \
+extern const OSSL_DISPATCH oqs_PrivateKeyInfo_der_to_##name##_decoder_functions[]; \
+extern const OSSL_DISPATCH oqs_SubjectPublicKeyInfo_der_to_##name##_decoder_functions[];
+
+DECLARE_LMS_ENCODER_DECODER(lms_sha256_h5_w8)
+DECLARE_LMS_ENCODER_DECODER(lms_sha256_h10_w4)
+DECLARE_LMS_ENCODER_DECODER(lms_sha256_h10_w8)
+DECLARE_LMS_ENCODER_DECODER(lms_sha256_h15_w8)
+DECLARE_LMS_ENCODER_DECODER(lms_sha256_h20_w8)
+DECLARE_LMS_ENCODER_DECODER(lms_sha256_h25_w8)
+#undef DECLARE_LMS_ENCODER_DECODER
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
+
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
 extern const OSSL_DISPATCH oqs_mldsa44_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_p256_mldsa44_keymgmt_functions[];
@@ -2499,6 +2541,15 @@ extern const OSSL_DISPATCH oqs_hqc5_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_ecp_p521_hqc5_keymgmt_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
+
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+extern const OSSL_DISPATCH oqs_lms_sha256_h5_w8_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_lms_sha256_h10_w4_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_lms_sha256_h10_w8_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_lms_sha256_h15_w8_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_lms_sha256_h20_w8_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_lms_sha256_h25_w8_keymgmt_functions[];
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
 
 /* BIO function declarations */
 int oqs_prov_bio_from_dispatch(const OSSL_DISPATCH *fns);

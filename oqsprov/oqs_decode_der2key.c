@@ -902,3 +902,19 @@ MAKE_DECODER(, "p521_mqom2cat5gf16fastr5", p521_mqom2cat5gf16fastr5, oqsx,
 MAKE_DECODER(, "p521_mqom2cat5gf16fastr5", p521_mqom2cat5gf16fastr5, oqsx,
              SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END
+
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+/* LMS decoder dispatch tables */
+MAKE_DECODER(, "lms_sha256_h5_w8",  lms_sha256_h5_w8,  oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "lms_sha256_h5_w8",  lms_sha256_h5_w8,  oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "lms_sha256_h10_w4", lms_sha256_h10_w4, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "lms_sha256_h10_w4", lms_sha256_h10_w4, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "lms_sha256_h10_w8", lms_sha256_h10_w8, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "lms_sha256_h10_w8", lms_sha256_h10_w8, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "lms_sha256_h15_w8", lms_sha256_h15_w8, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "lms_sha256_h15_w8", lms_sha256_h15_w8, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "lms_sha256_h20_w8", lms_sha256_h20_w8, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "lms_sha256_h20_w8", lms_sha256_h20_w8, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "lms_sha256_h25_w8", lms_sha256_h25_w8, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "lms_sha256_h25_w8", lms_sha256_h25_w8, oqsx, SubjectPublicKeyInfo);
+#endif /* OQS_ENABLE_SIG_STFL_LMS */

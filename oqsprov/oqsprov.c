@@ -57,9 +57,9 @@ extern OSSL_FUNC_provider_get_capabilities_fn oqs_provider_get_capabilities;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START
 
 #ifdef OQS_KEM_ENCODERS
-#define OQS_OID_CNT 248
+#define OQS_OID_CNT (248 + 12)
 #else
-#define OQS_OID_CNT 124
+#define OQS_OID_CNT (124 + 12)
 #endif
 const char *oqs_oid_alg_list[OQS_OID_CNT] = {
 
@@ -316,6 +316,25 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "1.3.9999.11.5.2",
     "p521_mqom2cat5gf16fastr5",
     ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_END
+
+/* LMS — experimental OIDs (1.3.9999.99.x) pending formal IANA/NIST assignment */
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    "1.3.9999.99.1",
+    "lms_sha256_h5_w8",
+    "1.3.9999.99.2",
+    "lms_sha256_h10_w4",
+    "1.3.9999.99.3",
+    "lms_sha256_h10_w8",
+    "1.3.9999.99.4",
+    "lms_sha256_h15_w8",
+    "1.3.9999.99.5",
+    "lms_sha256_h20_w8",
+    "1.3.9999.99.6",
+    "lms_sha256_h25_w8",
+#else
+    NULL, NULL, NULL, NULL, NULL, NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL,
+#endif
 };
 
 int oqs_patch_oids(void) {
@@ -776,6 +795,16 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("p521_mqom2cat5gf16fastr5", 256, oqs_signature_functions),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
+
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    /* LMS stateful signatures use the dedicated stateful dispatch table */
+    SIGALG("lms_sha256_h5_w8",  128, oqs_stfl_signature_functions),
+    SIGALG("lms_sha256_h10_w4", 128, oqs_stfl_signature_functions),
+    SIGALG("lms_sha256_h10_w8", 128, oqs_stfl_signature_functions),
+    SIGALG("lms_sha256_h15_w8", 128, oqs_stfl_signature_functions),
+    SIGALG("lms_sha256_h20_w8", 128, oqs_stfl_signature_functions),
+    SIGALG("lms_sha256_h25_w8", 128, oqs_stfl_signature_functions),
+#endif
     {NULL, NULL, NULL}};
 
 static OSSL_ALGORITHM *oqsprovider_asym_kems_rt = NULL;
@@ -1030,6 +1059,14 @@ static const OSSL_ALGORITHM
 #ifdef OQS_ENABLE_SIG_mqom_mqom2_cat5_gf16_fast_r5
     SIGALG("mqom2cat5gf16fastr5", 256, oqs_mqom2cat5gf16fastr5_keymgmt_functions),
     SIGALG("p521_mqom2cat5gf16fastr5", 256, oqs_p521_mqom2cat5gf16fastr5_keymgmt_functions),
+#endif
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    SIGALG("lms_sha256_h5_w8",  128, oqs_lms_sha256_h5_w8_keymgmt_functions),
+    SIGALG("lms_sha256_h10_w4", 128, oqs_lms_sha256_h10_w4_keymgmt_functions),
+    SIGALG("lms_sha256_h10_w8", 128, oqs_lms_sha256_h10_w8_keymgmt_functions),
+    SIGALG("lms_sha256_h15_w8", 128, oqs_lms_sha256_h15_w8_keymgmt_functions),
+    SIGALG("lms_sha256_h20_w8", 128, oqs_lms_sha256_h20_w8_keymgmt_functions),
+    SIGALG("lms_sha256_h25_w8", 128, oqs_lms_sha256_h25_w8_keymgmt_functions),
 #endif
 
 #ifdef OQS_ENABLE_KEM_efrodokem_640_aes

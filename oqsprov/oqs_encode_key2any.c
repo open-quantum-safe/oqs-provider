@@ -1002,6 +1002,28 @@ done:
 #define p521_mqom2cat5gf16fastr5_pem_type "p521_mqom2cat5gf16fastr5"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+/* LMS encoder defines */
+#define lms_sha256_h5_w8_evp_type 0
+#define lms_sha256_h5_w8_input_type "lms_sha256_h5_w8"
+#define lms_sha256_h5_w8_pem_type "lms_sha256_h5_w8"
+#define lms_sha256_h10_w4_evp_type 0
+#define lms_sha256_h10_w4_input_type "lms_sha256_h10_w4"
+#define lms_sha256_h10_w4_pem_type "lms_sha256_h10_w4"
+#define lms_sha256_h10_w8_evp_type 0
+#define lms_sha256_h10_w8_input_type "lms_sha256_h10_w8"
+#define lms_sha256_h10_w8_pem_type "lms_sha256_h10_w8"
+#define lms_sha256_h15_w8_evp_type 0
+#define lms_sha256_h15_w8_input_type "lms_sha256_h15_w8"
+#define lms_sha256_h15_w8_pem_type "lms_sha256_h15_w8"
+#define lms_sha256_h20_w8_evp_type 0
+#define lms_sha256_h20_w8_input_type "lms_sha256_h20_w8"
+#define lms_sha256_h20_w8_pem_type "lms_sha256_h20_w8"
+#define lms_sha256_h25_w8_evp_type 0
+#define lms_sha256_h25_w8_input_type "lms_sha256_h25_w8"
+#define lms_sha256_h25_w8_pem_type "lms_sha256_h25_w8"
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
+
 /* ---------------------------------------------------------------------- */
 
 static OSSL_FUNC_decoder_newctx_fn key2any_newctx;
@@ -2464,3 +2486,23 @@ MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p521_mqom2cat5gf16fastr5, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p521_mqom2cat5gf16fastr5);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END
+
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+/* LMS encoder dispatch tables */
+#define MAKE_LMS_ENCODERS(name) \
+MAKE_ENCODER(, name, oqsx, EncryptedPrivateKeyInfo, der); \
+MAKE_ENCODER(, name, oqsx, EncryptedPrivateKeyInfo, pem); \
+MAKE_ENCODER(, name, oqsx, PrivateKeyInfo, der); \
+MAKE_ENCODER(, name, oqsx, PrivateKeyInfo, pem); \
+MAKE_ENCODER(, name, oqsx, SubjectPublicKeyInfo, der); \
+MAKE_ENCODER(, name, oqsx, SubjectPublicKeyInfo, pem); \
+MAKE_TEXT_ENCODER(, name);
+
+MAKE_LMS_ENCODERS(lms_sha256_h5_w8)
+MAKE_LMS_ENCODERS(lms_sha256_h10_w4)
+MAKE_LMS_ENCODERS(lms_sha256_h10_w8)
+MAKE_LMS_ENCODERS(lms_sha256_h15_w8)
+MAKE_LMS_ENCODERS(lms_sha256_h20_w8)
+MAKE_LMS_ENCODERS(lms_sha256_h25_w8)
+#undef MAKE_LMS_ENCODERS
+#endif /* OQS_ENABLE_SIG_STFL_LMS */

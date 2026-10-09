@@ -18,6 +18,9 @@
 #include <string.h>
 
 #include "oqs_prov.h"
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+#include "oqs/sig_stfl.h"
+#endif
 
 #ifdef NDEBUG
 #define OQS_KEY_PRINTF(a)
@@ -52,10 +55,17 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
-#ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 124
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+/* Number of LMS variants exposed through the provider */
+#define LMS_TABLE_LEN 6
 #else
-#define NID_TABLE_LEN 62
+#define LMS_TABLE_LEN 0
+#endif
+
+#ifdef OQS_KEM_ENCODERS
+#define NID_TABLE_LEN (124 + LMS_TABLE_LEN)
+#else
+#define NID_TABLE_LEN (62 + LMS_TABLE_LEN)
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -248,6 +258,22 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "p521_mqom2cat5gf16fastr5", OQS_SIG_alg_mqom_mqom2_cat5_gf16_fast_r5,
      KEY_TYPE_HYB_SIG, 256},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
+
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    /* LMS — Leighton-Micali Signature (stateful hash-based, NIST SP 800-208) */
+    {0, "lms_sha256_h5_w8",  OQS_SIG_STFL_alg_lms_sha256_h5_w8,
+     KEY_TYPE_STFL_SIG, 128, 0},
+    {0, "lms_sha256_h10_w4", OQS_SIG_STFL_alg_lms_sha256_h10_w4,
+     KEY_TYPE_STFL_SIG, 128, 0},
+    {0, "lms_sha256_h10_w8", OQS_SIG_STFL_alg_lms_sha256_h10_w8,
+     KEY_TYPE_STFL_SIG, 128, 0},
+    {0, "lms_sha256_h15_w8", OQS_SIG_STFL_alg_lms_sha256_h15_w8,
+     KEY_TYPE_STFL_SIG, 128, 0},
+    {0, "lms_sha256_h20_w8", OQS_SIG_STFL_alg_lms_sha256_h20_w8,
+     KEY_TYPE_STFL_SIG, 128, 0},
+    {0, "lms_sha256_h25_w8", OQS_SIG_STFL_alg_lms_sha256_h25_w8,
+     KEY_TYPE_STFL_SIG, 128, 0},
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
 };
 
 int oqs_set_nid(char *tlsname, int nid) {
@@ -776,6 +802,71 @@ static OQSX_KEY *oqsx_key_op(const X509_ALGOR *palg, const unsigned char *p,
     }
     OQS_KEY_PRINTF2("OQSX KEY: Recreated OQSX key %s\n", key->tls_name);
 
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    /* LMS keys have a distinct encoding: serialized SK || PK for private,
+     * raw PK bytes for public.  Handle them before the generic path. */
+    if (key->keytype == KEY_TYPE_STFL_SIG) {
+        OQS_SIG_STFL *stfl = key->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl;
+
+        if (op == KEY_OP_PUBLIC) {
+            if ((size_t)plen != stfl->length_public_key) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err_key_op;
+            }
+            key->pubkey = OPENSSL_secure_zalloc(stfl->length_public_key);
+            if (!key->pubkey) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err_key_op;
+            }
+            memcpy(key->pubkey, p, stfl->length_public_key);
+            key->pubkeylen = stfl->length_public_key;
+            key->comp_pubkey[0] = key->pubkey;
+        } else {
+            /* Private key blob: serialized SK bytes followed by PK bytes */
+            size_t publen = stfl->length_public_key;
+            if ((size_t)plen <= publen) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err_key_op;
+            }
+            size_t sklen = plen - publen;
+
+            /* Reconstruct live secret key object from serialized bytes */
+            key->stfl_secret_key =
+                OQS_SIG_STFL_SECRET_KEY_new(stfl->method_name);
+            if (!key->stfl_secret_key) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err_key_op;
+            }
+            if (OQS_SIG_STFL_SECRET_KEY_deserialize(
+                    key->stfl_secret_key, p, sklen, NULL) != OQS_SUCCESS) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                goto err_key_op;
+            }
+
+            /* Store serialized bytes in privkey for round-trip export */
+            key->privkey = OPENSSL_secure_zalloc(sklen);
+            if (!key->privkey) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err_key_op;
+            }
+            memcpy(key->privkey, p, sklen);
+            key->privkeylen = sklen;
+            key->comp_privkey[0] = key->privkey;
+
+            /* Public key is the suffix */
+            key->pubkey = OPENSSL_secure_zalloc(publen);
+            if (!key->pubkey) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                goto err_key_op;
+            }
+            memcpy(key->pubkey, p + sklen, publen);
+            key->pubkeylen = publen;
+            key->comp_pubkey[0] = key->pubkey;
+        }
+        return key;
+    }
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
+
     if (op == KEY_OP_PUBLIC) {
         if (key->pubkeylen != plen) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
@@ -1188,6 +1279,29 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char *oqs_name, char *tls_name,
         ret->keytype = primitive;
         ret->evp_info = evp_ctx->evp_info;
         break;
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    case KEY_TYPE_STFL_SIG:
+        ret->numkeys = 1;
+        ret->comp_privkey = OPENSSL_malloc(sizeof(void *));
+        ret->comp_pubkey = OPENSSL_malloc(sizeof(void *));
+        ON_ERR_GOTO(!ret->comp_privkey || !ret->comp_pubkey, err);
+        ret->oqsx_provider_ctx.oqsx_evp_ctx = NULL;
+        ret->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl =
+            OQS_SIG_STFL_new(oqs_name);
+        if (!ret->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl) {
+            fprintf(stderr,
+                    "Could not create OQS stateful signature %s. "
+                    "Enabled in liboqs?\n",
+                    oqs_name);
+            goto err;
+        }
+        ret->privkeylen =
+            ret->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl->length_secret_key;
+        ret->pubkeylen =
+            ret->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl->length_public_key;
+        ret->keytype = KEY_TYPE_STFL_SIG;
+        break;
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
     default:
         OQS_KEY_PRINTF2("OQSX_KEY: Unknown key type encountered: %d\n",
                         primitive);
@@ -1237,8 +1351,17 @@ err:
         OPENSSL_free(ret->comp_pubkey);
         OQS_KEM_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.kem);
         ret->oqsx_provider_ctx.oqsx_qs_ctx.kem = NULL;
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+        if (ret->keytype == KEY_TYPE_STFL_SIG) {
+            OQS_SIG_STFL_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl);
+            ret->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl = NULL;
+        } else {
+#endif
         OQS_SIG_free(ret->oqsx_provider_ctx.oqsx_qs_ctx.sig);
         ret->oqsx_provider_ctx.oqsx_qs_ctx.sig = NULL;
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+        }
+#endif
     }
     OPENSSL_free(ret);
     return NULL;
@@ -1278,6 +1401,15 @@ void oqsx_key_free(OQSX_KEY *key) {
              key->keytype == KEY_TYPE_ECBP_HYB_KEM ||
              key->keytype == KEY_TYPE_ECX_HYB_KEM) {
         OQS_KEM_free(key->oqsx_provider_ctx.oqsx_qs_ctx.kem);
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    } else if (key->keytype == KEY_TYPE_STFL_SIG) {
+        OQS_SIG_STFL_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl);
+        key->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl = NULL;
+        OQS_SIG_STFL_SECRET_KEY_free(key->stfl_secret_key);
+        key->stfl_secret_key = NULL;
+        OPENSSL_free(key->stfl_state_file);
+        key->stfl_state_file = NULL;
+#endif
     } else
         OQS_SIG_free(key->oqsx_provider_ctx.oqsx_qs_ctx.sig);
     EVP_PKEY_free(key->classical_pkey);
@@ -1349,17 +1481,49 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
             return 0;
         }
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+        /* LMS serialized private key size varies; allow any size ≤ maximum */
+        if (key->keytype == KEY_TYPE_STFL_SIG) {
+            if (pp1->data_size == 0 ||
+                pp1->data_size > key->oqsx_provider_ctx.oqsx_qs_ctx
+                                     .sig_stfl->length_secret_key) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
+                return 0;
+            }
+        } else
+#endif
         if (key->privkeylen != pp1->data_size) {
             ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_SIZE);
             return 0;
         }
-        OPENSSL_secure_clear_free(key->privkey, pp1->data_size);
+        OPENSSL_secure_clear_free(key->privkey, key->privkeylen);
         key->privkey = OPENSSL_secure_malloc(pp1->data_size);
         if (key->privkey == NULL) {
             ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
             return 0;
         }
         memcpy(key->privkey, pp1->data, pp1->data_size);
+        key->privkeylen = pp1->data_size;
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+        /* Reconstruct the live secret key object for LMS signing */
+        if (key->keytype == KEY_TYPE_STFL_SIG) {
+            OQS_SIG_STFL_SECRET_KEY_free(key->stfl_secret_key);
+            key->stfl_secret_key = OQS_SIG_STFL_SECRET_KEY_new(
+                key->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl->method_name);
+            if (!key->stfl_secret_key) {
+                ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
+                return 0;
+            }
+            if (OQS_SIG_STFL_SECRET_KEY_deserialize(
+                    key->stfl_secret_key,
+                    (const uint8_t *)key->privkey, key->privkeylen,
+                    NULL) != OQS_SUCCESS) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                return 0;
+            }
+            key->comp_privkey[0] = key->privkey;
+        }
+#endif
     }
     if (pp2 != NULL) {
         if (pp2->data_type != OSSL_PARAM_OCTET_STRING) {
@@ -1377,7 +1541,16 @@ int oqsx_key_fromdata(OQSX_KEY *key, const OSSL_PARAM params[],
             return 0;
         }
         memcpy(key->pubkey, pp2->data, pp2->data_size);
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+        if (key->keytype == KEY_TYPE_STFL_SIG)
+            key->comp_pubkey[0] = key->pubkey;
+#endif
     }
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    /* LMS keys don't use composites or classic keys */
+    if (key->keytype == KEY_TYPE_STFL_SIG)
+        return 1;
+#endif
     if (!oqsx_key_set_composites(key, classic_lengths_fixed) ||
         !oqsx_key_recreate_classickey(
             key, key->privkey != NULL ? KEY_OP_PRIVATE : KEY_OP_PUBLIC))
@@ -1645,6 +1818,49 @@ int oqsx_key_gen(OQSX_KEY *key) {
         ret = !oqsx_key_set_composites(key, 0);
         ON_ERR_GOTO(ret, err_gen);
         ret = oqsx_key_gen_oqs(key, 0);
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    } else if (key->keytype == KEY_TYPE_STFL_SIG) {
+        OQS_SIG_STFL *stfl =
+            key->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl;
+        if (!stfl) {
+            ret = 1;
+            goto err_gen;
+        }
+
+        /* Allocate public key buffer */
+        key->pubkey = OPENSSL_secure_zalloc(stfl->length_public_key);
+        ON_ERR_SET_GOTO(!key->pubkey, ret, 1, err_gen);
+        key->comp_pubkey[0] = key->pubkey;
+
+        /* Allocate the live secret key object */
+        key->stfl_secret_key =
+            OQS_SIG_STFL_SECRET_KEY_new(stfl->method_name);
+        ON_ERR_SET_GOTO(!key->stfl_secret_key, ret, 1, err_gen);
+
+        /* Generate the key pair */
+        OQS_STATUS oqs_ret = OQS_SIG_STFL_keypair(
+            stfl, (uint8_t *)key->pubkey, key->stfl_secret_key);
+        ON_ERR_SET_GOTO(oqs_ret != OQS_SUCCESS, ret, 1, err_gen);
+
+        /* Serialize secret key into privkey blob for PEM/DER export */
+        uint8_t *sk_buf = NULL;
+        size_t sk_buf_len = 0;
+        oqs_ret = OQS_SIG_STFL_SECRET_KEY_serialize(&sk_buf, &sk_buf_len,
+                                                     key->stfl_secret_key);
+        ON_ERR_SET_GOTO(oqs_ret != OQS_SUCCESS || !sk_buf, ret, 1, err_gen);
+
+        key->privkey = OPENSSL_secure_zalloc(sk_buf_len);
+        if (!key->privkey) {
+            OQS_MEM_secure_free(sk_buf, sk_buf_len);
+            ret = 1;
+            goto err_gen;
+        }
+        memcpy(key->privkey, sk_buf, sk_buf_len);
+        key->privkeylen = sk_buf_len;
+        key->comp_privkey[0] = key->privkey;
+        OQS_MEM_secure_free(sk_buf, sk_buf_len);
+        ret = 0;
+#endif /* OQS_ENABLE_SIG_STFL_LMS */
     } else {
         ret = 1;
     }
@@ -1675,7 +1891,11 @@ int oqsx_key_maxsize(OQSX_KEY *key) {
         return key->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature +
                key->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature +
                SIZE_OF_UINT32;
-
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    case KEY_TYPE_STFL_SIG:
+        return (int)key->oqsx_provider_ctx.oqsx_qs_ctx.sig_stfl
+                   ->length_signature;
+#endif
     default:
         OQS_KEY_PRINTF("OQSX KEY: Wrong key type\n");
         return 0;
@@ -1693,6 +1913,10 @@ int oqsx_key_get_oqs_public_key_len(OQSX_KEY *k) {
     case KEY_TYPE_ECBP_HYB_KEM:
     case KEY_TYPE_ECP_HYB_KEM:
         return k->oqsx_provider_ctx.oqsx_qs_ctx.kem->length_public_key;
+#ifdef OQS_ENABLE_SIG_STFL_LMS
+    case KEY_TYPE_STFL_SIG:
+        return (int)k->pubkeylen;
+#endif
     default:
         OQS_KEY_PRINTF2("OQSX_KEY: Unknown key type encountered: %d\n",
                         k->keytype);

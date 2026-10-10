@@ -1,0 +1,34 @@
+name: Check links
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-links:
+    name: Check Markdown links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Check links with Lychee
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --root-dir "$(pwd)"
+            --include-fragments=anchor-only
+            --verbose
+            --no-progress
+            './**/*.md'
+          fail: false
+          failIfEmpty: false
+          format: markdown
+          jobSummary: true
+          output: lychee/out.md

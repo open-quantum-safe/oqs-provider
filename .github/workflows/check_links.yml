@@ -148,7 +148,7 @@ jobs:
 
       - name: Report new link findings in a GitHub issue
         if: steps.prepare.outcome == 'success' && hashFiles('lychee/findings.json') != ''
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.8
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
           FINDINGS_FILE: lychee/findings.json
         with:

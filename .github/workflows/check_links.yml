@@ -7,11 +7,13 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   check-links:
     name: Check Markdown links
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -19,16 +21,301 @@ jobs:
           persist-credentials: false
 
       - name: Check links with Lychee
+        id: lychee
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
           args: >-
             --root-dir "$(pwd)"
-            --include-fragments=anchor-only
+            --include-fragments anchor-only
             --verbose
             --no-progress
             './**/*.md'
           fail: false
           failIfEmpty: false
-          format: markdown
-          jobSummary: true
-          output: lychee/out.md
+          format: json
+          jobSummary: false
+          output: lychee/report.json
+
+      - name: Validate report and prepare findings
+        id: prepare
+        if: steps.lychee.outcome == 'success'
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+          from urllib.parse import unquote, urlparse
+
+          root = Path.cwd().resolve()
+          report_path = Path("lychee/report.json")
+
+          if not report_path.is_file():
+              raise SystemExit("Missing Lychee report; issue state will not be updated.")
+
+          try:
+              report = json.loads(report_path.read_text(encoding="utf-8"))
+          except (OSError, json.JSONDecodeError) as exc:
+              raise SystemExit(f"Invalid Lychee report; issue state will not be updated: {exc}")
+
+          if not isinstance(report, dict) or not isinstance(report.get("error_map"), dict):
+              raise SystemExit("Report has no valid error_map; issue state will not be updated.")
+
+          def normalise_url(value):
+              if value.startswith("[") and "](" in value and value.endswith(")"):
+                  value = value.split("](", 1)[1][:-1]
+
+              if value.startswith("file://"):
+                  parsed = urlparse(value)
+                  path = Path(unquote(parsed.path))
+
+                  try:
+                      value = path.resolve().relative_to(root).as_posix()
+                  except (ValueError, OSError):
+                      parts = path.parts
+                      try:
+                          index = len(parts) - 1 - tuple(reversed(parts)).index("oqs-provider")
+                          value = Path(*parts[index + 1:]).as_posix()
+                      except ValueError:
+                          value = path.as_posix().lstrip("/")
+
+              return value
+
+          findings = []
+          seen = set()
+
+          for source, errors in report["error_map"].items():
+              if not isinstance(errors, list):
+                  continue
+
+              for error in errors:
+                  if not isinstance(error, dict) or not isinstance(error.get("url"), str):
+                      continue
+
+                  url = normalise_url(error["url"])
+                  key = f"{source}\t{url}"
+
+                  if key in seen:
+                      continue
+                  seen.add(key)
+
+                  status = error.get("status") or {}
+                  span = error.get("span") or {}
+
+                  findings.append({
+                      "key": key,
+                      "source": source,
+                      "url": url,
+                      "status": status.get("text", "Unspecified link-check failure"),
+                      "line": span.get("line"),
+                  })
+
+          findings.sort(key=lambda item: item["key"])
+
+          out = Path("lychee")
+          out.mkdir(parents=True, exist_ok=True)
+          (out / "findings.json").write_text(
+              json.dumps(findings, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          lines = [
+              "# Markdown link check",
+              "",
+              f"Lychee reported **{len(findings)} suspected failing link(s)**.",
+              "",
+              "Results may include transient network failures or false-positive fragment checks. Verify links manually before treating them as broken.",
+              "",
+          ]
+
+          if findings:
+              for item in findings:
+                  line = f" (line {item['line']})" if item["line"] else ""
+                  lines.append(
+                      f"- `{item['source']}`{line}: `{item['url']}` — {item['status']}"
+                  )
+          else:
+              lines.append("No link failures were reported.")
+
+          (out / "summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+          print(f"Prepared {len(findings)} finding(s).")
+          PY
+
+      - name: Publish Markdown job summary
+        if: steps.prepare.outcome == 'success'
+        shell: bash
+        run: cat lychee/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report new link findings in a GitHub issue
+        if: steps.prepare.outcome == 'success' && hashFiles('lychee/findings.json') != ''
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.8
+        env:
+          FINDINGS_FILE: lychee/findings.json
+        with:
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo;
+            const issueTitle = 'Automated Markdown link check findings';
+            const stateStart = '<!-- lychee-state:start -->';
+            const stateEnd = '<!-- lychee-state:end -->';
+
+            const findings = JSON.parse(
+              fs.readFileSync(process.env.FINDINGS_FILE, 'utf8')
+            );
+
+            const issues = await github.paginate(
+              github.rest.issues.listForRepo,
+              { owner, repo, state: 'all', per_page: 100 }
+            );
+
+            const matching = issues
+              .filter(issue =>
+                !issue.pull_request && issue.title === issueTitle
+              )
+              .sort((a, b) => b.number - a.number);
+
+            const openIssue = matching.find(issue => issue.state === 'open');
+            const previousClosedIssue = matching.find(issue => issue.state === 'closed');
+
+            function renderFindings(items) {
+              if (!items.length) {
+                return 'No failing links were reported in this scan.';
+              }
+
+              return items.map(item => {
+                const line = item.line ? ` (line ${item.line})` : '';
+                return `- \`${item.source}\`${line}: \`${item.url}\` — ${item.status}`;
+              }).join('\n');
+            }
+
+            function stateBody(keys) {
+              return [
+                stateStart,
+                JSON.stringify(keys),
+                stateEnd
+              ].join('\n');
+            }
+
+            async function getComments(issueNumber) {
+              return github.paginate(
+                github.rest.issues.listComments,
+                { owner, repo, issue_number: issueNumber, per_page: 100 }
+              );
+            }
+
+            function findStateComment(comments) {
+              return comments.find(comment =>
+                comment.user?.type === 'Bot' &&
+                comment.body?.includes(stateStart) &&
+                comment.body?.includes(stateEnd)
+              );
+            }
+
+            function readPreviousKeys(comments) {
+              const comment = findStateComment(comments);
+              if (!comment) return [];
+
+              const match = comment.body.match(
+                /<!-- lychee-state:start -->\s*([\s\S]*?)\s*<!-- lychee-state:end -->/
+              );
+
+              if (!match) return [];
+
+              try {
+                const parsed = JSON.parse(match[1]);
+                return Array.isArray(parsed)
+                  ? parsed.filter(key => typeof key === 'string')
+                  : [];
+              } catch {
+                core.warning('Previous state was invalid; using an empty baseline.');
+                return [];
+              }
+            }
+
+            async function saveState(issueNumber, keys) {
+              const comments = await getComments(issueNumber);
+              const existing = findStateComment(comments);
+              const body = stateBody(keys);
+
+              if (existing) {
+                await github.rest.issues.updateComment({
+                  owner,
+                  repo,
+                  comment_id: existing.id,
+                  body
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: issueNumber,
+                  body
+                });
+              }
+            }
+
+            if (!openIssue) {
+              if (findings.length === 0) {
+                core.info('No failures and no open tracking issue.');
+                return;
+              }
+
+              let body = [
+                'This issue tracks **suspected Markdown link-check failures** reported by the scheduled Lychee workflow.',
+                '',
+                'These findings require manual verification. Websites may temporarily block automated requests, and fragment checks can produce false positives. A reported failure is not proof that a link is broken.',
+                '',
+                'Later comments will report newly observed failures instead of repeating unchanged findings.',
+                '',
+                renderFindings(findings)
+              ].join('\n');
+
+              if (previousClosedIssue) {
+                body += `\n\nA previous tracking issue was closed: #${previousClosedIssue.number}.`;
+              }
+
+              const created = await github.rest.issues.create({
+                owner,
+                repo,
+                title: issueTitle,
+                body
+              });
+
+              await saveState(
+                created.data.number,
+                findings.map(item => item.key).sort()
+              );
+
+              core.info(`Created tracking issue #${created.data.number}.`);
+              return;
+            }
+
+            const comments = await getComments(openIssue.number);
+            const previousKeys = new Set(readPreviousKeys(comments));
+            const currentKeys = new Set(findings.map(item => item.key));
+            const newlyObserved = findings.filter(
+              item => !previousKeys.has(item.key)
+            );
+
+            if (newlyObserved.length) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: openIssue.number,
+                body: [
+                  '## Newly observed link-check findings',
+                  '',
+                  'These suspected failures were not present in the previous successful scan. Please verify them manually.',
+                  '',
+                  renderFindings(newlyObserved)
+                ].join('\n')
+              });
+
+              core.info(`Reported ${newlyObserved.length} newly observed finding(s).`);
+            } else {
+              core.info('No newly observed failures; no notification comment needed.');
+            }
+
+            // Refresh state after every valid scan, including clean scans.
+            // Do not automatically close the tracking issue.
+            await saveState(openIssue.number, [...currentKeys].sort());

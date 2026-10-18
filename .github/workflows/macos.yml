@@ -14,6 +14,11 @@ jobs:
       matrix:
         os:
           - macos-15
+        openssl-branch:
+          - openssl-3.4.1
+          - openssl-3.5.0
+          - openssl-4.0.1
+          - master
         libjade-build:
 # build with -DOQS_LIBJADE_BUILD=ON when building for algorithms with libjade implementations
           - "OFF"
@@ -37,6 +42,7 @@ jobs:
           set-safe-directory: true
           repository: openssl/openssl
           path: openssl
+          ref: ${{ matrix.openssl-branch }}
       - name: checkout liboqs
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -47,10 +53,10 @@ jobs:
           path: liboqs
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32
-        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        uses: actions/cache@v4
         with:
           path: .localopenssl32
-          key: ${{ runner.os }}-openssl32
+          key: ${{ runner.os }}-${{ matrix.openssl-branch }}-openssl32
       - name: Build openssl3 if not cached
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
         run: pwd && ./config --prefix=`pwd`/../.localopenssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs
@@ -58,14 +64,21 @@ jobs:
       - name: Save OpenSSL
         id: cache-openssl-save
         if: steps.cache-openssl32.outputs.cache-hit != 'true'
-        uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        uses: actions/cache/save@v4
         with:
           path: |
             .localopenssl32
-          key: ${{ runner.os }}-openssl32
+          key: ${{ runner.os }}-${{ matrix.openssl-branch }}-openssl32
+      - name: Retrieve liboqs from cache
+        id: cache-liboqs
+        uses: actions/cache@v4
+        with:
+          path: .localliboqs
+          key: ${{ runner.os }}-liboqs-${{ hashFiles('liboqs/.git/refs/heads/main') }}
       - name: build liboqs
+        if: steps.cache-liboqs.outputs.cache-hit != 'true'
         run: |
-           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs -DOQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ${{ matrix.params.oqsconfig }} -S . -B _build
+           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs -DOQS_LIBJADE_BUILD=${{ matrix.libjade-build }}${{ matrix.params.oqsconfig }} -S . -B _build
            cmake --build _build
            cmake --install _build
         working-directory: liboqs
@@ -90,5 +103,5 @@ jobs:
       - name: Retain oqsprovider.dylib
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: oqs-provider-${{matrix.os}}-x64
+          name: oqs-provider-${{matrix.os}}-${{matrix.openssl-branch}}-x64
           path: _build/lib/oqsprovider.dylib

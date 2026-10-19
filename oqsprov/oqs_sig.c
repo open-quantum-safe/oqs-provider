@@ -234,31 +234,22 @@ static int oqs_sig_verify_message_init(void *vpoqs_sigctx, void *voqssig,
 static int oqs_sig_sign_directly(void *vpoqs_sigctx, unsigned char *sig,
                                  size_t *siglen, size_t sigsize,
                                  const unsigned char *tbs, size_t tbslen) {
+    /* [mb-nohybrids] single-key (PQ-only) signing: the classical half of a
+     * KEY_TYPE_HYB_SIG key and its length-prefixed concatenation are gone. */
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQSX_KEY *oqsxkey = poqs_sigctx->sig;
     OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
-    OSSL_LIB_CTX *libctx = poqs_sigctx->libctx;
-    EVP_PKEY *evpkey = oqsxkey->classical_pkey;
-    EVP_PKEY_CTX *classical_ctx_sign = NULL;
 
     OQS_SIG_PRINTF2("OQS SIG provider: sign_directly called for %ld bytes\n",
                     tbslen);
 
-    int is_hybrid = (oqsxkey->keytype == KEY_TYPE_HYB_SIG);
     size_t max_sig_len = oqs_key->length_signature;
-    size_t classical_sig_len = 0, oqs_sig_len = 0;
-    size_t actual_classical_sig_len = 0;
-    size_t index = 0;
+    size_t oqs_sig_len = 0;
     int rv = 0;
 
     if (!oqsxkey || !oqs_key || !oqsxkey->privkey) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_NO_PRIVATE_KEY);
         return rv;
-    }
-
-    if (is_hybrid) {
-        actual_classical_sig_len = oqsxkey->evp_info->length_signature;
-        max_sig_len += (SIZE_OF_UINT32 + actual_classical_sig_len);
     }
 
     if (sig == NULL) {
@@ -272,109 +263,23 @@ static int oqs_sig_sign_directly(void *vpoqs_sigctx, unsigned char *sig,
         return rv;
     }
 
-    if (is_hybrid) {
-        if ((classical_ctx_sign =
-                 EVP_PKEY_CTX_new_from_pkey(libctx, evpkey, NULL)) == NULL ||
-            EVP_PKEY_sign_init(classical_ctx_sign) <= 0) {
-            ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-            goto endsign;
-        }
-        if (oqsxkey->evp_info->keytype == EVP_PKEY_RSA) {
-            if (EVP_PKEY_CTX_set_rsa_padding(classical_ctx_sign,
-                                             RSA_PKCS1_PADDING) <= 0) {
-                ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                goto endsign;
-            }
-        }
-
-        /* delete the following line if using unconditional hash:
-         *  if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG ||
-                !use_sign_verify_message_api) {
-         */
-#if (OPENSSL_VERSION_PREREQ(3, 4))
-        if (poqs_sigctx->operation == EVP_PKEY_OP_SIGNMSG ||
-            !use_sign_verify_message_api) {
-#endif
-            const EVP_MD *classical_md;
-            int digest_len;
-            unsigned char
-                digest[SHA512_DIGEST_LENGTH]; /* init with max length */
-
-            /* classical schemes can't sign arbitrarily large data; we hash it
-             * first
-             */
-            switch (oqs_key->claimed_nist_level) {
-            case 1:
-                classical_md = EVP_sha256();
-                digest_len = SHA256_DIGEST_LENGTH;
-                SHA256(tbs, tbslen, (unsigned char *)&digest);
-                break;
-            case 2:
-            case 3:
-                classical_md = EVP_sha384();
-                digest_len = SHA384_DIGEST_LENGTH;
-                SHA384(tbs, tbslen, (unsigned char *)&digest);
-                break;
-            case 4:
-            case 5:
-            default:
-                classical_md = EVP_sha512();
-                digest_len = SHA512_DIGEST_LENGTH;
-                SHA512(tbs, tbslen, (unsigned char *)&digest);
-                break;
-            }
-            if ((EVP_PKEY_CTX_set_signature_md(classical_ctx_sign,
-                                               classical_md) <= 0) ||
-                (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32,
-                               &actual_classical_sig_len, digest,
-                               digest_len) <= 0)) {
-                ERR_raise(ERR_LIB_USER, ERR_R_FATAL);
-                goto endsign;
-            }
-#if (OPENSSL_VERSION_PREREQ(3, 4))
-        } else { // hashing asumed to be done before; just sign:
-            if (EVP_PKEY_sign(classical_ctx_sign, sig + SIZE_OF_UINT32,
-                              &actual_classical_sig_len, tbs, tbslen) <= 0) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
-                goto endsign;
-            }
-        }
-#endif
-
-        if (actual_classical_sig_len > oqsxkey->evp_info->length_signature) {
-            /* sig is bigger than expected */
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_BUFFER_LENGTH_WRONG);
-            goto endsign;
-        }
-        ENCODE_UINT32(sig, actual_classical_sig_len);
-        classical_sig_len = SIZE_OF_UINT32 + actual_classical_sig_len;
-        index += classical_sig_len;
-    }
-
 #if !defined OQS_VERSION_MINOR ||                                              \
     (OQS_VERSION_MAJOR == 0 && OQS_VERSION_MINOR < 12)
-    if (OQS_SIG_sign(oqs_key, sig + index, &oqs_sig_len, tbs, tbslen,
+    if (OQS_SIG_sign(oqs_key, sig, &oqs_sig_len, tbs, tbslen,
 #else
-    if (OQS_SIG_sign_with_ctx_str(
-            oqs_key, sig + index, &oqs_sig_len, tbs, tbslen,
-            poqs_sigctx->context_string, poqs_sigctx->context_string_length,
+    if (OQS_SIG_sign_with_ctx_str(oqs_key, sig, &oqs_sig_len, tbs, tbslen,
+                                  poqs_sigctx->context_string,
+                                  poqs_sigctx->context_string_length,
 #endif
-                     oqsxkey->comp_privkey[oqsxkey->numkeys - 1]) !=
-        OQS_SUCCESS) {
+                     oqsxkey->privkey) != OQS_SUCCESS) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
-        goto endsign;
+        return rv;
     }
 
-    *siglen = classical_sig_len + oqs_sig_len;
+    *siglen = oqs_sig_len;
     OQS_SIG_PRINTF2("OQS SIG provider: signing completes with size %ld\n",
                     *siglen);
-    rv = 1; /* success */
-
-endsign:
-    if (classical_ctx_sign) {
-        EVP_PKEY_CTX_free(classical_ctx_sign);
-    }
-    return rv;
+    return 1; /* success */
 }
 
 static int oqs_sig_sign(void *vctx, unsigned char *sig, size_t *siglen,
@@ -403,16 +308,11 @@ static int oqs_sig_sign(void *vctx, unsigned char *sig, size_t *siglen,
 static int oqs_sig_verify_directly(void *vpoqs_sigctx, const unsigned char *sig,
                                    size_t siglen, const unsigned char *tbs,
                                    size_t tbslen) {
+    /* [mb-nohybrids] single-key (PQ-only) verification: the classical verify
+     * branch for KEY_TYPE_HYB_SIG keys has been removed. */
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
     OQSX_KEY *oqsxkey = poqs_sigctx->sig;
     OQS_SIG *oqs_key = poqs_sigctx->sig->oqsx_provider_ctx.oqsx_qs_ctx.sig;
-    OSSL_LIB_CTX *libctx = poqs_sigctx->libctx;
-    EVP_PKEY *evpkey = oqsxkey->classical_pkey;
-    EVP_PKEY_CTX *classical_ctx_sign = NULL;
-    EVP_PKEY_CTX *ctx_verify = NULL;
-    int is_hybrid = (oqsxkey->keytype == KEY_TYPE_HYB_SIG);
-    size_t classical_sig_len = 0;
-    size_t index = 0;
     int rv = 0;
 
     OQS_SIG_PRINTF3(
@@ -423,123 +323,28 @@ static int oqs_sig_verify_directly(void *vpoqs_sigctx, const unsigned char *sig,
     if (!oqsxkey || !oqs_key || !oqsxkey->pubkey || sig == NULL ||
         (tbs == NULL && tbslen > 0)) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
-        goto endverify;
+        return rv;
     }
 
-    if (is_hybrid) {
-        const EVP_MD *classical_md;
-        uint32_t actual_classical_sig_len = 0;
-        int digest_len;
-        unsigned char digest[SHA512_DIGEST_LENGTH]; /* init with max length */
-        size_t max_pq_sig_len =
-            oqsxkey->oqsx_provider_ctx.oqsx_qs_ctx.sig->length_signature;
-        size_t max_classical_sig_len =
-            oqsxkey->oqsx_provider_ctx.oqsx_evp_ctx->evp_info->length_signature;
-
-        if ((ctx_verify = EVP_PKEY_CTX_new_from_pkey(
-                 libctx, oqsxkey->classical_pkey, NULL)) == NULL ||
-            EVP_PKEY_verify_init(ctx_verify) <= 0) {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-            goto endverify;
-        }
-        if (oqsxkey->evp_info->keytype == EVP_PKEY_RSA) {
-            if (EVP_PKEY_CTX_set_rsa_padding(ctx_verify, RSA_PKCS1_PADDING) <=
-                0) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
-                goto endverify;
-            }
-        }
-        if (siglen > SIZE_OF_UINT32) {
-            size_t actual_pq_sig_len = 0;
-            DECODE_UINT32(actual_classical_sig_len, sig);
-            actual_pq_sig_len =
-                siglen - SIZE_OF_UINT32 - actual_classical_sig_len;
-            if (siglen <= (SIZE_OF_UINT32 + actual_classical_sig_len) ||
-                actual_classical_sig_len > max_classical_sig_len ||
-                actual_pq_sig_len > max_pq_sig_len) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-                goto endverify;
-            }
-        } else {
-            ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
-            goto endverify;
-        }
-
-        /* same as with sign: delete if unconditional hashing to be used:
-         * if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG ||
-                !use_sign_verify_message_api) {
-         */
-#if (OPENSSL_VERSION_PREREQ(3, 4))
-        if (poqs_sigctx->operation == EVP_PKEY_OP_VERIFYMSG ||
-            !use_sign_verify_message_api) {
-#endif
-            switch (oqs_key->claimed_nist_level) {
-            case 1:
-                classical_md = EVP_sha256();
-                digest_len = SHA256_DIGEST_LENGTH;
-                SHA256(tbs, tbslen, (unsigned char *)&digest);
-                break;
-            case 2:
-            case 3:
-                classical_md = EVP_sha384();
-                digest_len = SHA384_DIGEST_LENGTH;
-                SHA384(tbs, tbslen, (unsigned char *)&digest);
-                break;
-            case 4:
-            case 5:
-            default:
-                classical_md = EVP_sha512();
-                digest_len = SHA512_DIGEST_LENGTH;
-                SHA512(tbs, tbslen, (unsigned char *)&digest);
-                break;
-            }
-            if ((EVP_PKEY_CTX_set_signature_md(ctx_verify, classical_md) <=
-                 0) ||
-                (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32,
-                                 actual_classical_sig_len, digest,
-                                 digest_len) <= 0)) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-                goto endverify;
-            } else {
-                OQS_SIG_PRINTF("OQS SIG: classic verification OK\n");
-            }
-#if (OPENSSL_VERSION_PREREQ(3, 4))
-        } else { // hashing already done:
-            if (EVP_PKEY_verify(ctx_verify, sig + SIZE_OF_UINT32,
-                                actual_classical_sig_len, tbs, tbslen) <= 0) {
-                ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-                goto endverify;
-            }
-        }
-#endif
-
-        classical_sig_len = SIZE_OF_UINT32 + actual_classical_sig_len;
-        index += classical_sig_len;
-    }
-    if (!oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) {
+    if (!oqsxkey->pubkey) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_WRONG_PARAMETERS);
-        goto endverify;
+        return rv;
     }
 #if !defined OQS_VERSION_MINOR ||                                              \
     (OQS_VERSION_MAJOR == 0 && OQS_VERSION_MINOR < 12)
-    if (OQS_SIG_verify(
-            oqs_key, tbs, tbslen, sig + index, siglen - classical_sig_len,
-            oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) != OQS_SUCCESS) {
+    if (OQS_SIG_verify(oqs_key, tbs, tbslen, sig, siglen, oqsxkey->pubkey) !=
+        OQS_SUCCESS) {
 #else
-    if (OQS_SIG_verify_with_ctx_str(
-            oqs_key, tbs, tbslen, sig + index, siglen - classical_sig_len,
-            poqs_sigctx->context_string, poqs_sigctx->context_string_length,
-            oqsxkey->comp_pubkey[oqsxkey->numkeys - 1]) != OQS_SUCCESS) {
+    if (OQS_SIG_verify_with_ctx_str(oqs_key, tbs, tbslen, sig, siglen,
+                                    poqs_sigctx->context_string,
+                                    poqs_sigctx->context_string_length,
+                                    oqsxkey->pubkey) != OQS_SUCCESS) {
 #endif
         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
-        goto endverify;
+        return rv;
     }
     rv = 1;
 
-endverify:
-    if (ctx_verify) {
-        EVP_PKEY_CTX_free(ctx_verify);
-    }
     OQS_SIG_PRINTF2("OQS SIG provider: verify rv = %d\n", rv);
     return rv;
 }

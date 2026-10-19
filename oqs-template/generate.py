@@ -105,25 +105,9 @@ def complete_config(config):
           exit(1)
       kem['bit_security'] = bits_level
 
-      if 'nid_hybrid' in kem:
-          # now add hybrid_nid to hybrid_groups
-          phyb = {}
-          if (bits_level == 128):
-              phyb['hybrid_group']='p256'
-          elif (bits_level == 192):
-              phyb['hybrid_group']='p384'
-          elif (bits_level == 256):
-              phyb['hybrid_group']='p521'
-          else:
-              print("Warning: Unknown bit level for %s. Cannot assign hybrid." % (kem['group_name']))
-              exit(1)
-          phyb['bit_security']=bits_level
-          phyb['nid']=kem['nid_hybrid']
-          if 'hybrid_oid' in kem: phyb['hybrid_oid']=kem['hybrid_oid']
-          else: phyb['hybrid_oid'] = get_tmp_kem_oid()
-          kem['hybrids'].insert(0, phyb)
-          if not 'oid' in kem:
-             kem['oid'] = get_tmp_kem_oid()
+      # [mb-nohybrids] hybrid KEM synthesis removed; keep PQ-only OID defaulting
+      if not 'oid' in kem:
+          kem['oid'] = get_tmp_kem_oid()
 
    for famsig in config['sigs']:
       for sig in famsig['variants']:
@@ -132,6 +116,8 @@ def complete_config(config):
              print("Cannot find security level for {:s} {:s}. Setting to 0.".format(famsig['family'], sig['name']))
              bits_level = 0
          sig['security'] = bits_level
+         # [mb-nohybrids] composite/hybrid signatures no longer generated
+         sig['mix_with'] = []
    return config
 
 def run_subprocess(command, outfilename=None, working_dir='.', expected_returncode=0, input=None, ignore_returncode=False):
@@ -206,28 +192,8 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
         sig['variants']=newvars
 
     for kem in config['kems']:
+        # [mb-nohybrids] hybrid KEM groups (extra_nids.current) no longer generated
         kem['hybrids'] = []
-        if 'extra_nids' not in kem or 'current' not in kem['extra_nids']:
-            continue
-        hybrid_nids = set()
-        for extra_hybrid in kem['extra_nids']['current']:
-            if extra_hybrid['hybrid_group'] == "x25519" or extra_hybrid['hybrid_group'] == "p256" or extra_hybrid['hybrid_group'] == "bp256" or extra_hybrid['hybrid_group'] == "secp256_r1":
-               extra_hybrid['bit_security'] = 128
-            if extra_hybrid['hybrid_group'] == "x448" or extra_hybrid['hybrid_group'] == "p384" or extra_hybrid['hybrid_group'] == "bp384" or extra_hybrid['hybrid_group'] == "secp384_r1":
-               extra_hybrid['bit_security'] = 192
-            if extra_hybrid['hybrid_group'] == "p521" or extra_hybrid['hybrid_group'] == "bp512" or extra_hybrid['hybrid_group'] == "secp521_r1":
-               extra_hybrid['bit_security'] = 256
-            if not 'hybrid_oid' in extra_hybrid:
-                extra_hybrid['hybrid_oid'] = get_tmp_kem_oid()
-            kem['hybrids'].append(extra_hybrid)
-            if 'hybrid_group' in extra_hybrid:
-                extra_hybrid_nid = extra_hybrid['nid']
-                if extra_hybrid_nid in hybrid_nids:
-                    print("ERROR: duplicate hybrid NID for", kem['name_group'],
-                          ":", extra_hybrid_nid, "in generate.yml.",
-                          "Curve NIDs may only be specified once per KEM.")
-                    exit(1)
-                hybrid_nids.add(extra_hybrid_nid)
     return config
 
 # Validates that non-standard TLS code points are in the private use range

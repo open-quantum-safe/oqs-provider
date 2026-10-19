@@ -8,9 +8,7 @@
     # post-quantum + classical key exchanges
     {% for kem in config['kems'] -%}
        {%- if 'enable_tls' in kem and kem['enable_tls'] -%}
-         {%- for hybrid in kem['hybrids'] -%}
-            '{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %}', 
-         {%- endfor -%}
+         
        {%- endif -%}
     {% endfor %}
 

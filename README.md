@@ -36,21 +36,21 @@ This implementation makes available the following quantum safe algorithms:
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_START -->
 ### KEM algorithms
 
-- **BIKE**:`bikel1`\*, `p256_bikel1`\*, `x25519_bikel1`\*, `bikel3`, `p384_bikel3`, `x448_bikel3`, `bikel5`, `p521_bikel5`
-- **FrodoKEM**:`efrodo640aes`, `p256_efrodo640aes`, `x25519_efrodo640aes`, `efrodo640shake`, `p256_efrodo640shake`, `x25519_efrodo640shake`, `efrodo976aes`, `p384_efrodo976aes`, `x448_efrodo976aes`, `efrodo976shake`, `p384_efrodo976shake`, `x448_efrodo976shake`, `efrodo1344aes`, `p521_efrodo1344aes`, `efrodo1344shake`, `p521_efrodo1344shake`, `frodo640aes`, `p256_frodo640aes`, `x25519_frodo640aes`, `frodo640shake`, `p256_frodo640shake`, `x25519_frodo640shake`, `frodo976aes`, `p384_frodo976aes`, `x448_frodo976aes`, `frodo976shake`, `p384_frodo976shake`, `x448_frodo976shake`, `frodo1344aes`, `p521_frodo1344aes`, `frodo1344shake`, `p521_frodo1344shake`
-- **HQC**:`hqc1`, `p256_hqc1`, `x25519_hqc1`, `hqc3`, `p384_hqc3`, `x448_hqc3`, `hqc5`, `p521_hqc5`
-- **ML-KEM**:`mlkem512`, `SecP256r1MLKEM512`, `x25519_mlkem512`, `bp256_mlkem512`, `mlkem768`, `p384_mlkem768`, `x448_mlkem768`, `bp384_mlkem768`, `X25519MLKEM768`, `SecP256r1MLKEM768`, `mlkem1024`, `p521_mlkem1024`, `SecP384r1MLKEM1024`, `bp512_mlkem1024`
+- **BIKE**:`bikel1`\*, `bikel3`, `bikel5`
+- **FrodoKEM**:`efrodo640aes`, `efrodo640shake`, `efrodo976aes`, `efrodo976shake`, `efrodo1344aes`, `efrodo1344shake`, `frodo640aes`, `frodo640shake`, `frodo976aes`, `frodo976shake`, `frodo1344aes`, `frodo1344shake`
+- **HQC**:`hqc1`, `hqc3`, `hqc5`
+- **ML-KEM**:`mlkem512`, `mlkem768`, `mlkem1024`
 
 ### Signature algorithms
 
-- **ML-DSA**:`mldsa44`, `p256_mldsa44`, `rsa3072_mldsa44`, `mldsa65`, `p384_mldsa65`, `mldsa87`, `p521_mldsa87`
-- **Falcon**:`falcon512`, `p256_falcon512`, `rsa3072_falcon512`, `falconpadded512`, `p256_falconpadded512`, `rsa3072_falconpadded512`, `falcon1024`, `p521_falcon1024`, `falconpadded1024`, `p521_falconpadded1024`
-- **MAYO**:`mayo1`, `p256_mayo1`, `mayo2`, `p256_mayo2`, `mayo3`, `p384_mayo3`, `mayo5`, `p521_mayo5`
+- **ML-DSA**:`mldsa44`, `mldsa65`, `mldsa87`
+- **Falcon**:`falcon512`, `falconpadded512`, `falcon1024`, `falconpadded1024`
+- **MAYO**:`mayo1`, `mayo2`, `mayo3`, `mayo5`
 - **CROSS**:`CROSSrsdp128balanced`, `CROSSrsdp128fast`\*, `CROSSrsdp128small`\*, `CROSSrsdp192balanced`\*, `CROSSrsdp192fast`\*, `CROSSrsdp192small`\*, `CROSSrsdp256small`\*\*, `CROSSrsdpg128balanced`\*, `CROSSrsdpg128fast`\*, `CROSSrsdpg128small`\*, `CROSSrsdpg192balanced`\*, `CROSSrsdpg192fast`\*, `CROSSrsdpg192small`\*, `CROSSrsdpg256balanced`\*, `CROSSrsdpg256fast`\*, `CROSSrsdpg256small`\*
-- **UOV**:`OV_Is`\*\*, `p256_OV_Is`\*\*, `OV_Ip`\*\*, `p256_OV_Ip`\*\*, `OV_III`\*\*, `p384_OV_III`\*\*, `OV_V`\*\*, `p521_OV_V`\*\*, `OV_Is_pkc`\*\*, `p256_OV_Is_pkc`\*\*, `OV_Ip_pkc`, `p256_OV_Ip_pkc`, `OV_III_pkc`\*\*, `p384_OV_III_pkc`\*\*, `OV_V_pkc`\*\*, `p521_OV_V_pkc`\*\*, `OV_Is_pkc_skc`\*\*, `p256_OV_Is_pkc_skc`\*\*, `OV_Ip_pkc_skc`, `p256_OV_Ip_pkc_skc`, `OV_III_pkc_skc`\*\*, `p384_OV_III_pkc_skc`\*\*, `OV_V_pkc_skc`\*\*, `p521_OV_V_pkc_skc`\*\*
-- **SNOVA**:`snova1k`, `p256_snova1k`, `snova1b`, `p256_snova1b`, `snova1s`, `p256_snova1s`, `snova3k`, `p384_snova3k`, `snova3b`, `p384_snova3b`, `snova3s`, `p384_snova3s`, `snova5k`, `p521_snova5k`, `snova5b`, `p521_snova5b`, `snova5s`, `p521_snova5s`
+- **UOV**:`OV_Is`\*\*, `OV_Ip`\*\*, `OV_III`\*\*, `OV_V`\*\*, `OV_Is_pkc`\*\*, `OV_Ip_pkc`, `OV_III_pkc`\*\*, `OV_V_pkc`\*\*, `OV_Is_pkc_skc`\*\*, `OV_Ip_pkc_skc`, `OV_III_pkc_skc`\*\*, `OV_V_pkc_skc`\*\*
+- **SNOVA**:`snova1k`, `snova1b`, `snova1s`, `snova3k`, `snova3b`, `snova3s`, `snova5k`, `snova5b`, `snova5s`
 - **SLH-DSA**:`slhdsasha2128s`, `slhdsasha2128f`, `slhdsasha2192s`, `slhdsasha2192f`, `slhdsasha2256s`, `slhdsasha2256f`, `slhdsashake128s`, `slhdsashake128f`, `slhdsashake192s`, `slhdsashake192f`, `slhdsashake256s`, `slhdsashake256f`
-- **MQOM**:`mqom3cat1gf16fastct`, `p256_mqom3cat1gf16fastct`, `mqom3cat1gf16fastot`\*, `p256_mqom3cat1gf16fastot`\*, `mqom3cat1gf16shortct`\*, `p256_mqom3cat1gf16shortct`\*, `mqom3cat1gf16shortot`\*, `p256_mqom3cat1gf16shortot`\*, `mqom3cat1gf2shorterct`\*, `p256_mqom3cat1gf2shorterct`\*, `mqom3cat1gf2shorterot`\*, `p256_mqom3cat1gf2shorterot`\*, `mqom3cat3gf16fastct`, `p384_mqom3cat3gf16fastct`, `mqom3cat3gf16fastot`\*, `p384_mqom3cat3gf16fastot`\*, `mqom3cat3gf16shortct`\*, `p384_mqom3cat3gf16shortct`\*, `mqom3cat3gf16shortot`\*, `p384_mqom3cat3gf16shortot`\*, `mqom3cat3gf2shorterct`\*, `p384_mqom3cat3gf2shorterct`\*, `mqom3cat3gf2shorterot`\*, `p384_mqom3cat3gf2shorterot`\*, `mqom3cat5gf16fastct`, `p521_mqom3cat5gf16fastct`, `mqom3cat5gf16fastot`\*, `p521_mqom3cat5gf16fastot`\*, `mqom3cat5gf16shortct`\*, `p521_mqom3cat5gf16shortct`\*, `mqom3cat5gf16shortot`\*, `p521_mqom3cat5gf16shortot`\*, `mqom3cat5gf2shorterct`\*, `p521_mqom3cat5gf2shorterct`\*, `mqom3cat5gf2shorterot`\*, `p521_mqom3cat5gf2shorterot`\*
+- **MQOM**:`mqom3cat1gf16fastct`, `mqom3cat1gf16fastot`\*, `mqom3cat1gf16shortct`\*, `mqom3cat1gf16shortot`\*, `mqom3cat1gf2shorterct`\*, `mqom3cat1gf2shorterot`\*, `mqom3cat3gf16fastct`, `mqom3cat3gf16fastot`\*, `mqom3cat3gf16shortct`\*, `mqom3cat3gf16shortot`\*, `mqom3cat3gf2shorterct`\*, `mqom3cat3gf2shorterot`\*, `mqom3cat5gf16fastct`, `mqom3cat5gf16fastot`\*, `mqom3cat5gf16shortct`\*, `mqom3cat5gf16shortot`\*, `mqom3cat5gf2shorterct`\*, `mqom3cat5gf2shorterot`\*
 
 <!--- OQS_TEMPLATE_FRAGMENT_ALGS_END -->
 

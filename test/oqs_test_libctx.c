@@ -392,7 +392,6 @@ static int test_oqs_kems_libctx(const char *kemalg_name) {
     if (!testresult)
         goto err;
 
-
     testresult &= oqs_cmp_kem_elems(kemalg_name, secenc1, sec1len, secenc2,
                                     sec2len, out1, out1len, out2, out2len);
 

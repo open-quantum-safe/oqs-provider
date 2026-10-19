@@ -267,9 +267,9 @@ static int oqs_sig_sign_directly(void *vpoqs_sigctx, unsigned char *sig,
     (OQS_VERSION_MAJOR == 0 && OQS_VERSION_MINOR < 12)
     if (OQS_SIG_sign(oqs_key, sig, &oqs_sig_len, tbs, tbslen,
 #else
-    if (OQS_SIG_sign_with_ctx_str(
-            oqs_key, sig, &oqs_sig_len, tbs, tbslen,
-            poqs_sigctx->context_string, poqs_sigctx->context_string_length,
+    if (OQS_SIG_sign_with_ctx_str(oqs_key, sig, &oqs_sig_len, tbs, tbslen,
+                                  poqs_sigctx->context_string,
+                                  poqs_sigctx->context_string_length,
 #endif
                      oqsxkey->privkey) != OQS_SUCCESS) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_SIGNING_FAILED);
@@ -335,10 +335,10 @@ static int oqs_sig_verify_directly(void *vpoqs_sigctx, const unsigned char *sig,
     if (OQS_SIG_verify(oqs_key, tbs, tbslen, sig, siglen, oqsxkey->pubkey) !=
         OQS_SUCCESS) {
 #else
-    if (OQS_SIG_verify_with_ctx_str(
-            oqs_key, tbs, tbslen, sig, siglen, poqs_sigctx->context_string,
-            poqs_sigctx->context_string_length,
-            oqsxkey->pubkey) != OQS_SUCCESS) {
+    if (OQS_SIG_verify_with_ctx_str(oqs_key, tbs, tbslen, sig, siglen,
+                                    poqs_sigctx->context_string,
+                                    poqs_sigctx->context_string_length,
+                                    oqsxkey->pubkey) != OQS_SUCCESS) {
 #endif
         ERR_raise(ERR_LIB_USER, OQSPROV_R_VERIFY_ERROR);
         return rv;

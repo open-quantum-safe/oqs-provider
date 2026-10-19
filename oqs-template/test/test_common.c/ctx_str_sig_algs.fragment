@@ -5,9 +5,7 @@
 {%- for sig in config['sigs'] %}
 {%- for variant in sig['variants'] -%}
 {%- set count.val = count.val + 1 -%}
-{%- for classical_alg in variant['mix_with'] %}
-{%- set count.val = count.val + 1 -%}
-{%- endfor -%}
+
 {%- endfor -%}
 {%- endfor %}
 
@@ -18,9 +16,7 @@ oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
       { {{variant['oqs_meth']}}, "{{variant['name']}}" },
-      {%- for classical_alg in variant['mix_with'] -%}
-        { {{variant['oqs_meth']}}, "{{ classical_alg['name'] }}_{{ variant['name'] }}" },
-      {%- endfor -%}
+      
    {%- endfor %}
 {%- endfor %}
 };

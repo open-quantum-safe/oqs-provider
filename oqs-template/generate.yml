@@ -8,55 +8,34 @@ kems:
     family: 'FrodoKEM'
     name_group: 'efrodo640aes'
     nid: '65024'
-    nid_hybrid: '65025'
     oqs_alg: 'OQS_KEM_alg_efrodokem_640_aes'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x25519"
-          nid: '65026'
   -
     family: 'FrodoKEM'
     name_group: 'efrodo640shake'
     nid: '65027'
-    nid_hybrid: '65028'
     oqs_alg: 'OQS_KEM_alg_efrodokem_640_shake'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x25519"
-          nid: '65029'
   -
     family: 'FrodoKEM'
     name_group: 'efrodo976aes'
     nid: '65030'
-    nid_hybrid: '65031'
     oqs_alg: 'OQS_KEM_alg_efrodokem_976_aes'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x448"
-          nid: '65032'
   -
     family: 'FrodoKEM'
     name_group: 'efrodo976shake'
     nid: '65033'
-    nid_hybrid: '65034'
     oqs_alg: 'OQS_KEM_alg_efrodokem_976_shake'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x448"
-          nid: '65035'
   -
     family: 'FrodoKEM'
     name_group: 'efrodo1344aes'
     nid: '65036'
-    nid_hybrid: '65037'
     oqs_alg: 'OQS_KEM_alg_efrodokem_1344_aes'
     enable_kem: true
     enable_tls: true
@@ -64,7 +43,6 @@ kems:
     family: 'FrodoKEM'
     name_group: 'efrodo1344shake'
     nid: '65038'
-    nid_hybrid: '65039'
     oqs_alg: 'OQS_KEM_alg_efrodokem_1344_shake'
     enable_kem: true
     enable_tls: true
@@ -72,55 +50,34 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo640aes'
     nid: '65059'
-    nid_hybrid: '65060'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_aes'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x25519"
-          nid: '65061'
   -
     family: 'FrodoKEM'
     name_group: 'frodo640shake'
     nid: '65062'
-    nid_hybrid: '65063'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_shake'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x25519"
-          nid: '65064'
   -
     family: 'FrodoKEM'
     name_group: 'frodo976aes'
     nid: '65065'
-    nid_hybrid: '65066'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_aes'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x448"
-          nid: '65067'
   -
     family: 'FrodoKEM'
     name_group: 'frodo976shake'
     nid: '65068'
-    nid_hybrid: '65069'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_shake'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x448"
-          nid: '65070'
   -
     family: 'FrodoKEM'
     name_group: 'frodo1344aes'
     nid: '65071'
-    nid_hybrid: '65072'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_aes'
     enable_kem: true
     enable_tls: true
@@ -128,7 +85,6 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo1344shake'
     nid: '65073'
-    nid_hybrid: '65074'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_shake'
     enable_kem: true
     enable_tls: true
@@ -136,15 +92,6 @@ kems:
     family: 'BIKE'
     name_group: 'bike1l1cpa'
     bit_security: 128
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x0206'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp256_r1
-          nid: '0x2F06'
     oqs_alg: 'OQS_KEM_alg_bike1_l1_cpa'
     enable_kem: false
     enable_tls: true
@@ -152,15 +99,6 @@ kems:
     family: 'BIKE'
     name_group: 'bike1l3cpa'
     bit_security: 192
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x0207'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp384_r1
-          nid: '0x2F07'
     oqs_alg: 'OQS_KEM_alg_bike1_l3_cpa'
     enable_kem: false
     enable_tls: true
@@ -171,62 +109,10 @@ kems:
     oqs_alg: 'OQS_KEM_alg_kyber_512'
     enable_kem: false
     enable_tls: true
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x023A'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp256_r1
-          nid: '0x2F3A'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x25519
-          nid: '0x2F39'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x020F'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp256_r1
-          nid: '0x2F0F'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: x25519
-          nid: '0x2F26'
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber768'
     oid: '1.3.6.1.4.1.2.267.8.3.3'
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x023C'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x448
-          nid: '0x2F90'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x25519
-          nid: '0x6399'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp256_r1
-          nid: '0x639A'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp384_r1
-          nid: '0x2F3C'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x0210'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp384_r1
-          nid: '0x2F10'
     oqs_alg: 'OQS_KEM_alg_kyber_768'
     enable_kem: false
     enable_tls: true
@@ -234,22 +120,6 @@ kems:
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber1024'
     oid: '1.3.6.1.4.1.2.267.8.4.4'
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x023D'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp521_r1
-          nid: '0x2F3D'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x0211'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp521_r1
-          nid: '0x2F11'
     oqs_alg: 'OQS_KEM_alg_kyber_1024'
     enable_kem: false
     enable_tls: true
@@ -269,25 +139,6 @@ kems:
     enable_kem: true
     enable_tls: true
     openssl_version: 3.5.0
-    extra_nids:
-      current:
-        - hybrid_group: "secp256_r1"
-# retain OIDs of the Legion of the BouncyCastle: XXX check if OK
-          hybrid_oid: '1.3.6.1.4.1.22554.5.7.1'
-# https://www.ietf.org/archive/id/draft-rosomakho-tls-ecdhe-mlkem512-00.html#name-secp256r1mlkem512-2
-          nid: '0x11e9'
-          iana: true
-          standard_name: "SecP256r1MLKEM512"
-          openssl_version: 4.0.0
-        - hybrid_group: "x25519"
-# retain OIDs of the Legion of the BouncyCastle: XXX check if OK
-          hybrid_oid: '1.3.6.1.4.1.22554.5.8.1'
-# https://www.ietf.org/archive/id/draft-rosomakho-tls-ecdhe-mlkem512-00.html#name-mlkem512x25519-2
-          nid: '0x11ea'
-          iana: true
-          #standard_name: "MLKEM512X25519"
-        - hybrid_group: "bp256"
-          nid: '65056'
   -
     family: 'ML-KEM'
     fips_standard: 1
@@ -298,30 +149,10 @@ kems:
 # NIST kem 2
     oid: '2.16.840.1.101.3.4.4.2'
 # code point not standardized: Why? XXX
-    nid_hybrid: '0x2F4C'
     oqs_alg: 'OQS_KEM_alg_ml_kem_768'
     enable_kem: true
     enable_tls: true
     openssl_version: 3.5.0
-    extra_nids:
-      current:
-        - hybrid_group: "x448"
-# code point not standardized: Why? XXX
-          nid: '0x2FB7'
-        - hybrid_group: "bp384"
-          nid: '65057'
-        - hybrid_group: "x25519"
-# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-x25519mlkem768
-          nid: '0x11ec'
-          iana: true
-          standard_name: "X25519MLKEM768"
-          openssl_version: 3.5.0
-        - hybrid_group: "secp256_r1"
-# https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-02.html#name-secp256r1mlkem768
-          nid: '0x11eb'
-          iana: true
-          standard_name: "SecP256r1MLKEM768"
-          openssl_version: 3.5.0
   -
     family: 'ML-KEM'
     fips_standard: 1
@@ -332,43 +163,14 @@ kems:
 # NIST kem 3
     oid: '2.16.840.1.101.3.4.4.3'
 # code point not standardized: Why? XXX
-    nid_hybrid: '0x2F4D'
     oqs_alg: 'OQS_KEM_alg_ml_kem_1024'
     enable_kem: true
     enable_tls: true
     openssl_version: 3.5.0
-    extra_nids:
-      current:
-        # p384_mlkem1024 hybrid not fully standardized
-        # this oid is proposed by Tresorit
-        # if the hybrid combination is standardized, feel free to change it
-        - hybrid_group: "secp384_r1"
-# does Tresorit want to update?
-          hybrid_oid: '1.3.6.1.4.1.42235.6'
-# code point standardization proposal as per https://www.ietf.org/archive/id/draft-kwiatkowski-tls-ecdhe-mlkem-03.html
-          nid: '0x11ED'
-          iana: true
-          standard_name: "SecP384r1MLKEM1024"
-          openssl_version: 3.5.0
-        - hybrid_group: "bp512"
-          nid: '65058'
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'
     bit_security: 128
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x0223'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp256_r1
-          nid: '0x2F23'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: "x25519"
-          nid: '0x2F28'
     oqs_alg: 'OQS_KEM_alg_bike1_l1_fo'
     enable_kem: false
     enable_tls: true
@@ -376,15 +178,6 @@ kems:
     family: 'BIKE'
     name_group: 'bike1l3fo'
     bit_security: 192
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x0224'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp384_r1
-          nid: '0x2F24'
     oqs_alg: 'OQS_KEM_alg_bike1_l3_fo'
     enable_kem: false
     enable_tls: true
@@ -393,127 +186,40 @@ kems:
     name_group: 'bikel1'
     implementation_version: '5.1'
     nid: '65040'
-    nid_hybrid: '65041'
     oqs_alg: 'OQS_KEM_alg_bike_l1'
     enable_kem: true
     enable_tls: false
-    extra_nids:
-      current:
-        - hybrid_group: "x25519"
-          nid: '65042'
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x0238'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x25519
-          nid: '0x2F37'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp256_r1
-          nid: '0x2F38'
   -
     family: 'BIKE'
     name_group: 'bikel3'
     implementation_version: '5.1'
     nid: '65043'
-    nid_hybrid: '65044'
     oqs_alg: 'OQS_KEM_alg_bike_l3'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x448"
-          nid: '65045'
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x023B'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp384_r1
-          nid: '0x2F3B'
   -
     family: 'BIKE'
     name_group: 'bikel5'
     implementation_version: '5.1'
     nid: '65046'
-    nid_hybrid: '65047'
     oqs_alg: 'OQS_KEM_alg_bike_l5'
     enable_kem: true
     enable_tls: true
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber90s512'
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x0229'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp256_r1
-          nid: '0x2F29'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x023E'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp256_r1
-          nid: '0x2F3E'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x25519
-          nid: '0x2FA9'
     oqs_alg: 'OQS_KEM_alg_kyber_512_90s'
     enable_kem: false
     enable_tls: true
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber90s768'
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x022A'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp384_r1
-          nid: '0x2F2A'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x023F'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp384_r1
-          nid: '0x2F3F'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x448
-          nid: '0x2FAA'
     oqs_alg: 'OQS_KEM_alg_kyber_768_90s'
     enable_kem: false
     enable_tls: true
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber90s1024'
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          nid: '0x022B'
-        - implementation_version: NIST Round 2 submission
-          nist-round: 2
-          hybrid_group: secp521_r1
-          nid: '0x2F2B'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x0240'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp521_r1
-          nid: '0x2F40'
     oqs_alg: 'OQS_KEM_alg_kyber_1024_90s'
     enable_kem: false
     enable_tls: true
@@ -521,96 +227,23 @@ kems:
     family: 'HQC'
     name_group: 'hqc1'
     nid: '65075'
-    nid_hybrid: '65076'
     oqs_alg: 'OQS_KEM_alg_hqc_1'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x25519"
-          nid: '65077'
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x022C'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp256_r1
-          nid: '0x2F2C'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x25519
-          nid: '0x2FAC'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          nid: '65048'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          hybrid_group: secp256_r1
-          nid: '65049'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          hybrid_group: x25519
-          nid: '65050'
   -
     family: 'HQC'
     name_group: 'hqc3'
     nid: '65078'
-    nid_hybrid: '65079'
     oqs_alg: 'OQS_KEM_alg_hqc_3'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      current:
-        - hybrid_group: "x448"
-          nid: '65080'
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x022D'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp384_r1
-          nid: '0x2F2D'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: x448
-          nid: '0x2FAD'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          nid: '65051'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          hybrid_group: secp384_r1
-          nid: '65052'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          hybrid_group: x448
-          nid: '65053'
   -
     family: 'HQC'
     name_group: 'hqc5'
     nid: '65081'
-    nid_hybrid: '65082'
     oqs_alg: 'OQS_KEM_alg_hqc_5'
     enable_kem: true
     enable_tls: true
-    extra_nids:
-      old:
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          nid: '0x022E'
-        - implementation_version: NIST Round 3 submission
-          nist-round: 3
-          hybrid_group: secp521_r1
-          nid: '0x2F2E'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          nid: '65054'
-        - implementation_version: NIST Round 4 submission
-          nist-round: 4
-          hybrid_group: secp521_r1
-          nid: '65055'
 
 kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
@@ -656,14 +289,6 @@ sigs:
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.7.5',
-                    'code_point': '0xff06'},
-                   {'name': 'rsa3072',
-                    'pretty_name': 'RSA3072',
-                    'oid': '1.3.9999.7.6',
-                    'code_point': '0xff07'}]
       -
         name: 'mldsa65'
         pretty_name: 'ML-DSA-65'
@@ -673,10 +298,6 @@ sigs:
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.7.7',
-                    'code_point': '0xff08'}]
       -
         name: 'mldsa87'
         pretty_name: 'ML-DSA-87'
@@ -686,10 +307,6 @@ sigs:
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.7.8',
-                    'code_point': '0xff09'}]
   -
     # iso (1)
     # identified-organization (3)
@@ -706,40 +323,16 @@ sigs:
         supported_encodings: ['draft-uni-qsckeys-falcon-00/sk-pk']
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.3.12',
-                    'code_point': '0xfed8'},
-                   {'name': 'rsa3072',
-                    'pretty_name': 'RSA3072',
-                    'oid': '1.3.9999.3.13',
-                    'code_point': '0xfed9'}]
         extra_nids:
           old:
             - implementation_version: PQClean Round 3 version labelled 20211101
               nist-round: 3
               oid: '1.3.9999.3.6'
               code_point: '0xfeae'
-              mix_with: [{'name': 'p256',
-                          'pretty_name': 'ECDSA p256',
-                          'oid': '1.3.9999.3.7',
-                          'code_point': '0xfeaf'},
-                         {'name': 'rsa3072',
-                          'pretty_name': 'RSA3072',
-                          'oid': '1.3.9999.3.8',
-                          'code_point': '0xfeb0'}]
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.3.1'
               code_point: '0xfe0b'
-              mix_with: [{'name': 'p256',
-                          'pretty_name': 'ECDSA p256',
-                          'oid': '1.3.9999.3.2',
-                          'code_point': '0xfe0c'},
-                         {'name': 'rsa3072',
-                          'pretty_name': 'RSA3072',
-                          'oid': '1.3.9999.3.3',
-                          'code_point': '0xfe0d'}]
       -
         name: 'falconpadded512'
         pretty_name: 'Falcon-padded-512'
@@ -749,14 +342,6 @@ sigs:
         supported_encodings: ['draft-uni-qsckeys-falcon-00/sk-pk']
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.3.17',
-                    'code_point': '0xfedd'},
-                   {'name': 'rsa3072',
-                    'pretty_name': 'RSA3072',
-                    'oid': '1.3.9999.3.18',
-                    'code_point': '0xfede'}]
       -
         name: 'falcon1024'
         pretty_name: 'Falcon-1024'
@@ -766,28 +351,16 @@ sigs:
         supported_encodings: ['draft-uni-qsckeys-falcon-00/sk-pk']
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.3.15',
-                    'code_point': '0xfedb'}]
         extra_nids:
           old:
             - implementation_version: PQClean Round 3 version labelled 20211101
               nist-round: 3
               oid: '1.3.9999.3.9'
               code_point: '0xfeb1'
-              mix_with: [{'name': 'p521',
-                          'pretty_name': 'ECDSA p521',
-                          'oid': '1.3.9999.3.10',
-                          'code_point': '0xfeb2'}]
             - implementation_version: NIST Round 3 submission
               nist-round: 3
               oid: '1.3.9999.3.4'
               code_point: '0xfe0e'
-              mix_with: [{'name': 'p521',
-                          'pretty_name': 'ECDSA p521',
-                          'oid': '1.3.9999.3.5',
-                          'code_point': '0xfe0f'}]
       -
         name: 'falconpadded1024'
         pretty_name: 'Falcon-padded-1024'
@@ -797,10 +370,6 @@ sigs:
         supported_encodings: ['draft-uni-qsckeys-falcon-00/sk-pk']
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.3.20',
-                    'code_point': '0xfee0'}]
   -
     family: 'MAYO'
     variants:
@@ -812,10 +381,6 @@ sigs:
         code_point: '0xff7b'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.8.1.6',
-                    'code_point': '0xff7f'}]
       -
         name: 'mayo2'
         pretty_name: 'MAYO-2'
@@ -824,10 +389,6 @@ sigs:
         code_point: '0xff7c'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.8.2.6',
-                    'code_point': '0xff80'}]
       -
         name: 'mayo3'
         pretty_name: 'MAYO-3'
@@ -836,10 +397,6 @@ sigs:
         code_point: '0xff7d'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.8.3.6',
-                    'code_point': '0xff81'}]
       -
         name: 'mayo5'
         pretty_name: 'MAYO-5'
@@ -848,10 +405,6 @@ sigs:
         code_point: '0xff7e'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.8.5.6',
-                    'code_point': '0xff82'}]
   -
     family: 'CROSS'
     variants:
@@ -1003,10 +556,6 @@ sigs:
         code_point: '0xff0a'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.1.2',
-                    'code_point': '0xff16'}]
       -
         name: 'OV_Ip'
         pretty_name: 'OV-Ip'
@@ -1015,10 +564,6 @@ sigs:
         code_point: '0xff0b'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.2.2',
-                    'code_point': '0xff17'}]
       -
         name: 'OV_III'
         pretty_name: 'OV-III'
@@ -1027,10 +572,6 @@ sigs:
         code_point: '0xff0c'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.3.2',
-                    'code_point': '0xff18'}]
       -
         name: 'OV_V'
         pretty_name: 'OV-V'
@@ -1039,10 +580,6 @@ sigs:
         code_point: '0xff0d'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.4.2',
-                    'code_point': '0xff19'}]
       -
         name: 'OV_Is_pkc'
         pretty_name: 'OV-Is-pkc'
@@ -1051,10 +588,6 @@ sigs:
         code_point: '0xff0e'
         enable: true
         enable_tls: false
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.5.2',
-                    'code_point': '0xff1a'}]
       -
         name: 'OV_Ip_pkc'
         pretty_name: 'OV-Ip-pkc'
@@ -1063,10 +596,6 @@ sigs:
         code_point: '0xff0f'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.6.2',
-                    'code_point': '0xff1b'}]
       -
         name: 'OV_III_pkc'
         pretty_name: 'OV-III-pkc'
@@ -1075,10 +604,6 @@ sigs:
         code_point: '0xff10'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.7.2',
-                    'code_point': '0xff1c'}]
       -
         name: 'OV_V_pkc'
         pretty_name: 'OV-V-pkc'
@@ -1087,10 +612,6 @@ sigs:
         code_point: '0xff11'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.8.2',
-                    'code_point': '0xff1d'}]
       -
         name: 'OV_Is_pkc_skc'
         pretty_name: 'OV-Is-pkc-skc'
@@ -1099,10 +620,6 @@ sigs:
         code_point: '0xff12'
         enable: true
         enable_tls: false
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.9.2',
-                    'code_point': '0xff1e'}]
       -
         name: 'OV_Ip_pkc_skc'
         pretty_name: 'OV-Ip-pkc-skc'
@@ -1111,10 +628,6 @@ sigs:
         code_point: '0xff13'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.10.2',
-                    'code_point': '0xff1f'}]
       -
         name: 'OV_III_pkc_skc'
         pretty_name: 'OV-III-pkc-skc'
@@ -1123,10 +636,6 @@ sigs:
         code_point: '0xff14'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.11.2',
-                    'code_point': '0xff20'}]
       -
         name: 'OV_V_pkc_skc'
         pretty_name: 'OV-V-pkc-skc'
@@ -1135,10 +644,6 @@ sigs:
         code_point: '0xff15'
         enable: false
         enable_tls: false
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.12.2',
-                    'code_point': '0xff21'}]
   -
     family: 'SNOVA'
     variants:
@@ -1150,10 +655,6 @@ sigs:
         code_point: '0xff83'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.10.1.4',
-                    'code_point': '0xff84'}]
       -
         name: 'snova1b'
         pretty_name: 'SNOVA_I_B'
@@ -1162,10 +663,6 @@ sigs:
         code_point: '0xff85'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.10.2.4',
-                    'code_point': '0xff86'}]
       -
         name: 'snova1s'
         pretty_name: 'SNOVA_I_S'
@@ -1174,10 +671,6 @@ sigs:
         code_point: '0xff87'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.10.3.4',
-                    'code_point': '0xff88'}]
       -
         name: 'snova3k'
         pretty_name: 'SNOVA_III_K'
@@ -1186,10 +679,6 @@ sigs:
         code_point: '0xff89'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.10.4.4',
-                    'code_point': '0xff8a'}]
       -
         name: 'snova3b'
         pretty_name: 'SNOVA_III_B'
@@ -1198,10 +687,6 @@ sigs:
         code_point: '0xff8b'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.10.5.4',
-                    'code_point': '0xff8c'}]
       -
         name: 'snova3s'
         pretty_name: 'SNOVA_III_S'
@@ -1210,10 +695,6 @@ sigs:
         code_point: '0xff8d'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.10.6.4',
-                    'code_point': '0xff8e'}]
       -
         name: 'snova5k'
         pretty_name: 'SNOVA_V_K'
@@ -1222,10 +703,6 @@ sigs:
         code_point: '0xff8f'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.10.7.4',
-                    'code_point': '0xff90'}]
       -
         name: 'snova5b'
         pretty_name: 'SNOVA_V_B'
@@ -1234,10 +711,6 @@ sigs:
         code_point: '0xff91'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.10.8.4',
-                    'code_point': '0xff92'}]
       -
         name: 'snova5s'
         pretty_name: 'SNOVA_V_S'
@@ -1246,10 +719,6 @@ sigs:
         code_point: '0xff93'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.10.9.4',
-                    'code_point': '0xff94'}]
   -
     family: 'SLH-DSA'
     variants:
@@ -1378,10 +847,6 @@ sigs:
         code_point: '0xff99'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.10',
-                    'code_point': '0xff9a'}]
       -
         name: 'mqom3cat1gf16fastot'
         pretty_name: 'mqom3_cat1_gf16_fast_ot'
@@ -1390,10 +855,6 @@ sigs:
         code_point: '0xff9b'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.12',
-                    'code_point': '0xff9c'}]
       -
         name: 'mqom3cat1gf16shortct'
         pretty_name: 'mqom3_cat1_gf16_short_ct'
@@ -1402,10 +863,6 @@ sigs:
         code_point: '0xff9d'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.14',
-                    'code_point': '0xff9e'}]
       -
         name: 'mqom3cat1gf16shortot'
         pretty_name: 'mqom3_cat1_gf16_short_ot'
@@ -1414,10 +871,6 @@ sigs:
         code_point: '0xff9f'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.16',
-                    'code_point': '0xffa0'}]
       -
         name: 'mqom3cat1gf2shorterct'
         pretty_name: 'mqom3_cat1_gf2_shorter_ct'
@@ -1426,10 +879,6 @@ sigs:
         code_point: '0xffa1'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.18',
-                    'code_point': '0xffa2'}]
       -
         name: 'mqom3cat1gf2shorterot'
         pretty_name: 'mqom3_cat1_gf2_shorter_ot'
@@ -1438,10 +887,6 @@ sigs:
         code_point: '0xffa3'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p256',
-                    'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.20',
-                    'code_point': '0xffa4'}]
       -
         name: 'mqom3cat3gf16fastct'
         pretty_name: 'mqom3_cat3_gf16_fast_ct'
@@ -1450,10 +895,6 @@ sigs:
         code_point: '0xffa5'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.10',
-                    'code_point': '0xffa6'}]
       -
         name: 'mqom3cat3gf16fastot'
         pretty_name: 'mqom3_cat3_gf16_fast_ot'
@@ -1462,10 +903,6 @@ sigs:
         code_point: '0xffa7'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.12',
-                    'code_point': '0xffa8'}]
       -
         name: 'mqom3cat3gf16shortct'
         pretty_name: 'mqom3_cat3_gf16_short_ct'
@@ -1474,10 +911,6 @@ sigs:
         code_point: '0xffa9'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.14',
-                    'code_point': '0xffaa'}]
       -
         name: 'mqom3cat3gf16shortot'
         pretty_name: 'mqom3_cat3_gf16_short_ot'
@@ -1486,10 +919,6 @@ sigs:
         code_point: '0xffab'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.16',
-                    'code_point': '0xffac'}]
       -
         name: 'mqom3cat3gf2shorterct'
         pretty_name: 'mqom3_cat3_gf2_shorter_ct'
@@ -1498,10 +927,6 @@ sigs:
         code_point: '0xffad'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.18',
-                    'code_point': '0xffae'}]
       -
         name: 'mqom3cat3gf2shorterot'
         pretty_name: 'mqom3_cat3_gf2_shorter_ot'
@@ -1510,10 +935,6 @@ sigs:
         code_point: '0xffaf'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p384',
-                    'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.20',
-                    'code_point': '0xffb0'}]
       -
         name: 'mqom3cat5gf16fastct'
         pretty_name: 'mqom3_cat5_gf16_fast_ct'
@@ -1522,10 +943,6 @@ sigs:
         code_point: '0xffb1'
         enable: true
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.10',
-                    'code_point': '0xffb2'}]
       -
         name: 'mqom3cat5gf16fastot'
         pretty_name: 'mqom3_cat5_gf16_fast_ot'
@@ -1534,10 +951,6 @@ sigs:
         code_point: '0xffb3'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.12',
-                    'code_point': '0xffb4'}]
       -
         name: 'mqom3cat5gf16shortct'
         pretty_name: 'mqom3_cat5_gf16_short_ct'
@@ -1546,10 +959,6 @@ sigs:
         code_point: '0xffb5'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.14',
-                    'code_point': '0xffb6'}]
       -
         name: 'mqom3cat5gf16shortot'
         pretty_name: 'mqom3_cat5_gf16_short_ot'
@@ -1558,10 +967,6 @@ sigs:
         code_point: '0xffb7'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.16',
-                    'code_point': '0xffb8'}]
       -
         name: 'mqom3cat5gf2shorterct'
         pretty_name: 'mqom3_cat5_gf2_shorter_ct'
@@ -1570,10 +975,6 @@ sigs:
         code_point: '0xffb9'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.18',
-                    'code_point': '0xffba'}]
       -
         name: 'mqom3cat5gf2shorterot'
         pretty_name: 'mqom3_cat5_gf2_shorter_ot'
@@ -1582,7 +983,3 @@ sigs:
         code_point: '0xffbb'
         enable: false
         enable_tls: true
-        mix_with: [{'name': 'p521',
-                    'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.20',
-                    'code_point': '0xffbc'}]

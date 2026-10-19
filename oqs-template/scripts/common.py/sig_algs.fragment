@@ -11,9 +11,7 @@
     {% for sig in config['sigs'] -%}
         {%- for variant in sig['variants'] -%}
             {%- if 'enable_tls' in variant and variant['enable_tls'] -%}
-                {%- for classical_alg in variant['mix_with'] -%}
-                    '{{ classical_alg['name'] }}_{{ variant['name'] }}',
-                {%- endfor -%}
+                
             {%- endif -%}
     {%- endfor %} {%- endfor %}
     

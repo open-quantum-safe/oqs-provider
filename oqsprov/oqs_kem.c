@@ -112,8 +112,7 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
     }
 
     kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
-    if (pkemctx->kem->comp_pubkey == NULL ||
-        pkemctx->kem->comp_pubkey[keyslot] == NULL) {
+    if (pkemctx->kem->pubkey == NULL) {
         OQS_KEM_PRINTF("OQS Warning: public key is NULL\n");
         return -1;
     }
@@ -145,8 +144,8 @@ static int oqs_qs_kem_encaps_keyslot(void *vpkemctx, unsigned char *out,
     *outlen = kem_ctx->length_ciphertext;
     *secretlen = kem_ctx->length_shared_secret;
 
-    return OQS_SUCCESS == OQS_KEM_encaps(kem_ctx, out, secret,
-                                         pkemctx->kem->comp_pubkey[keyslot]);
+    return OQS_SUCCESS ==
+           OQS_KEM_encaps(kem_ctx, out, secret, pkemctx->kem->pubkey);
 }
 
 static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
@@ -161,10 +160,7 @@ static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
         return -1;
     }
     kem_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
-    // comp_privkey[keyslot] aliases into privkey and can dangle once privkey is
-    // freed, so guard on privkey too.
-    if (pkemctx->kem->privkey == NULL || pkemctx->kem->comp_privkey == NULL ||
-        pkemctx->kem->comp_privkey[keyslot] == NULL) {
+    if (pkemctx->kem->privkey == NULL) {
         OQS_KEM_PRINTF("OQS Warning: private key is NULL\n");
         return -1;
     }
@@ -194,8 +190,8 @@ static int oqs_qs_kem_decaps_keyslot(void *vpkemctx, unsigned char *out,
     }
     *outlen = kem_ctx->length_shared_secret;
 
-    return OQS_SUCCESS == OQS_KEM_decaps(kem_ctx, out, in,
-                                         pkemctx->kem->comp_privkey[keyslot]);
+    return OQS_SUCCESS ==
+           OQS_KEM_decaps(kem_ctx, out, in, pkemctx->kem->privkey);
 }
 
 static int oqs_qs_kem_encaps(void *vpkemctx, unsigned char *out, size_t *outlen,
@@ -209,7 +205,7 @@ static int oqs_qs_kem_decaps(void *vpkemctx, unsigned char *out, size_t *outlen,
     return oqs_qs_kem_decaps_keyslot(vpkemctx, out, outlen, in, inlen, 0);
 }
 
-#include "oqs_hyb_kem.c"
+/* [mb-nohybrids] hybrid KEM implementation (oqs_hyb_kem.c) removed */
 
 #define MAKE_KEM_FUNCTIONS(alg)                                                \
     const OSSL_DISPATCH oqs_##alg##_kem_functions[] = {                        \
@@ -221,16 +217,5 @@ static int oqs_qs_kem_decaps(void *vpkemctx, unsigned char *out, size_t *outlen,
         {OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx},              \
         {0, NULL}};
 
-#define MAKE_HYB_KEM_FUNCTIONS(alg)                                            \
-    const OSSL_DISPATCH oqs_##alg##_kem_functions[] = {                        \
-        {OSSL_FUNC_KEM_NEWCTX, (void (*)(void))oqs_kem_newctx},                \
-        {OSSL_FUNC_KEM_ENCAPSULATE_INIT, (void (*)(void))oqs_kem_encaps_init}, \
-        {OSSL_FUNC_KEM_ENCAPSULATE, (void (*)(void))oqs_hyb_kem_encaps},       \
-        {OSSL_FUNC_KEM_DECAPSULATE_INIT, (void (*)(void))oqs_kem_decaps_init}, \
-        {OSSL_FUNC_KEM_DECAPSULATE, (void (*)(void))oqs_hyb_kem_decaps},       \
-        {OSSL_FUNC_KEM_FREECTX, (void (*)(void))oqs_kem_freectx},              \
-        {0, NULL}};
-
 // keep this just in case we need to become ALG-specific at some point in time
 MAKE_KEM_FUNCTIONS(generic)
-MAKE_HYB_KEM_FUNCTIONS(hybrid)

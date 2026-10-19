@@ -232,49 +232,8 @@ err:
     return testresult;
 }
 
-/** \brief Compares the classical keys of two hybrid key pairs
- *
- * \param key1 A key pair.
- * \param key2 A key pair.
- *
- * \return 1 if the compare operation is successful, else 0. */
-static int oqs_cmp_classical_keys(const EVP_PKEY *key1, const EVP_PKEY *key2) {
-    int ret = 0;
-    unsigned char *pubkey1 = NULL, *pubkey2 = NULL, *privkey1 = NULL,
-                  *privkey2 = NULL;
-    size_t pubkey1_len, pubkey2_len, privkey1_len, privkey2_len;
-
-    if (get_param_octet_string(key1, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY,
-                               &pubkey1, &pubkey1_len)) {
-        goto out;
-    }
-    if (get_param_octet_string(key2, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PUB_KEY,
-                               &pubkey2, &pubkey2_len)) {
-        goto out;
-    }
-
-    if (get_param_octet_string(key1, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY,
-                               &privkey1, &privkey1_len)) {
-        goto out;
-    }
-    if (get_param_octet_string(key2, OQS_HYBRID_PKEY_PARAM_CLASSICAL_PRIV_KEY,
-                               &privkey2, &privkey2_len)) {
-        goto out;
-    }
-    ret = (pubkey1_len == pubkey2_len) && (privkey1_len == privkey2_len);
-    if (!ret) {
-        goto out;
-    }
-    ret &= memcmp(pubkey1, pubkey2, pubkey1_len) == 0 &&
-           memcmp(privkey1, privkey2, privkey1_len) == 0;
-
-out:
-    free(pubkey1);
-    free(pubkey2);
-    free(privkey1);
-    free(privkey2);
-    return ret;
-}
+/* [mb-nohybrids] oqs_cmp_classical_keys() removed (compared the classical
+ * halves of hybrid key pairs; no hybrid keys exist in a PQ-only provider). */
 
 /** \brief Returns the index associated to the 'info_classical' struct
  *
@@ -433,9 +392,6 @@ static int test_oqs_kems_libctx(const char *kemalg_name) {
     if (!testresult)
         goto err;
 
-    testresult &= oqs_cmp_classical_keys(key1, key2);
-    if (!testresult)
-        goto err;
 
     testresult &= oqs_cmp_kem_elems(kemalg_name, secenc1, sec1len, secenc2,
                                     sec2len, out1, out1len, out2, out2len);
@@ -475,10 +431,6 @@ static int test_oqs_sigs_libctx(const char *sigalg_name) {
                                          &sig2, &sig2len);
     if (!testresult)
         goto err;
-
-    if (is_signature_algorithm_hybrid(sigalg_name)) {
-        testresult &= oqs_cmp_classical_keys(key1, key2);
-    }
 
     if (!testresult)
         goto err;

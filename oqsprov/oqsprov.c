@@ -52,15 +52,6 @@ static int rt_loaded = 0;
 
 static void create_rt_lock(void) { rt_lock = CRYPTO_THREAD_lock_new(); }
 
-#if defined(__GNUC__)
-/* The lock outlives every provider instance, so it goes with the module, as
- * the self-test lock of OpenSSL's FIPS provider does. MSVC builds keep it for
- * the lifetime of the process.
- */
-static void free_rt_lock(void) __attribute__((destructor));
-static void free_rt_lock(void) { CRYPTO_THREAD_lock_free(rt_lock); }
-#endif
-
 int oqsprov_alg_rt_disabled(const char *algname) {
     int disabled;
 

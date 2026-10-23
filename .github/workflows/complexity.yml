@@ -1,0 +1,93 @@
+# SPDX-License-Identifier: Apache-2.0 AND MIT
+#
+# Advisory code-complexity report.
+#
+# Runs the cyclomatic (lizard / McCabe) and cognitive (clang-tidy /
+# SonarSource) complexity delta scripts against the merge base and publishes
+# the result to the job summary. See scripts/COMPLEXITY.md for the metrics.
+#
+# ADVISORY ONLY: both jobs use `continue-on-error`, so this workflow never
+# blocks a pull request. It exists to make complexity trends visible and to
+# discourage the code from drifting toward unnecessary special-casing. Flip to
+# a blocking gate (e.g. a committed complexity budget) later if desired.
+name: Complexity (advisory)
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cyclomatic:
+    name: Cyclomatic complexity (lizard, advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install lizard
+        run: |
+          python3 -m pip install --user --quiet lizard \
+            || python3 -m pip install --user --quiet --break-system-packages lizard
+      - name: Report cyclomatic complexity delta
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          git config --global --add safe.directory "$PWD" || true
+          if [ -n "${GITHUB_BASE_REF:-}" ]; then
+            git fetch --quiet --depth=1 origin "$GITHUB_BASE_REF"
+            BASE="origin/$GITHUB_BASE_REF"
+          else
+            BASE="HEAD~1"
+          fi
+          {
+            echo "## Cyclomatic complexity (lizard) — advisory"
+            echo '```'
+            ./scripts/complexity_delta.sh "$BASE" oqsprov || true
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+  cognitive:
+    name: Cognitive complexity (clang-tidy / SonarSource, advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    container:
+      image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build provider with compile database
+        # OQSPROV_CMAKE_PARAMS is forwarded to the oqsprovider cmake invocation
+        # (scripts/fullbuild.sh), producing _build/compile_commands.json which
+        # clang-tidy needs to parse the translation units.
+        run: OQSPROV_CMAKE_PARAMS="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" LIBOQS_BRANCH=main ./scripts/fullbuild.sh
+      - name: Install clang-tidy
+        run: |
+          python3 -m pip install --user --quiet clang-tidy \
+            || python3 -m pip install --user --quiet --break-system-packages clang-tidy
+      - name: Report cognitive complexity delta
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          git config --global --add safe.directory "$PWD" || true
+          if [ -n "${GITHUB_BASE_REF:-}" ]; then
+            git fetch --quiet --depth=1 origin "$GITHUB_BASE_REF"
+            BASE="origin/$GITHUB_BASE_REF"
+          else
+            BASE="HEAD~1"
+          fi
+          {
+            echo "## Cognitive complexity (clang-tidy / SonarSource) — advisory"
+            echo '```'
+            ./scripts/cognitive_delta.sh "$BASE" oqsprov || true
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"

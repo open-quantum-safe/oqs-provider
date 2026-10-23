@@ -7,6 +7,7 @@
  *
  */
 
+#include <assert.h>
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
@@ -19,6 +20,11 @@
 #include <string.h>
 
 #include "oqs_prov.h"
+
+/* GCC and clang (>= 14) both define __SANITIZE_ADDRESS__ under ASan. */
+#ifdef __SANITIZE_ADDRESS__
+#include <sanitizer/lsan_interface.h>
+#endif
 
 #ifdef NDEBUG
 #define OQS_PROV_PRINTF(a)
@@ -50,7 +56,21 @@ static CRYPTO_RWLOCK *rt_lock = NULL;
 /* provider instances currently loaded in the process */
 static int rt_loaded = 0;
 
-static void create_rt_lock(void) { rt_lock = CRYPTO_THREAD_lock_new(); }
+static void create_rt_lock(void) {
+    /* Run exactly once per module load, via rt_lock_init; a second caller
+     * would orphan (and, under the ignore below, hide the leak of) the
+     * previous lock.
+     */
+    assert(rt_lock == NULL);
+    rt_lock = CRYPTO_THREAD_lock_new();
+#ifdef __SANITIZE_ADDRESS__
+    /* rt_lock is shared by all library contexts and intentionally lives for
+     * the lifetime of the process (freed by the OS on exit); tell
+     * LeakSanitizer this single allocation is not a leak.
+     */
+    __lsan_ignore_object(rt_lock);
+#endif
+}
 
 int oqsprov_alg_rt_disabled(const char *algname) {
     int disabled;

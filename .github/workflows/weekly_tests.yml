@@ -1,0 +1,205 @@
+name: Weekly Tests
+
+on:
+  schedule:
+    # Run at 00:00 every Sunday
+    - cron: '0 0 * * 0'
+  workflow_dispatch: # Allows maintainers to trigger it manually if required
+
+permissions:
+  contents: read
+
+jobs:
+  macos-matrix:
+    name: macOS Weekly Tests
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        openssl-branch: [master, openssl-3.4.1, openssl-3.5.0, openssl-4.0.1]
+        libjade-build: ["OFF"]
+        params:
+          - oqsconfig: -DOQS_ALGS_ENABLED=STD
+    env:
+      MAKE_PARAMS: -j 4
+    steps:
+      - name: Checkout provider
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Checkout openssl
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          set-safe-directory: true
+          repository: openssl/openssl
+          path: openssl
+          ref: ${{ matrix.openssl-branch }}
+
+      - name: checkout liboqs
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          set-safe-directory: true
+          repository: open-quantum-safe/liboqs
+          ref: main
+          path: liboqs
+
+      - name: Retrieve OpenSSL32 from cache
+        id: cache-openssl32
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: .localopenssl32
+          key: ${{ runner.os }}-openssl32-${{ matrix.openssl-branch }}
+
+      - name: Build openssl3 if not cached
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        run: pwd && ./config --prefix=`pwd`/../.localopenssl32 && make $MAKE_PARAMS && make install_sw install_ssldirs
+        working-directory: openssl
+
+      - name: Save OpenSSL
+        id: cache-openssl-save
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: |
+            .localopenssl32
+          key: ${{ runner.os }}-openssl32-${{ matrix.openssl-branch }}
+
+      - name: build liboqs
+        run: |
+           cmake -DOPENSSL_ROOT_DIR=../.localopenssl32 -DCMAKE_INSTALL_PREFIX=../.localliboqs -DOQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ${{ matrix.params.oqsconfig }} -S . -B _build
+           cmake --build _build
+           cmake --install _build
+        working-directory: liboqs
+
+      - name: build oqs-provider
+        run: liboqs_DIR=.localliboqs cmake -DOPENSSL_ROOT_DIR=.localopenssl32 -S . -B _build && cmake --build _build
+
+      - name: Check Openssl providers
+        run: OPENSSL_MODULES=_build/lib .localopenssl32/bin/openssl list -providers -provider oqsprovider -provider default
+
+      - name: Run tests
+        run: PATH=../.localopenssl32/bin:$PATH ctest -V
+        working-directory: _build
+
+      - name: Retain oqsprovider.dylib
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: oqs-provider-macos-15-x64-${{ matrix.openssl-branch }}
+          path: _build/lib/oqsprovider.dylib
+
+  windows-matrix:
+    name: Windows Weekly Tests
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        openssl-branch: [master, openssl-3.4.1, openssl-3.5.0, openssl-4.0.1]
+        platform:
+          - arch: win64
+            oqsconfig: -DOQS_ALGS_ENABLED=STD
+            osslconfig: no-shared no-fips VC-WIN64A
+    steps:
+      - name: Restore OpenSSL32 cache
+        id: cache-openssl32
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: c:\openssl32
+          key: ${{ runner.os }}-msvcopenssl32-${{ matrix.openssl-branch }}
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Checkout OpenSSL
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          set-safe-directory: true
+          repository: openssl/openssl
+          path: openssl
+          ref: ${{ matrix.openssl-branch }}
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          set-safe-directory: true
+          repository: open-quantum-safe/liboqs
+          ref: main
+          path: liboqs
+
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+        with:
+          arch: ${{ matrix.platform.arch }}
+
+      - name: Setup nasm for OpenSSL build
+        uses: ilammy/setup-nasm@72793074d3c8cdda771dba85f6deafe00623038b # v1.5.2
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        with:
+          platform: ${{ matrix.platform.arch }}
+
+      - name: Setup perl for OpenSSl build
+        uses: shogo82148/actions-setup-perl@a198315ec4e9244f206879ea7b63078003aec8a6 # v1.41.1
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+
+      - name: build liboqs
+        run: |
+          cmake --version
+          mkdir build
+          cd build
+          cmake -GNinja -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX="c:\liboqs" ${{ matrix.platform.oqsconfig }} -DOQS_DIST_BUILD=ON ..
+          ninja
+          ninja install
+        working-directory: liboqs
+
+      - name: prepare the OpenSSL build directory
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        run: mkdir _build
+        working-directory: openssl
+
+      - name: OpenSSL config
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        working-directory: openssl\_build
+        run: |
+          perl ..\Configure --banner=Configured --prefix=c:\openssl32 no-makedepend ${{ matrix.platform.osslconfig }}
+          perl configdata.pm --dump
+
+      - name: OpenSSL build
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        working-directory: openssl\_build
+        run: nmake /S
+
+      - name: OpenSSL install
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        run: |
+          mkdir c:\openssl32
+          nmake install_sw
+        working-directory: openssl\_build
+
+      - name: Save OpenSSL
+        id: cache-openssl-save
+        if: steps.cache-openssl32.outputs.cache-hit != 'true'
+        uses: actions/cache/save@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: |
+            c:\openssl32
+          key: ${{ runner.os }}-msvcopenssl32-${{ matrix.openssl-branch }}
+
+      - name: build oqs-provider
+        run: |
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER="cl" -DCMAKE_C_FLAGS="/wd5105" -DOPENSSL_ROOT_DIR="c:\openssl32" -Dliboqs_DIR="c:\liboqs\lib\cmake\liboqs" -S . -B _build
+          cd _build
+          ninja
+
+      - name: Run tests
+        run: |
+          ctest -V --test-dir _build
+
+      - name: Retain oqsprovider.dll
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-2022-${{ matrix.platform.arch }}-oqs-provider-msvc-${{ matrix.openssl-branch }}
+          path: D:/a/oqs-provider/oqs-provider/_build/lib/oqsprovider.dll

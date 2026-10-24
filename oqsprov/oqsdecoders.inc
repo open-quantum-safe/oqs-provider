@@ -558,4 +558,34 @@ DECODER_w_structure("efrodo640aes", der, PrivateKeyInfo, efrodo640aes),
     DECODER_w_structure("p521_mqom3cat5gf16fastct", der, SubjectPublicKeyInfo,
                         p521_mqom3cat5gf16fastct),
 #endif
+#ifdef OQS_ENABLE_SIG_qruov_1q127L10shake
+    DECODER_w_structure("qruov1q127L10shake", der, PrivateKeyInfo,
+                        qruov1q127L10shake),
+    DECODER_w_structure("qruov1q127L10shake", der, SubjectPublicKeyInfo,
+                        qruov1q127L10shake),
+    DECODER_w_structure("p256_qruov1q127L10shake", der, PrivateKeyInfo,
+                        p256_qruov1q127L10shake),
+    DECODER_w_structure("p256_qruov1q127L10shake", der, SubjectPublicKeyInfo,
+                        p256_qruov1q127L10shake),
+#endif
+#ifdef OQS_ENABLE_SIG_qruov_3q31L10shake
+    DECODER_w_structure("qruov3q31L10shake", der, PrivateKeyInfo,
+                        qruov3q31L10shake),
+    DECODER_w_structure("qruov3q31L10shake", der, SubjectPublicKeyInfo,
+                        qruov3q31L10shake),
+    DECODER_w_structure("p384_qruov3q31L10shake", der, PrivateKeyInfo,
+                        p384_qruov3q31L10shake),
+    DECODER_w_structure("p384_qruov3q31L10shake", der, SubjectPublicKeyInfo,
+                        p384_qruov3q31L10shake),
+#endif
+#ifdef OQS_ENABLE_SIG_qruov_5q31L10shake
+    DECODER_w_structure("qruov5q31L10shake", der, PrivateKeyInfo,
+                        qruov5q31L10shake),
+    DECODER_w_structure("qruov5q31L10shake", der, SubjectPublicKeyInfo,
+                        qruov5q31L10shake),
+    DECODER_w_structure("p521_qruov5q31L10shake", der, PrivateKeyInfo,
+                        p521_qruov5q31L10shake),
+    DECODER_w_structure("p521_qruov5q31L10shake", der, SubjectPublicKeyInfo,
+                        p521_qruov5q31L10shake),
+#endif
     ///// OQS_TEMPLATE_FRAGMENT_MAKE_END

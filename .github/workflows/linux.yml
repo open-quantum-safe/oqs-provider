@@ -66,8 +66,55 @@ jobs:
           persist-credentials: false
       - name: Add safe directory exception
         run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
+      - name: Resolve upstream commits for cache keys
+        id: refs
+        if: matrix.ossl-branch != ''
+        run: |
+          echo "ossl=$(git ls-remote https://github.com/openssl/openssl.git ${{ matrix.ossl-branch }} | cut -f1)" >> "$GITHUB_OUTPUT"
+          echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git main | cut -f1)" >> "$GITHUB_OUTPUT"
+      - name: Retrieve OpenSSL from cache
+        id: cache-openssl
+        if: matrix.ossl-branch != ''
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: .localossl
+          key: ${{ runner.os }}-openssl-${{ matrix.ossl-branch }}-${{ steps.refs.outputs.ossl }}
+      - name: Build OpenSSL from source if not cached
+        if: matrix.ossl-branch != '' && steps.cache-openssl.outputs.cache-hit != 'true'
+        run: |
+          OSSL_PREFIX="$GITHUB_WORKSPACE/.localossl"
+          git clone --depth 1 --branch "${{ matrix.ossl-branch }}" https://github.com/openssl/openssl.git openssl-src
+          cd openssl-src
+          LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config --prefix="${OSSL_PREFIX}"
+          make ${MAKE_PARAMS}
+          make install_sw install_ssldirs
+          cd ..
+          if [ -d "${OSSL_PREFIX}/lib64" ] && [ ! -e "${OSSL_PREFIX}/lib" ]; then ln -s lib64 "${OSSL_PREFIX}/lib"; fi
+          rm -rf openssl-src
+      - name: Check out liboqs source (needed by the re-generation step)
+        if: matrix.ossl-branch != ''
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          set-safe-directory: true
+          repository: open-quantum-safe/liboqs
+          ref: ${{ steps.refs.outputs.liboqs }}
+          path: liboqs
+      - name: Retrieve liboqs build from cache
+        id: cache-liboqs
+        if: matrix.ossl-branch != ''
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: .local
+          key: ${{ runner.os }}-liboqs-${{ steps.refs.outputs.liboqs }}-${{ matrix.ossl-branch }}-libjade${{ matrix.libjade-build }}
+      - name: Expose the cached OpenSSL to build and tests
+        if: matrix.ossl-branch != ''
+        run: |
+          echo "OSSL_INSTALL_ARG=$GITHUB_WORKSPACE/.localossl"         >> "$GITHUB_ENV"
+          echo "OPENSSL_APP=$GITHUB_WORKSPACE/.localossl/bin/openssl"  >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$GITHUB_WORKSPACE/.localossl/lib64"    >> "$GITHUB_ENV"
       - name: Full build
-        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
+        run: OPENSSL_INSTALL=$OSSL_INSTALL_ARG OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
       - name: Re-generate code
@@ -80,7 +127,7 @@ jobs:
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
           python3 oqs-template/generate.py
       - name: Full re-build & test
-        run: rm -rf _build && OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh && ./scripts/runtests.sh
+        run: rm -rf _build && OPENSSL_INSTALL=$OSSL_INSTALL_ARG OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh && ./scripts/runtests.sh
       - name: Build .deb install package
         run: cpack -C DebPack
         working-directory: _build
@@ -91,7 +138,7 @@ jobs:
           path: _build/*.deb
       - name: Verify that the static library is copied to the install directory.
         run: |
-          OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQSPROV_CMAKE_PARAMS="-DOQS_PROVIDER_BUILD_STATIC=ON" ./scripts/fullbuild.sh -f && \
+          OPENSSL_INSTALL=$OSSL_INSTALL_ARG OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQSPROV_CMAKE_PARAMS="-DOQS_PROVIDER_BUILD_STATIC=ON" ./scripts/fullbuild.sh -f && \
           mkdir -p _sysroot/ && \
           cmake --install _build --prefix _sysroot/ && \
           stat _sysroot/lib/liboqsprovider.a

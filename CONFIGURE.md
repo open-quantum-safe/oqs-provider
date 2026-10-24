@@ -12,6 +12,13 @@ The default configuration is as defined in the [algorithm configuration file](oq
 
 Any PR changing this default must include all files changed by `generate.py`.
 
+`generate.py` enforces the following rules on `generate.yml`:
+
+- Algorithm names must be lowercase. Standardized hybrid KEM names (`standard_name`) are the only exception.
+- A signature algorithm (and each of its hybrids) has a TLS code point if and only if it has both `enable: true` and `enable_tls: true`.
+- Signature code points must be unique and lie in the TLS private use range `0xFE00`-`0xFFFF`, unless marked `iana: true`, and must not reuse a code point that a previous release (`oqs-template/generate.yml-*`) assigned to another algorithm.
+- `code_point: 'auto'` makes `generate.py` assign, and write into `generate.yml`, the code point of the algorithm's latest release if it is still free, otherwise the lowest code point satisfying these rules. To enable a disabled signature algorithm, set `enable: true` and `code_point: 'auto'` on the variant and on each of its hybrids.
+
 ## Build install options
 
 ### OPENSSL_ROOT_DIR

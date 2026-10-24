@@ -616,7 +616,10 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xffbd
+# SIG code points: TLS SignatureScheme private use range 0xFE00..0xFFFF (RFC 8446), unless 'iana: true'.
+# Only variants with both 'enable: true' and 'enable_tls: true' (and their hybrids) get a code point. To enable
+# a variant, set its code points to 'auto': generate.py then assigns the code point of its latest release if
+# still free, otherwise the lowest code point not used by any release (see generate.yml-*).
 sigs:
   # -
     # iso (1)
@@ -653,6 +656,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_ml_dsa_44'
         oid: '2.16.840.1.101.3.4.3.17'
         code_point: '0x0904'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -670,6 +674,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_ml_dsa_65'
         oid: '2.16.840.1.101.3.4.3.18'
         code_point: '0x0905'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -683,6 +688,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_ml_dsa_87'
         oid: '2.16.840.1.101.3.4.3.19'
         code_point: '0x0906'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -857,7 +863,7 @@ sigs:
     variants:
       # RSDP 128
       -
-        name: 'CROSSrsdp128balanced'
+        name: 'crossrsdp128balanced'
         pretty_name: 'CROSS-rsdp-128-balanced'
         oqs_meth: 'OQS_SIG_alg_cross_rsdp_128_balanced'
         oid: '1.3.6.1.4.1.62245.2.1.1.2.2'
@@ -865,44 +871,39 @@ sigs:
         enable: true
         enable_tls: true
       -
-        name: 'CROSSrsdp128fast'
+        name: 'crossrsdp128fast'
         pretty_name: 'CROSS-rsdp-128-fast'
         oqs_meth: 'OQS_SIG_alg_cross_rsdp_128_fast'
         oid: '1.3.6.1.4.1.62245.2.1.2.2.2'
-        code_point: '0xff54'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdp128small'
+        name: 'crossrsdp128small'
         pretty_name: 'CROSS-rsdp-128-small'
         oqs_meth: 'OQS_SIG_alg_cross_rsdp_128_small'
         oid: '1.3.6.1.4.1.62245.2.1.3.2.2'
-        code_point: '0xff55'
         enable: false
         enable_tls: true
       # RSDP 192
       -
-        name: 'CROSSrsdp192balanced'
+        name: 'crossrsdp192balanced'
         pretty_name: 'CROSS-rsdp-192-balanced'
         oqs_meth: 'OQS_SIG_alg_cross_rsdp_192_balanced'
         oid: '1.3.6.1.4.1.62245.2.1.4.2.2'
-        code_point: '0xff56'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdp192fast'
+        name: 'crossrsdp192fast'
         pretty_name: 'CROSS-rsdp-192-fast'
         oqs_meth: 'OQS_SIG_alg_cross_rsdp_192_fast'
         oid: '1.3.6.1.4.1.62245.2.1.5.2.2'
-        code_point: '0xff57'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdp192small'
+        name: 'crossrsdp192small'
         pretty_name: 'CROSS-rsdp-192-small'
         oqs_meth: 'OQS_SIG_alg_cross_rsdp_192_small'
         oid: '1.3.6.1.4.1.62245.2.1.6.2.2'
-        code_point: '0xff58'
         enable: false
         enable_tls: true
       # RSDP 256
@@ -910,153 +911,133 @@ sigs:
       # they produce certificates that are larger than the maximum size allowed 
       # by TLS 1.3 (RFC 8446 section B.3.3)
       -
-        name: 'CROSSrsdp256small'
+        name: 'crossrsdp256small'
         pretty_name: 'CROSS-rsdp-256-small'
         oqs_meth: 'OQS_SIG_alg_cross_rsdp_256_small'
         oid: '1.3.6.1.4.1.62245.2.1.9.2.2'
-        code_point: '0xff59'
         enable: false
         enable_tls: false
       # RSDPG 128
       -
-        name: 'CROSSrsdpg128balanced'
+        name: 'crossrsdpg128balanced'
         pretty_name: 'CROSS-rsdpg-128-balanced'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_128_balanced'
         oid: '1.3.6.1.4.1.62245.2.1.10.2.2'
-        code_point: '0xff5a'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdpg128fast'
+        name: 'crossrsdpg128fast'
         pretty_name: 'CROSS-rsdpg-128-fast'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_128_fast'
         oid: '1.3.6.1.4.1.62245.2.1.11.2.2'
-        code_point: '0xff5b'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdpg128small'
+        name: 'crossrsdpg128small'
         pretty_name: 'CROSS-rsdpg-128-small'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_128_small'
         oid: '1.3.6.1.4.1.62245.2.1.12.2.2'
-        code_point: '0xff5c'
         enable: false
         enable_tls: true
       # RSDPG 192
       -
-        name: 'CROSSrsdpg192balanced'
+        name: 'crossrsdpg192balanced'
         pretty_name: 'CROSS-rsdpg-192-balanced'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_192_balanced'
         oid: '1.3.6.1.4.1.62245.2.1.13.2.2'
-        code_point: '0xff5d'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdpg192fast'
+        name: 'crossrsdpg192fast'
         pretty_name: 'CROSS-rsdpg-192-fast'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_192_fast'
         oid: '1.3.6.1.4.1.62245.2.1.14.2.2'
-        code_point: '0xff5e'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdpg192small'
+        name: 'crossrsdpg192small'
         pretty_name: 'CROSS-rsdpg-192-small'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_192_small'
         oid: '1.3.6.1.4.1.62245.2.1.15.2.2'
-        code_point: '0xff5f'
         enable: false
         enable_tls: true
       # RSDPG 256
       -
-        name: 'CROSSrsdpg256balanced'
+        name: 'crossrsdpg256balanced'
         pretty_name: 'CROSS-rsdpg-256-balanced'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_256_balanced'
         oid: '1.3.6.1.4.1.62245.2.1.16.2.2'
-        code_point: '0xff60'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdpg256fast'
+        name: 'crossrsdpg256fast'
         pretty_name: 'CROSS-rsdpg-256-fast'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_256_fast'
         oid: '1.3.6.1.4.1.62245.2.1.17.2.2'
-        code_point: '0xff61'
         enable: false
         enable_tls: true
       -
-        name: 'CROSSrsdpg256small'
+        name: 'crossrsdpg256small'
         pretty_name: 'CROSS-rsdpg-256-small'
         oqs_meth: 'OQS_SIG_alg_cross_rsdpg_256_small'
         oid: '1.3.6.1.4.1.62245.2.1.18.2.2'
-        code_point: '0xff62'
         enable: false
         enable_tls: true
   -
     family: 'UOV'
     variants:
       -
-        name: 'OV_Is'
+        name: 'ov_is'
         pretty_name: 'OV-Is'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Is'
         oid: '1.3.9999.9.1.1'
-        code_point: '0xff0a'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.1.2',
-                    'code_point': '0xff16'}]
+                    'oid': '1.3.9999.9.1.2'}]
       -
-        name: 'OV_Ip'
+        name: 'ov_ip'
         pretty_name: 'OV-Ip'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Ip'
         oid: '1.3.9999.9.2.1'
-        code_point: '0xff0b'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.2.2',
-                    'code_point': '0xff17'}]
+                    'oid': '1.3.9999.9.2.2'}]
       -
-        name: 'OV_III'
+        name: 'ov_iii'
         pretty_name: 'OV-III'
         oqs_meth: 'OQS_SIG_alg_uov_ov_III'
         oid: '1.3.9999.9.3.1'
-        code_point: '0xff0c'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.3.2',
-                    'code_point': '0xff18'}]
+                    'oid': '1.3.9999.9.3.2'}]
       -
-        name: 'OV_V'
+        name: 'ov_v'
         pretty_name: 'OV-V'
         oqs_meth: 'OQS_SIG_alg_uov_ov_V'
         oid: '1.3.9999.9.4.1'
-        code_point: '0xff0d'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.4.2',
-                    'code_point': '0xff19'}]
+                    'oid': '1.3.9999.9.4.2'}]
       -
-        name: 'OV_Is_pkc'
+        name: 'ov_is_pkc'
         pretty_name: 'OV-Is-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Is_pkc'
         oid: '1.3.9999.9.5.1'
-        code_point: '0xff0e'
         enable: true
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.5.2',
-                    'code_point': '0xff1a'}]
+                    'oid': '1.3.9999.9.5.2'}]
       -
-        name: 'OV_Ip_pkc'
+        name: 'ov_ip_pkc'
         pretty_name: 'OV-Ip-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Ip_pkc'
         oid: '1.3.9999.9.6.1'
@@ -1068,43 +1049,37 @@ sigs:
                     'oid': '1.3.9999.9.6.2',
                     'code_point': '0xff1b'}]
       -
-        name: 'OV_III_pkc'
+        name: 'ov_iii_pkc'
         pretty_name: 'OV-III-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_III_pkc'
         oid: '1.3.9999.9.7.1'
-        code_point: '0xff10'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.7.2',
-                    'code_point': '0xff1c'}]
+                    'oid': '1.3.9999.9.7.2'}]
       -
-        name: 'OV_V_pkc'
+        name: 'ov_v_pkc'
         pretty_name: 'OV-V-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_V_pkc'
         oid: '1.3.9999.9.8.1'
-        code_point: '0xff11'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.8.2',
-                    'code_point': '0xff1d'}]
+                    'oid': '1.3.9999.9.8.2'}]
       -
-        name: 'OV_Is_pkc_skc'
+        name: 'ov_is_pkc_skc'
         pretty_name: 'OV-Is-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Is_pkc_skc'
         oid: '1.3.9999.9.9.1'
-        code_point: '0xff12'
         enable: true
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.9.2',
-                    'code_point': '0xff1e'}]
+                    'oid': '1.3.9999.9.9.2'}]
       -
-        name: 'OV_Ip_pkc_skc'
+        name: 'ov_ip_pkc_skc'
         pretty_name: 'OV-Ip-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Ip_pkc_skc'
         oid: '1.3.9999.9.10.1'
@@ -1116,29 +1091,25 @@ sigs:
                     'oid': '1.3.9999.9.10.2',
                     'code_point': '0xff1f'}]
       -
-        name: 'OV_III_pkc_skc'
+        name: 'ov_iii_pkc_skc'
         pretty_name: 'OV-III-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_III_pkc_skc'
         oid: '1.3.9999.9.11.1'
-        code_point: '0xff14'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.11.2',
-                    'code_point': '0xff20'}]
+                    'oid': '1.3.9999.9.11.2'}]
       -
-        name: 'OV_V_pkc_skc'
+        name: 'ov_v_pkc_skc'
         pretty_name: 'OV-V-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_V_pkc_skc'
         oid: '1.3.9999.9.12.1'
-        code_point: '0xff15'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.12.2',
-                    'code_point': '0xff21'}]
+                    'oid': '1.3.9999.9.12.2'}]
   -
     family: 'SNOVA'
     variants:
@@ -1259,6 +1230,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128s'
         oid: '2.16.840.1.101.3.4.3.20'
         code_point: '0x0911'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1268,6 +1240,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_128f'
         oid: '2.16.840.1.101.3.4.3.21'
         code_point: '0x0912'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1277,6 +1250,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192s'
         oid: '2.16.840.1.101.3.4.3.22'
         code_point: '0x0913'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1286,6 +1260,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_192f'
         oid: '2.16.840.1.101.3.4.3.23'
         code_point: '0x0914'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1295,6 +1270,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256s'
         oid: '2.16.840.1.101.3.4.3.24'
         code_point: '0x0915'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1304,6 +1280,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_sha2_256f'
         oid: '2.16.840.1.101.3.4.3.25'
         code_point: '0x0916'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1313,6 +1290,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128s'
         oid: '2.16.840.1.101.3.4.3.26'
         code_point: '0x0917'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1322,6 +1300,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_128f'
         oid: '2.16.840.1.101.3.4.3.27'
         code_point: '0x0918'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1331,6 +1310,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192s'
         oid: '2.16.840.1.101.3.4.3.28'
         code_point: '0x0919'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1340,6 +1320,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_192f'
         oid: '2.16.840.1.101.3.4.3.29'
         code_point: '0x091A'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1349,6 +1330,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256s'
         oid: '2.16.840.1.101.3.4.3.30'
         code_point: '0x091B'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1358,6 +1340,7 @@ sigs:
         oqs_meth: 'OQS_SIG_alg_slh_dsa_pure_shake_256f'
         oid: '2.16.840.1.101.3.4.3.31'
         code_point: '0x091C'
+        iana: true
         enable: true
         enable_tls: true
         openssl_version: 3.5.0
@@ -1368,7 +1351,8 @@ sigs:
     # "gf16 fast ct" ones, one per security level, in order to leave room for other signatures: if one wants to test
     # the disabled MQOM variants, one can explicitly enable them below. For the disabled variants, we use
     # "enable: false" and "enable_tls: true" since they are disabled by default but are still compatible with TLS:
-    # switch to "enable: true" to activate them for your local compilation.
+    # switch to "enable: true", and set "code_point: 'auto'" on the variant and its hybrid, to activate them for your
+    # local compilation.
     variants:
       -
         name: 'mqom3cat1gf16fastct'
@@ -1387,61 +1371,51 @@ sigs:
         pretty_name: 'mqom3_cat1_gf16_fast_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat1_gf16_fast_ot'
         oid: '1.3.9999.11.1.11'
-        code_point: '0xff9b'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.12',
-                    'code_point': '0xff9c'}]
+                    'oid': '1.3.9999.11.1.12'}]
       -
         name: 'mqom3cat1gf16shortct'
         pretty_name: 'mqom3_cat1_gf16_short_ct'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat1_gf16_short_ct'
         oid: '1.3.9999.11.1.13'
-        code_point: '0xff9d'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.14',
-                    'code_point': '0xff9e'}]
+                    'oid': '1.3.9999.11.1.14'}]
       -
         name: 'mqom3cat1gf16shortot'
         pretty_name: 'mqom3_cat1_gf16_short_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat1_gf16_short_ot'
         oid: '1.3.9999.11.1.15'
-        code_point: '0xff9f'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.16',
-                    'code_point': '0xffa0'}]
+                    'oid': '1.3.9999.11.1.16'}]
       -
         name: 'mqom3cat1gf2shorterct'
         pretty_name: 'mqom3_cat1_gf2_shorter_ct'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat1_gf2_shorter_ct'
         oid: '1.3.9999.11.1.17'
-        code_point: '0xffa1'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.18',
-                    'code_point': '0xffa2'}]
+                    'oid': '1.3.9999.11.1.18'}]
       -
         name: 'mqom3cat1gf2shorterot'
         pretty_name: 'mqom3_cat1_gf2_shorter_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat1_gf2_shorter_ot'
         oid: '1.3.9999.11.1.19'
-        code_point: '0xffa3'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.11.1.20',
-                    'code_point': '0xffa4'}]
+                    'oid': '1.3.9999.11.1.20'}]
       -
         name: 'mqom3cat3gf16fastct'
         pretty_name: 'mqom3_cat3_gf16_fast_ct'
@@ -1459,61 +1433,51 @@ sigs:
         pretty_name: 'mqom3_cat3_gf16_fast_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat3_gf16_fast_ot'
         oid: '1.3.9999.11.3.11'
-        code_point: '0xffa7'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.12',
-                    'code_point': '0xffa8'}]
+                    'oid': '1.3.9999.11.3.12'}]
       -
         name: 'mqom3cat3gf16shortct'
         pretty_name: 'mqom3_cat3_gf16_short_ct'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat3_gf16_short_ct'
         oid: '1.3.9999.11.3.13'
-        code_point: '0xffa9'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.14',
-                    'code_point': '0xffaa'}]
+                    'oid': '1.3.9999.11.3.14'}]
       -
         name: 'mqom3cat3gf16shortot'
         pretty_name: 'mqom3_cat3_gf16_short_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat3_gf16_short_ot'
         oid: '1.3.9999.11.3.15'
-        code_point: '0xffab'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.16',
-                    'code_point': '0xffac'}]
+                    'oid': '1.3.9999.11.3.16'}]
       -
         name: 'mqom3cat3gf2shorterct'
         pretty_name: 'mqom3_cat3_gf2_shorter_ct'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat3_gf2_shorter_ct'
         oid: '1.3.9999.11.3.17'
-        code_point: '0xffad'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.18',
-                    'code_point': '0xffae'}]
+                    'oid': '1.3.9999.11.3.18'}]
       -
         name: 'mqom3cat3gf2shorterot'
         pretty_name: 'mqom3_cat3_gf2_shorter_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat3_gf2_shorter_ot'
         oid: '1.3.9999.11.3.19'
-        code_point: '0xffaf'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.11.3.20',
-                    'code_point': '0xffb0'}]
+                    'oid': '1.3.9999.11.3.20'}]
       -
         name: 'mqom3cat5gf16fastct'
         pretty_name: 'mqom3_cat5_gf16_fast_ct'
@@ -1531,58 +1495,48 @@ sigs:
         pretty_name: 'mqom3_cat5_gf16_fast_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ot'
         oid: '1.3.9999.11.5.11'
-        code_point: '0xffb3'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.12',
-                    'code_point': '0xffb4'}]
+                    'oid': '1.3.9999.11.5.12'}]
       -
         name: 'mqom3cat5gf16shortct'
         pretty_name: 'mqom3_cat5_gf16_short_ct'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat5_gf16_short_ct'
         oid: '1.3.9999.11.5.13'
-        code_point: '0xffb5'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.14',
-                    'code_point': '0xffb6'}]
+                    'oid': '1.3.9999.11.5.14'}]
       -
         name: 'mqom3cat5gf16shortot'
         pretty_name: 'mqom3_cat5_gf16_short_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat5_gf16_short_ot'
         oid: '1.3.9999.11.5.15'
-        code_point: '0xffb7'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.16',
-                    'code_point': '0xffb8'}]
+                    'oid': '1.3.9999.11.5.16'}]
       -
         name: 'mqom3cat5gf2shorterct'
         pretty_name: 'mqom3_cat5_gf2_shorter_ct'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat5_gf2_shorter_ct'
         oid: '1.3.9999.11.5.17'
-        code_point: '0xffb9'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.18',
-                    'code_point': '0xffba'}]
+                    'oid': '1.3.9999.11.5.18'}]
       -
         name: 'mqom3cat5gf2shorterot'
         pretty_name: 'mqom3_cat5_gf2_shorter_ot'
         oqs_meth: 'OQS_SIG_alg_mqom_mqom3_cat5_gf2_shorter_ot'
         oid: '1.3.9999.11.5.19'
-        code_point: '0xffbb'
         enable: false
         enable_tls: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.11.5.20',
-                    'code_point': '0xffbc'}]
+                    'oid': '1.3.9999.11.5.20'}]

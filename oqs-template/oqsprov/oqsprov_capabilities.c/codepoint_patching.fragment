@@ -9,7 +9,7 @@
 {%- endfor %}
 {% set cnt = namespace(val=-1) %}
 {%- for sig in config['sigs'] %}
-   {%- for variant in sig['variants'] %}
+   {%- for variant in sig['variants'] if variant['enable'] and variant['enable_tls'] %}
    {%- set cnt.val = cnt.val + 1 %}
    if (getenv("OQS_CODEPOINT_{{variant['name']|upper}}")) oqs_sigalg_list[{{ cnt.val }}].code_point = atoi(getenv("OQS_CODEPOINT_{{variant['name']|upper}}")); 
       {%- for classical_alg in variant['mix_with'] %}

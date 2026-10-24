@@ -39,14 +39,14 @@ def gen_sig_table(oqslibdocdir):
 
         try: 
             table.append([variant['name'], liboqs_sigs[sig['family']]['spec-version'],
-                          liboqs_sigs[sig['family']]['nist-round'], claimed_nist_level, variant['code_point'],
+                          liboqs_sigs[sig['family']]['nist-round'], claimed_nist_level, variant.get('code_point', '-'),
                           variant['oid']])
             for hybrid in variant['mix_with']:
                 table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
                               liboqs_sigs[sig['family']]['spec-version'],
                               str(liboqs_sigs[sig['family']]['nist-round']),
                               claimed_nist_level,
-                              hybrid['code_point'],
+                              hybrid.get('code_point', '-'),
                               hybrid['oid']])
         except KeyError as ke:
             # Non-existant NIDs mean this alg is not supported any more

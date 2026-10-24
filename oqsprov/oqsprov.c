@@ -242,23 +242,23 @@ const char *oqs_oid_alg_list[OQS_OID_CNT] = {
     "1.3.9999.8.5.6",
     "p521_mayo5",
     "1.3.6.1.4.1.62245.2.1.1.2.2",
-    "CROSSrsdp128balanced",
+    "crossrsdp128balanced",
     "1.3.9999.9.5.1",
-    "OV_Is_pkc",
+    "ov_is_pkc",
     "1.3.9999.9.5.2",
-    "p256_OV_Is_pkc",
+    "p256_ov_is_pkc",
     "1.3.9999.9.6.1",
-    "OV_Ip_pkc",
+    "ov_ip_pkc",
     "1.3.9999.9.6.2",
-    "p256_OV_Ip_pkc",
+    "p256_ov_ip_pkc",
     "1.3.9999.9.9.1",
-    "OV_Is_pkc_skc",
+    "ov_is_pkc_skc",
     "1.3.9999.9.9.2",
-    "p256_OV_Is_pkc_skc",
+    "p256_ov_is_pkc_skc",
     "1.3.9999.9.10.1",
-    "OV_Ip_pkc_skc",
+    "ov_ip_pkc_skc",
     "1.3.9999.9.10.2",
-    "p256_OV_Ip_pkc_skc",
+    "p256_ov_ip_pkc_skc",
     "1.3.9999.10.1.3",
     "snova1k",
     "1.3.9999.10.1.4",
@@ -721,23 +721,23 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     SIGALG("p521_mayo5", 256, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
-    SIGALG("CROSSrsdp128balanced", 128, oqs_signature_functions),
+    SIGALG("crossrsdp128balanced", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
-    SIGALG("OV_Is_pkc", 128, oqs_signature_functions),
-    SIGALG("p256_OV_Is_pkc", 128, oqs_signature_functions),
+    SIGALG("ov_is_pkc", 128, oqs_signature_functions),
+    SIGALG("p256_ov_is_pkc", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
-    SIGALG("OV_Ip_pkc", 128, oqs_signature_functions),
-    SIGALG("p256_OV_Ip_pkc", 128, oqs_signature_functions),
+    SIGALG("ov_ip_pkc", 128, oqs_signature_functions),
+    SIGALG("p256_ov_ip_pkc", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
-    SIGALG("OV_Is_pkc_skc", 128, oqs_signature_functions),
-    SIGALG("p256_OV_Is_pkc_skc", 128, oqs_signature_functions),
+    SIGALG("ov_is_pkc_skc", 128, oqs_signature_functions),
+    SIGALG("p256_ov_is_pkc_skc", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
-    SIGALG("OV_Ip_pkc_skc", 128, oqs_signature_functions),
-    SIGALG("p256_OV_Ip_pkc_skc", 128, oqs_signature_functions),
+    SIGALG("ov_ip_pkc_skc", 128, oqs_signature_functions),
+    SIGALG("p256_ov_ip_pkc_skc", 128, oqs_signature_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_I_K
     SIGALG("snova1k", 128, oqs_signature_functions),
@@ -993,23 +993,23 @@ static const OSSL_ALGORITHM
     SIGALG("p521_mayo5", 256, oqs_p521_mayo5_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
-    SIGALG("CROSSrsdp128balanced", 128, oqs_CROSSrsdp128balanced_keymgmt_functions),
+    SIGALG("crossrsdp128balanced", 128, oqs_crossrsdp128balanced_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
-    SIGALG("OV_Is_pkc", 128, oqs_OV_Is_pkc_keymgmt_functions),
-    SIGALG("p256_OV_Is_pkc", 128, oqs_p256_OV_Is_pkc_keymgmt_functions),
+    SIGALG("ov_is_pkc", 128, oqs_ov_is_pkc_keymgmt_functions),
+    SIGALG("p256_ov_is_pkc", 128, oqs_p256_ov_is_pkc_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
-    SIGALG("OV_Ip_pkc", 128, oqs_OV_Ip_pkc_keymgmt_functions),
-    SIGALG("p256_OV_Ip_pkc", 128, oqs_p256_OV_Ip_pkc_keymgmt_functions),
+    SIGALG("ov_ip_pkc", 128, oqs_ov_ip_pkc_keymgmt_functions),
+    SIGALG("p256_ov_ip_pkc", 128, oqs_p256_ov_ip_pkc_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
-    SIGALG("OV_Is_pkc_skc", 128, oqs_OV_Is_pkc_skc_keymgmt_functions),
-    SIGALG("p256_OV_Is_pkc_skc", 128, oqs_p256_OV_Is_pkc_skc_keymgmt_functions),
+    SIGALG("ov_is_pkc_skc", 128, oqs_ov_is_pkc_skc_keymgmt_functions),
+    SIGALG("p256_ov_is_pkc_skc", 128, oqs_p256_ov_is_pkc_skc_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
-    SIGALG("OV_Ip_pkc_skc", 128, oqs_OV_Ip_pkc_skc_keymgmt_functions),
-    SIGALG("p256_OV_Ip_pkc_skc", 128, oqs_p256_OV_Ip_pkc_skc_keymgmt_functions),
+    SIGALG("ov_ip_pkc_skc", 128, oqs_ov_ip_pkc_skc_keymgmt_functions),
+    SIGALG("p256_ov_ip_pkc_skc", 128, oqs_p256_ov_ip_pkc_skc_keymgmt_functions),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_I_K
     SIGALG("snova1k", 128, oqs_snova1k_keymgmt_functions),

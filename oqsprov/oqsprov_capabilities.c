@@ -308,76 +308,39 @@ typedef struct oqs_sigalg_constants_st {
 static OQS_SIGALG_CONSTANTS oqs_sigalg_list[] = {
     // ad-hoc assignments - take from OQS generate data structures
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_START
-    {0x0904, 128, TLS1_3_VERSION, 0},
-    {0xff06, 128, TLS1_3_VERSION, 0},
-    {0xff07, 128, TLS1_3_VERSION, 0},
-    {0x0905, 192, TLS1_3_VERSION, 0},
-    {0xff08, 192, TLS1_3_VERSION, 0},
-    {0x0906, 256, TLS1_3_VERSION, 0},
-    {0xff09, 256, TLS1_3_VERSION, 0},
-    {0xfed7, 128, TLS1_3_VERSION, 0},
-    {0xfed8, 128, TLS1_3_VERSION, 0},
-    {0xfed9, 128, TLS1_3_VERSION, 0},
-    {0xfedc, 128, TLS1_3_VERSION, 0},
-    {0xfedd, 128, TLS1_3_VERSION, 0},
-    {0xfede, 128, TLS1_3_VERSION, 0},
-    {0xfeda, 256, TLS1_3_VERSION, 0},
-    {0xfedb, 256, TLS1_3_VERSION, 0},
-    {0xfedf, 256, TLS1_3_VERSION, 0},
-    {0xfee0, 256, TLS1_3_VERSION, 0},
-    {0xff7b, 128, TLS1_3_VERSION, 0},
-    {0xff7f, 128, TLS1_3_VERSION, 0},
-    {0xff7c, 128, TLS1_3_VERSION, 0},
-    {0xff80, 128, TLS1_3_VERSION, 0},
-    {0xff7d, 192, TLS1_3_VERSION, 0},
-    {0xff81, 192, TLS1_3_VERSION, 0},
-    {0xff7e, 256, TLS1_3_VERSION, 0},
-    {0xff82, 256, TLS1_3_VERSION, 0},
-    {0xff53, 128, TLS1_3_VERSION, 0},
-    {0xff0e, 128, -1, 0},
-    {0xff1a, 128, -1, 0},
-    {0xff0f, 128, TLS1_3_VERSION, 0},
-    {0xff1b, 128, TLS1_3_VERSION, 0},
-    {0xff12, 128, -1, 0},
-    {0xff1e, 128, -1, 0},
-    {0xff13, 128, TLS1_3_VERSION, 0},
-    {0xff1f, 128, TLS1_3_VERSION, 0},
-    {0xff83, 128, TLS1_3_VERSION, 0},
-    {0xff84, 128, TLS1_3_VERSION, 0},
-    {0xff85, 128, TLS1_3_VERSION, 0},
-    {0xff86, 128, TLS1_3_VERSION, 0},
-    {0xff87, 128, TLS1_3_VERSION, 0},
-    {0xff88, 128, TLS1_3_VERSION, 0},
-    {0xff89, 192, TLS1_3_VERSION, 0},
-    {0xff8a, 192, TLS1_3_VERSION, 0},
-    {0xff8b, 192, TLS1_3_VERSION, 0},
-    {0xff8c, 192, TLS1_3_VERSION, 0},
-    {0xff8d, 192, TLS1_3_VERSION, 0},
-    {0xff8e, 192, TLS1_3_VERSION, 0},
-    {0xff8f, 256, TLS1_3_VERSION, 0},
-    {0xff90, 256, TLS1_3_VERSION, 0},
-    {0xff91, 256, TLS1_3_VERSION, 0},
-    {0xff92, 256, TLS1_3_VERSION, 0},
-    {0xff93, 256, TLS1_3_VERSION, 0},
-    {0xff94, 256, TLS1_3_VERSION, 0},
-    {0x0911, 128, TLS1_3_VERSION, 0},
-    {0x0912, 128, TLS1_3_VERSION, 0},
-    {0x0913, 192, TLS1_3_VERSION, 0},
-    {0x0914, 192, TLS1_3_VERSION, 0},
-    {0x0915, 256, TLS1_3_VERSION, 0},
-    {0x0916, 256, TLS1_3_VERSION, 0},
-    {0x0917, 128, TLS1_3_VERSION, 0},
-    {0x0918, 128, TLS1_3_VERSION, 0},
-    {0x0919, 192, TLS1_3_VERSION, 0},
-    {0x091A, 192, TLS1_3_VERSION, 0},
-    {0x091B, 256, TLS1_3_VERSION, 0},
-    {0x091C, 256, TLS1_3_VERSION, 0},
-    {0xff99, 128, TLS1_3_VERSION, 0},
-    {0xff9a, 128, TLS1_3_VERSION, 0},
-    {0xffa5, 192, TLS1_3_VERSION, 0},
-    {0xffa6, 192, TLS1_3_VERSION, 0},
-    {0xffb1, 256, TLS1_3_VERSION, 0},
-    {0xffb2, 256, TLS1_3_VERSION, 0},
+    {0x0904, 128, TLS1_3_VERSION, 0}, {0xff06, 128, TLS1_3_VERSION, 0},
+    {0xff07, 128, TLS1_3_VERSION, 0}, {0x0905, 192, TLS1_3_VERSION, 0},
+    {0xff08, 192, TLS1_3_VERSION, 0}, {0x0906, 256, TLS1_3_VERSION, 0},
+    {0xff09, 256, TLS1_3_VERSION, 0}, {0xfed7, 128, TLS1_3_VERSION, 0},
+    {0xfed8, 128, TLS1_3_VERSION, 0}, {0xfed9, 128, TLS1_3_VERSION, 0},
+    {0xfedc, 128, TLS1_3_VERSION, 0}, {0xfedd, 128, TLS1_3_VERSION, 0},
+    {0xfede, 128, TLS1_3_VERSION, 0}, {0xfeda, 256, TLS1_3_VERSION, 0},
+    {0xfedb, 256, TLS1_3_VERSION, 0}, {0xfedf, 256, TLS1_3_VERSION, 0},
+    {0xfee0, 256, TLS1_3_VERSION, 0}, {0xff7b, 128, TLS1_3_VERSION, 0},
+    {0xff7f, 128, TLS1_3_VERSION, 0}, {0xff7c, 128, TLS1_3_VERSION, 0},
+    {0xff80, 128, TLS1_3_VERSION, 0}, {0xff7d, 192, TLS1_3_VERSION, 0},
+    {0xff81, 192, TLS1_3_VERSION, 0}, {0xff7e, 256, TLS1_3_VERSION, 0},
+    {0xff82, 256, TLS1_3_VERSION, 0}, {0xff53, 128, TLS1_3_VERSION, 0},
+    {0xff0f, 128, TLS1_3_VERSION, 0}, {0xff1b, 128, TLS1_3_VERSION, 0},
+    {0xff13, 128, TLS1_3_VERSION, 0}, {0xff1f, 128, TLS1_3_VERSION, 0},
+    {0xff83, 128, TLS1_3_VERSION, 0}, {0xff84, 128, TLS1_3_VERSION, 0},
+    {0xff85, 128, TLS1_3_VERSION, 0}, {0xff86, 128, TLS1_3_VERSION, 0},
+    {0xff87, 128, TLS1_3_VERSION, 0}, {0xff88, 128, TLS1_3_VERSION, 0},
+    {0xff89, 192, TLS1_3_VERSION, 0}, {0xff8a, 192, TLS1_3_VERSION, 0},
+    {0xff8b, 192, TLS1_3_VERSION, 0}, {0xff8c, 192, TLS1_3_VERSION, 0},
+    {0xff8d, 192, TLS1_3_VERSION, 0}, {0xff8e, 192, TLS1_3_VERSION, 0},
+    {0xff8f, 256, TLS1_3_VERSION, 0}, {0xff90, 256, TLS1_3_VERSION, 0},
+    {0xff91, 256, TLS1_3_VERSION, 0}, {0xff92, 256, TLS1_3_VERSION, 0},
+    {0xff93, 256, TLS1_3_VERSION, 0}, {0xff94, 256, TLS1_3_VERSION, 0},
+    {0x0911, 128, TLS1_3_VERSION, 0}, {0x0912, 128, TLS1_3_VERSION, 0},
+    {0x0913, 192, TLS1_3_VERSION, 0}, {0x0914, 192, TLS1_3_VERSION, 0},
+    {0x0915, 256, TLS1_3_VERSION, 0}, {0x0916, 256, TLS1_3_VERSION, 0},
+    {0x0917, 128, TLS1_3_VERSION, 0}, {0x0918, 128, TLS1_3_VERSION, 0},
+    {0x0919, 192, TLS1_3_VERSION, 0}, {0x091A, 192, TLS1_3_VERSION, 0},
+    {0x091B, 256, TLS1_3_VERSION, 0}, {0x091C, 256, TLS1_3_VERSION, 0},
+    {0xff99, 128, TLS1_3_VERSION, 0}, {0xff9a, 128, TLS1_3_VERSION, 0},
+    {0xffa5, 192, TLS1_3_VERSION, 0}, {0xffa6, 192, TLS1_3_VERSION, 0},
+    {0xffb1, 256, TLS1_3_VERSION, 0}, {0xffb2, 256, TLS1_3_VERSION, 0},
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_ASSIGNMENTS_END
 };
 
@@ -618,128 +581,116 @@ int oqs_patch_codepoints() {
     if (getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED"))
         oqs_sigalg_list[25].code_point =
             atoi(getenv("OQS_CODEPOINT_CROSSRSDP128BALANCED"));
-    if (getenv("OQS_CODEPOINT_OV_IS_PKC"))
-        oqs_sigalg_list[26].code_point =
-            atoi(getenv("OQS_CODEPOINT_OV_IS_PKC"));
-    if (getenv("OQS_CODEPOINT_P256_OV_IS_PKC"))
-        oqs_sigalg_list[27].code_point =
-            atoi(getenv("OQS_CODEPOINT_P256_OV_IS_PKC"));
     if (getenv("OQS_CODEPOINT_OV_IP_PKC"))
-        oqs_sigalg_list[28].code_point =
+        oqs_sigalg_list[26].code_point =
             atoi(getenv("OQS_CODEPOINT_OV_IP_PKC"));
     if (getenv("OQS_CODEPOINT_P256_OV_IP_PKC"))
-        oqs_sigalg_list[29].code_point =
+        oqs_sigalg_list[27].code_point =
             atoi(getenv("OQS_CODEPOINT_P256_OV_IP_PKC"));
-    if (getenv("OQS_CODEPOINT_OV_IS_PKC_SKC"))
-        oqs_sigalg_list[30].code_point =
-            atoi(getenv("OQS_CODEPOINT_OV_IS_PKC_SKC"));
-    if (getenv("OQS_CODEPOINT_P256_OV_IS_PKC_SKC"))
-        oqs_sigalg_list[31].code_point =
-            atoi(getenv("OQS_CODEPOINT_P256_OV_IS_PKC_SKC"));
     if (getenv("OQS_CODEPOINT_OV_IP_PKC_SKC"))
-        oqs_sigalg_list[32].code_point =
+        oqs_sigalg_list[28].code_point =
             atoi(getenv("OQS_CODEPOINT_OV_IP_PKC_SKC"));
     if (getenv("OQS_CODEPOINT_P256_OV_IP_PKC_SKC"))
-        oqs_sigalg_list[33].code_point =
+        oqs_sigalg_list[29].code_point =
             atoi(getenv("OQS_CODEPOINT_P256_OV_IP_PKC_SKC"));
     if (getenv("OQS_CODEPOINT_SNOVA1K"))
-        oqs_sigalg_list[34].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA1K"));
+        oqs_sigalg_list[30].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA1K"));
     if (getenv("OQS_CODEPOINT_P256_SNOVA1K"))
-        oqs_sigalg_list[35].code_point =
+        oqs_sigalg_list[31].code_point =
             atoi(getenv("OQS_CODEPOINT_P256_SNOVA1K"));
     if (getenv("OQS_CODEPOINT_SNOVA1B"))
-        oqs_sigalg_list[36].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA1B"));
+        oqs_sigalg_list[32].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA1B"));
     if (getenv("OQS_CODEPOINT_P256_SNOVA1B"))
-        oqs_sigalg_list[37].code_point =
+        oqs_sigalg_list[33].code_point =
             atoi(getenv("OQS_CODEPOINT_P256_SNOVA1B"));
     if (getenv("OQS_CODEPOINT_SNOVA1S"))
-        oqs_sigalg_list[38].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA1S"));
+        oqs_sigalg_list[34].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA1S"));
     if (getenv("OQS_CODEPOINT_P256_SNOVA1S"))
-        oqs_sigalg_list[39].code_point =
+        oqs_sigalg_list[35].code_point =
             atoi(getenv("OQS_CODEPOINT_P256_SNOVA1S"));
     if (getenv("OQS_CODEPOINT_SNOVA3K"))
-        oqs_sigalg_list[40].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA3K"));
+        oqs_sigalg_list[36].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA3K"));
     if (getenv("OQS_CODEPOINT_P384_SNOVA3K"))
-        oqs_sigalg_list[41].code_point =
+        oqs_sigalg_list[37].code_point =
             atoi(getenv("OQS_CODEPOINT_P384_SNOVA3K"));
     if (getenv("OQS_CODEPOINT_SNOVA3B"))
-        oqs_sigalg_list[42].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA3B"));
+        oqs_sigalg_list[38].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA3B"));
     if (getenv("OQS_CODEPOINT_P384_SNOVA3B"))
-        oqs_sigalg_list[43].code_point =
+        oqs_sigalg_list[39].code_point =
             atoi(getenv("OQS_CODEPOINT_P384_SNOVA3B"));
     if (getenv("OQS_CODEPOINT_SNOVA3S"))
-        oqs_sigalg_list[44].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA3S"));
+        oqs_sigalg_list[40].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA3S"));
     if (getenv("OQS_CODEPOINT_P384_SNOVA3S"))
-        oqs_sigalg_list[45].code_point =
+        oqs_sigalg_list[41].code_point =
             atoi(getenv("OQS_CODEPOINT_P384_SNOVA3S"));
     if (getenv("OQS_CODEPOINT_SNOVA5K"))
-        oqs_sigalg_list[46].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA5K"));
+        oqs_sigalg_list[42].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA5K"));
     if (getenv("OQS_CODEPOINT_P521_SNOVA5K"))
-        oqs_sigalg_list[47].code_point =
+        oqs_sigalg_list[43].code_point =
             atoi(getenv("OQS_CODEPOINT_P521_SNOVA5K"));
     if (getenv("OQS_CODEPOINT_SNOVA5B"))
-        oqs_sigalg_list[48].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA5B"));
+        oqs_sigalg_list[44].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA5B"));
     if (getenv("OQS_CODEPOINT_P521_SNOVA5B"))
-        oqs_sigalg_list[49].code_point =
+        oqs_sigalg_list[45].code_point =
             atoi(getenv("OQS_CODEPOINT_P521_SNOVA5B"));
     if (getenv("OQS_CODEPOINT_SNOVA5S"))
-        oqs_sigalg_list[50].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA5S"));
+        oqs_sigalg_list[46].code_point = atoi(getenv("OQS_CODEPOINT_SNOVA5S"));
     if (getenv("OQS_CODEPOINT_P521_SNOVA5S"))
-        oqs_sigalg_list[51].code_point =
+        oqs_sigalg_list[47].code_point =
             atoi(getenv("OQS_CODEPOINT_P521_SNOVA5S"));
     if (getenv("OQS_CODEPOINT_SLHDSASHA2128S"))
-        oqs_sigalg_list[52].code_point =
+        oqs_sigalg_list[48].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHA2128S"));
     if (getenv("OQS_CODEPOINT_SLHDSASHA2128F"))
-        oqs_sigalg_list[53].code_point =
+        oqs_sigalg_list[49].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHA2128F"));
     if (getenv("OQS_CODEPOINT_SLHDSASHA2192S"))
-        oqs_sigalg_list[54].code_point =
+        oqs_sigalg_list[50].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHA2192S"));
     if (getenv("OQS_CODEPOINT_SLHDSASHA2192F"))
-        oqs_sigalg_list[55].code_point =
+        oqs_sigalg_list[51].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHA2192F"));
     if (getenv("OQS_CODEPOINT_SLHDSASHA2256S"))
-        oqs_sigalg_list[56].code_point =
+        oqs_sigalg_list[52].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHA2256S"));
     if (getenv("OQS_CODEPOINT_SLHDSASHA2256F"))
-        oqs_sigalg_list[57].code_point =
+        oqs_sigalg_list[53].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHA2256F"));
     if (getenv("OQS_CODEPOINT_SLHDSASHAKE128S"))
-        oqs_sigalg_list[58].code_point =
+        oqs_sigalg_list[54].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHAKE128S"));
     if (getenv("OQS_CODEPOINT_SLHDSASHAKE128F"))
-        oqs_sigalg_list[59].code_point =
+        oqs_sigalg_list[55].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHAKE128F"));
     if (getenv("OQS_CODEPOINT_SLHDSASHAKE192S"))
-        oqs_sigalg_list[60].code_point =
+        oqs_sigalg_list[56].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHAKE192S"));
     if (getenv("OQS_CODEPOINT_SLHDSASHAKE192F"))
-        oqs_sigalg_list[61].code_point =
+        oqs_sigalg_list[57].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHAKE192F"));
     if (getenv("OQS_CODEPOINT_SLHDSASHAKE256S"))
-        oqs_sigalg_list[62].code_point =
+        oqs_sigalg_list[58].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHAKE256S"));
     if (getenv("OQS_CODEPOINT_SLHDSASHAKE256F"))
-        oqs_sigalg_list[63].code_point =
+        oqs_sigalg_list[59].code_point =
             atoi(getenv("OQS_CODEPOINT_SLHDSASHAKE256F"));
     if (getenv("OQS_CODEPOINT_MQOM3CAT1GF16FASTCT"))
-        oqs_sigalg_list[64].code_point =
+        oqs_sigalg_list[60].code_point =
             atoi(getenv("OQS_CODEPOINT_MQOM3CAT1GF16FASTCT"));
     if (getenv("OQS_CODEPOINT_P256_MQOM3CAT1GF16FASTCT"))
-        oqs_sigalg_list[65].code_point =
+        oqs_sigalg_list[61].code_point =
             atoi(getenv("OQS_CODEPOINT_P256_MQOM3CAT1GF16FASTCT"));
     if (getenv("OQS_CODEPOINT_MQOM3CAT3GF16FASTCT"))
-        oqs_sigalg_list[66].code_point =
+        oqs_sigalg_list[62].code_point =
             atoi(getenv("OQS_CODEPOINT_MQOM3CAT3GF16FASTCT"));
     if (getenv("OQS_CODEPOINT_P384_MQOM3CAT3GF16FASTCT"))
-        oqs_sigalg_list[67].code_point =
+        oqs_sigalg_list[63].code_point =
             atoi(getenv("OQS_CODEPOINT_P384_MQOM3CAT3GF16FASTCT"));
     if (getenv("OQS_CODEPOINT_MQOM3CAT5GF16FASTCT"))
-        oqs_sigalg_list[68].code_point =
+        oqs_sigalg_list[64].code_point =
             atoi(getenv("OQS_CODEPOINT_MQOM3CAT5GF16FASTCT"));
     if (getenv("OQS_CODEPOINT_P521_MQOM3CAT5GF16FASTCT"))
-        oqs_sigalg_list[69].code_point =
+        oqs_sigalg_list[65].code_point =
             atoi(getenv("OQS_CODEPOINT_P521_MQOM3CAT5GF16FASTCT"));
     ///// OQS_TEMPLATE_FRAGMENT_CODEPOINT_PATCHING_END
     return 1;
@@ -841,141 +792,130 @@ static const OSSL_PARAM oqs_param_sigalg_list[][12] = {
     OQS_SIGALG_ENTRY(p521_mayo5, p521_mayo5, p521_mayo5, "1.3.9999.8.5.6", 24),
 #endif
 #ifdef OQS_ENABLE_SIG_cross_rsdp_128_balanced
-    OQS_SIGALG_ENTRY(CROSSrsdp128balanced, CROSSrsdp128balanced,
-                     CROSSrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2.2", 25),
-#endif
-#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc
-    OQS_SIGALG_ENTRY(OV_Is_pkc, OV_Is_pkc, OV_Is_pkc, "1.3.9999.9.5.1", 26),
-    OQS_SIGALG_ENTRY(p256_OV_Is_pkc, p256_OV_Is_pkc, p256_OV_Is_pkc,
-                     "1.3.9999.9.5.2", 27),
+    OQS_SIGALG_ENTRY(crossrsdp128balanced, crossrsdp128balanced,
+                     crossrsdp128balanced, "1.3.6.1.4.1.62245.2.1.1.2.2", 25),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc
-    OQS_SIGALG_ENTRY(OV_Ip_pkc, OV_Ip_pkc, OV_Ip_pkc, "1.3.9999.9.6.1", 28),
-    OQS_SIGALG_ENTRY(p256_OV_Ip_pkc, p256_OV_Ip_pkc, p256_OV_Ip_pkc,
-                     "1.3.9999.9.6.2", 29),
-#endif
-#ifdef OQS_ENABLE_SIG_uov_ov_Is_pkc_skc
-    OQS_SIGALG_ENTRY(OV_Is_pkc_skc, OV_Is_pkc_skc, OV_Is_pkc_skc,
-                     "1.3.9999.9.9.1", 30),
-    OQS_SIGALG_ENTRY(p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc, p256_OV_Is_pkc_skc,
-                     "1.3.9999.9.9.2", 31),
+    OQS_SIGALG_ENTRY(ov_ip_pkc, ov_ip_pkc, ov_ip_pkc, "1.3.9999.9.6.1", 26),
+    OQS_SIGALG_ENTRY(p256_ov_ip_pkc, p256_ov_ip_pkc, p256_ov_ip_pkc,
+                     "1.3.9999.9.6.2", 27),
 #endif
 #ifdef OQS_ENABLE_SIG_uov_ov_Ip_pkc_skc
-    OQS_SIGALG_ENTRY(OV_Ip_pkc_skc, OV_Ip_pkc_skc, OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.1", 32),
-    OQS_SIGALG_ENTRY(p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc, p256_OV_Ip_pkc_skc,
-                     "1.3.9999.9.10.2", 33),
+    OQS_SIGALG_ENTRY(ov_ip_pkc_skc, ov_ip_pkc_skc, ov_ip_pkc_skc,
+                     "1.3.9999.9.10.1", 28),
+    OQS_SIGALG_ENTRY(p256_ov_ip_pkc_skc, p256_ov_ip_pkc_skc, p256_ov_ip_pkc_skc,
+                     "1.3.9999.9.10.2", 29),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_I_K
-    OQS_SIGALG_ENTRY(snova1k, snova1k, snova1k, "1.3.9999.10.1.3", 34),
+    OQS_SIGALG_ENTRY(snova1k, snova1k, snova1k, "1.3.9999.10.1.3", 30),
     OQS_SIGALG_ENTRY(p256_snova1k, p256_snova1k, p256_snova1k,
-                     "1.3.9999.10.1.4", 35),
+                     "1.3.9999.10.1.4", 31),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_I_B
-    OQS_SIGALG_ENTRY(snova1b, snova1b, snova1b, "1.3.9999.10.2.3", 36),
+    OQS_SIGALG_ENTRY(snova1b, snova1b, snova1b, "1.3.9999.10.2.3", 32),
     OQS_SIGALG_ENTRY(p256_snova1b, p256_snova1b, p256_snova1b,
-                     "1.3.9999.10.2.4", 37),
+                     "1.3.9999.10.2.4", 33),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_I_S
-    OQS_SIGALG_ENTRY(snova1s, snova1s, snova1s, "1.3.9999.10.3.3", 38),
+    OQS_SIGALG_ENTRY(snova1s, snova1s, snova1s, "1.3.9999.10.3.3", 34),
     OQS_SIGALG_ENTRY(p256_snova1s, p256_snova1s, p256_snova1s,
-                     "1.3.9999.10.3.4", 39),
+                     "1.3.9999.10.3.4", 35),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_III_K
-    OQS_SIGALG_ENTRY(snova3k, snova3k, snova3k, "1.3.9999.10.4.3", 40),
+    OQS_SIGALG_ENTRY(snova3k, snova3k, snova3k, "1.3.9999.10.4.3", 36),
     OQS_SIGALG_ENTRY(p384_snova3k, p384_snova3k, p384_snova3k,
-                     "1.3.9999.10.4.4", 41),
+                     "1.3.9999.10.4.4", 37),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_III_B
-    OQS_SIGALG_ENTRY(snova3b, snova3b, snova3b, "1.3.9999.10.5.3", 42),
+    OQS_SIGALG_ENTRY(snova3b, snova3b, snova3b, "1.3.9999.10.5.3", 38),
     OQS_SIGALG_ENTRY(p384_snova3b, p384_snova3b, p384_snova3b,
-                     "1.3.9999.10.5.4", 43),
+                     "1.3.9999.10.5.4", 39),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_III_S
-    OQS_SIGALG_ENTRY(snova3s, snova3s, snova3s, "1.3.9999.10.6.3", 44),
+    OQS_SIGALG_ENTRY(snova3s, snova3s, snova3s, "1.3.9999.10.6.3", 40),
     OQS_SIGALG_ENTRY(p384_snova3s, p384_snova3s, p384_snova3s,
-                     "1.3.9999.10.6.4", 45),
+                     "1.3.9999.10.6.4", 41),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_V_K
-    OQS_SIGALG_ENTRY(snova5k, snova5k, snova5k, "1.3.9999.10.7.3", 46),
+    OQS_SIGALG_ENTRY(snova5k, snova5k, snova5k, "1.3.9999.10.7.3", 42),
     OQS_SIGALG_ENTRY(p521_snova5k, p521_snova5k, p521_snova5k,
-                     "1.3.9999.10.7.4", 47),
+                     "1.3.9999.10.7.4", 43),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_V_B
-    OQS_SIGALG_ENTRY(snova5b, snova5b, snova5b, "1.3.9999.10.8.3", 48),
+    OQS_SIGALG_ENTRY(snova5b, snova5b, snova5b, "1.3.9999.10.8.3", 44),
     OQS_SIGALG_ENTRY(p521_snova5b, p521_snova5b, p521_snova5b,
-                     "1.3.9999.10.8.4", 49),
+                     "1.3.9999.10.8.4", 45),
 #endif
 #ifdef OQS_ENABLE_SIG_snova_SNOVA_V_S
-    OQS_SIGALG_ENTRY(snova5s, snova5s, snova5s, "1.3.9999.10.9.3", 50),
+    OQS_SIGALG_ENTRY(snova5s, snova5s, snova5s, "1.3.9999.10.9.3", 46),
     OQS_SIGALG_ENTRY(p521_snova5s, p521_snova5s, p521_snova5s,
-                     "1.3.9999.10.9.4", 51),
+                     "1.3.9999.10.9.4", 47),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128s
     OQS_SIGALG_ENTRY(slhdsasha2128s, slhdsasha2128s, slhdsasha2128s,
-                     "2.16.840.1.101.3.4.3.20", 52),
+                     "2.16.840.1.101.3.4.3.20", 48),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_128f
     OQS_SIGALG_ENTRY(slhdsasha2128f, slhdsasha2128f, slhdsasha2128f,
-                     "2.16.840.1.101.3.4.3.21", 53),
+                     "2.16.840.1.101.3.4.3.21", 49),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192s
     OQS_SIGALG_ENTRY(slhdsasha2192s, slhdsasha2192s, slhdsasha2192s,
-                     "2.16.840.1.101.3.4.3.22", 54),
+                     "2.16.840.1.101.3.4.3.22", 50),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_192f
     OQS_SIGALG_ENTRY(slhdsasha2192f, slhdsasha2192f, slhdsasha2192f,
-                     "2.16.840.1.101.3.4.3.23", 55),
+                     "2.16.840.1.101.3.4.3.23", 51),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256s
     OQS_SIGALG_ENTRY(slhdsasha2256s, slhdsasha2256s, slhdsasha2256s,
-                     "2.16.840.1.101.3.4.3.24", 56),
+                     "2.16.840.1.101.3.4.3.24", 52),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_sha2_256f
     OQS_SIGALG_ENTRY(slhdsasha2256f, slhdsasha2256f, slhdsasha2256f,
-                     "2.16.840.1.101.3.4.3.25", 57),
+                     "2.16.840.1.101.3.4.3.25", 53),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128s
     OQS_SIGALG_ENTRY(slhdsashake128s, slhdsashake128s, slhdsashake128s,
-                     "2.16.840.1.101.3.4.3.26", 58),
+                     "2.16.840.1.101.3.4.3.26", 54),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_128f
     OQS_SIGALG_ENTRY(slhdsashake128f, slhdsashake128f, slhdsashake128f,
-                     "2.16.840.1.101.3.4.3.27", 59),
+                     "2.16.840.1.101.3.4.3.27", 55),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192s
     OQS_SIGALG_ENTRY(slhdsashake192s, slhdsashake192s, slhdsashake192s,
-                     "2.16.840.1.101.3.4.3.28", 60),
+                     "2.16.840.1.101.3.4.3.28", 56),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_192f
     OQS_SIGALG_ENTRY(slhdsashake192f, slhdsashake192f, slhdsashake192f,
-                     "2.16.840.1.101.3.4.3.29", 61),
+                     "2.16.840.1.101.3.4.3.29", 57),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256s
     OQS_SIGALG_ENTRY(slhdsashake256s, slhdsashake256s, slhdsashake256s,
-                     "2.16.840.1.101.3.4.3.30", 62),
+                     "2.16.840.1.101.3.4.3.30", 58),
 #endif
 #ifdef OQS_ENABLE_SIG_slh_dsa_pure_shake_256f
     OQS_SIGALG_ENTRY(slhdsashake256f, slhdsashake256f, slhdsashake256f,
-                     "2.16.840.1.101.3.4.3.31", 63),
+                     "2.16.840.1.101.3.4.3.31", 59),
 #endif
 #ifdef OQS_ENABLE_SIG_mqom_mqom3_cat1_gf16_fast_ct
     OQS_SIGALG_ENTRY(mqom3cat1gf16fastct, mqom3cat1gf16fastct,
-                     mqom3cat1gf16fastct, "1.3.9999.11.1.9", 64),
+                     mqom3cat1gf16fastct, "1.3.9999.11.1.9", 60),
     OQS_SIGALG_ENTRY(p256_mqom3cat1gf16fastct, p256_mqom3cat1gf16fastct,
-                     p256_mqom3cat1gf16fastct, "1.3.9999.11.1.10", 65),
+                     p256_mqom3cat1gf16fastct, "1.3.9999.11.1.10", 61),
 #endif
 #ifdef OQS_ENABLE_SIG_mqom_mqom3_cat3_gf16_fast_ct
     OQS_SIGALG_ENTRY(mqom3cat3gf16fastct, mqom3cat3gf16fastct,
-                     mqom3cat3gf16fastct, "1.3.9999.11.3.9", 66),
+                     mqom3cat3gf16fastct, "1.3.9999.11.3.9", 62),
     OQS_SIGALG_ENTRY(p384_mqom3cat3gf16fastct, p384_mqom3cat3gf16fastct,
-                     p384_mqom3cat3gf16fastct, "1.3.9999.11.3.10", 67),
+                     p384_mqom3cat3gf16fastct, "1.3.9999.11.3.10", 63),
 #endif
 #ifdef OQS_ENABLE_SIG_mqom_mqom3_cat5_gf16_fast_ct
     OQS_SIGALG_ENTRY(mqom3cat5gf16fastct, mqom3cat5gf16fastct,
-                     mqom3cat5gf16fastct, "1.3.9999.11.5.9", 68),
+                     mqom3cat5gf16fastct, "1.3.9999.11.5.9", 64),
     OQS_SIGALG_ENTRY(p521_mqom3cat5gf16fastct, p521_mqom3cat5gf16fastct,
-                     p521_mqom3cat5gf16fastct, "1.3.9999.11.5.10", 69),
+                     p521_mqom3cat5gf16fastct, "1.3.9999.11.5.10", 65),
 #endif
     ///// OQS_TEMPLATE_FRAGMENT_SIGALG_NAMES_END
 };

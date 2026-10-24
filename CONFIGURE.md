@@ -12,12 +12,13 @@ The default configuration is as defined in the [algorithm configuration file](oq
 
 Any PR changing this default must include all files changed by `generate.py`.
 
-`generate.py` enforces the following rules on `generate.yml`:
+`generate.py` enforces the following rules on `generate.yml`, in the same way for KEMs and signatures:
 
 - Algorithm names must be lowercase. Standardized hybrid KEM names (`standard_name`) are the only exception.
-- A signature algorithm (and each of its hybrids) has a TLS code point if and only if it has both `enable: true` and `enable_tls: true`.
-- Signature code points must be unique and lie in the TLS private use range `0xFE00`-`0xFFFF`, unless marked `iana: true`, and must not reuse a code point that a previous release (`oqs-template/generate.yml-*`) assigned to another algorithm.
-- `code_point: 'auto'` makes `generate.py` assign, and write into `generate.yml`, the code point of the algorithm's latest release if it is still free, otherwise the lowest code point satisfying these rules. To enable a disabled signature algorithm, set `enable: true` and `code_point: 'auto'` on the variant and on each of its hybrids.
+- A KEM's default ECP hybrid (p256, p384 or p521 by security level) exists if `use_hybrid: true`; further KEM hybrids are listed in `extra_nids` `current` by `hybrid_group`. Signature hybrids are listed in `mix_with`.
+- TLS code points (KEMs: `nid`, `nid_hybrid` and the `nid` of `extra_nids` `current` entries; signatures: `code_point` of variants and of `mix_with` entries) are set if and only if the algorithm is used in TLS: `enable_kem: true` and `enable_tls: true` for KEMs, `enable: true` and `enable_tls: true` for signatures.
+- Unless marked `iana: true`, TLS code points must be unique, lie in the RFC 8446 private use range (`0xFE00`-`0xFEFF` for KEMs, `0xFE00`-`0xFFFF` for signatures), and must not reuse a code point that a previous release (`oqs-template/generate.yml-*`) assigned to another algorithm.
+- A code point set to `'auto'` is assigned by `generate.py`, which writes it into `generate.yml`: the algorithm's code point in its latest release if it is still free, otherwise the lowest code point satisfying these rules. To enable an algorithm for TLS, set its flags and set its code points, and those of its hybrids, to `'auto'`.
 
 ## Build install options
 

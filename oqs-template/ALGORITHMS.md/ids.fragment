@@ -1,7 +1,7 @@
 
 |Algorithm name | default ID | enabled | environment variable |
 |---------------|:----------:|:-------:|----------------------|
-{%- for kem in config['kems']  %}
+{%- for kem in config['kems'] if kem['enable_kem'] and kem['enable_tls']  %}
 | {{ kem['name_group'] }} | {{ kem['nid'] }} | Yes | OQS_CODEPOINT_{{ kem['name_group']|upper }} |
 {%- for hybrid in kem['hybrids'] %}
 | {% if 'standard_name' in hybrid %}{{ hybrid['standard_name'] }}{% else %}{{ hybrid['hybrid_group'] }}_{{ kem['name_group'] }}{% endif %} | {{ hybrid['nid'] }} | Yes | OQS_CODEPOINT_{% if 'standard_name' in hybrid %}{{ hybrid['standard_name']|upper }}{% else %}{{ hybrid['hybrid_group']|upper }}_{{ kem['name_group']|upper }}{% endif %} |

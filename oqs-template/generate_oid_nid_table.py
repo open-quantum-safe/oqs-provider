@@ -109,13 +109,15 @@ def gen_kem_table(oqslibdocdir):
     if kem['name_group'].startswith('sidhp503') or kem['name_group'].startswith('sikep503'):
         claimed_nist_level = 2
 
-    try: 
+    try:
+       # KEMs not used in TLS have no code point
        table.append([kem['family'], implementation_version,
                      kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
-                     kem['nid'], ""])
-       table.append([kem['family'], implementation_version,
-                     kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
-                     kem['nid_hybrid'], hybrid_elliptic_curve])
+                     kem['nid'] if 'nid' in kem or not kem.get('enable') else '-', ""])
+       if kem.get('use_hybrid'):
+           table.append([kem['family'], implementation_version,
+                         kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
+                         kem.get('nid_hybrid', '-'), hybrid_elliptic_curve])
     except KeyError as ke:
        # Non-existant NIDs mean this alg is not supported any more
        pass
@@ -125,7 +127,7 @@ def gen_kem_table(oqslibdocdir):
             for entry in kem['extra_nids']['current']:
                 table.append([kem['family'], implementation_version,
                               kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
-                              entry['nid'], 
+                              entry.get('nid', '-'),
                               entry['hybrid_group'] if 'hybrid_group' in entry else ""])
         if 'old' in kem['extra_nids']:
             for entry in kem['extra_nids']['old']:

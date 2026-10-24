@@ -1,13 +1,19 @@
 # This is the master document for ID interoperability for KEM IDs, p-hybrid KEM IDs, SIG (O)IDs
-# Next free plain KEM ID: 0x024D, p-hybrid: 0x2F4F, X-hybrid: 0x2FB9
-# Switch to using unassigned code points as per https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-8:
-# Next free: 65083 (see https://github.com/open-quantum-safe/oqs-provider/issues/561)
 # ECX hybrid names must start with the name "x...", Brainpool hybrids must start with the name "bp...", all else is considered ECP
+# 'use_hybrid: true' adds the default ECP hybrid (p256/p384/p521 by security level); further hybrids are listed in
+# 'extra_nids' 'current' by 'hybrid_group'.
+# TLS code points (KEMs: 'nid', 'nid_hybrid' and the 'nid' of 'extra_nids' 'current' entries; signatures:
+# 'code_point' of variants and their hybrids) are set only for algorithms used in TLS, i.e. KEMs with 'enable: true'
+# and 'enable_tls: true', signatures with 'enable: true' and 'enable_tls: true'. Unless 'iana: true', they lie in the
+# RFC 8446 private use range (KEMs 0xFE00..0xFEFF, signatures 0xFE00..0xFFFF). Set them to 'auto' to have generate.py
+# assign the code point of the algorithm's latest release if still free, otherwise the lowest code point not used by
+# any release (see generate.yml-*).
 kems:
   -
     family: 'FrodoKEM'
     name_group: 'efrodo640aes'
     nid: '65024'
+    use_hybrid: true
     nid_hybrid: '65025'
     oqs_alg: 'OQS_KEM_alg_efrodokem_640_aes'
     enable_kem: true
@@ -20,6 +26,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'efrodo640shake'
     nid: '65027'
+    use_hybrid: true
     nid_hybrid: '65028'
     oqs_alg: 'OQS_KEM_alg_efrodokem_640_shake'
     enable_kem: true
@@ -32,6 +39,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'efrodo976aes'
     nid: '65030'
+    use_hybrid: true
     nid_hybrid: '65031'
     oqs_alg: 'OQS_KEM_alg_efrodokem_976_aes'
     enable_kem: true
@@ -44,6 +52,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'efrodo976shake'
     nid: '65033'
+    use_hybrid: true
     nid_hybrid: '65034'
     oqs_alg: 'OQS_KEM_alg_efrodokem_976_shake'
     enable_kem: true
@@ -56,6 +65,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'efrodo1344aes'
     nid: '65036'
+    use_hybrid: true
     nid_hybrid: '65037'
     oqs_alg: 'OQS_KEM_alg_efrodokem_1344_aes'
     enable_kem: true
@@ -64,6 +74,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'efrodo1344shake'
     nid: '65038'
+    use_hybrid: true
     nid_hybrid: '65039'
     oqs_alg: 'OQS_KEM_alg_efrodokem_1344_shake'
     enable_kem: true
@@ -72,6 +83,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo640aes'
     nid: '65059'
+    use_hybrid: true
     nid_hybrid: '65060'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_aes'
     enable_kem: true
@@ -84,6 +96,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo640shake'
     nid: '65062'
+    use_hybrid: true
     nid_hybrid: '65063'
     oqs_alg: 'OQS_KEM_alg_frodokem_640_shake'
     enable_kem: true
@@ -96,6 +109,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo976aes'
     nid: '65065'
+    use_hybrid: true
     nid_hybrid: '65066'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_aes'
     enable_kem: true
@@ -108,6 +122,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo976shake'
     nid: '65068'
+    use_hybrid: true
     nid_hybrid: '65069'
     oqs_alg: 'OQS_KEM_alg_frodokem_976_shake'
     enable_kem: true
@@ -120,6 +135,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo1344aes'
     nid: '65071'
+    use_hybrid: true
     nid_hybrid: '65072'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_aes'
     enable_kem: true
@@ -128,6 +144,7 @@ kems:
     family: 'FrodoKEM'
     name_group: 'frodo1344shake'
     nid: '65073'
+    use_hybrid: true
     nid_hybrid: '65074'
     oqs_alg: 'OQS_KEM_alg_frodokem_1344_shake'
     enable_kem: true
@@ -298,7 +315,8 @@ kems:
 # NIST kem 2
     oid: '2.16.840.1.101.3.4.4.2'
 # code point not standardized: Why? XXX
-    nid_hybrid: '0x2F4C'
+    use_hybrid: true
+    nid_hybrid: '65083'
     oqs_alg: 'OQS_KEM_alg_ml_kem_768'
     enable_kem: true
     enable_tls: true
@@ -307,7 +325,7 @@ kems:
       current:
         - hybrid_group: "x448"
 # code point not standardized: Why? XXX
-          nid: '0x2FB7'
+          nid: '65084'
         - hybrid_group: "bp384"
           nid: '65057'
         - hybrid_group: "x25519"
@@ -332,7 +350,8 @@ kems:
 # NIST kem 3
     oid: '2.16.840.1.101.3.4.4.3'
 # code point not standardized: Why? XXX
-    nid_hybrid: '0x2F4D'
+    use_hybrid: true
+    nid_hybrid: '65085'
     oqs_alg: 'OQS_KEM_alg_ml_kem_1024'
     enable_kem: true
     enable_tls: true
@@ -392,15 +411,13 @@ kems:
     family: 'BIKE'
     name_group: 'bikel1'
     implementation_version: '5.1'
-    nid: '65040'
-    nid_hybrid: '65041'
+    use_hybrid: true
     oqs_alg: 'OQS_KEM_alg_bike_l1'
     enable_kem: true
     enable_tls: false
     extra_nids:
       current:
         - hybrid_group: "x25519"
-          nid: '65042'
       old:
         - implementation_version: NIST Round 3 submission
           nist-round: 3
@@ -418,6 +435,7 @@ kems:
     name_group: 'bikel3'
     implementation_version: '5.1'
     nid: '65043'
+    use_hybrid: true
     nid_hybrid: '65044'
     oqs_alg: 'OQS_KEM_alg_bike_l3'
     enable_kem: true
@@ -439,6 +457,7 @@ kems:
     name_group: 'bikel5'
     implementation_version: '5.1'
     nid: '65046'
+    use_hybrid: true
     nid_hybrid: '65047'
     oqs_alg: 'OQS_KEM_alg_bike_l5'
     enable_kem: true
@@ -521,6 +540,7 @@ kems:
     family: 'HQC'
     name_group: 'hqc1'
     nid: '65075'
+    use_hybrid: true
     nid_hybrid: '65076'
     oqs_alg: 'OQS_KEM_alg_hqc_1'
     enable_kem: true
@@ -556,6 +576,7 @@ kems:
     family: 'HQC'
     name_group: 'hqc3'
     nid: '65078'
+    use_hybrid: true
     nid_hybrid: '65079'
     oqs_alg: 'OQS_KEM_alg_hqc_3'
     enable_kem: true
@@ -591,6 +612,7 @@ kems:
     family: 'HQC'
     name_group: 'hqc5'
     nid: '65081'
+    use_hybrid: true
     nid_hybrid: '65082'
     oqs_alg: 'OQS_KEM_alg_hqc_5'
     enable_kem: true
@@ -616,10 +638,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# SIG code points: TLS SignatureScheme private use range 0xFE00..0xFFFF (RFC 8446), unless 'iana: true'.
-# Only variants with both 'enable: true' and 'enable_tls: true' (and their hybrids) get a code point. To enable
-# a variant, set its code points to 'auto': generate.py then assigns the code point of its latest release if
-# still free, otherwise the lowest code point not used by any release (see generate.yml-*).
+# TLS code points of signatures: see the rules at the top of this file.
 sigs:
   # -
     # iso (1)

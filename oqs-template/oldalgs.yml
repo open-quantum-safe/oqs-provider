@@ -58,5 +58,9 @@ sphincsshake256256frobust:
    claimed-nist-level: 5
 sphincsshake256256srobust:
    claimed-nist-level: 5
-
-
+hqc128:
+   claimed-nist-level: 1
+hqc192:
+   claimed-nist-level: 3
+hqc256:
+   claimed-nist-level: 5

@@ -12,9 +12,6 @@ import yaml
 
 kemoidcnt=0
 
-# TLS SignatureScheme private use range (RFC 8446, section 4.2.3)
-SIG_PRIVATE_USE_RANGE = range(0xFE00, 0x10000)
-
 # For files generated, the copyright message can be adapted
 # see https://github.com/open-quantum-safe/oqs-provider/issues/2#issuecomment-920904048
 # SPDX message to be leading, OpenSSL Copyright notice to be deleted
@@ -109,8 +106,8 @@ def complete_config(config):
           exit(1)
       kem['bit_security'] = bits_level
 
-      if 'nid_hybrid' in kem:
-          # now add hybrid_nid to hybrid_groups
+      if kem.get('use_hybrid'):
+          # add the default (ECP) hybrid to hybrid_groups
           phyb = {}
           if (bits_level == 128):
               phyb['hybrid_group']='p256'
@@ -122,12 +119,12 @@ def complete_config(config):
               print("Warning: Unknown bit level for %s. Cannot assign hybrid." % (kem['group_name']))
               exit(1)
           phyb['bit_security']=bits_level
-          phyb['nid']=kem['nid_hybrid']
+          if 'nid_hybrid' in kem: phyb['nid']=kem['nid_hybrid']
           if 'hybrid_oid' in kem: phyb['hybrid_oid']=kem['hybrid_oid']
           else: phyb['hybrid_oid'] = get_tmp_kem_oid()
           kem['hybrids'].insert(0, phyb)
-          if not 'oid' in kem:
-             kem['oid'] = get_tmp_kem_oid()
+      if not 'oid' in kem:
+         kem['oid'] = get_tmp_kem_oid()
 
    for famsig in config['sigs']:
       for sig in famsig['variants']:
@@ -194,13 +191,6 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
     if not include_disabled_kems:
         config['kems'] = [kem for kem in config['kems'] if ('enable_kem' in kem and kem['enable_kem'])]
 
-    # remove KEMs without NID (old stuff)
-    newkems = []
-    for kem in config['kems']:
-        if 'nid' in kem:
-           newkems.append(kem)
-    config['kems']=newkems
-
     # remove SIGs without OID (old stuff)
     for sig in config['sigs']:
         newvars = []
@@ -224,7 +214,7 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
             if not 'hybrid_oid' in extra_hybrid:
                 extra_hybrid['hybrid_oid'] = get_tmp_kem_oid()
             kem['hybrids'].append(extra_hybrid)
-            if 'hybrid_group' in extra_hybrid:
+            if 'hybrid_group' in extra_hybrid and 'nid' in extra_hybrid:
                 extra_hybrid_nid = extra_hybrid['nid']
                 if extra_hybrid_nid in hybrid_nids:
                     print("ERROR: duplicate hybrid NID for", kem['name_group'],
@@ -234,192 +224,247 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
                 hybrid_nids.add(extra_hybrid_nid)
     return config
 
-# Validates that non-standard TLS code points are in the private use range
-def validate_iana_code_points(config):
-    reserved = list(range(65024, 65280))
-    in_use = list(reserved)
-    def validate(kem, name):
-        nid = str(kem['nid'])
-        nid = int(nid, 16) if nid[:2] == '0x' else int(nid, 10)
-        if nid in reserved and nid in in_use:
-            in_use.remove(nid)
-        elif nid not in reserved:
-            print(f"Non-standard TLS group {name} code point {kem['nid']} not in private use range.")
-            print(f"Next free code in point in private use range: {min(in_use)}")
-            exit(1)
-        elif nid not in in_use:
-            print(f"Non-standard TLS group {name} code point {kem['nid']} already in use in oqs-provider.")
-            print(f"Next free code in point in private use range: {min(in_use)}")
-            exit(1)
+# TLS code points ('nid' and 'nid_hybrid' for KEMs, 'code_point' for
+# signatures) are managed the same way for KEMs and signatures:
+# - only algorithms actually used in TLS have them: KEMs with 'enable_kem' and
+#   'enable_tls', signatures with 'enable' and 'enable_tls', and their hybrids;
+# - unless marked 'iana: true', they are unique, lie in the RFC 8446 private
+#   use range, and do not reuse a code point that a previous release
+#   (generate.yml-* snapshots) gave to another algorithm;
+# - 'auto' assigns the code point of the algorithm's latest release if still
+#   free, otherwise the lowest free one, and writes it into generate.yml.
+TLS_CODE_POINT_SPACES = {
+    # RFC 8446, section 4.2.7: NamedGroup ecdhe_private_use
+    'kems': {'range': range(0xFE00, 0xFF00), 'format': lambda cp: f"{cp}",
+             'enable': ('enable_kem', 'enable_tls')},
+    # RFC 8446, section 4.2.3: SignatureScheme private_use
+    'sigs': {'range': range(0xFE00, 0x10000), 'format': lambda cp: f"{cp:#06x}",
+             'enable': ('enable', 'enable_tls')},
+}
 
-    for kem in config['kems']:
-        if 'iana' not in kem or not kem['iana']:
-            validate(kem, f"{kem['name_group']}")
+# Curve of the default KEM hybrid ('use_hybrid') by bit security
+DEFAULT_HYBRID_CURVES = {128: 'p256', 192: 'p384', 256: 'p521'}
 
-            for hybrid in kem['hybrids']:
-                if 'iana' not in hybrid or not hybrid['iana']:
-                    validate(hybrid, f"{kem['name_group']}_{hybrid['hybrid_group']}")
+# Name of the default hybrid of a KEM, e.g. p384_mlkem768, or None if the KEM's
+# security level is unknown. The level comes from the liboqs datasheet or, for
+# KEMs no longer in liboqs, from oqs-template/oldalgs.yml.
+_default_hybrid_names = {}
+def default_hybrid_name(kem):
+    key = (kem['family'], kem['name_group'])
+    if key not in _default_hybrid_names:
+        try:
+            nist_level = get_kem_nistlevel(kem)
+        except FileNotFoundError:
+            nist_level = None
+        if nist_level is None:
+            old_algs = yaml.safe_load(file_get_contents(os.path.join('oqs-template', 'oldalgs.yml'), encoding='utf-8'))
+            nist_level = (old_algs.get(kem['name_group']) or {}).get('claimed-nist-level')
+        curve = DEFAULT_HYBRID_CURVES.get(nist_to_bits(nist_level))
+        _default_hybrid_names[key] = f"{curve}_{kem['name_group']}" if curve else None
+    return _default_hybrid_names[key]
+
+# An algorithm (and its hybrids) has TLS code points only if it is used in TLS
+def uses_tls(kind, alg):
+    return all(alg.get(flag) for flag in TLS_CODE_POINT_SPACES[kind]['enable'])
 
 def parse_code_point(code_point):
     code_point = str(code_point)
     return int(code_point, 16) if code_point[:2].lower() == '0x' else int(code_point, 10)
 
-# Yields (entry, TLS name, family, variant) for every signature variant and its
-# hybrids; with history=True also for composites and previous versions
-# ('extra_nids' 'old', 'extra_oids'), which hold code points of earlier releases.
-def sig_tls_entries(config, history=False):
-    for famsig in config['sigs']:
-        for variant in famsig['variants']:
-            versions = [variant]
-            if history:
-                versions += (variant.get('extra_nids') or {}).get('old', [])
-                if isinstance(variant.get('extra_oids'), dict):
-                    versions.append(variant['extra_oids'])
-            for version in versions:
-                yield version, variant['name'], famsig['family'], variant
-                for classical_alg in version.get('mix_with', []) or []:
-                    yield classical_alg, f"{classical_alg['name']}_{variant['name']}", famsig['family'], variant
-                for composite_alg in (version.get('composite', []) or []) if history else []:
-                    yield composite_alg, f"{variant['name']}_{composite_alg['name']}", famsig['family'], variant
+def algorithms(config, kind):
+    if kind == 'kems':
+        return config.get('kems', []) or []
+    return [variant for famsig in config.get('sigs', []) or [] for variant in famsig['variants']]
 
-# A signature variant (and its hybrids) gets a TLS code point only if it is
-# actually used in TLS: built ('enable') and TLS-capable ('enable_tls')
-def sig_uses_tls(variant):
-    return bool(variant.get('enable')) and bool(variant.get('enable_tls'))
+# Yields (container, key, name, identity, iana) for each TLS code point of a
+# KEM; history=True adds previous versions ('extra_nids' 'old'). The default
+# hybrid exists if 'use_hybrid' is true; in release snapshots (snapshot=True),
+# which predate 'use_hybrid', if 'nid_hybrid' is set.
+def kem_code_point_slots(kem, history=False, snapshot=False):
+    name = kem['name_group']
+    yield kem, 'nid', name, name, kem.get('iana', False)
+    if kem.get('use_hybrid') or (snapshot and 'nid_hybrid' in kem):
+        hybrid = default_hybrid_name(kem)
+        if hybrid is not None:
+            yield kem, 'nid_hybrid', hybrid, hybrid, False
+        # An unknown level is only possible for KEMs no longer in liboqs. In a
+        # release snapshot, such a hybrid with a code point outside the private
+        # use range cannot conflict with any current one, so it is skipped.
+        elif not (snapshot and parse_code_point(kem['nid_hybrid'])
+                  not in TLS_CODE_POINT_SPACES['kems']['range']):
+            print(f"ERROR: cannot determine the security level of {name}: "
+                  "add it to oqs-template/oldalgs.yml.")
+            exit(1)
+    extra_nids = kem.get('extra_nids') or {}
+    for entries in ['current'] + (['old'] if history else []):
+        for entry in extra_nids.get(entries, []) or []:
+            if 'hybrid_group' in entry:
+                identity = f"{entry['hybrid_group']}_{name}"
+                yield entry, 'nid', entry.get('standard_name', identity), identity, entry.get('iana', False)
+            else:
+                yield entry, 'nid', name, name, entry.get('iana', False)
+
+# Same for a signature variant; history=True adds previous versions
+# ('extra_nids' 'old', 'extra_oids') and composites.
+def sig_code_point_slots(variant, history=False, snapshot=False):
+    name = variant['name']
+    versions = [variant]
+    if history:
+        versions += (variant.get('extra_nids') or {}).get('old', []) or []
+        if isinstance(variant.get('extra_oids'), dict):
+            versions.append(variant['extra_oids'])
+    for version in versions:
+        yield version, 'code_point', name, name, version.get('iana', False)
+        for classical_alg in version.get('mix_with', []) or []:
+            hybrid = f"{classical_alg['name']}_{name}"
+            yield classical_alg, 'code_point', hybrid, hybrid, classical_alg.get('iana', False)
+        for composite_alg in (version.get('composite', []) or []) if history else []:
+            composite = f"{name}_{composite_alg['name']}"
+            yield composite_alg, 'code_point', composite, composite, composite_alg.get('iana', False)
+
+# Yields (algorithm, container, key, name, identity, iana) for all TLS code
+# points of a kind. Identities are lowercased, as OpenSSL matches algorithm
+# names case-insensitively.
+def code_point_slots(config, kind, history=False, snapshot=False):
+    slots = kem_code_point_slots if kind == 'kems' else sig_code_point_slots
+    for alg in algorithms(config, kind):
+        for container, key, name, identity, iana in slots(alg, history, snapshot):
+            yield alg, container, key, name, identity.lower(), iana
 
 def snapshot_version(filename):
     return tuple(int(n) for n in filename.rsplit('-', 1)[1].split('.'))
 
-# Returns the signature code points used by releases (generate.yml-* snapshots):
-# code point -> names it was assigned to, and name -> code point in the latest
-# release having that name. Names are lowercased, as OpenSSL matches algorithm
-# names case-insensitively.
-def load_released_sig_code_points():
-    by_code_point, by_name = {}, {}
+# Returns the code points of a kind used by releases: code point -> identities
+# it was assigned to, and identity -> code point in its latest release
+def load_released_code_points(kind):
+    by_code_point, by_identity = {}, {}
     snapshots = sorted(glob.glob(os.path.join('oqs-template', 'generate.yml-*')), key=snapshot_version)
     for filename in snapshots:
         old_config = yaml.safe_load(file_get_contents(filename, encoding='utf-8'))
-        for entry, name, _, _ in sig_tls_entries(old_config, history=True):
-            if 'code_point' in entry:
-                by_code_point.setdefault(parse_code_point(entry['code_point']), set()).add(name.lower())
-        for entry, name, _, _ in sig_tls_entries(old_config):
-            if 'code_point' in entry:
-                by_name[name.lower()] = parse_code_point(entry['code_point'])
-    return by_code_point, by_name
+        for _, container, key, _, identity, _ in code_point_slots(old_config, kind, history=True, snapshot=True):
+            if key in container:
+                by_code_point.setdefault(parse_code_point(container[key]), set()).add(identity)
+        for _, container, key, _, identity, _ in code_point_slots(old_config, kind, snapshot=True):
+            if key in container:
+                by_identity[identity] = parse_code_point(container[key])
+    return by_code_point, by_identity
 
-# Code points set in generate.yml (including earlier versions of algorithms)
-def sig_code_points_in_use(config):
-    return {parse_code_point(entry['code_point'])
-            for entry, _, _, _ in sig_tls_entries(config, history=True)
-            if entry.get('code_point', 'auto') != 'auto'}
+# Code points of a kind set in generate.yml (including previous versions)
+def code_points_in_use(config, kind):
+    return {parse_code_point(container[key])
+            for _, container, key, _, _, _ in code_point_slots(config, kind, history=True)
+            if container.get(key, 'auto') != 'auto'}
 
 # Private use code points neither in use nor used by any release
-def free_sig_code_points(config, released):
-    taken = set(released) | sig_code_points_in_use(config)
-    return [cp for cp in SIG_PRIVATE_USE_RANGE if cp not in taken]
+def free_code_points(config, kind, by_code_point):
+    taken = set(by_code_point) | code_points_in_use(config, kind)
+    return [cp for cp in TLS_CODE_POINT_SPACES[kind]['range'] if cp not in taken]
 
-# Replaces each "code_point: 'auto'" in generate.yml and saves the file. An
-# algorithm gets back the code point of its latest release if that is still
-# free, otherwise the lowest private use code point that is neither in use nor
-# used by any release.
-def assign_auto_sig_code_points(filename):
+# Replaces each 'auto' code point in generate.yml and saves the file
+def assign_auto_code_points(filename):
     text = file_get_contents(filename, encoding='utf-8')
-    pattern = re.compile(r"^(?!\s*#)(.*?'?code_point'?:\s*)'auto'", re.MULTILINE)
+    pattern = re.compile(r"^(?!\s*#)(.*?'?(?:code_point|nid_hybrid|nid)'?:\s*)'auto'", re.MULTILINE)
     matches = len(pattern.findall(text))
     if matches == 0:
         return
     config = yaml.safe_load(text)
-    # entries with 'auto', in the order their code points appear in the file
+    # (kind, name, identity) of each 'auto' code point, in file order
     auto = []
-    for famsig in config['sigs']:
-        for variant in famsig['variants']:
-            for key in variant:
-                if key == 'code_point' and variant['code_point'] == 'auto':
-                    auto.append(variant['name'])
-                elif key == 'mix_with':
-                    auto += [f"{c['name']}_{variant['name']}" for c in variant['mix_with'] or []
-                             if c.get('code_point') == 'auto']
+    for kind in [key for key in config if key in TLS_CODE_POINT_SPACES]:
+        slots = kem_code_point_slots if kind == 'kems' else sig_code_point_slots
+        for alg in algorithms(config, kind):
+            order = list(alg)
+            alg_slots = [s for s in slots(alg) if s[0].get(s[1]) == 'auto']
+            # code points of the algorithm itself come in key order, then those of hybrids
+            alg_slots.sort(key=lambda s: order.index(s[1]) if s[0] is alg else
+                           order.index('extra_nids' if kind == 'kems' else 'mix_with'))
+            auto += [(kind, name, identity.lower()) for _, _, name, identity, _ in alg_slots]
     if len(auto) != matches:
-        print("ERROR: unexpected placement of \"code_point: 'auto'\" in generate.yml.")
+        print("ERROR: unexpected placement of 'auto' code points in generate.yml.")
         exit(1)
-    by_code_point, by_name = load_released_sig_code_points()
-    in_use = sig_code_points_in_use(config)
-    free = iter(free_sig_code_points(config, by_code_point))
-    names = iter(auto)
+    state = {}
+    for kind in TLS_CODE_POINT_SPACES:
+        by_code_point, by_identity = load_released_code_points(kind)
+        state[kind] = (by_code_point, by_identity, code_points_in_use(config, kind),
+                       iter(free_code_points(config, kind, by_code_point)))
+    entries = iter(auto)
     def assign(match):
-        name = next(names)
-        code_point = by_name.get(name.lower())
-        if code_point is None or code_point in in_use or by_code_point[code_point] != {name.lower()}:
+        kind, name, identity = next(entries)
+        by_code_point, by_identity, in_use, free = state[kind]
+        space = TLS_CODE_POINT_SPACES[kind]
+        code_point = by_identity.get(identity)
+        if (code_point is None or code_point not in space['range'] or code_point in in_use
+                or by_code_point[code_point] != {identity}):
             code_point = next(free, None)
             if code_point is None:
-                print("ERROR: no free signature code point left in the private use range.")
+                print(f"ERROR: no free {kind} code point left in the private use range.")
                 exit(1)
         in_use.add(code_point)
-        print(f"Assigned signature code point {code_point:#06x} to {name}")
-        return f"{match.group(1)}'{code_point:#06x}'"
+        print(f"Assigned code point {space['format'](code_point)} to {name}")
+        return f"{match.group(1)}'{space['format'](code_point)}'"
     file_put_contents(filename, pattern.sub(assign, text), encoding='utf-8')
 
 # Enforces lowercase algorithm names; standardized hybrid KEM names
 # ('standard_name') are exempt
 def validate_alg_names(config):
-    errors = []
-    for kem in config['kems']:
-        if kem['name_group'] != kem['name_group'].lower():
-            errors.append(kem['name_group'])
-    for _, name, _, _ in sig_tls_entries(config):
-        if name != name.lower():
-            errors.append(name)
+    names = [kem['name_group'] for kem in algorithms(config, 'kems')]
+    names += [hybrid['hybrid_group'] for kem in algorithms(config, 'kems')
+              for hybrid in (kem.get('extra_nids') or {}).get('current', []) or []]
+    names += [variant['name'] for variant in algorithms(config, 'sigs')]
+    names += [classical_alg['name'] for variant in algorithms(config, 'sigs')
+              for classical_alg in variant.get('mix_with', []) or []]
+    errors = sorted({name for name in names if name != name.lower()})
     if errors:
         print("ERROR: algorithm names must be lowercase:", ", ".join(errors))
         exit(1)
 
-# Controlled allocation of TLS signature code points: only algorithms used in
-# TLS get one; it must be unique, in the private use range (unless 'iana: true'),
-# and must not reuse a code point of another algorithm from a previous release.
-def validate_sig_code_points(config):
-    by_code_point, _ = load_released_sig_code_points()
-    in_use = {}
+def validate_tls_code_points(config):
     errors = []
-    for entry, name, _, variant in sig_tls_entries(config):
-        if not sig_uses_tls(variant):
-            if 'code_point' in entry:
-                errors.append(f"{name}: not used in TLS ('enable' and 'enable_tls' not both true), "
-                              "so it must not have a code point.")
-            continue
-        if 'code_point' not in entry:
-            errors.append(f"{name}: used in TLS but no code point is set (use 'auto').")
-            continue
-        code_point = parse_code_point(entry['code_point'])
-        if code_point in in_use:
-            errors.append(f"{name}: code point {code_point:#06x} already used by {in_use[code_point]}.")
-        in_use[code_point] = name
-        if entry.get('iana'):
-            continue
-        if code_point not in SIG_PRIVATE_USE_RANGE:
-            errors.append(f"{name}: code point {code_point:#06x} not in private use range 0xfe00..0xffff.")
-        elif code_point in by_code_point and name.lower() not in by_code_point[code_point]:
-            errors.append(f"{name}: code point {code_point:#06x} was used by "
-                          f"{', '.join(sorted(by_code_point[code_point]))} in a previous release.")
+    for kem in config['kems']:
+        if 'nid_hybrid' in kem and not kem.get('use_hybrid'):
+            errors.append(f"{kem['name_group']}: 'nid_hybrid' is set but 'use_hybrid' is not true.")
+    for kind, space in TLS_CODE_POINT_SPACES.items():
+        flags = " and ".join(f"'{flag}'" for flag in space['enable'])
+        low, high = space['format'](space['range'].start), space['format'](space['range'].stop - 1)
+        by_code_point, _ = load_released_code_points(kind)
+        in_use = {}
+        for alg, container, key, name, identity, iana in code_point_slots(config, kind):
+            if not uses_tls(kind, alg):
+                if key in container:
+                    errors.append(f"{name}: not used in TLS ({flags} not both true), so '{key}' must not be set.")
+                continue
+            if key not in container:
+                errors.append(f"{name}: used in TLS but '{key}' is not set (use 'auto').")
+                continue
+            code_point = parse_code_point(container[key])
+            if code_point in in_use:
+                errors.append(f"{name}: code point {space['format'](code_point)} already used by {in_use[code_point]}.")
+            in_use[code_point] = name
+            if iana:
+                continue
+            if code_point not in space['range']:
+                errors.append(f"{name}: code point {space['format'](code_point)} not in private use range {low}..{high}.")
+            elif code_point in by_code_point and identity not in by_code_point[code_point]:
+                errors.append(f"{name}: code point {space['format'](code_point)} was used by "
+                              f"{', '.join(sorted(by_code_point[code_point]))} in a previous release.")
     if errors:
-        print("ERROR: invalid signature code points in generate.yml:")
+        print("ERROR: invalid TLS code points in generate.yml:")
         for error in errors:
             print("  " + error)
         exit(1)
-    print(f"Free signature code points: {len(free_sig_code_points(config, by_code_point))}")
 
-assign_auto_sig_code_points(os.path.join('oqs-template', 'generate.yml'))
+assign_auto_code_points(os.path.join('oqs-template', 'generate.yml'))
 full_config = load_config(include_disabled_sigs=True, include_disabled_kems=True)
 validate_alg_names(full_config)
-validate_sig_code_points(full_config)
+validate_tls_code_points(full_config)
 
 # extend config with "hybrid_groups" array:
 config = load_config() # extend config with "hybrid_groups" array
 
-# complete config with "bit_security" and "hybrid_group from
-# nid_hybrid information
+# complete config with "bit_security" and the default hybrid from
+# use_hybrid information
 config = complete_config(config)
 
-validate_iana_code_points(config)
 
 populate('oqsprov/oqsencoders.inc', config, '/////')
 populate('oqsprov/oqsdecoders.inc', config, '/////')

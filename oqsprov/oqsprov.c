@@ -21,8 +21,16 @@
 
 #include "oqs_prov.h"
 
-/* GCC and clang (>= 14) both define __SANITIZE_ADDRESS__ under ASan. */
-#ifdef __SANITIZE_ADDRESS__
+/* GCC defines __SANITIZE_ADDRESS__ under ASan, not all clang versions do. */
+#if defined(__SANITIZE_ADDRESS__)
+#define OQS_PROV_ASAN
+#elif defined(__has_feature)
+#if __has_feature(address_sanitizer)
+#define OQS_PROV_ASAN
+#endif
+#endif
+
+#ifdef OQS_PROV_ASAN
 #include <sanitizer/lsan_interface.h>
 #endif
 
@@ -63,7 +71,7 @@ static void create_rt_lock(void) {
      */
     assert(rt_lock == NULL);
     rt_lock = CRYPTO_THREAD_lock_new();
-#ifdef __SANITIZE_ADDRESS__
+#ifdef OQS_PROV_ASAN
     /* rt_lock is shared by all library contexts and intentionally lives for
      * the lifetime of the process (freed by the OS on exit); tell
      * LeakSanitizer this single allocation is not a leak.

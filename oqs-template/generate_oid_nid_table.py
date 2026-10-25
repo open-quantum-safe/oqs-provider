@@ -113,7 +113,7 @@ def gen_kem_table(oqslibdocdir):
        # KEMs not used in TLS have no code point
        table.append([kem['family'], implementation_version,
                      kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,
-                     kem['nid'] if 'nid' in kem or not kem.get('enable') else '-', ""])
+                     kem['nid'] if 'nid' in kem or not kem.get('enable_kem') else '-', ""])
        if kem.get('use_hybrid'):
            table.append([kem['family'], implementation_version,
                          kem['name_group'], str(liboqs_kems[kem['family']]['nist-round']), claimed_nist_level,

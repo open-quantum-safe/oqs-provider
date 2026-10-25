@@ -3,11 +3,10 @@
 # 'use_hybrid: true' adds the default ECP hybrid (p256/p384/p521 by security level); further hybrids are listed in
 # 'extra_nids' 'current' by 'hybrid_group'.
 # TLS code points (KEMs: 'nid', 'nid_hybrid' and the 'nid' of 'extra_nids' 'current' entries; signatures:
-# 'code_point' of variants and their hybrids) are set only for algorithms used in TLS, i.e. KEMs with 'enable: true'
-# and 'enable_tls: true', signatures with 'enable: true' and 'enable_tls: true'. Unless 'iana: true', they lie in the
-# RFC 8446 private use range (KEMs 0xFE00..0xFEFF, signatures 0xFE00..0xFFFF). Set them to 'auto' to have generate.py
-# assign the code point of the algorithm's latest release if still free, otherwise the lowest code point not used by
-# any release (see generate.yml-*).
+# 'code_point' of variants and their hybrids) are set only for algorithms used in TLS, i.e. KEMs with 'enable_kem: true'
+# and 'enable_tls: true', signatures with 'enable: true' and 'enable_tls: true'. Unless 'iana: true', they are unique
+# and lie in the RFC 8446 private use range (KEMs 0xFE00..0xFEFF, signatures 0xFE00..0xFFFF). Set them to 'auto' to have
+# generate.py assign the lowest private use code point not used anywhere in this file.
 kems:
   -
     family: 'FrodoKEM'

@@ -889,33 +889,33 @@ done:
 #define p521_mayo5_evp_type 0
 #define p521_mayo5_input_type "p521_mayo5"
 #define p521_mayo5_pem_type "p521_mayo5"
-#define CROSSrsdp128balanced_evp_type 0
-#define CROSSrsdp128balanced_input_type "CROSSrsdp128balanced"
-#define CROSSrsdp128balanced_pem_type "CROSSrsdp128balanced"
-#define OV_Is_pkc_evp_type 0
-#define OV_Is_pkc_input_type "OV_Is_pkc"
-#define OV_Is_pkc_pem_type "OV_Is_pkc"
-#define p256_OV_Is_pkc_evp_type 0
-#define p256_OV_Is_pkc_input_type "p256_OV_Is_pkc"
-#define p256_OV_Is_pkc_pem_type "p256_OV_Is_pkc"
-#define OV_Ip_pkc_evp_type 0
-#define OV_Ip_pkc_input_type "OV_Ip_pkc"
-#define OV_Ip_pkc_pem_type "OV_Ip_pkc"
-#define p256_OV_Ip_pkc_evp_type 0
-#define p256_OV_Ip_pkc_input_type "p256_OV_Ip_pkc"
-#define p256_OV_Ip_pkc_pem_type "p256_OV_Ip_pkc"
-#define OV_Is_pkc_skc_evp_type 0
-#define OV_Is_pkc_skc_input_type "OV_Is_pkc_skc"
-#define OV_Is_pkc_skc_pem_type "OV_Is_pkc_skc"
-#define p256_OV_Is_pkc_skc_evp_type 0
-#define p256_OV_Is_pkc_skc_input_type "p256_OV_Is_pkc_skc"
-#define p256_OV_Is_pkc_skc_pem_type "p256_OV_Is_pkc_skc"
-#define OV_Ip_pkc_skc_evp_type 0
-#define OV_Ip_pkc_skc_input_type "OV_Ip_pkc_skc"
-#define OV_Ip_pkc_skc_pem_type "OV_Ip_pkc_skc"
-#define p256_OV_Ip_pkc_skc_evp_type 0
-#define p256_OV_Ip_pkc_skc_input_type "p256_OV_Ip_pkc_skc"
-#define p256_OV_Ip_pkc_skc_pem_type "p256_OV_Ip_pkc_skc"
+#define crossrsdp128balanced_evp_type 0
+#define crossrsdp128balanced_input_type "crossrsdp128balanced"
+#define crossrsdp128balanced_pem_type "crossrsdp128balanced"
+#define ov_is_pkc_evp_type 0
+#define ov_is_pkc_input_type "ov_is_pkc"
+#define ov_is_pkc_pem_type "ov_is_pkc"
+#define p256_ov_is_pkc_evp_type 0
+#define p256_ov_is_pkc_input_type "p256_ov_is_pkc"
+#define p256_ov_is_pkc_pem_type "p256_ov_is_pkc"
+#define ov_ip_pkc_evp_type 0
+#define ov_ip_pkc_input_type "ov_ip_pkc"
+#define ov_ip_pkc_pem_type "ov_ip_pkc"
+#define p256_ov_ip_pkc_evp_type 0
+#define p256_ov_ip_pkc_input_type "p256_ov_ip_pkc"
+#define p256_ov_ip_pkc_pem_type "p256_ov_ip_pkc"
+#define ov_is_pkc_skc_evp_type 0
+#define ov_is_pkc_skc_input_type "ov_is_pkc_skc"
+#define ov_is_pkc_skc_pem_type "ov_is_pkc_skc"
+#define p256_ov_is_pkc_skc_evp_type 0
+#define p256_ov_is_pkc_skc_input_type "p256_ov_is_pkc_skc"
+#define p256_ov_is_pkc_skc_pem_type "p256_ov_is_pkc_skc"
+#define ov_ip_pkc_skc_evp_type 0
+#define ov_ip_pkc_skc_input_type "ov_ip_pkc_skc"
+#define ov_ip_pkc_skc_pem_type "ov_ip_pkc_skc"
+#define p256_ov_ip_pkc_skc_evp_type 0
+#define p256_ov_ip_pkc_skc_input_type "p256_ov_ip_pkc_skc"
+#define p256_ov_ip_pkc_skc_pem_type "p256_ov_ip_pkc_skc"
 #define snova1k_evp_type 0
 #define snova1k_input_type "snova1k"
 #define snova1k_pem_type "snova1k"
@@ -2244,69 +2244,69 @@ MAKE_ENCODER(, p521_mayo5, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p521_mayo5, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p521_mayo5);
-MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, CROSSrsdp128balanced, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, CROSSrsdp128balanced);
-MAKE_ENCODER(, OV_Is_pkc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Is_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Is_pkc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Is_pkc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Is_pkc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, OV_Is_pkc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, OV_Is_pkc);
-MAKE_ENCODER(, p256_OV_Is_pkc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Is_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Is_pkc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Is_pkc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Is_pkc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Is_pkc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_OV_Is_pkc);
-MAKE_ENCODER(, OV_Ip_pkc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Ip_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Ip_pkc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Ip_pkc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Ip_pkc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, OV_Ip_pkc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, OV_Ip_pkc);
-MAKE_ENCODER(, p256_OV_Ip_pkc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Ip_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Ip_pkc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Ip_pkc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Ip_pkc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Ip_pkc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_OV_Ip_pkc);
-MAKE_ENCODER(, OV_Is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Is_pkc_skc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Is_pkc_skc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Is_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, OV_Is_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, OV_Is_pkc_skc);
-MAKE_ENCODER(, p256_OV_Is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Is_pkc_skc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Is_pkc_skc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Is_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Is_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_OV_Is_pkc_skc);
-MAKE_ENCODER(, OV_Ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Ip_pkc_skc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, OV_Ip_pkc_skc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, OV_Ip_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, OV_Ip_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, OV_Ip_pkc_skc);
-MAKE_ENCODER(, p256_OV_Ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Ip_pkc_skc, oqsx, PrivateKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Ip_pkc_skc, oqsx, PrivateKeyInfo, pem);
-MAKE_ENCODER(, p256_OV_Ip_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
-MAKE_ENCODER(, p256_OV_Ip_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
-MAKE_TEXT_ENCODER(, p256_OV_Ip_pkc_skc);
+MAKE_ENCODER(, crossrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, crossrsdp128balanced, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, crossrsdp128balanced, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, crossrsdp128balanced, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, crossrsdp128balanced, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, crossrsdp128balanced, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, crossrsdp128balanced);
+MAKE_ENCODER(, ov_is_pkc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, ov_is_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_is_pkc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, ov_is_pkc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_is_pkc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, ov_is_pkc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, ov_is_pkc);
+MAKE_ENCODER(, p256_ov_is_pkc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_is_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_is_pkc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_is_pkc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_is_pkc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_ov_is_pkc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_ov_is_pkc);
+MAKE_ENCODER(, ov_ip_pkc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, ov_ip_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_ip_pkc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, ov_ip_pkc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_ip_pkc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, ov_ip_pkc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, ov_ip_pkc);
+MAKE_ENCODER(, p256_ov_ip_pkc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_ip_pkc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_ip_pkc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_ip_pkc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_ip_pkc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_ov_ip_pkc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_ov_ip_pkc);
+MAKE_ENCODER(, ov_is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, ov_is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_is_pkc_skc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, ov_is_pkc_skc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_is_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, ov_is_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, ov_is_pkc_skc);
+MAKE_ENCODER(, p256_ov_is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_is_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_is_pkc_skc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_is_pkc_skc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_is_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_ov_is_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_ov_is_pkc_skc);
+MAKE_ENCODER(, ov_ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, ov_ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_ip_pkc_skc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, ov_ip_pkc_skc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, ov_ip_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, ov_ip_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, ov_ip_pkc_skc);
+MAKE_ENCODER(, p256_ov_ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_ip_pkc_skc, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_ip_pkc_skc, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_ov_ip_pkc_skc, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_ov_ip_pkc_skc, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_ov_ip_pkc_skc, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_ov_ip_pkc_skc);
 MAKE_ENCODER(, snova1k, oqsx, EncryptedPrivateKeyInfo, der);
 MAKE_ENCODER(, snova1k, oqsx, EncryptedPrivateKeyInfo, pem);
 MAKE_ENCODER(, snova1k, oqsx, PrivateKeyInfo, der);

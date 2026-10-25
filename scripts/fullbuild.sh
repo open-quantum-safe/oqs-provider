@@ -101,20 +101,6 @@ if [ -z $liboqs_DIR ]; then
       echo "liboqs clone failure for branch $LIBOQS_BRANCH. Exiting."
       exit -1
     fi
-    if [ "$LIBOQS_BRANCH" != "main" ]; then
-      # check for presence of backwards-compatibility generator file
-      if [ -f oqs-template/generate.yml-$LIBOQS_BRANCH ]; then
-        pip install -r oqs-template/requirements.txt
-        echo "generating code for $LIBOQS_BRANCH"
-        mv oqs-template/generate.yml oqs-template/generate.yml-main
-        cp oqs-template/generate.yml-$LIBOQS_BRANCH oqs-template/generate.yml
-        LIBOQS_SRC_DIR=`pwd`/liboqs python3 oqs-template/generate.py
-        if [ $? -ne 0 ]; then
-           echo "Code generation failure for $LIBOQS_BRANCH. Exiting."
-           exit -1
-        fi
-      fi
-    fi
   fi
 
   # Ensure liboqs is built against OpenSSL3/4, not a possibly still system-

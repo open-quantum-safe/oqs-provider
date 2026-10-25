@@ -1,6 +1,9 @@
 name: Windows tests
 
-on: [pull_request, push]
+on:
+  schedule:
+    - cron: '27 4 * * 2'
+  workflow_dispatch:
 
 permissions:
   contents: read

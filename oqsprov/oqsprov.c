@@ -1679,6 +1679,43 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
 
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_END
 
+    /* User-level hybrid alg withdrawal via env var */
+    if (getenv("OQS_CEDE_HYBRIDS") != NULL) {
+        static const char *const hybrid_prefixes[] = {
+            "p256_", "p384_", "p521_",  "x25519_",
+            "x448_", "bp256_", "bp384_", "bp512_", "rsa3072_"};
+        const OSSL_ALGORITHM *const hybrid_alg_lists[] = {
+            oqsprovider_signatures, oqsprovider_asym_kems};
+        size_t li, pi;
+
+        for (li = 0; li < OSSL_NELEM(hybrid_alg_lists); li++) {
+            const OSSL_ALGORITHM *alg;
+
+            for (alg = hybrid_alg_lists[li]; alg->algorithm_names != NULL;
+                 alg++) {
+                const char *name = alg->algorithm_names;
+                int is_hybrid = 0;
+
+                for (pi = 0; pi < OSSL_NELEM(hybrid_prefixes); pi++)
+                    if (strncmp(name, hybrid_prefixes[pi],
+                                strlen(hybrid_prefixes[pi])) == 0) {
+                        is_hybrid = 1;
+                        break;
+                    }
+                /* standardised MLX-style hybrids: no classical prefix, but the
+                 * upper-case "MLKEM" token no standalone algorithm uses. */
+                if (!is_hybrid && strstr(name, "MLKEM") != NULL)
+                    is_hybrid = 1;
+
+                if (is_hybrid &&
+                    sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)name) < 0) {
+                    rt_algo_filter_enabled = 1;
+                    sk_OPENSSL_STRING_push(rt_disabled_algs, (char *)name);
+                }
+            }
+        }
+    }
+
     /* Registering an OID can make the core load its configuration, which may
      * load this provider again on the same thread. rt_lock is not recursive,
      * so work from a private copy of the list and never hold the lock across

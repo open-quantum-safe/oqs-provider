@@ -1682,8 +1682,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     /* User-level hybrid alg withdrawal via env var */
     if (getenv("OQS_CEDE_HYBRIDS") != NULL) {
         static const char *const hybrid_prefixes[] = {
-            "p256_", "p384_", "p521_",  "x25519_",
-            "x448_", "bp256_", "bp384_", "bp512_", "rsa3072_"};
+            "p256_",  "p384_",  "p521_",  "x25519_", "x448_",
+            "bp256_", "bp384_", "bp512_", "rsa3072_"};
         const OSSL_ALGORITHM *const hybrid_alg_lists[] = {
             oqsprovider_signatures, oqsprovider_asym_kems};
         size_t li, pi;
@@ -1707,8 +1707,8 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
                 if (!is_hybrid && strstr(name, "MLKEM") != NULL)
                     is_hybrid = 1;
 
-                if (is_hybrid &&
-                    sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)name) < 0) {
+                if (is_hybrid && sk_OPENSSL_STRING_find(rt_disabled_algs,
+                                                        (char *)name) < 0) {
                     rt_algo_filter_enabled = 1;
                     sk_OPENSSL_STRING_push(rt_disabled_algs, (char *)name);
                 }

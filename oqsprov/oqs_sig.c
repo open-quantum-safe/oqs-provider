@@ -638,6 +638,11 @@ static int oqs_sig_digest_verify_init(void *vpoqs_sigctx, const char *mdname,
 static int oqs_sig_collect_data(PROV_OQSSIG_CTX *poqs_sigctx,
                                 const unsigned char *data, size_t datalen) {
     if (poqs_sigctx->mddata) {
+        /* Fix: Prevent integer overflow on 32-bit systems */
+        if (SIZE_MAX - poqs_sigctx->mdsize < datalen) {
+            return 0;
+        }
+        
         unsigned char *newdata =
             OPENSSL_realloc(poqs_sigctx->mddata, poqs_sigctx->mdsize + datalen);
         if (newdata == NULL)

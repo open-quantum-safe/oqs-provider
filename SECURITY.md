@@ -37,6 +37,14 @@ implementations actually provided by either of these libraries (`liboqs` or `lib
 `openssl`). Any such problem shall be reported to those projects, respectively. Any report of
 this sort opened in this repository will be closed immediately without further action.
 
+Before preparing a report, please read the [threat model](.github/THREAT_MODEL.md),
+which describes the trust boundaries of this provider and what is (and is not) an
+`oqsprovider` vulnerability as opposed to an issue in `liboqs` or `libcrypto`.
+Security researchers and automated agents should additionally follow the
+step-by-step guidance in [`.github/AGENTS.md`](.github/AGENTS.md). Reports (and
+patches) produced with the help of generative AI must say so, as required by
+[`CONTRIBUTING.md`](CONTRIBUTING.md).
+
 ## Criteria for a valid security report
 
 - **Categorization**: The reported issue must be identified as a logic error, safety check failure,

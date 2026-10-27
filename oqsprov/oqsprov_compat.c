@@ -20,6 +20,7 @@ static void *oqsx_dlsym(const char *name) {
 }
 
 #else
+#define _GNU_SOURCE
 #include <dlfcn.h>
 
 static void *oqsx_dlsym(const char *name) { return dlsym(RTLD_DEFAULT, name); }

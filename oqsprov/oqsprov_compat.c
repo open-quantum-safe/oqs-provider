@@ -1,3 +1,6 @@
+/* Define GNU extensions before any system headers */
+#define _GNU_SOURCE
+
 /*
  * Runtime compatibility layer for OpenSSL 4.1 deprecated ASN.1 APIs.
  *

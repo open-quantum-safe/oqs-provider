@@ -62,6 +62,9 @@ The following list of algorithms may change when loading oqsprovider (version >=
 | p521_mlkem1024 | 65085 | Yes | OQS_CODEPOINT_P521_MLKEM1024 |
 | SecP384r1MLKEM1024 | 0x11ED | Yes | OQS_CODEPOINT_SECP384R1MLKEM1024 |
 | bp512_mlkem1024 | 65058 | Yes | OQS_CODEPOINT_BP512_MLKEM1024 |
+| bikel1 | 65040 | Yes | OQS_CODEPOINT_BIKEL1 |
+| p256_bikel1 | 65041 | Yes | OQS_CODEPOINT_P256_BIKEL1 |
+| x25519_bikel1 | 65042 | Yes | OQS_CODEPOINT_X25519_BIKEL1 |
 | bikel3 | 65043 | Yes | OQS_CODEPOINT_BIKEL3 |
 | p384_bikel3 | 65044 | Yes | OQS_CODEPOINT_P384_BIKEL3 |
 | x448_bikel3 | 65045 | Yes | OQS_CODEPOINT_X448_BIKEL3 |

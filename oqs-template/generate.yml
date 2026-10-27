@@ -413,10 +413,13 @@ kems:
     use_hybrid: true
     oqs_alg: 'OQS_KEM_alg_bike_l1'
     enable_kem: true
-    enable_tls: false
+    enable_tls: true
+    nid: '65040'
+    nid_hybrid: '65041'
     extra_nids:
       current:
         - hybrid_group: "x25519"
+          nid: '65042'
       old:
         - implementation_version: NIST Round 3 submission
           nist-round: 3

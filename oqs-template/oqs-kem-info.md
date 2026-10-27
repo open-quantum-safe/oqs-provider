@@ -1,8 +1,8 @@
 | Family         | Implementation Version                                | Variant         | NIST round   |   Claimed NIST Level | Code Point   | Hybrid Elliptic Curve (if any)   |
 |:---------------|:------------------------------------------------------|:----------------|:-------------|---------------------:|:-------------|:---------------------------------|
-| BIKE           | 5.1                                                   | bikel1          | 4            |                    1 | -            |                                  |
-| BIKE           | 5.1                                                   | bikel1          | 4            |                    1 | -            | secp256_r1                       |
-| BIKE           | 5.1                                                   | bikel1          | 4            |                    1 | -            | x25519                           |
+| BIKE           | 5.1                                                   | bikel1          | 4            |                    1 | 65040        |                                  |
+| BIKE           | 5.1                                                   | bikel1          | 4            |                    1 | 65041        | secp256_r1                       |
+| BIKE           | 5.1                                                   | bikel1          | 4            |                    1 | 65042        | x25519                           |
 | BIKE           | 5.1                                                   | bikel3          | 4            |                    3 | 65043        |                                  |
 | BIKE           | 5.1                                                   | bikel3          | 4            |                    3 | 65044        | secp384_r1                       |
 | BIKE           | 5.1                                                   | bikel3          | 4            |                    3 | 65045        | x448                             |

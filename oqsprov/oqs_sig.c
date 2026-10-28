@@ -544,20 +544,17 @@ endverify:
     return rv;
 }
 
-#if (OPENSSL_VERSION_PREREQ(3, 2))
-    p = OSSL_PARAM_locate_const(params, OSSL_SIGNATURE_PARAM_CONTEXT_STRING);
-    if (p != NULL) {
-        /* Free the existing buffer to safely support OpenSSL context reuse */
-        OPENSSL_free(poqs_sigctx->context_string);
-        poqs_sigctx->context_string = NULL;
-        poqs_sigctx->context_string_length = 0;
+#if (OPENSSL_VERSION_PREREQ(3, 4))
+static int oqs_sig_verify_set_sig(void *vctx, const unsigned char *sig,
+                                  size_t siglen) {
+    PROV_OQSSIG_CTX *ctx = (PROV_OQSSIG_CTX *)vctx;
+    OSSL_PARAM params[2];
 
-        if (!OSSL_PARAM_get_octet_string(p, &poqs_sigctx->context_string, 0,
-                                         &poqs_sigctx->context_string_length)) {
-            poqs_sigctx->context_string_length = 0;
-            return 0;
-        }
-    }
+    params[0] = OSSL_PARAM_construct_octet_string(
+        OSSL_SIGNATURE_PARAM_SIGNATURE, (unsigned char *)sig, siglen);
+    params[1] = OSSL_PARAM_construct_end();
+    return oqs_sig_set_ctx_params(ctx, params);
+}
 #endif
 
 static int oqs_sig_verify(void *vctx, const unsigned char *sig, size_t siglen,
@@ -954,7 +951,9 @@ static int oqs_sig_set_ctx_params(void *vpoqs_sigctx,
 #if (OPENSSL_VERSION_PREREQ(3, 2))
     p = OSSL_PARAM_locate_const(params, OSSL_SIGNATURE_PARAM_CONTEXT_STRING);
     if (p != NULL) {
-        if (!OSSL_PARAM_get_octet_string(p, &poqs_sigctx->context_string, 0,
+        OPENSSL_free(poqs_sigctx->context_string);
+        poqs_sigctx->context_string = NULL;
+        if (!OSSL_PARAM_get_octet_string(p, (void **)&poqs_sigctx->context_string, 0,
                                          &poqs_sigctx->context_string_length)) {
             poqs_sigctx->context_string_length = 0;
             return 0;

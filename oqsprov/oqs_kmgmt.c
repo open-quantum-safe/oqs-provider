@@ -370,6 +370,7 @@ static int oqsx_key_is_hybrid(const OQSX_KEY *oqsxk) {
 // Gets hybrid params.
 //
 // Returns 0 on success.
+
 static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[]) {
     OSSL_PARAM *p;
     const void *classical_pubkey = NULL;
@@ -398,11 +399,21 @@ static int oqsx_get_hybrid_params(OQSX_KEY *key, OSSL_PARAM params[]) {
         key->comp_pubkey[idx_classic] != NULL) {
         classical_pubkey = key->comp_pubkey[idx_classic];
         DECODE_UINT32(classical_pubkey_len, key->pubkey);
+        
+        /* Fix: Prevent integer underflow on malformed hybrid public keys */
+        if (classical_pubkey_len > key->pubkeylen - SIZE_OF_UINT32) {
+            return -1;
+        }
     }
     if (key->comp_privkey != NULL && key->privkey != NULL &&
         key->comp_privkey[idx_classic] != NULL) {
         classical_privkey = key->comp_privkey[idx_classic];
         DECODE_UINT32(classical_privkey_len, key->privkey);
+        
+        /* Fix: Prevent integer underflow on malformed hybrid private keys */
+        if (classical_privkey_len > key->privkeylen - SIZE_OF_UINT32) {
+            return -1;
+        }
     }
 
     if (key->comp_pubkey != NULL && key->comp_pubkey[idx_pq] != NULL) {

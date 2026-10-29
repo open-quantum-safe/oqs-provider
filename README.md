@@ -189,6 +189,9 @@ These versions are expected to support the `openssl pkeyutl -encap/-decap`
 syntax for testing key encapsulation and decapsulation for test purposes. To
 use this option, OQS provider should be built with
 [KEM encoding/decoding support](CONFIGURE.md#oqs_kem_encoders).
+`scripts/runtests.sh` exercises this CLI path via
+`scripts/oqsprovider-kem-encapdecap.sh` when OpenSSL is >= 3.4 and KEM
+encoders are enabled (otherwise the check is skipped).
 Also new in this version is the possibility to retrieve all currently
 active TLS signature algorithms via a new `openssl list` option:
 `openssl list -tls-signature-algorithms`.

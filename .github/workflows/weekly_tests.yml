@@ -10,6 +10,67 @@ permissions:
   contents: read
 
 jobs:
+  # KEM encoders are rarely exercised; keep them off the per-PR linux_intel
+  # matrix and run a focused Linux cell here instead (#862 review).
+  linux-kem-encoders:
+    name: Linux KEM encoders
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ossl-branch: [openssl-3.5.0, openssl-4.0.1, master]
+        libjade-build: ["OFF"]
+    container:
+      image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
+    env:
+      MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH: "main"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Add safe directory exception
+        run: git config --global --add safe.directory /__w/oqs-provider/oqs-provider
+      - name: Resolve upstream commits for cache keys
+        id: refs
+        run: |
+          echo "ossl=$(git ls-remote https://github.com/openssl/openssl.git ${{ matrix.ossl-branch }} | cut -f1)" >> "$GITHUB_OUTPUT"
+          echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git main | cut -f1)" >> "$GITHUB_OUTPUT"
+      - name: Retrieve OpenSSL from cache
+        id: cache-openssl
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: .localossl
+          key: ${{ runner.os }}-openssl-${{ matrix.ossl-branch }}-${{ steps.refs.outputs.ossl }}
+      - name: Build OpenSSL from source if not cached
+        if: steps.cache-openssl.outputs.cache-hit != 'true'
+        run: |
+          OSSL_PREFIX="$GITHUB_WORKSPACE/.localossl"
+          git clone --depth 1 --branch "${{ matrix.ossl-branch }}" https://github.com/openssl/openssl.git openssl-src
+          cd openssl-src
+          LDFLAGS="-Wl,-rpath -Wl,${OSSL_PREFIX}/lib64" ./config --prefix="${OSSL_PREFIX}"
+          make ${MAKE_PARAMS}
+          make install_sw install_ssldirs
+          cd ..
+          if [ -d "${OSSL_PREFIX}/lib64" ] && [ ! -e "${OSSL_PREFIX}/lib" ]; then ln -s lib64 "${OSSL_PREFIX}/lib"; fi
+          rm -rf openssl-src
+      - name: Retrieve liboqs build from cache
+        id: cache-liboqs
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: .local
+          key: ${{ runner.os }}-liboqs-${{ steps.refs.outputs.liboqs }}-${{ matrix.ossl-branch }}-libjade${{ matrix.libjade-build }}-kemencoders
+      - name: Expose the cached OpenSSL to build and tests
+        run: |
+          echo "OSSL_INSTALL_ARG=$GITHUB_WORKSPACE/.localossl"         >> "$GITHUB_ENV"
+          echo "OPENSSL_APP=$GITHUB_WORKSPACE/.localossl/bin/openssl"  >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$GITHUB_WORKSPACE/.localossl/lib64"    >> "$GITHUB_ENV"
+      - name: Full build with KEM encoders
+        run: OPENSSL_INSTALL=$OSSL_INSTALL_ARG OQSPROV_CMAKE_PARAMS="-DOQS_KEM_ENCODERS=ON" OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
+      - name: Test
+        run: ./scripts/runtests.sh -V
+
   macos-matrix:
     name: macOS Weekly Tests
     runs-on: macos-15

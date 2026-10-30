@@ -953,8 +953,9 @@ static int oqs_sig_set_ctx_params(void *vpoqs_sigctx,
     if (p != NULL) {
         OPENSSL_free(poqs_sigctx->context_string);
         poqs_sigctx->context_string = NULL;
-        if (!OSSL_PARAM_get_octet_string(p, (void **)&poqs_sigctx->context_string, 0,
-                                         &poqs_sigctx->context_string_length)) {
+        if (!OSSL_PARAM_get_octet_string(
+                p, (void **)&poqs_sigctx->context_string, 0,
+                &poqs_sigctx->context_string_length)) {
             poqs_sigctx->context_string_length = 0;
             return 0;
         }

@@ -4,7 +4,7 @@
 # that has a registered OID (file-based keys). Skips cleanly (exit 0) when
 # those prerequisites are missing.
 #
-# Optional arg: KEM algorithm name (default: first usable candidate).
+# Optional arg: KEM algorithm name (default: first usable oqsprovider KEM).
 
 set -e
 
@@ -42,6 +42,8 @@ trap cleanup EXIT
 
 alg_usable() {
     # Must be listed under oqsprovider and support PEM genpkey (needs OID + encoders).
+    # Listing @ oqsprovider already excludes pure ML-KEM names that OpenSSL >= 3.5
+    # serves via the default provider (oqsprovider cedes those at init).
     "$OPENSSL_APP" list -kem-algorithms 2>/dev/null | grep oqsprovider | grep -q "$1" || return 1
     "$OPENSSL_APP" genpkey -algorithm "$1" -out "$WORKDIR/probe.pem" 2>/dev/null || return 1
     rm -f "$WORKDIR/probe.pem"
@@ -53,15 +55,7 @@ pick_alg() {
         echo "$1"
         return
     fi
-    # Prefer hybrids that ship default OIDs when OQS_KEM_ENCODERS=ON
-    # (many pure Frodo/HQC/BIKE names have NULL default OIDs and skip encoding).
-    for cand in x25519_mlkem512 SecP256r1MLKEM512 x25519_mlkem768 SecP256r1MLKEM768; do
-        if alg_usable "$cand"; then
-            echo "$cand"
-            return
-        fi
-    done
-    # Fallback: first oqsprovider KEM that can write a PEM key
+    # First oqsprovider KEM that can write a PEM key (no preferred-name heuristics).
     "$OPENSSL_APP" list -kem-algorithms 2>/dev/null \
         | grep oqsprovider \
         | sed -e 's/^[[:space:]]*{[^}]*,[[:space:]]*\([^,}]*[^,} ]\)[[:space:]]*}[[:space:]]*@.*/\1/' \

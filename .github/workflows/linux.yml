@@ -149,13 +149,15 @@ jobs:
     needs: [coding_style_tests]
     strategy:
       fail-fast: false
+    # Needs clang >= 18: older ASan runtimes randomly segfault at startup on
+    # runner kernels using 32 bits of mmap ASLR entropy (vm.mmap_rnd_bits).
     container:
-      image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
+      image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
     env:
       CC: "clang"
       CXX: "clang++"
       ASAN_C_FLAGS: "-fsanitize=address -fno-omit-frame-pointer"
-      ASAN_OPTIONS: "detect_stack_use_after_return=1,detect_leaks=1"
+      ASAN_OPTIONS: "external_symbolizer_path=/usr/bin/addr2line:detect_stack_use_after_return=1:detect_leaks=1"
       OPENSSL_BRANCH: "openssl-3.5.0"
     steps:
       - name: Checkout code
@@ -163,8 +165,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install dependencies
-        run: apt-get update && apt-get install -y clang llvm ninja-build git cmake libclang-14-dev libclang-common-14-dev
+      - name: Check clang version
+        run: |
+          clang --version
+          major=$(clang -dumpversion | cut -d. -f1)
+          if [ "${major}" -lt 18 ]; then
+            echo "clang ${major} found; ASan needs clang >= 18 on current runners"
+            exit 1
+          fi
 
       - name: Clone and build OpenSSL(3) with ASan
         run: |
@@ -208,7 +216,9 @@ jobs:
       - name: Verify that test binaries are linked against ASan
         run: |
           find build/test/ -type f -perm '/u=x' | while read -r test_bin; do
-            if ! nm "${test_bin}" | grep -q '__local_asan_preinit'; then
+            # __asan_init is defined by every ASan runtime; clang >= 21 no
+            # longer emits the __local_asan_preinit symbol.
+            if ! nm "${test_bin}" | grep -q -w '__asan_init'; then
               echo "ASan not found in ${test_bin}"
               exit 1
             fi

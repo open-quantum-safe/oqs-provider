@@ -136,11 +136,32 @@ jobs:
         with:
           name: ${{ matrix.ossl-branch }} ${{ matrix.cmake-params }} ${{ matrix.libjade-build }} oqsprovider-x64
           path: _build/*.deb
-      - name: Verify that the static library is copied to the install directory.
+
+  # Static oqsprovider build: run the C test suite linked against liboqsprovider.a
+  # (openssl CLI / runtests.sh interop needs a shared module and is covered elsewhere).
+  # See #590 / prior attempt #367.
+  linux_static:
+    name: "static build + ctest"
+    runs-on: ubuntu-latest
+    needs: [coding_style_tests]
+    container:
+      image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
+    env:
+      MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH: "main"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Full static build
+        run: OQSPROV_CMAKE_PARAMS="-DOQS_PROVIDER_BUILD_STATIC=ON" ./scripts/fullbuild.sh
+      - name: Run ctest (static-linked binaries)
+        run: ctest --test-dir _build --output-on-failure --extra-verbose
+      - name: Verify static library install path
         run: |
-          OPENSSL_INSTALL=$OSSL_INSTALL_ARG OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQSPROV_CMAKE_PARAMS="-DOQS_PROVIDER_BUILD_STATIC=ON" ./scripts/fullbuild.sh -f && \
-          mkdir -p _sysroot/ && \
-          cmake --install _build --prefix _sysroot/ && \
+          mkdir -p _sysroot/
+          cmake --install _build --prefix _sysroot/
           stat _sysroot/lib/liboqsprovider.a
 
   asan_linux_intel:

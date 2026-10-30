@@ -184,6 +184,7 @@ static int test_provider_signatures(OSSL_PROVIDER *provider, void *vctx) {
 int main(int argc, char *argv[]) {
     size_t i;
     int errcnt = 0, test = 0;
+    OSSL_PROVIDER *oqsprov = NULL;
 
 #ifndef OPENSSL_NO_TRACE
     fprintf(stderr,
@@ -198,9 +199,10 @@ int main(int argc, char *argv[]) {
     configfile = argv[2];
     certsdir = argv[3];
 
-    load_oqs_provider(libctx, modulename, configfile);
+    oqsprov = load_oqs_provider(libctx, modulename, configfile);
 
     T(OSSL_PROVIDER_available(libctx, "default"));
+    T(OSSL_PROVIDER_available(libctx, modulename));
 
 #ifdef OSSL_CAPABILITY_TLS_SIGALG_NAME
     // crashes: EVP_SIGNATURE_do_all_provided(libctx, test_oqs_sigs, &errcnt);
@@ -211,6 +213,7 @@ int main(int argc, char *argv[]) {
             "current version.\n");
 #endif
 
+    OSSL_PROVIDER_unload(oqsprov);
     OSSL_LIB_CTX_free(libctx);
     TEST_ASSERT(errcnt == 0)
     return !test;

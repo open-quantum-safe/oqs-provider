@@ -203,6 +203,39 @@ end:
     return testresult;
 }
 
+static int ignore_exported(const OSSL_PARAM params[], void *arg) { return 1; }
+
+// Exports the keypair with a callback that keeps nothing, so that any private
+// key bytes left in a freed block were put there by the provider's export.
+static int test_export_cleanse(const char *algname) {
+    EVP_PKEY *key = NULL;
+    int ok = 0, testresult = 0;
+
+    if (!alg_is_enabled(algname)) {
+        fprintf(stderr, "Not testing disabled algorithm %s.\n", algname);
+        return 1;
+    }
+
+    if ((key = EVP_PKEY_Q_keygen(libctx, OQSPROV_PROPQ, algname)) == NULL)
+        goto end;
+    if (!pick_window(key)) {
+        fprintf(stderr,
+                cYELLOW "  No usable private key bytes, skipping\n" cNORM);
+        testresult = 1;
+        goto end;
+    }
+
+    leaks = 0;
+    armed = 1;
+    ok = EVP_PKEY_export(key, EVP_PKEY_KEYPAIR, ignore_exported, NULL);
+    armed = 0;
+    testresult = ok && leaks == 0;
+
+end:
+    EVP_PKEY_free(key);
+    return testresult;
+}
+
 int main(int argc, char *argv[]) {
     int query_nocache;
     OSSL_PROVIDER *oqsprov = NULL;
@@ -232,6 +265,23 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, cGREEN "  Testing private key cleanse for %s\n" cNORM,
                 name);
         TEST_ASSERT(test_privkey_cleanse(name))
+        if (!test)
+            errcnt++;
+        fprintf(stderr, cGREEN "  Testing export cleanse for %s\n" cNORM, name);
+        TEST_ASSERT(test_export_cleanse(name))
+        if (!test)
+            errcnt++;
+    }
+
+    algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);
+    T(algs != NULL);
+    for (; algs->algorithm_names != NULL; ++algs) {
+        const char *name = algs->algorithm_names;
+
+        if (is_kem_algorithm_hybrid(name))
+            continue;
+        fprintf(stderr, cGREEN "  Testing export cleanse for %s\n" cNORM, name);
+        TEST_ASSERT(test_export_cleanse(name))
         if (!test)
             errcnt++;
     }

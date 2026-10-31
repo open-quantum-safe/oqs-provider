@@ -167,6 +167,10 @@ fi
 "${OPENSSL_APP}" list -signature-algorithms
 "${OPENSSL_APP}" list -kem-algorithms
 
+# OpenSSL >= 3.4 CLI encap/decap path (issue #485). Skips cleanly on older
+# OpenSSL or when OQS_KEM_ENCODERS is off (no file-based KEM keys).
+echo "pkeyutl -encap/-decap smoke test:"
+"${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-kem-encapdecap.sh"
 
 # Run interop-tests:
 # cleanup log from previous runs:

@@ -191,14 +191,6 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
     if not include_disabled_kems:
         config['kems'] = [kem for kem in config['kems'] if ('enable_kem' in kem and kem['enable_kem'])]
 
-    # remove SIGs without OID (old stuff)
-    for sig in config['sigs']:
-        newvars = []
-        for variant in sig['variants']:
-            if 'oid' in variant:
-                newvars.append(variant)
-        sig['variants']=newvars
-
     for kem in config['kems']:
         kem['hybrids'] = []
         if 'extra_nids' not in kem or 'current' not in kem['extra_nids']:

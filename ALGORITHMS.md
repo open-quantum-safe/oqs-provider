@@ -7,6 +7,8 @@ Some algorithms by default may not be enabled for use in the master code-generat
 
 As standardization for these algorithms within TLS is not done, all TLS code points/IDs can be changed from their default values to values set by environment variables. This facilitates interoperability testing with TLS1.3 implementations that use different IDs.
 
+Algorithms that are disabled or cannot be used in TLS 1.3 have no code point and are not listed below.
+
 The following list of algorithms may change when loading oqsprovider (version >= 0.9.0) with OpenSSL (version >= 3.5.0); please see [README.md](README.md#using-with-openssl-3.5.0).
 
 # Code points / algorithm IDs
@@ -51,13 +53,13 @@ The following list of algorithms may change when loading oqsprovider (version >=
 | x25519_mlkem512 | 0x11ea | Yes | OQS_CODEPOINT_X25519_MLKEM512 |
 | bp256_mlkem512 | 65056 | Yes | OQS_CODEPOINT_BP256_MLKEM512 |
 | mlkem768 | 513 | Yes | OQS_CODEPOINT_MLKEM768 |
-| p384_mlkem768 | 0x2F4C | Yes | OQS_CODEPOINT_P384_MLKEM768 |
-| x448_mlkem768 | 0x2FB7 | Yes | OQS_CODEPOINT_X448_MLKEM768 |
+| p384_mlkem768 | 65083 | Yes | OQS_CODEPOINT_P384_MLKEM768 |
+| x448_mlkem768 | 65084 | Yes | OQS_CODEPOINT_X448_MLKEM768 |
 | bp384_mlkem768 | 65057 | Yes | OQS_CODEPOINT_BP384_MLKEM768 |
 | X25519MLKEM768 | 0x11ec | Yes | OQS_CODEPOINT_X25519MLKEM768 |
 | SecP256r1MLKEM768 | 0x11eb | Yes | OQS_CODEPOINT_SECP256R1MLKEM768 |
 | mlkem1024 | 514 | Yes | OQS_CODEPOINT_MLKEM1024 |
-| p521_mlkem1024 | 0x2F4D | Yes | OQS_CODEPOINT_P521_MLKEM1024 |
+| p521_mlkem1024 | 65085 | Yes | OQS_CODEPOINT_P521_MLKEM1024 |
 | SecP384r1MLKEM1024 | 0x11ED | Yes | OQS_CODEPOINT_SECP384R1MLKEM1024 |
 | bp512_mlkem1024 | 65058 | Yes | OQS_CODEPOINT_BP512_MLKEM1024 |
 | bikel1 | 65040 | Yes | OQS_CODEPOINT_BIKEL1 |
@@ -101,46 +103,11 @@ The following list of algorithms may change when loading oqsprovider (version >=
 | p384_mayo3 | 0xff81 |Yes| OQS_CODEPOINT_P384_MAYO3
 | mayo5 | 0xff7e |Yes| OQS_CODEPOINT_MAYO5
 | p521_mayo5 | 0xff82 |Yes| OQS_CODEPOINT_P521_MAYO5
-| CROSSrsdp128balanced | 0xff53 |Yes| OQS_CODEPOINT_CROSSRSDP128BALANCED
-| CROSSrsdp128fast | 0xff54 |No| OQS_CODEPOINT_CROSSRSDP128FAST
-| CROSSrsdp128small | 0xff55 |No| OQS_CODEPOINT_CROSSRSDP128SMALL
-| CROSSrsdp192balanced | 0xff56 |No| OQS_CODEPOINT_CROSSRSDP192BALANCED
-| CROSSrsdp192fast | 0xff57 |No| OQS_CODEPOINT_CROSSRSDP192FAST
-| CROSSrsdp192small | 0xff58 |No| OQS_CODEPOINT_CROSSRSDP192SMALL
-| CROSSrsdp256small | 0xff59 |No| OQS_CODEPOINT_CROSSRSDP256SMALL
-| CROSSrsdpg128balanced | 0xff5a |No| OQS_CODEPOINT_CROSSRSDPG128BALANCED
-| CROSSrsdpg128fast | 0xff5b |No| OQS_CODEPOINT_CROSSRSDPG128FAST
-| CROSSrsdpg128small | 0xff5c |No| OQS_CODEPOINT_CROSSRSDPG128SMALL
-| CROSSrsdpg192balanced | 0xff5d |No| OQS_CODEPOINT_CROSSRSDPG192BALANCED
-| CROSSrsdpg192fast | 0xff5e |No| OQS_CODEPOINT_CROSSRSDPG192FAST
-| CROSSrsdpg192small | 0xff5f |No| OQS_CODEPOINT_CROSSRSDPG192SMALL
-| CROSSrsdpg256balanced | 0xff60 |No| OQS_CODEPOINT_CROSSRSDPG256BALANCED
-| CROSSrsdpg256fast | 0xff61 |No| OQS_CODEPOINT_CROSSRSDPG256FAST
-| CROSSrsdpg256small | 0xff62 |No| OQS_CODEPOINT_CROSSRSDPG256SMALL
-| OV_Is | 0xff0a |No| OQS_CODEPOINT_OV_IS
-| p256_OV_Is | 0xff16 |No| OQS_CODEPOINT_P256_OV_IS
-| OV_Ip | 0xff0b |No| OQS_CODEPOINT_OV_IP
-| p256_OV_Ip | 0xff17 |No| OQS_CODEPOINT_P256_OV_IP
-| OV_III | 0xff0c |No| OQS_CODEPOINT_OV_III
-| p384_OV_III | 0xff18 |No| OQS_CODEPOINT_P384_OV_III
-| OV_V | 0xff0d |No| OQS_CODEPOINT_OV_V
-| p521_OV_V | 0xff19 |No| OQS_CODEPOINT_P521_OV_V
-| OV_Is_pkc | 0xff0e |Yes| OQS_CODEPOINT_OV_IS_PKC
-| p256_OV_Is_pkc | 0xff1a |Yes| OQS_CODEPOINT_P256_OV_IS_PKC
-| OV_Ip_pkc | 0xff0f |Yes| OQS_CODEPOINT_OV_IP_PKC
-| p256_OV_Ip_pkc | 0xff1b |Yes| OQS_CODEPOINT_P256_OV_IP_PKC
-| OV_III_pkc | 0xff10 |No| OQS_CODEPOINT_OV_III_PKC
-| p384_OV_III_pkc | 0xff1c |No| OQS_CODEPOINT_P384_OV_III_PKC
-| OV_V_pkc | 0xff11 |No| OQS_CODEPOINT_OV_V_PKC
-| p521_OV_V_pkc | 0xff1d |No| OQS_CODEPOINT_P521_OV_V_PKC
-| OV_Is_pkc_skc | 0xff12 |Yes| OQS_CODEPOINT_OV_IS_PKC_SKC
-| p256_OV_Is_pkc_skc | 0xff1e |Yes| OQS_CODEPOINT_P256_OV_IS_PKC_SKC
-| OV_Ip_pkc_skc | 0xff13 |Yes| OQS_CODEPOINT_OV_IP_PKC_SKC
-| p256_OV_Ip_pkc_skc | 0xff1f |Yes| OQS_CODEPOINT_P256_OV_IP_PKC_SKC
-| OV_III_pkc_skc | 0xff14 |No| OQS_CODEPOINT_OV_III_PKC_SKC
-| p384_OV_III_pkc_skc | 0xff20 |No| OQS_CODEPOINT_P384_OV_III_PKC_SKC
-| OV_V_pkc_skc | 0xff15 |No| OQS_CODEPOINT_OV_V_PKC_SKC
-| p521_OV_V_pkc_skc | 0xff21 |No| OQS_CODEPOINT_P521_OV_V_PKC_SKC
+| crossrsdp128balanced | 0xff53 |Yes| OQS_CODEPOINT_CROSSRSDP128BALANCED
+| ov_ip_pkc | 0xff0f |Yes| OQS_CODEPOINT_OV_IP_PKC
+| p256_ov_ip_pkc | 0xff1b |Yes| OQS_CODEPOINT_P256_OV_IP_PKC
+| ov_ip_pkc_skc | 0xff13 |Yes| OQS_CODEPOINT_OV_IP_PKC_SKC
+| p256_ov_ip_pkc_skc | 0xff1f |Yes| OQS_CODEPOINT_P256_OV_IP_PKC_SKC
 | snova1k | 0xff83 |Yes| OQS_CODEPOINT_SNOVA1K
 | p256_snova1k | 0xff84 |Yes| OQS_CODEPOINT_P256_SNOVA1K
 | snova1b | 0xff85 |Yes| OQS_CODEPOINT_SNOVA1B
@@ -173,40 +140,10 @@ The following list of algorithms may change when loading oqsprovider (version >=
 | slhdsashake256f | 0x091C |Yes| OQS_CODEPOINT_SLHDSASHAKE256F
 | mqom3cat1gf16fastct | 0xff99 |Yes| OQS_CODEPOINT_MQOM3CAT1GF16FASTCT
 | p256_mqom3cat1gf16fastct | 0xff9a |Yes| OQS_CODEPOINT_P256_MQOM3CAT1GF16FASTCT
-| mqom3cat1gf16fastot | 0xff9b |No| OQS_CODEPOINT_MQOM3CAT1GF16FASTOT
-| p256_mqom3cat1gf16fastot | 0xff9c |No| OQS_CODEPOINT_P256_MQOM3CAT1GF16FASTOT
-| mqom3cat1gf16shortct | 0xff9d |No| OQS_CODEPOINT_MQOM3CAT1GF16SHORTCT
-| p256_mqom3cat1gf16shortct | 0xff9e |No| OQS_CODEPOINT_P256_MQOM3CAT1GF16SHORTCT
-| mqom3cat1gf16shortot | 0xff9f |No| OQS_CODEPOINT_MQOM3CAT1GF16SHORTOT
-| p256_mqom3cat1gf16shortot | 0xffa0 |No| OQS_CODEPOINT_P256_MQOM3CAT1GF16SHORTOT
-| mqom3cat1gf2shorterct | 0xffa1 |No| OQS_CODEPOINT_MQOM3CAT1GF2SHORTERCT
-| p256_mqom3cat1gf2shorterct | 0xffa2 |No| OQS_CODEPOINT_P256_MQOM3CAT1GF2SHORTERCT
-| mqom3cat1gf2shorterot | 0xffa3 |No| OQS_CODEPOINT_MQOM3CAT1GF2SHORTEROT
-| p256_mqom3cat1gf2shorterot | 0xffa4 |No| OQS_CODEPOINT_P256_MQOM3CAT1GF2SHORTEROT
 | mqom3cat3gf16fastct | 0xffa5 |Yes| OQS_CODEPOINT_MQOM3CAT3GF16FASTCT
 | p384_mqom3cat3gf16fastct | 0xffa6 |Yes| OQS_CODEPOINT_P384_MQOM3CAT3GF16FASTCT
-| mqom3cat3gf16fastot | 0xffa7 |No| OQS_CODEPOINT_MQOM3CAT3GF16FASTOT
-| p384_mqom3cat3gf16fastot | 0xffa8 |No| OQS_CODEPOINT_P384_MQOM3CAT3GF16FASTOT
-| mqom3cat3gf16shortct | 0xffa9 |No| OQS_CODEPOINT_MQOM3CAT3GF16SHORTCT
-| p384_mqom3cat3gf16shortct | 0xffaa |No| OQS_CODEPOINT_P384_MQOM3CAT3GF16SHORTCT
-| mqom3cat3gf16shortot | 0xffab |No| OQS_CODEPOINT_MQOM3CAT3GF16SHORTOT
-| p384_mqom3cat3gf16shortot | 0xffac |No| OQS_CODEPOINT_P384_MQOM3CAT3GF16SHORTOT
-| mqom3cat3gf2shorterct | 0xffad |No| OQS_CODEPOINT_MQOM3CAT3GF2SHORTERCT
-| p384_mqom3cat3gf2shorterct | 0xffae |No| OQS_CODEPOINT_P384_MQOM3CAT3GF2SHORTERCT
-| mqom3cat3gf2shorterot | 0xffaf |No| OQS_CODEPOINT_MQOM3CAT3GF2SHORTEROT
-| p384_mqom3cat3gf2shorterot | 0xffb0 |No| OQS_CODEPOINT_P384_MQOM3CAT3GF2SHORTEROT
 | mqom3cat5gf16fastct | 0xffb1 |Yes| OQS_CODEPOINT_MQOM3CAT5GF16FASTCT
 | p521_mqom3cat5gf16fastct | 0xffb2 |Yes| OQS_CODEPOINT_P521_MQOM3CAT5GF16FASTCT
-| mqom3cat5gf16fastot | 0xffb3 |No| OQS_CODEPOINT_MQOM3CAT5GF16FASTOT
-| p521_mqom3cat5gf16fastot | 0xffb4 |No| OQS_CODEPOINT_P521_MQOM3CAT5GF16FASTOT
-| mqom3cat5gf16shortct | 0xffb5 |No| OQS_CODEPOINT_MQOM3CAT5GF16SHORTCT
-| p521_mqom3cat5gf16shortct | 0xffb6 |No| OQS_CODEPOINT_P521_MQOM3CAT5GF16SHORTCT
-| mqom3cat5gf16shortot | 0xffb7 |No| OQS_CODEPOINT_MQOM3CAT5GF16SHORTOT
-| p521_mqom3cat5gf16shortot | 0xffb8 |No| OQS_CODEPOINT_P521_MQOM3CAT5GF16SHORTOT
-| mqom3cat5gf2shorterct | 0xffb9 |No| OQS_CODEPOINT_MQOM3CAT5GF2SHORTERCT
-| p521_mqom3cat5gf2shorterct | 0xffba |No| OQS_CODEPOINT_P521_MQOM3CAT5GF2SHORTERCT
-| mqom3cat5gf2shorterot | 0xffbb |No| OQS_CODEPOINT_MQOM3CAT5GF2SHORTEROT
-| p521_mqom3cat5gf2shorterot | 0xffbc |No| OQS_CODEPOINT_P521_MQOM3CAT5GF2SHORTEROT
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_END -->
 
 Changing code points
@@ -261,46 +198,46 @@ discussed in https://github.com/open-quantum-safe/oqs-provider/issues/351.
 | p384_mayo3 | 1.3.9999.8.3.6 |Yes| OQS_OID_P384_MAYO3
 | mayo5 | 1.3.9999.8.5.5 |Yes| OQS_OID_MAYO5
 | p521_mayo5 | 1.3.9999.8.5.6 |Yes| OQS_OID_P521_MAYO5
-| CROSSrsdp128balanced | 1.3.6.1.4.1.62245.2.1.1.2.2 |Yes| OQS_OID_CROSSRSDP128BALANCED
-| CROSSrsdp128fast | 1.3.6.1.4.1.62245.2.1.2.2.2 |No| OQS_OID_CROSSRSDP128FAST
-| CROSSrsdp128small | 1.3.6.1.4.1.62245.2.1.3.2.2 |No| OQS_OID_CROSSRSDP128SMALL
-| CROSSrsdp192balanced | 1.3.6.1.4.1.62245.2.1.4.2.2 |No| OQS_OID_CROSSRSDP192BALANCED
-| CROSSrsdp192fast | 1.3.6.1.4.1.62245.2.1.5.2.2 |No| OQS_OID_CROSSRSDP192FAST
-| CROSSrsdp192small | 1.3.6.1.4.1.62245.2.1.6.2.2 |No| OQS_OID_CROSSRSDP192SMALL
-| CROSSrsdp256small | 1.3.6.1.4.1.62245.2.1.9.2.2 |No| OQS_OID_CROSSRSDP256SMALL
-| CROSSrsdpg128balanced | 1.3.6.1.4.1.62245.2.1.10.2.2 |No| OQS_OID_CROSSRSDPG128BALANCED
-| CROSSrsdpg128fast | 1.3.6.1.4.1.62245.2.1.11.2.2 |No| OQS_OID_CROSSRSDPG128FAST
-| CROSSrsdpg128small | 1.3.6.1.4.1.62245.2.1.12.2.2 |No| OQS_OID_CROSSRSDPG128SMALL
-| CROSSrsdpg192balanced | 1.3.6.1.4.1.62245.2.1.13.2.2 |No| OQS_OID_CROSSRSDPG192BALANCED
-| CROSSrsdpg192fast | 1.3.6.1.4.1.62245.2.1.14.2.2 |No| OQS_OID_CROSSRSDPG192FAST
-| CROSSrsdpg192small | 1.3.6.1.4.1.62245.2.1.15.2.2 |No| OQS_OID_CROSSRSDPG192SMALL
-| CROSSrsdpg256balanced | 1.3.6.1.4.1.62245.2.1.16.2.2 |No| OQS_OID_CROSSRSDPG256BALANCED
-| CROSSrsdpg256fast | 1.3.6.1.4.1.62245.2.1.17.2.2 |No| OQS_OID_CROSSRSDPG256FAST
-| CROSSrsdpg256small | 1.3.6.1.4.1.62245.2.1.18.2.2 |No| OQS_OID_CROSSRSDPG256SMALL
-| OV_Is | 1.3.9999.9.1.1 |No| OQS_OID_OV_IS
-| p256_OV_Is | 1.3.9999.9.1.2 |No| OQS_OID_P256_OV_IS
-| OV_Ip | 1.3.9999.9.2.1 |No| OQS_OID_OV_IP
-| p256_OV_Ip | 1.3.9999.9.2.2 |No| OQS_OID_P256_OV_IP
-| OV_III | 1.3.9999.9.3.1 |No| OQS_OID_OV_III
-| p384_OV_III | 1.3.9999.9.3.2 |No| OQS_OID_P384_OV_III
-| OV_V | 1.3.9999.9.4.1 |No| OQS_OID_OV_V
-| p521_OV_V | 1.3.9999.9.4.2 |No| OQS_OID_P521_OV_V
-| OV_Is_pkc | 1.3.9999.9.5.1 |Yes| OQS_OID_OV_IS_PKC
-| p256_OV_Is_pkc | 1.3.9999.9.5.2 |Yes| OQS_OID_P256_OV_IS_PKC
-| OV_Ip_pkc | 1.3.9999.9.6.1 |Yes| OQS_OID_OV_IP_PKC
-| p256_OV_Ip_pkc | 1.3.9999.9.6.2 |Yes| OQS_OID_P256_OV_IP_PKC
-| OV_III_pkc | 1.3.9999.9.7.1 |No| OQS_OID_OV_III_PKC
-| p384_OV_III_pkc | 1.3.9999.9.7.2 |No| OQS_OID_P384_OV_III_PKC
-| OV_V_pkc | 1.3.9999.9.8.1 |No| OQS_OID_OV_V_PKC
-| p521_OV_V_pkc | 1.3.9999.9.8.2 |No| OQS_OID_P521_OV_V_PKC
-| OV_Is_pkc_skc | 1.3.9999.9.9.1 |Yes| OQS_OID_OV_IS_PKC_SKC
-| p256_OV_Is_pkc_skc | 1.3.9999.9.9.2 |Yes| OQS_OID_P256_OV_IS_PKC_SKC
-| OV_Ip_pkc_skc | 1.3.9999.9.10.1 |Yes| OQS_OID_OV_IP_PKC_SKC
-| p256_OV_Ip_pkc_skc | 1.3.9999.9.10.2 |Yes| OQS_OID_P256_OV_IP_PKC_SKC
-| OV_III_pkc_skc | 1.3.9999.9.11.1 |No| OQS_OID_OV_III_PKC_SKC
-| p384_OV_III_pkc_skc | 1.3.9999.9.11.2 |No| OQS_OID_P384_OV_III_PKC_SKC
-| OV_V_pkc_skc | 1.3.9999.9.12.1 |No| OQS_OID_OV_V_PKC_SKC
-| p521_OV_V_pkc_skc | 1.3.9999.9.12.2 |No| OQS_OID_P521_OV_V_PKC_SKC
+| crossrsdp128balanced | 1.3.6.1.4.1.62245.2.1.1.2.2 |Yes| OQS_OID_CROSSRSDP128BALANCED
+| crossrsdp128fast | 1.3.6.1.4.1.62245.2.1.2.2.2 |No| OQS_OID_CROSSRSDP128FAST
+| crossrsdp128small | 1.3.6.1.4.1.62245.2.1.3.2.2 |No| OQS_OID_CROSSRSDP128SMALL
+| crossrsdp192balanced | 1.3.6.1.4.1.62245.2.1.4.2.2 |No| OQS_OID_CROSSRSDP192BALANCED
+| crossrsdp192fast | 1.3.6.1.4.1.62245.2.1.5.2.2 |No| OQS_OID_CROSSRSDP192FAST
+| crossrsdp192small | 1.3.6.1.4.1.62245.2.1.6.2.2 |No| OQS_OID_CROSSRSDP192SMALL
+| crossrsdp256small | 1.3.6.1.4.1.62245.2.1.9.2.2 |No| OQS_OID_CROSSRSDP256SMALL
+| crossrsdpg128balanced | 1.3.6.1.4.1.62245.2.1.10.2.2 |No| OQS_OID_CROSSRSDPG128BALANCED
+| crossrsdpg128fast | 1.3.6.1.4.1.62245.2.1.11.2.2 |No| OQS_OID_CROSSRSDPG128FAST
+| crossrsdpg128small | 1.3.6.1.4.1.62245.2.1.12.2.2 |No| OQS_OID_CROSSRSDPG128SMALL
+| crossrsdpg192balanced | 1.3.6.1.4.1.62245.2.1.13.2.2 |No| OQS_OID_CROSSRSDPG192BALANCED
+| crossrsdpg192fast | 1.3.6.1.4.1.62245.2.1.14.2.2 |No| OQS_OID_CROSSRSDPG192FAST
+| crossrsdpg192small | 1.3.6.1.4.1.62245.2.1.15.2.2 |No| OQS_OID_CROSSRSDPG192SMALL
+| crossrsdpg256balanced | 1.3.6.1.4.1.62245.2.1.16.2.2 |No| OQS_OID_CROSSRSDPG256BALANCED
+| crossrsdpg256fast | 1.3.6.1.4.1.62245.2.1.17.2.2 |No| OQS_OID_CROSSRSDPG256FAST
+| crossrsdpg256small | 1.3.6.1.4.1.62245.2.1.18.2.2 |No| OQS_OID_CROSSRSDPG256SMALL
+| ov_is | 1.3.9999.9.1.1 |No| OQS_OID_OV_IS
+| p256_ov_is | 1.3.9999.9.1.2 |No| OQS_OID_P256_OV_IS
+| ov_ip | 1.3.9999.9.2.1 |No| OQS_OID_OV_IP
+| p256_ov_ip | 1.3.9999.9.2.2 |No| OQS_OID_P256_OV_IP
+| ov_iii | 1.3.9999.9.3.1 |No| OQS_OID_OV_III
+| p384_ov_iii | 1.3.9999.9.3.2 |No| OQS_OID_P384_OV_III
+| ov_v | 1.3.9999.9.4.1 |No| OQS_OID_OV_V
+| p521_ov_v | 1.3.9999.9.4.2 |No| OQS_OID_P521_OV_V
+| ov_is_pkc | 1.3.9999.9.5.1 |Yes| OQS_OID_OV_IS_PKC
+| p256_ov_is_pkc | 1.3.9999.9.5.2 |Yes| OQS_OID_P256_OV_IS_PKC
+| ov_ip_pkc | 1.3.9999.9.6.1 |Yes| OQS_OID_OV_IP_PKC
+| p256_ov_ip_pkc | 1.3.9999.9.6.2 |Yes| OQS_OID_P256_OV_IP_PKC
+| ov_iii_pkc | 1.3.9999.9.7.1 |No| OQS_OID_OV_III_PKC
+| p384_ov_iii_pkc | 1.3.9999.9.7.2 |No| OQS_OID_P384_OV_III_PKC
+| ov_v_pkc | 1.3.9999.9.8.1 |No| OQS_OID_OV_V_PKC
+| p521_ov_v_pkc | 1.3.9999.9.8.2 |No| OQS_OID_P521_OV_V_PKC
+| ov_is_pkc_skc | 1.3.9999.9.9.1 |Yes| OQS_OID_OV_IS_PKC_SKC
+| p256_ov_is_pkc_skc | 1.3.9999.9.9.2 |Yes| OQS_OID_P256_OV_IS_PKC_SKC
+| ov_ip_pkc_skc | 1.3.9999.9.10.1 |Yes| OQS_OID_OV_IP_PKC_SKC
+| p256_ov_ip_pkc_skc | 1.3.9999.9.10.2 |Yes| OQS_OID_P256_OV_IP_PKC_SKC
+| ov_iii_pkc_skc | 1.3.9999.9.11.1 |No| OQS_OID_OV_III_PKC_SKC
+| p384_ov_iii_pkc_skc | 1.3.9999.9.11.2 |No| OQS_OID_P384_OV_III_PKC_SKC
+| ov_v_pkc_skc | 1.3.9999.9.12.1 |No| OQS_OID_OV_V_PKC_SKC
+| p521_ov_v_pkc_skc | 1.3.9999.9.12.2 |No| OQS_OID_P521_OV_V_PKC_SKC
 | snova1k | 1.3.9999.10.1.3 |Yes| OQS_OID_SNOVA1K
 | p256_snova1k | 1.3.9999.10.1.4 |Yes| OQS_OID_P256_SNOVA1K
 | snova1b | 1.3.9999.10.2.3 |Yes| OQS_OID_SNOVA1B

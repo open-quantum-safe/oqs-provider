@@ -812,27 +812,27 @@ MAKE_DECODER(, "mayo5", mayo5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "mayo5", mayo5, oqsx, SubjectPublicKeyInfo);
 MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "p521_mayo5", p521_mayo5, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx,
+MAKE_DECODER(, "crossrsdp128balanced", crossrsdp128balanced, oqsx,
              PrivateKeyInfo);
-MAKE_DECODER(, "CROSSrsdp128balanced", CROSSrsdp128balanced, oqsx,
+MAKE_DECODER(, "crossrsdp128balanced", crossrsdp128balanced, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "OV_Is_pkc", OV_Is_pkc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "OV_Is_pkc", OV_Is_pkc, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_OV_Is_pkc", p256_OV_Is_pkc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "p256_OV_Is_pkc", p256_OV_Is_pkc, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "OV_Ip_pkc", OV_Ip_pkc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "OV_Ip_pkc", OV_Ip_pkc, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_OV_Ip_pkc", p256_OV_Ip_pkc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "p256_OV_Ip_pkc", p256_OV_Ip_pkc, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "OV_Is_pkc_skc", OV_Is_pkc_skc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "OV_Is_pkc_skc", OV_Is_pkc_skc, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "p256_OV_Is_pkc_skc", p256_OV_Is_pkc_skc, oqsx,
+MAKE_DECODER(, "ov_is_pkc", ov_is_pkc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "ov_is_pkc", ov_is_pkc, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_ov_is_pkc", p256_ov_is_pkc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_ov_is_pkc", p256_ov_is_pkc, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "ov_ip_pkc", ov_ip_pkc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "ov_ip_pkc", ov_ip_pkc, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_ov_ip_pkc", p256_ov_ip_pkc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_ov_ip_pkc", p256_ov_ip_pkc, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "ov_is_pkc_skc", ov_is_pkc_skc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "ov_is_pkc_skc", ov_is_pkc_skc, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_ov_is_pkc_skc", p256_ov_is_pkc_skc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_ov_is_pkc_skc", p256_ov_is_pkc_skc, oqsx,
              SubjectPublicKeyInfo);
-MAKE_DECODER(, "OV_Ip_pkc_skc", OV_Ip_pkc_skc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "OV_Ip_pkc_skc", OV_Ip_pkc_skc, oqsx, SubjectPublicKeyInfo);
-MAKE_DECODER(, "p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, oqsx, PrivateKeyInfo);
-MAKE_DECODER(, "p256_OV_Ip_pkc_skc", p256_OV_Ip_pkc_skc, oqsx,
+MAKE_DECODER(, "ov_ip_pkc_skc", ov_ip_pkc_skc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "ov_ip_pkc_skc", ov_ip_pkc_skc, oqsx, SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_ov_ip_pkc_skc", p256_ov_ip_pkc_skc, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "p256_ov_ip_pkc_skc", p256_ov_ip_pkc_skc, oqsx,
              SubjectPublicKeyInfo);
 MAKE_DECODER(, "snova1k", snova1k, oqsx, PrivateKeyInfo);
 MAKE_DECODER(, "snova1k", snova1k, oqsx, SubjectPublicKeyInfo);

@@ -323,6 +323,14 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
     }
 
     ok = ok & param_cb(params, cbarg);
+    /*
+     * OSSL_PARAM_BLD_to_param() puts the private key copy on the secure heap
+     * only if the key buffer is there (secure heap initialised), and
+     * OSSL_PARAM_free() wipes only such a block. Wipe the copy first.
+     */
+    p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PRIV_KEY);
+    if (p != NULL && p->data != NULL)
+        OPENSSL_cleanse(p->data, p->data_size);
     OSSL_PARAM_free(params);
 err:
     OSSL_PARAM_BLD_free(tmpl);

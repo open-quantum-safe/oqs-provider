@@ -1059,7 +1059,7 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
     }
 
     oqsx = oqsx_key_op(palg, p, plen + key_diff, KEY_OP_PRIVATE, libctx, propq);
-    ASN1_OCTET_STRING_free(oct);
+    ASN1_STRING_clear_free(oct);
     return oqsx;
 }
 

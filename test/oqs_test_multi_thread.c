@@ -34,8 +34,7 @@ static int count_oqs_provider_algs(OSSL_LIB_CTX *libctx) {
     OSSL_PROVIDER *oqsprov;
     int algcount = 0, query_nocache;
 
-    load_oqs_provider(libctx, modulename, configfile);
-    if ((oqsprov = OSSL_PROVIDER_load(libctx, modulename)) == NULL)
+    if ((oqsprov = load_oqs_provider(libctx, modulename, configfile)) == NULL)
         return -1;
 
     algs = OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);

@@ -8,6 +8,7 @@
  * ToDo: Adding hybrid alg support
  */
 
+#include "oqsprov_compat.h"
 #include <openssl/asn1.h>
 #include <openssl/core.h>
 #include <openssl/core_dispatch.h>
@@ -574,7 +575,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         goto done;
     }
 
-    if (!ASN1_STRING_set(oct, buf, buflen)) {
+    if (!oqsx_ASN1_STRING_set(oct, buf, buflen)) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         goto done;
     }

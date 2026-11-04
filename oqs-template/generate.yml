@@ -616,7 +616,7 @@ kem_nid_end: '0x0250'
 kem_nid_hybrid_end: '0x2FFF'
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
 
-# Next free signature ID: 0xffbd
+# Next free signature ID: 0xfff9
 sigs:
   # -
     # iso (1)
@@ -1586,3 +1586,372 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.11.5.20',
                     'code_point': '0xffbc'}]
+  -
+    family: 'QRUOV'
+    # NOTE: for QR-UOV, the level-5 variants with q=7/L=10, q=31/L=3 and q=127/L=3 have public keys larger than
+    # OpenSSL's default maximum certificate list size (SSL_MAX_CERT_LIST_DEFAULT, 100 KiB), so TLS handshakes using
+    # them fail with "excessive message size"; they are therefore marked "enable_tls: false". All other variants are
+    # compatible with RFC 8446. To leave room for other signatures, only one variant per security level (the "shake"
+    # variant with the smallest public key) is enabled by default; the remaining TLS-compatible variants use
+    # "enable: false" and "enable_tls: true": switch to "enable: true" to activate them for your local compilation.
+    variants:
+      -
+        name: 'qruov1q7L10aes'
+        pretty_name: 'QRUOV-1q7L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q7L10aes'
+        oid: '1.3.9999.12.1.1'
+        code_point: '0xffbd'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.2',
+                    'code_point': '0xffbe'}]
+      -
+        name: 'qruov1q7L10shake'
+        pretty_name: 'QRUOV-1q7L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q7L10shake'
+        oid: '1.3.9999.12.1.3'
+        code_point: '0xffbf'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.4',
+                    'code_point': '0xffc0'}]
+      -
+        name: 'qruov1q31L3aes'
+        pretty_name: 'QRUOV-1q31L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L3aes'
+        oid: '1.3.9999.12.1.5'
+        code_point: '0xffc1'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.6',
+                    'code_point': '0xffc2'}]
+      -
+        name: 'qruov1q31L3shake'
+        pretty_name: 'QRUOV-1q31L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L3shake'
+        oid: '1.3.9999.12.1.7'
+        code_point: '0xffc3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.8',
+                    'code_point': '0xffc4'}]
+      -
+        name: 'qruov1q31L10aes'
+        pretty_name: 'QRUOV-1q31L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L10aes'
+        oid: '1.3.9999.12.1.9'
+        code_point: '0xffc5'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.10',
+                    'code_point': '0xffc6'}]
+      -
+        name: 'qruov1q31L10shake'
+        pretty_name: 'QRUOV-1q31L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L10shake'
+        oid: '1.3.9999.12.1.11'
+        code_point: '0xffc7'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.12',
+                    'code_point': '0xffc8'}]
+      -
+        name: 'qruov1q127L3aes'
+        pretty_name: 'QRUOV-1q127L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L3aes'
+        oid: '1.3.9999.12.1.13'
+        code_point: '0xffc9'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.14',
+                    'code_point': '0xffca'}]
+      -
+        name: 'qruov1q127L3shake'
+        pretty_name: 'QRUOV-1q127L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L3shake'
+        oid: '1.3.9999.12.1.15'
+        code_point: '0xffcb'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.16',
+                    'code_point': '0xffcc'}]
+      -
+        name: 'qruov1q127L10aes'
+        pretty_name: 'QRUOV-1q127L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L10aes'
+        oid: '1.3.9999.12.1.17'
+        code_point: '0xffcd'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.18',
+                    'code_point': '0xffce'}]
+      -
+        name: 'qruov1q127L10shake'
+        pretty_name: 'QRUOV-1q127L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L10shake'
+        oid: '1.3.9999.12.1.19'
+        code_point: '0xffcf'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.20',
+                    'code_point': '0xffd0'}]
+      -
+        name: 'qruov3q7L10aes'
+        pretty_name: 'QRUOV-3q7L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q7L10aes'
+        oid: '1.3.9999.12.3.1'
+        code_point: '0xffd1'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.2',
+                    'code_point': '0xffd2'}]
+      -
+        name: 'qruov3q7L10shake'
+        pretty_name: 'QRUOV-3q7L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q7L10shake'
+        oid: '1.3.9999.12.3.3'
+        code_point: '0xffd3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.4',
+                    'code_point': '0xffd4'}]
+      -
+        name: 'qruov3q31L3aes'
+        pretty_name: 'QRUOV-3q31L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L3aes'
+        oid: '1.3.9999.12.3.5'
+        code_point: '0xffd5'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.6',
+                    'code_point': '0xffd6'}]
+      -
+        name: 'qruov3q31L3shake'
+        pretty_name: 'QRUOV-3q31L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L3shake'
+        oid: '1.3.9999.12.3.7'
+        code_point: '0xffd7'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.8',
+                    'code_point': '0xffd8'}]
+      -
+        name: 'qruov3q31L10aes'
+        pretty_name: 'QRUOV-3q31L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L10aes'
+        oid: '1.3.9999.12.3.9'
+        code_point: '0xffd9'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.10',
+                    'code_point': '0xffda'}]
+      -
+        name: 'qruov3q31L10shake'
+        pretty_name: 'QRUOV-3q31L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L10shake'
+        oid: '1.3.9999.12.3.11'
+        code_point: '0xffdb'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.12',
+                    'code_point': '0xffdc'}]
+      -
+        name: 'qruov3q127L3aes'
+        pretty_name: 'QRUOV-3q127L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L3aes'
+        oid: '1.3.9999.12.3.13'
+        code_point: '0xffdd'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.14',
+                    'code_point': '0xffde'}]
+      -
+        name: 'qruov3q127L3shake'
+        pretty_name: 'QRUOV-3q127L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L3shake'
+        oid: '1.3.9999.12.3.15'
+        code_point: '0xffdf'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.16',
+                    'code_point': '0xffe0'}]
+      -
+        name: 'qruov3q127L10aes'
+        pretty_name: 'QRUOV-3q127L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L10aes'
+        oid: '1.3.9999.12.3.17'
+        code_point: '0xffe1'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.18',
+                    'code_point': '0xffe2'}]
+      -
+        name: 'qruov3q127L10shake'
+        pretty_name: 'QRUOV-3q127L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L10shake'
+        oid: '1.3.9999.12.3.19'
+        code_point: '0xffe3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.20',
+                    'code_point': '0xffe4'}]
+      -
+        name: 'qruov5q7L10aes'
+        pretty_name: 'QRUOV-5q7L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q7L10aes'
+        oid: '1.3.9999.12.5.1'
+        code_point: '0xffe5'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.2',
+                    'code_point': '0xffe6'}]
+      -
+        name: 'qruov5q7L10shake'
+        pretty_name: 'QRUOV-5q7L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q7L10shake'
+        oid: '1.3.9999.12.5.3'
+        code_point: '0xffe7'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.4',
+                    'code_point': '0xffe8'}]
+      -
+        name: 'qruov5q31L3aes'
+        pretty_name: 'QRUOV-5q31L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L3aes'
+        oid: '1.3.9999.12.5.5'
+        code_point: '0xffe9'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.6',
+                    'code_point': '0xffea'}]
+      -
+        name: 'qruov5q31L3shake'
+        pretty_name: 'QRUOV-5q31L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L3shake'
+        oid: '1.3.9999.12.5.7'
+        code_point: '0xffeb'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.8',
+                    'code_point': '0xffec'}]
+      -
+        name: 'qruov5q31L10aes'
+        pretty_name: 'QRUOV-5q31L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L10aes'
+        oid: '1.3.9999.12.5.9'
+        code_point: '0xffed'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.10',
+                    'code_point': '0xffee'}]
+      -
+        name: 'qruov5q31L10shake'
+        pretty_name: 'QRUOV-5q31L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L10shake'
+        oid: '1.3.9999.12.5.11'
+        code_point: '0xffef'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.12',
+                    'code_point': '0xfff0'}]
+      -
+        name: 'qruov5q127L3aes'
+        pretty_name: 'QRUOV-5q127L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L3aes'
+        oid: '1.3.9999.12.5.13'
+        code_point: '0xfff1'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.14',
+                    'code_point': '0xfff2'}]
+      -
+        name: 'qruov5q127L3shake'
+        pretty_name: 'QRUOV-5q127L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L3shake'
+        oid: '1.3.9999.12.5.15'
+        code_point: '0xfff3'
+        enable: false
+        enable_tls: false
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.16',
+                    'code_point': '0xfff4'}]
+      -
+        name: 'qruov5q127L10aes'
+        pretty_name: 'QRUOV-5q127L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L10aes'
+        oid: '1.3.9999.12.5.17'
+        code_point: '0xfff5'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.18',
+                    'code_point': '0xfff6'}]
+      -
+        name: 'qruov5q127L10shake'
+        pretty_name: 'QRUOV-5q127L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L10shake'
+        oid: '1.3.9999.12.5.19'
+        code_point: '0xfff7'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.20',
+                    'code_point': '0xfff8'}]

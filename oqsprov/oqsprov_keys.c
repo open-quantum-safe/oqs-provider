@@ -53,9 +53,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 132
+#define NID_TABLE_LEN 138
 #else
-#define NID_TABLE_LEN 70
+#define NID_TABLE_LEN 76
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -250,6 +250,16 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "mqom3cat5gf16fastct", OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct,
      KEY_TYPE_SIG, 256},
     {0, "p521_mqom3cat5gf16fastct", OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct,
+     KEY_TYPE_HYB_SIG, 256},
+    {0, "qruov1q127L10shake", OQS_SIG_alg_qruov_1q127L10shake, KEY_TYPE_SIG,
+     128},
+    {0, "p256_qruov1q127L10shake", OQS_SIG_alg_qruov_1q127L10shake,
+     KEY_TYPE_HYB_SIG, 128},
+    {0, "qruov3q31L10shake", OQS_SIG_alg_qruov_3q31L10shake, KEY_TYPE_SIG, 192},
+    {0, "p384_qruov3q31L10shake", OQS_SIG_alg_qruov_3q31L10shake,
+     KEY_TYPE_HYB_SIG, 192},
+    {0, "qruov5q31L10shake", OQS_SIG_alg_qruov_5q31L10shake, KEY_TYPE_SIG, 256},
+    {0, "p521_qruov5q31L10shake", OQS_SIG_alg_qruov_5q31L10shake,
      KEY_TYPE_HYB_SIG, 256},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };

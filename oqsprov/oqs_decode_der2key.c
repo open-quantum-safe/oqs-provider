@@ -918,4 +918,25 @@ MAKE_DECODER(, "p521_mqom3cat5gf16fastct", p521_mqom3cat5gf16fastct, oqsx,
              PrivateKeyInfo);
 MAKE_DECODER(, "p521_mqom3cat5gf16fastct", p521_mqom3cat5gf16fastct, oqsx,
              SubjectPublicKeyInfo);
+MAKE_DECODER(, "qruov1q127L10shake", qruov1q127L10shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "qruov1q127L10shake", qruov1q127L10shake, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER(, "p256_qruov1q127L10shake", p256_qruov1q127L10shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(, "p256_qruov1q127L10shake", p256_qruov1q127L10shake, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER(, "qruov3q31L10shake", qruov3q31L10shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "qruov3q31L10shake", qruov3q31L10shake, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER(, "p384_qruov3q31L10shake", p384_qruov3q31L10shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(, "p384_qruov3q31L10shake", p384_qruov3q31L10shake, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER(, "qruov5q31L10shake", qruov5q31L10shake, oqsx, PrivateKeyInfo);
+MAKE_DECODER(, "qruov5q31L10shake", qruov5q31L10shake, oqsx,
+             SubjectPublicKeyInfo);
+MAKE_DECODER(, "p521_qruov5q31L10shake", p521_qruov5q31L10shake, oqsx,
+             PrivateKeyInfo);
+MAKE_DECODER(, "p521_qruov5q31L10shake", p521_qruov5q31L10shake, oqsx,
+             SubjectPublicKeyInfo);
 ///// OQS_TEMPLATE_FRAGMENT_DECODER_MAKE_END

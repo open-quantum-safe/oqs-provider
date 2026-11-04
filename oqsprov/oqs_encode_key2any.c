@@ -1024,6 +1024,24 @@ done:
 #define p521_mqom3cat5gf16fastct_evp_type 0
 #define p521_mqom3cat5gf16fastct_input_type "p521_mqom3cat5gf16fastct"
 #define p521_mqom3cat5gf16fastct_pem_type "p521_mqom3cat5gf16fastct"
+#define qruov1q127L10shake_evp_type 0
+#define qruov1q127L10shake_input_type "qruov1q127L10shake"
+#define qruov1q127L10shake_pem_type "qruov1q127L10shake"
+#define p256_qruov1q127L10shake_evp_type 0
+#define p256_qruov1q127L10shake_input_type "p256_qruov1q127L10shake"
+#define p256_qruov1q127L10shake_pem_type "p256_qruov1q127L10shake"
+#define qruov3q31L10shake_evp_type 0
+#define qruov3q31L10shake_input_type "qruov3q31L10shake"
+#define qruov3q31L10shake_pem_type "qruov3q31L10shake"
+#define p384_qruov3q31L10shake_evp_type 0
+#define p384_qruov3q31L10shake_input_type "p384_qruov3q31L10shake"
+#define p384_qruov3q31L10shake_pem_type "p384_qruov3q31L10shake"
+#define qruov5q31L10shake_evp_type 0
+#define qruov5q31L10shake_input_type "qruov5q31L10shake"
+#define qruov5q31L10shake_pem_type "qruov5q31L10shake"
+#define p521_qruov5q31L10shake_evp_type 0
+#define p521_qruov5q31L10shake_input_type "p521_qruov5q31L10shake"
+#define p521_qruov5q31L10shake_pem_type "p521_qruov5q31L10shake"
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_END
 
 /* ---------------------------------------------------------------------- */
@@ -2559,4 +2577,46 @@ MAKE_ENCODER(, p521_mqom3cat5gf16fastct, oqsx, PrivateKeyInfo, pem);
 MAKE_ENCODER(, p521_mqom3cat5gf16fastct, oqsx, SubjectPublicKeyInfo, der);
 MAKE_ENCODER(, p521_mqom3cat5gf16fastct, oqsx, SubjectPublicKeyInfo, pem);
 MAKE_TEXT_ENCODER(, p521_mqom3cat5gf16fastct);
+MAKE_ENCODER(, qruov1q127L10shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, qruov1q127L10shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, qruov1q127L10shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, qruov1q127L10shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, qruov1q127L10shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, qruov1q127L10shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, qruov1q127L10shake);
+MAKE_ENCODER(, p256_qruov1q127L10shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p256_qruov1q127L10shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_qruov1q127L10shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p256_qruov1q127L10shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p256_qruov1q127L10shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p256_qruov1q127L10shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p256_qruov1q127L10shake);
+MAKE_ENCODER(, qruov3q31L10shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, qruov3q31L10shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, qruov3q31L10shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, qruov3q31L10shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, qruov3q31L10shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, qruov3q31L10shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, qruov3q31L10shake);
+MAKE_ENCODER(, p384_qruov3q31L10shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p384_qruov3q31L10shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_qruov3q31L10shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p384_qruov3q31L10shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p384_qruov3q31L10shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p384_qruov3q31L10shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p384_qruov3q31L10shake);
+MAKE_ENCODER(, qruov5q31L10shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, qruov5q31L10shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, qruov5q31L10shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, qruov5q31L10shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, qruov5q31L10shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, qruov5q31L10shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, qruov5q31L10shake);
+MAKE_ENCODER(, p521_qruov5q31L10shake, oqsx, EncryptedPrivateKeyInfo, der);
+MAKE_ENCODER(, p521_qruov5q31L10shake, oqsx, EncryptedPrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_qruov5q31L10shake, oqsx, PrivateKeyInfo, der);
+MAKE_ENCODER(, p521_qruov5q31L10shake, oqsx, PrivateKeyInfo, pem);
+MAKE_ENCODER(, p521_qruov5q31L10shake, oqsx, SubjectPublicKeyInfo, der);
+MAKE_ENCODER(, p521_qruov5q31L10shake, oqsx, SubjectPublicKeyInfo, pem);
+MAKE_TEXT_ENCODER(, p521_qruov5q31L10shake);
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_MAKE_END

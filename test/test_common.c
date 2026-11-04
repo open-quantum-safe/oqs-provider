@@ -40,6 +40,9 @@ const char *kHybridSignatureAlgorithms[] = {
     "p256_mqom3cat1gf16fastct",
     "p384_mqom3cat3gf16fastct",
     "p521_mqom3cat5gf16fastct",
+    "p256_qruov1q127L10shake",
+    "p384_qruov3q31L10shake",
+    "p521_qruov5q31L10shake",
     NULL,
 };
 ///// OQS_TEMPLATE_FRAGMENT_HYBRID_SIG_ALGS_END
@@ -51,7 +54,7 @@ typedef struct {
 
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_START
 
-#define SIGS_DICT_LEN 70
+#define SIGS_DICT_LEN 76
 
 /** \brief Mapping of signature algorithm with PQ naming in liboqs */
 oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
@@ -126,6 +129,12 @@ oqs_naming_dict kOQSNameMapSignatureAlgorithms[SIGS_DICT_LEN] = {
     {OQS_SIG_alg_mqom_mqom3_cat3_gf16_fast_ct, "p384_mqom3cat3gf16fastct"},
     {OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct, "mqom3cat5gf16fastct"},
     {OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct, "p521_mqom3cat5gf16fastct"},
+    {OQS_SIG_alg_qruov_1q127L10shake, "qruov1q127L10shake"},
+    {OQS_SIG_alg_qruov_1q127L10shake, "p256_qruov1q127L10shake"},
+    {OQS_SIG_alg_qruov_3q31L10shake, "qruov3q31L10shake"},
+    {OQS_SIG_alg_qruov_3q31L10shake, "p384_qruov3q31L10shake"},
+    {OQS_SIG_alg_qruov_5q31L10shake, "qruov5q31L10shake"},
+    {OQS_SIG_alg_qruov_5q31L10shake, "p521_qruov5q31L10shake"},
 };
 ///// OQS_TEMPLATE_FRAGMENT_CTX_STR_SIG_ALGS_END
 

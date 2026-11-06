@@ -20,7 +20,8 @@ static int test_oqs_kems(const char *kemalg_name) {
     unsigned char *secenc = NULL;
     unsigned char *secdec = NULL;
     unsigned char *pubkey = NULL;
-    size_t outlen, seclen, publen;
+    size_t outlen, seclen, publen, secret_capacity;
+    size_t short_seclen;
 
     int testresult = 1;
 
@@ -112,6 +113,16 @@ static int test_oqs_kems(const char *kemalg_name) {
             memset(secdec, 0xff, seclen) != NULL &&
             EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) &&
             memcmp(secenc, secdec, seclen) == 0;
+
+        if (!testresult)
+            goto err;
+        secret_capacity = seclen;
+        short_seclen = secret_capacity - 1;
+        if (EVP_PKEY_decapsulate(ctx, secdec, &short_seclen, out, outlen) > 0) {
+            testresult = 0;
+            goto err;
+        }
+        seclen = secret_capacity;
 
         out[0] = ~out[0];
         out[outlen - 1] = ~out[outlen - 1];

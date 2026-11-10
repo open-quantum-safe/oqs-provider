@@ -20,8 +20,7 @@ static int test_oqs_kems(const char *kemalg_name) {
     unsigned char *secenc = NULL;
     unsigned char *secdec = NULL;
     unsigned char *pubkey = NULL;
-    size_t outlen, seclen, publen, out_capacity, secret_capacity;
-    size_t short_outlen, short_seclen;
+    size_t outlen, seclen, publen;
 
     int testresult = 1;
 
@@ -51,32 +50,17 @@ static int test_oqs_kems(const char *kemalg_name) {
             (secenc = OPENSSL_malloc(seclen)) != NULL &&
             memset(secenc, 0x11, seclen) != NULL &&
             (secdec = OPENSSL_malloc(seclen)) != NULL &&
-            memset(secdec, 0xff, seclen) != NULL;
-        if (!testresult)
-            goto err;
-
-        out_capacity = outlen;
-        secret_capacity = seclen;
-        short_outlen = out_capacity - 1;
-        short_seclen = secret_capacity;
-        if (EVP_PKEY_encapsulate(ctx, out, &short_outlen, secenc, &seclen) >
-            0) {
-            testresult = 0;
-            goto err;
-        }
-        short_outlen = out_capacity;
-        short_seclen = secret_capacity - 1;
-        if (EVP_PKEY_encapsulate(ctx, out, &short_outlen, secenc,
-                                 &short_seclen) > 0) {
-            testresult = 0;
-            goto err;
-        }
-        outlen = out_capacity;
-        seclen = secret_capacity;
-        testresult = EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen) &&
-                     EVP_PKEY_decapsulate_init(ctx, NULL) &&
-                     EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) &&
-                     memcmp(secenc, secdec, seclen) == 0;
+            memset(secdec, 0xff, seclen) != NULL &&
+            (--outlen,
+             EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen) <= 0) &&
+            EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen) &&
+            (--seclen,
+             EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen) <= 0) &&
+            EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen) &&
+            EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen) &&
+            EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) &&
+            memcmp(secenc, secdec, seclen) == 0;
         if (!testresult)
             goto err;
 

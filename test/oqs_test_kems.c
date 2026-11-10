@@ -59,6 +59,9 @@ static int test_oqs_kems(const char *kemalg_name) {
             EVP_PKEY_encapsulate(ctx, NULL, &outlen, NULL, &seclen) &&
             EVP_PKEY_encapsulate(ctx, out, &outlen, secenc, &seclen) &&
             EVP_PKEY_decapsulate_init(ctx, NULL) &&
+            (--seclen,
+             EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) <= 0) &&
+            EVP_PKEY_decapsulate(ctx, NULL, &seclen, out, outlen) &&
             EVP_PKEY_decapsulate(ctx, secdec, &seclen, out, outlen) &&
             memcmp(secenc, secdec, seclen) == 0;
         if (!testresult)

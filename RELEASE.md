@@ -2,6 +2,10 @@
 
 ### What's New
 
+### Deprecation notices
+
+* In pursuit of more simple project maintenance and future avoidance of duplication of work, the algorithm families ML-KEM, ML-DSA and SLH-DSA together with their standardized hybrid combinations (such as X25519MLKEM768) -- all readily available from the OpenSSL default provider -- will be removed from oqsprovider in 0.14.0.
+
 Previous Release Notes
 ======================
 

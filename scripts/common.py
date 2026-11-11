@@ -8,50 +8,28 @@ from packaging.version import Version
 key_exchanges_oqs = [
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_START
     # post-quantum key exchanges
-    'efrodo640aes','efrodo640shake','efrodo976aes','efrodo976shake','efrodo1344aes','efrodo1344shake','frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','mlkem512','mlkem768','mlkem1024','bikel3','bikel5','hqc1','hqc3','hqc5',
+    'efrodo640aes','efrodo640shake','efrodo976aes','efrodo976shake','efrodo1344aes','efrodo1344shake','frodo640aes','frodo640shake','frodo976aes','frodo976shake','frodo1344aes','frodo1344shake','bikel3','bikel5','hqc1','hqc3','hqc5',
     # post-quantum + classical key exchanges
-    'p256_efrodo640aes','x25519_efrodo640aes','p256_efrodo640shake','x25519_efrodo640shake','p384_efrodo976aes','x448_efrodo976aes','p384_efrodo976shake','x448_efrodo976shake','p521_efrodo1344aes','p521_efrodo1344shake','p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','SecP256r1MLKEM512','x25519_mlkem512','bp256_mlkem512','p384_mlkem768','x448_mlkem768','bp384_mlkem768','X25519MLKEM768','SecP256r1MLKEM768','p521_mlkem1024','SecP384r1MLKEM1024','bp512_mlkem1024','p384_bikel3','x448_bikel3','p521_bikel5','p256_hqc1','x25519_hqc1','p384_hqc3','x448_hqc3','p521_hqc5',
+    'p256_efrodo640aes','x25519_efrodo640aes','p256_efrodo640shake','x25519_efrodo640shake','p384_efrodo976aes','x448_efrodo976aes','p384_efrodo976shake','x448_efrodo976shake','p521_efrodo1344aes','p521_efrodo1344shake','p256_frodo640aes','x25519_frodo640aes','p256_frodo640shake','x25519_frodo640shake','p384_frodo976aes','x448_frodo976aes','p384_frodo976shake','x448_frodo976shake','p521_frodo1344aes','p521_frodo1344shake','p384_bikel3','x448_bikel3','p521_bikel5','p256_hqc1','x25519_hqc1','p384_hqc3','x448_hqc3','p521_hqc5',
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_END
 ]
 signatures_oqs = [
     'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
-    'mldsa44','mldsa65','mldsa87','falcon512','falconpadded512','falcon1024','falconpadded1024','mayo1','mayo2','mayo3','mayo5','CROSSrsdp128balanced','OV_Ip_pkc','OV_Ip_pkc_skc','snova1k','snova1b','snova1s','snova3k','snova3b','snova3s','snova5k','snova5b','snova5s','slhdsasha2128s','slhdsasha2128f','slhdsasha2192s','slhdsasha2192f','slhdsasha2256s','slhdsasha2256f','slhdsashake128s','slhdsashake128f','slhdsashake192s','slhdsashake192f','slhdsashake256s','slhdsashake256f','mqom3cat1gf16fastct','mqom3cat3gf16fastct','mqom3cat5gf16fastct',
+    'falcon512','falconpadded512','falcon1024','falconpadded1024','mayo1','mayo2','mayo3','mayo5','CROSSrsdp128balanced','OV_Ip_pkc','OV_Ip_pkc_skc','snova1k','snova1b','snova1s','snova3k','snova3b','snova3s','snova5k','snova5b','snova5s','mqom3cat1gf16fastct','mqom3cat3gf16fastct','mqom3cat5gf16fastct',
     # post-quantum + classical signatures
-    'p256_mldsa44','rsa3072_mldsa44','p384_mldsa65','p521_mldsa87','p256_falcon512','rsa3072_falcon512','p256_falconpadded512','rsa3072_falconpadded512','p521_falcon1024','p521_falconpadded1024','p256_mayo1','p256_mayo2','p384_mayo3','p521_mayo5','p256_OV_Ip_pkc','p256_OV_Ip_pkc_skc','p256_snova1k','p256_snova1b','p256_snova1s','p384_snova3k','p384_snova3b','p384_snova3s','p521_snova5k','p521_snova5b','p521_snova5s','p256_mqom3cat1gf16fastct','p384_mqom3cat3gf16fastct','p521_mqom3cat5gf16fastct',
+    'p256_falcon512','rsa3072_falcon512','p256_falconpadded512','rsa3072_falconpadded512','p521_falcon1024','p521_falconpadded1024','p256_mayo1','p256_mayo2','p384_mayo3','p521_mayo5','p256_OV_Ip_pkc','p256_OV_Ip_pkc_skc','p256_snova1k','p256_snova1b','p256_snova1s','p384_snova3k','p384_snova3b','p384_snova3s','p521_snova5k','p521_snova5b','p521_snova5s','p256_mqom3cat1gf16fastct','p384_mqom3cat3gf16fastct','p521_mqom3cat5gf16fastct',
     ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 
 key_exchanges_ossl = [
 ##### OQS_TEMPLATE_FRAGMENT_OSSL_KEX_ALGS_START
-                     'mlkem512',
-                     'SecP256r1MLKEM512',
-                     'mlkem768',
-                     'X25519MLKEM768',
-                     'SecP256r1MLKEM768',
-                     'mlkem1024',
-                     'SecP384r1MLKEM1024',
 ##### OQS_TEMPLATE_FRAGMENT_OSSL_KEX_ALGS_END
                      ]
 
 signatures_ossl = [
 ##### OQS_TEMPLATE_FRAGMENT_OSSL_SIG_ALGS_START
-                  'mldsa44',
-                  'mldsa65',
-                  'mldsa87',
-                  'slhdsasha2128s',
-                  'slhdsasha2128f',
-                  'slhdsasha2192s',
-                  'slhdsasha2192f',
-                  'slhdsasha2256s',
-                  'slhdsasha2256f',
-                  'slhdsashake128s',
-                  'slhdsashake128f',
-                  'slhdsashake192s',
-                  'slhdsashake192f',
-                  'slhdsashake256s',
-                  'slhdsashake256f',
 ##### OQS_TEMPLATE_FRAGMENT_OSSL_SIG_ALGS_END
                   ]
 

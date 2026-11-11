@@ -658,8 +658,7 @@ int main(int argc, char **argv) {
     modulename = argv[1];
     configfile = argv[2];
 
-    load_oqs_provider(libctx, modulename, configfile);
-    if (!(oqs_provider = OSSL_PROVIDER_load(libctx, modulename))) {
+    if (!(oqs_provider = load_oqs_provider(libctx, modulename, configfile))) {
         fputs(cRED "  `oqs_provider` is NULL " cNORM "\n", stderr);
         goto unload_default_provider;
     }

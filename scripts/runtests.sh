@@ -104,6 +104,17 @@ if [ -z "${OPENSSL_MODULES}" ]; then
     export OPENSSL_MODULES="${OQS_PROVIDER_BUILD_DIR}/lib"
 fi
 
+# Some test scripts (e.g. oqsprovider-ca.sh) cd into working subdirs before
+# invoking openssl. A relative OPENSSL_MODULES would then fail to locate the
+# provider and make config-activated algorithms appear unsupported, so resolve
+# it to an absolute path while the directory is still reachable from here.
+case "${OPENSSL_MODULES}" in
+    /*) ;;
+    *) if [ -d "${OPENSSL_MODULES}" ]; then
+           export OPENSSL_MODULES="$(cd "${OPENSSL_MODULES}" && pwd)"
+       fi ;;
+esac
+
 if [ -z "${LD_LIBRARY_PATH}" ]; then
     if [ -d "$(pwd)/.local/lib64" ]; then
         export LD_LIBRARY_PATH="$(pwd)/.local/lib64"
@@ -167,6 +178,10 @@ fi
 "${OPENSSL_APP}" list -signature-algorithms
 "${OPENSSL_APP}" list -kem-algorithms
 
+# OpenSSL >= 3.4 CLI encap/decap path (issue #485). Skips cleanly on older
+# OpenSSL or when OQS_KEM_ENCODERS is off (no file-based KEM keys).
+echo "pkeyutl -encap/-decap smoke test:"
+"${OQS_PROVIDER_TESTSCRIPTS}/oqsprovider-kem-encapdecap.sh"
 
 # Run interop-tests:
 # cleanup log from previous runs:

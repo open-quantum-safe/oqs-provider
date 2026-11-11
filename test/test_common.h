@@ -48,9 +48,12 @@ int alg_is_enabled(const char *algname);
  * \returns The default provider. */
 OSSL_PROVIDER *load_default_provider(OSSL_LIB_CTX *libctx);
 
-/* Loads the oqs-provider. */
-void load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
-                       const char *configfile);
+/** \brief Loads the oqs-provider (shared module or static builtin).
+ *
+ * \returns The loaded provider handle (never NULL on success; aborts via T()
+ *          on failure). Caller may unload with OSSL_PROVIDER_unload. */
+OSSL_PROVIDER *load_oqs_provider(OSSL_LIB_CTX *libctx, const char *modulename,
+                                 const char *configfile);
 
 /** \brief Indicates if a signature algorithm is hybrid or not.
  *

@@ -100,6 +100,22 @@ Everyone interested in testing any of the disabled standardized PQ algorithms
 (pure as well as hybrid) via `oqsprovider` must therefore do so in an OpenSSL
 version `>= 3.2` and `< 3.5`.
 
+Alternatively, the pure ML-DSA and ML-KEM algorithms of `oqsprovider` can be
+kept available next to OpenSSL's own by setting `keep_standardized_algs = 1` in
+the provider's configuration section (off by default):
+
+```
+[oqsprovider_sect]
+activate = 1
+keep_standardized_algs = 1
+```
+
+They then use the standard OIDs registered by OpenSSL, so their keys and
+signatures interoperate with the default provider. OpenSSL still fetches its
+own implementations by default; select the `oqsprovider` ones with a property
+query such as `?provider=oqsprovider` (e.g., `-propquery` on the command
+line). SLH-DSA and the hybrids listed above stay disabled.
+
 > [!NOTE]
 > A concrete consequence is that SLH-DSA cannot be used for TLS via
 > `oqsprovider` when running in OpenSSL >= 3.5, because OpenSSL disables the

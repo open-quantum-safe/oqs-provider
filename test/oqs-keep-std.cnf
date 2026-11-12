@@ -1,0 +1,16 @@
+# Same as oqs.cnf, plus keep_standardized_algs for oqs_test_keep_std
+openssl_conf = openssl_init
+
+[openssl_init]
+providers = provider_sect
+
+[provider_sect]
+oqsprovider = oqsprovider_sect
+default = default_sect
+
+[default_sect]
+activate = 1
+
+[oqsprovider_sect]
+activate = 1
+keep_standardized_algs = 1

@@ -248,6 +248,20 @@ if (NOT WIN32)
   target_link_libraries(oqs_test_multi_thread PRIVATE Threads::Threads)
 endif()
 
+add_test(
+    NAME oqs_keep_std
+    COMMAND oqs_test_keep_std
+            "oqsprovider"
+            "${CMAKE_CURRENT_SOURCE_DIR}/oqs-keep-std.cnf"
+)
+set_tests_properties(oqs_keep_std
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
+               SKIP_RETURN_CODE 77
+)
+
+add_executable(oqs_test_keep_std oqs_test_keep_std.c test_common.c)
+target_link_libraries(oqs_test_keep_std PRIVATE ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+
 if (OQS_PROVIDER_BUILD_STATIC)
   targets_set_static_provider(oqs_test_multi_thread)
   targets_set_static_provider(oqs_test_signatures
@@ -260,5 +274,6 @@ if (OQS_PROVIDER_BUILD_STATIC)
     oqs_test_prop_str
     oqs_test_alg_overlap
     oqs_test_alloc_failures
+    oqs_test_keep_std
   )
 endif()

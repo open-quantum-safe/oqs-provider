@@ -1491,11 +1491,17 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     OSSL_LIB_CTX *libctx = NULL;
     int i, rc = 0, patched, counted = 0, nid, nid_ok;
     STACK_OF(OPENSSL_STRING) *disabled = NULL, *failed = NULL;
-    char *opensslv;
+    char *opensslv, *keep_std = NULL;
     const char *ossl_versionp = NULL;
+    /* "keep_standardized_algs" is read from this provider's config section */
     OSSL_PARAM version_request[] = {{"openssl-version", OSSL_PARAM_UTF8_PTR,
                                      &opensslv, sizeof(&opensslv), 0},
+                                    {"keep_standardized_algs",
+                                     OSSL_PARAM_UTF8_PTR, &keep_std,
+                                     sizeof(&keep_std), 0},
                                     {NULL, 0, NULL, 0, 0}};
+    static const char *std_algs[] = {"mldsa44",  "mldsa65",  "mldsa87",
+                                     "mlkem512", "mlkem768", "mlkem1024"};
 
     OQS_init();
 
@@ -1678,6 +1684,21 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
     }
 
     ///// OQS_TEMPLATE_FRAGMENT_DISABLE_OSSL_ALGS_END
+
+    /* Opt-in, off by default: with "keep_standardized_algs = 1" in this
+     * provider's config section, keep offering ML-DSA and ML-KEM next to the
+     * core's own. Select them with a property query such as
+     * "?provider=oqsprovider". Hybrids and SLH-DSA stay disabled.
+     */
+    if (keep_std != NULL && strcmp(keep_std, "1") == 0) {
+        for (i = 0; i < (int)OSSL_NELEM(std_algs); i++) {
+            int idx =
+                sk_OPENSSL_STRING_find(rt_disabled_algs, (char *)std_algs[i]);
+
+            if (idx >= 0)
+                sk_OPENSSL_STRING_delete(rt_disabled_algs, idx);
+        }
+    }
 
     /* Registering an OID can make the core load its configuration, which may
      * load this provider again on the same thread. rt_lock is not recursive,

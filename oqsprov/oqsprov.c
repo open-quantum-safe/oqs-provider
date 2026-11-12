@@ -1702,6 +1702,23 @@ int OQS_PROVIDER_ENTRYPOINT_NAME(const OSSL_CORE_HANDLE *handle,
             if (sk_OPENSSL_STRING_find(disabled,
                                        (char *)oqs_oid_alg_list[i + 1]) >= 0)
                 goto end_for;
+            /* The core already knows this OID under its own name, e.g.,
+             * ML-DSA and ML-KEM on OpenSSL >= 3.5: use the core's NID, as
+             * creating a second object or sigid for the same OID fails.
+             */
+            nid = OBJ_txt2nid(oqs_oid_alg_list[i]);
+            if (nid != NID_undef &&
+                OBJ_sn2nid(oqs_oid_alg_list[i + 1]) == NID_undef) {
+                if (!CRYPTO_THREAD_write_lock(rt_lock))
+                    goto end_init;
+                nid_ok = oqs_set_nid((char *)oqs_oid_alg_list[i + 1], nid);
+                CRYPTO_THREAD_unlock(rt_lock);
+                if (!nid_ok) {
+                    ERR_raise(ERR_LIB_USER, OQSPROV_R_OBJ_CREATE_ERR);
+                    goto end_init;
+                }
+                goto end_for;
+            }
             /* Registration also fails if the OID has been created in the
              * meantime by another thread or library, in which case the NID is
              * usable all the same, see

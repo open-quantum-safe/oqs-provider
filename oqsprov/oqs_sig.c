@@ -83,9 +83,10 @@ static OSSL_FUNC_signature_settable_ctx_md_params_fn
 // OIDS:
 static int get_aid(unsigned char **oidbuf, const char *tls_name) {
     X509_ALGOR *algor = X509_ALGOR_new();
-    int aidlen = 0;
+    int aidlen = 0, nid = oqs_get_nid(tls_name);
 
-    X509_ALGOR_set0(algor, OBJ_txt2obj(tls_name, 0), V_ASN1_UNDEF, NULL);
+    X509_ALGOR_set0(algor, nid != NID_undef ? OBJ_nid2obj(nid) : NULL,
+                    V_ASN1_UNDEF, NULL);
 
     aidlen = i2d_X509_ALGOR(algor, oidbuf);
     X509_ALGOR_free(algor);

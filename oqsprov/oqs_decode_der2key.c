@@ -224,7 +224,7 @@ static struct der2key_ctx_st *der2key_newctx(void *provctx,
         ctx->provctx = provctx;
         ctx->desc = desc;
         if (desc->evp_type == 0) {
-            ctx->desc->evp_type = OBJ_sn2nid(tls_name);
+            ctx->desc->evp_type = oqs_get_nid(tls_name);
             OQS_DEC_PRINTF2("OQS DEC provider: der2key_newctx set "
                             "evp_type to %d\n",
                             ctx->desc->evp_type);
@@ -431,7 +431,7 @@ static void oqsx_key_adjust(void *key, struct der2key_ctx_st *ctx) {
 }
 
 // OQS provider uses NIDs generated at load time as EVP_type identifiers
-// so initially this must be 0 and set to a real value by OBJ_sn2nid later
+// so initially this must be 0 and set to a real value by oqs_get_nid later
 
 /* ---------------------------------------------------------------------- */
 

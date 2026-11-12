@@ -265,6 +265,28 @@ int oqs_set_nid(char *tlsname, int nid) {
     return 0;
 }
 
+/* NID set for tlsname by oqs_set_nid(). This can be the core's own NID for an
+ * OID the core already knows, whose short name is not tlsname, so neither
+ * OBJ_sn2nid(tlsname) nor OBJ_nid2sn(nid) map between the two.
+ */
+int oqs_get_nid(const char *tlsname) {
+    int i;
+    for (i = 0; i < NID_TABLE_LEN; i++) {
+        if (!strcmp(nid_names[i].tlsname, tlsname))
+            return nid_names[i].nid;
+    }
+    return NID_undef;
+}
+
+static char *get_tlsname(int nid) {
+    int i;
+    for (i = 0; i < NID_TABLE_LEN; i++) {
+        if (nid_names[i].nid == nid)
+            return nid_names[i].tlsname;
+    }
+    return NULL;
+}
+
 static int get_secbits(int nid) {
     int i;
     for (i = 0; i < NID_TABLE_LEN; i++) {
@@ -467,7 +489,7 @@ static OQSX_KEY *oqsx_key_new_from_nid(OSSL_LIB_CTX *libctx, const char *propq,
                                        int nid) {
     OQS_KEY_PRINTF2("Generating OQSX key for nid %d\n", nid);
 
-    char *tls_algname = (char *)OBJ_nid2sn(nid);
+    char *tls_algname = get_tlsname(nid);
     OQS_KEY_PRINTF2("                    for tls_name %s\n", tls_algname);
 
     if (!tls_algname) {

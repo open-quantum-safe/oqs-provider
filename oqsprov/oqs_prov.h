@@ -191,6 +191,8 @@ typedef struct oqsx_key_st OQSX_KEY;
 
 /* Register given NID with tlsname in OSSL3 registry */
 int oqs_set_nid(char *tlsname, int nid);
+/* NID registered for tlsname, NID_undef if none */
+int oqs_get_nid(const char *tlsname);
 
 /* Create OQSX_KEY data structure based on parameters; key material allocated
  * separately */

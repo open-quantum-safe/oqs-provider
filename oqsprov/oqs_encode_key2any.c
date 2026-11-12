@@ -456,7 +456,7 @@ static int prepare_oqsx_params(const void *oqsxkey, int nid, int save,
                     "(tlsname: %s)\n",
                     nid, k->tls_name);
 
-    if (k->tls_name && OBJ_sn2nid(k->tls_name) != nid) {
+    if (k->tls_name && oqs_get_nid(k->tls_name) != nid) {
         ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
         return 0;
     }
@@ -604,7 +604,7 @@ done:
 #define oqsx_check_key_type NULL
 
 // OQS provider uses NIDs generated at load time as EVP_type identifiers
-// so initially this must be 0 and set to a real value by OBJ_sn2nid later
+// so initially this must be 0 and set to a real value by oqs_get_nid later
 ///// OQS_TEMPLATE_FRAGMENT_ENCODER_DEFINES_START
 #define efrodo640aes_evp_type 0
 #define efrodo640aes_input_type "efrodo640aes"
@@ -1152,7 +1152,7 @@ static int key2any_encode(struct key2any_ctx_st *ctx, OSSL_CORE_BIO *cout,
                           key_to_paramstring_fn *key2paramstring,
                           i2d_of_void *key2der) {
     int ret = 0;
-    int type = OBJ_sn2nid(typestr);
+    int type = oqs_get_nid(typestr);
     OQSX_KEY *oqsk = (OQSX_KEY *)key;
 
     OQS_ENC_PRINTF3(

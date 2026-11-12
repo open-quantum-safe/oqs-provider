@@ -1392,8 +1392,13 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
 
     if (!CRYPTO_THREAD_write_lock(rt_lock))
         return NULL;
-    // do not cache when rt algo filter is enabled
-    *no_cache = rt_algo_filter_enabled;
+    /* The answer for an operation never changes once the provider is loaded:
+     * rt_disabled_algs is complete when init returns and the filtered tables
+     * are built once below and kept until the last instance unloads, so let
+     * the core cache it. The lock still guards that one-time table build and
+     * the sorting sk_find() does on rt_disabled_algs.
+     */
+    *no_cache = 0;
 
     switch (operation_id) {
     case OSSL_OP_SIGNATURE:

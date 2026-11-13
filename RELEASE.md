@@ -6,6 +6,24 @@
 * All algorithm names are lowercase: the CROSS and UOV variants have been renamed accordingly, e.g. `OV_Ip_pkc` to `ov_ip_pkc`. OIDs are unchanged, and OpenSSL matches algorithm names case-insensitively ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 * Algorithms that are disabled or cannot be used in TLS, such as the UOV variants with large public keys, no longer have TLS code points ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 
+**Feature added to dynamically disable all hybrid algorithms by setting
+the environment variable OQS_CEDE_HYBRIDS.**
+
+This is to enable downstream experimentation with a two-provider setup:
+One provider carrying only pure PQ algorithms and a separate provider
+creating hybrid algorithms from other providers delivering PQ and/or
+classic cryptography. The rationale for this split is a substantial
+improvement in code coherence and maintainability for each separate
+provider as well as a reduction in provider size for users only
+interested in either, but not both feature sets. In addition, such setup
+for the first time allows users to select different PQ providers when
+operating and experimenting with different types of hybrid algorithms. A
+proof-of-concept first implementation of such generic, EVP-based
+hybrid-only provider is available at
+https://github.com/baentsch/hybrid-provider/. If this split-provider
+setup proves to be useable, oqsprovider will remove for good all hybrid
+logic in the next release.
+
 Previous Release Notes
 ======================
 

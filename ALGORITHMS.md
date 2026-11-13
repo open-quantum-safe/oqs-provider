@@ -11,6 +11,8 @@ Algorithms that are disabled or cannot be used in TLS 1.3 have no code point and
 
 The following list of algorithms may change when loading oqsprovider (version >= 0.9.0) with OpenSSL (version >= 3.5.0); please see [README.md](README.md#using-with-openssl-3.5.0).
 
+Also available is an environment-variable driven mechanism to disable operation of all hybrid (classic+PQ) algorithms: This can be facilitated by setting the environment variable "OQS_CEDE_HYBRIDS".
+
 # Code points / algorithm IDs
 
 <!--- OQS_TEMPLATE_FRAGMENT_IDS_START -->

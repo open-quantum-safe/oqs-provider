@@ -1392,8 +1392,12 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
 
     if (!CRYPTO_THREAD_write_lock(rt_lock))
         return NULL;
-    // do not cache when rt algo filter is enabled
-    *no_cache = rt_algo_filter_enabled;
+    /* No provider-dependent algorithm cede logic is implemented: algorithms
+     * are disabled by OpenSSL version only. Thus provider load order is no
+     * problem and caching does not have to be turned off. See
+     * https://github.com/open-quantum-safe/oqs-provider/issues/871#issuecomment-6833196788
+     */
+    *no_cache = 0;
 
     switch (operation_id) {
     case OSSL_OP_SIGNATURE:

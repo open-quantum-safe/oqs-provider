@@ -1392,11 +1392,10 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
 
     if (!CRYPTO_THREAD_write_lock(rt_lock))
         return NULL;
-    /* The answer for an operation never changes once the provider is loaded:
-     * rt_disabled_algs is complete when init returns and the filtered tables
-     * are built once below and kept until the last instance unloads, so let
-     * the core cache it. The lock still guards that one-time table build and
-     * the sorting sk_find() does on rt_disabled_algs.
+    /* No provider-dependent algorithm cede logic is implemented: algorithms
+     * are disabled by OpenSSL version only. Thus provider load order is no
+     * problem and caching does not have to be turned off. See
+     * https://github.com/open-quantum-safe/oqs-provider/issues/871#issuecomment-6833196788
      */
     *no_cache = 0;
 

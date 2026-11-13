@@ -9,7 +9,7 @@ add_definitions(-DOQSPROVIDER_VERSION_TEXT="${OQSPROVIDER_VERSION_TEXT}")
 message(STATUS "Building commit ${GIT_COMMIT_HASH} in ${CMAKE_SOURCE_DIR}")
 add_definitions(-DOQS_PROVIDER_COMMIT=" \(${GIT_COMMIT_HASH}\)")
 set(PROVIDER_SOURCE_FILES
-  oqsprov.c oqsprov_capabilities.c oqsprov_keys.c
+  oqsprov.c oqsprov_capabilities.c oqsprov_keys.c oqsprov_compat.c
   oqs_kmgmt.c oqs_sig.c oqs_kem.c
   oqs_encode_key2any.c oqs_endecoder_common.c oqs_decode_der2key.c oqsprov_bio.c
   oqsprov.def
@@ -76,7 +76,7 @@ if (NOT OQS_LIBRARY_TYPE STREQUAL "STATIC")
   endif()
 endif()
 
-target_link_libraries(oqsprovider PUBLIC OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS})
+target_link_libraries(oqsprovider PUBLIC OQS::oqs ${OPENSSL_CRYPTO_LIBRARY} ${OQS_ADDL_SOCKET_LIBS} ${CMAKE_DL_LIBS})
 
 # Hide liboqs symbols to applications loading oqsprovider.
 # CheckLinkerFlag requires CMake 3.18, target_link_options requires CMake 3.13.

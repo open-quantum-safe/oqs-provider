@@ -6,6 +6,10 @@
 * All algorithm names are lowercase: the CROSS and UOV variants have been renamed accordingly, e.g. `OV_Ip_pkc` to `ov_ip_pkc`. OIDs are unchanged, and OpenSSL matches algorithm names case-insensitively ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 * Algorithms that are disabled or cannot be used in TLS, such as the UOV variants with large public keys, no longer have TLS code points ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 
+### Deprecation notices
+
+* In pursuit of more simple project maintenance and future avoidance of duplication of work, the algorithm families ML-KEM, ML-DSA and SLH-DSA together with their standardized hybrid combinations (such as X25519MLKEM768) -- all readily available from the OpenSSL default provider -- will be removed from oqsprovider in 0.14.0.
+
 Previous Release Notes
 ======================
 

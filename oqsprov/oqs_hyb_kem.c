@@ -166,6 +166,7 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
     int ret = OQS_SUCCESS;
     const PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
     const OQSX_KEY *oqsx_key = pkemctx->kem;
+    size_t ctCapacity = *ctlen, secretCapacity = *secretlen;
     size_t secretLenClassical = 0, secretLenPQ = 0;
     size_t ctLenClassical = 0, ctLenPQ = 0;
     unsigned char *ctClassical, *ctPQ, *secretClassical, *secretPQ;
@@ -187,6 +188,8 @@ static int oqs_hyb_kem_encaps(void *vpkemctx, unsigned char *ct, size_t *ctlen,
                         *secretlen);
         return 1;
     }
+    if (ctCapacity < *ctlen || secretCapacity < *secretlen)
+        return 0;
 
     /* Rule: if the classical algorthm is not FIPS approved
        but the PQ algorithm is: PQ share comes first
@@ -226,6 +229,7 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
     const OQSX_KEY *oqsx_key = pkemctx->kem;
     const OQSX_EVP_CTX *evp_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_evp_ctx;
     const OQS_KEM *qs_ctx = pkemctx->kem->oqsx_provider_ctx.oqsx_qs_ctx.kem;
+    size_t secretCapacity = *secretlen;
 
     size_t secretLenClassical = 0, secretLenPQ = 0;
     size_t ctLenClassical = 0, ctLenPQ = 0;
@@ -243,6 +247,8 @@ static int oqs_hyb_kem_decaps(void *vpkemctx, unsigned char *secret,
 
     if (secret == NULL)
         return 1;
+    if (secretCapacity < *secretlen)
+        return 0;
 
     ctLenClassical = evp_ctx->evp_info->length_public_key;
     ctLenPQ = qs_ctx->length_ciphertext;

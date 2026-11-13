@@ -1,21 +1,21 @@
 | Algorithm                                  | Implementation Version                    | NIST round   |   Claimed NIST Level | Code Point   | OID                          |
 |:-------------------------------------------|:------------------------------------------|:-------------|---------------------:|:-------------|:-----------------------------|
-| CROSSrsdp128balanced                       | 2.2 + PQClean and OQS patches             | 2            |                    1 | 0xff53       | 1.3.6.1.4.1.62245.2.1.1.2.2  |
-| CROSSrsdp128fast                           | 2.2 + PQClean and OQS patches             | 2            |                    1 | 0xff54       | 1.3.6.1.4.1.62245.2.1.2.2.2  |
-| CROSSrsdp128small                          | 2.2 + PQClean and OQS patches             | 2            |                    1 | 0xff55       | 1.3.6.1.4.1.62245.2.1.3.2.2  |
-| CROSSrsdp192balanced                       | 2.2 + PQClean and OQS patches             | 2            |                    3 | 0xff56       | 1.3.6.1.4.1.62245.2.1.4.2.2  |
-| CROSSrsdp192fast                           | 2.2 + PQClean and OQS patches             | 2            |                    3 | 0xff57       | 1.3.6.1.4.1.62245.2.1.5.2.2  |
-| CROSSrsdp192small                          | 2.2 + PQClean and OQS patches             | 2            |                    3 | 0xff58       | 1.3.6.1.4.1.62245.2.1.6.2.2  |
-| CROSSrsdp256small                          | 2.2 + PQClean and OQS patches             | 2            |                    5 | 0xff59       | 1.3.6.1.4.1.62245.2.1.9.2.2  |
-| CROSSrsdpg128balanced                      | 2.2 + PQClean and OQS patches             | 2            |                    1 | 0xff5a       | 1.3.6.1.4.1.62245.2.1.10.2.2 |
-| CROSSrsdpg128fast                          | 2.2 + PQClean and OQS patches             | 2            |                    1 | 0xff5b       | 1.3.6.1.4.1.62245.2.1.11.2.2 |
-| CROSSrsdpg128small                         | 2.2 + PQClean and OQS patches             | 2            |                    1 | 0xff5c       | 1.3.6.1.4.1.62245.2.1.12.2.2 |
-| CROSSrsdpg192balanced                      | 2.2 + PQClean and OQS patches             | 2            |                    3 | 0xff5d       | 1.3.6.1.4.1.62245.2.1.13.2.2 |
-| CROSSrsdpg192fast                          | 2.2 + PQClean and OQS patches             | 2            |                    3 | 0xff5e       | 1.3.6.1.4.1.62245.2.1.14.2.2 |
-| CROSSrsdpg192small                         | 2.2 + PQClean and OQS patches             | 2            |                    3 | 0xff5f       | 1.3.6.1.4.1.62245.2.1.15.2.2 |
-| CROSSrsdpg256balanced                      | 2.2 + PQClean and OQS patches             | 2            |                    5 | 0xff60       | 1.3.6.1.4.1.62245.2.1.16.2.2 |
-| CROSSrsdpg256fast                          | 2.2 + PQClean and OQS patches             | 2            |                    5 | 0xff61       | 1.3.6.1.4.1.62245.2.1.17.2.2 |
-| CROSSrsdpg256small                         | 2.2 + PQClean and OQS patches             | 2            |                    5 | 0xff62       | 1.3.6.1.4.1.62245.2.1.18.2.2 |
+| crossrsdp128balanced                       | 2.2 + PQClean and OQS patches             | 2            |                    1 | 0xff53       | 1.3.6.1.4.1.62245.2.1.1.2.2  |
+| crossrsdp128fast                           | 2.2 + PQClean and OQS patches             | 2            |                    1 | -            | 1.3.6.1.4.1.62245.2.1.2.2.2  |
+| crossrsdp128small                          | 2.2 + PQClean and OQS patches             | 2            |                    1 | -            | 1.3.6.1.4.1.62245.2.1.3.2.2  |
+| crossrsdp192balanced                       | 2.2 + PQClean and OQS patches             | 2            |                    3 | -            | 1.3.6.1.4.1.62245.2.1.4.2.2  |
+| crossrsdp192fast                           | 2.2 + PQClean and OQS patches             | 2            |                    3 | -            | 1.3.6.1.4.1.62245.2.1.5.2.2  |
+| crossrsdp192small                          | 2.2 + PQClean and OQS patches             | 2            |                    3 | -            | 1.3.6.1.4.1.62245.2.1.6.2.2  |
+| crossrsdp256small                          | 2.2 + PQClean and OQS patches             | 2            |                    5 | -            | 1.3.6.1.4.1.62245.2.1.9.2.2  |
+| crossrsdpg128balanced                      | 2.2 + PQClean and OQS patches             | 2            |                    1 | -            | 1.3.6.1.4.1.62245.2.1.10.2.2 |
+| crossrsdpg128fast                          | 2.2 + PQClean and OQS patches             | 2            |                    1 | -            | 1.3.6.1.4.1.62245.2.1.11.2.2 |
+| crossrsdpg128small                         | 2.2 + PQClean and OQS patches             | 2            |                    1 | -            | 1.3.6.1.4.1.62245.2.1.12.2.2 |
+| crossrsdpg192balanced                      | 2.2 + PQClean and OQS patches             | 2            |                    3 | -            | 1.3.6.1.4.1.62245.2.1.13.2.2 |
+| crossrsdpg192fast                          | 2.2 + PQClean and OQS patches             | 2            |                    3 | -            | 1.3.6.1.4.1.62245.2.1.14.2.2 |
+| crossrsdpg192small                         | 2.2 + PQClean and OQS patches             | 2            |                    3 | -            | 1.3.6.1.4.1.62245.2.1.15.2.2 |
+| crossrsdpg256balanced                      | 2.2 + PQClean and OQS patches             | 2            |                    5 | -            | 1.3.6.1.4.1.62245.2.1.16.2.2 |
+| crossrsdpg256fast                          | 2.2 + PQClean and OQS patches             | 2            |                    5 | -            | 1.3.6.1.4.1.62245.2.1.17.2.2 |
+| crossrsdpg256small                         | 2.2 + PQClean and OQS patches             | 2            |                    5 | -            | 1.3.6.1.4.1.62245.2.1.18.2.2 |
 | falcon512                                  | 20211101                                  | 3            |                    1 | 0xfed7       | 1.3.9999.3.11                |
 | falcon512 **hybrid with** p256             | 20211101                                  | 3            |                    1 | 0xfed8       | 1.3.9999.3.12                |
 | falcon512 **hybrid with** rsa3072          | 20211101                                  | 3            |                    1 | 0xfed9       | 1.3.9999.3.13                |
@@ -53,40 +53,40 @@
 | mldsa87 **hybrid with** p521               | ML-DSA                                    | FIPS204      |                    5 | 0xff09       | 1.3.9999.7.8                 |
 | mqom3cat1gf16fastct                        | NIST Round 3                              | 3            |                    1 | 0xff99       | 1.3.9999.11.1.9              |
 | mqom3cat1gf16fastct **hybrid with** p256   | NIST Round 3                              | 3            |                    1 | 0xff9a       | 1.3.9999.11.1.10             |
-| mqom3cat1gf16fastot                        | NIST Round 3                              | 3            |                    1 | 0xff9b       | 1.3.9999.11.1.11             |
-| mqom3cat1gf16fastot **hybrid with** p256   | NIST Round 3                              | 3            |                    1 | 0xff9c       | 1.3.9999.11.1.12             |
-| mqom3cat1gf16shortct                       | NIST Round 3                              | 3            |                    1 | 0xff9d       | 1.3.9999.11.1.13             |
-| mqom3cat1gf16shortct **hybrid with** p256  | NIST Round 3                              | 3            |                    1 | 0xff9e       | 1.3.9999.11.1.14             |
-| mqom3cat1gf16shortot                       | NIST Round 3                              | 3            |                    1 | 0xff9f       | 1.3.9999.11.1.15             |
-| mqom3cat1gf16shortot **hybrid with** p256  | NIST Round 3                              | 3            |                    1 | 0xffa0       | 1.3.9999.11.1.16             |
-| mqom3cat1gf2shorterct                      | NIST Round 3                              | 3            |                    1 | 0xffa1       | 1.3.9999.11.1.17             |
-| mqom3cat1gf2shorterct **hybrid with** p256 | NIST Round 3                              | 3            |                    1 | 0xffa2       | 1.3.9999.11.1.18             |
-| mqom3cat1gf2shorterot                      | NIST Round 3                              | 3            |                    1 | 0xffa3       | 1.3.9999.11.1.19             |
-| mqom3cat1gf2shorterot **hybrid with** p256 | NIST Round 3                              | 3            |                    1 | 0xffa4       | 1.3.9999.11.1.20             |
+| mqom3cat1gf16fastot                        | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.11             |
+| mqom3cat1gf16fastot **hybrid with** p256   | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.12             |
+| mqom3cat1gf16shortct                       | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.13             |
+| mqom3cat1gf16shortct **hybrid with** p256  | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.14             |
+| mqom3cat1gf16shortot                       | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.15             |
+| mqom3cat1gf16shortot **hybrid with** p256  | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.16             |
+| mqom3cat1gf2shorterct                      | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.17             |
+| mqom3cat1gf2shorterct **hybrid with** p256 | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.18             |
+| mqom3cat1gf2shorterot                      | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.19             |
+| mqom3cat1gf2shorterot **hybrid with** p256 | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.11.1.20             |
 | mqom3cat3gf16fastct                        | NIST Round 3                              | 3            |                    3 | 0xffa5       | 1.3.9999.11.3.9              |
 | mqom3cat3gf16fastct **hybrid with** p384   | NIST Round 3                              | 3            |                    3 | 0xffa6       | 1.3.9999.11.3.10             |
-| mqom3cat3gf16fastot                        | NIST Round 3                              | 3            |                    3 | 0xffa7       | 1.3.9999.11.3.11             |
-| mqom3cat3gf16fastot **hybrid with** p384   | NIST Round 3                              | 3            |                    3 | 0xffa8       | 1.3.9999.11.3.12             |
-| mqom3cat3gf16shortct                       | NIST Round 3                              | 3            |                    3 | 0xffa9       | 1.3.9999.11.3.13             |
-| mqom3cat3gf16shortct **hybrid with** p384  | NIST Round 3                              | 3            |                    3 | 0xffaa       | 1.3.9999.11.3.14             |
-| mqom3cat3gf16shortot                       | NIST Round 3                              | 3            |                    3 | 0xffab       | 1.3.9999.11.3.15             |
-| mqom3cat3gf16shortot **hybrid with** p384  | NIST Round 3                              | 3            |                    3 | 0xffac       | 1.3.9999.11.3.16             |
-| mqom3cat3gf2shorterct                      | NIST Round 3                              | 3            |                    3 | 0xffad       | 1.3.9999.11.3.17             |
-| mqom3cat3gf2shorterct **hybrid with** p384 | NIST Round 3                              | 3            |                    3 | 0xffae       | 1.3.9999.11.3.18             |
-| mqom3cat3gf2shorterot                      | NIST Round 3                              | 3            |                    3 | 0xffaf       | 1.3.9999.11.3.19             |
-| mqom3cat3gf2shorterot **hybrid with** p384 | NIST Round 3                              | 3            |                    3 | 0xffb0       | 1.3.9999.11.3.20             |
+| mqom3cat3gf16fastot                        | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.11             |
+| mqom3cat3gf16fastot **hybrid with** p384   | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.12             |
+| mqom3cat3gf16shortct                       | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.13             |
+| mqom3cat3gf16shortct **hybrid with** p384  | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.14             |
+| mqom3cat3gf16shortot                       | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.15             |
+| mqom3cat3gf16shortot **hybrid with** p384  | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.16             |
+| mqom3cat3gf2shorterct                      | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.17             |
+| mqom3cat3gf2shorterct **hybrid with** p384 | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.18             |
+| mqom3cat3gf2shorterot                      | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.19             |
+| mqom3cat3gf2shorterot **hybrid with** p384 | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.11.3.20             |
 | mqom3cat5gf16fastct                        | NIST Round 3                              | 3            |                    5 | 0xffb1       | 1.3.9999.11.5.9              |
 | mqom3cat5gf16fastct **hybrid with** p521   | NIST Round 3                              | 3            |                    5 | 0xffb2       | 1.3.9999.11.5.10             |
-| mqom3cat5gf16fastot                        | NIST Round 3                              | 3            |                    5 | 0xffb3       | 1.3.9999.11.5.11             |
-| mqom3cat5gf16fastot **hybrid with** p521   | NIST Round 3                              | 3            |                    5 | 0xffb4       | 1.3.9999.11.5.12             |
-| mqom3cat5gf16shortct                       | NIST Round 3                              | 3            |                    5 | 0xffb5       | 1.3.9999.11.5.13             |
-| mqom3cat5gf16shortct **hybrid with** p521  | NIST Round 3                              | 3            |                    5 | 0xffb6       | 1.3.9999.11.5.14             |
-| mqom3cat5gf16shortot                       | NIST Round 3                              | 3            |                    5 | 0xffb7       | 1.3.9999.11.5.15             |
-| mqom3cat5gf16shortot **hybrid with** p521  | NIST Round 3                              | 3            |                    5 | 0xffb8       | 1.3.9999.11.5.16             |
-| mqom3cat5gf2shorterct                      | NIST Round 3                              | 3            |                    5 | 0xffb9       | 1.3.9999.11.5.17             |
-| mqom3cat5gf2shorterct **hybrid with** p521 | NIST Round 3                              | 3            |                    5 | 0xffba       | 1.3.9999.11.5.18             |
-| mqom3cat5gf2shorterot                      | NIST Round 3                              | 3            |                    5 | 0xffbb       | 1.3.9999.11.5.19             |
-| mqom3cat5gf2shorterot **hybrid with** p521 | NIST Round 3                              | 3            |                    5 | 0xffbc       | 1.3.9999.11.5.20             |
+| mqom3cat5gf16fastot                        | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.11             |
+| mqom3cat5gf16fastot **hybrid with** p521   | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.12             |
+| mqom3cat5gf16shortct                       | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.13             |
+| mqom3cat5gf16shortct **hybrid with** p521  | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.14             |
+| mqom3cat5gf16shortot                       | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.15             |
+| mqom3cat5gf16shortot **hybrid with** p521  | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.16             |
+| mqom3cat5gf2shorterct                      | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.17             |
+| mqom3cat5gf2shorterct **hybrid with** p521 | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.18             |
+| mqom3cat5gf2shorterot                      | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.19             |
+| mqom3cat5gf2shorterot **hybrid with** p521 | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.11.5.20             |
 | slhdsasha2128s                             | SLH-DSA                                   | FIPS205      |                    1 | 0x0911       | 2.16.840.1.101.3.4.3.20      |
 | slhdsasha2128f                             | SLH-DSA                                   | FIPS205      |                    1 | 0x0912       | 2.16.840.1.101.3.4.3.21      |
 | slhdsasha2192s                             | SLH-DSA                                   | FIPS205      |                    3 | 0x0913       | 2.16.840.1.101.3.4.3.22      |
@@ -117,27 +117,27 @@
 | snova5b **hybrid with** p521               | 3.0                                       | 3            |                    5 | 0xff92       | 1.3.9999.10.8.4              |
 | snova5s                                    | 3.0                                       | 3            |                    5 | 0xff93       | 1.3.9999.10.9.3              |
 | snova5s **hybrid with** p521               | 3.0                                       | 3            |                    5 | 0xff94       | 1.3.9999.10.9.4              |
-| OV_Is                                      | NIST Round 3                              | 3            |                    1 | 0xff0a       | 1.3.9999.9.1.1               |
-| OV_Is **hybrid with** p256                 | NIST Round 3                              | 3            |                    1 | 0xff16       | 1.3.9999.9.1.2               |
-| OV_Ip                                      | NIST Round 3                              | 3            |                    1 | 0xff0b       | 1.3.9999.9.2.1               |
-| OV_Ip **hybrid with** p256                 | NIST Round 3                              | 3            |                    1 | 0xff17       | 1.3.9999.9.2.2               |
-| OV_III                                     | NIST Round 3                              | 3            |                    3 | 0xff0c       | 1.3.9999.9.3.1               |
-| OV_III **hybrid with** p384                | NIST Round 3                              | 3            |                    3 | 0xff18       | 1.3.9999.9.3.2               |
-| OV_V                                       | NIST Round 3                              | 3            |                    5 | 0xff0d       | 1.3.9999.9.4.1               |
-| OV_V **hybrid with** p521                  | NIST Round 3                              | 3            |                    5 | 0xff19       | 1.3.9999.9.4.2               |
-| OV_Is_pkc                                  | NIST Round 3                              | 3            |                    1 | 0xff0e       | 1.3.9999.9.5.1               |
-| OV_Is_pkc **hybrid with** p256             | NIST Round 3                              | 3            |                    1 | 0xff1a       | 1.3.9999.9.5.2               |
-| OV_Ip_pkc                                  | NIST Round 3                              | 3            |                    1 | 0xff0f       | 1.3.9999.9.6.1               |
-| OV_Ip_pkc **hybrid with** p256             | NIST Round 3                              | 3            |                    1 | 0xff1b       | 1.3.9999.9.6.2               |
-| OV_III_pkc                                 | NIST Round 3                              | 3            |                    3 | 0xff10       | 1.3.9999.9.7.1               |
-| OV_III_pkc **hybrid with** p384            | NIST Round 3                              | 3            |                    3 | 0xff1c       | 1.3.9999.9.7.2               |
-| OV_V_pkc                                   | NIST Round 3                              | 3            |                    5 | 0xff11       | 1.3.9999.9.8.1               |
-| OV_V_pkc **hybrid with** p521              | NIST Round 3                              | 3            |                    5 | 0xff1d       | 1.3.9999.9.8.2               |
-| OV_Is_pkc_skc                              | NIST Round 3                              | 3            |                    1 | 0xff12       | 1.3.9999.9.9.1               |
-| OV_Is_pkc_skc **hybrid with** p256         | NIST Round 3                              | 3            |                    1 | 0xff1e       | 1.3.9999.9.9.2               |
-| OV_Ip_pkc_skc                              | NIST Round 3                              | 3            |                    1 | 0xff13       | 1.3.9999.9.10.1              |
-| OV_Ip_pkc_skc **hybrid with** p256         | NIST Round 3                              | 3            |                    1 | 0xff1f       | 1.3.9999.9.10.2              |
-| OV_III_pkc_skc                             | NIST Round 3                              | 3            |                    3 | 0xff14       | 1.3.9999.9.11.1              |
-| OV_III_pkc_skc **hybrid with** p384        | NIST Round 3                              | 3            |                    3 | 0xff20       | 1.3.9999.9.11.2              |
-| OV_V_pkc_skc                               | NIST Round 3                              | 3            |                    5 | 0xff15       | 1.3.9999.9.12.1              |
-| OV_V_pkc_skc **hybrid with** p521          | NIST Round 3                              | 3            |                    5 | 0xff21       | 1.3.9999.9.12.2              |
+| ov_is                                      | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.1.1               |
+| ov_is **hybrid with** p256                 | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.1.2               |
+| ov_ip                                      | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.2.1               |
+| ov_ip **hybrid with** p256                 | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.2.2               |
+| ov_iii                                     | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.9.3.1               |
+| ov_iii **hybrid with** p384                | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.9.3.2               |
+| ov_v                                       | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.9.4.1               |
+| ov_v **hybrid with** p521                  | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.9.4.2               |
+| ov_is_pkc                                  | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.5.1               |
+| ov_is_pkc **hybrid with** p256             | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.5.2               |
+| ov_ip_pkc                                  | NIST Round 3                              | 3            |                    1 | 0xff0f       | 1.3.9999.9.6.1               |
+| ov_ip_pkc **hybrid with** p256             | NIST Round 3                              | 3            |                    1 | 0xff1b       | 1.3.9999.9.6.2               |
+| ov_iii_pkc                                 | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.9.7.1               |
+| ov_iii_pkc **hybrid with** p384            | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.9.7.2               |
+| ov_v_pkc                                   | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.9.8.1               |
+| ov_v_pkc **hybrid with** p521              | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.9.8.2               |
+| ov_is_pkc_skc                              | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.9.1               |
+| ov_is_pkc_skc **hybrid with** p256         | NIST Round 3                              | 3            |                    1 | -            | 1.3.9999.9.9.2               |
+| ov_ip_pkc_skc                              | NIST Round 3                              | 3            |                    1 | 0xff13       | 1.3.9999.9.10.1              |
+| ov_ip_pkc_skc **hybrid with** p256         | NIST Round 3                              | 3            |                    1 | 0xff1f       | 1.3.9999.9.10.2              |
+| ov_iii_pkc_skc                             | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.9.11.1              |
+| ov_iii_pkc_skc **hybrid with** p384        | NIST Round 3                              | 3            |                    3 | -            | 1.3.9999.9.11.2              |
+| ov_v_pkc_skc                               | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.9.12.1              |
+| ov_v_pkc_skc **hybrid with** p521          | NIST Round 3                              | 3            |                    5 | -            | 1.3.9999.9.12.2              |

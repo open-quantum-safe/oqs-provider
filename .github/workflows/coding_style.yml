@@ -4,6 +4,12 @@ on: [workflow_call]
 permissions:
   contents: read
 
+# TEMPORARY-LIBOQS-PEG (oqs-provider#875): the NIST round-3 signature FAEST is only available on
+# liboqs branch na_FAEST_liboqs. Set LIBOQS_BRANCH back to "main" as soon as FAEST lands in liboqs
+# main (grep for TEMPORARY-LIBOQS-PEG to find every place); generate.yml needs no change then.
+env:
+  LIBOQS_BRANCH: "na_FAEST_liboqs"
+
 jobs:
   check_clang_format:
     name: "Coding style"
@@ -27,7 +33,7 @@ jobs:
       - name: Verify nothing changes on re-generate code
         run: |
           git config --global user.name "ciuser" && \
-          git clone https://github.com/open-quantum-safe/liboqs.git && \
+          git clone --branch "$LIBOQS_BRANCH" https://github.com/open-quantum-safe/liboqs.git && \
           git config --global user.email "ci@openquantumsafe.org" && \
           git config --global --add safe.directory `pwd` && \
           export LIBOQS_SRC_DIR=`pwd`/liboqs && \

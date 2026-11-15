@@ -22,6 +22,12 @@ on:
 permissions:
   contents: read
 
+# TEMPORARY-LIBOQS-PEG (oqs-provider#875): the NIST round-3 signature FAEST is only available on
+# liboqs branch na_FAEST_liboqs. Set LIBOQS_BRANCH back to "main" as soon as FAEST lands in liboqs
+# main (grep for TEMPORARY-LIBOQS-PEG to find every place); generate.yml needs no change then.
+env:
+  LIBOQS_BRANCH: "na_FAEST_liboqs"
+
 jobs:
   cyclomatic:
     name: Cyclomatic complexity (lizard, advisory)
@@ -70,7 +76,7 @@ jobs:
         # OQSPROV_CMAKE_PARAMS is forwarded to the oqsprovider cmake invocation
         # (scripts/fullbuild.sh), producing _build/compile_commands.json which
         # clang-tidy needs to parse the translation units.
-        run: OQSPROV_CMAKE_PARAMS="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" LIBOQS_BRANCH=main ./scripts/fullbuild.sh
+        run: OQSPROV_CMAKE_PARAMS="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" ./scripts/fullbuild.sh
       - name: Install clang-tidy
         run: |
           python3 -m pip install --user --quiet clang-tidy \

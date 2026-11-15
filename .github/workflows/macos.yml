@@ -5,6 +5,12 @@ on: [pull_request, push]
 permissions:
   contents: read
 
+# TEMPORARY-LIBOQS-PEG (oqs-provider#875): the NIST round-3 signature FAEST is only available on
+# liboqs branch na_FAEST_liboqs. Set LIBOQS_BRANCH back to "main" as soon as FAEST lands in liboqs
+# main (grep for TEMPORARY-LIBOQS-PEG to find every place); generate.yml needs no change then.
+env:
+  LIBOQS_BRANCH: "na_FAEST_liboqs"
+
 jobs:
   coding_style_tests:
     uses: ./.github/workflows/coding_style.yml
@@ -43,7 +49,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: main
+          ref: ${{ env.LIBOQS_BRANCH }}
           path: liboqs
       - name: Retrieve OpenSSL32 from cache
         id: cache-openssl32

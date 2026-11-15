@@ -144,7 +144,16 @@ code deficiencies related to providers in such old OpenSSL branches.
 ### LIBOQS_BRANCH
 
 This defines the branch of `liboqs` against which `oqs-provider` is built.
-If this variable is not set, the "main" branch is built. Only the algorithm
+If this variable is not set, the "na_FAEST_liboqs" branch is built.
+
+**Temporary:** the NIST round-3 signature FAEST is not yet in `liboqs` "main", only on its feature
+branch [`na_FAEST_liboqs`](https://github.com/open-quantum-safe/liboqs/tree/na_FAEST_liboqs). Until it lands,
+this default and all CI workflows build against that branch. As soon as FAEST is in "main", the default
+returns to "main" (search for `TEMPORARY-LIBOQS-PEG` to find every place); `generate.yml` stays as it is.
+Until then, building against "main" fails, as some generated tables reference the FAEST identifiers
+unconditionally.
+
+Only the algorithm
 set and code points of the current `generate.yml` are supported; building
 against older `liboqs` releases is not supported. Please go to the corresponding
 `oqs-provider` tag to use the desired pair.

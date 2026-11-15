@@ -9,6 +9,12 @@ on:
 permissions:
   contents: read
 
+# TEMPORARY-LIBOQS-PEG (oqs-provider#875): the NIST round-3 signature FAEST is only available on
+# liboqs branch na_FAEST_liboqs. Set LIBOQS_BRANCH back to "main" as soon as FAEST lands in liboqs
+# main (grep for TEMPORARY-LIBOQS-PEG to find every place); generate.yml needs no change then.
+env:
+  LIBOQS_BRANCH: "na_FAEST_liboqs"
+
 jobs:
   coding_style_tests:
     uses: ./.github/workflows/coding_style.yml
@@ -24,7 +30,6 @@ jobs:
       image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -54,7 +59,6 @@ jobs:
       image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -67,7 +71,7 @@ jobs:
         if: matrix.ossl-branch != ''
         run: |
           echo "ossl=$(git ls-remote https://github.com/openssl/openssl.git ${{ matrix.ossl-branch }} | cut -f1)" >> "$GITHUB_OUTPUT"
-          echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git main | cut -f1)" >> "$GITHUB_OUTPUT"
+          echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git "$LIBOQS_BRANCH" | cut -f1)" >> "$GITHUB_OUTPUT"
       - name: Retrieve OpenSSL from cache
         id: cache-openssl
         if: matrix.ossl-branch != ''
@@ -144,7 +148,6 @@ jobs:
       image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
     env:
       MAKE_PARAMS: "-j 18"
-      LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -152,7 +155,7 @@ jobs:
           persist-credentials: false
       - name: Resolve liboqs commit for cache key
         id: refs
-        run: echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git main | cut -f1)" >> "$GITHUB_OUTPUT"
+        run: echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git "$LIBOQS_BRANCH" | cut -f1)" >> "$GITHUB_OUTPUT"
       - name: Retrieve liboqs build from cache
         id: cache-liboqs
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
@@ -216,7 +219,7 @@ jobs:
 
       - name: Clone and build liboqs with ASan
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch "$LIBOQS_BRANCH" https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake -GNinja -B build \
@@ -302,7 +305,7 @@ jobs:
       - name: Clone and build liboqs for linux-aarch64
         working-directory: /opt/
         run: |
-          git clone --depth=1 --branch main https://github.com/open-quantum-safe/liboqs.git liboqs
+          git clone --depth=1 --branch "$LIBOQS_BRANCH" https://github.com/open-quantum-safe/liboqs.git liboqs
           cd liboqs
           mkdir build install
           cmake --toolchain "${CMAKE_TOOLCHAIN_FILE}" \

@@ -1006,131 +1006,135 @@ sigs:
         enable_tls: true
   -
     family: 'UOV'
+    # NIST Round 3 (liboqs #2554). Round 3 changed (n, m) of OV-Ip, OV-III and OV-V, so all sets
+    # take the Bouncy Castle round-3 OIDs (1.3.6.1.4.1.22554.2.14.<leaf>.3; OV-Is too, as BC
+    # does) and new TLS code points. Hybrids stay on the OQS arc as the .3/.4 round-3 pair; .3 is
+    # unassigned as the pure OID is BC's. Round 2 used 1.3.9999.9.<n>.1 (pure) and .2 (hybrid).
     variants:
       -
         name: 'ov_is'
         pretty_name: 'OV-Is'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Is'
-        oid: '1.3.9999.9.1.1'
+        oid: '1.3.6.1.4.1.22554.2.14.1.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.1.2'}]
+                    'oid': '1.3.9999.9.1.4'}]
       -
         name: 'ov_ip'
         pretty_name: 'OV-Ip'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Ip'
-        oid: '1.3.9999.9.2.1'
+        oid: '1.3.6.1.4.1.22554.2.14.4.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.2.2'}]
+                    'oid': '1.3.9999.9.2.4'}]
       -
         name: 'ov_iii'
         pretty_name: 'OV-III'
         oqs_meth: 'OQS_SIG_alg_uov_ov_III'
-        oid: '1.3.9999.9.3.1'
+        oid: '1.3.6.1.4.1.22554.2.14.7.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.3.2'}]
+                    'oid': '1.3.9999.9.3.4'}]
       -
         name: 'ov_v'
         pretty_name: 'OV-V'
         oqs_meth: 'OQS_SIG_alg_uov_ov_V'
-        oid: '1.3.9999.9.4.1'
+        oid: '1.3.6.1.4.1.22554.2.14.10.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.4.2'}]
+                    'oid': '1.3.9999.9.4.4'}]
       -
         name: 'ov_is_pkc'
         pretty_name: 'OV-Is-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Is_pkc'
-        oid: '1.3.9999.9.5.1'
+        oid: '1.3.6.1.4.1.22554.2.14.2.3'
         enable: true
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.5.2'}]
+                    'oid': '1.3.9999.9.5.4'}]
       -
         name: 'ov_ip_pkc'
         pretty_name: 'OV-Ip-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Ip_pkc'
-        oid: '1.3.9999.9.6.1'
-        code_point: '0xff0f'
+        oid: '1.3.6.1.4.1.22554.2.14.5.3'
+        code_point: '0xfe00'
         enable: true
         enable_tls: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.6.2',
-                    'code_point': '0xff1b'}]
+                    'oid': '1.3.9999.9.6.4',
+                    'code_point': '0xfe01'}]
       -
         name: 'ov_iii_pkc'
         pretty_name: 'OV-III-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_III_pkc'
-        oid: '1.3.9999.9.7.1'
+        oid: '1.3.6.1.4.1.22554.2.14.8.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.7.2'}]
+                    'oid': '1.3.9999.9.7.4'}]
       -
         name: 'ov_v_pkc'
         pretty_name: 'OV-V-pkc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_V_pkc'
-        oid: '1.3.9999.9.8.1'
+        oid: '1.3.6.1.4.1.22554.2.14.11.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.8.2'}]
+                    'oid': '1.3.9999.9.8.4'}]
       -
         name: 'ov_is_pkc_skc'
         pretty_name: 'OV-Is-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Is_pkc_skc'
-        oid: '1.3.9999.9.9.1'
+        oid: '1.3.6.1.4.1.22554.2.14.3.3'
         enable: true
         enable_tls: false
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.9.2'}]
+                    'oid': '1.3.9999.9.9.4'}]
       -
         name: 'ov_ip_pkc_skc'
         pretty_name: 'OV-Ip-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_Ip_pkc_skc'
-        oid: '1.3.9999.9.10.1'
-        code_point: '0xff13'
+        oid: '1.3.6.1.4.1.22554.2.14.6.3'
+        code_point: '0xfe02'
         enable: true
         enable_tls: true
         mix_with: [{'name': 'p256',
                     'pretty_name': 'ECDSA p256',
-                    'oid': '1.3.9999.9.10.2',
-                    'code_point': '0xff1f'}]
+                    'oid': '1.3.9999.9.10.4',
+                    'code_point': '0xfe03'}]
       -
         name: 'ov_iii_pkc_skc'
         pretty_name: 'OV-III-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_III_pkc_skc'
-        oid: '1.3.9999.9.11.1'
+        oid: '1.3.6.1.4.1.22554.2.14.9.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p384',
                     'pretty_name': 'ECDSA p384',
-                    'oid': '1.3.9999.9.11.2'}]
+                    'oid': '1.3.9999.9.11.4'}]
       -
         name: 'ov_v_pkc_skc'
         pretty_name: 'OV-V-pkc-skc'
         oqs_meth: 'OQS_SIG_alg_uov_ov_V_pkc_skc'
-        oid: '1.3.9999.9.12.1'
+        oid: '1.3.6.1.4.1.22554.2.14.12.3'
         enable: false
         enable_tls: false
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.9.12.2'}]
+                    'oid': '1.3.9999.9.12.4'}]
   -
     family: 'SNOVA'
     variants:
@@ -1242,6 +1246,99 @@ sigs:
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.10.9.4',
                     'code_point': '0xff94'}]
+      # SNOVA round 3 with the AES128CTR public XOF: pure OIDs are the Bouncy Castle ones
+      # (1.3.6.1.4.1.22554.2.11.<45..53>.3); hybrids take OQS leaves 10..18 with the round-3 .3/.4
+      # pair, .3 unassigned. Disabled by default; enable as described for MQOM below.
+      -
+        name: 'snova1ka'
+        pretty_name: 'SNOVA_I_K_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_I_K_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.45.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.10.4'}]
+      -
+        name: 'snova1ba'
+        pretty_name: 'SNOVA_I_B_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_I_B_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.46.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.11.4'}]
+      -
+        name: 'snova1sa'
+        pretty_name: 'SNOVA_I_S_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_I_S_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.47.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.10.12.4'}]
+      -
+        name: 'snova3ka'
+        pretty_name: 'SNOVA_III_K_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_III_K_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.48.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.10.13.4'}]
+      -
+        name: 'snova3ba'
+        pretty_name: 'SNOVA_III_B_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_III_B_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.49.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.10.14.4'}]
+      -
+        name: 'snova3sa'
+        pretty_name: 'SNOVA_III_S_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_III_S_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.50.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.10.15.4'}]
+      -
+        name: 'snova5ka'
+        pretty_name: 'SNOVA_V_K_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_V_K_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.51.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.10.16.4'}]
+      -
+        name: 'snova5ba'
+        pretty_name: 'SNOVA_V_B_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_V_B_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.52.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.10.17.4'}]
+      -
+        name: 'snova5sa'
+        pretty_name: 'SNOVA_V_S_AES'
+        oqs_meth: 'OQS_SIG_alg_snova_SNOVA_V_S_AES'
+        oid: '1.3.6.1.4.1.22554.2.11.53.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.10.18.4'}]
   -
     family: 'SLH-DSA'
     variants:
@@ -1561,3 +1658,624 @@ sigs:
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
                     'oid': '1.3.9999.11.5.20'}]
+  -
+    # NIST additional signatures Round 3, FAEST v3 (liboqs branch na_FAEST_liboqs).
+    # Pure OIDs: Bouncy Castle round-3 identifiers 1.3.6.1.4.1.22554.2.12.<leaf>.3 (BC leaf order).
+    # Hybrids: OQS arc 1.3.9999.12.<same leaf>.4 (.3 unassigned, as the pure OID is BC's).
+    # All sets fit TLS 1.3; one 'fast' set per level is enabled, as for MQOM.
+    family: 'FAEST'
+    variants:
+      -
+        name: 'faest128s'
+        pretty_name: 'FAEST-128S'
+        oqs_meth: 'OQS_SIG_alg_faest_128s'
+        oid: '1.3.6.1.4.1.22554.2.12.1.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.1.4'}]
+      -
+        name: 'faest128f'
+        pretty_name: 'FAEST-128F'
+        oqs_meth: 'OQS_SIG_alg_faest_128f'
+        oid: '1.3.6.1.4.1.22554.2.12.2.3'
+        code_point: '0xfe04'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.2.4',
+                    'code_point': '0xfe05'}]
+      -
+        name: 'faest192s'
+        pretty_name: 'FAEST-192S'
+        oqs_meth: 'OQS_SIG_alg_faest_192s'
+        oid: '1.3.6.1.4.1.22554.2.12.3.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.3.4'}]
+      -
+        name: 'faest192f'
+        pretty_name: 'FAEST-192F'
+        oqs_meth: 'OQS_SIG_alg_faest_192f'
+        oid: '1.3.6.1.4.1.22554.2.12.4.3'
+        code_point: '0xfe06'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.4.4',
+                    'code_point': '0xfe07'}]
+      -
+        name: 'faest256s'
+        pretty_name: 'FAEST-256S'
+        oqs_meth: 'OQS_SIG_alg_faest_256s'
+        oid: '1.3.6.1.4.1.22554.2.12.5.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.5.4'}]
+      -
+        name: 'faest256f'
+        pretty_name: 'FAEST-256F'
+        oqs_meth: 'OQS_SIG_alg_faest_256f'
+        oid: '1.3.6.1.4.1.22554.2.12.6.3'
+        code_point: '0xfe08'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.6.4',
+                    'code_point': '0xfe09'}]
+      -
+        name: 'faestem128s'
+        pretty_name: 'FAEST-EM-128S'
+        oqs_meth: 'OQS_SIG_alg_faest_em_128s'
+        oid: '1.3.6.1.4.1.22554.2.12.7.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.7.4'}]
+      -
+        name: 'faestem128f'
+        pretty_name: 'FAEST-EM-128F'
+        oqs_meth: 'OQS_SIG_alg_faest_em_128f'
+        oid: '1.3.6.1.4.1.22554.2.12.8.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.12.8.4'}]
+      -
+        name: 'faestem192s'
+        pretty_name: 'FAEST-EM-192S'
+        oqs_meth: 'OQS_SIG_alg_faest_em_192s'
+        oid: '1.3.6.1.4.1.22554.2.12.9.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.9.4'}]
+      -
+        name: 'faestem192f'
+        pretty_name: 'FAEST-EM-192F'
+        oqs_meth: 'OQS_SIG_alg_faest_em_192f'
+        oid: '1.3.6.1.4.1.22554.2.12.10.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.12.10.4'}]
+      -
+        name: 'faestem256s'
+        pretty_name: 'FAEST-EM-256S'
+        oqs_meth: 'OQS_SIG_alg_faest_em_256s'
+        oid: '1.3.6.1.4.1.22554.2.12.11.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.11.4'}]
+      -
+        name: 'faestem256f'
+        pretty_name: 'FAEST-EM-256F'
+        oqs_meth: 'OQS_SIG_alg_faest_em_256f'
+        oid: '1.3.6.1.4.1.22554.2.12.12.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.12.12.4'}]
+  -
+    # NIST additional signatures Round 3, SD-in-the-Head-3 v3.0.
+    # Pure OIDs: Bouncy Castle round-3 identifiers 1.3.6.1.4.1.22554.2.16.<13..24>.3 (hash grinding
+    # first, then cipher-based grinding 'cipherpow'). Hybrids: OQS arc 1.3.9999.13.<same leaf>.4.
+    family: 'SDitH'
+    variants:
+      -
+        name: 'sdith3l1gf2short'
+        pretty_name: 'SDitH3-L1-gf2-short'
+        oqs_meth: 'OQS_SIG_alg_sdith_l1_gf2_short'
+        oid: '1.3.6.1.4.1.22554.2.16.13.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.13.13.4'}]
+      -
+        name: 'sdith3l1gf2fast'
+        pretty_name: 'SDitH3-L1-gf2-fast'
+        oqs_meth: 'OQS_SIG_alg_sdith_l1_gf2_fast'
+        oid: '1.3.6.1.4.1.22554.2.16.14.3'
+        code_point: '0xfe0a'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.13.14.4',
+                    'code_point': '0xfe10'}]
+      -
+        name: 'sdith3l3gf2short'
+        pretty_name: 'SDitH3-L3-gf2-short'
+        oqs_meth: 'OQS_SIG_alg_sdith_l3_gf2_short'
+        oid: '1.3.6.1.4.1.22554.2.16.15.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.13.15.4'}]
+      -
+        name: 'sdith3l3gf2fast'
+        pretty_name: 'SDitH3-L3-gf2-fast'
+        oqs_meth: 'OQS_SIG_alg_sdith_l3_gf2_fast'
+        oid: '1.3.6.1.4.1.22554.2.16.16.3'
+        code_point: '0xfe11'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.13.16.4',
+                    'code_point': '0xfe12'}]
+      -
+        name: 'sdith3l5gf2short'
+        pretty_name: 'SDitH3-L5-gf2-short'
+        oqs_meth: 'OQS_SIG_alg_sdith_l5_gf2_short'
+        oid: '1.3.6.1.4.1.22554.2.16.17.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.13.17.4'}]
+      -
+        name: 'sdith3l5gf2fast'
+        pretty_name: 'SDitH3-L5-gf2-fast'
+        oqs_meth: 'OQS_SIG_alg_sdith_l5_gf2_fast'
+        oid: '1.3.6.1.4.1.22554.2.16.18.3'
+        code_point: '0xfe13'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.13.18.4',
+                    'code_point': '0xfe14'}]
+      -
+        name: 'sdith3l1gf2shortcipherpow'
+        pretty_name: 'SDitH3-L1-gf2-short-cipherpow'
+        oqs_meth: 'OQS_SIG_alg_sdith_l1_gf2_short_cipherpow'
+        oid: '1.3.6.1.4.1.22554.2.16.19.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.13.19.4'}]
+      -
+        name: 'sdith3l1gf2fastcipherpow'
+        pretty_name: 'SDitH3-L1-gf2-fast-cipherpow'
+        oqs_meth: 'OQS_SIG_alg_sdith_l1_gf2_fast_cipherpow'
+        oid: '1.3.6.1.4.1.22554.2.16.20.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.13.20.4'}]
+      -
+        name: 'sdith3l3gf2shortcipherpow'
+        pretty_name: 'SDitH3-L3-gf2-short-cipherpow'
+        oqs_meth: 'OQS_SIG_alg_sdith_l3_gf2_short_cipherpow'
+        oid: '1.3.6.1.4.1.22554.2.16.21.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.13.21.4'}]
+      -
+        name: 'sdith3l3gf2fastcipherpow'
+        pretty_name: 'SDitH3-L3-gf2-fast-cipherpow'
+        oqs_meth: 'OQS_SIG_alg_sdith_l3_gf2_fast_cipherpow'
+        oid: '1.3.6.1.4.1.22554.2.16.22.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.13.22.4'}]
+      -
+        name: 'sdith3l5gf2shortcipherpow'
+        pretty_name: 'SDitH3-L5-gf2-short-cipherpow'
+        oqs_meth: 'OQS_SIG_alg_sdith_l5_gf2_short_cipherpow'
+        oid: '1.3.6.1.4.1.22554.2.16.23.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.13.23.4'}]
+      -
+        name: 'sdith3l5gf2fastcipherpow'
+        pretty_name: 'SDitH3-L5-gf2-fast-cipherpow'
+        oqs_meth: 'OQS_SIG_alg_sdith_l5_gf2_fast_cipherpow'
+        oid: '1.3.6.1.4.1.22554.2.16.24.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.13.24.4'}]
+  -
+    # NIST additional signatures Round 3, SQIsign v3.
+    # Pure OIDs: Bouncy Castle round-3 identifiers 1.3.6.1.4.1.22554.2.19.<1..3>.3 (lvl1/3/5).
+    # Hybrids: OQS arc 1.3.9999.14.<same leaf>.4.
+    family: 'SQIsign'
+    variants:
+      -
+        name: 'sqisignp3243'
+        pretty_name: 'SQIsign-p324-3'
+        oqs_meth: 'OQS_SIG_alg_sqisign_p324_3'
+        oid: '1.3.6.1.4.1.22554.2.19.1.3'
+        code_point: '0xfe15'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.14.1.4',
+                    'code_point': '0xfe16'}]
+      -
+        name: 'sqisignp50027'
+        pretty_name: 'SQIsign-p500-27'
+        oqs_meth: 'OQS_SIG_alg_sqisign_p500_27'
+        oid: '1.3.6.1.4.1.22554.2.19.2.3'
+        code_point: '0xfe17'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.14.2.4',
+                    'code_point': '0xfe18'}]
+      -
+        name: 'sqisignp66417'
+        pretty_name: 'SQIsign-p664-17'
+        oqs_meth: 'OQS_SIG_alg_sqisign_p664_17'
+        oid: '1.3.6.1.4.1.22554.2.19.3.3'
+        code_point: '0xfe19'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.14.3.4',
+                    'code_point': '0xfe1a'}]
+  -
+    # NIST additional signatures Round 3 QR-UOV. Bouncy Castle round-3 identifiers name the SHAKE
+    # PRG sets: 1.3.6.1.4.1.22554.2.17.<1..15>.3 (leaves 1..12 = round-2 (q, L, v, m) sets, 13..15 =
+    # the new q=127, L=10 sets). BC has no OIDs for the AES PRG sets: they take OQS arc leaves
+    # 1.3.9999.15.<BC leaf + 15>.3. All hybrids: OQS arc 1.3.9999.15.<leaf>.4.
+    # All sets fit TLS 1.3; the SHAKE q=31, L=10 set of each level is enabled.
+    family: 'QR-UOV'
+    variants:
+      -
+        name: 'qruov1q127l3shake'
+        pretty_name: 'QRUOV-1q127L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L3shake'
+        oid: '1.3.6.1.4.1.22554.2.17.1.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.1.4'}]
+      -
+        name: 'qruov1q127l3aes'
+        pretty_name: 'QRUOV-1q127L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L3aes'
+        oid: '1.3.9999.15.16.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.16.4'}]
+      -
+        name: 'qruov1q31l3shake'
+        pretty_name: 'QRUOV-1q31L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L3shake'
+        oid: '1.3.6.1.4.1.22554.2.17.2.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.2.4'}]
+      -
+        name: 'qruov1q31l3aes'
+        pretty_name: 'QRUOV-1q31L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L3aes'
+        oid: '1.3.9999.15.17.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.17.4'}]
+      -
+        name: 'qruov1q31l10shake'
+        pretty_name: 'QRUOV-1q31L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.3.3'
+        code_point: '0xfe1b'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.3.4',
+                    'code_point': '0xfe1c'}]
+      -
+        name: 'qruov1q31l10aes'
+        pretty_name: 'QRUOV-1q31L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q31L10aes'
+        oid: '1.3.9999.15.18.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.18.4'}]
+      -
+        name: 'qruov1q7l10shake'
+        pretty_name: 'QRUOV-1q7L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q7L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.4.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.4.4'}]
+      -
+        name: 'qruov1q7l10aes'
+        pretty_name: 'QRUOV-1q7L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q7L10aes'
+        oid: '1.3.9999.15.19.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.19.4'}]
+      -
+        name: 'qruov3q127l3shake'
+        pretty_name: 'QRUOV-3q127L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L3shake'
+        oid: '1.3.6.1.4.1.22554.2.17.5.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.5.4'}]
+      -
+        name: 'qruov3q127l3aes'
+        pretty_name: 'QRUOV-3q127L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L3aes'
+        oid: '1.3.9999.15.20.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.20.4'}]
+      -
+        name: 'qruov3q31l3shake'
+        pretty_name: 'QRUOV-3q31L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L3shake'
+        oid: '1.3.6.1.4.1.22554.2.17.6.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.6.4'}]
+      -
+        name: 'qruov3q31l3aes'
+        pretty_name: 'QRUOV-3q31L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L3aes'
+        oid: '1.3.9999.15.21.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.21.4'}]
+      -
+        name: 'qruov3q31l10shake'
+        pretty_name: 'QRUOV-3q31L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.7.3'
+        code_point: '0xfe1d'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.7.4',
+                    'code_point': '0xfe1e'}]
+      -
+        name: 'qruov3q31l10aes'
+        pretty_name: 'QRUOV-3q31L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q31L10aes'
+        oid: '1.3.9999.15.22.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.22.4'}]
+      -
+        name: 'qruov3q7l10shake'
+        pretty_name: 'QRUOV-3q7L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q7L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.8.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.8.4'}]
+      -
+        name: 'qruov3q7l10aes'
+        pretty_name: 'QRUOV-3q7L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q7L10aes'
+        oid: '1.3.9999.15.23.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.23.4'}]
+      -
+        name: 'qruov5q127l3shake'
+        pretty_name: 'QRUOV-5q127L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L3shake'
+        oid: '1.3.6.1.4.1.22554.2.17.9.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.9.4'}]
+      -
+        name: 'qruov5q127l3aes'
+        pretty_name: 'QRUOV-5q127L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L3aes'
+        oid: '1.3.9999.15.24.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.24.4'}]
+      -
+        name: 'qruov5q31l3shake'
+        pretty_name: 'QRUOV-5q31L3-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L3shake'
+        oid: '1.3.6.1.4.1.22554.2.17.10.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.10.4'}]
+      -
+        name: 'qruov5q31l3aes'
+        pretty_name: 'QRUOV-5q31L3-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L3aes'
+        oid: '1.3.9999.15.25.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.25.4'}]
+      -
+        name: 'qruov5q31l10shake'
+        pretty_name: 'QRUOV-5q31L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.11.3'
+        code_point: '0xfe1f'
+        enable: true
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.11.4',
+                    'code_point': '0xfe20'}]
+      -
+        name: 'qruov5q31l10aes'
+        pretty_name: 'QRUOV-5q31L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q31L10aes'
+        oid: '1.3.9999.15.26.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.26.4'}]
+      -
+        name: 'qruov5q7l10shake'
+        pretty_name: 'QRUOV-5q7L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q7L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.12.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.12.4'}]
+      -
+        name: 'qruov5q7l10aes'
+        pretty_name: 'QRUOV-5q7L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q7L10aes'
+        oid: '1.3.9999.15.27.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.27.4'}]
+      -
+        name: 'qruov1q127l10shake'
+        pretty_name: 'QRUOV-1q127L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.13.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.13.4'}]
+      -
+        name: 'qruov1q127l10aes'
+        pretty_name: 'QRUOV-1q127L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_1q127L10aes'
+        oid: '1.3.9999.15.28.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p256',
+                    'pretty_name': 'ECDSA p256',
+                    'oid': '1.3.9999.15.28.4'}]
+      -
+        name: 'qruov3q127l10shake'
+        pretty_name: 'QRUOV-3q127L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.14.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.14.4'}]
+      -
+        name: 'qruov3q127l10aes'
+        pretty_name: 'QRUOV-3q127L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_3q127L10aes'
+        oid: '1.3.9999.15.29.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p384',
+                    'pretty_name': 'ECDSA p384',
+                    'oid': '1.3.9999.15.29.4'}]
+      -
+        name: 'qruov5q127l10shake'
+        pretty_name: 'QRUOV-5q127L10-shake'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L10shake'
+        oid: '1.3.6.1.4.1.22554.2.17.15.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.15.4'}]
+      -
+        name: 'qruov5q127l10aes'
+        pretty_name: 'QRUOV-5q127L10-aes'
+        oqs_meth: 'OQS_SIG_alg_qruov_5q127L10aes'
+        oid: '1.3.9999.15.30.3'
+        enable: false
+        enable_tls: true
+        mix_with: [{'name': 'p521',
+                    'pretty_name': 'ECDSA p521',
+                    'oid': '1.3.9999.15.30.4'}]

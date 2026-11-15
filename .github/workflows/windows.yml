@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+# TEMPORARY-LIBOQS-PEG (oqs-provider#875): the NIST round-3 signature FAEST is only available on
+# liboqs branch na_FAEST_liboqs. Set LIBOQS_BRANCH back to "main" as soon as FAEST lands in liboqs
+# main (grep for TEMPORARY-LIBOQS-PEG to find every place); generate.yml needs no change then.
+env:
+  LIBOQS_BRANCH: "na_FAEST_liboqs"
+
 jobs:
   coding_style_tests:
     uses: ./.github/workflows/coding_style.yml
@@ -50,7 +56,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: main
+          ref: ${{ env.LIBOQS_BRANCH }}
           path: liboqs
       - name: Install cygwin
         uses: cygwin/cygwin-install-action@3f0a3f9f988f7e96b8c18098ae05eaec175f5b52 # v6.1
@@ -148,7 +154,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: main
+          ref: ${{ env.LIBOQS_BRANCH }}
           path: liboqs
       - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
         with:
@@ -265,7 +271,7 @@ jobs:
             persist-credentials: false
             set-safe-directory: true
             repository: open-quantum-safe/liboqs
-            ref: main
+            ref: ${{ env.LIBOQS_BRANCH }}
             path: liboqs
         - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
           with:

@@ -21,7 +21,7 @@ jobs:
         ossl-branch: [openssl-3.5.0, openssl-4.0.1, master]
         libjade-build: ["OFF"]
     container:
-      image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
+      image: openquantumsafe/ci-ubuntu-latest@sha256:e668edf93ed62f625d139ab707348f3c4162b15fe1b7cc4edc66ed1d0f0afe87
     env:
       MAKE_PARAMS: "-j 18"
       LIBOQS_BRANCH: "main"

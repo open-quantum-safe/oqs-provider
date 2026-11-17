@@ -18,13 +18,11 @@ Status
 
 Currently this provider fully enables quantum-safe cryptography for KEM
 key establishment in TLS1.3 including management of such keys via the
-OpenSSL (3.0) provider interface and hybrid KEM schemes. Also, QSC
+OpenSSL provider interface and hybrid KEM schemes. Also, QSC
 signatures including CMS and CMP functionality are available via the OpenSSL
 EVP interface. Key persistence is provided via the encode/decode mechanism,
 X.509 data structures, and PKCS#12 for bundling a private key with its
-corresponding X.509 certificate. Starting with OpenSSL 3.2 support for
-TLS1.3 signature functionality is available and final glitches for CMS
-have been resolved.
+corresponding X.509 certificate. QSC signatures can also be used in TLS1.3.
 
 The standards implemented are documented in the separate file [STANDARDS.md](STANDARDS.md).
 
@@ -95,19 +93,22 @@ KEMs `X25519MLKEM768`, `SecP256r1MLKEM768` and `SecP384r1MLKEM1024`).
 A hybrid remains available through `oqsprovider` as long as OpenSSL does not
 implement that specific combination, even when one of its components is
 standardized: for example, `x25519_mlkem512` and `p256_mlkem512` stay available
-even though OpenSSL provides their `ML-KEM-512` component.
+even though OpenSSL provides their `ML-KEM-512` component. And for the
+avoidance of doubt, the cryptographic logic for these standardized PQ algorithms
+in the hybrid case is delivered by `liboqs`, not by OpenSSL's default provider.
 
-Everyone interested in testing any of the disabled standardized PQ algorithms
-(pure as well as hybrid) via `oqsprovider` must therefore do so in an OpenSSL
-version `>= 3.2` and `< 3.5`.
+The `oqsprovider` implementations of these disabled standardized PQ algorithms
+are therefore only active in OpenSSL versions `< 3.5`.
+These versions are no longer supported by the OpenSSL project, and accordingly
+`oqsprovider` is no longer tested with them (see
+[Note on OpenSSL versions](#note-on-openssl-versions)).
 
 > [!NOTE]
-> A concrete consequence is that SLH-DSA cannot be used for TLS via
-> `oqsprovider` when running in OpenSSL >= 3.5, because OpenSSL disables the
-> `oqsprovider` implementation but (as of this writing) does not itself offer
-> SLH-DSA for TLS. Use an OpenSSL version `>= 3.2` and `< 3.5` to test SLH-DSA
-> in TLS. OpenSSL >= 4.1 will add support for SLH-DSA on TLS (see
-> [this merged commit](https://github.com/openssl/openssl/commit/4a08aa1346aa00151b09cc45fb2ce01ddee27230)).
+> SLH-DSA is available for TLS starting with OpenSSL 4.1, which implements it
+> natively (see
+> [this commit](https://github.com/openssl/openssl/commit/4a08aa1346aa00151b09cc45fb2ce01ddee27230)).
+> In OpenSSL 3.5 to 4.0, SLH-DSA cannot be used for TLS: OpenSSL disables the
+> `oqsprovider` implementation but does not offer SLH-DSA for TLS itself.
 
 ## Using with LibOQS 0.16.0
 
@@ -140,7 +141,9 @@ in [CONFIGURE.md](CONFIGURE.md).
 
 ## Pre-requisites
 
-To be able to build `oqsprovider`, OpenSSL 3.0 and liboqs need to be installed.
+To be able to build `oqsprovider`, OpenSSL and liboqs need to be installed.
+The OpenSSL version should be one still supported by the OpenSSL project, see
+[Note on OpenSSL versions](#note-on-openssl-versions).
 It's not important where they are installed, just that they are. If installed
 in non-standard locations, these must be provided when running `cmake` via
 the variables "OPENSSL_ROOT_DIR" and "liboqs_DIR". See [CONFIGURE.md](CONFIGURE.md)
@@ -158,52 +161,14 @@ Usage of `oqsprovider` is documented in the separate [USAGE.md](USAGE.md) file.
 Note on OpenSSL versions
 ------------------------
 
-`oqsprovider` is written to ensure building on all versions of OpenSSL
-supporting the provider concept. However, OpenSSL still is in active
-development regarding features supported via the provider interface.
-Therefore some functionalities documented above are only supported
-with specific OpenSSL versions:
+`oqsprovider` originally has been designed and written to ensure building
+and operating on all versions of OpenSSL supporting the provider concept,
+i.e., all versions >= 3.0.
 
-## 3.0/3.1
-
-In these versions, CMS functionality implemented in providers is not
-supported: The resolution of https://github.com/openssl/openssl/issues/17717
-has not been not getting back-ported to OpenSSL3.0.
-
-Also not supported in this version are provider-based signature algorithms
-used during TLS1.3 operations as documented in https://github.com/openssl/openssl/issues/10512.
-
-Also not fully supported in 3.0.2 is performance testing as per the openssl
-`speed` command as documented in #385.
-
-## 3.2 and greater
-
-These versions have full support for all TLS1.3 operations using PQ algorithms
-when deploying `oqsprovider`, particularly with regard to the use of signature
-algorithms. This also includes support for the "OSSL_SIGNATURE_PARAM_CONTEXT_STRING"
-parameter that had not been supported before and for which limited support in
-single PQ algorithms is available since `liboqs` version 0.12.
-
-## 3.4 and greater
-
-These versions are expected to support the `openssl pkeyutl -encap/-decap`
-syntax for testing key encapsulation and decapsulation for test purposes. To
-use this option, OQS provider should be built with
-[KEM encoding/decoding support](CONFIGURE.md#oqs_kem_encoders).
-`scripts/runtests.sh` exercises this CLI path via
-`scripts/oqsprovider-kem-encapdecap.sh` when OpenSSL is >= 3.4 and KEM
-encoders are enabled (otherwise the check is skipped).
-Also new in this version is the possibility to retrieve all currently
-active TLS signature algorithms via a new `openssl list` option:
-`openssl list -tls-signature-algorithms`.
-
-These versions also provide support for the new `sign/verify message`
-interface, which are intended to sign arbitrary large data. The inclusion
-of this capacity has modified the behavior of hybrid signature
-components: unconditional hashing is no longer present, and will only
-happen for `EVP_PKEY_OP_SIGNMSG/EVP_PKEY_OP_VERIFYMSG` operations. This
-means that the behavior of `EVP_PKEY_sign_init` interface is modified, as
-an appropriate message length for hybrid signature schemes is expected.
+Independently, OpenSSL is following a support mode and [published release schedule](https://openssl-library.org/roadmap/)
+that this project also heeds. Accordingly, testing of this project
+on unsupported OpenSSL versions does not occur any more and we strongly
+discourage use of oqsprovider on such unsupported OpenSSL versions.
 
 ## 3.5 and greater
 
@@ -215,23 +180,15 @@ and non-functionally (e.g., code quality) is not at par with the implementations
 for these algorithms. Therefore, as described in
 [Using with OpenSSL >= 3.5](#using-with-openssl--35), any algorithm whose
 component is standardized and implemented in OpenSSL is disabled at runtime upon
-detection of it being available in `openssl`. The same algorithms will continue
-to work even using the same `oqsprovider` binary in OpenSSL installations with a
-version older than 3.5.
+detection of it being available in `openssl`. The same algorithms conceptually
+should continue to work even using the same `oqsprovider` binary in
+OpenSSL installations with a version older than 3.5 though this is no longer
+asserted by testing.
 
 This limitation might be resolved by implementing https://github.com/open-quantum-safe/oqs-provider/discussions/625.
 given sufficient interest. Contributions very welcome.
 
 ## All versions
-
-A limitation present in older OpenSSL versions is the number of default groups
-supported: [At most 44 default groups may be specified](https://github.com/openssl/openssl/issues/23624)
-, e.g., passing to [SSL_CTX_set1_groups](https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set1_groups.html).
-Therefore caution is advised activating all KEMs supported by `oqsprovider`
-via [the pre-build configuration facility](CONFIGURE.md#pre-build-configuration):
-This may lead to `openssl` crashing, depending on the OpenSSL version used:
-The problem is gone in OpenSSL "master" branch and in the respective branches
-since the releases 3.3.0, 3.2.2., 3.1.6 and 3.0.14.
 
 For [general OpenSSL implementation limitations, e.g., regarding provider feature usage and support,
 see here](https://www.openssl.org/docs/man3.0/man7/migration_guide.html).

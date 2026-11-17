@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.4.1, openssl-3.5.0, openssl-4.0.1, master] # retain openssl-3.4.1 to test non-OpenSSL PQ alg implementations
+        ossl-branch: [openssl-3.5.0, openssl-4.0.1, openssl-4.1.0, master]
         # OQS_KEM_ENCODERS=ON is weekly-only (see weekly_tests.yml); rarely used on the PR path.
         cmake-params: [ "" ]
         libjade-build:

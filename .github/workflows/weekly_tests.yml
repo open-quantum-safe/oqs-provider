@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ossl-branch: [openssl-3.5.0, openssl-4.0.1, master]
+        ossl-branch: [openssl-3.5.0, openssl-4.0.1, openssl-4.1.0, master]
         libjade-build: ["OFF"]
     container:
       image: openquantumsafe/ci-ubuntu-latest@sha256:e668edf93ed62f625d139ab707348f3c4162b15fe1b7cc4edc66ed1d0f0afe87
@@ -77,7 +77,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        openssl-branch: [master, openssl-3.4.1, openssl-3.5.0, openssl-4.0.1]
+        openssl-branch: [master, openssl-3.5.0, openssl-4.0.1, openssl-4.1.0]
         libjade-build: ["OFF"]
         params:
           - oqsconfig: -DOQS_ALGS_ENABLED=STD
@@ -157,7 +157,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        openssl-branch: [master, openssl-3.4.1, openssl-3.5.0, openssl-4.0.1]
+        openssl-branch: [master, openssl-3.5.0, openssl-4.0.1, openssl-4.1.0]
         platform:
           - arch: win64
             oqsconfig: -DOQS_ALGS_ENABLED=STD

@@ -9,12 +9,6 @@ on:
 permissions:
   contents: read
 
-# TEMPORARY-LIBOQS-PEG (oqs-provider#875): the NIST round-3 signature FAEST is only available on
-# liboqs branch na_FAEST_liboqs. Set LIBOQS_BRANCH back to "main" as soon as FAEST lands in liboqs
-# main (grep for TEMPORARY-LIBOQS-PEG to find every place); generate.yml needs no change then.
-env:
-  LIBOQS_BRANCH: "na_FAEST_liboqs"
-
 jobs:
   coding_style_tests:
     uses: ./.github/workflows/coding_style.yml
@@ -70,6 +64,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Full build
-        run: ./scripts/fullbuild.sh
+        run: LIBOQS_BRANCH=main ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V

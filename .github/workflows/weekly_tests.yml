@@ -9,12 +9,6 @@ on:
 permissions:
   contents: read
 
-# TEMPORARY-LIBOQS-PEG (oqs-provider#875): the NIST round-3 signature FAEST is only available on
-# liboqs branch na_FAEST_liboqs. Set LIBOQS_BRANCH back to "main" as soon as FAEST lands in liboqs
-# main (grep for TEMPORARY-LIBOQS-PEG to find every place); generate.yml needs no change then.
-env:
-  LIBOQS_BRANCH: "na_FAEST_liboqs"
-
 jobs:
   # KEM encoders are rarely exercised; keep them off the per-PR linux_intel
   # matrix and run a focused Linux cell here instead (#862 review).
@@ -30,6 +24,7 @@ jobs:
       image: openquantumsafe/ci-ubuntu-latest@sha256:52c9f9c763619c6495b34948c03b613ef1300deba8e615a26ea603d5ab0cfc47
     env:
       MAKE_PARAMS: "-j 18"
+      LIBOQS_BRANCH: "main"
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -41,7 +36,7 @@ jobs:
         id: refs
         run: |
           echo "ossl=$(git ls-remote https://github.com/openssl/openssl.git ${{ matrix.ossl-branch }} | cut -f1)" >> "$GITHUB_OUTPUT"
-          echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git "$LIBOQS_BRANCH" | cut -f1)" >> "$GITHUB_OUTPUT"
+          echo "liboqs=$(git ls-remote https://github.com/open-quantum-safe/liboqs.git main | cut -f1)" >> "$GITHUB_OUTPUT"
       - name: Retrieve OpenSSL from cache
         id: cache-openssl
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
@@ -109,7 +104,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: ${{ env.LIBOQS_BRANCH }}
+          ref: main
           path: liboqs
 
       - name: Retrieve OpenSSL32 from cache
@@ -194,7 +189,7 @@ jobs:
           persist-credentials: false
           set-safe-directory: true
           repository: open-quantum-safe/liboqs
-          ref: ${{ env.LIBOQS_BRANCH }}
+          ref: main
           path: liboqs
 
       - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0

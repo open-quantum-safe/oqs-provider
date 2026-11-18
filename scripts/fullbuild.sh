@@ -6,8 +6,7 @@
 # EnvVar CMAKE_PARAMS: passed to cmake
 # EnvVar MAKE_PARAMS: passed to invocations of make; sample value: "-j"
 # EnvVar OQSPROV_CMAKE_PARAMS: passed to invocations of oqsprovider cmake
-# EnvVar LIBOQS_BRANCH: Defines branch/release of liboqs; default value "na_FAEST_liboqs"
-#   TEMPORARY-LIBOQS-PEG (oqs-provider#875): revert the default to "main" once FAEST lands in liboqs main
+# EnvVar LIBOQS_BRANCH: Defines branch/release of liboqs; default value "main"
 # EnvVar OQS_ALGS_ENABLED: If set, defines OQS algs to be enabled, e.g., "STD"
 # EnvVar OPENSSL_INSTALL: If set, defines (binary) OpenSSL installation to use
 # EnvVar OPENSSL_BRANCH: Defines branch/release of openssl; if set, forces source-build of OpenSSL
@@ -45,10 +44,8 @@ if [ $# -gt 0 ]; then
    fi
 fi
 
-# TEMPORARY-LIBOQS-PEG (oqs-provider#875): FAEST is only on liboqs branch na_FAEST_liboqs;
-# set this back to "main" as soon as FAEST lands in liboqs main.
 if [ -z "$LIBOQS_BRANCH" ]; then
-   export LIBOQS_BRANCH=na_FAEST_liboqs
+   export LIBOQS_BRANCH=main
 fi
 
 if [ -z "$OQS_ALGS_ENABLED" ]; then

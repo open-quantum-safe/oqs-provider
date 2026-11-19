@@ -12,6 +12,14 @@ The default configuration is as defined in the [algorithm configuration file](oq
 
 Any PR changing this default must include all files changed by `generate.py`.
 
+`generate.py` enforces the following rules on `generate.yml`, in the same way for KEMs and signatures:
+
+- Algorithm names must be lowercase. Standardized hybrid KEM names (`standard_name`) are the only exception.
+- A KEM's default ECP hybrid (p256, p384 or p521 by security level) exists if `use_hybrid: true`; further KEM hybrids are listed in `extra_nids` `current` by `hybrid_group`. Signature hybrids are listed in `mix_with`.
+- TLS code points (KEMs: `nid`, `nid_hybrid` and the `nid` of `extra_nids` `current` entries; signatures: `code_point` of variants and of `mix_with` entries) are set if and only if the algorithm is used in TLS: `enable_kem: true` and `enable_tls: true` for KEMs, `enable: true` and `enable_tls: true` for signatures.
+- Unless marked `iana: true`, TLS code points must be unique and lie in the RFC 8446 private use range (`0xFE00`-`0xFEFF` for KEMs, `0xFE00`-`0xFFFF` for signatures).
+- A code point set to `'auto'` is assigned by `generate.py`, which writes it into `generate.yml`: the lowest private use code point not used anywhere in `generate.yml`, including by previous versions of algorithms (`extra_nids` `old`). To enable an algorithm for TLS, set its flags and set its code points, and those of its hybrids, to `'auto'`.
+
 ## Build install options
 
 ### OPENSSL_ROOT_DIR
@@ -136,9 +144,10 @@ code deficiencies related to providers in such old OpenSSL branches.
 ### LIBOQS_BRANCH
 
 This defines the branch of `liboqs` against which `oqs-provider` is built.
-This can be used, for example, to facilitate a release of `oqsprovider`
-to track an old/stable `liboqs` release. If this variable is not set, the
-"main" branch is built.
+If this variable is not set, the "main" branch is built. Only the algorithm
+set and code points of the current `generate.yml` are supported; building
+against older `liboqs` releases is not supported. Please go to the corresponding
+`oqs-provider` tag to use the desired pair.
 
 ### liboqs_DIR
 

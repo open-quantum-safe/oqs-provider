@@ -505,9 +505,7 @@ int main(int argc, char *argv[]) {
     configfile = argv[2];
 
     oqs_load_det_pseudorandom_generator();
-    load_oqs_provider(libctx, modulename, configfile);
-
-    oqsprov = OSSL_PROVIDER_load(libctx, modulename);
+    oqsprov = load_oqs_provider(libctx, modulename, configfile);
 
     kemalgs =
         OSSL_PROVIDER_query_operation(oqsprov, OSSL_OP_KEM, &query_nocache);

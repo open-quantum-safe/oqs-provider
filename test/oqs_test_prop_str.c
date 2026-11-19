@@ -138,11 +138,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    load_oqs_provider(libctx, argv[1], argv[2]);
-
-    oqsprov = OSSL_PROVIDER_load(libctx, argv[1]);
+    oqsprov = load_oqs_provider(libctx, argv[1], argv[2]);
     if (oqsprov == NULL) {
-        fprintf(stderr, "OSSL_PROVIDER_load(%s) failed\n", argv[1]);
+        fprintf(stderr, "load_oqs_provider(%s) failed\n", argv[1]);
         OSSL_LIB_CTX_free(libctx);
         return 1;
     }

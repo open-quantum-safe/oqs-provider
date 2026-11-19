@@ -64,6 +64,7 @@ def get_sig_nistlevel(family, alg):
         exit(1)
     # translate family names in generate.yml to directory names for liboqs algorithm datasheets
     if family['family'] == 'CRYSTALS-Dilithium': datasheetname = 'dilithium'
+    elif family['family'] == 'QR-UOV': datasheetname = 'qruov'
     else: datasheetname = family['family'].lower().replace('-', '_')
     # load datasheet
     algymlfilename = os.path.join(os.environ['LIBOQS_SRC_DIR'], 'docs', 'algorithms', 'sig', '{:s}.yml'.format(datasheetname))

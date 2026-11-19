@@ -26,7 +26,7 @@ jobs:
   release-test:
     runs-on: ubuntu-latest
     container:
-      image: openquantumsafe/ci-ubuntu-jammy@sha256:a4195181536916bb79e0e309b57fd5d9df20a3eee8f500da6caae9e355ba8807
+      image: openquantumsafe/ci-ubuntu-latest@sha256:e668edf93ed62f625d139ab707348f3c4162b15fe1b7cc4edc66ed1d0f0afe87
 
     steps:
       - name: Check if requested ref exists

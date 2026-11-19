@@ -8,8 +8,8 @@
  *
  */
 
-#include "oqsprov_compat.h"
 #include <assert.h>
+#include <limits.h>
 #include <openssl/core_names.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
@@ -1056,7 +1056,19 @@ OQSX_KEY *oqsx_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
         plen = 0;
     } else {
         p = ASN1_STRING_get0_data(oct);
-        plen = oqsx_ASN1_STRING_length(oct);
+#if OPENSSL_VERSION_NUMBER >= 0x40100000L
+        {
+            size_t len = ASN1_STRING_get_length(oct);
+            if (len > INT_MAX) {
+                ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_ENCODING);
+                ASN1_OCTET_STRING_free(oct);
+                return NULL;
+            }
+            plen = (int)len;
+        }
+#else
+        plen = ASN1_STRING_length(oct);
+#endif
     }
 
     oqsx = oqsx_key_op(palg, p, plen + key_diff, KEY_OP_PRIVATE, libctx, propq);

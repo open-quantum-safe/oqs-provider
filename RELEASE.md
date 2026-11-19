@@ -7,6 +7,10 @@
 * Algorithms that are disabled or cannot be used in TLS, such as the UOV variants with large public keys, no longer have TLS code points ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 * Testing now follows the [OpenSSL release support schedule](https://openssl-library.org/roadmap/). `oqsprovider` is only tested with OpenSSL releases that the OpenSSL project still supports: currently 3.5 (LTS), 4.0 and 4.1, plus `master`. OpenSSL 3.0 (Ubuntu 22.04 CI images) and 3.4 are no longer tested, and using `oqsprovider` with unsupported OpenSSL versions is strongly discouraged. Consequently, the `oqsprovider` implementations of algorithms that OpenSSL implements natively (e.g. ML-KEM, ML-DSA, SLH-DSA), which are only active with OpenSSL < 3.5, are no longer tested ([#880](https://github.com/open-quantum-safe/oqs-provider/pull/880)).
 
+### Deprecation notices
+
+* In pursuit of more simple project maintenance and future avoidance of duplication of work, the algorithm families ML-KEM, ML-DSA and SLH-DSA together with their standardized hybrid combinations (such as X25519MLKEM768) -- all readily available from the OpenSSL default provider -- will be removed from oqsprovider in 0.14.0.
+
 Previous Release Notes
 ======================
 

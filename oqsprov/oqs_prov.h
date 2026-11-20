@@ -1704,158 +1704,158 @@ extern const OSSL_DISPATCH
 extern const OSSL_DISPATCH
     oqs_SubjectPublicKeyInfo_der_to_p521_mayo5_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_CROSSrsdp128balanced_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_crossrsdp128balanced_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_CROSSrsdp128balanced_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_crossrsdp128balanced_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_CROSSrsdp128balanced_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_crossrsdp128balanced_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_CROSSrsdp128balanced_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_crossrsdp128balanced_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_CROSSrsdp128balanced_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_crossrsdp128balanced_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_CROSSrsdp128balanced_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_CROSSrsdp128balanced_to_text_encoder_functions[];
+    oqs_crossrsdp128balanced_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_crossrsdp128balanced_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_CROSSrsdp128balanced_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_crossrsdp128balanced_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_CROSSrsdp128balanced_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_crossrsdp128balanced_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_is_pkc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_is_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_is_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_is_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_ov_is_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_OV_Is_pkc_to_text_encoder_functions[];
+    oqs_ov_is_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_ov_is_pkc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_OV_Is_pkc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_ov_is_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_OV_Is_pkc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_ov_is_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_is_pkc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_is_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_is_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_is_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_is_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Is_pkc_to_text_encoder_functions[];
+    oqs_p256_ov_is_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_is_pkc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_p256_OV_Is_pkc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_p256_ov_is_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_p256_OV_Is_pkc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_p256_ov_is_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_ip_pkc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_ip_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_ip_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_ip_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_ov_ip_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_OV_Ip_pkc_to_text_encoder_functions[];
+    oqs_ov_ip_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_ov_ip_pkc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_OV_Ip_pkc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_ov_ip_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_OV_Ip_pkc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_ov_ip_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_ip_pkc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_ip_pkc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_ip_pkc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_ip_pkc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_ip_pkc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Ip_pkc_to_text_encoder_functions[];
+    oqs_p256_ov_ip_pkc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_ip_pkc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_p256_OV_Ip_pkc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_p256_ov_ip_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_p256_OV_Ip_pkc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_p256_ov_ip_pkc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_is_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_is_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_is_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_is_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_ov_is_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Is_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_OV_Is_pkc_skc_to_text_encoder_functions[];
+    oqs_ov_is_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_ov_is_pkc_skc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_OV_Is_pkc_skc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_ov_is_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_OV_Is_pkc_skc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_ov_is_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_is_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_is_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_is_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_is_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_is_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Is_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Is_pkc_skc_to_text_encoder_functions[];
+    oqs_p256_ov_is_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_is_pkc_skc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_p256_OV_Is_pkc_skc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_p256_ov_is_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_p256_OV_Is_pkc_skc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_p256_ov_is_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_ip_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_ip_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_ov_ip_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_ov_ip_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_ov_ip_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_OV_Ip_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_OV_Ip_pkc_skc_to_text_encoder_functions[];
+    oqs_ov_ip_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_ov_ip_pkc_skc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_OV_Ip_pkc_skc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_ov_ip_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_OV_Ip_pkc_skc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_ov_ip_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_ip_pkc_skc_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_ip_pkc_skc_to_PrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_ip_pkc_skc_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+    oqs_p256_ov_ip_pkc_skc_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
+    oqs_p256_ov_ip_pkc_skc_to_SubjectPublicKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_p256_OV_Ip_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Ip_pkc_skc_to_text_encoder_functions[];
+    oqs_p256_ov_ip_pkc_skc_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_ip_pkc_skc_to_text_encoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_PrivateKeyInfo_der_to_p256_OV_Ip_pkc_skc_decoder_functions[];
+    oqs_PrivateKeyInfo_der_to_p256_ov_ip_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
-    oqs_SubjectPublicKeyInfo_der_to_p256_OV_Ip_pkc_skc_decoder_functions[];
+    oqs_SubjectPublicKeyInfo_der_to_p256_ov_ip_pkc_skc_decoder_functions[];
 extern const OSSL_DISPATCH
     oqs_snova1k_to_PrivateKeyInfo_der_encoder_functions[];
 extern const OSSL_DISPATCH
@@ -2486,6 +2486,423 @@ extern const OSSL_DISPATCH
 extern const OSSL_DISPATCH
     oqs_SubjectPublicKeyInfo_der_to_p521_mqom3cat5gf16fastct_decoder_functions
         [];
+extern const OSSL_DISPATCH
+    oqs_faest128f_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest128f_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest128f_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest128f_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest128f_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest128f_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_faest128f_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_faest128f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_faest128f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_faest128f_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_faest128f_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_faest128f_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_faest128f_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_faest128f_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_faest128f_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p256_faest128f_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p256_faest128f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p256_faest128f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest192f_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest192f_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest192f_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest192f_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest192f_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest192f_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_faest192f_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_faest192f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_faest192f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_faest192f_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_faest192f_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_faest192f_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_faest192f_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_faest192f_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_faest192f_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p384_faest192f_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p384_faest192f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p384_faest192f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest256f_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest256f_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest256f_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest256f_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest256f_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_faest256f_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_faest256f_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_faest256f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_faest256f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_faest256f_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_faest256f_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_faest256f_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_faest256f_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_faest256f_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_faest256f_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p521_faest256f_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p521_faest256f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p521_faest256f_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l1gf2fast_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l1gf2fast_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l1gf2fast_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l1gf2fast_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l1gf2fast_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l1gf2fast_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_sdith3l1gf2fast_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_sdith3l1gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_sdith3l1gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sdith3l1gf2fast_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sdith3l1gf2fast_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sdith3l1gf2fast_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sdith3l1gf2fast_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sdith3l1gf2fast_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sdith3l1gf2fast_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p256_sdith3l1gf2fast_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p256_sdith3l1gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p256_sdith3l1gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l3gf2fast_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l3gf2fast_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l3gf2fast_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l3gf2fast_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l3gf2fast_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l3gf2fast_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_sdith3l3gf2fast_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_sdith3l3gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_sdith3l3gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sdith3l3gf2fast_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sdith3l3gf2fast_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sdith3l3gf2fast_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sdith3l3gf2fast_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sdith3l3gf2fast_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sdith3l3gf2fast_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p384_sdith3l3gf2fast_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p384_sdith3l3gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p384_sdith3l3gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l5gf2fast_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l5gf2fast_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l5gf2fast_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l5gf2fast_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l5gf2fast_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sdith3l5gf2fast_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_sdith3l5gf2fast_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_sdith3l5gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_sdith3l5gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sdith3l5gf2fast_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sdith3l5gf2fast_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sdith3l5gf2fast_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sdith3l5gf2fast_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sdith3l5gf2fast_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sdith3l5gf2fast_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p521_sdith3l5gf2fast_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p521_sdith3l5gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p521_sdith3l5gf2fast_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp3243_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp3243_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp3243_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp3243_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp3243_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp3243_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_sqisignp3243_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_sqisignp3243_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_sqisignp3243_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sqisignp3243_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sqisignp3243_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sqisignp3243_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sqisignp3243_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sqisignp3243_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_sqisignp3243_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p256_sqisignp3243_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p256_sqisignp3243_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p256_sqisignp3243_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp50027_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp50027_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp50027_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp50027_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp50027_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp50027_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_sqisignp50027_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_sqisignp50027_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_sqisignp50027_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sqisignp50027_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sqisignp50027_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sqisignp50027_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sqisignp50027_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sqisignp50027_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_sqisignp50027_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p384_sqisignp50027_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p384_sqisignp50027_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p384_sqisignp50027_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp66417_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp66417_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp66417_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp66417_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp66417_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_sqisignp66417_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_sqisignp66417_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_sqisignp66417_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_sqisignp66417_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sqisignp66417_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sqisignp66417_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sqisignp66417_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sqisignp66417_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sqisignp66417_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_sqisignp66417_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_p521_sqisignp66417_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p521_sqisignp66417_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p521_sqisignp66417_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov1q31l10shake_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov1q31l10shake_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov1q31l10shake_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov1q31l10shake_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov1q31l10shake_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov1q31l10shake_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_qruov1q31l10shake_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_qruov1q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_qruov1q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_qruov1q31l10shake_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_qruov1q31l10shake_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_qruov1q31l10shake_to_EncryptedPrivateKeyInfo_der_encoder_functions
+        [];
+extern const OSSL_DISPATCH
+    oqs_p256_qruov1q31l10shake_to_EncryptedPrivateKeyInfo_pem_encoder_functions
+        [];
+extern const OSSL_DISPATCH
+    oqs_p256_qruov1q31l10shake_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_qruov1q31l10shake_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p256_qruov1q31l10shake_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p256_qruov1q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p256_qruov1q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov3q31l10shake_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov3q31l10shake_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov3q31l10shake_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov3q31l10shake_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov3q31l10shake_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov3q31l10shake_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_qruov3q31l10shake_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_qruov3q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_qruov3q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_qruov3q31l10shake_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_qruov3q31l10shake_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_qruov3q31l10shake_to_EncryptedPrivateKeyInfo_der_encoder_functions
+        [];
+extern const OSSL_DISPATCH
+    oqs_p384_qruov3q31l10shake_to_EncryptedPrivateKeyInfo_pem_encoder_functions
+        [];
+extern const OSSL_DISPATCH
+    oqs_p384_qruov3q31l10shake_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_qruov3q31l10shake_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p384_qruov3q31l10shake_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p384_qruov3q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p384_qruov3q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov5q31l10shake_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov5q31l10shake_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov5q31l10shake_to_EncryptedPrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov5q31l10shake_to_EncryptedPrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov5q31l10shake_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_qruov5q31l10shake_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH oqs_qruov5q31l10shake_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_qruov5q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_qruov5q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_qruov5q31l10shake_to_PrivateKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_qruov5q31l10shake_to_PrivateKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_qruov5q31l10shake_to_EncryptedPrivateKeyInfo_der_encoder_functions
+        [];
+extern const OSSL_DISPATCH
+    oqs_p521_qruov5q31l10shake_to_EncryptedPrivateKeyInfo_pem_encoder_functions
+        [];
+extern const OSSL_DISPATCH
+    oqs_p521_qruov5q31l10shake_to_SubjectPublicKeyInfo_der_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_qruov5q31l10shake_to_SubjectPublicKeyInfo_pem_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_p521_qruov5q31l10shake_to_text_encoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_PrivateKeyInfo_der_to_p521_qruov5q31l10shake_decoder_functions[];
+extern const OSSL_DISPATCH
+    oqs_SubjectPublicKeyInfo_der_to_p521_qruov5q31l10shake_decoder_functions[];
 ///// OQS_TEMPLATE_FRAGMENT_ENDECODER_FUNCTIONS_END
 
 ///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
@@ -2514,15 +2931,15 @@ extern const OSSL_DISPATCH oqs_mayo3_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_p384_mayo3_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_mayo5_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_p521_mayo5_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_CROSSrsdp128balanced_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_OV_Is_pkc_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Is_pkc_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_OV_Ip_pkc_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Ip_pkc_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_OV_Is_pkc_skc_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Is_pkc_skc_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_OV_Ip_pkc_skc_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_p256_OV_Ip_pkc_skc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_crossrsdp128balanced_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ov_is_pkc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_is_pkc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ov_ip_pkc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_ip_pkc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ov_is_pkc_skc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_is_pkc_skc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ov_ip_pkc_skc_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_ov_ip_pkc_skc_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_snova1k_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_p256_snova1k_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_snova1b_keymgmt_functions[];
@@ -2559,6 +2976,30 @@ extern const OSSL_DISPATCH oqs_mqom3cat3gf16fastct_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_p384_mqom3cat3gf16fastct_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_mqom3cat5gf16fastct_keymgmt_functions[];
 extern const OSSL_DISPATCH oqs_p521_mqom3cat5gf16fastct_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_faest128f_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_faest128f_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_faest192f_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p384_faest192f_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_faest256f_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p521_faest256f_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sdith3l1gf2fast_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_sdith3l1gf2fast_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sdith3l3gf2fast_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p384_sdith3l3gf2fast_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sdith3l5gf2fast_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p521_sdith3l5gf2fast_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sqisignp3243_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_sqisignp3243_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sqisignp50027_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p384_sqisignp50027_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sqisignp66417_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p521_sqisignp66417_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_qruov1q31l10shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p256_qruov1q31l10shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_qruov3q31l10shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p384_qruov3q31l10shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_qruov5q31l10shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_p521_qruov5q31l10shake_keymgmt_functions[];
 
 extern const OSSL_DISPATCH oqs_efrodo640aes_keymgmt_functions[];
 

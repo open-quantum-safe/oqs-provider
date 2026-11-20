@@ -53,9 +53,9 @@ static int oqsx_key_recreate_classickey(OQSX_KEY *key, oqsx_key_op_t op);
 ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_START
 
 #ifdef OQS_KEM_ENCODERS
-#define NID_TABLE_LEN 132
+#define NID_TABLE_LEN 156
 #else
-#define NID_TABLE_LEN 70
+#define NID_TABLE_LEN 94
 #endif
 
 static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
@@ -185,17 +185,17 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "p384_mayo3", OQS_SIG_alg_mayo_3, KEY_TYPE_HYB_SIG, 192},
     {0, "mayo5", OQS_SIG_alg_mayo_5, KEY_TYPE_SIG, 256},
     {0, "p521_mayo5", OQS_SIG_alg_mayo_5, KEY_TYPE_HYB_SIG, 256},
-    {0, "CROSSrsdp128balanced", OQS_SIG_alg_cross_rsdp_128_balanced,
+    {0, "crossrsdp128balanced", OQS_SIG_alg_cross_rsdp_128_balanced,
      KEY_TYPE_SIG, 128},
-    {0, "OV_Is_pkc", OQS_SIG_alg_uov_ov_Is_pkc, KEY_TYPE_SIG, 128},
-    {0, "p256_OV_Is_pkc", OQS_SIG_alg_uov_ov_Is_pkc, KEY_TYPE_HYB_SIG, 128},
-    {0, "OV_Ip_pkc", OQS_SIG_alg_uov_ov_Ip_pkc, KEY_TYPE_SIG, 128},
-    {0, "p256_OV_Ip_pkc", OQS_SIG_alg_uov_ov_Ip_pkc, KEY_TYPE_HYB_SIG, 128},
-    {0, "OV_Is_pkc_skc", OQS_SIG_alg_uov_ov_Is_pkc_skc, KEY_TYPE_SIG, 128},
-    {0, "p256_OV_Is_pkc_skc", OQS_SIG_alg_uov_ov_Is_pkc_skc, KEY_TYPE_HYB_SIG,
+    {0, "ov_is_pkc", OQS_SIG_alg_uov_ov_Is_pkc, KEY_TYPE_SIG, 128},
+    {0, "p256_ov_is_pkc", OQS_SIG_alg_uov_ov_Is_pkc, KEY_TYPE_HYB_SIG, 128},
+    {0, "ov_ip_pkc", OQS_SIG_alg_uov_ov_Ip_pkc, KEY_TYPE_SIG, 128},
+    {0, "p256_ov_ip_pkc", OQS_SIG_alg_uov_ov_Ip_pkc, KEY_TYPE_HYB_SIG, 128},
+    {0, "ov_is_pkc_skc", OQS_SIG_alg_uov_ov_Is_pkc_skc, KEY_TYPE_SIG, 128},
+    {0, "p256_ov_is_pkc_skc", OQS_SIG_alg_uov_ov_Is_pkc_skc, KEY_TYPE_HYB_SIG,
      128},
-    {0, "OV_Ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_SIG, 128},
-    {0, "p256_OV_Ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_HYB_SIG,
+    {0, "ov_ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_SIG, 128},
+    {0, "p256_ov_ip_pkc_skc", OQS_SIG_alg_uov_ov_Ip_pkc_skc, KEY_TYPE_HYB_SIG,
      128},
     {0, "snova1k", OQS_SIG_alg_snova_SNOVA_I_K, KEY_TYPE_SIG, 128},
     {0, "p256_snova1k", OQS_SIG_alg_snova_SNOVA_I_K, KEY_TYPE_HYB_SIG, 128},
@@ -250,6 +250,38 @@ static oqs_nid_name_t nid_names[NID_TABLE_LEN] = {
     {0, "mqom3cat5gf16fastct", OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct,
      KEY_TYPE_SIG, 256},
     {0, "p521_mqom3cat5gf16fastct", OQS_SIG_alg_mqom_mqom3_cat5_gf16_fast_ct,
+     KEY_TYPE_HYB_SIG, 256},
+    {0, "faest128f", OQS_SIG_alg_faest_128f, KEY_TYPE_SIG, 128},
+    {0, "p256_faest128f", OQS_SIG_alg_faest_128f, KEY_TYPE_HYB_SIG, 128},
+    {0, "faest192f", OQS_SIG_alg_faest_192f, KEY_TYPE_SIG, 192},
+    {0, "p384_faest192f", OQS_SIG_alg_faest_192f, KEY_TYPE_HYB_SIG, 192},
+    {0, "faest256f", OQS_SIG_alg_faest_256f, KEY_TYPE_SIG, 256},
+    {0, "p521_faest256f", OQS_SIG_alg_faest_256f, KEY_TYPE_HYB_SIG, 256},
+    {0, "sdith3l1gf2fast", OQS_SIG_alg_sdith_l1_gf2_fast, KEY_TYPE_SIG, 128},
+    {0, "p256_sdith3l1gf2fast", OQS_SIG_alg_sdith_l1_gf2_fast, KEY_TYPE_HYB_SIG,
+     128},
+    {0, "sdith3l3gf2fast", OQS_SIG_alg_sdith_l3_gf2_fast, KEY_TYPE_SIG, 192},
+    {0, "p384_sdith3l3gf2fast", OQS_SIG_alg_sdith_l3_gf2_fast, KEY_TYPE_HYB_SIG,
+     192},
+    {0, "sdith3l5gf2fast", OQS_SIG_alg_sdith_l5_gf2_fast, KEY_TYPE_SIG, 256},
+    {0, "p521_sdith3l5gf2fast", OQS_SIG_alg_sdith_l5_gf2_fast, KEY_TYPE_HYB_SIG,
+     256},
+    {0, "sqisignp3243", OQS_SIG_alg_sqisign_p324_3, KEY_TYPE_SIG, 128},
+    {0, "p256_sqisignp3243", OQS_SIG_alg_sqisign_p324_3, KEY_TYPE_HYB_SIG, 128},
+    {0, "sqisignp50027", OQS_SIG_alg_sqisign_p500_27, KEY_TYPE_SIG, 192},
+    {0, "p384_sqisignp50027", OQS_SIG_alg_sqisign_p500_27, KEY_TYPE_HYB_SIG,
+     192},
+    {0, "sqisignp66417", OQS_SIG_alg_sqisign_p664_17, KEY_TYPE_SIG, 256},
+    {0, "p521_sqisignp66417", OQS_SIG_alg_sqisign_p664_17, KEY_TYPE_HYB_SIG,
+     256},
+    {0, "qruov1q31l10shake", OQS_SIG_alg_qruov_1q31L10shake, KEY_TYPE_SIG, 128},
+    {0, "p256_qruov1q31l10shake", OQS_SIG_alg_qruov_1q31L10shake,
+     KEY_TYPE_HYB_SIG, 128},
+    {0, "qruov3q31l10shake", OQS_SIG_alg_qruov_3q31L10shake, KEY_TYPE_SIG, 192},
+    {0, "p384_qruov3q31l10shake", OQS_SIG_alg_qruov_3q31L10shake,
+     KEY_TYPE_HYB_SIG, 192},
+    {0, "qruov5q31l10shake", OQS_SIG_alg_qruov_5q31L10shake, KEY_TYPE_SIG, 256},
+    {0, "p521_qruov5q31l10shake", OQS_SIG_alg_qruov_5q31L10shake,
      KEY_TYPE_HYB_SIG, 256},
     ///// OQS_TEMPLATE_FRAGMENT_OQSNAMES_END
 };

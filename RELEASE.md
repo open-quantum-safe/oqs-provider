@@ -3,6 +3,7 @@
 ### What's New
 
 * All algorithm names are lowercase: the CROSS and UOV variants have been renamed accordingly, e.g. `OV_Ip_pkc` to `ov_ip_pkc`. OIDs are unchanged, and OpenSSL matches algorithm names case-insensitively ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
+* Added the NIST additional signatures round 3 candidates FAEST, SDitH, SQIsign and QR-UOV, as well as the AES variants of SNOVA. See [README.md](README.md) for which variants are enabled for TLS.
 
 ### Breaking changes
 
@@ -11,6 +12,8 @@
 * TLS code points are now managed by `generate.py` in the same way for KEMs and signatures: only algorithms used in TLS (enabled and TLS-capable) have them, they must be unique and lie in the RFC 8446 private use range unless IANA-registered, and `'auto'` assigns free ones. Enabling an algorithm for TLS thus requires setting its code points to `'auto'`; see [CONFIGURE.md](CONFIGURE.md#pre-build-configuration) ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 * Algorithms that are disabled or cannot be used in TLS, such as the UOV variants with large public keys, no longer have TLS code points ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 * The OIDs for the hybrid KEMs `SecP256r1MLKEM512` (`1.3.6.1.4.1.22554.5.7.1`) and `x25519_mlkem512` (`1.3.6.1.4.1.22554.5.8.1`) have been removed, as they were incorrectly taken from an external OID arc and therefore can cause conflicts. Like all other hybrid KEMs except `SecP384r1MLKEM1024`, they now have no OID. TLS use is unaffected. Builds with [OQS_KEM_ENCODERS](CONFIGURE.md#OQS_KEM_ENCODERS) enabled can no longer write or read keys for these algorithms in PKCS#8/SPKI format unless the OIDs are set explicitly via the environment variables `OQS_OID_SECP256R1MLKEM512` and `OQS_OID_X25519_MLKEM512`; setting them to the previous values restores compatibility with existing keys ([#878](https://github.com/open-quantum-safe/oqs-provider/pull/878)).
+* HQC has been updated to specification v5.1. HQC v5.1 does not interoperate with HQC v5.0 (2025-08-22, shipped in `oqs-provider` 0.12.0). All HQC TLS groups therefore have new code points. As a consequence, TLS peers using HQC v5.0 and v5.1 no longer negotiate an HQC group with each other.
+* UOV has been updated from NIST Round 2 to Round 3. Round 3 changed parameters, so interoperability with Round 2 code is not given. Therefore, all UOV variants have new OIDs. The TLS code points have also changed. UOV keys and certificates created with earlier versions cannot be used any more ([#877](https://github.com/open-quantum-safe/oqs-provider/pull/877)).
 * Testing now follows the [OpenSSL release support schedule](https://openssl-library.org/roadmap/). `oqsprovider` is only tested with OpenSSL releases that the OpenSSL project still supports: currently 3.5 (LTS), 4.0 and 4.1, plus `master`. OpenSSL 3.0 (Ubuntu 22.04 CI images) and 3.4 are no longer tested, and using `oqsprovider` with unsupported OpenSSL versions is strongly discouraged. Consequently, the `oqsprovider` implementations of algorithms that OpenSSL implements natively (e.g. ML-KEM, ML-DSA, SLH-DSA), which are only active with OpenSSL < 3.5, are no longer tested ([#880](https://github.com/open-quantum-safe/oqs-provider/pull/880)).
 
 Previous Release Notes

@@ -85,6 +85,14 @@
 | FrodoKEM       | ISO Preliminary Standardization Proposal - 2023/03/14 | frodo976shake   | 3            |                    3 | 65068        |                                  |
 | FrodoKEM       | ISO Preliminary Standardization Proposal - 2023/03/14 | frodo976shake   | 3            |                    3 | 65069        | secp384_r1                       |
 | FrodoKEM       | ISO Preliminary Standardization Proposal - 2023/03/14 | frodo976shake   | 3            |                    3 | 65070        | x448                             |
+| HQC            | 2025-08-22                                            | hqc1            | 4            |                    1 | 65075        |                                  |
+| HQC            | 2025-08-22                                            | hqc1            | 4            |                    1 | 65076        | secp256_r1                       |
+| HQC            | 2025-08-22                                            | hqc1            | 4            |                    1 | 65077        | x25519                           |
+| HQC            | 2025-08-22                                            | hqc3            | 4            |                    3 | 65078        |                                  |
+| HQC            | 2025-08-22                                            | hqc3            | 4            |                    3 | 65079        | secp384_r1                       |
+| HQC            | 2025-08-22                                            | hqc3            | 4            |                    3 | 65080        | x448                             |
+| HQC            | 2025-08-22                                            | hqc5            | 4            |                    5 | 65081        |                                  |
+| HQC            | 2025-08-22                                            | hqc5            | 4            |                    5 | 65082        | secp521_r1                       |
 | HQC            | NIST Round 3 submission                               | hqc1            | 3            |                    1 | 0x022C       |                                  |
 | HQC            | NIST Round 3 submission                               | hqc1            | 3            |                    1 | 0x2F2C       | secp256_r1                       |
 | HQC            | NIST Round 3 submission                               | hqc1            | 3            |                    1 | 0x2FAC       | x25519                           |
@@ -101,14 +109,14 @@
 | HQC            | NIST Round 4 submission                               | hqc3            | 4            |                    3 | 65053        | x448                             |
 | HQC            | NIST Round 4 submission                               | hqc5            | 4            |                    5 | 65054        |                                  |
 | HQC            | NIST Round 4 submission                               | hqc5            | 4            |                    5 | 65055        | secp521_r1                       |
-| HQC            | 2025-08-22                                            | hqc1            | 4            |                    1 | 65075        |                                  |
-| HQC            | 2025-08-22                                            | hqc1            | 4            |                    1 | 65076        | secp256_r1                       |
-| HQC            | 2025-08-22                                            | hqc1            | 4            |                    1 | 65077        | x25519                           |
-| HQC            | 2025-08-22                                            | hqc3            | 4            |                    3 | 65078        |                                  |
-| HQC            | 2025-08-22                                            | hqc3            | 4            |                    3 | 65079        | secp384_r1                       |
-| HQC            | 2025-08-22                                            | hqc3            | 4            |                    3 | 65080        | x448                             |
-| HQC            | 2025-08-22                                            | hqc5            | 4            |                    5 | 65081        |                                  |
-| HQC            | 2025-08-22                                            | hqc5            | 4            |                    5 | 65082        | secp521_r1                       |
+| HQC            | v5.1.0                                                | hqc1            | 4            |                    1 | 65086        |                                  |
+| HQC            | v5.1.0                                                | hqc1            | 4            |                    1 | 65087        | secp256_r1                       |
+| HQC            | v5.1.0                                                | hqc1            | 4            |                    1 | 65088        | x25519                           |
+| HQC            | v5.1.0                                                | hqc3            | 4            |                    3 | 65089        |                                  |
+| HQC            | v5.1.0                                                | hqc3            | 4            |                    3 | 65090        | secp384_r1                       |
+| HQC            | v5.1.0                                                | hqc3            | 4            |                    3 | 65091        | x448                             |
+| HQC            | v5.1.0                                                | hqc5            | 4            |                    5 | 65092        |                                  |
+| HQC            | v5.1.0                                                | hqc5            | 4            |                    5 | 65093        | secp521_r1                       |
 | ML-KEM         | ML-KEM                                                | mlkem1024       | FIPS203      |                    5 | 0x11ED       | secp384_r1                       |
 | ML-KEM         | ML-KEM                                                | mlkem1024       | FIPS203      |                    5 | 514          |                                  |
 | ML-KEM         | ML-KEM                                                | mlkem1024       | FIPS203      |                    5 | 65058        | bp512                            |

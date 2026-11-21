@@ -6,6 +6,7 @@
 
 ### Breaking changes
 
+* libjade support has been removed in `liboqs`, so it is also no longer supported in this project
 * Building against earlier `liboqs` releases is no longer supported: in line with [SECURITY.md](SECURITY.md), only the most recent release is supported, and the `main` branch is meant to be used with the `main` branch of `liboqs`. The back-level code generator files (`oqs-template/generate.yml-*`) and the corresponding logic in `scripts/fullbuild.sh` and `scripts/revertmain.sh` have been removed ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 * TLS code points are now managed by `generate.py` in the same way for KEMs and signatures: only algorithms used in TLS (enabled and TLS-capable) have them, they must be unique and lie in the RFC 8446 private use range unless IANA-registered, and `'auto'` assigns free ones. Enabling an algorithm for TLS thus requires setting its code points to `'auto'`; see [CONFIGURE.md](CONFIGURE.md#pre-build-configuration) ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).
 * Algorithms that are disabled or cannot be used in TLS, such as the UOV variants with large public keys, no longer have TLS code points ([#852](https://github.com/open-quantum-safe/oqs-provider/pull/852)).

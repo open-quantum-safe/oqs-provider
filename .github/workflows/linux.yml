@@ -19,7 +19,6 @@ jobs:
       fail-fast: false
       matrix:
         cmake-params: [ "" ]
-        libjade-build: ["ON", "OFF"]
     container:
       image: openquantumsafe/ci-ubuntu-latest@sha256:e668edf93ed62f625d139ab707348f3c4162b15fe1b7cc4edc66ed1d0f0afe87
     env:
@@ -31,7 +30,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Full build
-        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
+        run: OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
 
@@ -44,9 +43,6 @@ jobs:
         ossl-branch: [openssl-3.5.0, openssl-4.0.1, openssl-4.1.0, master]
         # OQS_KEM_ENCODERS=ON is weekly-only (see weekly_tests.yml); rarely used on the PR path.
         cmake-params: [ "" ]
-        libjade-build:
-          - "ON"
-          - "OFF"
     container:
       image: openquantumsafe/ci-ubuntu-latest@sha256:e668edf93ed62f625d139ab707348f3c4162b15fe1b7cc4edc66ed1d0f0afe87
     env:
@@ -99,7 +95,7 @@ jobs:
         uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: .local
-          key: ${{ runner.os }}-liboqs-${{ steps.refs.outputs.liboqs }}-${{ matrix.ossl-branch }}-libjade${{ matrix.libjade-build }}
+          key: ${{ runner.os }}-liboqs-${{ steps.refs.outputs.liboqs }}-${{ matrix.ossl-branch }}
       - name: Expose the cached OpenSSL to build and tests
         if: matrix.ossl-branch != ''
         run: |
@@ -107,7 +103,7 @@ jobs:
           echo "OPENSSL_APP=$GITHUB_WORKSPACE/.localossl/bin/openssl"  >> "$GITHUB_ENV"
           echo "LD_LIBRARY_PATH=$GITHUB_WORKSPACE/.localossl/lib64"    >> "$GITHUB_ENV"
       - name: Full build
-        run: OPENSSL_INSTALL=$OSSL_INSTALL_ARG OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh
+        run: OPENSSL_INSTALL=$OSSL_INSTALL_ARG OQSPROV_CMAKE_PARAMS=${{ matrix.cmake-params}} OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh
       - name: Test
         run: ./scripts/runtests.sh -V
       - name: Re-generate code
@@ -120,14 +116,14 @@ jobs:
           ! pip3 install -r oqs-template/requirements.txt 2>&1 | grep ERROR && \
           python3 oqs-template/generate.py
       - name: Full re-build & test
-        run: rm -rf _build && OPENSSL_INSTALL=$OSSL_INSTALL_ARG OPENSSL_BRANCH=${{ matrix.ossl-branch }} OQS_LIBJADE_BUILD=${{ matrix.libjade-build }} ./scripts/fullbuild.sh && ./scripts/runtests.sh
+        run: rm -rf _build && OPENSSL_INSTALL=$OSSL_INSTALL_ARG OPENSSL_BRANCH=${{ matrix.ossl-branch }} ./scripts/fullbuild.sh && ./scripts/runtests.sh
       - name: Build .deb install package
         run: cpack -C DebPack
         working-directory: _build
       - name: Retain .deb installer
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ${{ matrix.ossl-branch }} ${{ matrix.cmake-params }} ${{ matrix.libjade-build }} oqsprovider-x64
+          name: ${{ matrix.ossl-branch }} ${{ matrix.cmake-params }} oqsprovider-x64
           path: _build/*.deb
 
   # Static oqsprovider build: run the C test suite linked against liboqsprovider.a

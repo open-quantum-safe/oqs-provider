@@ -232,6 +232,27 @@ add_executable(oqs_test_alloc_failures oqs_test_alloc_failures.c test_common.c t
 target_link_libraries(oqs_test_alloc_failures PRIVATE ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
 
 add_test(
+    NAME oqs_privkey_cleanse
+    COMMAND oqs_test_privkey_cleanse
+            "oqsprovider"
+            "${CMAKE_CURRENT_SOURCE_DIR}/oqs.cnf"
+)
+# openssl under MSVC seems to have a bug registering NIDs:
+# It only works when setting OPENSSL_CONF, not when loading the same cnf file:
+if (MSVC)
+set_tests_properties(oqs_privkey_cleanse
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR};OPENSSL_CONF=${CMAKE_CURRENT_SOURCE_DIR}/openssl-ca.cnf"
+)
+else()
+set_tests_properties(oqs_privkey_cleanse
+    PROPERTIES ENVIRONMENT "OPENSSL_MODULES=${OQS_PROV_BINARY_DIR}"
+)
+endif()
+
+add_executable(oqs_test_privkey_cleanse oqs_test_privkey_cleanse.c test_common.c)
+target_link_libraries(oqs_test_privkey_cleanse PRIVATE ${OPENSSL_CRYPTO_LIBRARY} OQS::oqs ${OQS_ADDL_SOCKET_LIBS} ${REQ_LIBS_T})
+
+add_test(
     NAME oqs_multi_thread
     COMMAND oqs_test_multi_thread
             "oqsprovider"
@@ -260,5 +281,6 @@ if (OQS_PROVIDER_BUILD_STATIC)
     oqs_test_prop_str
     oqs_test_alg_overlap
     oqs_test_alloc_failures
+    oqs_test_privkey_cleanse
   )
 endif()

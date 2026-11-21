@@ -587,7 +587,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     }
 
 done:
-    ASN1_OCTET_STRING_free(oct);
+    ASN1_STRING_clear_free(oct);
     OPENSSL_secure_clear_free(buf, buflen);
 
     return keybloblen;

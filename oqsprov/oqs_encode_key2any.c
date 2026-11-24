@@ -507,6 +507,7 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
     uint32_t buflen = 0, privkeylen = 0;
     ASN1_OCTET_STRING *oct = NULL;
     int keybloblen = -1;
+    int set_rc;
 
     OQS_ENC_PRINTF("OQS ENC provider: oqsx_pki_priv_to_der called\n");
 
@@ -574,7 +575,12 @@ static int oqsx_pki_priv_to_der(const void *vxkey, unsigned char **pder) {
         goto done;
     }
 
-    if (!ASN1_STRING_set(oct, buf, buflen)) {
+#if OPENSSL_VERSION_NUMBER >= 0x40100000L
+    set_rc = ASN1_STRING_set1_data(oct, buf, buflen);
+#else
+    set_rc = ASN1_STRING_set(oct, buf, buflen);
+#endif
+    if (!set_rc) {
         ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
         goto done;
     }
